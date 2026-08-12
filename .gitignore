@@ -1,0 +1,51 @@
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+
+# Node.js dependencies and package-manager files
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/install-state.gz
+.pnp.*
+
+# Next.js
+.next/
+out/
+.vercel/
+
+# React and frontend build artifacts
+build/
+dist/
+coverage/
+storybook-static/
+.cache/
+.parcel-cache/
+.turbo/
+
+# Test reports and runtime logs
+playwright-report/
+test-results/
+*.log
+logs/
+
+# AI tools and local agent state
+.ai/
+.ai-cache/
+.agents/
+.aider/
+.claude/
+.codex/
+.continue/
+.cursor/
+.mcp/
+.serena/
+.windsurf/
