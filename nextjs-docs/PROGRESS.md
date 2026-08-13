@@ -137,9 +137,9 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.50 | Building | [공식](https://nextjs.org/docs/app/guides/building) | 초안 | 미착수 |
-| 2.51 | Package Bundling | [공식](https://nextjs.org/docs/app/guides/package-bundling) | 초안 | 미착수 |
-| 2.52 | Custom Server | [공식](https://nextjs.org/docs/app/guides/custom-server) | 초안 | 미착수 |
+| 2.50 | Building | [공식](https://nextjs.org/docs/app/guides/building) | 완료 | 미착수 |
+| 2.51 | Package Bundling | [공식](https://nextjs.org/docs/app/guides/package-bundling) | 완료 | 미착수 |
+| 2.52 | Custom Server | [공식](https://nextjs.org/docs/app/guides/custom-server) | 완료 | 미착수 |
 
 ### 배포·운영
 
