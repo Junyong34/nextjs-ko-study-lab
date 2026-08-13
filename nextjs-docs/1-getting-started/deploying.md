@@ -47,7 +47,7 @@ Node.js를 지원하는 제공자라면 Next.js를 배포할 수 있다. `packag
 
 ### Docker
 
-Docker 컨테이너를 지원하는 제공자, Kubernetes 같은 컨테이너 오케스트레이터, Docker를 실행하는 클라우드에 배포할 수 있다. Docker 배포는 모든 Next.js 기능을 지원한다.
+Docker 컨테이너를 지원하는 제공자, Kubernetes 같은 컨테이너 오케스트레이터, Docker를 실행하는 클라우드에 배포할 수 있다. 컨테이너화 모범 사례는 Docker 공식 [Next.js 가이드](https://docs.docker.com/guides/nextjs/)와 [React.js 가이드](https://docs.docker.com/guides/reactjs/)를 참고한다. Docker 배포는 모든 Next.js 기능을 지원한다.
 
 > **개발 참고**: Docker는 프로덕션 배포에 적합하지만 Mac과 Windows에서 개발할 때는 성능을 위해 Docker보다 로컬 `npm run dev`를 고려한다. 자세한 내용은 [로컬 개발 최적화](../2-guides/local-development.md)를 참고한다.
 
