@@ -156,8 +156,8 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.59 | Analytics | [공식](https://nextjs.org/docs/app/guides/analytics) | 초안 | 미착수 |
-| 2.60 | Videos | [공식](https://nextjs.org/docs/app/guides/videos) | 초안 | 미착수 |
+| 2.59 | Analytics | [공식](https://nextjs.org/docs/app/guides/analytics) | 완료 | 미착수 |
+| 2.60 | Videos | [공식](https://nextjs.org/docs/app/guides/videos) | 완료 | 미착수 |
 
 ### AI 도구
 
