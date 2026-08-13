@@ -166,20 +166,6 @@
 | 2.61 | AI Coding Agents | [공식](https://nextjs.org/docs/app/guides/ai-agents) | 초안 | 미착수 |
 | 2.62 | Next.js MCP Server | [공식](https://nextjs.org/docs/app/guides/mcp) | 초안 | 미착수 |
 
-### 마이그레이션·업그레이드
-
-| 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
-|---|---|---|---|---|
-| 2.63 | Migrating | [공식](https://nextjs.org/docs/app/guides/migrating) | 초안 | 미착수 |
-| 2.63.1 | ㄴ App Router | [공식](https://nextjs.org/docs/app/guides/migrating/app-router-migration) | 초안 | 미착수 |
-| 2.63.2 | ㄴ Create React App | [공식](https://nextjs.org/docs/app/guides/migrating/from-create-react-app) | 초안 | 미착수 |
-| 2.63.3 | ㄴ Vite | [공식](https://nextjs.org/docs/app/guides/migrating/from-vite) | 초안 | 미착수 |
-| 2.64 | Upgrading | [공식](https://nextjs.org/docs/app/guides/upgrading) | 초안 | 미착수 |
-| 2.64.1 | ㄴ Codemods | [공식](https://nextjs.org/docs/app/guides/upgrading/codemods) | 초안 | 미착수 |
-| 2.64.2 | ㄴ Version 14 | [공식](https://nextjs.org/docs/app/guides/upgrading/version-14) | 초안 | 미착수 |
-| 2.64.3 | ㄴ Version 15 | [공식](https://nextjs.org/docs/app/guides/upgrading/version-15) | 초안 | 미착수 |
-| 2.64.4 | ㄴ Version 16 | [공식](https://nextjs.org/docs/app/guides/upgrading/version-16) | 초안 | 미착수 |
-
 ## 3. API Reference (하위 그룹 순서 재배열)
 
 ### 3.1 File-system conventions
