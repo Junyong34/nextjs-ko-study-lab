@@ -102,7 +102,7 @@ export default function LikeButton({ likes }: { likes: number }) {
 
 이후 내비게이션에서는:
 
-- **RSC Payload**가 프리페칭되고 캐시되어 즉각적인 내비게이션이 가능해진다.
+- **RSC Payload**가 prefetch되고 캐시되어 즉각적인 내비게이션이 가능해진다.
 - **Client Component**는 서버가 렌더링한 HTML 없이도 전적으로 클라이언트에서 렌더링된다.
 
 ## 예시

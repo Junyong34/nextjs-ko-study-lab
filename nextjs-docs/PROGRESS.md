@@ -43,7 +43,7 @@
 | 2.4 | Caching (Previous Model) | [공식](https://nextjs.org/docs/app/guides/caching-without-cache-components) | 초안 | 미착수 |
 | 2.5 | Streaming | [공식](https://nextjs.org/docs/app/guides/streaming) | 초안 | 미착수 |
 
-### 캐싱·재검증 심화
+### 캐싱·revalidation 심화
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|

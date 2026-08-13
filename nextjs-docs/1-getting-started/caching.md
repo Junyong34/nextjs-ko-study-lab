@@ -41,7 +41,7 @@ export default nextConfig
 - **데이터 레벨**: 데이터를 가져오거나 계산하는 함수를 캐시 (예: `getProducts()`, `getUser(id)`)
 - **UI 레벨**: 컴포넌트나 페이지 전체를 캐시 (예: `async function BlogPosts()`)
 
-캐시 지시어는 결과에 수명(lifetime)을 부여하고, Next.js는 이 정보로 렌더링 최적화를 적용한다. 캐시된 결과가 정적 셸의 일부가 되는 과정과 [프리페치](#런타임-프리페칭)에 포함될 수 있는지는 [Prerendering](#prerendering)을 참고한다.
+캐시 지시어는 결과에 수명(lifetime)을 부여하고, Next.js는 이 정보로 렌더링 최적화를 적용한다. 캐시된 결과가 정적 셸의 일부가 되는 과정과 [prefetch](#런타임-prefetching)에 포함될 수 있는지는 [Prerendering](#prerendering)을 참고한다.
 
 > **알아두면 좋은 점**: 모든 캐시 지시어에는 [`cacheLife`](../3-api-reference/3.3-functions/cacheLife.md)를 함께 쓰는 걸 권장한다. 지정하지 않으면 암묵적으로 `default` 프로필이 적용된다.
 
@@ -142,7 +142,7 @@ export default function Page() {
 - [`cookies`](../3-api-reference/3.3-functions/cookies.md) — 사용자의 쿠키 데이터
 - [`headers`](../3-api-reference/3.3-functions/headers.md) — 요청 헤더
 - [`searchParams`](../3-api-reference/3.1-file-conventions/page.md) — URL 쿼리 파라미터
-- [`params`](../3-api-reference/3.1-file-conventions/page.md) — 다이나믹 라우트 파라미터. [`generateStaticParams`](../3-api-reference/3.3-functions/generate-static-params.md)로 빌드 타임에 특정 값을 prerender하거나, [Cache Components를 쓰는 ISR](../2-guides/incremental-static-regeneration-cache-components.md)로 알 수 없는 params가 백그라운드에서 resolve되는 동안 [App Shell](../4-glossary/README.md)을 제공할 수 있다.
+- [`params`](../3-api-reference/3.1-file-conventions/page.md) — 다이나믹 라우트 파라미터. [`generateStaticParams`](../3-api-reference/3.3-functions/generate-static-params.md)로 빌드 타임에 특정 값을 prerender할 수 있다. 또는 [Cache Components를 쓰는 ISR](../2-guides/incremental-static-regeneration-cache-components.md)로, 알 수 없는 params가 백그라운드에서 resolve되는 동안 [App Shell](../4-glossary/README.md)을 제공할 수 있다.
 
 런타임 API에 접근하는 컴포넌트는 `<Suspense>`로 감싸야 한다.
 
@@ -170,7 +170,7 @@ export default function Page() {
 
 `<Suspense>` 없이 런타임 API에 접근하면, dev 오버레이에 같은 **blocking-route** 인사이트와 같은 수정 방법이 나타난다.
 
-런타임에 의존하는 데이터도 [`"use cache: private"`](../3-api-reference/3.4-directives/use-cache-private.md)로 수명을 줄 수 있다. 이는 Cache Components와 함께 제공되는 또 다른 변형으로, 쿠키·헤더·`searchParams`를 직접 읽는 함수에 수명을 줘서 [프리페치](#런타임-프리페칭)에 포함될 수 있게 한다.
+런타임에 의존하는 데이터도 [`"use cache: private"`](../3-api-reference/3.4-directives/use-cache-private.md)로 수명을 줄 수 있다. 이는 Cache Components와 함께 제공되는 또 다른 변형으로, 쿠키·헤더·`searchParams`를 직접 읽는 함수에 수명을 줘서 [prefetch](#런타임-prefetching)에 포함될 수 있게 한다.
 
 다음 섹션은 `use cache: private`의 대안을 보여준다: 런타임 값을 추출해서 공유 캐시 함수에 인자로 전달하는 방식이다.
 
@@ -209,7 +209,7 @@ async function CachedContent({ sessionId }: { sessionId: string }) {
 
 > **알아두면 좋은 점**: `<CachedContent />`가 요청 데이터 뒤에 게이트되어 있어서, prerender된 정적 셸에는 추가되지 않는다. 런타임에는 기본적으로 [인메모리](../3-api-reference/3.4-directives/use-cache.md#runtime-caching-considerations)로 캐시되는데, 서버리스 요청 사이에는 유지되지 않으므로 매 요청마다 다시 평가될 수 있다. 지속적이고 공유되는 캐싱이 필요하면 [`'use cache: remote'`](../3-api-reference/3.4-directives/use-cache-remote.md)를 쓴다.
 
-이 패턴에서는 [런타임 프리페칭](#런타임-프리페칭)이 클라이언트 전환 중에 사용자의 실제 세션으로 `<CachedContent />`를 prerender해서 클릭 전에 결과를 준비해둘 수 있다. 서버 사이드 엔트리가 요청 사이에 거의 살아남지 못해도 이게 가능한 건, 부여한 수명이 그 결과를 프리페치에 합류시켜, 클라이언트가 그 결과를 자신의 [`cacheLife`](../3-api-reference/3.3-functions/cacheLife.md) `stale` 윈도우 동안 최신으로 취급하기 때문이다.
+이 패턴에서는 [런타임 prefetching](#런타임-prefetching)이 클라이언트 전환 중에 사용자의 실제 세션으로 `<CachedContent />`를 prerender해서 클릭 전에 결과를 준비해둘 수 있다. 서버 사이드 엔트리가 요청 사이에 거의 살아남지 못해도 이게 가능한 건, 부여한 수명이 그 결과를 prefetch에 합류시켜, 클라이언트가 그 결과를 자신의 [`cacheLife`](../3-api-reference/3.3-functions/cacheLife.md) `stale` 윈도우 동안 최신으로 취급하기 때문이다.
 
 ### 정적, 캐시된, 스트리밍이 함께 있는 경우
 
@@ -245,7 +245,7 @@ export default function BlogPage() {
 
 type Post = { id: string; title: string; author: string; date: string }
 
-// 모두가 같은 블로그 포스트를 본다 (매시간 재검증)
+// 모두가 같은 블로그 포스트를 본다 (매시간 revalidation)
 async function BlogPosts() {
   'use cache'
   cacheLife('hours')
@@ -291,7 +291,7 @@ prerendering 중에 헤더(정적)와 블로그 포스트(`use cache`로 캐시)
 
 `<Suspense>`가 비동기 접근을 감싸는 것처럼, **에러 바운더리**는 실패를 감싼다: 렌더링 중 에러가 날 수 있는 서브트리를 감싸자. 컴포넌트 레벨 바운더리에는 [`catchError`](../3-api-reference/3.3-functions/catchError.md)를, 라우트 레벨 바운더리에는 [`error.js`](../3-api-reference/3.1-file-conventions/error.md) 파일 컨벤션을 쓴다.
 
-빌드하면서, [`generateMetadata`](../3-api-reference/3.3-functions/generate-metadata.md)와 [`generateViewport`](../3-api-reference/3.3-functions/generate-viewport.md) 안의 캐시되지 않은 fetch나 런타임 데이터 접근도 페이지와 같은 인사이트와 에러를 보여줘서, 의도한 렌더링으로 안내한다는 점을 기억하자. 알려진 값과 알려지지 않은 param 값 모두에 대한 incremental static regeneration은 [Cache Components를 쓰는 ISR](../2-guides/incremental-static-regeneration-cache-components.md)을 참고한다.
+빌드 중에는 [`generateMetadata`](../3-api-reference/3.3-functions/generate-metadata.md)와 [`generateViewport`](../3-api-reference/3.3-functions/generate-viewport.md)도 페이지와 똑같이 취급된다. 이 함수들 안에서 캐시되지 않은 fetch나 런타임 데이터에 접근하면, 페이지에서와 같은 인사이트와 에러가 나타나 의도한 렌더링으로 안내한다. 알려진 param 값과 알려지지 않은 param 값 모두에 대한 incremental static regeneration은 [Cache Components를 쓰는 ISR](../2-guides/incremental-static-regeneration-cache-components.md)을 참고한다.
 
 ### 랜덤 값과 타임스탬프
 
@@ -320,7 +320,7 @@ export default function Page() {
 }
 ```
 
-또는 **결과를 캐시**해서 재검증 전까지 모든 사용자가 같은 값을 보게 할 수도 있다.
+또는 **결과를 캐시**해서 revalidation 전까지 모든 사용자가 같은 값을 보게 할 수도 있다.
 
 ```tsx
 export default async function Page() {
@@ -411,7 +411,7 @@ export default function Page() {
 
 라우트의 정적 셸에 무엇이 담기는지는 빌드 타임에 알 수 있는 것에 따라 다르다. 라우트의 [다이나믹 params](../3-api-reference/3.3-functions/generate-static-params.md)가 알려져 있으면 셸에 그 구체적인 콘텐츠가 담기고, 캐시되지 않았거나 런타임인 나머지 데이터는 여전히 `<Suspense>` fallback 뒤에서 스트리밍된다. params를 모른다면, 재사용 가능한 URL 독립적인 버전이 [**App Shell**](../4-glossary/README.md)이다: 같은 정적 셸이지만 param에 특정된 부분만 fallback 뒤에 남는다. [Incremental Static Regeneration](#incremental-static-regeneration)이 첫 방문 이후 구체적인 버전을 채워넣는다.
 
-Next.js는 prerendering 중에 완료될 수 없는 컴포넌트를 명시적으로 다루도록 요구한다. dev 오버레이와 dev 서버 콘솔에 라우트를 지목하고 수정 방법(접근을 캐시하거나, `<Suspense>` 바운더리로 옮기거나, 라우트를 옵트아웃)을 가리키는 검증 인사이트를 보여준다. 이 검증 덕분에 모든 라우트가 정적 셸을 만들어내서, 다이렉트 내비게이션이 항상 즉각적이다.
+Next.js는 prerendering 중에 완료될 수 없는 컴포넌트를 명시적으로 다루도록 요구한다. dev 오버레이와 dev 서버 콘솔에 라우트를 지목하고 수정 방법(접근을 캐시하거나, `<Suspense>` 바운더리로 옮기거나, 라우트를 옵트아웃)을 가리키는 검증 인사이트를 보여준다. 이 검증 덕분에 모든 라우트가 정적 셸을 만들어내므로, 다이렉트 내비게이션이 계속 즉각적인 상태를 유지한다.
 
 ![클라이언트에서 부분적으로 렌더링된 페이지가 스트리밍되는 청크에 로딩 UI를 보여주는 그림](./assets/caching-02.webp)
 
@@ -419,7 +419,7 @@ Next.js는 prerendering 중에 완료될 수 없는 컴포넌트를 명시적으
 
 #### 정적 셸 최대화하기
 
-비동기 작업이 트리에서 더 깊이 있을수록, 페이지의 더 많은 부분이 prerender될 수 있다. 이는 Cache Components가 보상하는 구조적 패턴이다: 어디서나 적용할 수 있는 일반적인 습관이며, 이어서 설명할 즉각적인 내비게이션과 런타임 프리페칭의 기반이 된다. [런타임 API](#런타임-api-다루기)와 데이터 fetch 같은 비동기 작업 전반에 적용된다.
+비동기 작업이 트리에서 더 깊이 있을수록, 페이지의 더 많은 부분이 prerender될 수 있다. 이는 Cache Components가 보상하는 구조적 패턴이다: 어디서나 적용할 수 있는 일반적인 습관이며, 이어서 설명할 즉각적인 내비게이션과 런타임 prefetching의 기반이 된다. [런타임 API](#런타임-api-다루기)와 데이터 fetch 같은 비동기 작업 전반에 적용된다.
 
 `params`를 최상위 레벨에서 구조 분해하는 레이아웃을 생각해보자.
 
@@ -481,9 +481,9 @@ Cache Components는 16.0.0에서 다이렉트 방문이 정적 셸을 만든다�
 
 예시와 점검 도구는 [Instant navigation 가이드](../2-guides/instant-navigation.md)를 참고한다.
 
-### 런타임 프리페칭
+### 런타임 prefetching
 
-[Partial Prefetching](../3-api-reference/3.5-config/3.5.1-next-config-js/README.md)이 켜져 있으면, 라우터는 기본적으로 각 라우트의 [App Shell](../4-glossary/README.md)을 프리페치한다. 여기엔 이미 정적 콘텐츠와 `cookies()`/`headers()`에서 파생된 세션 데이터가 포함되어 있다. 런타임 프리페칭은 이 프리페치를 **URL 데이터**로 확장한다: 목적지 링크마다 달라지는 `searchParams`와 다이나믹 `params`다.
+[Partial Prefetching](../3-api-reference/3.5-config/3.5.1-next-config-js/README.md)이 켜져 있으면, 라우터는 기본적으로 각 라우트의 [App Shell](../4-glossary/README.md)을 prefetch한다. 여기엔 이미 정적 콘텐츠와 `cookies()`/`headers()`에서 파생된 세션 데이터가 포함되어 있다. 런타임 prefetching은 이 prefetch를 **URL 데이터**로 확장한다: 목적지 링크마다 달라지는 `searchParams`와 다이나믹 `params`다.
 
 [`<Link prefetch={true}>`](../3-api-reference/3.2-components/link.md)가 [Partial Prefetching](../3-api-reference/3.5-config/3.5.1-next-config-js/README.md) 라우트를 가리키면, Next.js는 목적지 URL이 해석된 상태로 그 라우트의 컴포넌트 트리를 다시 렌더링한다. 같은 규칙이 적용되지만, 이제 `searchParams`와 `params`가 스코프 안에 있으므로 트리의 더 많은 부분이 resolve된다.
 
@@ -491,7 +491,7 @@ Cache Components는 16.0.0에서 다이렉트 방문이 정적 셸을 만든다�
 - [`use cache: private`](../3-api-reference/3.4-directives/use-cache-private.md)는 서버에서 실행되어 런타임 데이터를 직접 읽고 결과를 브라우저에 캐시해서, 런타임 prerender에 합류한다
 - [`<Suspense>`](#캐시되지-않은-데이터-스트리밍하기) fallback은 캐시되지 않은 콘텐츠가 요청 시점에 스트리밍되는 동안 런타임 prerender에 남는다
 
-이렇게 만들어진 **런타임 prerender**는 정적 셸을 넘어서 목적지 URL이 여는 콘텐츠까지 확장된다. 프리페치 중에 일어나기 때문에, 내비게이션은 기다릴 게 없다. 비용은 프리페치 가능한 링크마다 서버 호출이 발생한다는 점이다.
+이렇게 만들어진 **런타임 prerender**는 정적 셸을 넘어서 목적지 URL이 여는 콘텐츠까지 확장된다. prefetch 중에 일어나기 때문에, 내비게이션은 기다릴 게 없다. 비용은 prefetch 가능한 링크마다 서버 호출이 발생한다는 점이다.
 
 예를 들어 URL에서 `searchParams`를 읽는 검색 페이지를 보자.
 
@@ -528,9 +528,9 @@ async function search(query: string | string[] | undefined) {
 
 다이렉트 방문에서는 `<Results>`가 fallback 뒤에서 스트리밍된다.
 
-`/search?q=shoes`로 향하는 [`<Link>`](../3-api-reference/3.2-components/link.md)가 프리페치되면, 프레임워크는 링크의 URL로부터 `searchParams`를 resolve해서, 캐시된 `search` 결과가 클릭 전에 런타임 prerender에 포함된다. 브라우저는 그 결과를 [`stale`](../3-api-reference/3.3-functions/cacheLife.md#stale) 시간이 지나거나 `searchParams`가 바뀔 때까지 재사용한다.
+`/search?q=shoes`로 향하는 [`<Link>`](../3-api-reference/3.2-components/link.md)가 prefetch되면, 프레임워크는 링크의 URL로부터 `searchParams`를 resolve해서, 캐시된 `search` 결과가 클릭 전에 런타임 prerender에 포함된다. 브라우저는 그 결과를 [`stale`](../3-api-reference/3.3-functions/cacheLife.md#stale) 시간이 지나거나 `searchParams`가 바뀔 때까지 재사용한다.
 
-`<Link>` 프리페칭이 어떻게 동작하는지, 어떻게 도입하는지는 [Adopting Partial Prefetching](../2-guides/adopting-partial-prefetching.md)을 참고한다.
+`<Link>` prefetching이 어떻게 동작하는지, 어떻게 도입하는지는 [Adopting Partial Prefetching](../2-guides/adopting-partial-prefetching.md)을 참고한다.
 
 전체 패턴은 [Runtime prefetching 가이드](../2-guides/README.md)를, 모든 모드는 [`prefetch` reference](../3-api-reference/3.1-file-conventions/3.1.22-route-segment-config/README.md)를 참고한다.
 
@@ -540,7 +540,7 @@ async function search(query: string | string[] | undefined) {
 
 - **Prerender된 HTML**: self-hosting이면 payload가 HTML로 렌더링되어 디스크에, 아니면 플랫폼의 지속적인 스토리지에 CDN 뒤로 저장된다. 이 HTML이 빌드 타임의 [정적 셸](#prerendering)이자, [ISR](#incremental-static-regeneration) 업그레이드 이후의 구체적인 페이지로, [`revalidate`](../3-api-reference/3.3-functions/cacheLife.md#revalidate)와 [`expire`](../3-api-reference/3.3-functions/cacheLife.md#expire)가 언제 다시 만들어지는지를 제어한다.
 - **공유 스토어**: 기본적으로 결과는 인스턴스별 인메모리 스토어에 남는데, 서버리스에서는 임시적이다. [`use cache: remote`](../3-api-reference/3.4-directives/use-cache-remote.md)는 여러 인스턴스가 공유하는 지속적인 [캐시 핸들러](../3-api-reference/3.5-config/3.5.1-next-config-js/README.md)로 옮긴다. **높은 히트율**에서만 이득이 되는 네트워크 라운드트립이다.
-- **브라우저**: payload는 클라이언트 내비게이션이나 [프리페치](#런타임-프리페칭)를 위해 전송되는 RSC에 포함되어, 브라우저가 자신의 [`stale`](../3-api-reference/3.3-functions/cacheLife.md#stale) 윈도우 동안 최신으로 유지한다. [`use cache: private`](../3-api-reference/3.4-directives/use-cache-private.md) 결과는 여기에만 존재한다.
+- **브라우저**: payload는 클라이언트 내비게이션이나 [prefetch](#런타임-prefetching)를 위해 전송되는 RSC에 포함되어, 브라우저가 자신의 [`stale`](../3-api-reference/3.3-functions/cacheLife.md#stale) 윈도우 동안 최신으로 유지한다. [`use cache: private`](../3-api-reference/3.4-directives/use-cache-private.md) 결과는 여기에만 존재한다.
 
 > **알아두면 좋은 점**: `cookies()`나 `headers()`를 읽는 [App Shell](../4-glossary/README.md)은 세션에 특정되어, 공유 서버 캐시가 아니라 클라이언트에서 세션별로 캐시된다.
 

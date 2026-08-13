@@ -122,7 +122,7 @@ export default function BlogLayout({
 }
 ```
 
-위 두 레이아웃을 합치면, 루트 레이아웃(`app/layout.js`)이 블로그 레이아웃(`app/blog/layout.js`)을 감싸고, 블로그 레이아웃이 블로그 페이지(`app/blog/page.js`)와 블로그 포스트 페이지(`app/blog/[slug]/page.js`)를 감싸는 구조가 된다.
+위 두 레이아웃을 합치면 다음 구조가 된다. 루트 레이아웃(`app/layout.js`)이 블로그 레이아웃(`app/blog/layout.js`)을 감싸고, 블로그 레이아웃이 다시 블로그 페이지(`app/blog/page.js`)와 블로그 포스트 페이지(`app/blog/[slug]/page.js`)를 감싼다.
 
 ### 다이나믹 세그먼트 만들기
 
@@ -176,7 +176,7 @@ Client Component는 [`useSearchParams`](../3-api-reference/3.3-functions/use-sea
 
 ### 페이지 사이 링크 연결하기
 
-[`<Link>` 컴포넌트](../3-api-reference/3.2-components/link.md)로 라우트 사이를 이동할 수 있다. `<Link>`는 HTML `<a>` 태그를 확장한 Next.js 내장 컴포넌트로, [프리페칭](./linking-and-navigating.md)과 클라이언트 사이드 내비게이션을 제공한다.
+[`<Link>` 컴포넌트](../3-api-reference/3.2-components/link.md)로 라우트 사이를 이동할 수 있다. `<Link>`는 HTML `<a>` 태그를 확장한 Next.js 내장 컴포넌트로, [prefetching](./linking-and-navigating.md)과 클라이언트 사이드 내비게이션을 제공한다.
 
 예를 들어 블로그 포스트 목록을 만들 때 `next/link`에서 `<Link>`를 import하고 `href` prop을 넘긴다.
 
@@ -262,7 +262,7 @@ export default function Layout(props: LayoutProps<'/dashboard'>) {
 
 - [ ] `useSearchParams`를 쓴 페이지는 항상 서버에서만 검색 파라미터를 읽는다.
 - [ ] `searchParams` prop을 페이지에서 사용하면 해당 페이지는 다이나믹 렌더링으로 전환된다.
-- [ ] `<Link>`는 HTML `<a>` 태그를 확장해 프리페칭과 클라이언트 사이드 내비게이션을 제공한다.
+- [ ] `<Link>`는 HTML `<a>` 태그를 확장해 prefetching과 클라이언트 사이드 내비게이션을 제공한다.
 - [ ] 루트 레이아웃은 선택 사항이며 없어도 무방하다.
 
 <details>

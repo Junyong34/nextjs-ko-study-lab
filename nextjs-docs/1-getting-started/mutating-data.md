@@ -52,7 +52,7 @@ export async function createPost(formData: FormData) {
   const content = formData.get('content')
 
   // 데이터 변경
-  // 캐시 재검증
+  // 캐시 revalidation
 }
 
 export async function deletePost(formData: FormData) {
@@ -66,7 +66,7 @@ export async function deletePost(formData: FormData) {
 
   // 이 리소스의 소유자인지 삭제 전에 검증
   // 데이터 변경
-  // 캐시 재검증
+  // 캐시 revalidation
 }
 ```
 
@@ -174,7 +174,7 @@ export async function createPost(formData: FormData) {
   const content = formData.get('content')
 
   // 데이터 변경
-  // 캐시 재검증
+  // 캐시 revalidation
 }
 ```
 
@@ -257,11 +257,11 @@ export async function updatePost(formData: FormData) {
 }
 ```
 
-이는 클라이언트 라우터를 새로고침해서 UI가 최신 상태를 반영하게 한다. `refresh()`는 태그가 붙은 데이터를 재검증하지 않는다. 태그된 데이터를 재검증하려면 [`updateTag`](../3-api-reference/3.3-functions/updateTag.md)나 [`revalidateTag`](../3-api-reference/3.3-functions/revalidateTag.md)를 쓴다.
+이는 클라이언트 라우터를 새로고침해서 UI가 최신 상태를 반영하게 한다. `refresh()`는 태그가 붙은 데이터를 revalidate하지 않는다. 태그된 데이터를 revalidate하려면 [`updateTag`](../3-api-reference/3.3-functions/updateTag.md)나 [`revalidateTag`](../3-api-reference/3.3-functions/revalidateTag.md)를 쓴다.
 
-### 데이터 재검증하기
+### 데이터 revalidate하기
 
-mutation을 수행한 뒤, Server Function 안에서 [`revalidatePath`](../3-api-reference/3.3-functions/revalidatePath.md)나 [`revalidateTag`](../3-api-reference/3.3-functions/revalidateTag.md)를 호출해서 Next.js 캐시를 재검증하고 갱신된 데이터를 보여줄 수 있다.
+mutation을 수행한 뒤, Server Function 안에서 [`revalidatePath`](../3-api-reference/3.3-functions/revalidatePath.md)나 [`revalidateTag`](../3-api-reference/3.3-functions/revalidateTag.md)를 호출해서 Next.js 캐시를 revalidate하고 갱신된 데이터를 보여줄 수 있다.
 
 ```tsx
 import { auth } from '@/lib/auth'
@@ -387,12 +387,12 @@ export default function ViewCount({ initialViews }: { initialViews: number }) {
 - [ ] `redirect()`를 호출한 뒤의 코드는 계속 실행된다.
 - [ ] Server Action은 내부적으로 `POST` 메서드만 사용해 호출된다.
 - [ ] Server Action에서 쿠키를 설정하면 Next.js가 현재 페이지와 레이아웃을 다시 렌더링한다.
-- [ ] `refresh()`는 태그가 붙은 데이터를 재검증한다.
+- [ ] `refresh()`는 태그가 붙은 데이터를 revalidate한다.
 
 <details>
 <summary>정답 보기</summary>
 
-**정답: 2, 3** — `redirect()`는 제어 흐름 예외를 던져 이후 코드를 실행하지 않으며, `refresh()`는 태그 재검증과 무관하게 클라이언트 라우터만 새로고침한다.
+**정답: 2, 3** — `redirect()`는 제어 흐름 예외를 던져 이후 코드를 실행하지 않으며, `refresh()`는 태그 revalidation과 무관하게 클라이언트 라우터만 새로고침한다.
 
 </details>
 
@@ -406,7 +406,7 @@ export default function ViewCount({ initialViews }: { initialViews: number }) {
 <details>
 <summary>정답 보기</summary>
 
-**정답: 3** — `revalidatePath`는 어떤 태그가 연관되어 있는지 몰라도 특정 라우트 경로의 캐시된 데이터를 재검증한다.
+**정답: 3** — `revalidatePath`는 어떤 태그가 연관되어 있는지 몰라도 특정 라우트 경로의 캐시된 데이터를 revalidate한다.
 
 </details>
 
@@ -414,6 +414,6 @@ export default function ViewCount({ initialViews }: { initialViews: number }) {
 
 - Server Function은 `'use server'`로 정의하는 서버에서 실행되는 비동기 함수이며, 폼 mutation 맥락에서는 Server Action이라고 부른다.
 - Client Component에서 Server Function을 직접 정의할 수는 없지만, `"use server"` 파일에서 import해 폼이나 이벤트 핸들러로 호출할 수 있다.
-- mutation 이후 UI를 갱신하는 방법은 `refresh()`(라우터만 새로고침), `revalidatePath`/`revalidateTag`(캐시 재검증), `redirect()`(다른 페이지로 이동) 세 가지다.
+- mutation 이후 UI를 갱신하는 방법은 `refresh()`(라우터만 새로고침), `revalidatePath`/`revalidateTag`(캐시 revalidation), `redirect()`(다른 페이지로 이동) 세 가지다.
 - Server Action에서 쿠키를 설정·삭제하면 Next.js가 현재 페이지와 레이아웃을 다시 렌더링해 UI에 반영한다.
 - `useActionState`로 대기 상태를 보여주고, `useEffect`로 마운트 시점이나 의존성 변화에 맞춰 Server Action을 자동으로 트리거할 수 있다.

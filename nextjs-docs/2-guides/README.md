@@ -17,7 +17,7 @@
 - 2.4 [Caching (Previous Model)](./caching-without-cache-components.md)
 - 2.5 [Streaming](./streaming.md)
 
-### 캐싱·재검증 심화
+### 캐싱·revalidation 심화
 
 - 2.6 [ISR](./incremental-static-regeneration.md)
 - 2.7 [ISR with Cache Components](./incremental-static-regeneration-cache-components.md)

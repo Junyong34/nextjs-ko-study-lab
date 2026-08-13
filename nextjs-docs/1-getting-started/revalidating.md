@@ -4,21 +4,21 @@
 - 상위 메뉴: [Getting Started](./README.md)
 - 전체 목차: [Next.js 학습 문서](../README.md)
 
-> 이 문서는 [`cacheComponents: true`](../3-api-reference/3.5-config/3.5.1-next-config-js/README.md)를 켠 Cache Components에서의 재검증을 다룬다. 쓰지 않는다면 [Caching and Revalidating (이전 모델)](../2-guides/caching-without-cache-components.md) 가이드를 참고한다.
+> 이 문서는 [`cacheComponents: true`](../3-api-reference/3.5-config/3.5.1-next-config-js/README.md)를 켠 Cache Components에서의 revalidation을 다룬다. 쓰지 않는다면 [Caching and Revalidating (이전 모델)](../2-guides/caching-without-cache-components.md) 가이드를 참고한다.
 
 ## 학습 목표
 
-- 시간 기반 재검증(`cacheLife`)과 온디맨드 재검증(`revalidateTag`, `updateTag`, `revalidatePath`)의 차이를 설명할 수 있다.
+- 시간 기반 revalidation(`cacheLife`)과 온디맨드 revalidation(`revalidateTag`, `updateTag`, `revalidatePath`)의 차이를 설명할 수 있다.
 - `cacheTag`로 캐시된 데이터에 태그를 붙이고, 그 태그로 무효화할 수 있다.
 - `revalidateTag`와 `updateTag`를 언제 각각 써야 하는지 구분할 수 있다.
 - 무엇을 캐시할지 결정하는 기준을 안다.
 
 ## 핵심 개념 및 설명
 
-재검증은 캐시된 데이터를 갱신하는 과정이다. 빠른 캐시 응답을 계속 제공하면서 콘텐츠를 최신으로 유지할 수 있게 해준다. 전략은 두 가지다.
+revalidation은 캐시된 데이터를 갱신하는 과정이다. 빠른 캐시 응답을 계속 제공하면서 콘텐츠를 최신으로 유지할 수 있게 해준다. 전략은 두 가지다.
 
-- **시간 기반 재검증**: [`cacheLife`](#cachelife)로 정해진 기간이 지나면 캐시된 데이터를 자동으로 새로고침한다.
-- **온디맨드 재검증**: mutation 이후 [`revalidateTag`](#revalidatetag), [`updateTag`](#updatetag), [`revalidatePath`](#revalidatepath)로 캐시된 데이터를 수동으로 무효화한다.
+- **시간 기반 revalidation**: [`cacheLife`](#cachelife)로 정해진 기간이 지나면 캐시된 데이터를 자동으로 새로고침한다.
+- **온디맨드 revalidation**: mutation 이후 [`revalidateTag`](#revalidatetag), [`updateTag`](#updatetag), [`revalidatePath`](#revalidatepath)로 캐시된 데이터를 수동으로 무효화한다.
 
 ### `cacheLife`
 
@@ -52,7 +52,7 @@ export async function getProducts() {
 'use cache'
 cacheLife({
   stale: 3600, // 1시간 동안 stale로 간주
-  revalidate: 7200, // 2시간 후 재검증
+  revalidate: 7200, // 2시간 후 revalidation
   expire: 86400, // 1일 후 만료
 })
 ```
@@ -92,7 +92,7 @@ export async function updateUser(id: string) {
 }
 ```
 
-같은 태그를 여러 함수에서 재사용해서 한 번에 모두 재검증할 수 있다. `revalidateTag`는 [Server Action](./mutating-data.md)이나 [Route Handler](../3-api-reference/3.1-file-conventions/route.md)에서 호출한다.
+같은 태그를 여러 함수에서 재사용해서 한 번에 모두 revalidate할 수 있다. `revalidateTag`는 [Server Action](./mutating-data.md)이나 [Route Handler](../3-api-reference/3.1-file-conventions/route.md)에서 호출한다.
 
 > **알아두면 좋은 점**: 두 번째 인자는 최신 콘텐츠가 생성되는 동안 stale 콘텐츠를 얼마나 오래 제공할 수 있는지를 설정한다. 그 시간이 지나면, 이후 요청은 최신 콘텐츠가 준비될 때까지 블록된다. `'max'`를 쓰면 가장 긴 stale 윈도우를 준다.
 
@@ -129,7 +129,7 @@ export async function createPost(formData: FormData) {
 
 ### `revalidatePath`
 
-`revalidatePath`는 특정 라우트 경로의 모든 캐시된 데이터를 무효화한다. 그 경로에 어떤 태그가 연결되어 있는지 모를 때 라우트를 재검증하고 싶다면 이걸 쓴다.
+`revalidatePath`는 특정 라우트 경로의 모든 캐시된 데이터를 무효화한다. 그 경로에 어떤 태그가 연결되어 있는지 모를 때 라우트를 revalidate하고 싶다면 이걸 쓴다.
 
 ```tsx
 import { revalidatePath } from 'next/cache'
@@ -140,7 +140,7 @@ export async function updateUser(id: string) {
 }
 ```
 
-> **알아두면 좋은 점**: 가능하면 경로 기반보다 태그 기반 재검증(`revalidateTag` / `updateTag`)을 우선하자 — 더 정밀하고 과도한 무효화를 피할 수 있다.
+> **알아두면 좋은 점**: 가능하면 경로 기반보다 태그 기반 revalidation(`revalidateTag` / `updateTag`)을 우선하자 — 더 정밀하고 과도한 무효화를 피할 수 있다.
 
 자세한 내용은 [`revalidatePath` API reference](../3-api-reference/3.3-functions/revalidatePath.md)를 참고한다.
 
@@ -148,9 +148,9 @@ export async function updateUser(id: string) {
 
 [런타임 데이터](./caching.md#런타임-api-다루기)에 의존하지 않고, 한동안 캐시에서 서빙해도 괜찮은 데이터를 캐시한다. `use cache`와 `cacheLife`로 이 동작을 기술한다.
 
-시간 기반 재검증이 필요 없는 콘텐츠(예: CMS에서 온 데이터)라면, [`cacheTag`](#cachetag)와 `max` 같은 긴 [`cacheLife`](#cachelife)를 써서 정적 셸에 남겨둔다. 콘텐츠 소스가 콘텐츠가 바뀔 때 웹훅이나 다른 알림으로 [`revalidateTag`](#revalidatetag)를 호출하도록 설정한다. 이렇게 하면 바뀌지 않은 콘텐츠에 대한 불필요한 시간 기반 재검증을 줄일 수 있다.
+시간 기반 revalidation이 필요 없는 콘텐츠(예: CMS에서 온 데이터)라면, [`cacheTag`](#cachetag)와 `max` 같은 긴 [`cacheLife`](#cachelife)를 써서 정적 셸에 남겨둔다. 콘텐츠 소스가 콘텐츠가 바뀔 때 웹훅이나 다른 알림으로 [`revalidateTag`](#revalidatetag)를 호출하도록 설정한다. 이렇게 하면 바뀌지 않은 콘텐츠에 대한 불필요한 시간 기반 revalidation을 줄일 수 있다.
 
-> **알아두면 좋은 점**: 서버리스 환경에서는 인메모리 캐시 엔트리가 재검증 사이에 유지되지 않을 수 있다. 자세한 내용은 [런타임 캐싱 고려사항](../3-api-reference/3.4-directives/use-cache.md#runtime-caching-considerations)을 참고한다.
+> **알아두면 좋은 점**: 서버리스 환경에서는 인메모리 캐시 엔트리가 revalidation 사이에 유지되지 않을 수 있다. 자세한 내용은 [런타임 캐싱 고려사항](../3-api-reference/3.4-directives/use-cache.md#runtime-caching-considerations)을 참고한다.
 
 ## 예제 및 데모 설계
 
@@ -165,7 +165,7 @@ export async function updateUser(id: string) {
 
 1. `revalidateTag`는 Route Handler에서만 쓸 수 있다.
 2. `updateTag`는 캐시를 즉시 만료시키고, `revalidateTag`는 stale-while-revalidate로 동작한다.
-3. `updateTag`는 시간 기반 재검증에만 쓰인다.
+3. `updateTag`는 시간 기반 revalidation에만 쓰인다.
 4. 두 함수는 동작이 완전히 동일하다.
 
 <details>
@@ -179,7 +179,7 @@ export async function updateUser(id: string) {
 
 - [ ] `cacheLife`는 `use cache` 스코프 밖에서도 독립적으로 동작한다.
 - [ ] `cacheTag`로 태그를 붙인 데이터는 `revalidateTag`나 `updateTag`로 무효화할 수 있다.
-- [ ] 어떤 태그가 연결됐는지 모를 때는 `revalidatePath`로 경로 전체를 재검증할 수 있다.
+- [ ] 어떤 태그가 연결됐는지 모를 때는 `revalidatePath`로 경로 전체를 revalidate할 수 있다.
 - [ ] `seconds` 프로필을 쓴 캐시는 자동으로 prerender에서 제외되고 다이나믹 홀이 된다.
 
 <details>
@@ -199,14 +199,14 @@ export async function updateUser(id: string) {
 <details>
 <summary>정답 보기</summary>
 
-**정답: 2** — 콘텐츠가 바뀔 때만 웹훅으로 `revalidateTag`를 호출하면, 바뀌지 않은 기간 동안은 불필요한 시간 기반 재검증 없이 긴 캐시 수명을 유지할 수 있다.
+**정답: 2** — 콘텐츠가 바뀔 때만 웹훅으로 `revalidateTag`를 호출하면, 바뀌지 않은 기간 동안은 불필요한 시간 기반 revalidation 없이 긴 캐시 수명을 유지할 수 있다.
 
 </details>
 
 ## 요약
 
-- 재검증은 시간 기반(`cacheLife`)과 온디맨드(`revalidateTag`/`updateTag`/`revalidatePath`) 두 전략으로 나뉜다.
-- `cacheTag`로 캐시된 데이터에 태그를 붙이면, 그 태그 단위로 재검증하거나 즉시 만료시킬 수 있다.
+- revalidation은 시간 기반(`cacheLife`)과 온디맨드(`revalidateTag`/`updateTag`/`revalidatePath`) 두 전략으로 나뉜다.
+- `cacheTag`로 캐시된 데이터에 태그를 붙이면, 그 태그 단위로 revalidate하거나 즉시 만료시킬 수 있다.
 - `revalidateTag`는 stale-while-revalidate, `updateTag`는 즉시 만료 — 후자는 Server Actions에서만 쓸 수 있다.
-- 태그를 모를 때는 `revalidatePath`로 경로 전체를 재검증할 수 있지만, 가능하면 태그 기반이 더 정밀하다.
+- 태그를 모를 때는 `revalidatePath`로 경로 전체를 revalidate할 수 있지만, 가능하면 태그 기반이 더 정밀하다.
 - CMS처럼 변경 시점을 웹훅으로 알 수 있는 데이터는 긴 `cacheLife`와 `cacheTag` + 웹훅 기반 `revalidateTag` 조합이 효율적이다.

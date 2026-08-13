@@ -25,7 +25,7 @@ cd my-app
 pnpm dev
 ```
 
-`--yes` 플래그를 쓰면 프롬프트 없이 저장된 기본값(또는 이전 설정)으로 바로 생성된다. 기본값은 **TypeScript, Tailwind CSS, ESLint, App Router, Turbopack**이 활성화되고, import 별칭은 `@/*`로 설정되며, 코딩 에이전트가 최신 Next.js 문법을 따르도록 안내하는 `AGENTS.md`(및 이를 참조하는 `CLAUDE.md`)가 함께 생성된다.
+`--yes` 플래그를 쓰면 프롬프트 없이 저장된 기본값(또는 이전 설정)으로 바로 생성된다. 이때 기본값은 **TypeScript, Tailwind CSS, ESLint, App Router, Turbopack** 활성화이고, import 별칭은 `@/*`로 설정된다. 또한 코딩 에이전트가 최신 Next.js 문법을 따르도록 안내하는 `AGENTS.md`와, 이를 참조하는 `CLAUDE.md`가 함께 생성된다.
 
 `http://localhost:3000`에 접속하면 방금 생성한 프로젝트의 기본 페이지를 볼 수 있다.
 
@@ -184,7 +184,7 @@ Next.js는 커스텀 TypeScript 플러그인과 타입 체커를 내장하고 �
 
 App Router는 `page.tsx`, `layout.tsx`, `route.ts`처럼 파일명이 관례로 정해져 있어서, 에디터 탭이 같은 이름으로 가득 차기 쉽다. 각 탭에 상위 폴더 이름을 함께 표시하도록 설정하면(예: `blog/[id]`) 구분이 쉬워진다.
 
-VS Code 1.88+ 또는 Cursor에서는 `.vscode/settings.json`에 커스텀 에디터 레이블을 추가한다. 폴더 2단계까지 표시해야 `blog/[id]/page.tsx` 같은 동적 라우트들이 전부 `[id]`로만 뭉쳐 보이지 않는다.
+VS Code 1.88+ 또는 Cursor에서는 `.vscode/settings.json`에 커스텀 에디터 레이블을 추가한다. 폴더 2단계까지 표시해야 `blog/[id]/page.tsx` 같은 다이나믹 라우트들이 전부 `[id]`로만 뭉쳐 보이지 않는다.
 
 ```json
 {
