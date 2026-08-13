@@ -163,8 +163,8 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.61 | AI Coding Agents | [공식](https://nextjs.org/docs/app/guides/ai-agents) | 초안 | 미착수 |
-| 2.62 | Next.js MCP Server | [공식](https://nextjs.org/docs/app/guides/mcp) | 초안 | 미착수 |
+| 2.61 | AI Coding Agents | [공식](https://nextjs.org/docs/app/guides/ai-agents) | 완료 | 미착수 |
+| 2.62 | Next.js MCP Server | [공식](https://nextjs.org/docs/app/guides/mcp) | 완료 | 미착수 |
 
 ## 3. API Reference (하위 그룹 순서 재배열)
 
