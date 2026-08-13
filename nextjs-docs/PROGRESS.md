@@ -145,12 +145,12 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.53 | Production | [공식](https://nextjs.org/docs/app/guides/production-checklist) | 초안 | 미착수 |
-| 2.54 | Self-Hosting | [공식](https://nextjs.org/docs/app/guides/self-hosting) | 초안 | 미착수 |
-| 2.55 | Deploying to Platforms | [공식](https://nextjs.org/docs/app/guides/deploying-to-platforms) | 초안 | 미착수 |
-| 2.56 | Static Exports | [공식](https://nextjs.org/docs/app/guides/static-exports) | 초안 | 미착수 |
-| 2.57 | Public pages | [공식](https://nextjs.org/docs/app/guides/public-static-pages) | 초안 | 미착수 |
-| 2.58 | PPR Platform Guide | [공식](https://nextjs.org/docs/app/guides/ppr-platform-guide) | 초안 | 미착수 |
+| 2.53 | Production | [공식](https://nextjs.org/docs/app/guides/production-checklist) | 완료 | 미착수 |
+| 2.54 | Self-Hosting | [공식](https://nextjs.org/docs/app/guides/self-hosting) | 완료 | 미착수 |
+| 2.55 | Deploying to Platforms | [공식](https://nextjs.org/docs/app/guides/deploying-to-platforms) | 완료 | 미착수 |
+| 2.56 | Static Exports | [공식](https://nextjs.org/docs/app/guides/static-exports) | 완료 | 미착수 |
+| 2.57 | Public pages | [공식](https://nextjs.org/docs/app/guides/public-static-pages) | 완료 | 미착수 |
+| 2.58 | PPR Platform Guide | [공식](https://nextjs.org/docs/app/guides/ppr-platform-guide) | 완료 | 미착수 |
 
 ### 분석·기타
 
