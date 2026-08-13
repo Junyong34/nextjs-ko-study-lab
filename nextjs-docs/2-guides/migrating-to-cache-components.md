@@ -147,9 +147,9 @@ Cache Components에서는 `'use cache'`를 명시하지 않으면 캐시하지 �
 
 빈 배열은 오류다. Next.js가 라우트를 prerender해 비어 있지 않은 static shell을 검증할 수 있도록 하나 이상 반환한다. 반환하지 않은 경로도 App Shell과 요청 시 스트리밍으로 제공한다. 전체 흐름은 [ISR with Cache Components](./incremental-static-regeneration-cache-components.md)를 참고한다.
 
-#### `dynamicParams`는 지원하지 않는다
+#### `dynamicParams`는 첫 방문을 더 이상 blocking하지 않는다
 
-export를 삭제한다. 목록에 없는 params도 요청 시 렌더된다. 기존 `dynamicParams: false`처럼 잘못된 값의 접근을 거절하려면 실제 데이터가 없을 때 `notFound()`를 호출한다.
+기본값인 `dynamicParams: true`에서 `generateStaticParams`가 반환하지 않은 param으로 처음 방문하면, 이전에는 페이지 렌더링이 끝날 때까지 응답이 blocking됐다. Cache Components에서는 Next.js가 App Shell을 즉시 제공하고, 알려진 param으로 백그라운드 업그레이드를 수행한다. `dynamicParams: false`의 동작은 바뀌지 않으므로 목록에 없는 경로는 계속 404를 반환한다.
 
 #### `params`는 `Suspense` 안에서 기다린다
 
