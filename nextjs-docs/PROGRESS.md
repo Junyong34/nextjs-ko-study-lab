@@ -91,10 +91,10 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.28 | Authentication | [공식](https://nextjs.org/docs/app/guides/authentication) | 초안 | 미착수 |
-| 2.29 | Data Security | [공식](https://nextjs.org/docs/app/guides/data-security) | 초안 | 미착수 |
-| 2.30 | Content Security Policy | [공식](https://nextjs.org/docs/app/guides/content-security-policy) | 초안 | 미착수 |
-| 2.31 | Environment Variables | [공식](https://nextjs.org/docs/app/guides/environment-variables) | 초안 | 미착수 |
+| 2.28 | Authentication | [공식](https://nextjs.org/docs/app/guides/authentication) | 완료 | 미착수 |
+| 2.29 | Data Security | [공식](https://nextjs.org/docs/app/guides/data-security) | 완료 | 미착수 |
+| 2.30 | Content Security Policy | [공식](https://nextjs.org/docs/app/guides/content-security-policy) | 완료 | 미착수 |
+| 2.31 | Environment Variables | [공식](https://nextjs.org/docs/app/guides/environment-variables) | 완료 | 미착수 |
 
 ### 메타데이터·인터랙션 확장
 
