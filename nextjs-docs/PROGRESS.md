@@ -100,11 +100,11 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.32 | JSON-LD | [공식](https://nextjs.org/docs/app/guides/json-ld) | 초안 | 미착수 |
-| 2.33 | Interactive apps | [공식](https://nextjs.org/docs/app/guides/interactive-apps) | 초안 | 미착수 |
-| 2.34 | Scripts | [공식](https://nextjs.org/docs/app/guides/scripts) | 초안 | 미착수 |
-| 2.35 | MDX | [공식](https://nextjs.org/docs/app/guides/mdx) | 초안 | 미착수 |
-| 2.36 | Third Party Libraries | [공식](https://nextjs.org/docs/app/guides/third-party-libraries) | 초안 | 미착수 |
+| 2.32 | JSON-LD | [공식](https://nextjs.org/docs/app/guides/json-ld) | 완료 | 미착수 |
+| 2.33 | Interactive apps | [공식](https://nextjs.org/docs/app/guides/interactive-apps) | 완료 | 미착수 |
+| 2.34 | Scripts | [공식](https://nextjs.org/docs/app/guides/scripts) | 완료 | 미착수 |
+| 2.35 | MDX | [공식](https://nextjs.org/docs/app/guides/mdx) | 완료 | 미착수 |
+| 2.36 | Third Party Libraries | [공식](https://nextjs.org/docs/app/guides/third-party-libraries) | 완료 | 미착수 |
 
 ### 앱 아키텍처 패턴
 
