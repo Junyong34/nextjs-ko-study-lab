@@ -122,16 +122,16 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.44 | Testing | [공식](https://nextjs.org/docs/app/guides/testing) | 초안 | 미착수 |
-| 2.44.1 | ㄴ Cypress | [공식](https://nextjs.org/docs/app/guides/testing/cypress) | 초안 | 미착수 |
-| 2.44.2 | ㄴ Jest | [공식](https://nextjs.org/docs/app/guides/testing/jest) | 초안 | 미착수 |
-| 2.44.3 | ㄴ Playwright | [공식](https://nextjs.org/docs/app/guides/testing/playwright) | 초안 | 미착수 |
-| 2.44.4 | ㄴ Vitest | [공식](https://nextjs.org/docs/app/guides/testing/vitest) | 초안 | 미착수 |
-| 2.45 | Debugging | [공식](https://nextjs.org/docs/app/guides/debugging) | 초안 | 미착수 |
-| 2.46 | Development Environment | [공식](https://nextjs.org/docs/app/guides/local-development) | 초안 | 미착수 |
-| 2.47 | Memory Usage | [공식](https://nextjs.org/docs/app/guides/memory-usage) | 초안 | 미착수 |
-| 2.48 | Instrumentation | [공식](https://nextjs.org/docs/app/guides/instrumentation) | 초안 | 미착수 |
-| 2.49 | OpenTelemetry | [공식](https://nextjs.org/docs/app/guides/open-telemetry) | 초안 | 미착수 |
+| 2.44 | Testing | [공식](https://nextjs.org/docs/app/guides/testing) | 완료 | 미착수 |
+| 2.44.1 | ㄴ Cypress | [공식](https://nextjs.org/docs/app/guides/testing/cypress) | 완료 | 미착수 |
+| 2.44.2 | ㄴ Jest | [공식](https://nextjs.org/docs/app/guides/testing/jest) | 완료 | 미착수 |
+| 2.44.3 | ㄴ Playwright | [공식](https://nextjs.org/docs/app/guides/testing/playwright) | 완료 | 미착수 |
+| 2.44.4 | ㄴ Vitest | [공식](https://nextjs.org/docs/app/guides/testing/vitest) | 완료 | 미착수 |
+| 2.45 | Debugging | [공식](https://nextjs.org/docs/app/guides/debugging) | 완료 | 미착수 |
+| 2.46 | Development Environment | [공식](https://nextjs.org/docs/app/guides/local-development) | 완료 | 미착수 |
+| 2.47 | Memory Usage | [공식](https://nextjs.org/docs/app/guides/memory-usage) | 완료 | 미착수 |
+| 2.48 | Instrumentation | [공식](https://nextjs.org/docs/app/guides/instrumentation) | 완료 | 미착수 |
+| 2.49 | OpenTelemetry | [공식](https://nextjs.org/docs/app/guides/open-telemetry) | 완료 | 미착수 |
 
 ### 빌드·번들링
 
