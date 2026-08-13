@@ -144,6 +144,10 @@ export default function Page() {
 />
 ```
 
+### API 참고
+
+모든 prop과 전략별 제약은 [Script Component API](../3-api-reference/3.2-components/script.md)에서 확인한다.
+
 ## 예제 및 데모 설계
 
 - Phase 2에서 dashboard layout과 root layout에 각각 script를 배치해 로드 범위를 비교한다.

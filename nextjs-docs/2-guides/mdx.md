@@ -47,7 +47,17 @@ const withMDX = createMDX({
 export default withMDX(nextConfig)
 ```
 
-이 설정으로 `.mdx` 파일을 page, 라우트, import 대상으로 사용할 수 있다. `@next/mdx`는 기본적으로 `.mdx`만 컴파일한다. webpack에서 `.md`까지 처리하려면 `extension: /\.(md|mdx)$/`를 추가한다.
+이 설정으로 `.mdx` 파일을 page, 라우트, import 대상으로 사용할 수 있다.
+
+#### `.md` 파일 처리
+
+`@next/mdx`는 기본적으로 `.mdx`만 컴파일한다. webpack에서 `.md`까지 처리하려면 `extension` 옵션을 추가한다.
+
+```js
+const withMDX = createMDX({
+  extension: /\.(md|mdx)$/,
+})
+```
 
 ### `mdx-components.tsx` 추가
 
@@ -163,7 +173,21 @@ export default function Page() {
 
 #### 공유 layout
 
-App Router의 `layout.tsx`로 여러 MDX page에 공통 구조와 style을 적용한다. Tailwind를 쓴다면 `@tailwindcss/typography` plugin의 `prose` class를 공유 layout에 적용해 Markdown 콘텐츠의 typography를 재사용할 수 있다.
+App Router의 `layout.tsx`로 여러 MDX page에 공통 구조와 style을 적용한다.
+
+#### Tailwind typography plugin 사용
+
+Tailwind를 쓴다면 [`@tailwindcss/typography`](https://tailwindcss.com/docs/typography-plugin) plugin의 `prose` class를 공유 layout에 적용해 Markdown 콘텐츠의 typography를 재사용할 수 있다.
+
+```tsx
+export default function MdxLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return <div className="prose dark:prose-invert">{children}</div>
+}
+```
 
 ### Frontmatter
 
@@ -191,7 +215,24 @@ export default function Page() {
 
 remark는 Markdown을 다루는 도구 생태계고 rehype는 HTML을 다룬다. `@next/mdx`의 `options.remarkPlugins`와 `options.rehypePlugins`에 plugin을 추가해 콘텐츠를 변환할 수 있다. 생태계가 ESM 전용이므로 설정 파일은 `next.config.mjs` 또는 `next.config.ts`를 사용한다.
 
+#### Turbopack에서 plugin 사용
+
 Turbopack에서는 최신 `@next/mdx`를 사용하고 plugin 이름을 문자열로 지정한다. 옵션이 있으면 `[pluginName, serializableOptions]` 형태로 전달한다.
+
+```js
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [
+      'remark-gfm',
+      ['remark-toc', { heading: 'The Table' }],
+    ],
+    rehypePlugins: [
+      'rehype-slug',
+      ['rehype-katex', { strict: true, throwOnError: true }],
+    ],
+  },
+})
+```
 
 > **알아두면 좋은 점**: JavaScript 함수는 Rust로 전달할 수 없으므로 직렬화할 수 없는 옵션을 가진 remark·rehype plugin은 아직 Turbopack에서 사용할 수 없다.
 
@@ -213,7 +254,15 @@ module.exports = withMDX({
 })
 ```
 
-객체를 전달하면 `jsxRuntime`, `jsxImportSource`, `providerImportSource`, `mdxType`을 설정할 수 있다. 더 알아볼 자료로 MDX, `@next/mdx`, remark, rehype, Markdoc 공식 문서가 있다.
+객체를 전달하면 `jsxRuntime`, `jsxImportSource`, `providerImportSource`, `mdxType`을 설정할 수 있다.
+
+### 도움말 링크
+
+- [MDX](https://mdxjs.com/)
+- [`@next/mdx`](https://www.npmjs.com/package/@next/mdx)
+- [remark](https://github.com/remarkjs/remark)
+- [rehype](https://github.com/rehypejs/rehype)
+- [Markdoc](https://markdoc.dev/docs/nextjs)
 
 ## 예제 및 데모 설계
 

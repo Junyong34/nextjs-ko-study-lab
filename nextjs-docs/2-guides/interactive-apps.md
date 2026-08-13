@@ -14,6 +14,8 @@
 
 사용자 상호작용이 서버 작업을 요구하면 결과는 즉시 도착하지 않는다. 네트워크 요청은 완료 시간이 일정하지 않고 성공하거나 실패할 수 있다. 기다리는 동안 클라이언트가 상태를 알리지 않으면 사용자는 오래된 데이터를 보며 작업이 진행 중인지 판단하기 어렵다.
 
+### 예제
+
 공식 예제 Taskboard는 느린 읽기를 스트리밍하는 단계부터 mutation을 서버가 확인하기 전에 결과를 보여주는 단계까지 순서대로 확장한다. Server Function은 mutation 뒤에 [`refresh()`](../3-api-reference/3.3-functions/refresh.md)를 호출해 서버를 최신 데이터로 다시 렌더링한다.
 
 > **알아두면 좋은 점**: `Suspense` 스트리밍은 느린 읽기가 끝나는 동안 셸을 먼저 그려 FCP와 LCP를 낮춘다. 낙관적 UI와 transition은 클릭 프레임을 빠르게 유지해 INP를 낮춘다. 다만 클라이언트 JavaScript를 줄이고 상호작용 중 블로킹 왕복 요청을 피하는 기본 INP 최적화도 계속 필요하다.
@@ -112,7 +114,9 @@ const [{ key }, formAction, isPending] = useActionState(
 )
 ```
 
-`await` 뒤의 상태 갱신은 현재 React에서 자동으로 같은 transition에 포함되지 않는다. 따라서 `setIsOpen(false)`를 `startTransition`으로 다시 감싸는 방식이 권장된다. 분석 이벤트, toast, focus 변경처럼 렌더링 상태를 바꾸지 않는 부수 효과는 transition이 필요 없다.
+분석 이벤트, toast, focus 변경처럼 렌더링 상태를 바꾸지 않는 부수 효과는 transition이 필요 없다.
+
+> **알아두면 좋은 점**: React는 현재 `await` 뒤의 상태 갱신을 자동으로 같은 transition에 포함하지 않는다. 이 제한이 해결되기 전까지 `setIsOpen(false)`처럼 `await` 이후의 상태 갱신을 `startTransition`으로 다시 감싸는 방식이 권장된다.
 
 > **알아두면 좋은 점**: 동반 앱은 modal에 상태, 우선순위, 담당자, label 선택기도 추가한다. hidden input이 각 선택 상태를 추적하고, 성공할 때 `key`가 모든 입력을 재설정하는 패턴은 같다.
 
