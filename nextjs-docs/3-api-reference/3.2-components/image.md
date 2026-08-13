@@ -1013,6 +1013,8 @@ export default function MyImage() {
 
 정적 이미지를 import하면 Next.js는 파일을 기준으로 width와 height를 자동으로 설정한다. style을 지정해 이미지를 반응형으로 만들 수 있다.
 
+![부모 컨테이너의 너비와 높이를 채우는 반응형 이미지](./assets/image-01.webp)
+
 ```tsx
 import Image from 'next/image'
 import mountains from '../public/mountains.jpg'
@@ -1070,6 +1072,8 @@ export default function Page({ photoUrl }) {
 
 이미지의 가로세로 비율을 모른다면 [`fill` prop](#fill)과 `objectFit`을 `cover`로 설정한 style을 함께 추가할 수 있다. 이렇게 하면 이미지가 부모 컨테이너의 전체 너비를 채운다.
 
+![부모 컨테이너의 너비를 채우는 이미지 그리드](./assets/image-02.webp)
+
 ```tsx
 import Image from 'next/image'
 import mountains from '../public/mountains.jpg'
@@ -1103,6 +1107,8 @@ export default function Fill() {
 #### Background Image
 
 `fill` prop을 사용해 이미지가 화면 전체 영역을 덮도록 만들 수 있다.
+
+![페이지 전체 너비와 높이를 차지하는 배경 이미지](./assets/image-03.webp)
 
 ```tsx
 import Image from 'next/image'
