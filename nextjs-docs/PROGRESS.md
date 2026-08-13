@@ -110,13 +110,13 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.37 | Backend for Frontend | [공식](https://nextjs.org/docs/app/guides/backend-for-frontend) | 초안 | 미착수 |
-| 2.38 | SPAs | [공식](https://nextjs.org/docs/app/guides/single-page-applications) | 초안 | 미착수 |
-| 2.39 | PWAs | [공식](https://nextjs.org/docs/app/guides/progressive-web-apps) | 초안 | 미착수 |
-| 2.40 | Offline support | [공식](https://nextjs.org/docs/app/guides/offline-support) | 초안 | 미착수 |
-| 2.41 | Internationalization | [공식](https://nextjs.org/docs/app/guides/internationalization) | 초안 | 미착수 |
-| 2.42 | Multi-tenant | [공식](https://nextjs.org/docs/app/guides/multi-tenant) | 초안 | 미착수 |
-| 2.43 | Multi-zones | [공식](https://nextjs.org/docs/app/guides/multi-zones) | 초안 | 미착수 |
+| 2.37 | Backend for Frontend | [공식](https://nextjs.org/docs/app/guides/backend-for-frontend) | 완료 | 미착수 |
+| 2.38 | SPAs | [공식](https://nextjs.org/docs/app/guides/single-page-applications) | 완료 | 미착수 |
+| 2.39 | PWAs | [공식](https://nextjs.org/docs/app/guides/progressive-web-apps) | 완료 | 미착수 |
+| 2.40 | Offline support | [공식](https://nextjs.org/docs/app/guides/offline-support) | 완료 | 미착수 |
+| 2.41 | Internationalization | [공식](https://nextjs.org/docs/app/guides/internationalization) | 완료 | 미착수 |
+| 2.42 | Multi-tenant | [공식](https://nextjs.org/docs/app/guides/multi-tenant) | 완료 | 미착수 |
+| 2.43 | Multi-zones | [공식](https://nextjs.org/docs/app/guides/multi-zones) | 완료 | 미착수 |
 
 ### 테스트·디버깅
 
