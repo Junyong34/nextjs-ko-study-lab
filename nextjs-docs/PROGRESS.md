@@ -25,11 +25,11 @@
 | 1.11 | CSS | [공식](https://nextjs.org/docs/app/getting-started/css) | 완료 | 미착수 |
 | 1.12 | Image Optimization | [공식](https://nextjs.org/docs/app/getting-started/images) | 완료 | 미착수 |
 | 1.13 | Font Optimization | [공식](https://nextjs.org/docs/app/getting-started/fonts) | 완료 | 미착수 |
-| 1.14 | Metadata and OG images | [공식](https://nextjs.org/docs/app/getting-started/metadata-and-og-images) | 초안 | 미착수 |
-| 1.15 | Route Handlers | [공식](https://nextjs.org/docs/app/getting-started/route-handlers) | 초안 | 미착수 |
-| 1.16 | Proxy | [공식](https://nextjs.org/docs/app/getting-started/proxy) | 초안 | 미착수 |
-| 1.17 | Deploying | [공식](https://nextjs.org/docs/app/getting-started/deploying) | 초안 | 미착수 |
-| 1.18 | Upgrading | [공식](https://nextjs.org/docs/app/getting-started/upgrading) | 초안 | 미착수 |
+| 1.14 | Metadata and OG images | [공식](https://nextjs.org/docs/app/getting-started/metadata-and-og-images) | 완료 | 미착수 |
+| 1.15 | Route Handlers | [공식](https://nextjs.org/docs/app/getting-started/route-handlers) | 완료 | 미착수 |
+| 1.16 | Proxy | [공식](https://nextjs.org/docs/app/getting-started/proxy) | 완료 | 미착수 |
+| 1.17 | Deploying | [공식](https://nextjs.org/docs/app/getting-started/deploying) | 완료 | 미착수 |
+| 1.18 | Upgrading | [공식](https://nextjs.org/docs/app/getting-started/upgrading) | 완료 | 미착수 |
 
 ## 2. Guides (의존성 기준 재배열)
 
@@ -37,55 +37,55 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.1 | Rendering Philosophy | [공식](https://nextjs.org/docs/app/guides/rendering-philosophy) | 초안 | 미착수 |
-| 2.2 | Server and Client Boundary | [공식](https://nextjs.org/docs/app/guides/server-and-client-boundary) | 초안 | 미착수 |
-| 2.3 | How Revalidation Works | [공식](https://nextjs.org/docs/app/guides/how-revalidation-works) | 초안 | 미착수 |
-| 2.4 | Caching (Previous Model) | [공식](https://nextjs.org/docs/app/guides/caching-without-cache-components) | 초안 | 미착수 |
-| 2.5 | Streaming | [공식](https://nextjs.org/docs/app/guides/streaming) | 초안 | 미착수 |
+| 2.1 | Rendering Philosophy | [공식](https://nextjs.org/docs/app/guides/rendering-philosophy) | 완료 | 미착수 |
+| 2.2 | Server and Client Boundary | [공식](https://nextjs.org/docs/app/guides/server-and-client-boundary) | 완료 | 미착수 |
+| 2.3 | How Revalidation Works | [공식](https://nextjs.org/docs/app/guides/how-revalidation-works) | 완료 | 미착수 |
+| 2.4 | Caching (Previous Model) | [공식](https://nextjs.org/docs/app/guides/caching-without-cache-components) | 완료 | 미착수 |
+| 2.5 | Streaming | [공식](https://nextjs.org/docs/app/guides/streaming) | 완료 | 미착수 |
 
 ### 캐싱·revalidation 심화
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.6 | ISR | [공식](https://nextjs.org/docs/app/guides/incremental-static-regeneration) | 초안 | 미착수 |
-| 2.7 | ISR with Cache Components | [공식](https://nextjs.org/docs/app/guides/incremental-static-regeneration-cache-components) | 초안 | 미착수 |
-| 2.8 | Migrating to Cache Components | [공식](https://nextjs.org/docs/app/guides/migrating-to-cache-components) | 초안 | 미착수 |
-| 2.9 | Adopting Partial Prefetching | [공식](https://nextjs.org/docs/app/guides/adopting-partial-prefetching) | 초안 | 미착수 |
-| 2.10 | Authentication with Cache Components | [공식](https://nextjs.org/docs/app/guides/authentication-with-cache-components) | 초안 | 미착수 |
-| 2.11 | CDN Caching | [공식](https://nextjs.org/docs/app/guides/cdn-caching) | 초안 | 미착수 |
-| 2.12 | CI Build Caching | [공식](https://nextjs.org/docs/app/guides/ci-build-caching) | 초안 | 미착수 |
+| 2.6 | ISR | [공식](https://nextjs.org/docs/app/guides/incremental-static-regeneration) | 완료 | 미착수 |
+| 2.7 | ISR with Cache Components | [공식](https://nextjs.org/docs/app/guides/incremental-static-regeneration-cache-components) | 완료 | 미착수 |
+| 2.8 | Migrating to Cache Components | [공식](https://nextjs.org/docs/app/guides/migrating-to-cache-components) | 완료 | 미착수 |
+| 2.9 | Adopting Partial Prefetching | [공식](https://nextjs.org/docs/app/guides/adopting-partial-prefetching) | 완료 | 미착수 |
+| 2.10 | Authentication with Cache Components | [공식](https://nextjs.org/docs/app/guides/authentication-with-cache-components) | 완료 | 미착수 |
+| 2.11 | CDN Caching | [공식](https://nextjs.org/docs/app/guides/cdn-caching) | 완료 | 미착수 |
+| 2.12 | CI Build Caching | [공식](https://nextjs.org/docs/app/guides/ci-build-caching) | 완료 | 미착수 |
 
 ### 데이터·폼
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.13 | Forms | [공식](https://nextjs.org/docs/app/guides/forms) | 초안 | 미착수 |
-| 2.14 | Server Actions | [공식](https://nextjs.org/docs/app/guides/server-actions) | 초안 | 미착수 |
-| 2.15 | Client-side data fetching | [공식](https://nextjs.org/docs/app/guides/client-side-data-fetching) | 초안 | 미착수 |
-| 2.15.1 | ㄴ SWR | [공식](https://nextjs.org/docs/app/guides/client-side-data-fetching/swr) | 초안 | 미착수 |
-| 2.15.2 | ㄴ TanStack Query | [공식](https://nextjs.org/docs/app/guides/client-side-data-fetching/tanstack-query) | 초안 | 미착수 |
-| 2.16 | Redirecting | [공식](https://nextjs.org/docs/app/guides/redirecting) | 초안 | 미착수 |
-| 2.17 | Draft Mode | [공식](https://nextjs.org/docs/app/guides/draft-mode) | 초안 | 미착수 |
+| 2.13 | Forms | [공식](https://nextjs.org/docs/app/guides/forms) | 완료 | 미착수 |
+| 2.14 | Server Actions | [공식](https://nextjs.org/docs/app/guides/server-actions) | 완료 | 미착수 |
+| 2.15 | Client-side data fetching | [공식](https://nextjs.org/docs/app/guides/client-side-data-fetching) | 완료 | 미착수 |
+| 2.15.1 | ㄴ SWR | [공식](https://nextjs.org/docs/app/guides/client-side-data-fetching/swr) | 완료 | 미착수 |
+| 2.15.2 | ㄴ TanStack Query | [공식](https://nextjs.org/docs/app/guides/client-side-data-fetching/tanstack-query) | 완료 | 미착수 |
+| 2.16 | Redirecting | [공식](https://nextjs.org/docs/app/guides/redirecting) | 완료 | 미착수 |
+| 2.17 | Draft Mode | [공식](https://nextjs.org/docs/app/guides/draft-mode) | 완료 | 미착수 |
 
 ### 내비게이션·체감 성능
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.18 | Prefetching | [공식](https://nextjs.org/docs/app/guides/prefetching) | 초안 | 미착수 |
-| 2.19 | Optimizing prefetching | [공식](https://nextjs.org/docs/app/guides/optimizing-prefetching) | 초안 | 미착수 |
-| 2.20 | Instant navigation | [공식](https://nextjs.org/docs/app/guides/instant-navigation) | 초안 | 미착수 |
-| 2.21 | Lazy Loading | [공식](https://nextjs.org/docs/app/guides/lazy-loading) | 초안 | 미착수 |
-| 2.22 | Preserving UI state | [공식](https://nextjs.org/docs/app/guides/preserving-ui-state) | 초안 | 미착수 |
-| 2.23 | Preventing Flash | [공식](https://nextjs.org/docs/app/guides/preventing-flash-before-hydration) | 초안 | 미착수 |
-| 2.24 | View transitions | [공식](https://nextjs.org/docs/app/guides/view-transitions) | 초안 | 미착수 |
+| 2.18 | Prefetching | [공식](https://nextjs.org/docs/app/guides/prefetching) | 완료 | 미착수 |
+| 2.19 | Optimizing prefetching | [공식](https://nextjs.org/docs/app/guides/optimizing-prefetching) | 완료 | 미착수 |
+| 2.20 | Instant navigation | [공식](https://nextjs.org/docs/app/guides/instant-navigation) | 완료 | 미착수 |
+| 2.21 | Lazy Loading | [공식](https://nextjs.org/docs/app/guides/lazy-loading) | 완료 | 미착수 |
+| 2.22 | Preserving UI state | [공식](https://nextjs.org/docs/app/guides/preserving-ui-state) | 완료 | 미착수 |
+| 2.23 | Preventing Flash | [공식](https://nextjs.org/docs/app/guides/preventing-flash-before-hydration) | 완료 | 미착수 |
+| 2.24 | View transitions | [공식](https://nextjs.org/docs/app/guides/view-transitions) | 완료 | 미착수 |
 
 ### 스타일링
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 2.25 | CSS-in-JS | [공식](https://nextjs.org/docs/app/guides/css-in-js) | 초안 | 미착수 |
-| 2.26 | Sass | [공식](https://nextjs.org/docs/app/guides/sass) | 초안 | 미착수 |
-| 2.27 | Tailwind CSS v3 | [공식](https://nextjs.org/docs/app/guides/tailwind-v3-css) | 초안 | 미착수 |
+| 2.25 | CSS-in-JS | [공식](https://nextjs.org/docs/app/guides/css-in-js) | 완료 | 미착수 |
+| 2.26 | Sass | [공식](https://nextjs.org/docs/app/guides/sass) | 완료 | 미착수 |
+| 2.27 | Tailwind CSS v3 | [공식](https://nextjs.org/docs/app/guides/tailwind-v3-css) | 완료 | 미착수 |
 
 ### 인증·보안
 
