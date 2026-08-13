@@ -16,16 +16,21 @@ Vitest는 React Testing Library와 함께 컴포넌트 단위 테스트에 사�
 
 > **알아두면 좋은 점**: Vitest는 현재 `async` Server Component를 지원하지 않는다. 동기 Server Component와 Client Component는 단위 테스트할 수 있지만 `async` 컴포넌트에는 E2E 테스트를 사용한다.
 
-### 빠른 시작과 수동 설정
+### 빠른 시작
 
 ```bash
 pnpm create next-app --example with-vitest with-vitest-app
 ```
 
+### 수동 설정
+
 TypeScript 프로젝트는 경로 별칭 플러그인까지 설치한다.
 
 ```bash
+# TypeScript
 pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom vite-tsconfig-paths
+# JavaScript
+pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom
 ```
 
 ```ts
@@ -44,14 +49,38 @@ export default defineConfig({
 
 `package.json`에 `"test": "vitest"`를 추가한다. 기본 실행은 파일 변경을 감지하는 watch 모드다.
 
+```json
+{
+  "scripts": {
+    "test": "vitest"
+  }
+}
+```
+
 ### 첫 단위 테스트
+
+테스트할 페이지를 만든다.
+
+```tsx
+// app/page.tsx
+import Link from 'next/link'
+
+export default function Page() {
+  return (
+    <div>
+      <h1>Home</h1>
+      <Link href="/about">About</Link>
+    </div>
+  )
+}
+```
 
 ```tsx
 import { expect, test } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import Page from '../app/page'
 
-test('홈 제목을 렌더링한다', () => {
+test('Page', () => {
   render(<Page />)
   expect(
     screen.getByRole('heading', { level: 1, name: 'Home' })
@@ -62,6 +91,10 @@ test('홈 제목을 렌더링한다', () => {
 role과 접근 가능한 이름으로 요소를 찾으면 구현 세부 클래스보다 사용자가 인식하는 UI를 검사할 수 있다.
 
 > **알아두면 좋은 점**: 예제처럼 루트 `__tests__` 폴더를 써도 되고 테스트 파일을 App Router 코드 가까이에 배치해도 된다.
+
+### 테스트 실행
+
+`pnpm test`로 Vitest를 실행한다. 기본 watch 모드에서는 파일 변경을 감지해 관련 테스트를 다시 실행한다.
 
 ### 추가 자료
 

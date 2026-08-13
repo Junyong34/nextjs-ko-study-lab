@@ -55,13 +55,19 @@ Next.js는 source map을 제공하므로 번들 결과가 아니라 작성한 �
 
 Firefox를 쓰려면 Firefox Debugger 확장을 설치하고 `type: "firefox"`와 `webpack://_N_E` 경로 매핑을 추가한다. 포트가 `3000`이 아니면 URL을 바꾸고, 모노레포의 앱이 루트 밖에 있으면 서버와 full stack 구성에 `cwd`를 지정한다.
 
+> **참고**: VS Code에서 Firefox를 디버깅하려면 Firefox Debugger 확장을 설치해야 한다.
+
+### JetBrains WebStorm 디버거 사용
+
 WebStorm에서는 `JavaScript Debug` 구성을 만들고 앱 URL을 지정한다. Node.js 앱과 브라우저 앱을 각각 디버그 모드로 실행한다.
 
 ### 브라우저 DevTools로 클라이언트 디버깅하기
 
 개발 서버를 실행하고 Chrome의 Sources 탭이나 Firefox의 Debugger 탭을 연다. `debugger` 문에 도달하면 실행이 멈추며, 파일 검색으로 source map에 매핑된 소스에 breakpoint를 직접 걸 수도 있다. 클라이언트 소스 경로는 보통 `webpack://_N_E/./`로 시작한다.
 
-[React Developer Tools](https://react.dev/learn/react-developer-tools)를 설치하면 컴포넌트 트리, props와 state, 렌더링 성능을 React 관점에서 검사할 수 있다.
+#### React Developer Tools
+
+React 전용 디버깅에는 React Developer Tools 브라우저 확장을 사용한다. 컴포넌트를 검사하고 props와 state를 수정하며 렌더링 성능 문제를 찾을 수 있다.
 
 ### 서버 코드 디버깅하기
 
@@ -69,6 +75,14 @@ Node.js inspector를 켜서 개발 서버를 실행한다.
 
 ```bash
 pnpm dev --inspect
+```
+
+실행하면 다음과 같이 inspector 주소와 서버 주소가 출력된다.
+
+```text
+Debugger listening on ws://127.0.0.1:9229/0cf90313-350d-4466-a748-cd60f4e47c95
+For help, see: https://nodejs.org/learn/getting-started/debugging
+ready - started server on 0.0.0.0:3000, url: http://localhost:3000
 ```
 
 Chrome에서는 `chrome://inspect`, Firefox에서는 `about:debugging`에서 Next.js 프로세스를 찾아 연결한다. 서버 소스 경로는 보통 `webpack://{application-name}/./`로 시작한다.
@@ -82,6 +96,10 @@ Chrome에서는 `chrome://inspect`, Firefox에서는 `about:debugging`에서 Nex
 개발 오류 오버레이의 Next.js 버전 아래에 나타나는 Node.js 아이콘을 누르면 서버 프로세스 DevTools URL이 복사된다. 새 탭에서 URL을 열어 오류가 난 서버 소스를 검사한다.
 
 공식 문서는 Windows에서 Fast Refresh가 지나치게 느릴 때 Windows Defender를 비활성화하라고 안내한다. 보안 정책상 전체 비활성화가 어렵다면 [Development Environment](./local-development.md)의 프로젝트 폴더 제외 절차를 검토한다.
+
+### Windows에서 디버깅
+
+Windows Defender가 모든 파일 읽기를 검사하면 `next dev`의 Fast Refresh가 크게 느려질 수 있다. 전체 비활성화 여부는 보안 정책에 따라 결정하고, 우선 [Development Environment](./local-development.md)의 프로젝트 폴더 제외 절차를 검토한다.
 
 ### 추가 자료
 

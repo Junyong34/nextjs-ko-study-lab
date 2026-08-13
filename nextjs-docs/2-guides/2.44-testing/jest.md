@@ -16,11 +16,13 @@ Jest와 React Testing Library는 단위 테스트와 스냅샷 테스트에 자�
 
 > **알아두면 좋은 점**: Jest는 현재 `async` Server Component를 지원하지 않는다. 동기 Server Component와 Client Component는 단위 테스트할 수 있지만 `async` 컴포넌트는 E2E 테스트를 권장한다.
 
-### 빠른 시작과 수동 설정
+### 빠른 시작
 
 ```bash
 pnpm create next-app --example with-jest with-jest-app
 ```
+
+### 수동 설정
 
 기존 프로젝트에서는 필요한 패키지를 설치하고 `pnpm create jest@latest`로 기본 설정을 만든다.
 
@@ -46,11 +48,24 @@ const config: Config = {
 export default createJestConfig(config)
 ```
 
-환경 변수 자체를 테스트한다면 별도 setup 스크립트나 `jest.config.ts`에서 직접 불러온다.
+> **알아두면 좋은 점**: 환경 변수를 직접 테스트하려면 별도 setup 스크립트나 `jest.config.ts`에서 수동으로 불러온다.
 
-### 경로 별칭과 DOM matcher
+### 선택 사항: 절대 import와 모듈 경로 별칭 처리
 
 `tsconfig.json`이나 `jsconfig.json`의 경로 별칭은 Jest의 `moduleNameMapper`에도 맞춰야 한다.
+
+```json
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "baseUrl": "./",
+    "paths": {
+      "@/components/*": ["components/*"]
+    }
+  }
+}
+```
 
 ```ts
 moduleNameMapper: {
@@ -58,35 +73,17 @@ moduleNameMapper: {
 }
 ```
 
+### 선택 사항: custom matcher로 Jest 확장
+
 `jest.setup.ts`에서 `@testing-library/jest-dom`을 불러오면 `toBeInTheDocument()` 같은 matcher를 쓸 수 있다.
 
 ```ts
 import '@testing-library/jest-dom'
 ```
 
-> **알아두면 좋은 점**: `@testing-library/jest-dom` v6에서 `extend-expect`가 제거됐다. v6 이상은 `@testing-library/jest-dom`을 직접 import한다.
+> **알아두면 좋은 점**: `@testing-library/jest-dom` v6에서 `extend-expect`가 제거됐다. v6 이상은 `@testing-library/jest-dom`을 직접 import하고, v6 미만은 `@testing-library/jest-dom/extend-expect`를 import한다.
 
-### 첫 테스트와 스냅샷
-
-```tsx
-import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
-import Page from '../app/page'
-
-describe('Page', () => {
-  it('제목을 렌더링한다', () => {
-    render(<Page />)
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
-  })
-})
-```
-
-스냅샷은 예상하지 못한 렌더링 변경을 찾는 보조 수단이다. 변경된 스냅샷을 무조건 갱신하지 말고 의도한 결과인지 검토한다.
-
-```tsx
-const { container } = render(<Page />)
-expect(container).toMatchSnapshot()
-```
+### `package.json`에 테스트 스크립트 추가
 
 `package.json`에는 일반 실행과 watch 실행을 나눈다.
 
@@ -98,6 +95,53 @@ expect(container).toMatchSnapshot()
   }
 }
 ```
+
+### 첫 테스트 만들기
+
+테스트할 페이지를 만든다.
+
+```tsx
+// app/page.tsx
+import Link from 'next/link'
+
+export default function Page() {
+  return (
+    <div>
+      <h1>Home</h1>
+      <Link href="/about">About</Link>
+    </div>
+  )
+}
+```
+
+```tsx
+import '@testing-library/jest-dom'
+import { render, screen } from '@testing-library/react'
+import Page from '../app/page'
+
+describe('Page', () => {
+  it('renders a heading', () => {
+    render(<Page />)
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
+  })
+})
+```
+
+스냅샷은 예상하지 못한 렌더링 변경을 찾는 보조 수단이다. 변경된 스냅샷을 무조건 갱신하지 말고 의도한 결과인지 검토한다.
+
+```tsx
+import { render } from '@testing-library/react'
+import Page from '../app/page'
+
+it('renders homepage unchanged', () => {
+  const { container } = render(<Page />)
+  expect(container).toMatchSnapshot()
+})
+```
+
+### 테스트 실행
+
+`pnpm test`로 테스트를 실행한다. `jest --watch`는 파일이 바뀔 때 관련 테스트를 다시 실행한다.
 
 ### 추가 자료
 

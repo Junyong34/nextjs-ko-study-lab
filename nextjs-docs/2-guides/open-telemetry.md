@@ -79,11 +79,19 @@ sdk.start()
 
 Edge Runtime 지원이 필요하면 `@vercel/otel`을 사용한다.
 
-### 로컬 테스트와 배포
+### instrumentation 테스트
 
 로컬 trace를 보려면 호환 backend가 연결된 OpenTelemetry Collector가 필요하다. 정상 동작하면 `GET /requested/pathname` 형태의 root server span 아래에 같은 trace의 하위 span이 보인다. 기본값보다 많은 span을 출력하려면 `NEXT_OTEL_VERBOSE=1`을 설정한다.
 
+### 배포
+
+#### OpenTelemetry Collector 사용
+
 Vercel에서는 관측 제공자를 프로젝트에 연결할 수 있다. 자체 호스팅은 collector를 직접 띄워 telemetry를 받아야 한다. collector 없이 `@vercel/otel`이나 수동 설정에 custom exporter를 연결하는 방식도 가능하다.
+
+#### custom exporter
+
+OpenTelemetry Collector는 필수가 아니다. `@vercel/otel`이나 수동 OpenTelemetry 구성에 custom exporter를 연결할 수도 있다.
 
 ### custom span
 

@@ -16,13 +16,15 @@ Cypress는 E2E 테스트와 컴포넌트 테스트를 지원하는 테스트 러
 
 > **경고**: Cypress `13.6.3` 미만은 `moduleResolution: "bundler"`를 사용하는 TypeScript 5를 지원하지 않는다. 이 문제는 `13.6.3`부터 해결됐다.
 
-### 빠른 시작과 수동 설정
+### 빠른 시작
 
 공식 예제로 새 프로젝트를 만들 수 있다.
 
 ```bash
 pnpm create next-app --example with-cypress with-cypress-app
 ```
+
+### 수동 설정
 
 기존 프로젝트에는 개발 의존성을 설치하고 실행 스크립트를 추가한다.
 
@@ -40,9 +42,43 @@ pnpm add -D cypress
 
 `pnpm cypress:open`을 처음 실행하면 E2E Testing과 Component Testing 중 필요한 구성을 선택할 수 있다. Cypress가 `cypress.config.js`와 `cypress` 폴더를 만든다.
 
+```bash
+pnpm cypress:open
+```
+
 ### E2E 테스트
 
 E2E 모드는 실행 중인 Next.js 서버에 접속한다. 실제 배포 동작과 가까운 조건을 만들려면 `next build`와 `next start`로 프로덕션 빌드를 실행한 뒤 테스트한다.
+
+홈과 About 페이지를 먼저 만든다.
+
+```tsx
+// app/page.tsx
+import Link from 'next/link'
+
+export default function Page() {
+  return (
+    <div>
+      <h1>Home</h1>
+      <Link href="/about">About</Link>
+    </div>
+  )
+}
+```
+
+```tsx
+// app/about/page.tsx
+import Link from 'next/link'
+
+export default function Page() {
+  return (
+    <div>
+      <h1>About</h1>
+      <Link href="/">Home</Link>
+    </div>
+  )
+}
+```
 
 ```ts
 import { defineConfig } from 'cypress'
@@ -56,7 +92,7 @@ export default defineConfig({
 
 ```ts
 describe('Navigation', () => {
-  it('About 페이지로 이동한다', () => {
+  it('should navigate to the about page', () => {
     cy.visit('http://localhost:3000/')
     cy.get('a[href*="about"]').click()
     cy.url().should('include', '/about')
@@ -69,6 +105,10 @@ describe('Navigation', () => {
 >
 > - `cypress.config.js`에 `baseUrl: 'http://localhost:3000'`을 지정하면 `cy.visit('/')`처럼 쓸 수 있다.
 > - `start-server-and-test`를 사용하면 서버 시작과 Cypress 실행을 한 스크립트로 묶을 수 있다. 코드가 바뀌면 프로덕션 빌드를 다시 만들어야 한다.
+
+#### E2E 테스트 실행
+
+`pnpm build && pnpm start`로 프로덕션 서버를 실행하고 다른 터미널에서 `pnpm cypress:open`을 실행한다. 공식 문서는 실제 앱 동작에 더 가까운 프로덕션 코드를 대상으로 테스트할 것을 권장한다.
 
 ### 컴포넌트 테스트
 
@@ -103,6 +143,10 @@ describe('<Page />', () => {
 >
 > - Cypress 컴포넌트 테스트는 현재 `async` Server Component를 지원하지 않으므로 E2E 테스트를 사용한다.
 > - Next.js 서버가 없기 때문에 서버에 의존하는 `<Image />` 같은 기능은 별도 구성 없이 동작하지 않을 수 있다.
+
+#### 컴포넌트 테스트 실행
+
+`pnpm cypress:open`을 실행하고 Component Testing suite를 선택한다.
 
 ### CI에서 실행하기
 

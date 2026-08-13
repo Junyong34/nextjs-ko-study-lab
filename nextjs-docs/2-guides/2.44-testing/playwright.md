@@ -14,11 +14,13 @@
 
 Playwright는 하나의 API로 Chromium, Firefox, WebKit을 자동화하는 E2E 테스트 프레임워크다.
 
-### 빠른 시작과 수동 설정
+### 빠른 시작
 
 ```bash
 pnpm create next-app --example with-playwright with-playwright-app
 ```
+
+### 수동 설정
 
 기존 프로젝트에서는 설치 마법사가 `playwright.config.ts`를 비롯한 기본 파일을 만든다.
 
@@ -30,10 +32,38 @@ pnpm create playwright
 
 테스트는 브라우저에서 홈을 열고 About 링크를 누른 뒤 URL과 제목을 검사한다.
 
+```tsx
+// app/page.tsx
+import Link from 'next/link'
+
+export default function Page() {
+  return (
+    <div>
+      <h1>Home</h1>
+      <Link href="/about">About</Link>
+    </div>
+  )
+}
+```
+
+```tsx
+// app/about/page.tsx
+import Link from 'next/link'
+
+export default function Page() {
+  return (
+    <div>
+      <h1>About</h1>
+      <Link href="/">Home</Link>
+    </div>
+  )
+}
+```
+
 ```ts
 import { test, expect } from '@playwright/test'
 
-test('About 페이지로 이동한다', async ({ page }) => {
+test('should navigate to the about page', async ({ page }) => {
   await page.goto('http://localhost:3000/')
   await page.click('text=About')
   await expect(page).toHaveURL('http://localhost:3000/about')
@@ -43,7 +73,7 @@ test('About 페이지로 이동한다', async ({ page }) => {
 
 > **알아두면 좋은 점**: `playwright.config.ts`에 `baseURL: 'http://localhost:3000'`을 지정하면 `page.goto('/')`와 상대 URL assertion을 사용할 수 있다.
 
-### 서버 실행과 CI
+#### Playwright 테스트 실행
 
 실제 서비스에 가까운 조건으로 검사하려면 `npm run build`와 `npm run start`로 서버를 실행하고 다른 터미널에서 테스트한다.
 
@@ -52,6 +82,8 @@ npx playwright test
 ```
 
 `webServer` 설정을 사용하면 Playwright가 서버를 시작하고 준비될 때까지 기다릴 수 있다.
+
+> **알아두면 좋은 점**: `webServer` 기능을 사용하면 Playwright가 개발 서버를 시작하고 완전히 준비될 때까지 기다리게 할 수 있다.
 
 ```ts
 import { defineConfig } from '@playwright/test'
@@ -67,6 +99,8 @@ export default defineConfig({
 ```
 
 CI에서는 기본적으로 headless 모드로 실행한다. 러너에 브라우저 의존성이 없다면 먼저 설치한다.
+
+#### CI에서 Playwright 실행
 
 ```bash
 npx playwright install-deps
