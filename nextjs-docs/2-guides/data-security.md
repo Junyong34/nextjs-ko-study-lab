@@ -112,7 +112,9 @@ module.exports = {
 }
 ```
 
-Taint API는 추가 방어층이다. DAL에서 데이터를 필터링하고 정제하는 작업을 대체하지 않는다. 환경 변수는 기본적으로 서버에서만 사용할 수 있지만 `NEXT_PUBLIC_` 접두사가 붙으면 클라이언트 번들에 노출된다. 함수와 클래스는 기본적으로 Client Component에 전달할 수 없다.
+Taint API는 추가 방어층이다. DAL에서 데이터를 필터링하고 정제하는 작업을 대체하지 않는다.
+
+> **알아두면 좋은 점**: 환경 변수는 기본적으로 서버에서만 사용할 수 있지만 `NEXT_PUBLIC_` 접두사가 붙으면 클라이언트 번들에 노출된다. 함수와 클래스는 기본적으로 Client Component에 전달할 수 없다.
 
 #### 서버 전용 코드의 클라이언트 실행 막기
 
@@ -131,9 +133,13 @@ Action ID는 컴파일 때 만들어져 최대 14일 캐시되고, 새 빌드나
 
 > **알아두면 좋은 점**: Action ID가 숨겨져 있고 주기적으로 바뀌어도 접근 제어 수단은 아니다.
 
-#### 입력 검증과 인가
+#### 클라이언트 입력 검증
 
-클라이언트의 폼 데이터, URL params, 헤더, `searchParams`는 수정될 수 있으므로 신뢰하지 않는다. 페이지 수준 인증 검사는 그 안의 Server Action으로 이어지지 않는다. Action에서 사용자를 다시 인증하고, 해당 리소스의 소유자인지도 확인해야 IDOR 취약점을 막을 수 있다.
+클라이언트의 폼 데이터, URL params, 헤더, `searchParams`는 수정될 수 있으므로 신뢰하지 않는다. 서버에서 값을 다시 검증하고, 쿠키나 데이터베이스처럼 신뢰할 수 있는 원본에서 권한 정보를 읽는다.
+
+#### Authentication과 Authorization
+
+페이지 수준 인증 검사는 그 안의 Server Action으로 이어지지 않는다. Action에서 사용자를 다시 인증하고, 해당 리소스의 소유자인지도 확인해야 IDOR 취약점을 막을 수 있다.
 
 ```ts
 'use server'
@@ -155,7 +161,9 @@ export async function deletePost(postId: string) {
 
 #### mutation에 DAL 사용하기
 
-변경 로직도 `server-only` DAL에 두고 `"use server"` Action은 위임만 하게 만들 수 있다. 두 모듈 모두 `server-only`를 사용할 수 있으며, Action을 Client Component에서 `useActionState` 등에 전달해도 서버 전용 번들 계층에서 해석된다.
+변경 로직도 `server-only` DAL에 두고 `"use server"` Action은 위임만 하게 만들 수 있다.
+
+> **알아두면 좋은 점**: DAL과 `"use server"` 파일 모두 `server-only`를 사용할 수 있다. Action을 Client Component에서 `useActionState` 등에 전달해도 `"use server"` 모듈은 서버 전용 webpack 계층에서 해석된다.
 
 #### 반환값 제어하기
 
@@ -170,6 +178,8 @@ Server Action 반환값은 직렬화되어 클라이언트로 전달된다. 전�
 컴포넌트 안에 정의한 Server Action은 렌더링 시점의 외부 변수를 캡처할 수 있다. 호출 때 이 값을 클라이언트로 보냈다가 서버로 돌려보내야 하므로 Next.js는 캡처 값을 자동 암호화한다. 빌드마다 새 개인 키가 만들어져 Action은 특정 빌드에서만 호출할 수 있다.
 
 > **알아두면 좋은 점**: 암호화만으로 민감한 값의 클라이언트 노출을 막으려 하지는 않는다.
+
+#### 암호화 키 덮어쓰기(고급)
 
 여러 서버에 self-hosting할 때는 `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY`로 빌드 사이의 키를 맞출 수 있다. 값은 base64로 인코딩해야 하고 디코딩 길이는 AES 키 크기인 16, 24, 32바이트 중 하나여야 한다. Next.js 기본 키는 32바이트다. 키 교체와 서명 같은 일반 보안 관행도 적용한다.
 
@@ -193,7 +203,9 @@ module.exports = {
 
 #### 렌더링 중 부수 효과 피하기
 
-렌더링 중 로그아웃, 데이터베이스 갱신, 캐시 무효화를 부수 효과로 실행해서는 안 된다. Next.js는 렌더링 메서드에서 쿠키 설정과 캐시 revalidation을 막는다. 변경은 Server Action으로 처리한다. Next.js가 변경에 `POST`를 사용하면 `GET` 요청의 우발적 부수 효과와 일부 CSRF 위험을 줄일 수 있다.
+렌더링 중 로그아웃, 데이터베이스 갱신, 캐시 무효화를 부수 효과로 실행해서는 안 된다. Next.js는 렌더링 메서드에서 쿠키 설정과 캐시 revalidation을 막는다. 변경은 Server Action으로 처리한다.
+
+> **알아두면 좋은 점**: Next.js는 mutation에 `POST` 요청을 사용한다. 따라서 `GET` 요청에서 우발적인 부수 효과가 발생하는 일을 막고 CSRF 위험을 줄인다.
 
 ### 보안 감사 체크리스트
 

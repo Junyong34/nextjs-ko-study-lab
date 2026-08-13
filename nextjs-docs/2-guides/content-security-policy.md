@@ -176,7 +176,39 @@ module.exports = nextConfig
 
 #### SRI와 함께 CSP 구성하기
 
-SRI는 기존 CSP와 독립적으로 asset에 `integrity`를 추가하므로 hash를 허용하는 CSP를 별도로 구성한다.
+SRI를 활성화해도 기존 CSP 정책을 계속 사용할 수 있다. SRI는 asset에 `integrity` 속성을 추가해 CSP와 독립적으로 동작한다. 다이나믹 렌더링이 필요한 경로에서는 필요에 따라 Proxy에서 nonce도 함께 생성할 수 있다.
+
+```js
+const isDev = process.env.NODE_ENV === 'development'
+
+const csp = `
+  default-src 'self';
+  script-src 'self'${isDev ? " 'unsafe-eval'" : ''};
+  style-src 'self';
+  img-src 'self' blob: data:;
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  upgrade-insecure-requests;
+`
+
+module.exports = {
+  experimental: {
+    sri: { algorithm: 'sha256' },
+  },
+  async headers() {
+    return [{
+      source: '/(.*)',
+      headers: [{
+        key: 'Content-Security-Policy',
+        value: csp.replace(/\n/g, ''),
+      }],
+    }]
+  },
+}
+```
 
 #### nonce 대비 장점
 
@@ -184,7 +216,7 @@ SRI는 기존 CSP와 독립적으로 asset에 `integrity`를 추가하므로 has
 
 #### SRI 제약 사항
 
-제약도 있다. 기능이 변경되거나 제거될 수 있고, Pages Router에서는 지원하지 않으며, 빌드 뒤 동적으로 생성한 스크립트는 처리하지 못한다. 다이나믹 렌더링에서는 필요에 따라 Proxy nonce와 SRI를 함께 사용할 수 있다.
+제약도 있다. 기능이 변경되거나 제거될 수 있고, Pages Router에서는 지원하지 않으며, 빌드 뒤 동적으로 생성한 스크립트는 처리하지 못한다.
 
 > **알아두면 좋은 점**: SRI와 nonce는 함께 사용할 수 있지만, 서로 다른 위협과 렌더링 방식에 대응하므로 앱 요구에 맞춰 조합한다.
 
@@ -206,7 +238,40 @@ SRI는 기존 CSP와 독립적으로 asset에 `integrity`를 추가하므로 has
 
 #### 서드파티 스크립트
 
-Google Tag Manager 같은 서드파티 컴포넌트에는 `headers()`로 읽은 nonce를 전달하고 `script-src`, `connect-src`, `img-src`에 실제 사용하는 도메인만 추가한다.
+Google Tag Manager 같은 서드파티 컴포넌트에는 `headers()`로 읽은 nonce를 전달한다.
+
+```tsx
+import { GoogleTagManager } from '@next/third-parties/google'
+import { headers } from 'next/headers'
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const nonce = (await headers()).get('x-nonce')
+
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <GoogleTagManager gtmId="GTM-XYZ" nonce={nonce} />
+      </body>
+    </html>
+  )
+}
+```
+
+`script-src`, `connect-src`, `img-src`에는 실제 사용하는 도메인만 추가한다.
+
+```ts
+const csp = `
+  default-src 'self';
+  script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://www.googletagmanager.com;
+  connect-src 'self' https://www.google-analytics.com;
+  img-src 'self' data: https://www.google-analytics.com;
+`
+```
 
 #### 흔한 CSP 위반
 

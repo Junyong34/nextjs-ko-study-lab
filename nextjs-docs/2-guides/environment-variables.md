@@ -41,7 +41,7 @@ export async function GET() {
 }
 ```
 
-여러 줄 값은 큰따옴표 안에 실제 줄바꿈을 쓰거나 `\n`으로 표현할 수 있다.
+> **참고**: 여러 줄 값은 큰따옴표 안에 실제 줄바꿈을 쓰거나 `\n`으로 표현할 수 있다.
 
 ```bash
 PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----

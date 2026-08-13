@@ -81,9 +81,11 @@ export async function signup(_: unknown, formData: FormData) {
 }
 ```
 
-> **알아두면 좋은 점**: React 19의 `useFormStatus`는 `pending`뿐 아니라 `data`, `method`, `action`도 제공한다. 데이터를 변경하기 전에는 사용자가 그 동작을 수행할 권한까지 확인해야 한다. 사용자가 여러 번 제출하는 문제를 막기 위해 버튼 비활성화, debounce 같은 중복 제출 방지도 적용한다.
+> **알아두면 좋은 점**: React 19의 `useFormStatus`는 `pending`뿐 아니라 `data`, `method`, `action`도 제공한다. 데이터를 변경하기 전에는 사용자가 그 동작을 수행할 권한까지 확인해야 한다.
 
-직접 만든 인증 흐름은 빠르게 복잡해질 수 있으므로 인증 라이브러리 사용을 검토한다.
+> **팁**: 직접 만든 인증 흐름은 빠르게 복잡해지므로 인증 라이브러리 사용을 검토한다. 가입 과정에서 이메일이나 사용자 이름의 중복을 미리 확인하면 불필요한 제출을 줄이고 즉시 피드백할 수 있다. 입력 중 발생하는 검사 요청의 빈도는 `use-debounce` 같은 라이브러리로 조절할 수 있다.
+
+제출 버튼의 `pending` 상태는 같은 폼을 여러 번 제출하는 일을 막는 데도 사용한다.
 
 ### Session Management
 
@@ -98,9 +100,11 @@ export async function signup(_: unknown, formData: FormData) {
 
 #### Stateless 세션 만들기
 
-먼저 서명용 비밀 키를 생성해 [환경 변수](./environment-variables.md)에 둔다. 세션 모듈에는 `server-only`를 import하고, payload에는 사용자 ID나 역할처럼 이후 요청에 필요한 최소 데이터만 넣는다. 전화번호, 이메일, 카드 정보, 비밀번호 같은 개인·민감 정보는 넣지 않는다.
+먼저 서명용 비밀 키를 생성해 [환경 변수](./environment-variables.md)에 둔다. 세션 모듈에는 `server-only`를 import한다.
 
-> **알아두면 좋은 점**: 비밀 키는 예측하기 어려운 충분한 길이로 만들고 저장소에 커밋하지 않는다.
+> **알아두면 좋은 점**: 사용 중인 인증 라이브러리가 세션 관리도 제공하는지 확인한다.
+
+비밀 키는 예측하기 어려운 충분한 길이로 만들고 저장소에 커밋하지 않는다.
 
 ```bash
 openssl rand -base64 32
@@ -132,6 +136,8 @@ export async function decrypt(session = '') {
   }
 }
 ```
+
+> **팁**: payload에는 이후 요청에 필요한 사용자 ID나 역할처럼 최소한의 고유 정보만 넣는다. 전화번호, 이메일, 카드 정보, 비밀번호 같은 개인·민감 정보는 넣지 않는다.
 
 세션 쿠키는 서버에서 설정한다. `HttpOnly`는 클라이언트 JavaScript의 접근을 막고, `Secure`는 HTTPS로만 전송하며, `SameSite`는 교차 사이트 요청 규칙을 정한다. `Expires` 또는 `Max-Age`와 `Path`도 명시한다.
 
@@ -168,7 +174,7 @@ export async function createSession(userId: string) {
 2. 브라우저에 저장할 세션 ID를 암호화한다.
 3. Proxy의 낙관적 검사에 쓸 쿠키와 데이터베이스 상태를 함께 유지한다.
 
-세션 수명 동안 조회 결과를 서버에 캐시하거나 관련 데이터 요청을 합칠 수 있다. 마지막 로그인 시각, 활성 기기 수, 모든 기기에서 로그아웃 같은 고급 기능에도 적합하다.
+> **팁**: 빠른 조회가 필요하면 세션 수명 동안 서버 캐시를 두거나 관련 데이터 요청을 합칠 수 있다. 마지막 로그인 시각, 활성 기기 수, 모든 기기 로그아웃 같은 기능에는 Database 세션이 적합하다.
 
 ### Authorization
 
@@ -196,7 +202,9 @@ export async function proxy(req: NextRequest) {
 }
 ```
 
-Proxy는 첫 번째 방어선일 뿐이다. 대부분의 보안 검사는 데이터 원본 가까이에서 수행한다. `matcher`로 실행 경로를 좁힐 수 있지만 인증 용도라면 모든 라우트에서 실행하는 것을 권장한다. 사용 중인 인증·세션 라이브러리가 Proxy의 Node.js 런타임과 호환되는지도 확인한다.
+Proxy는 첫 번째 방어선일 뿐이다. 대부분의 보안 검사는 데이터 원본 가까이에서 수행한다.
+
+> **팁**: Proxy는 모든 라우트에서 실행하는 편이 권장되지만, `matcher`로 특정 경로만 선택할 수도 있다. 사용 중인 인증 라이브러리가 Proxy에서 실행될 수 있는지도 확인한다.
 
 #### Data Access Layer
 
@@ -219,7 +227,9 @@ export const verifySession = cache(async () => {
 
 #### Data Transfer Object(DTO) 사용하기
 
-DTO는 전체 사용자 객체 대신 화면에 필요한 필드만 반환한다. `toJSON()`, 개별 함수, 클래스 등 여러 JavaScript 패턴을 사용할 수 있으며, React나 Next.js 전용 기능은 아니다.
+DTO는 전체 사용자 객체 대신 화면에 필요한 필드만 반환한다.
+
+> **알아두면 좋은 점**: DTO는 `toJSON()`, 개별 함수, JavaScript 클래스 등 여러 방식으로 정의할 수 있다. React나 Next.js 전용 기능이 아니므로 앱에 맞는 패턴을 선택한다.
 
 #### Server Components
 
