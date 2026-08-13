@@ -33,7 +33,7 @@ export default nextConfig
 
 ### 기존 앱을 점진적으로 마이그레이션하기
 
-Cache Components를 켜면 instant navigation 검증은 세션을 읽는 모든 라우트를 표시한다. 요청 시점의 읽기는 static shell에 넣을 수 없기 때문이다. 모든 라우트를 한 번에 고칠 필요는 없다. 페이지나 레이아웃에 `export const instant = false`를 설정하면 서버에서 계속 블로킹하도록 둘 수 있다. 이후 아래 패턴을 라우트별로 적용한다. 전체 절차는 [Migrating to Cache Components](./migrating-to-cache-components.md#following-validation)를 참고한다.
+Cache Components를 켜면 instant navigation 검증은 세션을 읽는 모든 라우트를 표시한다. 요청 시점의 읽기는 static shell에 넣을 수 없기 때문이다. 모든 라우트를 한 번에 고칠 필요는 없다. 페이지나 레이아웃에 `export const instant = false`를 설정하면 서버에서 계속 블로킹하도록 둘 수 있다. 이후 아래 패턴을 라우트별로 적용한다. 전체 절차는 [Migrating to Cache Components](./migrating-to-cache-components.md)를 참고한다.
 
 ### 1단계: 현재 사용자 읽기
 
@@ -121,9 +121,9 @@ async function Dashboard() {
 }
 ```
 
-레이아웃 최상위에서도 세션을 `await`하지 않는다. 그렇게 하면 `{children}`을 포함한 세그먼트 전체가 요청을 기다린다. 세션 읽기를 경계 안쪽의 컴포넌트로 밀어 넣는다. 자세한 원리는 [Streaming](./streaming.md#push-dynamic-access-down)을 참고한다.
+레이아웃 최상위에서도 세션을 `await`하지 않는다. 그렇게 하면 `{children}`을 포함한 세그먼트 전체가 요청을 기다린다. 세션 읽기를 경계 안쪽의 컴포넌트로 밀어 넣는다. 자세한 원리는 [Streaming](./streaming.md)을 참고한다.
 
-> **알아두면 좋은 점**: 세션 읽기·검증과 최소 사용자 객체 반환을 `getCurrentUser` 한 곳에 모으는 방식은 [Data Access Layer](./authentication.md#creating-a-data-access-layer-dal) 패턴이다.
+> **알아두면 좋은 점**: 세션 읽기·검증과 최소 사용자 객체 반환을 `getCurrentUser` 한 곳에 모으는 방식은 [Data Access Layer](./authentication.md) 패턴이다.
 
 ### 3단계: 여러 컴포넌트에서 사용자 공유하기
 
@@ -246,7 +246,7 @@ export async function addNote(formData: FormData) {
 `use cache: private`는 별도 설정이 없으면 5분 `stale`을 가진 `default` [`cacheLife`](../3-api-reference/3.3-functions/cacheLife.md) 프로필을 사용한다. 세션을 읽는 라우트는 인증 콘텐츠를 포함한 세션별 App Shell을 만들고, 이를 세션별로 prefetch하고 캐시하므로 내비게이션이 즉시 열릴 수 있다.
 
 - `cacheLife`를 조정할 때 `stale`을 30초 이상으로 유지한다. 이보다 짧으면 해당 범위가 prefetch 대상에서 빠진다.
-- `params`나 `searchParams`에도 의존하는 라우트의 링크에는 [`<Link prefetch={true}>`](../3-api-reference/3.2-components/link.md#prefetch)를 지정한다. 링크마다 URL 데이터를 미리 해결하는 방식은 [Optimizing prefetching](./optimizing-prefetching.md)을 참고한다.
+- `params`나 `searchParams`에도 의존하는 라우트의 링크에는 [`<Link prefetch={true}>`](../3-api-reference/3.2-components/link.md)를 지정한다. 링크마다 URL 데이터를 미리 해결하는 방식은 [Optimizing prefetching](./optimizing-prefetching.md)을 참고한다.
 
 ```tsx
 <Link href={`/notes/${note.id}`} prefetch={true}>

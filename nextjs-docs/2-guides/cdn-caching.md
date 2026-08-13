@@ -104,7 +104,7 @@ pathname 기반 방식은 세그먼트 prefetch 경로와 `output: 'export'`에�
 
 ### CDN 기능 호환성
 
-주요 CDN이 제공하는 엣지 컴퓨팅, key-value 저장소, blob 저장소, PPR 재개 기능 비교는 [Deploying to Platforms](./deploying-to-platforms.md#cdn-infrastructure-compatibility)를 참고한다. 자체 호스팅 구조는 [Self-Hosting](./self-hosting.md), CDN 뒤에서의 점진적 응답은 [Streaming](./streaming.md)을 함께 확인한다.
+주요 CDN이 제공하는 엣지 컴퓨팅, key-value 저장소, blob 저장소, PPR 재개 기능 비교는 [Deploying to Platforms](./deploying-to-platforms.md)를 참고한다. 자체 호스팅 구조는 [Self-Hosting](./self-hosting.md), CDN 뒤에서의 점진적 응답은 [Streaming](./streaming.md)을 함께 확인한다.
 
 ## 예제 및 데모 설계
 
