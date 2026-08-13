@@ -224,11 +224,11 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 3.2.1 | Image Component | [공식](https://nextjs.org/docs/app/api-reference/components/image) | 초안 | 미착수 |
-| 3.2.2 | Link Component | [공식](https://nextjs.org/docs/app/api-reference/components/link) | 초안 | 미착수 |
-| 3.2.3 | Font | [공식](https://nextjs.org/docs/app/api-reference/components/font) | 초안 | 미착수 |
-| 3.2.4 | Script Component | [공식](https://nextjs.org/docs/app/api-reference/components/script) | 초안 | 미착수 |
-| 3.2.5 | Form Component | [공식](https://nextjs.org/docs/app/api-reference/components/form) | 초안 | 미착수 |
+| 3.2.1 | Image Component | [공식](https://nextjs.org/docs/app/api-reference/components/image) | 완료 | 미착수 |
+| 3.2.2 | Link Component | [공식](https://nextjs.org/docs/app/api-reference/components/link) | 완료 | 미착수 |
+| 3.2.3 | Font | [공식](https://nextjs.org/docs/app/api-reference/components/font) | 완료 | 미착수 |
+| 3.2.4 | Script Component | [공식](https://nextjs.org/docs/app/api-reference/components/script) | 완료 | 미착수 |
+| 3.2.5 | Form Component | [공식](https://nextjs.org/docs/app/api-reference/components/form) | 완료 | 미착수 |
 
 ### 3.3 Functions
 
