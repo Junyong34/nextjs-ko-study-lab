@@ -72,7 +72,7 @@ Server Component에서 데이터를 가져올 때, 데이터는 매 요청마다
 
 초기 로드 시간과 사용자 경험을 개선하려면, 페이지를 더 작은 _청크_로 나누고 그 청크들을 서버에서 클라이언트로 점진적으로 보낼 수 있다. 이를 스트리밍이라고 부른다. 스트리밍이 동작하는 방식(HTTP 계약, 인프라 고려사항, 성능 트레이드오프)은 [Streaming 가이드](../2-guides/streaming.md)를 참고한다.
 
-![스트리밍이 적용됐을 때 서버 렌더링이 동작하는 방식](./assets/fetching-data-01.png)
+![스트리밍이 적용됐을 때 서버 렌더링이 동작하는 방식](./assets/fetching-data-01.webp)
 
 애플리케이션에서 스트리밍을 쓰는 방법은 두 가지다.
 
@@ -85,7 +85,7 @@ Server Component에서 데이터를 가져올 때, 데이터는 매 요청마다
 
 페이지와 같은 폴더에 `loading.js` 파일을 만들면 데이터가 fetch되는 동안 **페이지 전체**를 스트리밍할 수 있다. 예를 들어 `app/blog/page.js`를 스트리밍하려면 `app/blog` 폴더 안에 파일을 추가한다.
 
-![app/blog 폴더 안에 loading.tsx 파일이 추가된 구조](./assets/fetching-data-02.png)
+![app/blog 폴더 안에 loading.tsx 파일이 추가된 구조](./assets/fetching-data-02.webp)
 
 ```tsx
 export default function Loading() {
@@ -96,11 +96,11 @@ export default function Loading() {
 
 내비게이션이 일어나면 사용자는 페이지가 렌더링되는 동안 레이아웃과 [로딩 상태](#의미-있는-로딩-상태-만들기)를 즉시 보게 된다. 렌더링이 끝나면 새 콘텐츠가 자동으로 교체된다.
 
-![로딩 UI가 보여지는 화면 예시](./assets/fetching-data-03.png)
+![로딩 UI가 보여지는 화면 예시](./assets/fetching-data-03.webp)
 
 내부적으로 `loading.js`는 [`layout.js` 안에 중첩](./project-structure.md)되어, `page.js` 파일과 그 아래 모든 자식을 자동으로 `<Suspense>` 바운더리로 감싼다.
 
-![loading.js가 layout.js와 page.js 사이에서 Suspense 바운더리를 형성하는 구조](./assets/fetching-data-04.png)
+![loading.js가 layout.js와 page.js 사이에서 Suspense 바운더리를 형성하는 구조](./assets/fetching-data-04.webp)
 
 이 때문에, 캐시되지 않은 런타임 데이터(예: `cookies()`, `headers()`, 캐시되지 않은 fetch)에 접근하는 레이아웃은 같은 라우트 세그먼트의 `loading.js`로 폴백하지 않는다. 대신 레이아웃 렌더링이 끝날 때까지 내비게이션을 막는다. [Cache Components](./caching.md)는 빌드 타임 에러로 안내해서 이를 방지한다.
 

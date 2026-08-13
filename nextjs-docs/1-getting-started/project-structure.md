@@ -17,7 +17,7 @@
 
 최상위 폴더는 애플리케이션의 코드와 정적 자산을 조직하는 데 쓰인다.
 
-![최상위 폴더 구조: app, pages, public, src](./assets/project-structure-01.png)
+![최상위 폴더 구조: app, pages, public, src](./assets/project-structure-01.webp)
 
 - `app`: App Router
 - `pages`: Pages Router (레거시)
@@ -124,23 +124,23 @@ Next.js는 파일을 어떻게 조직하고 어디에 콜로케이션할지에 �
 - `not-found.js` ("not found" UI를 위한 React 에러 바운더리)
 - `page.js` 또는 중첩된 `layout.js`
 
-![layout.js, template.js, error.js, loading.js, not-found.js, page.js가 오른쪽의 중첩된 컴포넌트 트리(Layout > Template > ErrorBoundary > Suspense > ErrorBoundary > Page)로 대응되는 구조](./assets/project-structure-02.png)
+![layout.js, template.js, error.js, loading.js, not-found.js, page.js가 오른쪽의 중첩된 컴포넌트 트리(Layout > Template > ErrorBoundary > Suspense > ErrorBoundary > Page)로 대응되는 구조](./assets/project-structure-02.webp)
 
 이 컴포넌트들은 중첩 라우트에서 재귀적으로 렌더링된다. 즉 한 라우트 세그먼트의 컴포넌트는 부모 세그먼트의 컴포넌트 **안에** 중첩된다.
 
-![여러 라우트 세그먼트가 중첩됐을 때 컴포넌트 계층이 재귀적으로 겹치는 구조](./assets/project-structure-03.png)
+![여러 라우트 세그먼트가 중첩됐을 때 컴포넌트 계층이 재귀적으로 겹치는 구조](./assets/project-structure-03.webp)
 
 ### 콜로케이션
 
 `app` 안에서 폴더는 라우트 구조를 정의하지만, `page.js`나 `route.js`가 있어야만 라우트가 퍼블릭하게 노출된다.
 
-![page.js나 route.js가 없어 퍼블릭하게 노출되지 않는 라우트 세그먼트](./assets/project-structure-04.png)
+![page.js나 route.js가 없어 퍼블릭하게 노출되지 않는 라우트 세그먼트](./assets/project-structure-04.webp)
 
-![page.js나 route.js가 있어 퍼블릭하게 노출되는 라우트](./assets/project-structure-05.png)
+![page.js나 route.js가 있어 퍼블릭하게 노출되는 라우트](./assets/project-structure-05.webp)
 
 그리고 라우트가 노출되더라도, `page.js`나 `route.js`가 **반환하는 콘텐츠만** 클라이언트로 전송된다. 즉 프로젝트 파일을 라우트 세그먼트 안에 안전하게 콜로케이션할 수 있다.
 
-![세그먼트에 page.js나 route.js가 있어도 콜로케이션된 프로젝트 파일은 라우팅되지 않는 구조](./assets/project-structure-06.png)
+![세그먼트에 page.js나 route.js가 있어도 콜로케이션된 프로젝트 파일은 라우팅되지 않는 구조](./assets/project-structure-06.webp)
 
 > **알아두면 좋은 점**: 프로젝트 파일을 `app` 안에 콜로케이션**할 수는 있지만**, 반드시 그래야 하는 건 아니다. 원한다면 뒤에서 다룰 "`app` 밖에 프로젝트 파일 두기" 예시처럼 `app` 디렉토리 밖에 둘 수도 있다.
 
@@ -148,7 +148,7 @@ Next.js는 파일을 어떻게 조직하고 어디에 콜로케이션할지에 �
 
 폴더 이름 앞에 언더스코어를 붙이면(`_folderName`) 프라이빗 폴더가 된다. 라우팅 시스템이 이 폴더와 하위 폴더 전체를 라우팅 대상에서 제외한다.
 
-![_components, _lib 같은 프라이빗 폴더를 사용한 예시 폴더 구조](./assets/project-structure-07.png)
+![_components, _lib 같은 프라이빗 폴더를 사용한 예시 폴더 구조](./assets/project-structure-07.webp)
 
 콜로케이션 자체엔 프라이빗 폴더가 필수는 아니지만, 다음 상황에 유용하다.
 
@@ -167,7 +167,7 @@ Next.js는 파일을 어떻게 조직하고 어디에 콜로케이션할지에 �
 
 폴더를 괄호로 감싸면(`(folderName)`) 라우트 그룹이 된다. URL 경로에는 포함되지 않고 조직 목적으로만 쓰인다.
 
-![라우트 그룹으로 조직한 예시 폴더 구조](./assets/project-structure-08.png)
+![라우트 그룹으로 조직한 예시 폴더 구조](./assets/project-structure-08.webp)
 
 라우트 그룹은 다음 상황에 유용하다.
 
@@ -178,7 +178,7 @@ Next.js는 파일을 어떻게 조직하고 어디에 콜로케이션할지에 �
 
 `app`을 포함한 애플리케이션 코드를 선택적으로 `src` 폴더 안에 둘 수 있다. 대부분 프로젝트 루트에 있는 설정 파일들과 애플리케이션 코드를 분리하기 위함이다.
 
-![src 폴더를 사용한 예시 폴더 구조](./assets/project-structure-09.png)
+![src 폴더를 사용한 예시 폴더 구조](./assets/project-structure-09.webp)
 
 ## 예시
 
@@ -190,41 +190,41 @@ Next.js는 파일을 어떻게 조직하고 어디에 콜로케이션할지에 �
 
 이 전략은 모든 애플리케이션 코드를 프로젝트 **루트**의 공유 폴더에 두고, `app` 디렉토리는 순수하게 라우팅 목적으로만 쓴다.
 
-![app 디렉토리 밖에 프로젝트 파일을 둔 예시 폴더 구조](./assets/project-structure-10.png)
+![app 디렉토리 밖에 프로젝트 파일을 둔 예시 폴더 구조](./assets/project-structure-10.webp)
 
 ### `app` 안 최상위 폴더에 프로젝트 파일 두기
 
 이 전략은 모든 애플리케이션 코드를 `app` 디렉토리 **루트**의 공유 폴더에 둔다.
 
-![app 디렉토리 루트에 프로젝트 파일을 둔 예시 폴더 구조](./assets/project-structure-11.png)
+![app 디렉토리 루트에 프로젝트 파일을 둔 예시 폴더 구조](./assets/project-structure-11.webp)
 
 ### 기능이나 라우트별로 프로젝트 파일 나누기
 
 이 전략은 전역으로 공유되는 애플리케이션 코드는 `app` 루트에 두고, 더 특정한 코드는 그 코드를 사용하는 라우트 세그먼트 안으로 **분리**한다.
 
-![기능/라우트 단위로 나눈 예시 폴더 구조](./assets/project-structure-12.png)
+![기능/라우트 단위로 나눈 예시 폴더 구조](./assets/project-structure-12.webp)
 
 ### URL 경로에 영향 없이 라우트 조직하기
 
 URL에 영향을 주지 않고 라우트를 조직하려면, 관련 라우트를 묶는 그룹을 만든다. 괄호로 감싼 폴더(`(marketing)`, `(shop)`)는 URL에서 생략된다.
 
-![(marketing), (shop) 라우트 그룹으로 조직한 예시](./assets/project-structure-13.png)
+![(marketing), (shop) 라우트 그룹으로 조직한 예시](./assets/project-structure-13.webp)
 
 `(marketing)`과 `(shop)` 안의 라우트는 같은 URL 계층을 공유하지만, 각 그룹 폴더 안에 `layout.js`를 추가하면 서로 다른 레이아웃을 줄 수 있다. 이 레이아웃들은 기존 앱 레이아웃 안에 중첩된다.
 
-![app 루트 레이아웃 안에서 (marketing)과 (shop)이 각자의 layout.js를 갖는 예시](./assets/project-structure-14.png)
+![app 루트 레이아웃 안에서 (marketing)과 (shop)이 각자의 layout.js를 갖는 예시](./assets/project-structure-14.webp)
 
 ### 특정 세그먼트만 레이아웃 적용하기
 
 특정 라우트만 레이아웃에 포함시키려면, 새 라우트 그룹(예: `(shop)`)을 만들고 그 레이아웃을 공유할 라우트(예: `account`, `cart`)를 그룹 안으로 옮긴다. 그룹 밖의 라우트(예: `checkout`)는 레이아웃을 공유하지 않는다.
 
-![account, cart는 (shop) 레이아웃을 공유하고 checkout은 공유하지 않는 예시](./assets/project-structure-15.png)
+![account, cart는 (shop) 레이아웃을 공유하고 checkout은 공유하지 않는 예시](./assets/project-structure-15.webp)
 
 ### 특정 라우트에만 로딩 스켈레톤 적용하기
 
 `loading.js` 파일로 [로딩 스켈레톤](./route-handlers.md)을 특정 라우트에만 적용하려면, 새 라우트 그룹(예: `/(overview)`)을 만들고 `loading.tsx`를 그 그룹 안으로 옮긴다.
 
-![dashboard/(overview) 라우트 그룹 안에 loading.tsx와 page.tsx를 둔 예시](./assets/project-structure-16.png)
+![dashboard/(overview) 라우트 그룹 안에 loading.tsx와 page.tsx를 둔 예시](./assets/project-structure-16.webp)
 
 이렇게 하면 `loading.tsx`는 대시보드 안의 모든 페이지가 아니라 대시보드 → 개요 페이지에만 적용되고, URL 경로 구조에는 영향을 주지 않는다.
 
@@ -232,7 +232,7 @@ URL에 영향을 주지 않고 라우트를 조직하려면, 관련 라우트를
 
 여러 개의 [루트 레이아웃](../3-api-reference/3.1-file-conventions/layout.md)을 만들려면, 최상위 `layout.js`를 지우고 각 라우트 그룹 안에 `layout.js`를 추가한다. 완전히 다른 UI나 경험을 가진 섹션으로 애플리케이션을 나눌 때 유용하다. `<html>`과 `<body>` 태그는 각 루트 레이아웃에 추가해야 한다.
 
-![최상위 layout.js 없이 (marketing)과 (shop)이 각자 독립된 루트 레이아웃을 갖는 예시](./assets/project-structure-17.png)
+![최상위 layout.js 없이 (marketing)과 (shop)이 각자 독립된 루트 레이아웃을 갖는 예시](./assets/project-structure-17.webp)
 
 위 예시에서 `(marketing)`과 `(shop)` 둘 다 자기만의 루트 레이아웃을 갖는다.
 

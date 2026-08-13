@@ -1,4 +1,19 @@
-# AGENTS.md
+# nextjs-ko-study-lab 작업 규칙
+
+Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리큘럼으로 재구성하고, 이후 데모 앱으로 확장하는 저장소다.
+
+## 디렉토리별 규칙
+
+작업 대상이 하위 디렉토리에 속하면, 그 디렉토리의 `AGENTS.md`(Claude Code는 `CLAUDE.md`를 통해 동일 내용을 읽는다)가 이 파일보다 우선한다.
+
+| 디렉토리 | 상태 | 규칙 |
+|---|---|---|
+| [`nextjs-docs/`](./nextjs-docs/AGENTS.md) | Phase 1, 진행 중 | 문서 작성 규칙 |
+| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 착수 전 | 착수 조건 및 Phase Gate |
+
+## Phase Gate
+
+지금은 **Phase 1: 문서화**다. [`nextjs-docs/PROGRESS.md`](./nextjs-docs/PROGRESS.md)의 항목이 대부분 "완료"가 되기 전까지 `nextjs-app/`에 실행 코드를 만들지 않는다.
 
 ## 커밋 작성 규칙
 
@@ -37,3 +52,7 @@
 
 - 로그인 폼과 인증 요청 로직을 추가했습니다.
 ```
+
+## 참고
+
+- [루트 README.md](./README.md) — 저장소 구조와 Phase 개요

@@ -38,7 +38,7 @@
 - [용어집](./CONTEXT.md)
 - [공식 사이드바 계층 미러링 결정](./docs/adr/0001-mirror-official-sidebar-hierarchy.md)
 - [학습 순서 재배열 결정](./docs/adr/0002-reorder-learning-sequence.md)
-- [문서 작성 규칙 (CLAUDE.md)](./CLAUDE.md)
+- [문서 작성 규칙 (AGENTS.md)](./AGENTS.md)
 - [전체 진행 트래킹](./PROGRESS.md)
 
 ## 기준 출처

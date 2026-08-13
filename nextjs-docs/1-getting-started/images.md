@@ -37,7 +37,7 @@ export default function Page() {
 
 프로젝트 루트의 [`public`](../3-api-reference/3.1-file-conventions/public-folder.md) 폴더에 이미지, 폰트 같은 정적 파일을 저장할 수 있다. `public` 안의 파일은 베이스 URL(`/`)로 시작하는 경로로 코드에서 참조할 수 있다.
 
-![app 폴더와 public 폴더가 나란히 있는 예시 폴더 구조](./assets/images-01.png)
+![app 폴더와 public 폴더가 나란히 있는 예시 폴더 구조](./assets/images-01.webp)
 
 ```tsx
 import Image from 'next/image'

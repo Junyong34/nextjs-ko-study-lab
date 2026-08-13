@@ -17,7 +17,7 @@
 
 **페이지**는 특정 라우트에서 렌더링되는 UI다. `app` 디렉토리 안에 [`page` 파일](../3-api-reference/3.1-file-conventions/page.md)을 추가하고 React 컴포넌트를 default export하면 된다. 예를 들어 인덱스 페이지(`/`)를 만들려면:
 
-![app 디렉토리 안에 page.js 특수 파일이 추가된 구조](./assets/layouts-and-pages-01.png)
+![app 디렉토리 안에 page.js 특수 파일이 추가된 구조](./assets/layouts-and-pages-01.webp)
 
 ```tsx
 export default function Page() {
@@ -33,7 +33,7 @@ export default function Page() {
 
 예를 들어 인덱스 페이지를 자식으로 받는 레이아웃을 만들려면 `app` 디렉토리 안에 `layout` 파일을 추가한다.
 
-![app 디렉토리 안에 layout.js 특수 파일이 추가된 구조](./assets/layouts-and-pages-02.png)
+![app 디렉토리 안에 layout.js 특수 파일이 추가된 구조](./assets/layouts-and-pages-02.webp)
 
 ```tsx
 export default function DashboardLayout({
@@ -70,7 +70,7 @@ Next.js에서는:
 
 중첩 라우트를 만들려면 폴더를 서로 안에 중첩시킨다. 예를 들어 `/blog` 라우트를 추가하려면 `app` 디렉토리에 `blog` 폴더를 만들고, `/blog`를 퍼블릭하게 노출하려면 `page.tsx`를 추가한다.
 
-![blog 폴더와 page.js 파일이 있는 파일 계층 구조](./assets/layouts-and-pages-03.png)
+![blog 폴더와 page.js 파일이 있는 파일 계층 구조](./assets/layouts-and-pages-03.webp)
 
 ```tsx
 // 예시 import
@@ -92,7 +92,7 @@ export default async function Page() {
 
 폴더를 계속 중첩해서 라우트를 더 깊게 만들 수 있다. 예를 들어 특정 블로그 포스트를 위한 라우트를 만들려면 `blog` 안에 새 `[slug]` 폴더를 만들고 `page` 파일을 추가한다.
 
-![blog 폴더 안에 중첩된 slug 폴더와 page.js 파일이 있는 파일 계층 구조](./assets/layouts-and-pages-04.png)
+![blog 폴더 안에 중첩된 slug 폴더와 page.js 파일이 있는 파일 계층 구조](./assets/layouts-and-pages-04.webp)
 
 ```tsx
 function generateStaticParams() {}
@@ -110,7 +110,7 @@ export default function Page() {
 
 예를 들어 `/blog` 라우트를 위한 레이아웃을 만들려면 `blog` 폴더 안에 새 `layout` 파일을 추가한다.
 
-![루트 레이아웃이 블로그 레이아웃을 감싸는 파일 계층 구조](./assets/layouts-and-pages-05.png)
+![루트 레이아웃이 블로그 레이아웃을 감싸는 파일 계층 구조](./assets/layouts-and-pages-05.webp)
 
 ```tsx
 export default function BlogLayout({

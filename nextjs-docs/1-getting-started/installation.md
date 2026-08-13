@@ -141,7 +141,7 @@ export default function Page() {
 
 `layout.tsx`와 `page.tsx`는 애플리케이션의 루트(`/`)에 접속했을 때 함께 렌더링된다.
 
-![app 디렉토리와 layout.tsx, page.tsx가 만들어진 폴더 구조](./assets/installation-01.png)
+![app 디렉토리와 layout.tsx, page.tsx가 만들어진 폴더 구조](./assets/installation-01.webp)
 
 > **알아두면 좋은 점**
 >
@@ -178,7 +178,7 @@ Next.js는 TypeScript를 기본 지원한다. 파일 확장자를 `.ts`/`.tsx`�
 
 Next.js는 커스텀 TypeScript 플러그인과 타입 체커를 내장하고 있어, VS Code 등의 에디터에서 더 정교한 타입 체크와 자동완성을 쓸 수 있다. VS Code에서는 커맨드 팔레트(`Ctrl/⌘` + `Shift` + `P`)를 열고 "TypeScript: Select TypeScript Version"을 검색해 "Use Workspace Version"을 선택하면 활성화된다.
 
-![VS Code 커맨드 팔레트에서 TypeScript: Select TypeScript Version을 검색해 Use Workspace Version을 선택하는 화면](./assets/installation-02.png)
+![VS Code 커맨드 팔레트에서 TypeScript: Select TypeScript Version을 검색해 Use Workspace Version을 선택하는 화면](./assets/installation-02.webp)
 
 ### 에디터 설정
 

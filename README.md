@@ -8,9 +8,13 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 nextjs-ko-study-lab/
 ├─ nextjs-docs/   # 학습 문서 (Phase 1, 진행 중) — 공식 사이드바 구조를 미러링한 번역·학습 콘텐츠
 ├─ nextjs-app/    # Next.js 데모 앱 (Phase 2, 착수 전) — 폴더만 예약, 코드는 아직 없음
+├─ AGENTS.md      # 저장소 전체 작업 규칙 (Codex 등) — Claude Code는 CLAUDE.md를 통해 동일 내용을 읽음
+├─ CLAUDE.md
 ├─ LICENSE
 └─ README.md
 ```
+
+각 디렉토리에는 그 디렉토리 작업에 특화된 `AGENTS.md`가 있고, 그 디렉토리의 `CLAUDE.md`는 `@AGENTS.md`로 동일 내용을 가리킵니다 (Claude Code의 import 문법). Codex 등 AGENTS.md만 읽는 도구도, Claude Code도 결국 같은 내용을 보게 됩니다.
 
 ## Phase
 
@@ -21,7 +25,7 @@ nextjs-ko-study-lab/
 
 - [학습 문서 목차 및 흐름](./nextjs-docs/README.md)
 - [전체 진행 상태 트래킹](./nextjs-docs/PROGRESS.md)
-- [문서 작성 규칙](./nextjs-docs/CLAUDE.md)
+- [문서 작성 규칙](./nextjs-docs/AGENTS.md)
 
 ## 기준 출처
 

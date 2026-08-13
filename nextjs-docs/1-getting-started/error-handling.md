@@ -164,7 +164,7 @@ export default function ErrorPage({
 
 에러는 가장 가까운 부모 에러 바운더리로 버블링된다. 이는 [라우트 계층](./project-structure.md#component-hierarchy)의 여러 레벨에 `error.tsx` 파일을 두어 세밀한 에러 처리를 할 수 있게 해준다.
 
-![여러 레벨에 error.tsx를 둘 수 있는 중첩 에러 컴포넌트 계층](./assets/error-handling-01.png)
+![여러 레벨에 error.tsx를 둘 수 있는 중첩 에러 컴포넌트 계층](./assets/error-handling-01.webp)
 
 컴포넌트 레벨의 에러 복구를 위해, [`catchError`](../3-api-reference/3.3-functions/catchError.md) 함수로 컴포넌트 트리의 어느 부분이든 감쌀 수 있는 에러 바운더리를 만들 수 있다.
 

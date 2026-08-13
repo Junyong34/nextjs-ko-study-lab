@@ -63,7 +63,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 다이나믹 라우트를 스킵하거나 부분적으로만 프리페칭함으로써, Next.js는 사용자가 방문하지 않을 수도 있는 라우트에 서버 작업을 낭비하지 않는다. 다만 내비게이션 전에 서버 응답을 기다려야 한다는 점 때문에 앱이 응답하지 않는다는 인상을 줄 수 있다.
 
-![서버에서 모든 컴포넌트가 준비될 때까지 브라우저에는 아무 콘텐츠도 없다가, 준비가 끝난 뒤에야 완성된 페이지가 한 번에 전송되는 과정](./assets/linking-and-navigating-01.png)
+![서버에서 모든 컴포넌트가 준비될 때까지 브라우저에는 아무 콘텐츠도 없다가, 준비가 끝난 뒤에야 완성된 페이지가 한 번에 전송되는 과정](./assets/linking-and-navigating-01.webp)
 
 > **알아두면 좋은 점**: 프리페칭의 전체 동작, 링크별 제어 방법, [Partial Prefetching](../2-guides/adopting-partial-prefetching.md) 도입 시 어떻게 바뀌는지는 별도 가이드를 참고한다.
 
@@ -75,11 +75,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 다이나믹 라우트에서는 공유 레이아웃과 로딩 스켈레톤을 미리 요청할 수 있어, **부분적으로 프리페칭**될 수 있다는 뜻이다.
 
-![스트리밍이 적용됐을 때 서버 렌더링이 동작하는 방식](./assets/linking-and-navigating-02.png)
+![스트리밍이 적용됐을 때 서버 렌더링이 동작하는 방식](./assets/linking-and-navigating-02.webp)
 
 스트리밍을 쓰려면 라우트 폴더에 `loading.tsx`를 만든다.
 
-![app/dashboard 폴더 안에 layout.js, loading.js, page.js가 나란히 있는 예시 폴더 구조](./assets/linking-and-navigating-03.png)
+![app/dashboard 폴더 안에 layout.js, loading.js, page.js가 나란히 있는 예시 폴더 구조](./assets/linking-and-navigating-03.webp)
 
 ```tsx
 export default function Loading() {

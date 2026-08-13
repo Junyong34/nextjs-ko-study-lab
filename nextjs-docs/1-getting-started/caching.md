@@ -405,7 +405,7 @@ export default function Page() {
 
 이렇게 생성된 정적 셸은 최초 페이지 로드를 위한 HTML과 클라이언트 사이드 내비게이션을 위한 직렬화된 [RSC Payload](./server-and-client-components.md#on-the-server)로 구성되어, 사용자가 URL로 직접 접속하든 다른 페이지에서 전환하든 브라우저가 완전히 렌더링된 콘텐츠를 즉시 받게 한다. 이 렌더링 방식을 **Partial Prerendering(PPR)** 이라고 부르며, Cache Components의 기본 동작이다.
 
-![정적 nav와 상품 정보, 다이나믹 카트와 추천 상품을 함께 보여주는 부분 렌더링 상품 페이지](./assets/caching-01.png)
+![정적 nav와 상품 정보, 다이나믹 카트와 추천 상품을 함께 보여주는 부분 렌더링 상품 페이지](./assets/caching-01.webp)
 
 만들어진 모든 정적 셸은 상위 서버를 거치지 않고 CDN에서 직접 서빙될 수 있다. 이는 다이렉트 내비게이션을 [즉각적으로](#instant-navigation) 만든다.
 
@@ -413,7 +413,7 @@ export default function Page() {
 
 Next.js는 prerendering 중에 완료될 수 없는 컴포넌트를 명시적으로 다루도록 요구한다. dev 오버레이와 dev 서버 콘솔에 라우트를 지목하고 수정 방법(접근을 캐시하거나, `<Suspense>` 바운더리로 옮기거나, 라우트를 옵트아웃)을 가리키는 검증 인사이트를 보여준다. 이 검증 덕분에 모든 라우트가 정적 셸을 만들어내서, 다이렉트 내비게이션이 항상 즉각적이다.
 
-![클라이언트에서 부분적으로 렌더링된 페이지가 스트리밍되는 청크에 로딩 UI를 보여주는 그림](./assets/caching-02.png)
+![클라이언트에서 부분적으로 렌더링된 페이지가 스트리밍되는 청크에 로딩 UI를 보여주는 그림](./assets/caching-02.webp)
 
 > **🎥 시청**: Partial Prerendering이 왜, 어떻게 동작하는지 → [YouTube (10분)](https://www.youtube.com/watch?v=MTcPrTIBkpA).
 

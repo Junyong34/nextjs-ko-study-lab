@@ -4,7 +4,9 @@
 
 ## 시작 조건
 
-`nextjs-docs/PROGRESS.md`의 항목이 대부분 "완료"가 되어야 착수합니다 ([Phase Gate](../nextjs-docs/CLAUDE.md#phase-gate) 참고).
+`nextjs-docs/PROGRESS.md`의 항목이 대부분 "완료"가 되어야 착수합니다 ([Phase Gate](../nextjs-docs/AGENTS.md#phase-gate) 참고).
+
+작업 규칙은 [`AGENTS.md`](./AGENTS.md)에 있습니다.
 
 ## 예정 스택
 
