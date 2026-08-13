@@ -12,7 +12,7 @@
 
 ## 핵심 개념 및 설명
 
-static export를 사용하면 Next.js 애플리케이션을 정적 사이트나 SPA로 시작한 뒤 필요할 때 서버 기능을 추가하는 구조로 전환할 수 있다. `next build`는 라우트마다 HTML 파일을 만들고 클라이언트 전환용 정적 payload도 생성한다. 정적 HTML/CSS/JavaScript를 제공할 수 있는 모든 웹 서버에 배포할 수 있다.
+static export를 사용하면 Next.js 애플리케이션을 정적 사이트나 [SPA](./single-page-applications.md)로 시작한 뒤 필요할 때 서버 기능을 추가하는 구조로 전환할 수 있다. `next build`는 라우트마다 HTML 파일을 만들고 클라이언트 전환용 정적 payload도 생성한다. 정적 HTML/CSS/JavaScript를 제공할 수 있는 모든 웹 서버에 배포할 수 있다.
 
 ### 설정
 
@@ -59,6 +59,14 @@ export default async function Page() {
 브라우저에서 최신 데이터를 가져와야 하면 Client Component와 [SWR](./2.15-client-side-data-fetching/swr.md) 같은 도구를 사용할 수 있다. 라우트 전환은 클라이언트에서 일어나므로 전통적인 SPA처럼 동작한다.
 
 ```tsx
+import Link from 'next/link'
+
+export default function Page() {
+  return <Link href="/other">Other Page</Link>
+}
+```
+
+```tsx
 'use client'
 
 import useSWR from 'swr'
@@ -75,7 +83,7 @@ export default function Page() {
 
 #### Image Optimization
 
-기본 Image Optimization은 요청 시점 서버가 필요하므로 static export에서 지원하지 않는다. `next/image`를 유지하려면 Cloudinary 같은 외부 이미지 서비스의 custom loader를 설정한다.
+기본 [Image Optimization](../3-api-reference/3.2-components/image.md)은 요청 시점 서버가 필요하므로 static export에서 지원하지 않는다. `next/image`를 유지하려면 Cloudinary 같은 외부 이미지 서비스의 custom loader를 설정한다.
 
 ```js
 const nextConfig = {
@@ -91,13 +99,34 @@ module.exports = nextConfig
 
 loader는 `src`, `width`, `quality`를 받아 외부 서비스 URL을 구성한다. 그러면 컴포넌트에서는 일반적인 `next/image` API를 계속 사용할 수 있다.
 
+```ts
+export default function cloudinaryLoader({
+  src,
+  width,
+  quality,
+}: {
+  src: string
+  width: number
+  quality?: number
+}) {
+  const params = ['f_auto', 'c_limit', `w_${width}`, `q_${quality || 'auto'}`]
+  return `https://res.cloudinary.com/demo/image/upload/${params.join(',')}${src}`
+}
+```
+
+```tsx
+import Image from 'next/image'
+
+export default function Page() {
+  return <Image alt="turtles" src="/turtles.jpg" width={300} height={300} />
+}
+```
+
 #### Route Handlers
 
-static export에서는 `GET` Route Handler만 정적 파일로 만들 수 있다. handler가 정적임을 명시해야 한다.
+static export에서는 `GET` Route Handler만 정적 파일로 만들 수 있다. 다음 예제처럼 정적 응답을 생성한다.
 
 ```ts
-export const dynamic = 'force-static'
-
 export async function GET() {
   return Response.json({ name: 'Lee' })
 }
@@ -107,7 +136,7 @@ export async function GET() {
 
 #### 브라우저 API
 
-Client Component도 빌드 중 HTML로 prerender된다. 따라서 `window`, `localStorage`, `navigator` 같은 Web API는 렌더링 중 바로 읽지 말고 브라우저에서만 실행되는 Effect나 이벤트에서 접근한다.
+Client Component도 빌드 중 HTML로 prerender된다. 따라서 [`window`](https://developer.mozilla.org/docs/Web/API/Window), [`localStorage`](https://developer.mozilla.org/docs/Web/API/Window/localStorage), [`navigator`](https://developer.mozilla.org/docs/Web/API/Navigator) 같은 Web API는 렌더링 중 바로 읽지 말고 브라우저에서만 실행되는 Effect나 이벤트에서 접근한다.
 
 ```tsx
 'use client'
@@ -127,17 +156,17 @@ export default function ClientComponent() {
 
 Node.js 서버나 빌드 시점에 계산할 수 없는 다이나믹 로직이 필요한 다음 기능은 지원하지 않는다.
 
-- `dynamicParams: true`인 Dynamic Route
-- `generateStaticParams()`가 없는 Dynamic Route
-- 들어오는 `Request`에 의존하는 Route Handler
-- `cookies`
-- rewrites, redirects, headers
-- Proxy
+- [`dynamicParams: true`](../3-api-reference/3.1-file-conventions/dynamic-routes.md)인 Dynamic Route
+- [`generateStaticParams()`](../3-api-reference/3.3-functions/generate-static-params.md)가 없는 Dynamic Route
+- 들어오는 `Request`에 의존하는 [Route Handler](../3-api-reference/3.1-file-conventions/route.md)
+- [`cookies`](../3-api-reference/3.3-functions/cookies.md)
+- [rewrites](../3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md), [redirects](../3-api-reference/3.5-config/3.5.1-next-config-js/redirects.md), [headers](../3-api-reference/3.5-config/3.5.1-next-config-js/headers.md)
+- [Proxy](../3-api-reference/3.1-file-conventions/proxy.md)
 - [ISR](./incremental-static-regeneration.md)
 - 기본 loader를 사용하는 Image Optimization
 - [Draft Mode](./draft-mode.md)
-- Server Actions
-- Intercepting Routes
+- [Server Actions](../1-getting-started/mutating-data.md)
+- [Intercepting Routes](../3-api-reference/3.1-file-conventions/intercepting-routes.md)
 
 이 기능을 `next dev`에서 사용하면 Root Layout에 다음 설정을 둔 것과 비슷한 오류가 발생한다.
 
@@ -169,10 +198,13 @@ server {
   }
 
   error_page 404 /404.html;
+  location = /404.html {
+    internal;
+  }
 }
 ```
 
-`trailingSlash: true`이면 위의 `/blog/` rewrite는 생략할 수 있다. GitHub Pages에는 공식 템플릿을 사용할 수 있다.
+`trailingSlash: true`이면 위의 `/blog/` rewrite는 생략할 수 있다. GitHub Pages에는 [공식 템플릿](https://github.com/nextjs/deploy-github-pages)을 사용할 수 있다.
 
 ### 버전 이력
 

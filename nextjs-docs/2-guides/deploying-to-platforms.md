@@ -12,17 +12,17 @@
 
 ## 핵심 개념 및 설명
 
-Next.js는 정적 콘텐츠와 다이나믹 콘텐츠를 라우트 단위의 양자택일이 아니라 컴포넌트 수준의 스펙트럼으로 다룬다. 따라서 사용하는 기능에 따라 호스팅 플랫폼에 필요한 능력이 달라진다.
+[Next.js의 렌더링 철학](./rendering-philosophy.md)은 정적 콘텐츠와 다이나믹 콘텐츠를 라우트 단위의 양자택일이 아니라 컴포넌트 수준의 스펙트럼으로 다룬다. 따라서 사용하는 기능에 따라 호스팅 플랫폼에 필요한 능력이 달라진다.
 
 ### 최소 요구 사항
 
 모든 Next.js 기능을 올바르게 실행하는 최소 조건은 Node.js 서버 하나다. 단일 `next start` 프로세스는 Server Components, ISR, PPR, Cache Components, Server Actions, Proxy, `after()`를 처리한다.
 
-스트리밍이 없으면 응답이 완성될 때까지 버퍼링되지만 기능 자체는 동작한다. 다만 Server Components와 PPR의 점진적 전송 이점은 잃는다. CDN, edge compute, 공유 캐시는 주로 성능과 다중 인스턴스의 일관성을 개선한다. Image Optimization에는 `sharp` 패키지가 추가로 필요하다.
+스트리밍이 없으면 응답이 완성될 때까지 버퍼링되지만 기능 자체는 동작한다. 다만 Server Components와 PPR의 점진적 전송 이점은 잃는다. CDN, edge compute, 공유 캐시는 주로 성능과 다중 인스턴스의 일관성을 개선한다. [Image Optimization](../3-api-reference/3.2-components/image.md)에는 `sharp` 패키지가 추가로 필요하다.
 
 ### 기능 충실도와 성능 충실도
 
-- **기능 충실도**: 모든 Next.js 기능이 올바르게 동작하는지 나타낸다. adapter 테스트 스위트 통과 여부로 판정할 수 있는 이진 조건이다.
+- **기능 충실도**: 모든 Next.js 기능이 올바르게 동작하는지 나타낸다. [adapter 테스트 스위트](../3-api-reference/3.7-adapters/testing-adapters.md) 통과 여부로 판정할 수 있는 이진 조건이다.
 - **성능 충실도**: 기능이 최적의 성능 특성을 내는 정도다. PPR의 static shell을 CDN 지연 시간으로 제공하거나 ISR 무효화를 인스턴스 전체에 빠르게 전파하는 수준처럼 플랫폼 구조에 따라 달라지는 스펙트럼이다.
 
 기능 충실도를 만족하면 완전한 배포 대상이다. 성능 충실도는 플랫폼이 추가 인프라로 차별화하는 영역이다.
@@ -35,14 +35,14 @@ Next.js는 정적 콘텐츠와 다이나믹 콘텐츠를 라우트 단위의 양
 | --- | --- | --- | --- | --- |
 | Server Components | 필요 | 불필요 | 불필요 | 기본 스트리밍 지원 |
 | ISR(시간 기반) | 불필요 | 권장 | 불필요 | 공유하지 않아도 인스턴스별로 동작 |
-| ISR(요청 기반) | 불필요 | 권장 | 불필요 | 다중 인스턴스에서는 태그 전파에 공유 캐시 활용 |
+| ISR(요청 기반) | 불필요 | 권장 | 불필요 | 다중 인스턴스에서는 [태그 전파](./how-revalidation-works.md)에 공유 캐시 활용 |
 | Partial Prerendering | 필요 | 권장 | 선택 | [PPR Platform Guide](./ppr-platform-guide.md) 참고 |
 | Cache Components(`use cache`) | 필요 | 권장 | 불필요 | 공유 캐시가 인스턴스 간 일관성을 개선 |
 | Proxy / Middleware | 불필요 | 불필요 | 불필요 | edge 또는 origin에서 실행 |
 | Server Actions | 필요 | 불필요 | 불필요 | 스트리밍 응답을 포함한 POST 요청 |
 | `after()` | 불필요 | 불필요 | 불필요 | 정상 종료 지원 필요 |
 
-스트리밍을 지원하려면 chunked transfer encoding 또는 HTTP/2 streaming을 통과시키고 응답 전체를 버퍼링하지 않아야 한다. 다중 인스턴스에서 공유 캐시를 쓰지 않아도 각 인스턴스의 기능은 동작하지만, revalidation 이벤트가 다른 인스턴스로 전파되지 않는다. ISR과 서버 응답 캐시는 `cacheHandler`, `'use cache'` 항목은 `cacheHandlers`로 백엔드를 구성한다.
+스트리밍을 지원하려면 chunked transfer encoding 또는 HTTP/2 streaming을 통과시키고 응답 전체를 버퍼링하지 않아야 한다. 다중 인스턴스에서 공유 캐시를 쓰지 않아도 각 인스턴스의 기능은 동작하지만, revalidation 이벤트가 다른 인스턴스로 전파되지 않는다. ISR과 서버 응답 캐시는 [`cacheHandler`](../3-api-reference/3.5-config/3.5.1-next-config-js/incrementalCacheHandlerPath.md), `'use cache'` 항목은 [`cacheHandlers`](../3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md)로 백엔드를 구성한다.
 
 ### CDN 인프라 호환성
 
@@ -61,7 +61,7 @@ Next.js는 정적 콘텐츠와 다이나믹 콘텐츠를 라우트 단위의 양
 
 ### Adapters
 
-Deployment Adapter API를 사용하면 플랫폼이 표준 Next.js 빌드 결과를 자체 인프라에 맞게 변환할 수 있다. adapter는 빌드 시점에 실행된다. 공개 API이므로 특별한 접근 권한 없이 구현할 수 있다.
+[Deployment Adapter API](../3-api-reference/3.5-config/3.5.1-next-config-js/adapterPath.md)를 사용하면 플랫폼이 표준 Next.js 빌드 결과를 자체 인프라에 맞게 변환할 수 있다. adapter는 빌드 시점에 실행된다. 공개 API이므로 특별한 접근 권한 없이 구현할 수 있다.
 
 플랫폼 통합 범위는 adapter API와 캐시 인터페이스로 나뉜다. 단일 Node.js 서버를 운영하는 구체적인 항목은 [Self-Hosting](./self-hosting.md)에서 이어서 다룬다.
 
@@ -74,9 +74,9 @@ Deployment Adapter API를 사용하면 플랫폼이 표준 Next.js 빌드 결과
 검증된 adapter는 다음 두 조건을 만족한다.
 
 1. 소스가 공개되어 Next.js 팀과 커뮤니티가 구현을 검사하고 기여할 수 있다.
-2. 전체 Next.js 호환성 테스트 스위트를 실행할 수 있어 기능별 상태와 차이를 확인할 수 있다.
+2. 전체 [Next.js 호환성 테스트 스위트](../3-api-reference/3.7-adapters/testing-adapters.md)를 실행할 수 있어 기능별 상태와 차이를 확인할 수 있다.
 
-검증된 adapter는 Next.js GitHub 조직에서 호스팅되고 공식 지원 대상에 등재되며 각 플랫폼 팀이 유지보수한다. Vercel도 다른 adapter와 같은 공개 API를 사용한다. Next.js 팀은 주요 릴리스 전 조율된 테스트, RFC와 release candidate 단계의 조기 접근, adapter 계약 변경에 대한 직접 지원을 제공한다.
+검증된 adapter는 [Next.js GitHub 조직](https://github.com/nextjs)에서 호스팅되고 공식 지원 대상에 등재되며 각 플랫폼 팀이 유지보수한다. Vercel도 다른 adapter와 같은 공개 API를 사용한다. Next.js 팀은 주요 릴리스 전 조율된 테스트, RFC와 release candidate 단계의 조기 접근, adapter 계약 변경에 대한 직접 지원을 제공한다. 플랫폼 제작자는 [Next.js Ecosystem Working Group](https://nextjs.org/ecosystem-working-group)에 참여할 수 있다.
 
 > **알아두면 좋은 점**: 비공개 adapter도 같은 공개 API와 테스트 스위트로 만들 수 있다. 그러나 Next.js 팀이 구현을 검사할 수 없으므로 검증된 adapter 목록에는 포함되지 않는다.
 

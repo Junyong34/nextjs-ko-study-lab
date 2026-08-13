@@ -12,11 +12,13 @@
 
 ## 핵심 개념 및 설명
 
-public page는 모든 사용자에게 같은 콘텐츠를 보여주는 랜딩 페이지, 마케팅 페이지, 상품 목록, 블로그 목록 같은 화면이다. Next.js에서는 페이지 전체를 정적 또는 다이나믹 중 하나로 고르지 않고 컴포넌트별 입력과 수명에 맞춰 조합할 수 있다.
+public page는 모든 사용자에게 같은 콘텐츠를 보여주는 랜딩 페이지, 마케팅 페이지, 상품 목록, 블로그 목록 같은 화면이다. 공유 데이터이므로 미리 [prerender](../4-glossary/README.md)해 재사용할 수 있다. Next.js에서는 페이지 전체를 정적 또는 다이나믹 중 하나로 고르지 않고 컴포넌트별 입력과 수명에 맞춰 조합할 수 있다.
 
 ### 예제: 상품 목록 페이지
 
 정적 헤더에서 시작해 외부 데이터 상품 목록을 추가하고, 응답을 막지 않도록 캐시한다. 마지막에는 사용자별 프로모션을 스트리밍해 페이지 전체를 다이나믹 렌더링으로 바꾸지 않는다.
+
+공식 예제의 [영상](https://youtu.be/F6romq71KtI), [실행 데모](https://cache-components-public-pages.labs.vercel.dev/), [소스 코드](https://github.com/vercel-labs/cache-components-public-pages)를 함께 참고할 수 있다.
 
 #### 1단계: 정적 헤더
 
@@ -34,7 +36,7 @@ export default async function Page() {
 
 > **알아두면 좋은 점**: locale에 맞는 날짜나 시간을 화면 깜빡임 없이 보여줘야 한다면 [Preventing flash before hydration](./preventing-flash-before-hydration.md) 가이드를 참고한다.
 
-`next build` 출력의 `○` 표시는 라우트가 별도 설정 없이 정적 콘텐츠로 prerender되었음을 뜻한다.
+[`next build`](../3-api-reference/3.6-cli/next.md) 출력의 `○` 표시는 라우트가 별도 설정 없이 정적 콘텐츠로 prerender되었음을 뜻한다.
 
 ```text
 Route (app)      Revalidate  Expire
@@ -65,7 +67,7 @@ export default async function Page() {
 }
 ```
 
-상품 목록은 시간이 지나며 바뀔 수 있는 외부 데이터에 의존한다. 아무 지침이 없으면 프레임워크는 사용자 요청마다 새 데이터를 가져오려는 의도로 해석한다. 이 요청 시점 작업을 `<Suspense>` 밖에서 기다리면 상품 조회가 끝날 때까지 정적 헤더까지 보낼 수 없다. Next.js는 uncached 데이터를 처음 `await`하는 지점에서 라우트 prerender를 막는다는 경고를 표시한다.
+상품 목록은 시간이 지나며 바뀔 수 있는 외부 데이터에 의존한다. 아무 지침이 없으면 프레임워크는 사용자 요청마다 새 데이터를 가져오려는 의도로 해석한다. 이 요청 시점 작업을 `<Suspense>` 밖에서 기다리면 상품 조회가 끝날 때까지 정적 헤더까지 보낼 수 없다. Next.js는 uncached 데이터를 처음 `await`하는 지점에서 라우트 prerender를 막는다는 [경고](https://nextjs.org/docs/messages/blocking-prerender-dynamic)를 표시한다.
 
 응답을 풀어주는 방법은 두 가지다.
 
@@ -85,7 +87,15 @@ async function ProductList() {
 }
 ```
 
-`'use cache'`를 붙이면 반환 결과가 저장되고 재사용된다. 컴포넌트 입력을 요청 전에 알 수 있으면 정적 컴포넌트처럼 prerender할 수 있다. 다시 빌드하면 `/products`는 여전히 `○`로 표시된다.
+[`'use cache'`](../3-api-reference/3.4-directives/use-cache.md)를 붙이면 반환 결과가 저장되고 재사용된다. 컴포넌트 입력을 요청 전에 알 수 있으면 정적 컴포넌트처럼 prerender할 수 있다. 다시 빌드하면 `/products`는 여전히 `○`로 표시된다.
+
+```text
+Route (app)      Revalidate  Expire
+┌ ○ /products           15m      1y
+└ ○ /_not-found
+
+○  (Static)  prerendered as static content
+```
 
 #### 3단계: 다이나믹 프로모션 추가
 
@@ -100,7 +110,7 @@ async function PromotionContent() {
 
 ### Partial Prerendering
 
-`<Suspense>` 경계는 스트리밍 응답을 나눌 위치와 기다리는 동안 보여줄 fallback을 정한다.
+[`<Suspense>` 경계](../4-glossary/README.md)는 스트리밍 응답을 나눌 위치와 기다리는 동안 보여줄 fallback을 정한다.
 
 ```tsx
 import { Suspense } from 'react'

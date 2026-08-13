@@ -12,7 +12,7 @@
 
 ## 핵심 개념 및 설명
 
-Next.js를 자체 호스팅하면 인프라에 맞춰 각 기능의 실행 위치와 저장소를 직접 선택할 수 있다. 단일 `next start` 인스턴스는 기본 기능을 처리하지만, 여러 인스턴스와 CDN을 사용하면 일관성과 스트리밍을 위한 구성이 추가로 필요하다.
+[Next.js를 배포](../1-getting-started/deploying.md)할 때 자체 호스팅을 선택하면 인프라에 맞춰 각 기능의 실행 위치와 저장소를 직접 선택할 수 있다. 단일 `next start` 인스턴스는 기본 기능을 처리하지만, 여러 인스턴스와 CDN을 사용하면 일관성과 스트리밍을 위한 구성이 추가로 필요하다.
 
 > **영상**: 공식 문서에서 [45분 분량의 Next.js 자체 호스팅 영상](https://www.youtube.com/watch?v=sIVL4JMqRfc)을 함께 제공한다.
 
@@ -22,7 +22,7 @@ Next.js 서버를 인터넷에 직접 노출하기보다 nginx 같은 reverse pr
 
 ### Image Optimization
 
-`next start`에서는 `next/image`가 별도 설정 없이 동작한다. 이미지 최적화를 별도 서비스에 맡기려면 custom image loader를 구성한다. [static export](./static-exports.md)에서도 custom loader를 사용할 수 있다. 이미지는 빌드 시점이 아니라 런타임에 최적화된다.
+`next start`에서는 [`next/image`](../3-api-reference/3.2-components/image.md)가 별도 설정 없이 동작한다. 이미지 최적화를 별도 서비스에 맡기려면 [custom image loader](../3-api-reference/3.2-components/image.md)를 구성한다. [static export](./static-exports.md#image-optimization)에서도 custom loader를 사용할 수 있다. 이미지는 빌드 시점이 아니라 런타임에 최적화된다.
 
 > **알아두면 좋은 점**:
 >
@@ -32,7 +32,7 @@ Next.js 서버를 인터넷에 직접 노출하기보다 nginx 같은 reverse pr
 
 ### Proxy
 
-Proxy는 `next start`에서 별도 설정 없이 동작하지만 들어오는 요청에 접근해야 하므로 static export에서는 지원하지 않는다. 모든 Node.js API가 필요한 로직은 Server Component 레이아웃으로 옮겨 headers를 확인하고 redirect하는 방식을 검토한다. `next.config.js`의 header·cookie·query 조건부 redirect와 rewrite도 사용할 수 있다. 이 방식으로 해결되지 않으면 custom server를 고려한다.
+[Proxy](../3-api-reference/3.1-file-conventions/proxy.md)는 `next start`에서 별도 설정 없이 동작하지만 들어오는 요청에 접근해야 하므로 static export에서는 지원하지 않는다. 모든 Node.js API가 필요한 로직은 [Server Component 레이아웃](../3-api-reference/3.1-file-conventions/layout.md)으로 옮겨 [`headers`](../3-api-reference/3.3-functions/headers.md)를 확인하고 [`redirect`](../3-api-reference/3.3-functions/redirect.md)하는 방식을 검토한다. `next.config.js`의 header·cookie·query 조건부 [redirect](../3-api-reference/3.5-config/3.5.1-next-config-js/redirects.md)와 [rewrite](../3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md)도 사용할 수 있다. 이 방식으로 해결되지 않으면 [custom server](./custom-server.md)를 고려한다.
 
 ### 환경 변수
 
@@ -62,13 +62,13 @@ Next.js는 응답, 생성된 정적 페이지, 빌드 출력, 이미지·폰트�
 
 #### 자동 캐싱
 
-- 파일명에 SHA hash가 있는 불변 자산에는 `public, max-age=31536000, immutable`이 설정되며 재정의할 수 없다.
-- ISR은 `s-maxage`와 `stale-while-revalidate`를 사용한다. CDN이 이 directive와 cache key 변형을 올바르게 처리해야 한다.
-- 다이나믹 렌더링 페이지와 Draft Mode는 사용자별 데이터가 공유 캐시에 들어가지 않도록 `private, no-cache, no-store, max-age=0, must-revalidate`를 사용한다.
+- [정적으로 import한 이미지](../1-getting-started/images.md#로컬-이미지)처럼 파일명에 SHA hash가 있는 불변 자산에는 `public, max-age=31536000, immutable`이 설정되며 재정의할 수 없다.
+- [ISR](./incremental-static-regeneration.md)은 `s-maxage`와 `stale-while-revalidate`를 사용한다. CDN이 이 directive와 [cache key 변형](./cdn-caching.md)을 올바르게 처리해야 한다.
+- 다이나믹 렌더링 페이지와 [Draft Mode](./draft-mode.md)는 사용자별 데이터가 공유 캐시에 들어가지 않도록 `private, no-cache, no-store, max-age=0, must-revalidate`를 사용한다.
 
 #### 정적 자산
 
-JavaScript와 CSS를 별도 도메인이나 CDN에서 제공하려면 `assetPrefix`를 설정한다. 도메인을 분리하면 DNS와 TLS 연결 시간이 추가된다는 trade-off가 있다.
+JavaScript와 CSS를 별도 도메인이나 CDN에서 제공하려면 [`assetPrefix`](../3-api-reference/3.5-config/3.5.1-next-config-js/assetPrefix.md)를 설정한다. 도메인을 분리하면 DNS와 TLS 연결 시간이 추가된다는 trade-off가 있다.
 
 #### 캐시 구성
 
@@ -81,7 +81,42 @@ module.exports = {
 }
 ```
 
-프로덕션 handler는 durable storage, eviction policy, 오류 처리, 분산 tag 조정을 구현해야 한다. [ISR](./incremental-static-regeneration.md) 같은 서버 캐시에는 `cacheHandler`, `'use cache'` 백엔드에는 `cacheHandlers`를 사용한다.
+`cache-handler.js`는 `get`, `set`, tag 무효화, 요청 단위 임시 캐시 초기화 계약을 구현한다. 다음 메모리 구현은 인터페이스를 설명하기 위한 출발점이며 프로덕션에서는 외부 저장소로 바꾼다.
+
+```js
+const cache = new Map()
+
+module.exports = class CacheHandler {
+  constructor(options) {
+    this.options = options
+  }
+
+  async get(key) {
+    return cache.get(key)
+  }
+
+  async set(key, data, ctx) {
+    cache.set(key, {
+      value: data,
+      lastModified: Date.now(),
+      tags: ctx.tags,
+    })
+  }
+
+  async revalidateTag(tags) {
+    tags = [tags].flat()
+    for (const [key, value] of cache) {
+      if (value.tags.some((tag) => tags.includes(tag))) {
+        cache.delete(key)
+      }
+    }
+  }
+
+  resetRequestCache() {}
+}
+```
+
+프로덕션 handler는 durable storage, eviction policy, 오류 처리, 분산 tag 조정을 구현해야 한다. [ISR](./incremental-static-regeneration.md) 같은 서버 캐시에는 [`cacheHandler`](../3-api-reference/3.5-config/3.5.1-next-config-js/incrementalCacheHandlerPath.md), `'use cache'` 백엔드에는 [`cacheHandlers`](../3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md)를 사용한다.
 
 > **알아두면 좋은 점**: `revalidatePath`는 내부적으로 해당 페이지의 특별한 기본 tag에 `revalidateTag`를 호출하는 편의 계층이다.
 
@@ -99,17 +134,25 @@ module.exports = {
 
 #### Server Functions 암호화 키
 
-Next.js는 Server Function closure 값을 클라이언트로 보내기 전에 암호화한다. 기본 키는 빌드마다 새로 생성된다. 모든 인스턴스가 같은 키를 사용하지 않으면 한 인스턴스가 만든 값을 다른 인스턴스가 복호화하지 못해 `Failed to find Server Action` 오류가 날 수 있다.
+Next.js는 [Server Function](../1-getting-started/mutating-data.md) closure 값을 클라이언트로 보내기 전에 암호화한다. 기본 키는 빌드마다 새로 생성된다. 모든 인스턴스가 같은 키를 사용하지 않으면 한 인스턴스가 만든 값을 다른 인스턴스가 복호화하지 못해 `Failed to find Server Action` 오류가 날 수 있다.
 
 `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY`에 16, 24, 32 byte의 유효한 AES key를 base64로 인코딩해 설정한다. Next.js의 기본 생성 크기는 32 byte다. 키는 빌드 출력에 포함되어 런타임에 사용된다.
 
-#### Deployment ID와 공유 캐시
+```bash
+NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=your-generated-key next build
+```
 
-rolling deployment의 version skew를 감지하려면 `deploymentId`를 설정한다. `'use cache: remote'`와 외부 저장소 기반 custom cache handler를 사용하면 여러 인스턴스가 캐시를 공유할 수 있다.
+#### Deployment identifier
+
+rolling deployment의 version skew를 감지하려면 [`deploymentId`](../3-api-reference/3.5-config/3.5.1-next-config-js/deploymentId.md)를 설정한다.
+
+#### 공유 캐시
+
+[`'use cache: remote'`](../3-api-reference/3.4-directives/use-cache-remote.md)와 외부 저장소 기반 [custom cache handler](../3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md)를 사용하면 여러 인스턴스가 캐시를 공유할 수 있다.
 
 ### Version skew
 
-여러 버전이 동시에 서비스되면 오래된 클라이언트가 사라진 JavaScript/CSS를 요청하거나, 이전 Server Function ID를 호출하거나, 새 서버와 호환되지 않는 prefetch 데이터를 사용할 수 있다.
+여러 버전이 동시에 서비스될 때 생기는 [version skew](../4-glossary/README.md)로 오래된 클라이언트가 사라진 JavaScript/CSS를 요청하거나, 이전 Server Function ID를 호출하거나, 새 서버와 호환되지 않는 prefetch 데이터를 사용할 수 있다.
 
 ```js
 module.exports = {
@@ -123,7 +166,7 @@ deployment ID를 설정하면 정적 자산에 `?dpl=<deploymentId>`, 클라이�
 
 ### 스트리밍과 Suspense
 
-App Router는 자체 호스팅에서도 스트리밍 응답을 지원한다. nginx 같은 proxy가 버퍼링하지 않도록 구성해야 한다.
+App Router는 자체 호스팅에서도 [스트리밍 응답](../3-api-reference/3.1-file-conventions/loading.md)을 지원한다. nginx 같은 proxy가 버퍼링하지 않도록 구성해야 한다.
 
 ```js
 module.exports = {
@@ -140,15 +183,19 @@ load balancer는 chunked transfer encoding 또는 HTTP/2 streaming을 지원해�
 
 ### 다중 인스턴스 캐시 조정
 
-한 인스턴스의 `revalidateTag()`는 기본적으로 그 인스턴스 캐시만 무효화한다. 다른 인스턴스는 무효화를 알기 전까지 오래된 데이터를 보낼 수 있다. custom cache handler에 `refreshTags()`를 구현해 요청 전마다 Redis 같은 공유 저장소의 tag 상태를 동기화한다.
+한 인스턴스의 [`revalidateTag()`](../3-api-reference/3.3-functions/revalidateTag.md)는 기본적으로 그 인스턴스 캐시만 무효화한다. 다른 인스턴스는 무효화를 알기 전까지 오래된 데이터를 보낼 수 있다. custom cache handler에 [`refreshTags()`](../3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md)를 구현해 요청 전마다 Redis 같은 공유 저장소의 tag 상태를 동기화한다. 자세한 tag 구조는 [How Revalidation Works](./how-revalidation-works.md)에서 다룬다.
 
-### Cache Components와 CDN
+### Cache Components
 
-Cache Components는 CDN 전용 기능이 아니며 `next start`와 Docker에서도 동작한다. CDN 앞단에서는 다이나믹 API를 읽은 페이지가 `Cache-Control: private`, 완전히 prerender된 페이지가 `Cache-Control: public`을 사용한다. CDN은 cache key 변형까지 올바르게 처리해야 한다.
+[Cache Components](../1-getting-started/caching.md)는 CDN 전용 기능이 아니며 `next start`와 Docker에서도 동작한다.
+
+### CDN 사용
+
+CDN 앞단에서는 다이나믹 API를 읽은 페이지가 `Cache-Control: private`, 완전히 prerender된 페이지가 `Cache-Control: public`을 사용한다. CDN은 cache key 변형까지 올바르게 처리해야 한다. 세부 동작은 [CDN Caching](./cdn-caching.md), 플랫폼별 PPR 지원은 [PPR Platform Guide](./ppr-platform-guide.md)를 참고한다.
 
 ### `after()`와 정상 종료
 
-`after()`는 `next start`에서 완전히 지원된다. 서버를 중지할 때 `SIGINT` 또는 `SIGTERM`을 보내고 기다리면 진행 중인 요청과 대기 중인 `after()` callback을 마친다. 플랫폼에는 백그라운드 작업이 완료되도록 조정 가능한 drain 시간(권장 10~30초)을 둔다.
+[`after()`](../3-api-reference/3.3-functions/after.md)는 `next start`에서 완전히 지원된다. 서버를 중지할 때 `SIGINT` 또는 `SIGTERM`을 보내고 기다리면 진행 중인 요청과 대기 중인 `after()` callback을 마친다. 플랫폼에는 백그라운드 작업이 완료되도록 조정 가능한 drain 시간(권장 10~30초)을 둔다.
 
 ## 예제 및 데모 설계
 

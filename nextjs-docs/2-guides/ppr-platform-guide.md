@@ -36,7 +36,7 @@ Partial Prerendering(PPR)은 한 라우트 안에서 정적 렌더링과 다이�
 
 각 라우트의 static HTML shell과 `postponedState`는 한 쌍으로 저장해야 한다. 시간 기반 또는 요청 기반 revalidation이 일어나면 Next.js가 둘을 함께 다시 생성한다. 새 shell과 오래된 postponed state를 조합하거나 그 반대로 제공하면 다이나믹 결과가 잘못된다.
 
-따라서 두 산출물은 원자적으로 갱신한다. adapter에서는 `requestMeta.onCacheEntryV2`로 [revalidation](./incremental-static-regeneration.md) 이후 캐시 변경을 관찰해 저장소에 전파할 수 있다.
+따라서 두 산출물은 원자적으로 갱신한다. adapter에서는 [`requestMeta.onCacheEntryV2`](../3-api-reference/3.7-adapters/implementing-ppr-in-an-adapter.md)로 [시간 기반 revalidation](./incremental-static-regeneration.md)이나 [`revalidateTag`](../3-api-reference/3.3-functions/revalidateTag.md)를 사용한 요청 기반 revalidation 이후 캐시 변경을 관찰해 저장소에 전파할 수 있다.
 
 ### Origin 전용 구현
 
@@ -80,7 +80,7 @@ handler를 프로세스 안에서 직접 호출할 때는 다음 값을 제공�
 
 #### 빌드 출력에서 PPR 라우트 찾기
 
-adapter 출력의 `outputs.prerenders`에서 `renderingMode: 'PARTIALLY_STATIC'`인 항목이 PPR 라우트다. 해당 항목의 `fallback.postponedState`를 읽는다. `pprChain.headers`에는 resume에 필요한 `{ 'next-resume': '1' }`가 들어 있다.
+[adapter 출력](../3-api-reference/3.7-adapters/output-types.md)의 `outputs.prerenders`에서 `renderingMode: 'PARTIALLY_STATIC'`인 항목이 PPR 라우트다. 해당 항목의 `fallback.postponedState`를 읽는다. `pprChain.headers`에는 resume에 필요한 `{ 'next-resume': '1' }`가 들어 있다. 전체 코드 예제는 [Adapter에서 PPR 구현하기](../3-api-reference/3.7-adapters/implementing-ppr-in-an-adapter.md)를 참고한다.
 
 ### 구현 체크리스트
 
@@ -89,6 +89,8 @@ adapter 출력의 `outputs.prerenders`에서 `renderingMode: 'PARTIALLY_STATIC'`
 3. **다이나믹 렌더링 resume**: CDN 구조에서는 POST와 resume 헤더·body로 origin을 호출한다. adapter 구조에서는 같은 정보를 handler에 직접 넘긴다.
 4. **캐시 갱신**: `requestMeta.onCacheEntryV2`로 revalidation 결과를 받고 shell과 postponed state 쌍을 원자적으로 갱신한다.
 5. **안전한 성능 저하**: postponed state가 없거나 오래됐으면 전체 서버 렌더링으로 대체한다. shell-first 최적화는 잃지만 완전한 페이지를 제공한다.
+
+전체 adapter API와 구현 예제는 [Deployment Adapter API](../3-api-reference/3.5-config/3.5.1-next-config-js/adapterPath.md)에서 확인한다.
 
 ## 예제 및 데모 설계
 
