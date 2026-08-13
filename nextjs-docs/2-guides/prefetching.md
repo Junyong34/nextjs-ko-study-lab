@@ -14,7 +14,7 @@
 
 ### prefetch는 언제 무엇을 가져오는가
 
-prefetch는 사용자가 라우트로 이동하기 전에 HTML, JavaScript, React Server Component(RSC) payload 같은 리소스를 가져오는 과정이다. Next.js는 라우트별로 JavaScript를 분할하므로 현재 라우트에 필요한 코드만 먼저 로드하고, 링크 대상 리소스는 백그라운드에서 브라우저 캐시에 준비한다. 클릭하면 전체 페이지를 다시 로드하지 않고 [클라이언트 전환](../1-getting-started/linking-and-navigating.md#클라이언트-전환)을 수행한다.
+prefetch는 사용자가 라우트로 이동하기 전에 HTML, JavaScript, React Server Component(RSC) payload 같은 리소스를 가져오는 과정이다. Next.js는 라우트별로 JavaScript를 분할하므로 현재 라우트에 필요한 코드만 먼저 로드하고, 링크 대상 리소스는 백그라운드에서 브라우저 캐시에 준비한다. 클릭하면 전체 페이지를 다시 로드하지 않고 [클라이언트 전환](../1-getting-started/linking-and-navigating.md#클라이언트-사이드-전환)을 수행한다.
 
 자동 prefetch는 프로덕션에서만 동작한다. `<Link>`가 viewport에 들어오면 작업 큐에 넣고 다음 순서로 처리한다.
 
