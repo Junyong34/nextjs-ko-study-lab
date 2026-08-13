@@ -124,7 +124,12 @@ export function MarkReadButton() {
   return <button onClick={() => mutate(activityCache.key, async () => {
     await markActivityReadAction()
     return { count: 0 }
-  }, { optimisticData: { count: 0 }, revalidate: false, rollbackOnError: true })}>Mark read</button>
+  }, {
+    optimisticData: { count: 0 },
+    revalidate: false,
+    rollbackOnError: true,
+    throwOnError: false,
+  })}>Mark read</button>
 }
 ```
 

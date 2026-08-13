@@ -18,7 +18,7 @@
 | API | 목적 | 실행 위치 | 상태 코드 |
 | --- | --- | --- | --- |
 | `redirect` | mutation 또는 이벤트 뒤 이동 | Server Component, Server Function, Route Handler | 307 또는 Server Action에서 303 |
-| `permanentRedirect` | canonical URL 변경 뒤 영구 이동 | Server Component, Server Function, Route Handler | 308 |
+| `permanentRedirect` | mutation 또는 이벤트 뒤 영구 이동 | Server Component, Server Function, Route Handler | 308 |
 | `useRouter` | 클라이언트 사이드 내비게이션 | Client Component 이벤트 핸들러 | 해당 없음 |
 | `next.config.js`의 `redirects` | 경로 기반 수신 요청 redirect | 설정 파일 | 307 또는 308 |
 | `NextResponse.redirect` | 조건 기반 수신 요청 redirect | Proxy | 임의 지정 |

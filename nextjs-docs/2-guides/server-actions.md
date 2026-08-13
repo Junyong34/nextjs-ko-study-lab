@@ -59,10 +59,10 @@ Next.js는 다음 프레임워크 보호를 제공한다.
 
 - **CSRF 검사**: `Origin`과 `Host` 또는 `X-Forwarded-Host`를 비교한다. 프록시 도메인은 `serverActions.allowedOrigins`에 설정한다.
 - **본문 크기 제한**: 기본 1MB이며 `serverActions.bodySizeLimit`으로 바꾼다.
-- **암호화된 Action ID와 dead code elimination**: 사용하지 않는 Server Function은 클라이언트 번들에서 제거된다.
+- **암호화된 Action ID와 dead code elimination**: Action 참조는 빌드 시 암호화되고, 사용하지 않는 Server Function은 클라이언트 번들에서 제거되어 공개 endpoint를 갖지 않는다.
 - **클로저 변수 암호화**: 클라이언트로 전달되는 클로저 값은 암호화되지만 비밀을 캡처하는 설계를 대신할 수 없다.
 
-각 Action에서 인증, 인가, 입력 검증, 속도 제한을 수행한다. 스키마 검증은 입력 모양만 확인하며 행의 소유권은 증명하지 않는다. 클라이언트에서는 대상 ID와 변경 내용만 받고, 세션을 기준으로 신뢰할 수 있는 저장소에서 소유권을 다시 조회한다.
+각 Action에서 인증, 인가, 입력 검증을 수행한다. 스키마 검증은 입력 모양만 확인하며 행의 소유권은 증명하지 않는다. 클라이언트에서는 대상 ID와 변경 내용만 받고, 세션을 기준으로 신뢰할 수 있는 저장소에서 소유권을 다시 조회한다. 속도 제한을 포함한 종단 간 보안 패턴은 [Data Security](./data-security.md)를 참고한다.
 
 ```tsx
 'use server'

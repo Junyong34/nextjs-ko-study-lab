@@ -15,7 +15,7 @@
 
 ### Client-side data fetching
 
-많은 앱은 별도 클라이언트 데이터 fetching 라이브러리 없이도 반응성 있는 상호작용을 만들 수 있습니다. Client Component가 서버 데이터를 한 번만 읽는다면 Server Component에서 Promise를 전달하고 React `use()`로 푸는 방법을 먼저 고려합니다. 클라이언트에서 공유 캐시, focus revalidation, 폴링, 요청 중복 제거, 여러 컴포넌트의 낙관적 업데이트가 필요할 때 SWR이나 TanStack Query 같은 라이브러리를 사용합니다.
+많은 앱은 별도 클라이언트 데이터 fetching 라이브러리 없이도 반응성 있는 상호작용을 만들 수 있습니다. Client Component가 서버 데이터를 한 번만 읽는다면 Server Component에서 Promise를 전달하고 React `use()`로 푸는 방법을 먼저 고려합니다. 클라이언트에서 공유 캐시, focus revalidation, 폴링, 요청 중복 제거, 여러 컴포넌트의 낙관적 업데이트가 필요할 때 SWR, TanStack Query, [Apollo Client](https://www.apollographql.com/docs/react) 같은 라이브러리를 사용합니다.
 
 ### 클라이언트 fetching 패턴 선택
 
@@ -59,6 +59,8 @@ Server Component는 세그먼트에 필요한 초기 데이터를 제공하고, 
 - 2.15.2 [TanStack Query](./tanstack-query.md): query key, hydration, `useMutation` 중심 패턴입니다.
 
 두 라이브러리는 서로 대체 가능한 독립 선택지입니다. 서버 데이터 흐름은 [Fetching Data](../../1-getting-started/fetching-data.md), SPA 구조는 [SPAs](../single-page-applications.md), 반응형 mutation은 [Interactive apps](../interactive-apps.md), 서버 캐시는 [Caching](../../1-getting-started/caching.md)을 참고합니다.
+
+두 패턴의 실제 동작은 공식 [next-spa-patterns 데모](https://next-spa-patterns.labs.vercel.dev/)와 [소스 코드](https://github.com/vercel-labs/next-spa-patterns)에서 함께 확인할 수 있습니다.
 
 ## 예제 및 데모 설계
 
