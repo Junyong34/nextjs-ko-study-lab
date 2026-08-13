@@ -13,7 +13,7 @@
 
 ## 핵심 개념 및 설명
 
-Next.js는 `sass` 패키지를 설치하면 별도 통합 설정 없이 `.scss`와 `.sass` 확장자를 지원한다. 컴포넌트 단위 Sass에는 CSS Modules를 함께 사용하며, 파일 이름을 `.module.scss` 또는 `.module.sass`로 만든다.
+Next.js는 [`sass`](https://github.com/sass/sass) 패키지를 설치하면 별도 통합 설정 없이 `.scss`와 `.sass` 확장자를 지원한다. 컴포넌트 단위 Sass에는 CSS Modules를 함께 사용하며, 파일 이름을 `.module.scss` 또는 `.module.sass`로 만든다.
 
 ```bash
 npm install --save-dev sass
@@ -21,7 +21,7 @@ npm install --save-dev sass
 
 pnpm은 `pnpm add -D sass`, Yarn은 `yarn add -D sass`, Bun은 `bun add -D sass`를 실행한다.
 
-> **알아두면 좋은 점**: Sass에는 확장자별로 서로 다른 두 문법이 있다. `.scss`는 SCSS 문법을, `.sass`는 들여쓰기 문법(Indented Syntax)을 사용해야 한다. 무엇을 선택할지 확실하지 않다면 CSS의 상위 집합이며 별도의 들여쓰기 문법을 배우지 않아도 되는 `.scss`로 시작한다.
+> **알아두면 좋은 점**: Sass에는 확장자별로 [서로 다른 두 문법](https://sass-lang.com/documentation/syntax)이 있다. `.scss`는 [SCSS 문법](https://sass-lang.com/documentation/syntax#scss)을, `.sass`는 [들여쓰기 문법(Indented Syntax)](https://sass-lang.com/documentation/syntax#the-indented-syntax)을 사용해야 한다. 무엇을 선택할지 확실하지 않다면 CSS의 상위 집합이며 별도의 들여쓰기 문법을 배우지 않아도 되는 `.scss`로 시작한다.
 
 ### Sass 옵션 사용자화
 
@@ -81,7 +81,7 @@ export default function Page() {
 }
 ```
 
-`app/page.js`는 루트 `/` URL에 대응한다. 위 예제에서는 빌드 과정이 Sass 변수 `$primary-color`를 처리하고, CSS Module이 내보낸 `primaryColor`를 페이지 모듈에서 읽는다.
+`app/page.js`는 루트 `/` URL에 대응한다.
 
 ## 예제 및 데모 설계
 

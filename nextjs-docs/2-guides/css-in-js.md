@@ -20,10 +20,15 @@
 - [`chakra-ui`](https://chakra-ui.com/getting-started/nextjs-app-guide)
 - [`@fluentui/react-components`](https://react.fluentui.dev/?path=/docs/concepts-developer-server-side-rendering-next-js-appdir-setup--page)
 - [`kuma-ui`](https://kuma-ui.com)
-- [`@mui/material`](https://mui.com/material-ui/guides/next-js-app-router/), [`@mui/joy`](https://mui.com/joy-ui/integrations/next-js-app-router/)
-- [`pandacss`](https://panda-css.com), [`stylex`](https://stylexjs.com), [`tamagui`](https://tamagui.dev/docs/guides/next-js#server-components)
-- [`styled-jsx`](#styled-jsx), [`styled-components`](#styled-components)
-- [`tss-react`](https://tss-react.dev/), [`vanilla-extract`](https://vanilla-extract.style)
+- [`@mui/material`](https://mui.com/material-ui/guides/next-js-app-router/)
+- [`@mui/joy`](https://mui.com/joy-ui/integrations/next-js-app-router/)
+- [`pandacss`](https://panda-css.com)
+- [`styled-jsx`](#styled-jsx)
+- [`styled-components`](#styled-components)
+- [`stylex`](https://stylexjs.com)
+- [`tamagui`](https://tamagui.dev/docs/guides/next-js#server-components)
+- [`tss-react`](https://tss-react.dev/)
+- [`vanilla-extract`](https://vanilla-extract.style)
 
 [`emotion`](https://github.com/emotion-js/emotion/issues/2928)은 현재 App Router 지원을 진행하고 있다.
 
@@ -39,13 +44,13 @@ CSS-in-JS는 다음 세 요소를 직접 구성해야 하는 opt-in 방식이다
 
 #### `styled-jsx`
 
-Client Component에서 `styled-jsx`를 쓰려면 `v5.1.0` 이상이 필요하다. 레지스트리는 최초 렌더링에서 한 번만 만들고, 서버가 HTML을 만들 때 수집한 스타일을 반환한 뒤 비운다.
+Client Component에서 `styled-jsx`를 쓰려면 `v5.1.0`을 사용해야 한다. 레지스트리는 최초 렌더링에서 한 번만 만들고, 서버가 HTML을 만들 때 수집한 스타일을 반환한 뒤 비운다.
 
 ```tsx
 // app/registry.tsx
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useServerInsertedHTML } from 'next/navigation'
 import { StyleRegistry, createStyleRegistry } from 'styled-jsx'
 
@@ -105,7 +110,7 @@ module.exports = {
 // lib/registry.tsx
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useServerInsertedHTML } from 'next/navigation'
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components'
 
@@ -205,6 +210,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 - CSS-in-JS 라이브러리는 최신 React의 Server Component, 스트리밍, 동시성 렌더링을 지원해야 한다.
 - App Router 구성에는 스타일 레지스트리, `useServerInsertedHTML`, 최상단 Client Component가 필요하다.
-- `styled-jsx`는 `v5.1.0` 이상, `styled-components`는 이 가이드에서 `v6` 이상을 기준으로 한다.
+- `styled-jsx`는 `v5.1.0`, `styled-components`는 `v6` 이상을 기준으로 한다.
 - 서버 렌더링에서는 스타일을 콘텐츠보다 먼저 삽입하고 스트리밍 중에는 청크별 스타일을 이어 붙인다.
 - 클라이언트 `hydration`이 끝나면 CSS-in-JS 라이브러리가 이후의 다이나믹 스타일을 관리한다.

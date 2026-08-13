@@ -30,7 +30,7 @@ pnpm과 Yarn도 설치 뒤 `npx tailwindcss init -p`를 실행한다. Bun에서�
 
 ### Tailwind v3 구성
 
-`tailwind.config.js`의 `content`에는 Tailwind 클래스를 사용하는 템플릿 경로를 지정한다. App Router뿐 아니라 Pages Router나 공유 컴포넌트가 함께 있을 수 있으므로 세 경로를 모두 포함한다.
+`tailwind.config.js`의 `content`에는 Tailwind 클래스를 사용하는 템플릿 경로를 지정한다. 공식 예제는 `app`, `pages`, `components` 아래의 JavaScript, TypeScript, JSX, TSX, MDX 파일을 탐색 대상으로 둔다.
 
 ```js
 // tailwind.config.js
@@ -82,8 +82,6 @@ export default function Page() {
   return <h1 className="text-3xl font-bold underline">Hello, Next.js!</h1>
 }
 ```
-
-`text-3xl`은 글자 크기, `font-bold`는 글자 굵기, `underline`은 밑줄을 적용한다. Tailwind는 `content`에 지정된 소스 파일을 빌드 과정에서 탐색해 사용된 클래스에 필요한 CSS를 생성한다.
 
 ### Turbopack과 함께 사용
 
