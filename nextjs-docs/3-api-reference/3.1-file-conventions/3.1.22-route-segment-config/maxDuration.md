@@ -7,17 +7,31 @@
 ## 학습 목표
 
 - route segment 서버 로직의 최대 실행 시간을 deployment platform에 전달한다.
-- 페이지의 Server Actions timeout에 미치는 범위를 이해한다.
+- page의 Server Actions timeout에 미치는 범위를 이해한다.
 
 ## 핵심 개념 및 설명
 
-`maxDuration`은 서버 로직의 최대 실행 시간을 초 단위로 선언한다. Next.js 빌드 output에 포함되며 deployment platform이 실행 제한을 적용하는 데 사용할 수 있다. 실제 기본값과 강제 방식은 platform이 정한다.
+`maxDuration` 옵션을 사용하면 라우트 세그먼트의 서버 측 논리에 대한 최대 실행 시간(초)을 설정할 수 있다. 배포 플랫폼은 Next.js 빌드 출력의 `maxDuration`를 사용하여 특정 실행 제한을 추가할 수 있다.
 
-```ts
+```tsx filename="layout.tsx | page.tsx | route.ts" switcher
 export const maxDuration = 5
 ```
 
-Server Actions를 사용할 때 page level에 선언하면 그 페이지에서 사용하는 모든 Server Action의 기본 timeout을 바꾼다.
+```js filename="layout.js | page.js | route.js" switcher
+export const maxDuration = 5
+```
+
+<a id="server-actions"></a>
+### Server Action
+
+[Server Action](../../../1-getting-started/mutating-data.md)을 사용하는 경우 페이지 수준에서 `maxDuration`를 설정하여 페이지에서 사용되는 모든 Server Action의 기본 시간 초과를 변경한다.
+
+<a id="version-history"></a>
+### Version History
+
+| 버전 | 변경 사항 |
+| ---------- | ------------------------- |
+| `v13.4.10` | `maxDuration`가 출시되었다. |
 
 ## 예제 및 데모 설계
 
@@ -41,4 +55,4 @@ Server Actions를 사용할 때 page level에 선언하면 그 페이지에서 �
 - `maxDuration`은 서버 실행 시간 상한을 선언한다.
 - 단위는 초다.
 - deployment platform이 build output을 읽어 적용할 수 있다.
-- page level 선언은 그 페이지의 Server Actions에도 적용된다.
+- page level 선언은 그 page의 Server Actions에도 적용된다.

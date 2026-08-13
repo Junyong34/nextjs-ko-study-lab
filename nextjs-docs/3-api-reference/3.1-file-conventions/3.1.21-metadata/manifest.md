@@ -11,19 +11,76 @@
 
 ## 핵심 개념 및 설명
 
-`manifest.json|webmanifest`는 `app` root에 두고 Web Manifest 표준에 맞춰 앱 이름, 시작 URL, 표시 방식, 색상, icon을 설명한다.
+`app` 디렉터리의 **루트**에 [웹 매니페스트 사양](https://developer.mozilla.org/docs/Web/Manifest)과 일치하는 `manifest.(json|webmanifest)` 파일을 추가하거나 생성하여 브라우저에 웹 애플리케이션에 대한 정보를 제공한다.
 
-코드가 필요하면 `manifest.js|ts`의 default 함수에서 `MetadataRoute.Manifest` 객체를 반환한다.
+<a id="static-manifest-file"></a>
+### 정적 매니페스트 파일
 
-```ts
-import type { MetadataRoute } from 'next'
-
-export default function manifest(): MetadataRoute.Manifest {
-  return { name: 'Next.js App', start_url: '/', display: 'standalone' }
+```json filename="app/manifest.json | app/manifest.webmanifest"
+{
+  "name": "My Next.js Application",
+  "short_name": "Next.js App",
+  "description": "An application built with Next.js",
+  "start_url": "/"
+  // ...
 }
 ```
 
-이 특수 Route Handler는 Request-time API나 다이나믹 설정을 사용하지 않으면 기본적으로 캐시된다. Manifest 표준은 확장될 수 있으므로 최신 field는 TypeScript type이나 MDN을 확인한다.
+<a id="generate-a-manifest-file"></a>
+### 매니페스트 파일 생성
+
+[`Manifest` 객체](#manifest-object)를 반환하는 `manifest.js` 또는 `manifest.ts` 파일을 추가한다.
+
+> **알아두면 좋은 점**: `manifest.js`는 [요청 시점 API](../../../4-glossary/README.md#request-time-apis) 또는 [동적 구성](../../../2-guides/caching-without-cache-components.md#dynamic) 옵션을 사용하지 않는 한 기본적으로 캐시되는 특수 Route Handler이다.
+
+```ts filename="app/manifest.ts" switcher
+import type { MetadataRoute } from 'next'
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: 'Next.js App',
+    short_name: 'Next.js App',
+    description: 'Next.js App',
+    start_url: '/',
+    display: 'standalone',
+    background_color: '#fff',
+    theme_color: '#fff',
+    icons: [
+      {
+        src: '/favicon.ico',
+        sizes: 'any',
+        type: 'image/x-icon',
+      },
+    ],
+  }
+}
+```
+
+```js filename="app/manifest.js" switcher
+export default function manifest() {
+  return {
+    name: 'Next.js App',
+    short_name: 'Next.js App',
+    description: 'Next.js App',
+    start_url: '/',
+    display: 'standalone',
+    background_color: '#fff',
+    theme_color: '#fff',
+    icons: [
+      {
+        src: '/favicon.ico',
+        sizes: 'any',
+        type: 'image/x-icon',
+      },
+    ],
+  }
+}
+```
+
+<a id="manifest-object"></a>
+#### 매니페스트 객체
+
+매니페스트 객체에는 새로운 웹 표준으로 인해 업데이트될 수 있는 광범위한 옵션 목록이 포함되어 있다. 현재 모든 옵션에 대한 자세한 내용은 [TypeScript](../../3.5-config/typescript.md#ide-plugin)를 사용하는 경우 코드 편집기에서 `MetadataRoute.Manifest` 유형을 참조하거나 [MDN](https://developer.mozilla.org/docs/Web/Manifest) 문서를 참조한다.
 
 ## 예제 및 데모 설계
 

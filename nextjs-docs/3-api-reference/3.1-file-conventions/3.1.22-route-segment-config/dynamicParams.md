@@ -11,13 +11,23 @@
 
 ## 핵심 개념 및 설명
 
-```ts
-export const dynamicParams = true
+`dynamicParams` 옵션을 사용하면 [generateStaticParams](../../3.3-functions/generate-static-params.md)로 생성되지 않은 다이나믹 세그먼트를 방문할 때 발생하는 상황을 제어할 수 있다.
+
+```tsx filename="layout.tsx | page.tsx" switcher
+export const dynamicParams = true // 사실 | 거짓
 ```
 
-`true`가 기본값이며 미리 생성하지 않은 params를 요청 시점에 생성한다. `false`이면 해당 path는 404를 반환한다. Pages Router의 `getStaticPaths`에서 사용하던 `fallback: true | false | blocking`을 대신한다.
+```js filename="layout.js | page.js | route.js" switcher
+export const dynamicParams = true // 사실 | 거짓
+```
 
-> **알아두면 좋은 점**: `cacheComponents`를 활성화하면 `dynamicParams`는 사용할 수 없다.
+- **`true`**(기본값):`generateStaticParams`에 포함되지 않은 다이나믹 라우트 세그먼트는 요청 시 생성된다.
+- **`false`**:`generateStaticParams`에 포함되지 않은 다이나믹 라우트 세그먼트는 404를 반환한다.
+
+> **알아두면 좋은 점**:
+>
+> - 이 옵션은 `pages` 디렉터리에 있는 `getStaticPaths`의 `fallback: true | false | blocking` 옵션을 대체한다.
+> - [Cache Components](../../3.5-config/3.5.1-next-config-js/cacheComponents.md)가 활성화된 경우에는 `dynamicParams`를 사용할 수 없다.
 
 ## 예제 및 데모 설계
 

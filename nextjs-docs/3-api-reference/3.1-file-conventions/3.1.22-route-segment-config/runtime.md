@@ -11,11 +11,25 @@
 
 ## 핵심 개념 및 설명
 
-```ts
+`runtime` 옵션을 사용하면 경로 렌더링에 사용되는 JavaScript 런타임을 선택할 수 있다.
+
+```tsx filename="layout.tsx | page.tsx | route.ts" switcher
 export const runtime = 'nodejs'
+// 'nodejs'
 ```
 
-현재 지원되는 기본 runtime은 `'nodejs'`다. Edge Runtime은 deprecated되었으므로 route 파일의 edge `runtime` export를 제거하고 Node.js runtime으로 이동한다. Proxy에서는 이 옵션을 사용할 수 없다.
+```js filename="layout.js | page.js | route.js" switcher
+export const runtime = 'nodejs'
+// 'nodejs'
+```
+
+- **`'nodejs'`**(기본값)
+- **`'edge'`**(지원 중단됨)
+
+> **알아두면 좋은 점**:
+>
+> - Edge 런타임은 더 이상 사용되지 않는다. 경로 파일에서 `runtime` 내보내기를 제거한다. [Edge 런타임 지원 중단됨](https://nextjs.org/docs/messages/edge-runtime-deprecated)을 참조한다.
+> - [프록시](../proxy.md)에서는 이 옵션을 사용할 수 없다.
 
 ## 예제 및 데모 설계
 

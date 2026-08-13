@@ -11,9 +11,11 @@
 
 ## 핵심 개념 및 설명
 
-App Router에서 `@next/mdx`를 사용하려면 프로젝트 root 또는 `src` 구조의 root에 `mdx-components.js|tsx`가 반드시 있어야 한다. 파일이 없으면 동작하지 않는다. 이 파일로 MDX 기본 HTML 요소와 사용자 컴포넌트의 스타일·구현을 교체할 수 있다.
+`mdx-components.js|tsx` 파일은 [App Router가 포함된 `@next/mdx`](../../2-guides/mdx.md)를 사용하려면 **필수**이며 이 파일이 없으면 작동하지 않는다. 또한 이를 사용하여 [스타일을 사용자 정의](../../2-guides/mdx.md#using-custom-styles-and-components)할 수 있다.
 
-```tsx
+MDX 컴포넌트를 정의하려면 프로젝트 루트에 있는 `mdx-components.tsx`(또는 `.js`) 파일을 사용한다. 예를 들어 `pages` 또는 `app`와 동일한 수준이거나 해당하는 경우 `src` 내부이다.
+
+```tsx filename="mdx-components.tsx" switcher
 import type { MDXComponents } from 'mdx/types'
 
 const components: MDXComponents = {}
@@ -23,7 +25,46 @@ export function useMDXComponents(): MDXComponents {
 }
 ```
 
-파일은 인자를 받지 않는 `useMDXComponents` 함수 하나를 export해야 한다.
+```js filename="mdx-components.js" switcher
+const components = {}
+
+export function useMDXComponents() {
+  return components
+}
+```
+
+<a id="exports"></a>
+### 내보내기
+
+<a id="usemdxcomponents-function"></a>
+#### `useMDXComponents` 기능
+
+파일은 `useMDXComponents`라는 단일 함수를 내보내야 한다. 이 함수는 어떤 인수도 허용하지 않는다.
+
+```tsx filename="mdx-components.tsx" switcher
+import type { MDXComponents } from 'mdx/types'
+
+const components: MDXComponents = {}
+
+export function useMDXComponents(): MDXComponents {
+  return components
+}
+```
+
+```js filename="mdx-components.js" switcher
+const components = {}
+
+export function useMDXComponents() {
+  return components
+}
+```
+
+<a id="version-history"></a>
+### Version History
+
+| 버전 | 변경 사항 |
+| --------- | -------------------- |
+| `v13.1.2` | MDX 컴포넌트가 추가되었다. |
 
 ## 예제 및 데모 설계
 

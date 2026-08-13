@@ -11,17 +11,116 @@
 
 ## 핵심 개념 및 설명
 
-> **주의**: 이 기능은 experimental이며 변경될 수 있어 production 사용을 권장하지 않는다.
+**unauthorized** 파일은 인증 시 [`unauthorized`](../3.3-functions/unauthorized.md) 함수 호출 시 UI를 렌더링하는 데 사용된다. UI를 사용자 정의할 수 있는 것과 함께 Next.js는 `401` 상태 코드를 반환한다.
 
-인증 과정에서 session이 없을 때 `unauthorized()`를 호출하면 `unauthorized.js`가 렌더링되고 Next.js는 `401`을 반환한다. 이 파일은 props를 받지 않으며 로그인 form이나 인증 안내를 포함할 수 있다.
+```tsx filename="app/unauthorized.tsx" switcher
+import Login from '@/app/components/Login'
 
-```tsx
 export default function Unauthorized() {
-  return <main><h1>401 - Unauthorized</h1><Login /></main>
+  return (
+    <main>
+      <h1>401 - Unauthorized</h1>
+      <p>Please log in to access this page.</p>
+      <Login />
+    </main>
+  )
 }
 ```
 
-권한 검사 함수는 session 부재를 결정하고, 특수 파일은 사용자에게 다시 인증할 방법을 제공한다. 인증됐지만 권한이 부족한 경우에는 `forbidden()`과 `forbidden.js`를 사용한다.
+```jsx filename="app/unauthorized.js" switcher
+import Login from '@/app/components/Login'
+
+export default function Unauthorized() {
+  return (
+    <main>
+      <h1>401 - Unauthorized</h1>
+      <p>Please log in to access this page.</p>
+      <Login />
+    </main>
+  )
+}
+```
+
+<a id="reference"></a>
+### 참조
+
+<a id="props"></a>
+#### prop
+
+`unauthorized.js` 컴포넌트는 prop을 허용하지 않는다.
+
+<a id="examples"></a>
+### 예제
+
+<a id="displaying-login-ui-to-unauthenticated-users"></a>
+#### 인증되지 않은 사용자에게 로그인 UI 표시
+
+[`unauthorized`](../3.3-functions/unauthorized.md) 기능을 사용하여 로그인 UI로 `unauthorized.js` 파일을 렌더링할 수 있다.
+
+```tsx filename="app/dashboard/page.tsx" switcher
+import { verifySession } from '@/app/lib/dal'
+import { unauthorized } from 'next/navigation'
+
+export default async function DashboardPage() {
+  const session = await verifySession()
+
+  if (!session) {
+    unauthorized()
+  }
+
+  return <div>Dashboard</div>
+}
+```
+
+```jsx filename="app/dashboard/page.js" switcher
+import { verifySession } from '@/app/lib/dal'
+import { unauthorized } from 'next/navigation'
+
+export default async function DashboardPage() {
+  const session = await verifySession()
+
+  if (!session) {
+    unauthorized()
+  }
+
+  return <div>Dashboard</div>
+}
+```
+
+```tsx filename="app/unauthorized.tsx" switcher
+import Login from '@/app/components/Login'
+
+export default function UnauthorizedPage() {
+  return (
+    <main>
+      <h1>401 - Unauthorized</h1>
+      <p>Please log in to access this page.</p>
+      <Login />
+    </main>
+  )
+}
+```
+
+```jsx filename="app/unauthorized.js" switcher
+import Login from '@/app/components/Login'
+
+export default function UnauthorizedPage() {
+  return (
+    <main>
+      <h1>401 - Unauthorized</h1>
+      <p>Please log in to access this page.</p>
+      <Login />
+    </main>
+  )
+}
+```
+
+<a id="version-history"></a>
+### Version History
+
+| 버전 | 변경 사항 |
+| --------- | ----------------------------- |
+| `v15.1.0` | `unauthorized.js`가 출시되었다. |
 
 ## 예제 및 데모 설계
 

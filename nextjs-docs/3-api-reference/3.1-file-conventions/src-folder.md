@@ -11,11 +11,24 @@
 
 ## 핵심 개념 및 설명
 
-Next.js는 root의 `app` 또는 `pages` 대신 `src/app`, `src/pages`를 지원한다. 애플리케이션 코드와 프로젝트 설정 파일을 분리하려는 팀에 유용하다.
+프로젝트 루트에 특별한 Next.js`app` 또는 `pages` 디렉터리를 두는 대신 Next.js는 `src` 폴더 아래에 애플리케이션 코드를 배치하는 일반적인 패턴도 지원한다.
 
-`public`, `package.json`, `next.config.js`, `tsconfig.json`, `.env.*`는 프로젝트 root에 남긴다. root에 `app` 또는 `pages`가 있으면 대응하는 `src/app` 또는 `src/pages`는 무시된다. Proxy를 사용하면 `src` 안에 배치한다. Tailwind content 경로와 TypeScript import alias도 `src/`를 반영하도록 갱신한다.
+이는 대부분 개인과 팀이 선호하는 프로젝트 루트에 있는 프로젝트 구성 파일과 애플리케이션 코드를 분리한다.
 
-> **알아두면 좋은 점**: `src`를 선택했다면 `components`, `lib` 같은 애플리케이션 폴더도 함께 옮기는 편이 구조를 이해하기 쉽다.
+`src` 폴더를 사용하려면 `app` 라우터 폴더 또는 `pages` 라우터 폴더를 각각 `src/app` 또는 `src/pages`로 이동한다.
+
+![`src` 폴더가 있는 폴더 구조의 예](./assets/src-folder-01.webp)
+
+> **알아두면 좋은 점**:
+>
+> - `/public` 디렉터리는 프로젝트의 루트에 남아 있어야 한다.
+> - `package.json`,`next.config.js` 및 `tsconfig.json`와 같은 구성 파일은 프로젝트 루트에 남아 있어야 한다.
+> - `.env.*` 파일은 프로젝트 루트에 남아 있어야 한다.
+> - 루트 디렉터리에 `app` 또는 `pages`가 있으면 `src/app` 또는 `src/pages`는 무시된다.
+> - `src`를 사용하는 경우 `/components` 또는 `/lib`와 같은 다른 응용 프로그램 폴더도 이동할 수도 있다.
+> - 프록시를 사용하는 경우 `src` 폴더 안에 있는지 확인한다.
+> - Tailwind CSS를 사용하는 경우 [콘텐츠 섹션](https://tailwindcss.com/docs/content-configuration)의 `tailwind.config.js` 파일에 `/src` 접두사를 추가해야 한다.
+> - `@/*`와 같은 가져오기에 TypeScript 경로를 사용하는 경우 `src/`를 포함하도록 `tsconfig.json`의 `paths` 객체를 업데이트해야 한다.
 
 ## 예제 및 데모 설계
 

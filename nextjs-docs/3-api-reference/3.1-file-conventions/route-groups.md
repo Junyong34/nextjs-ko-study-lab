@@ -8,13 +8,34 @@
 
 - URL을 바꾸지 않고 라우트를 팀·관심사·기능별로 묶는다.
 - 공유 layout 범위를 조절하고 여러 root layout을 구성한다.
-- 경로 충돌과 전체 페이지 로드 caveat를 피한다.
+- 경로 충돌과 전체 page 로드 caveat를 피한다.
 
 ## 핵심 개념 및 설명
 
-폴더 이름을 `(folderName)`처럼 괄호로 감싸면 Route Group이 된다. 이 폴더는 정리 목적으로만 사용되고 URL path에는 포함되지 않는다. 팀·기능별로 라우트를 나누고, 일부 라우트만 layout을 공유하거나, 여러 root layout을 정의할 때 유용하다.
+라우트 그룹은 범주나 팀별로 경로를 구성할 수 있는 폴더 규칙이다.
 
-서로 다른 group이라도 결과 URL이 같으면 충돌한다. 예를 들어 `(marketing)/about/page.js`와 `(shop)/about/page.js`는 모두 `/about`이므로 오류다. 서로 다른 root layout 사이를 이동하면 client-side transition이 아니라 전체 페이지 로드가 발생한다. 최상위 `app/layout.js` 없이 여러 root layout을 사용한다면 `/` route도 group 중 하나 안에 두어야 한다.
+<a id="convention"></a>
+### 규칙
+
+라우트 그룹은 폴더 이름을 괄호(`(folderName)`)로 묶어 생성할 수 있다.
+
+이 규칙은 폴더가 조직적 목적을 위한 것이며 경로의 URL 경로에 **포함되어서는 안 됨**을 나타냅니다.
+
+![라우트 그룹을 사용하는 폴더 구조의 예](./assets/route-groups-01.webp)
+
+<a id="use-cases"></a>
+### 사용 사례
+
+- 팀, 관심사 또는 기능별로 경로를 구성한다.
+- 여러 [루트 레이아웃](layout.md#root-layout) 정의.
+- 특정 경로 구간을 레이아웃 공유로 선택하고 다른 구간은 제외한다.
+
+<a id="caveats"></a>
+### 주의사항
+
+- **전체 페이지 로드**: 서로 다른 루트 레이아웃을 사용하는 경로 사이를 탐색하는 경우 전체 페이지 새로고침이 트리거된다. 예를 들어 `app/(shop)/layout.js`를 사용하는 `/cart`에서 `app/(marketing)/layout.js`를 사용하는 `/blog`로 이동한다. 이는 **만** 다중 루트 레이아웃에만 적용된다.
+- **경로 충돌**: 서로 다른 그룹의 경로는 동일한 URL 경로로 해석되어서는 안 된다. 예를 들어,`(marketing)/about/page.js` 및 `(shop)/about/page.js`는 모두 `/about`로 확인되어 오류를 발생시킵니다.
+- **최상위 루트 레이아웃**: 최상위 `layout.js` 파일 없이 여러 루트 레이아웃을 사용하는 경우 홈 경로(/)가 라우트 그룹 중 하나 내에 정의되어 있는지 확인한다. app/(마케팅)/page.js.
 
 ## 예제 및 데모 설계
 
@@ -39,4 +60,4 @@
 - group 이름은 URL path에 포함되지 않는다.
 - layout 공유 범위와 여러 root layout을 구성할 수 있다.
 - 같은 URL로 해석되는 group route는 충돌한다.
-- 서로 다른 root layout 사이에서는 전체 페이지가 로드된다.
+- 서로 다른 root layout 사이에서는 전체 page가 로드된다.

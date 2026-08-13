@@ -11,25 +11,23 @@
 
 ## 핵심 개념 및 설명
 
-Route Segment Config는 파일에서 변수를 직접 export해 route 동작을 지정합니다.
+라우트 세그먼트 구성 옵션을 사용하면 다음 변수를 직접 내보내 [페이지](../page.md), [레이아웃](../layout.md) 또는 [Route Handler](../route.md)의 동작을 구성할 수 있습니다.
 
-| 옵션 | type | 기본값 |
-|---|---|---|
-| `dynamicParams` | boolean | `true` |
-| `runtime` | `'nodejs'` 또는 deprecated `'edge'` | `'nodejs'` |
-| `preferredRegion` | 문자열/배열 계열(deprecated) | `'auto'` |
-| `maxDuration` | number | deployment platform이 결정 |
+| 옵션 | 유형 | 기본 |
+| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | -------------------------- |
+| [`dynamicParams`](dynamicParams.md) | `boolean` | `true` |
+| [`runtime`](runtime.md) | ``nodejs'\ | '가장자리'(더 이상 사용되지 않음)` | `'nodejs'` |
+| [`preferredRegion`](preferredRegion.md) | ``자동'\ | '글로벌'\ | '집' \ | 끈 \ | string[] (더 이상 사용되지 않음)` | `'auto'` |
+| [`maxDuration`](maxDuration.md) | `number` | 배포 플랫폼별로 설정 |
 
-Next.js 16에서 Cache Components가 활성화되면 과거의 `dynamic`, `dynamicParams`, `revalidate`, `fetchCache` 설정은 제거됩니다. `experimental_ppr`도 제거되었습니다. 이 그룹에는 새 내비게이션 검증용 `instant`와 segment prefetch 제어용 `prefetch` 문서도 포함됩니다.
+<a id="version-history"></a>
+### Version History
 
-## 학습 순서
-
-- 3.1.22.1 [dynamicParams](./dynamicParams.md)
-- 3.1.22.2 [instant](./instant.md)
-- 3.1.22.3 [maxDuration](./maxDuration.md)
-- 3.1.22.4 [prefetch](./prefetch.md)
-- 3.1.22.5 [runtime](./runtime.md)
-- 3.1.22.6 [preferredRegion (deprecated)](./preferredRegion.md)
+| 버전 |                                                                                                                                                                                                                                                                                                |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v16.0.0` | [Cache Components](../../3.5-config/3.5.1-next-config-js/cacheComponents.md)가 활성화되면 `dynamic`,`dynamicParams`,`revalidate` 및 `fetchCache`가 제거됩니다. [캐싱 및 ​​유효성 재검사(이전 모델)](../../../2-guides/caching-without-cache-components.md#route-segment-config)를 참조하세요. |
+| `v16.0.0` | `export const experimental_ppr = true`가 제거되었습니다. [codemod](../../../2-guides/2.64-upgrading/codemods.md#remove-experimental_ppr-route-segment-config-from-app-router-pages-and-layouts)를 사용할 수 있습니다. |
+| `v15.0.0-RC` | `export const runtime = "experimental-edge"`는 더 이상 사용되지 않습니다. [codemod](../../../2-guides/2.64-upgrading/codemods.md#transform-app-router-route-segment-config-runtime-value-from-experimental-edge-to-edge)를 사용할 수 있습니다. |
 
 ## 예제 및 데모 설계
 

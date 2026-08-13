@@ -12,17 +12,16 @@
 
 ## 핵심 개념 및 설명
 
-Metadata Files는 icon, manifest, social image, robots, sitemap을 파일 규칙으로 정의합니다. 정적 image·text·XML 파일을 놓거나 `.js|ts|tsx`에서 코드를 실행해 생성할 수 있습니다. Next.js는 프로덕션 캐싱을 위해 URL에 hash를 붙여 제공하고 관련 `<link>`·`<meta>` 요소를 파일 type과 크기에 맞게 갱신합니다.
+문서의 이 섹션에서는 **메타데이터 파일 규칙**을 다룹니다. 라우트 세그먼트에 특수 메타데이터 파일을 추가하여 파일 기반 메타데이터를 정의할 수 있습니다.
 
-특수 Route Handler인 `sitemap.ts`, `opengraph-image.tsx`, `icon.tsx` 등은 기본적으로 캐시됩니다. `proxy.ts`와 함께 쓰면 matcher에서 metadata 요청을 제외해 crawler와 브라우저가 직접 접근할 수 있게 합니다.
+각 파일 규칙은 정적 파일(예:`opengraph-image.jpg`) 또는 코드를 사용하여 파일을 생성하는 동적 변형(예:`opengraph-image.js`)을 사용하여 정의할 수 있습니다.
 
-## 학습 순서
+파일이 정의되면 Next.js는 자동으로 파일을 제공하고(캐싱을 위한 프로덕션 해시 포함) 관련 헤드 요소를 자산의 URL, 파일 유형 및 이미지 크기와 같은 올바른 메타데이터로 업데이트합니다.
 
-- 3.1.21.1 [favicon, icon, and apple-icon](./app-icons.md)
-- 3.1.21.2 [manifest.json](./manifest.md)
-- 3.1.21.3 [opengraph-image and twitter-image](./opengraph-image.md)
-- 3.1.21.4 [robots.txt](./robots.md)
-- 3.1.21.5 [sitemap.xml](./sitemap.md)
+> **알아두면 좋은 점**:
+>
+> - [`sitemap.ts`](sitemap.md), [`opengraph-image.tsx`](opengraph-image.md), [`icon.tsx`](app-icons.md) 및 기타 [메타데이터 파일](README.md)과 같은 특수 Route Handler는 기본적으로 캐시됩니다.
+> - [`proxy.ts`](../proxy.md)와 함께 사용하는 경우 [매처를 구성](../proxy.md#matcher)하여 메타데이터 파일을 제외합니다.
 
 ## 예제 및 데모 설계
 
@@ -32,9 +31,9 @@ Metadata Files는 icon, manifest, social image, robots, sitemap을 파일 규칙
 ## 연습 문제
 
 1. 코드로 만든 metadata Route Handler의 기본 caching은?
-   - A. 기본적으로 캐시된다.
-   - B. 절대 캐시되지 않는다.
-   - C. 브라우저 localStorage만 사용한다.
+   - A. 기본적으로 캐시됩니다.
+   - B. 절대 캐시되지 않습니다.
+   - C. 브라우저 localStorage만 사용합니다.
 
 <details><summary>정답 보기</summary>
 
