@@ -172,39 +172,39 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 3.1.1 | layout.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/layout) | 초안 | 미착수 |
-| 3.1.2 | page.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/page) | 초안 | 미착수 |
-| 3.1.3 | loading.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/loading) | 초안 | 미착수 |
-| 3.1.4 | error.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/error) | 초안 | 미착수 |
-| 3.1.5 | not-found.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/not-found) | 초안 | 미착수 |
-| 3.1.6 | template.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/template) | 초안 | 미착수 |
-| 3.1.7 | default.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/default) | 초안 | 미착수 |
-| 3.1.8 | route.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route) | 초안 | 미착수 |
-| 3.1.9 | Route Groups | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-groups) | 초안 | 미착수 |
-| 3.1.10 | Dynamic Segments | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes) | 초안 | 미착수 |
-| 3.1.11 | Parallel Routes | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/parallel-routes) | 초안 | 미착수 |
-| 3.1.12 | Intercepting Routes | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/intercepting-routes) | 초안 | 미착수 |
-| 3.1.13 | src | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/src-folder) | 초안 | 미착수 |
-| 3.1.14 | public | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/public-folder) | 초안 | 미착수 |
-| 3.1.15 | mdx-components.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/mdx-components) | 초안 | 미착수 |
-| 3.1.16 | instrumentation.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation) | 초안 | 미착수 |
-| 3.1.17 | instrumentation-client.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client) | 초안 | 미착수 |
-| 3.1.18 | proxy.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/proxy) | 초안 | 미착수 |
-| 3.1.19 | forbidden.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/forbidden) | 초안 | 미착수 |
-| 3.1.20 | unauthorized.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/unauthorized) | 초안 | 미착수 |
-| 3.1.21 | Metadata Files | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) | 초안 | 미착수 |
-| 3.1.21.1 | ㄴ favicon, icon, apple-icon | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons) | 초안 | 미착수 |
-| 3.1.21.2 | ㄴ manifest.json | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest) | 초안 | 미착수 |
-| 3.1.21.3 | ㄴ opengraph-image / twitter-image | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image) | 초안 | 미착수 |
-| 3.1.21.4 | ㄴ robots.txt | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots) | 초안 | 미착수 |
-| 3.1.21.5 | ㄴ sitemap.xml | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap) | 초안 | 미착수 |
-| 3.1.22 | Route Segment Config | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config) | 초안 | 미착수 |
-| 3.1.22.1 | ㄴ dynamicParams | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams) | 초안 | 미착수 |
-| 3.1.22.2 | ㄴ instant | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant) | 초안 | 미착수 |
-| 3.1.22.3 | ㄴ maxDuration | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/maxDuration) | 초안 | 미착수 |
-| 3.1.22.4 | ㄴ prefetch | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/prefetch) | 초안 | 미착수 |
-| 3.1.22.5 | ㄴ runtime | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/runtime) | 초안 | 미착수 |
-| 3.1.22.6 | ㄴ preferredRegion (deprecated) | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/preferredRegion) | 초안 | 미착수 |
+| 3.1.1 | layout.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/layout) | 완료 | 미착수 |
+| 3.1.2 | page.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/page) | 완료 | 미착수 |
+| 3.1.3 | loading.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/loading) | 완료 | 미착수 |
+| 3.1.4 | error.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/error) | 완료 | 미착수 |
+| 3.1.5 | not-found.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/not-found) | 완료 | 미착수 |
+| 3.1.6 | template.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/template) | 완료 | 미착수 |
+| 3.1.7 | default.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/default) | 완료 | 미착수 |
+| 3.1.8 | route.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route) | 완료 | 미착수 |
+| 3.1.9 | Route Groups | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-groups) | 완료 | 미착수 |
+| 3.1.10 | Dynamic Segments | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes) | 완료 | 미착수 |
+| 3.1.11 | Parallel Routes | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/parallel-routes) | 완료 | 미착수 |
+| 3.1.12 | Intercepting Routes | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/intercepting-routes) | 완료 | 미착수 |
+| 3.1.13 | src | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/src-folder) | 완료 | 미착수 |
+| 3.1.14 | public | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/public-folder) | 완료 | 미착수 |
+| 3.1.15 | mdx-components.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/mdx-components) | 완료 | 미착수 |
+| 3.1.16 | instrumentation.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation) | 완료 | 미착수 |
+| 3.1.17 | instrumentation-client.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client) | 완료 | 미착수 |
+| 3.1.18 | proxy.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/proxy) | 완료 | 미착수 |
+| 3.1.19 | forbidden.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/forbidden) | 완료 | 미착수 |
+| 3.1.20 | unauthorized.js | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/unauthorized) | 완료 | 미착수 |
+| 3.1.21 | Metadata Files | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata) | 완료 | 미착수 |
+| 3.1.21.1 | ㄴ favicon, icon, apple-icon | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/app-icons) | 완료 | 미착수 |
+| 3.1.21.2 | ㄴ manifest.json | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest) | 완료 | 미착수 |
+| 3.1.21.3 | ㄴ opengraph-image / twitter-image | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image) | 완료 | 미착수 |
+| 3.1.21.4 | ㄴ robots.txt | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots) | 완료 | 미착수 |
+| 3.1.21.5 | ㄴ sitemap.xml | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap) | 완료 | 미착수 |
+| 3.1.22 | Route Segment Config | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config) | 완료 | 미착수 |
+| 3.1.22.1 | ㄴ dynamicParams | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams) | 완료 | 미착수 |
+| 3.1.22.2 | ㄴ instant | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/instant) | 완료 | 미착수 |
+| 3.1.22.3 | ㄴ maxDuration | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/maxDuration) | 완료 | 미착수 |
+| 3.1.22.4 | ㄴ prefetch | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/prefetch) | 완료 | 미착수 |
+| 3.1.22.5 | ㄴ runtime | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/runtime) | 완료 | 미착수 |
+| 3.1.22.6 | ㄴ preferredRegion (deprecated) | [공식](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/preferredRegion) | 완료 | 미착수 |
 
 ### 3.2 Components
 
