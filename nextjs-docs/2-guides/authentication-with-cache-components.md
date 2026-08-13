@@ -156,6 +156,31 @@ export function useUser() {
 
 Server Component는 Promise를 기다리지 않고 Provider에 넘긴다. 각 Client Component는 `useUser()`를 호출하며, `use()`가 Promise 해결까지 중단하므로 자체 `Suspense` 경계 뒤에 둔다.
 
+```tsx
+function Dashboard() {
+  const userPromise = getCurrentUser()
+
+  return (
+    <UserProvider userPromise={userPromise}>
+      <Suspense fallback={<span>Loading…</span>}>
+        <UserBadge />
+      </Suspense>
+    </UserProvider>
+  )
+}
+```
+
+```tsx
+'use client'
+
+import { useUser } from './user-provider'
+
+export function UserBadge() {
+  const user = useUser()
+  return <span>Signed in as {user.name}</span>
+}
+```
+
 > **알아두면 좋은 점**: 클라이언트에는 필요한 필드만 노출한다. 원시 세션 대신 `{ id, name }`처럼 좁은 객체를 반환한다. 민감한 값이 클라이언트로 전달되지 않게 하려면 React의 [`taintUniqueValue`](https://react.dev/reference/react/experimental_taintUniqueValue)도 참고한다.
 
 ### 4단계: 세션에서 파생한 데이터 캐시하기
@@ -236,6 +261,14 @@ export async function addNote(formData: FormData) {
 - 일반 `use cache` 안에서 `cookies()`나 `headers()`를 읽으면 오류가 발생한다. 요청 값을 밖에서 읽어 넘기거나 `use cache: private`를 사용한다.
 - 캐시 키나 태그에 비밀·개인 데이터를 넣지 않는다. 이 값들은 평문으로 저장된다.
 - UI에서 요소를 숨기는 것만으로 데이터를 보호할 수 없다. 모든 Server Action과 [Route Handler](../3-api-reference/3.1-file-conventions/route.md)에서 데이터 접근과 가까운 곳에서 세션을 다시 검증한다.
+
+### 다음 단계
+
+- [Authentication](./authentication.md)에서 로그인, 세션 관리, 인가를 구현하는 방법을 알아본다.
+- [Caching](../1-getting-started/caching.md)에서 데이터와 UI를 캐시하는 방법을 알아본다.
+- [Fetching Data](../1-getting-started/fetching-data.md)에서 데이터에 의존하는 콘텐츠를 가져오고 스트리밍하는 방법을 알아본다.
+- [Optimizing prefetching](./optimizing-prefetching.md)에서 링크별 URL 데이터와 세션 데이터를 클릭 전에 준비하는 방법을 알아본다.
+- [`use cache: private`](../3-api-reference/3.4-directives/use-cache-private.md), [`cacheTag`](../3-api-reference/3.3-functions/cacheTag.md), [`cacheComponents`](../3-api-reference/3.5-config/3.5.1-next-config-js/cacheComponents.md)의 API 세부사항을 확인한다.
 
 ## 예제 및 데모 설계
 
