@@ -14,7 +14,7 @@
 
 ### Instant Loading States와 동작
 
-`loading.js`는 같은 폴더의 `page.js`와 하위 세그먼트를 `<Suspense>`로 감싼다. fallback은 prefetch되어 내비게이션 직후 표시될 수 있고, 새 콘텐츠가 streaming 완료되면 교체된다. 내비게이션은 중단 가능하며 공유 레이아웃은 계속 상호작용할 수 있다. 컴포넌트는 인자를 받지 않으며 기본값은 Server Component다.
+`loading.js`는 같은 폴더의 `page.js`와 하위 세그먼트를 `<Suspense>`로 감싼다. fallback은 prefetch되어 내비게이션 직후 표시될 수 있고, 새 콘텐츠가 스트리밍 완료되면 교체된다. 내비게이션은 중단 가능하며 공유 레이아웃은 계속 상호작용할 수 있다. 컴포넌트는 인자를 받지 않으며 기본값은 Server Component다.
 
 ```tsx
 export default function Loading() {
@@ -26,7 +26,7 @@ export default function Loading() {
 
 ### SEO와 상태 코드
 
-정적 HTML만 읽는 bot에는 `generateMetadata`가 UI streaming 전에 해결된다. 다른 user agent에는 streaming metadata가 사용될 수 있으며 Next.js가 자동으로 선택한다. streaming 응답은 헤더가 이미 전송되므로 성공을 나타내는 `200`을 반환한다. 이후 `redirect`나 `notFound`는 streaming된 콘텐츠에 meta tag를 주입해 클라이언트 동작과 검색 엔진 신호를 전달한다.
+정적 HTML만 읽는 bot에는 `generateMetadata`가 UI 스트리밍 전에 해결된다. 다른 user agent에는 스트리밍 metadata가 사용될 수 있으며 Next.js가 자동으로 선택한다. 스트리밍 응답은 헤더가 이미 전송되므로 성공을 나타내는 `200`을 반환한다. 이후 `redirect`나 `notFound`는 스트리밍된 콘텐츠에 meta tag를 주입해 클라이언트 동작과 검색 엔진 신호를 전달한다.
 
 > **알아두면 좋은 점**: 레이아웃에서 `cookies()`, `headers()`, uncached fetch를 사용하면 그 아래의 `loading.js`는 레이아웃 fallback이 되지 못한다. Cache Components에서는 해당 접근을 별도 `<Suspense>`로 감싸야 하며, 그렇지 않으면 빌드 오류가 안내된다.
 

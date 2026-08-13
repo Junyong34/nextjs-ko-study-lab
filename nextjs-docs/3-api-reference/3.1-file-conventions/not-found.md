@@ -14,11 +14,11 @@
 
 ### `not-found.js`
 
-라우트 세그먼트에서 `notFound()`가 발생하면 가장 가까운 `not-found.js`가 렌더링된다. streaming 응답은 `200`, streaming이 아닌 응답은 `404`를 반환한다. 이 파일은 기본적으로 Server Component라서 `async`로 데이터를 가져올 수 있으며 props는 받지 않는다. Client Component 훅이 필요하면 클라이언트에서 데이터를 가져온다.
+라우트 세그먼트에서 `notFound()`가 발생하면 가장 가까운 `not-found.js`가 렌더링된다. 스트리밍 응답은 `200`, 스트리밍이 아닌 응답은 `404`를 반환한다. 이 파일은 기본적으로 Server Component라서 `async`로 데이터를 가져올 수 있으며 props는 받지 않는다. Client Component 훅이 필요하면 클라이언트에서 데이터를 가져온다.
 
 ### `global-not-found.js` (experimental)
 
-일치하는 라우트가 전혀 없을 때 routing 수준에서 앱 전체 404를 반환한다. 여러 root layout이 있거나 root layout이 최상위 다이나믹 세그먼트 아래에 있을 때 유용하다. `experimental.globalNotFound`를 켜야 하며, layout을 거치지 않으므로 `<html>`과 `<body>`, 스타일, 폰트, 테마를 직접 포함해야 한다.
+일치하는 라우트가 전혀 없을 때 라우팅 수준에서 앱 전체 404를 반환한다. 여러 root layout이 있거나 root layout이 최상위 다이나믹 세그먼트 아래에 있을 때 유용하다. `experimental.globalNotFound`를 켜야 하며, layout을 거치지 않으므로 `<html>`과 `<body>`, 스타일, 폰트, 테마를 직접 포함해야 한다.
 
 ```tsx
 export default function GlobalNotFound() {
@@ -28,7 +28,7 @@ export default function GlobalNotFound() {
 
 ### Metadata와 테마
 
-`global-not-found.js`는 `metadata` 또는 `generateMetadata`를 export할 수 있다. Next.js는 404 응답에 `noindex` robots meta를 자동 주입한다. 기본 404 UI는 OS color scheme만 따르므로 앱의 명시적 테마가 필요하면 사용자 정의 파일에서 적용한다.
+`global-not-found.js`는 `metadata` 또는 `generateMetadata`를 export할 수 있다. Next.js는 404 응답에 `noindex` robots meta를 자동으로 주입한다. 기본 404 UI는 OS color scheme만 따르므로 앱의 명시적 테마가 필요하면 사용자 정의 파일에서 적용한다.
 
 > **알아두면 좋은 점**: root `app/not-found.js`와 `app/global-not-found.js`는 앱 전체의 일치하지 않는 URL도 처리한다.
 

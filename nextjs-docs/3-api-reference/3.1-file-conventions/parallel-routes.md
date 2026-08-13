@@ -32,7 +32,7 @@ soft navigation에서는 한 slot만 partial render하면서 다른 slot의 활�
 
 slot 안에 layout을 두면 독립 tab을 만들 수 있다. Intercepting Routes와 결합하면 URL 공유, 뒤로/앞으로 이동, 새로고침 시 full page를 지원하는 modal을 만들 수 있다. modal을 닫을 route에는 `null`을 반환하는 page나 catch-all slot을 둔다.
 
-`useSelectedLayoutSegment`와 `useSelectedLayoutSegments`에 `parallelRoutesKey`를 전달하면 특정 slot의 활성 segment를 읽을 수 있다. 각 slot에는 독립적인 `loading.js`와 `error.js`를 둘 수 있어 한 영역을 다른 영역과 별도로 streaming하고 복구할 수 있다.
+`useSelectedLayoutSegment`와 `useSelectedLayoutSegments`에 `parallelRoutesKey`를 전달하면 특정 slot의 활성 segment를 읽을 수 있다. 각 slot에는 독립적인 `loading.js`와 `error.js`를 둘 수 있어 한 영역을 다른 영역과 별도로 스트리밍하고 복구할 수 있다.
 
 ## 예제 및 데모 설계
 

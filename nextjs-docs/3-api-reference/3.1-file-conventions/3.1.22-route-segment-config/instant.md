@@ -21,12 +21,12 @@ export const instant = true
 
 validation은 segment의 `loading.js`나 Suspense fallback이 prefetch 가능한 static shell을 제공하는지 추적한다. 필요하면 `false`로 즉시성을 포기하거나 validation만 끌 수 있지만, 실제 loading state를 제공하는 것이 우선이다. 프로젝트 기본 severity는 Next.js 설정에서 조정하고 route별 export로 override한다.
 
-검증은 destination의 page만 보지 않고 진입 경로에 있는 layout과 static shell을 함께 검사한다. 개발 중에는 overlay가 blocking source를 가리키며, build 단계 검증을 선택한 경우 production build도 같은 기대를 강제할 수 있다.
+검증은 destination의 page만 보지 않고 진입 경로에 있는 layout과 static shell을 함께 검사한다. 개발 중에는 overlay가 blocking source를 가리킨다. 현재 지원하는 validation level은 `warning`이며, 빌드 단계 검증은 향후 지원될 예정이다.
 
 ## 예제 및 데모 설계
 
 - Phase 2에서 runtime 데이터를 boundary 밖에 두어 개발 overlay 오류를 확인한 뒤 loading state로 해결한다.
-- `level`별 warning/error 동작과 production prefetch를 비교한다.
+- `warning` 메시지와 프로덕션 prefetch 동작을 비교한다.
 
 ## 연습 문제
 

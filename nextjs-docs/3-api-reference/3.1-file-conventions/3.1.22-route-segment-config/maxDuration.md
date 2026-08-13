@@ -11,7 +11,7 @@
 
 ## 핵심 개념 및 설명
 
-`maxDuration`은 서버 로직의 최대 실행 시간을 초 단위로 선언한다. Next.js build output에 포함되며 deployment platform이 실행 제한을 적용하는 데 사용할 수 있다. 실제 기본값과 강제 방식은 platform이 정한다.
+`maxDuration`은 서버 로직의 최대 실행 시간을 초 단위로 선언한다. Next.js 빌드 output에 포함되며 deployment platform이 실행 제한을 적용하는 데 사용할 수 있다. 실제 기본값과 강제 방식은 platform이 정한다.
 
 ```ts
 export const maxDuration = 5

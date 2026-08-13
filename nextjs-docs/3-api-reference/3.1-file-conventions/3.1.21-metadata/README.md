@@ -12,7 +12,7 @@
 
 ## 핵심 개념 및 설명
 
-Metadata Files는 icon, manifest, social image, robots, sitemap을 파일 규칙으로 정의합니다. 정적 image·text·XML 파일을 놓거나 `.js|ts|tsx`에서 코드를 실행해 생성할 수 있습니다. Next.js는 production caching을 위해 URL에 hash를 붙여 제공하고 관련 `<link>`·`<meta>` 요소를 파일 type과 크기에 맞게 갱신합니다.
+Metadata Files는 icon, manifest, social image, robots, sitemap을 파일 규칙으로 정의합니다. 정적 image·text·XML 파일을 놓거나 `.js|ts|tsx`에서 코드를 실행해 생성할 수 있습니다. Next.js는 프로덕션 캐싱을 위해 URL에 hash를 붙여 제공하고 관련 `<link>`·`<meta>` 요소를 파일 type과 크기에 맞게 갱신합니다.
 
 특수 Route Handler인 `sitemap.ts`, `opengraph-image.tsx`, `icon.tsx` 등은 기본적으로 캐시됩니다. `proxy.ts`와 함께 쓰면 matcher에서 metadata 요청을 제외해 crawler와 브라우저가 직접 접근할 수 있게 합니다.
 

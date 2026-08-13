@@ -26,7 +26,7 @@ export function proxy(request: NextRequest) {
 export const config = { matcher: '/about/:path*' }
 ```
 
-`matcher`는 build 때 정적으로 분석 가능하도록 상수로 작성한다. negative lookahead와 `has`/`missing` 조건으로 asset, prefetch, 특정 header를 제외할 수 있다. `request`는 `NextRequest`, 두 번째 `event`는 `waitUntil()`로 응답 이후 작업을 연장할 수 있는 `NextFetchEvent`다.
+`matcher`는 빌드 때 정적으로 분석 가능하도록 상수로 작성한다. negative lookahead와 `has`/`missing` 조건으로 asset, prefetch, 특정 header를 제외할 수 있다. `request`는 `NextRequest`, 두 번째 `event`는 `waitUntil()`로 응답 이후 작업을 연장할 수 있는 `NextFetchEvent`다.
 
 ### 실행 순서와 응답 조작
 
@@ -36,7 +36,7 @@ cookie는 `request.cookies`로 읽고 `response.cookies`로 설정한다. CORS p
 
 > **알아두면 좋은 점**: Proxy는 렌더 코드와 별도로 실행될 수 있으므로 공유 module이나 global state에 의존하지 않는다. 정보 전달에는 header, cookie, rewrite, redirect, URL을 사용한다.
 
-Proxy는 빠른 routing 결정에 적합하며 느린 데이터 fetching이나 완전한 session management를 넣는 장소가 아니다. `runtime` route segment config도 사용할 수 없다.
+Proxy는 빠른 라우팅 결정에 적합하며 느린 데이터 fetching이나 완전한 session management를 넣는 장소가 아니다. `runtime` route segment config도 사용할 수 없다.
 
 Next.js 16 이전 프로젝트는 `npx @next/codemod@canary middleware-to-proxy .` codemod로 파일명과 함수명을 이전할 수 있다.
 

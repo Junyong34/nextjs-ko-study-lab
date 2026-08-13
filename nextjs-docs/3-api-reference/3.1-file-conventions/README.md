@@ -12,9 +12,9 @@
 
 ## 핵심 개념 및 설명
 
-File-system conventions는 디렉터리 구조를 route 구조와 실행 경계로 바꿉니다. `layout`, `page`, `loading`, `error`, `not-found`, `template`, `default`는 UI 계층을 구성합니다. `route`는 Web API endpoint를 만들고, Route Groups·Dynamic Segments·Parallel Routes·Intercepting Routes는 URL과 화면 조합 방식을 확장합니다.
+File-system conventions는 디렉터리 구조를 라우트 구조와 실행 경계로 바꿉니다. `layout`, `page`, `loading`, `error`, `not-found`, `template`, `default`는 UI 계층을 구성합니다. `route`는 Web API endpoint를 만들고, Route Groups·Dynamic Segments·Parallel Routes·Intercepting Routes는 URL과 화면 조합 방식을 확장합니다.
 
-프로젝트 root에는 `src`, `public`, `mdx-components`, instrumentation, Proxy 같은 규칙이 있습니다. Metadata Files는 icon·manifest·social image·crawler 문서를 만들며, Route Segment Config는 page·layout·Route Handler의 실행과 내비게이션 특성을 상수 export로 조정합니다. 아래 순서는 파일 계층의 기본부터 고급 routing, root 통합, metadata와 설정 순으로 학습하도록 재배열했습니다.
+프로젝트 root에는 `src`, `public`, `mdx-components`, instrumentation, Proxy 같은 규칙이 있습니다. Metadata Files는 icon·manifest·social image·crawler 문서를 만들며, Route Segment Config는 page·layout·Route Handler의 실행과 내비게이션 특성을 상수 export로 조정합니다. 아래 순서는 파일 계층의 기본부터 고급 라우팅, root 통합, metadata와 설정 순으로 학습하도록 재배열했습니다.
 
 ## 학습 순서
 
