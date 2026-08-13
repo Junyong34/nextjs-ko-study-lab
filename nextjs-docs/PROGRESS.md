@@ -24,7 +24,7 @@
 | 1.10 | Error Handling | [공식](https://nextjs.org/docs/app/getting-started/error-handling) | 완료 | 미착수 |
 | 1.11 | CSS | [공식](https://nextjs.org/docs/app/getting-started/css) | 완료 | 미착수 |
 | 1.12 | Image Optimization | [공식](https://nextjs.org/docs/app/getting-started/images) | 완료 | 미착수 |
-| 1.13 | Font Optimization | [공식](https://nextjs.org/docs/app/getting-started/fonts) | 초안 | 미착수 |
+| 1.13 | Font Optimization | [공식](https://nextjs.org/docs/app/getting-started/fonts) | 완료 | 미착수 |
 | 1.14 | Metadata and OG images | [공식](https://nextjs.org/docs/app/getting-started/metadata-and-og-images) | 초안 | 미착수 |
 | 1.15 | Route Handlers | [공식](https://nextjs.org/docs/app/getting-started/route-handlers) | 초안 | 미착수 |
 | 1.16 | Proxy | [공식](https://nextjs.org/docs/app/getting-started/proxy) | 초안 | 미착수 |
