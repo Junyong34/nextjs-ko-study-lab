@@ -284,32 +284,32 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 3.6.1 | create-next-app | [공식](https://nextjs.org/docs/app/api-reference/cli/create-next-app) | 초안 | 미착수 |
-| 3.6.2 | next CLI | [공식](https://nextjs.org/docs/app/api-reference/cli/next) | 초안 | 미착수 |
+| 3.6.1 | create-next-app | [공식](https://nextjs.org/docs/app/api-reference/cli/create-next-app) | 완료 | 미착수 |
+| 3.6.2 | next CLI | [공식](https://nextjs.org/docs/app/api-reference/cli/next) | 완료 | 미착수 |
 
 ### 3.7 Adapters
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 3.7.1 | API Reference (개요) | [공식](https://nextjs.org/docs/app/api-reference/adapters/api-reference) | 초안 | 미착수 |
-| 3.7.2 | Use Cases | [공식](https://nextjs.org/docs/app/api-reference/adapters/use-cases) | 초안 | 미착수 |
-| 3.7.3 | Creating an Adapter | [공식](https://nextjs.org/docs/app/api-reference/adapters/creating-an-adapter) | 초안 | 미착수 |
-| 3.7.4 | Configuration | [공식](https://nextjs.org/docs/app/api-reference/adapters/configuration) | 초안 | 미착수 |
-| 3.7.5 | Routing Information | [공식](https://nextjs.org/docs/app/api-reference/adapters/routing-information) | 초안 | 미착수 |
-| 3.7.6 | Routing with @next/routing | [공식](https://nextjs.org/docs/app/api-reference/adapters/routing-with-next-routing) | 초안 | 미착수 |
-| 3.7.7 | Invoking Entrypoints | [공식](https://nextjs.org/docs/app/api-reference/adapters/invoking-entrypoints) | 초안 | 미착수 |
-| 3.7.8 | Runtime Integration | [공식](https://nextjs.org/docs/app/api-reference/adapters/runtime-integration) | 초안 | 미착수 |
-| 3.7.9 | Output Types | [공식](https://nextjs.org/docs/app/api-reference/adapters/output-types) | 초안 | 미착수 |
-| 3.7.10 | Supporting Immutable Static Assets | [공식](https://nextjs.org/docs/app/api-reference/adapters/immutable-static-assets) | 초안 | 미착수 |
-| 3.7.11 | Implementing PPR in an Adapter | [공식](https://nextjs.org/docs/app/api-reference/adapters/implementing-ppr-in-an-adapter) | 초안 | 미착수 |
-| 3.7.12 | Testing Adapters | [공식](https://nextjs.org/docs/app/api-reference/adapters/testing-adapters) | 초안 | 미착수 |
+| 3.7.1 | API Reference (개요) | [공식](https://nextjs.org/docs/app/api-reference/adapters/api-reference) | 완료 | 미착수 |
+| 3.7.2 | Use Cases | [공식](https://nextjs.org/docs/app/api-reference/adapters/use-cases) | 완료 | 미착수 |
+| 3.7.3 | Creating an Adapter | [공식](https://nextjs.org/docs/app/api-reference/adapters/creating-an-adapter) | 완료 | 미착수 |
+| 3.7.4 | Configuration | [공식](https://nextjs.org/docs/app/api-reference/adapters/configuration) | 완료 | 미착수 |
+| 3.7.5 | Routing Information | [공식](https://nextjs.org/docs/app/api-reference/adapters/routing-information) | 완료 | 미착수 |
+| 3.7.6 | Routing with @next/routing | [공식](https://nextjs.org/docs/app/api-reference/adapters/routing-with-next-routing) | 완료 | 미착수 |
+| 3.7.7 | Invoking Entrypoints | [공식](https://nextjs.org/docs/app/api-reference/adapters/invoking-entrypoints) | 완료 | 미착수 |
+| 3.7.8 | Runtime Integration | [공식](https://nextjs.org/docs/app/api-reference/adapters/runtime-integration) | 완료 | 미착수 |
+| 3.7.9 | Output Types | [공식](https://nextjs.org/docs/app/api-reference/adapters/output-types) | 완료 | 미착수 |
+| 3.7.10 | Supporting Immutable Static Assets | [공식](https://nextjs.org/docs/app/api-reference/adapters/immutable-static-assets) | 완료 | 미착수 |
+| 3.7.11 | Implementing PPR in an Adapter | [공식](https://nextjs.org/docs/app/api-reference/adapters/implementing-ppr-in-an-adapter) | 완료 | 미착수 |
+| 3.7.12 | Testing Adapters | [공식](https://nextjs.org/docs/app/api-reference/adapters/testing-adapters) | 완료 | 미착수 |
 
 ### 3.8 ~ 3.9 개별 항목
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 3.8 | Edge Runtime | [공식](https://nextjs.org/docs/app/api-reference/edge) | 초안 | 미착수 |
-| 3.9 | Turbopack | [공식](https://nextjs.org/docs/app/api-reference/turbopack) | 초안 | 미착수 |
+| 3.8 | Edge Runtime | [공식](https://nextjs.org/docs/app/api-reference/edge) | 완료 | 미착수 |
+| 3.9 | Turbopack | [공식](https://nextjs.org/docs/app/api-reference/turbopack) | 완료 | 미착수 |
 
 ## 4. Glossary (참고용, 하위 순번 없음)
 
