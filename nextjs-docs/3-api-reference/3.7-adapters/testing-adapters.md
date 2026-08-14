@@ -105,10 +105,136 @@ deploy 스크립트가 `.adapter-build.log`와 `.adapter-server.log`를 기록�
 
 ### CI에서의 실행 구조
 
-공식 문서는 GitHub Actions 워크플로 예시를 함께 제공한다. 이 워크플로는 크게 두 job으로 나뉜다.
+공식 문서는 다음과 같은 GitHub Actions 워크플로 예시를 제공한다. 이 워크플로는 크게 두 job으로 나뉜다.
 
 - **build**: Next.js 저장소와 어댑터 저장소를 함께 체크아웃하고, Next.js와 어댑터를 빌드한 뒤 Playwright까지 설치해 캐시에 저장한다.
-- **test**: build job의 캐시를 복원하고, `NEXT_TEST_MODE=deploy`와 세 스크립트 경로 환경 변수를 설정한 뒤 `node run-tests.js --timings -g <group> -c 2 --type e2e`로 테스트를 그룹 단위 매트릭스(matrix)로 병렬 실행한다.
+- **test**: build job의 캐시를 복원하고, `NEXT_TEST_MODE=deploy`와 세 스크립트 경로 환경 변수를 설정한 뒤 `node run-tests.js --timings -g <group> -c 2 --type e2e`로 테스트를 16-way 매트릭스(matrix)로 병렬 실행한다.
+
+```yaml
+name: test-e2e-deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      nextjsRef:
+        description: 'Next.js repo ref (branch/tag/SHA)'
+        default: 'canary'
+        type: string
+  # schedule:
+  #   - cron: '0 2 * * *'
+
+jobs:
+  build:
+    name: Build Next.js + adapter
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: adapter
+
+      - uses: actions/checkout@v4
+        with:
+          repository: vercel/next.js
+          ref: ${{ inputs.nextjsRef || 'canary' }}
+          path: nextjs
+          fetch-depth: 25
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Setup pnpm
+        run: npm i -g corepack@0.31 && corepack enable
+
+      - name: Install & build Next.js
+        working-directory: nextjs
+        run: pnpm install && pnpm build && pnpm install
+
+      - name: Install Playwright
+        working-directory: nextjs
+        run: pnpm playwright install --with-deps chromium
+
+      - name: Build adapter
+        working-directory: adapter
+        run: pnpm install && pnpm build
+
+      - uses: actions/cache/save@v4
+        with:
+          path: |
+            nextjs
+            adapter
+            ~/.cache/ms-playwright
+          key: build-${{ github.sha }}-${{ github.run_id }}
+
+  test:
+    name: Tests (${{ matrix.group }})
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        group:
+          [
+            1/16,
+            2/16,
+            3/16,
+            4/16,
+            5/16,
+            6/16,
+            7/16,
+            8/16,
+            9/16,
+            10/16,
+            11/16,
+            12/16,
+            13/16,
+            14/16,
+            15/16,
+            16/16,
+          ]
+    steps:
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            nextjs
+            adapter
+            ~/.cache/ms-playwright
+          key: build-${{ github.sha }}-${{ github.run_id }}
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+
+      - name: Setup pnpm
+        run: npm i -g corepack@0.31 && corepack enable
+
+      - name: Ensure Playwright browser
+        working-directory: nextjs
+        run: pnpm playwright install chromium
+
+      - name: Make scripts executable
+        run: chmod +x adapter/scripts/e2e-deploy.sh
+          adapter/scripts/e2e-logs.sh
+          adapter/scripts/e2e-cleanup.sh
+
+      - name: Run deploy tests
+        working-directory: nextjs
+        env:
+          NEXT_TEST_MODE: deploy
+          NEXT_E2E_TEST_TIMEOUT: 240000
+          NEXT_EXTERNAL_TESTS_FILTERS: test/deploy-tests-manifest.json
+          ADAPTER_DIR: ${{ github.workspace }}/adapter
+          IS_TURBOPACK_TEST: 1
+          NEXT_TEST_JOB: 1
+          NEXT_TELEMETRY_DISABLED: 1
+
+          # 어댑터 저장소의 scripts 디렉터리에 스크립트가 있다면 아래 경로를 그대로 두고,
+          # 그렇지 않다면 각자의 어댑터 스크립트 경로로 바꾼다.
+          NEXT_TEST_DEPLOY_SCRIPT_PATH: ${{ github.workspace }}/adapter/scripts/e2e-deploy.sh
+          NEXT_TEST_DEPLOY_LOGS_SCRIPT_PATH: ${{ github.workspace }}/adapter/scripts/e2e-logs.sh
+          NEXT_TEST_CLEANUP_SCRIPT_PATH: ${{ github.workspace }}/adapter/scripts/e2e-cleanup.sh
+        run: node run-tests.js --timings -g ${{ matrix.group }} -c 2 --type e2e
+```
 
 > **알아두면 좋은 점**:
 >
