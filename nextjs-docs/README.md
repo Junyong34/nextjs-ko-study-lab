@@ -13,9 +13,8 @@
 3. [API Reference](./3-api-reference/README.md): 기능별 세부 동작과 사용법 (하위 그룹 순서 재배열, ADR 0002)
 4. [Glossary](./4-glossary/README.md): 반복해서 등장하는 용어 확인 (참고용, 하위 순번 없음)
 5. [Architecture](./5-architecture/README.md): 내부 동작과 설계 원리 (기존 순서 유지)
-6. [Community](./6-community/README.md): 기여와 생태계 자료 (참고용, 하위 순번 없음)
 
-> 위 번호(1~6)는 카테고리 대분류 번호입니다. 하위 메뉴까지 포함한 전체 트리형 순번(`1.1`, `3.1.1` 등)은 각 카테고리 `README.md`와 [PROGRESS.md](./PROGRESS.md)에 동일하게 반영되어 있습니다. 카테고리·하위그룹 폴더명에도 같은 번호를 접두어로 붙여, 탐색기에서 폴더만 봐도 학습 순서가 보이도록 했습니다 (개별 md 파일명에는 붙이지 않습니다).
+> 위 번호(1~5)는 카테고리 대분류 번호입니다. 하위 메뉴까지 포함한 전체 트리형 순번(`1.1`, `3.1.1` 등)은 각 카테고리 `README.md`와 [PROGRESS.md](./PROGRESS.md)에 동일하게 반영되어 있습니다. 카테고리·하위그룹 폴더명에도 같은 번호를 접두어로 붙여, 탐색기에서 폴더만 봐도 학습 순서가 보이도록 했습니다 (개별 md 파일명에는 붙이지 않습니다).
 
 ## 공식 메뉴 구조
 
@@ -24,7 +23,6 @@
 - [API Reference](./3-api-reference/README.md)
 - [Glossary](./4-glossary/README.md)
 - [Architecture](./5-architecture/README.md)
-- [Community](./6-community/README.md)
 
 ## 문서 작성 원칙
 

@@ -2,7 +2,7 @@
 
 > 전체 메뉴에 대한 순번·상태를 한 곳에서 확인하기 위한 표입니다. 순번은 각 카테고리·하위그룹 `README.md`와 동일하게 사용합니다 ([ADR 0002](./docs/adr/0002-reorder-learning-sequence.md)).
 >
-> - **순번**: 실제 디렉토리 뎁스를 반영한 트리 번호 (`1.1`, `3.1.1` 등). Glossary(4)/Community(6)는 참고용 카테고리라 대분류 번호만 사용합니다.
+> - **순번**: 실제 디렉토리 뎁스를 반영한 트리 번호 (`1.1`, `3.1.1` 등). Glossary(4)는 참고용 카테고리라 대분류 번호만 사용합니다.
 > - **공식 링크**: nextjs.org 공식 문서 링크입니다. 로컬 파일명 기준으로 추정한 링크이므로, 문서를 작성하면서 실제 링크와 다르면 바로 고쳐주세요.
 > - **md 상태**: 미작성 / 초안 / 완료 (첫 작성 후 보강이 필요하면 완료 전까지 초안 유지). "완료"는 공식 출처/상위메뉴/학습 목표/핵심 개념 및 설명/예제 및 데모 설계/연습 문제/챕터 요약 6개 섹션이 모두 채워졌을 때만 부여한다 ([CLAUDE.md](./CLAUDE.md) 참고).
 > - **데모 상태**: 미착수 / 진행중 / 완료 — Phase 2(문서화 완료 후)까지는 전부 미착수로 유지됩니다.
@@ -315,7 +315,7 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 4 | Glossary (전체 용어집, 개별 용어는 문서 내부 섹션으로 관리) | [공식](https://nextjs.org/docs/app/glossary) | 초안 | - |
+| 4 | Glossary (전체 용어집, 개별 용어는 문서 내부 섹션으로 관리) | [공식](https://nextjs.org/docs/app/glossary) | 완료 | - |
 
 ## 5. Architecture (기존 순서 유지)
 
@@ -325,10 +325,3 @@
 | 5.2 | Fast Refresh | [공식](https://nextjs.org/docs/architecture/fast-refresh) | 초안 | 미착수 |
 | 5.3 | Next.js Compiler | [공식](https://nextjs.org/docs/architecture/nextjs-compiler) | 초안 | 미착수 |
 | 5.4 | Supported Browsers | [공식](https://nextjs.org/docs/architecture/supported-browsers) | 초안 | 미착수 |
-
-## 6. Community (참고용, 하위 순번 없음)
-
-| 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
-|---|---|---|---|---|
-| 6 | Contribution Guide | [공식](https://nextjs.org/docs/community/contribution-guide) | 초안 | - |
-| 6 | Rspack | [공식](https://nextjs.org/docs/community/rspack) | 초안 | - |
