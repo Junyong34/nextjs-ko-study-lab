@@ -57,8 +57,8 @@ Script 컴포넌트에서 사용할 수 있는 props는 다음과 같다.
 
 스크립트를 불러오는 전략이다. 다음 네 가지 전략을 사용할 수 있다.
 
-- `beforeInteractive`: Next.js 코드와 페이지 하이드레이션이 일어나기 전에 로드한다.
-- `afterInteractive`: (**기본값**) 이르게 로드하지만 페이지에서 일부 하이드레이션이 일어난 뒤에 로드한다.
+- `beforeInteractive`: Next.js 코드와 페이지 hydration이 일어나기 전에 로드한다.
+- `afterInteractive`: (**기본값**) 이르게 로드하지만 페이지에서 일부 hydration이 일어난 뒤에 로드한다.
 - `lazyOnload`: 브라우저의 유휴 시간 동안 로드한다.
 - `worker`: (실험적) 웹 워커에서 로드한다.
 
@@ -66,7 +66,7 @@ Script 컴포넌트에서 사용할 수 있는 props는 다음과 같다.
 
 `beforeInteractive` 전략으로 로드되는 스크립트는 서버에서 내려주는 초기 HTML에 삽입되어, 어떤 Next.js 모듈보다도 먼저 다운로드되고 배치된 순서대로 실행된다.
 
-이 전략으로 지정된 스크립트는 어떤 퍼스트파티 코드보다도 먼저 프리로드되고 가져와지지만, 그 실행이 **페이지 하이드레이션을 막지는 않는다**.
+이 전략으로 지정된 스크립트는 어떤 퍼스트파티 코드보다도 먼저 프리로드되고 가져와지지만, 그 실행이 **페이지 hydration을 막지는 않는다**.
 
 `beforeInteractive` 스크립트는 루트 레이아웃(`app/layout.tsx`) 안에 배치해야 하며, 사이트 전체에서 필요한 스크립트를 로드하도록 설계되어 있다(즉 애플리케이션의 어떤 페이지든 서버에서 로드되는 순간 이 스크립트도 함께 로드된다).
 
@@ -103,7 +103,7 @@ export default function RootLayout({
 
 #### afterInteractive
 
-`afterInteractive` 전략을 사용하는 스크립트는 클라이언트 사이드에서 HTML에 삽입되며, 페이지에서 일부(또는 전체) 하이드레이션이 일어난 뒤 로드된다. **이는 Script 컴포넌트의 기본 전략이며**, 가능한 한 빨리 로드되어야 하지만 퍼스트파티 Next.js 코드보다 먼저 로드될 필요는 없는 스크립트에 사용해야 한다.
+`afterInteractive` 전략을 사용하는 스크립트는 클라이언트 사이드에서 HTML에 삽입되며, 페이지에서 일부(또는 전체) hydration이 일어난 뒤 로드된다. **이는 Script 컴포넌트의 기본 전략이며**, 가능한 한 빨리 로드되어야 하지만 퍼스트파티 Next.js 코드보다 먼저 로드될 필요는 없는 스크립트에 사용해야 한다.
 
 `afterInteractive` 스크립트는 어떤 페이지나 레이아웃 안에도 배치할 수 있으며, 해당 페이지(또는 페이지 그룹)가 브라우저에서 열릴 때만 로드되고 실행된다.
 
@@ -286,7 +286,7 @@ export default function Page() {
 
    <details><summary>정답 보기</summary>
 
-   `strategy="beforeInteractive"`를 사용하며, 반드시 루트 레이아웃(`app/layout.tsx`) 안에 배치해야 한다. 이 스크립트는 실행되어도 페이지 하이드레이션을 막지 않지만, 배치 위치와 관계없이 항상 HTML `head`에 삽입된다.
+   `strategy="beforeInteractive"`를 사용하며, 반드시 루트 레이아웃(`app/layout.tsx`) 안에 배치해야 한다. 이 스크립트는 실행되어도 페이지 hydration을 막지 않지만, 배치 위치와 관계없이 항상 HTML `head`에 삽입된다.
 
    </details>
 
@@ -309,7 +309,7 @@ export default function Page() {
 ## 챕터 요약
 
 - `next/script`는 `src`(필수), `strategy`, `onLoad`, `onReady`, `onError` props로 서드파티 스크립트의 로딩 시점과 후처리를 제어한다.
-- 로딩 전략은 `beforeInteractive`(하이드레이션 전, 루트 레이아웃 전용), `afterInteractive`(기본값), `lazyOnload`(유휴 시간), `worker`(실험적, 아직 App Router 미지원) 네 가지다.
+- 로딩 전략은 `beforeInteractive`(hydration 전, 루트 레이아웃 전용), `afterInteractive`(기본값), `lazyOnload`(유휴 시간), `worker`(실험적, 아직 App Router 미지원) 네 가지다.
 - `beforeInteractive` 스크립트는 배치 위치와 무관하게 항상 HTML `head`에 삽입되며, 봇 감지기나 쿠키 동의 관리자처럼 중요한 스크립트에만 사용해야 한다.
 - `onLoad`, `onReady`, `onError`는 모두 Client Component에서만 사용할 수 있고, `beforeInteractive`와는 함께 쓸 수 없다.
 - 실제 사용 패턴과 시나리오는 [Optimizing Scripts](../../2-guides/scripts.md) 가이드에서 더 다룬다.

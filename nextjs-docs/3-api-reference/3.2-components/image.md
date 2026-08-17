@@ -717,7 +717,7 @@ module.exports = {
 }
 ```
 
-재검증 횟수를 줄이고 비용을 낮추기 위해 TTL을 늘릴 수도 있다.
+revalidation 횟수를 줄이고 비용을 낮추기 위해 TTL을 늘릴 수도 있다.
 
 ```js
 module.exports = {

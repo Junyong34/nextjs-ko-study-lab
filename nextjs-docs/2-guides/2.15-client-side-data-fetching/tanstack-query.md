@@ -112,7 +112,7 @@ function ProductData({ id }: { id: string }) {
 }
 ```
 
-서버와 Client Component는 같은 query key를 사용해야 한다. key와 options를 하나의 계약 객체로 정의한다. 브라우저에서 실행되는 기본 `queryFn`은 상대 URL의 Route Handler를 호출하고, 서버 prefetch에서는 서버 함수를 override한다. `staleTime`은 hydration 직후 불필요한 refetch를 막는다.
+서버와 Client Component는 같은 query key를 사용해야 한다. key와 options를 하나의 계약 객체로 정의한다. 브라우저에서 실행되는 기본 `queryFn`은 상대 URL의 Route Handler를 호출하고, 서버 prefetch에서는 Server Function을 override한다. `staleTime`은 hydration 직후 불필요한 refetch를 막는다.
 
 ### Cache Components로 서버 제공 데이터 캐싱
 

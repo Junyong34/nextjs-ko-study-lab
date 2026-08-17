@@ -12,14 +12,14 @@
 
 ## 핵심 개념 및 설명
 
-부분적으로 프리렌더된(partially prerendered) app 경로의 경우, `onBuildComplete`가 PPR을 시딩(seed)하고 재개(resume)하는 데 필요한 데이터를 전달한다.
+부분적으로 prerender된(partially prerendered) app 경로의 경우, `onBuildComplete`가 PPR을 시딩(seed)하고 재개(resume)하는 데 필요한 데이터를 전달한다.
 
 - `outputs.prerenders[].fallback.filePath`: 생성된 fallback shell(예: HTML) 파일의 경로
 - `outputs.prerenders[].fallback.postponedState`: 렌더링을 재개할 때 사용하는 직렬화된 postponed state
 
 ### 1. 빌드 시점에 shell과 postponed state를 시딩한다
 
-빌드가 끝나면 각 prerender 항목의 fallback shell 파일을 읽어 플랫폼 캐시에 저장한다. 이때 postponed state와 초기 헤더·상태·재검증 정보도 함께 저장해야 요청 시점에 재개할 수 있다.
+빌드가 끝나면 각 prerender 항목의 fallback shell 파일을 읽어 플랫폼 캐시에 저장한다. 이때 postponed state와 초기 헤더·상태·revalidation 정보도 함께 저장해야 요청 시점에 재개할 수 있다.
 
 ```ts
 import { readFile } from 'node:fs/promises'
@@ -130,7 +130,7 @@ requestMeta.onCacheEntryV2 callback
 ## 예제 및 데모 설계
 
 - Phase 1에서는 구현 예정이다. Phase 2에서 어댑터 데모 앱을 만들 때, PPR 경로 하나에 대해 `seedPprEntries`로 shell을 캐시에 저장하고 요청 시 shell + resumed 스트림이 하나의 응답으로 이어지는지 확인하는 데모를 설계한다.
-- `onCacheEntryV2` 콜백에서 `APP_PAGE` 캐시 항목이 갱신되는 로그를 남겨, 재검증 이후 캐시가 최신 상태로 유지되는지 검증하는 시나리오를 포함한다.
+- `onCacheEntryV2` 콜백에서 `APP_PAGE` 캐시 항목이 갱신되는 로그를 남겨, revalidation 이후 캐시가 최신 상태로 유지되는지 검증하는 시나리오를 포함한다.
 
 ## 연습 문제
 
@@ -141,7 +141,7 @@ requestMeta.onCacheEntryV2 callback
 
 <details><summary>정답 보기</summary>
 
-정답: B. `postponedState`는 재개 렌더링에 사용되는 직렬화된 상태이다. `filePath`는 fallback shell 파일 경로, `initialRevalidate`는 초기 재검증 값으로 별도 정보다.
+정답: B. `postponedState`는 재개 렌더링에 사용되는 직렬화된 상태이다. `filePath`는 fallback shell 파일 경로, `initialRevalidate`는 초기 revalidation 값으로 별도 정보다.
 </details>
 
 2. `requestMeta.onCacheEntryV2` 콜백이 `true`를 반환하면 어떤 의미인가?

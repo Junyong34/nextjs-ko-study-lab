@@ -358,7 +358,7 @@ export async function GET(request, { params }) {
 <a id="static-generation-with-generatestaticparams"></a>
 ##### `generateStaticParams`를 사용한 정적 생성
 
-다이나믹 라우트 핸들러와 함께 [`generateStaticParams`](../3.3-functions/generate-static-params.md)를 사용하여 빌드 시 지정된 매개변수에 대한 응답을 정적으로 생성하는 동시에 요청 시 다른 매개변수를 동적으로 처리할 수 있다.
+다이나믹 Route Handler와 함께 [`generateStaticParams`](../3.3-functions/generate-static-params.md)를 사용하여 빌드 시 지정된 매개변수에 대한 응답을 정적으로 생성하는 동시에 요청 시 다른 매개변수를 동적으로 처리할 수 있다.
 
 [Cache Components](../../1-getting-started/caching.md)를 사용하는 경우 `generateStaticParams`와 `use cache`를 결합하여 prerendering된 매개변수와 런타임 매개변수 모두에 대한 데이터 캐싱을 활성화할 수 있다.
 

@@ -194,7 +194,7 @@ export async function updateUser(id: string) {
 1. `cacheLife('seconds')`만 사용
 2. `cacheTag` + 긴 `cacheLife`(`max`) + 웹훅에서 `revalidateTag` 호출
 3. 캐시를 전혀 쓰지 않고 매 요청마다 fetch
-4. `updateTag`를 라우트 핸들러에서 주기적으로 호출
+4. `updateTag`를 Route Handler에서 주기적으로 호출
 
 <details>
 <summary>정답 보기</summary>

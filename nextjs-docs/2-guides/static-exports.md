@@ -42,7 +42,7 @@ module.exports = nextConfig
 
 #### Server Components
 
-`app` 디렉터리의 Server Component는 `next build` 중 실행된다. 결과는 최초 로드용 정적 HTML과 클라이언트 라우트 전환용 정적 payload로 저장된다. 빌드 시점에 계산할 수 없는 다이나믹 서버 함수만 사용하지 않으면 별도 변경이 필요 없다.
+`app` 디렉터리의 Server Component는 `next build` 중 실행된다. 결과는 최초 로드용 정적 HTML과 클라이언트 라우트 전환용 정적 payload로 저장된다. 빌드 시점에 계산할 수 없는 다이나믹 Server Function만 사용하지 않으면 별도 변경이 필요 없다.
 
 ```tsx
 export default async function Page() {

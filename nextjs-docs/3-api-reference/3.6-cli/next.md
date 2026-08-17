@@ -227,7 +227,7 @@ pnpm next experimental-analyze
 
 - 라우트별로 번들을 필터링하고 클라이언트/서버 뷰를 전환한다
 - 모듈이 왜 포함되었는지 보여주는 전체 import 체인을 확인한다
-- 서버-클라이언트 컴포넌트 경계와 다이나믹 import를 넘나드는 import를 추적한다
+- Server Component-Client Component 경계와 다이나믹 import를 넘나드는 import를 추적한다
 
 최적화 전략은 [Package Bundling](https://nextjs.org/docs/app/guides/package-bundling#optimizing-large-bundles)을 참고한다.
 

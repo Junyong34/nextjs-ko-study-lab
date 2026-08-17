@@ -100,7 +100,7 @@ export interface NextAdapter {
 - `appPages`: App Router 페이지 목록
 - `pagesApi`: Pages Router API 라우트 목록
 - `appRoutes`: App Router Route Handler 목록
-- `prerenders`: 프리렌더된 산출물 목록
+- `prerenders`: prerender된 산출물 목록
 - `staticFiles`: 정적 파일 목록
 
 <a id="nextadapter"></a>
@@ -170,7 +170,7 @@ const adapter = {
 module.exports = adapter
 ```
 
-`modifyConfig`는 `phase === 'phase-production-build'`일 때만 config를 수정하는 식으로 build phase별 분기를 둘 수 있다. `onBuildComplete`는 `outputs`의 각 배열을 순회하며 페이지·API 라우트·프리렌더 산출물의 경로와 파일 위치를 확인하는 데 쓰인다.
+`modifyConfig`는 `phase === 'phase-production-build'`일 때만 config를 수정하는 식으로 build phase별 분기를 둘 수 있다. `onBuildComplete`는 `outputs`의 각 배열을 순회하며 페이지·API 라우트·prerender 산출물의 경로와 파일 위치를 확인하는 데 쓰인다.
 
 ## 예제 및 데모 설계
 

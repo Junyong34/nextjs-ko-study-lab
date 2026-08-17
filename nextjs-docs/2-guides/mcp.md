@@ -80,7 +80,7 @@ Next.js 16 이상에는 코딩 에이전트가 애플리케이션 내부 상태�
 - **`get_logs`**: 브라우저 콘솔 로그와 서버 출력이 담긴 개발 로그 파일의 경로를 가져온다.
 - **`get_page_metadata`**: 라우트, 컴포넌트, 렌더링 정보를 포함한 특정 페이지의 메타데이터를 가져온다.
 - **`get_project_metadata`**: 프로젝트 구조, 설정, 개발 서버 URL을 가져온다.
-- **`get_routes`**: 파일시스템을 스캔해 엔트리 포인트가 될 모든 라우트를 가져온다. 라우터 타입(appRouter, pagesRouter)별로 라우트를 그룹화해 반환하며, 동적 세그먼트는 `[param]`이나 `[...slug]` 형태로 나타난다.
+- **`get_routes`**: 파일시스템을 스캔해 엔트리 포인트가 될 모든 라우트를 가져온다. 라우터 타입(appRouter, pagesRouter)별로 라우트를 그룹화해 반환하며, 다이나믹 세그먼트는 `[param]`이나 `[...slug]` 형태로 나타난다.
 - **`get_server_action_by_id`**: Server Action을 ID로 조회해 소스 파일과 함수 이름을 찾는다.
 - **`get_compilation_issues`**: 번들러가 보고하는 프로젝트 전체의 컴파일 경고와 에러를 가져온다. Turbopack에서만 동작한다.
 - **`compile_route`**: HTTP 요청을 보내지 않고 특정 라우트를 온디맨드로 컴파일한다. `get_routes`가 반환하는 형태의 `routeSpecifier`(예: `/blog/[slug]`) 또는 `path`(예: `/blog/hello-world`)를 받으며, `path`는 개발 라우터의 실시간 라우트 테이블에서 일치하는 라우트로 해석된다. 해당 라우트의 컴파일 이슈를 반환한다. Turbopack에서만 동작한다.

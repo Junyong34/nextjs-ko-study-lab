@@ -6,16 +6,16 @@
 
 ## 학습 목표
 
-- `<Link>` 컴포넌트가 HTML `<a>` 태그를 확장해 제공하는 [프리페치](../../1-getting-started/linking-and-navigating.md)와 클라이언트 사이드 내비게이션의 동작 원리를 설명한다.
+- `<Link>` 컴포넌트가 HTML `<a>` 태그를 확장해 제공하는 [prefetch](../../1-getting-started/linking-and-navigating.md)와 클라이언트 사이드 내비게이션의 동작 원리를 설명한다.
 - `href`, `replace`, `scroll`, `prefetch`, `onNavigate`, `transitionTypes` props를 상황에 맞게 구분해 사용한다.
-- `prefetch` 값(`"auto"`/`null`, `true`, `false`)에 따른 프리페치 범위 차이와 Partial Prefetching 활성화 시 동작 변화를 이해한다.
+- `prefetch` 값(`"auto"`/`null`, `true`, `false`)에 따른 prefetch 범위 차이와 Partial Prefetching 활성화 시 동작 변화를 이해한다.
 - `usePathname`, Proxy 재작성(rewrite) 시나리오에서 `<Link>`를 안전하게 조합하는 방법을 익힌다.
 
 ## 핵심 개념 및 설명
 
 ### Link 컴포넌트란
 
-`<Link>`는 HTML `<a>` 엘리먼트를 확장해 라우트 간 [프리페치](https://nextjs.org/docs/app/getting-started/linking-and-navigating#prefetching)와 클라이언트 사이드 내비게이션을 제공하는 React 컴포넌트다. Next.js에서 라우트 사이를 이동하는 기본적인 방법이다.
+`<Link>`는 HTML `<a>` 엘리먼트를 확장해 라우트 간 [prefetch](https://nextjs.org/docs/app/getting-started/linking-and-navigating#prefetching)와 클라이언트 사이드 내비게이션을 제공하는 React 컴포넌트다. Next.js에서 라우트 사이를 이동하는 기본적인 방법이다.
 
 기본 사용법:
 
@@ -102,15 +102,15 @@ export default function Page() {
 
 #### prefetch
 
-프리페치는 `<Link />` 컴포넌트가 사용자의 뷰포트에 들어올 때(처음 로드되거나 스크롤로 진입할 때) 일어난다. Next.js는 클라이언트 사이드 내비게이션 성능을 높이기 위해 `href`로 지정된 라우트와 그 데이터를 백그라운드에서 미리 불러온다. 프리페치된 데이터가 만료된 상태에서 사용자가 `<Link />`에 마우스를 올리면, Next.js는 다시 프리페치를 시도한다. **프리페치는 프로덕션 환경에서만 활성화된다.**
+prefetch는 `<Link />` 컴포넌트가 사용자의 뷰포트에 들어올 때(처음 로드되거나 스크롤로 진입할 때) 일어난다. Next.js는 클라이언트 사이드 내비게이션 성능을 높이기 위해 `href`로 지정된 라우트와 그 데이터를 백그라운드에서 미리 불러온다. prefetch된 데이터가 만료된 상태에서 사용자가 `<Link />`에 마우스를 올리면, Next.js는 다시 prefetch를 시도한다. **prefetch는 프로덕션 환경에서만 활성화된다.**
 
 `prefetch` prop에는 다음 값을 전달할 수 있다.
 
-- **`"auto"` 또는 `null`(기본값)**: 라우트가 정적인지 동적인지에 따라 프리페치 동작이 달라진다. 정적 라우트는 모든 데이터를 포함해 전체 라우트를 프리페치한다. 동적 라우트는 [`loading.js`](../3.1-file-conventions/loading.md) 바운더리가 있는 가장 가까운 세그먼트까지만 부분적으로 프리페치한다.
-- **`true`**: 정적·동적 라우트 모두 전체 라우트를 프리페치한다. [Partial Prefetching](../3.5-config/3.5.1-next-config-js/partialPrefetching.md)이 활성화된 경우, 프리페치에는 [App Shell](https://nextjs.org/docs/app/glossary#app-shell)과 링크의 URL 데이터에 의존하는 캐시된 콘텐츠가 포함된다. 자세한 내용은 [Optimizing prefetching](../../2-guides/optimizing-prefetching.md)을 참고한다.
-- **`false`**: 뷰포트 진입 시와 마우스 오버 시 모두 프리페치가 일어나지 않는다.
+- **`"auto"` 또는 `null`(기본값)**: 라우트가 정적인지 동적인지에 따라 prefetch 동작이 달라진다. 정적 라우트는 모든 데이터를 포함해 전체 라우트를 prefetch한다. 다이나믹 라우트는 [`loading.js`](../3.1-file-conventions/loading.md) 바운더리가 있는 가장 가까운 세그먼트까지만 부분적으로 prefetch한다.
+- **`true`**: 정적·다이나믹 라우트 모두 전체 라우트를 prefetch한다. [Partial Prefetching](../3.5-config/3.5.1-next-config-js/partialPrefetching.md)이 활성화된 경우, prefetch에는 [App Shell](https://nextjs.org/docs/app/glossary#app-shell)과 링크의 URL 데이터에 의존하는 캐시된 콘텐츠가 포함된다. 자세한 내용은 [Optimizing prefetching](../../2-guides/optimizing-prefetching.md)을 참고한다.
+- **`false`**: 뷰포트 진입 시와 마우스 오버 시 모두 prefetch가 일어나지 않는다.
 
-> **Partial Prefetching이 활성화된 경우**([`partialPrefetching: true`](../3.5-config/3.5.1-next-config-js/partialPrefetching.md)): 기본 동작이 달라진다. `auto`는 전체 페이지 대신 라우트별 [App Shell](https://nextjs.org/docs/app/glossary#app-shell)(라우트의 정적·캐시된 콘텐츠)을 프리페치한다. 전체 동작 변화는 [Adopting Partial Prefetching](../../2-guides/adopting-partial-prefetching.md)을 참고한다.
+> **Partial Prefetching이 활성화된 경우**([`partialPrefetching: true`](../3.5-config/3.5.1-next-config-js/partialPrefetching.md)): 기본 동작이 달라진다. `auto`는 전체 페이지 대신 라우트별 [App Shell](https://nextjs.org/docs/app/glossary#app-shell)(라우트의 정적·캐시된 콘텐츠)을 prefetch한다. 전체 동작 변화는 [Adopting Partial Prefetching](../../2-guides/adopting-partial-prefetching.md)을 참고한다.
 
 ```tsx
 import Link from 'next/link'
@@ -175,9 +175,9 @@ export default function Page() {
 
 `<Link>` 컴포넌트를 다양한 상황에서 어떻게 사용하는지 살펴본다.
 
-#### 동적 라우트 세그먼트로 링크하기
+#### 다이나믹 라우트 세그먼트로 링크하기
 
-[동적 세그먼트](../3.1-file-conventions/page.md)로 링크할 때는 [템플릿 리터럴과 문자열 삽입](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals)을 사용해 링크 목록을 생성할 수 있다. 예를 들어 블로그 글 목록을 생성하는 경우다.
+[다이나믹 세그먼트](../3.1-file-conventions/page.md)로 링크할 때는 [템플릿 리터럴과 문자열 삽입](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals)을 사용해 링크 목록을 생성할 수 있다. 예를 들어 블로그 글 목록을 생성하는 경우다.
 
 ```tsx
 import Link from 'next/link'
@@ -324,9 +324,9 @@ html {
 
 이 값은 스크롤 기반 위치 지정을 오프셋하는 브라우저 CSS 속성이다. Next.js가 네이티브 [`scrollIntoView()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) API를 사용하는 모든 경우(해시 프래그먼트(`#id`) 내비게이션 포함)에 적용된다. 전역 오프셋을 설정하는 대신, 개별 대상 엘리먼트에 [`scroll-margin-top`](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-top)을 사용할 수도 있다.
 
-#### Proxy에서 링크 프리페치하기
+#### Proxy에서 링크 prefetch하기
 
-인증이나 사용자를 다른 페이지로 재작성(rewrite)하는 그 외의 목적으로 [Proxy](../3.1-file-conventions/proxy.md)를 사용하는 경우가 많다. Proxy로 재작성된 링크를 `<Link />` 컴포넌트가 올바르게 프리페치하려면, 표시할 URL과 프리페치할 URL을 모두 Next.js에 알려줘야 한다. Proxy에 불필요한 요청을 보내지 않고 올바른 프리페치 라우트를 알기 위해 필요한 절차다.
+인증이나 사용자를 다른 페이지로 재작성(rewrite)하는 그 외의 목적으로 [Proxy](../3.1-file-conventions/proxy.md)를 사용하는 경우가 많다. Proxy로 재작성된 링크를 `<Link />` 컴포넌트가 올바르게 prefetch하려면, 표시할 URL과 prefetch할 URL을 모두 Next.js에 알려줘야 한다. Proxy에 불필요한 요청을 보내지 않고 올바른 prefetch 라우트를 알기 위해 필요한 절차다.
 
 예를 들어 인증된 사용자와 방문자 뷰가 모두 있는 `/dashboard` 라우트를 제공하려면, Proxy에서 다음과 같이 올바른 페이지로 사용자를 리다이렉트할 수 있다.
 
@@ -524,27 +524,27 @@ export default function Page() {
 | 버전 | 변경 사항 |
 | --- | --- |
 | v16.2.0 | `transitionTypes` prop이 추가되었다. |
-| v15.4.0 | 기본 프리페치 동작의 별칭으로 `auto`가 추가되었다. |
+| v15.4.0 | 기본 prefetch 동작의 별칭으로 `auto`가 추가되었다. |
 | v15.3.0 | `onNavigate` API가 추가되었다. |
 | v13.0.0 | 더 이상 자식 `<a>` 태그가 필요하지 않다. 코드베이스를 자동으로 갱신하는 codemod가 제공된다. |
-| v10.0.0 | 동적 라우트를 가리키는 `href` props가 자동으로 해석되어 더 이상 `as` prop이 필요하지 않다. |
-| v8.0.0 | 프리페치 성능이 개선되었다. |
+| v10.0.0 | 다이나믹 라우트를 가리키는 `href` props가 자동으로 해석되어 더 이상 `as` prop이 필요하지 않다. |
+| v8.0.0 | prefetch 성능이 개선되었다. |
 | v1.0.0 | `next/link`가 도입되었다. |
 
 ## 예제 및 데모 설계
 
-- Phase 2에서 정적 라우트와 동적 라우트를 오가는 내비게이션 메뉴를 구현한다.
-- `prefetch` 값을 `"auto"`/`true`/`false`로 바꿔가며 네트워크 탭에서 프리페치 범위 차이를 관찰한다.
+- Phase 2에서 정적 라우트와 다이나믹 라우트를 오가는 내비게이션 메뉴를 구현한다.
+- `prefetch` 값을 `"auto"`/`true`/`false`로 바꿔가며 네트워크 탭에서 prefetch 범위 차이를 관찰한다.
 - `usePathname`으로 활성 링크를 표시하고, sticky 헤더와 `scroll-padding-top` 보정을 함께 적용한다.
 - 저장하지 않은 폼 변경 사항이 있을 때 `onNavigate`로 내비게이션을 막는 예제를 구현한다.
 
 ## 연습 문제
 
-1. `prefetch` prop을 지정하지 않았을 때(기본값 `"auto"`/`null`) 정적 라우트와 동적 라우트의 프리페치 범위 차이로 올바른 것은?
+1. `prefetch` prop을 지정하지 않았을 때(기본값 `"auto"`/`null`) 정적 라우트와 다이나믹 라우트의 prefetch 범위 차이로 올바른 것은?
 
    <details><summary>정답 보기</summary>
 
-   정적 라우트는 모든 데이터를 포함한 전체 라우트가 프리페치되고, 동적 라우트는 가장 가까운 `loading.js` 바운더리까지만 부분적으로 프리페치된다. 프리페치는 프로덕션 환경에서만 동작한다.
+   정적 라우트는 모든 데이터를 포함한 전체 라우트가 prefetch되고, 다이나믹 라우트는 가장 가까운 `loading.js` 바운더리까지만 부분적으로 prefetch된다. prefetch는 프로덕션 환경에서만 동작한다.
 
    </details>
 
@@ -560,14 +560,14 @@ export default function Page() {
 
    <details><summary>정답 보기</summary>
 
-   사용자에게 보여줄 URL(`as="/dashboard"`)과 실제로 프리페치할 URL(`href={path}`)을 각각 Next.js에 알려줘야, Proxy에 불필요한 요청을 보내지 않고도 올바른 라우트를 프리페치할 수 있기 때문이다.
+   사용자에게 보여줄 URL(`as="/dashboard"`)과 실제로 prefetch할 URL(`href={path}`)을 각각 Next.js에 알려줘야, Proxy에 불필요한 요청을 보내지 않고도 올바른 라우트를 prefetch할 수 있기 때문이다.
 
    </details>
 
 ## 챕터 요약
 
-- `<Link>`는 `<a>` 태그를 확장해 프리페치와 클라이언트 사이드 내비게이션을 제공하는 Next.js의 기본 라우팅 컴포넌트다.
-- `href`(필수), `replace`, `scroll`, `prefetch`, `onNavigate`, `transitionTypes` 6개 prop으로 이동 방식과 프리페치·스크롤 동작을 세밀하게 제어할 수 있다.
+- `<Link>`는 `<a>` 태그를 확장해 prefetch와 클라이언트 사이드 내비게이션을 제공하는 Next.js의 기본 라우팅 컴포넌트다.
+- `href`(필수), `replace`, `scroll`, `prefetch`, `onNavigate`, `transitionTypes` 6개 prop으로 이동 방식과 prefetch·스크롤 동작을 세밀하게 제어할 수 있다.
 - `prefetch`는 `"auto"`/`null`(정적은 전체, 동적은 `loading.js` 바운더리까지), `true`(전체, Partial Prefetching 시 App Shell 포함), `false`(비활성화) 세 가지로 동작한다.
 - 활성 링크 표시(`usePathname`), sticky 헤더 스크롤 보정(`scroll-padding-top`), Proxy 재작성 시 `as`+`href` 조합, `onNavigate` 기반 내비게이션 차단 등 실전 패턴을 다룬다.
 - v13.0.0부터 자식 `<a>` 태그가 필요 없어졌고, v15.3.0의 `onNavigate`와 v16.2.0의 `transitionTypes`까지 계속 API가 확장되어 왔다.

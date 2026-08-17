@@ -247,7 +247,7 @@ export const proxy: NextProxy = (request, event) => {
 7. 다이나믹 라우트(`/blog/[slug]`)
 8. `next.config.js`의 `fallback`(`rewrites`)
 
-> **알아두면 좋은 점**: [Server Function](../3.4-directives/use-server.md)은 이 체인에서 별도의 경로가 아닙니다. 이는 사용되는 경로에 대한 POST 요청으로 처리되므로 경로를 제외하는 프록시 일치자는 해당 경로에 대한 서버 함수 호출도 건너뜁니다.
+> **알아두면 좋은 점**: [Server Function](../3.4-directives/use-server.md)은 이 체인에서 별도의 경로가 아니다. 이는 사용되는 경로에 대한 POST 요청으로 처리되므로 경로를 제외하는 프록시 매처는 해당 경로에 대한 Server Function 호출도 건너뛴다.
 >
 > Server Function을 다른 경로로 이동하는 매처 변경 또는 리팩터링은 자동으로 프록시 적용 범위를 제거할 수 있다. 프록시에만 의존하기보다는 항상 각 Server Function 내에서 인증 및 권한 부여를 확인한다. 권장 패턴은 [데이터 보안 가이드](../../2-guides/data-security.md#authentication-and-authorization)를 참조한다.
 
