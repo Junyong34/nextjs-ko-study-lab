@@ -321,7 +321,7 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 5.1 | Accessibility | [공식](https://nextjs.org/docs/architecture/accessibility) | 초안 | 미착수 |
-| 5.2 | Fast Refresh | [공식](https://nextjs.org/docs/architecture/fast-refresh) | 초안 | 미착수 |
-| 5.3 | Next.js Compiler | [공식](https://nextjs.org/docs/architecture/nextjs-compiler) | 초안 | 미착수 |
-| 5.4 | Supported Browsers | [공식](https://nextjs.org/docs/architecture/supported-browsers) | 초안 | 미착수 |
+| 5.1 | Accessibility | [공식](https://nextjs.org/docs/architecture/accessibility) | 완료 | 미착수 |
+| 5.2 | Fast Refresh | [공식](https://nextjs.org/docs/architecture/fast-refresh) | 완료 | 미착수 |
+| 5.3 | Next.js Compiler | [공식](https://nextjs.org/docs/architecture/nextjs-compiler) | 완료 | 미착수 |
+| 5.4 | Supported Browsers | [공식](https://nextjs.org/docs/architecture/supported-browsers) | 완료 | 미착수 |
