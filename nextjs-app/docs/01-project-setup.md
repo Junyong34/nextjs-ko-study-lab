@@ -45,7 +45,8 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "check-types": "turbo check-types"
   },
   "devDependencies": { "turbo": "^2.10.10" }
 }
@@ -138,10 +139,13 @@ pnpm create next-app@16.3.1 shell \
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
-    "start": "next start --port 3000"
+    "start": "next start --port 3000",
+    "check-types": "tsc --noEmit"
   }
 }
 ```
+
+`check-types`는 3-5의 turbo 태스크가 호출할 스크립트입니다. **모든 패키지에 같은 이름으로 있어야** `turbo check-types`가 워크스페이스 전체를 훑습니다 — 한 곳이라도 빠지면 그 패키지는 조용히 검사에서 제외됩니다.
 
 포트 배정은 [03. 결합 구조 설계](./03-composition-architecture.md)의 zone 표를 따릅니다.
 
@@ -149,9 +153,59 @@ pnpm create next-app@16.3.1 shell \
 
 **⑥ zone용 `AGENTS.md`와 `CLAUDE.md` 작성** — 이 zone이 어느 설정 축을 담당하는지, 어떤 문서의 데모를 담는지 한 문단으로 적습니다. `CLAUDE.md`는 저장소 관례대로 `@AGENTS.md` 한 줄입니다.
 
-**⑦ 데모 앱만 추가로**: `assetPrefix` 설정과 라우트를 `src/app/demo/{zone}/` 아래에 두는 규칙. 상세는 [03. 결합 구조 설계](./03-composition-architecture.md).
+**⑦ 데모 앱만 추가로**: `assetPrefix` 설정과 라우트를 `src/app/demo/{슬러그}/` 아래에 두는 규칙. **폴더명에 쓰는 슬러그는 앱 이름과 다른 값**입니다 (`demo-cache-components` 앱의 슬러그는 `cache`). 상세는 [03. 결합 구조 설계 2절](./03-composition-architecture.md).
 
-### 3-4. turbo 파이프라인
+### 3-4. 공유 패키지(`packages/*`) 구성 — Internal Package 패턴
+
+공유 컴포넌트(`packages/ui`)나 공통 렌더러(`packages/docs-render`)는 **별도의 번들링 빌드 단계(tsup/rollup 등) 없이 TypeScript 소스 그대로 export**하는 Internal Package 패턴을 사용합니다.
+
+1. **`packages/ui/package.json`**:
+   ```jsonc
+   {
+     "name": "@study/ui",
+     "version": "0.0.0",
+     "private": true,
+     "exports": {
+       "./*": "./src/*.tsx"
+     },
+     "scripts": {
+       "check-types": "tsc --noEmit"
+     },
+     "peerDependencies": {
+       "react": "catalog:",
+       "react-dom": "catalog:"
+     },
+     "devDependencies": {
+       "react": "catalog:",
+       "react-dom": "catalog:",
+       "@types/react": "catalog:"
+     }
+   }
+   ```
+
+   `peerDependencies`만 두면 소비하는 앱에서는 동작하지만 **패키지 자신을 타입체크하거나 편집할 때 react 타입이 해석되지 않습니다.** pnpm은 선언하지 않은 의존성을 `node_modules`에 올려주지 않기 때문입니다. `devDependencies`에도 함께 적습니다.
+2. **소비하는 앱(`apps/shell`, `apps/demo-*`) 설정**:
+   - `package.json`의 dependencies에 `"@study/ui": "workspace:*"` 추가
+   - `next.config.ts`에 `transpilePackages: ['@study/ui', '@study/docs-render']` 명시 (Next.js / Turbopack이 소스코드를 직접 트랜스파일 및 HMR)
+3. **Tailwind CSS v4 스타일 스캔**:
+   - Tailwind는 `node_modules` 아래를 기본 스캔에서 제외하므로, 공유 패키지의 클래스를 쓰려면 `@source`로 명시해야 합니다.
+   - **`@source`의 경로는 그 지시자가 적힌 CSS 파일 기준 상대 경로입니다.** `--src-dir`로 만든 앱의 `globals.css`는 `apps/{앱이름}/src/app/globals.css`에 놓이므로 `packages/`까지는 네 단계를 올라갑니다:
+
+     ```css
+     @import "tailwindcss";
+     @source "../../../../packages/ui";
+     ```
+
+     ```
+     src/app/ ─┬─ ../          → src/
+               ├─ ../../       → {앱이름}/
+               ├─ ../../../    → apps/
+               └─ ../../../../ → nextjs-app/   ← 여기서 packages/ui
+     ```
+
+   - 이 경로가 한 단계라도 어긋나면 **빌드는 성공하고 화면도 뜨지만 공유 컴포넌트의 Tailwind 클래스만 조용히 누락됩니다.** 원인을 찾기 어려운 종류의 실수라 첫 공유 컴포넌트를 붙일 때 반드시 눈으로 확인합니다.
+
+### 3-5. turbo 파이프라인
 
 루트 `turbo.json`:
 
@@ -169,7 +223,10 @@ pnpm create next-app@16.3.1 shell \
       "persistent": true,
       "inputs": ["$TURBO_DEFAULT$", ".env.local", ".env"]
     },
-    "lint": {}
+    "lint": {},
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    }
   }
 }
 ```
@@ -180,7 +237,7 @@ pnpm create next-app@16.3.1 shell \
 
 매니페스트 생성을 미루고 싶다면 임시로 루트 `turbo.json`에 `"globalDependencies": ["nextjs-docs/**/*.md"]`를 둘 수 있습니다. 정확하지만 거칠어서 — md 한 줄만 고쳐도 **모든 zone의 모든 캐시**가 날아갑니다. zone이 3개일 땐 견딜 만하고 6개가 되면 아플 겁니다.
 
-### 3-5. 설치와 로컬 실행
+### 3-6. 설치와 로컬 실행
 
 ```bash
 pnpm install          # 워크스페이스 루트에서 한 번
@@ -189,7 +246,7 @@ pnpm dev              # turbo가 모든 zone의 dev 서버를 동시에 기동
 
 `http://localhost:3000` 하나만 열면 됩니다. 나머지 포트는 셸이 뒤에서 부릅니다 — 학습자도, 개발자도 직접 열 일이 없습니다.
 
-### 3-6. 첫 배포 검증 (셸 + 데모 앱 1개가 동작하는 시점)
+### 3-7. 첫 배포 검증 (셸 + 데모 앱 1개가 동작하는 시점)
 
 로컬에서는 **절대 드러나지 않는** 문제들이 있어서, zone을 다 만들기 전에 한 번 배포 경로를 뚫습니다.
 
@@ -210,12 +267,14 @@ pnpm dev              # turbo가 모든 zone의 dev 서버를 동시에 기동
 
 zone을 하나 늘릴 때마다 손대야 하는 곳입니다. **하나라도 빠지면 그 zone은 사이트에서 보이지 않습니다.**
 
-- [ ] `nextjs-app/apps/{zone}/` 생성 (3-3의 ①~⑦)
-- [ ] `package.json` 이름 `@study/{zone}`, 의존성 `catalog:`, dev 포트 고정
-- [ ] `next.config.ts`에 `assetPrefix` 설정
-- [ ] 라우트를 `src/app/demo/{zone}/` 아래에 배치
-- [ ] **셸의 `next.config.ts`에 rewrites 2줄 추가** (페이지 경로 + 정적 자산 경로)
-- [ ] **셸의 `.env.local`에 `ZONE_{ZONE}_URL` 추가**
+> zone에는 **앱 이름**(`demo-cache-components`)과 **슬러그**(`cache`) 두 이름이 있고 서로 대체할 수 없습니다. 어느 자리에 무엇이 들어가는지는 [03. 결합 구조 설계 2절](./03-composition-architecture.md)의 표를 보세요.
+
+- [ ] `nextjs-app/apps/{앱이름}/` 생성 (3-3의 ①~⑦)
+- [ ] `package.json` 이름 `@study/{앱이름}`, 의존성 `catalog:`, dev 포트 고정, `check-types` 스크립트
+- [ ] `next.config.ts`에 `assetPrefix: '/demo-static/{슬러그}'` 설정 및 공유 패키지 사용 시 `transpilePackages` 명시
+- [ ] 라우트를 `src/app/demo/{슬러그}/` 아래에 배치
+- [ ] **셸의 `next.config.ts`에 rewrites 2줄 추가** — 페이지 경로 + 정적 자산 경로. **정적 자산은 접두사를 벗기지 말고 그대로 통과**시킵니다
+- [ ] **셸의 `.env.local`에 `ZONE_{슬러그 대문자}_URL` 추가**
 - [ ] 해당 학습 문서에 데모 지시자 삽입
 - [ ] (배포 시) Vercel 프로젝트 생성 + 셸 프로젝트에 환경변수 추가
 

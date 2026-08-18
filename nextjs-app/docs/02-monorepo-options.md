@@ -29,12 +29,13 @@ Next.js 앱 하나에는 `next.config` 파일이 하나뿐인데, 학습 문서�
 
 | 기준 | 평가 |
 |---|---|
-| 버전 강제 | ✅ **catalog** — 루트에 `next: 16.3.1` 한 번 적고 각 앱은 `"next": "catalog:"`. 앱마다 버전이 갈라지는 게 **문법적으로 불가능**해짐 |
+| 버전 강제 | ✅ **catalog** — 루트에 `next: 16.3.1` 한 번 적고 각 앱은 `"next": "catalog:"`. 앱마다 버전이 갈라지는 게 **문법적으로 불가능**해짐. 필요 시 Named Catalogs(`catalogs.canary` 등)로 확장 가능 |
 | 동시 dev | ✅ `turbo dev` 하나로 전부. `persistent: true` |
 | 캐시 무효화 | ✅ `dependsOn: ["^build"]` + `@study/docs` 패키지로 md 변경을 정확히 추적 |
 | 학습 부담 | ✅ 설정 파일 2개. Next.js·Turborepo·Vercel이 같은 팀이라 조합 마찰이 사실상 없음 |
+| 코드 공유 | ✅ **Internal Packages 패턴** — Next.js의 `transpilePackages`와 결합하여 패키지 번들링 빌드 단계 없이 TypeScript 소스를 직접 공유 및 HMR 가능 |
 
-**약점**: `turbo.json`의 `inputs`는 패키지 상대 경로라 패키지 밖 파일을 직접 참조할 수 없습니다. 그래서 `nextjs-docs`를 워크스페이스 패키지로 편입하는 우회가 필요합니다 ([01. 구성 절차 3-4](./01-project-setup.md)).
+**약점**: `turbo.json`의 `inputs`는 패키지 상대 경로라 패키지 밖 파일을 직접 참조할 수 없습니다. 그래서 `nextjs-docs`를 워크스페이스 패키지로 편입하는 우회가 필요합니다 ([01. 구성 절차 3-1, 3-5](./01-project-setup.md)).
 
 ### 2-2. npm workspaces + Turborepo
 
