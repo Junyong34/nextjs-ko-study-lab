@@ -254,13 +254,13 @@
 | 3.3.32 | NextResponse | [공식](https://nextjs.org/docs/app/api-reference/functions/next-response) | 완료 | 미착수 |
 | 3.3.33 | ImageResponse | [공식](https://nextjs.org/docs/app/api-reference/functions/image-response) | 완료 | 미착수 |
 | 3.3.34 | userAgent | [공식](https://nextjs.org/docs/app/api-reference/functions/userAgent) | 완료 | 미착수 |
-| 3.3.35 | generateMetadata | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) | 초안 | 미착수 |
-| 3.3.36 | generateImageMetadata | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata) | 초안 | 미착수 |
-| 3.3.37 | generateViewport | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-viewport) | 초안 | 미착수 |
-| 3.3.38 | generateStaticParams | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) | 초안 | 미착수 |
-| 3.3.39 | generateSitemaps | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-sitemaps) | 초안 | 미착수 |
-| 3.3.40 | useOffline | [공식](https://nextjs.org/docs/app/api-reference/functions/use-offline) | 초안 | 미착수 |
-| 3.3.41 | useReportWebVitals | [공식](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals) | 초안 | 미착수 |
+| 3.3.35 | generateMetadata | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) | 완료 | 미착수 |
+| 3.3.36 | generateImageMetadata | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata) | 완료 | 미착수 |
+| 3.3.37 | generateViewport | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-viewport) | 완료 | 미착수 |
+| 3.3.38 | generateStaticParams | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-static-params) | 완료 | 미착수 |
+| 3.3.39 | generateSitemaps | [공식](https://nextjs.org/docs/app/api-reference/functions/generate-sitemaps) | 완료 | 미착수 |
+| 3.3.40 | useOffline | [공식](https://nextjs.org/docs/app/api-reference/functions/use-offline) | 완료 | 미착수 |
+| 3.3.41 | useReportWebVitals | [공식](https://nextjs.org/docs/app/api-reference/functions/use-report-web-vitals) | 완료 | 미착수 |
 
 ### 3.4 Directives
 
