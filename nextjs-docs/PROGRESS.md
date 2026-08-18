@@ -220,13 +220,13 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 3.3.1 | useRouter | [공식](https://nextjs.org/docs/app/api-reference/functions/use-router) | 초안 | 미착수 |
-| 3.3.2 | usePathname | [공식](https://nextjs.org/docs/app/api-reference/functions/use-pathname) | 초안 | 미착수 |
-| 3.3.3 | useParams | [공식](https://nextjs.org/docs/app/api-reference/functions/use-params) | 초안 | 미착수 |
-| 3.3.4 | useSearchParams | [공식](https://nextjs.org/docs/app/api-reference/functions/use-search-params) | 초안 | 미착수 |
-| 3.3.5 | useSelectedLayoutSegment | [공식](https://nextjs.org/docs/app/api-reference/functions/use-selected-layout-segment) | 초안 | 미착수 |
-| 3.3.6 | useSelectedLayoutSegments | [공식](https://nextjs.org/docs/app/api-reference/functions/use-selected-layout-segments) | 초안 | 미착수 |
-| 3.3.7 | useLinkStatus | [공식](https://nextjs.org/docs/app/api-reference/functions/use-link-status) | 초안 | 미착수 |
+| 3.3.1 | useRouter | [공식](https://nextjs.org/docs/app/api-reference/functions/use-router) | 완료 | 미착수 |
+| 3.3.2 | usePathname | [공식](https://nextjs.org/docs/app/api-reference/functions/use-pathname) | 완료 | 미착수 |
+| 3.3.3 | useParams | [공식](https://nextjs.org/docs/app/api-reference/functions/use-params) | 완료 | 미착수 |
+| 3.3.4 | useSearchParams | [공식](https://nextjs.org/docs/app/api-reference/functions/use-search-params) | 완료 | 미착수 |
+| 3.3.5 | useSelectedLayoutSegment | [공식](https://nextjs.org/docs/app/api-reference/functions/use-selected-layout-segment) | 완료 | 미착수 |
+| 3.3.6 | useSelectedLayoutSegments | [공식](https://nextjs.org/docs/app/api-reference/functions/use-selected-layout-segments) | 완료 | 미착수 |
+| 3.3.7 | useLinkStatus | [공식](https://nextjs.org/docs/app/api-reference/functions/use-link-status) | 완료 | 미착수 |
 | 3.3.8 | root-params | [공식](https://nextjs.org/docs/app/api-reference/functions/next-root-params) | 초안 | 미착수 |
 | 3.3.9 | fetch | [공식](https://nextjs.org/docs/app/api-reference/functions/fetch) | 초안 | 미착수 |
 | 3.3.10 | cookies | [공식](https://nextjs.org/docs/app/api-reference/functions/cookies) | 초안 | 미착수 |
