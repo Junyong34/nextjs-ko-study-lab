@@ -59,9 +59,12 @@ export default function RootLayout({ children }) {
 }
 ```
 
-> **알아두면 좋은 점**:
+> **알아두면 좋은 점 (generateViewport 모범 사례 및 내부 동작)**:
 >
-> - 한 파일 안에서 `viewport` 객체와 `generateViewport` 함수를 동시에 export할 수 없다.
+> - **Server Component 전용**: `viewport` 객체와 `generateViewport` 함수는 오직 Server Component에서만 export할 수 있다. 한 파일에서 두 개를 동시에 export할 수 없다.
+> - **정적 vs 동적 선택**: 요청 정보(파라미터 등)에 의존하지 않는 정적 뷰포트 설정은 성능 최적화를 위해 비동기 함수 대신 정적 `viewport` 객체로 export해야 한다.
+> - **기본 뷰포트 태그 자동 주입**: Next.js는 기본적으로 `<meta name="viewport" content="width=device-width, initial-scale=1">` 태그를 자동 생성하므로, 기본 동작을 덮어쓰거나 테마 색상을 추가할 때만 명시적으로 설정하면 된다.
+> - **라우트별 다이나믹 뷰포트 격리**: 특정 라우트에서만 다이나믹 `generateViewport`가 필요하다면, Route Group 및 복수 루트 레이아웃을 사용하여 해당 라우트를 격리함으로써 다른 정적 페이지들이 불필요하게 다이나믹 렌더링으로 전환되는 것을 방지할 수 있다.
 > - 일반 `metadata`와 달리 `viewport`는 브라우저의 초기 화면 레이아웃과 렌더링에 직접적인 영향을 주므로 **스트리밍(Streaming)될 수 없다.** 따라서 `generateViewport`가 지연되면 초기 페이지 응답이 블로킹될 수 있다.
 > - 동적 데이터가 필요하지만 런타임 요청 데이터가 아니라면 `'use cache'`를 함께 활용하는 것이 권장된다.
 

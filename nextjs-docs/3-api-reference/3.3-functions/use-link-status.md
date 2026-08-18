@@ -230,6 +230,6 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
 
 - `useLinkStatus`는 `next/link`에서 제공하는 훅으로, `<Link>` 클릭 후 전환 대기(`pending`) 상태를 감지한다.
 - 반드시 `<Link>` 컴포넌트의 하위 자손 컴포넌트 내부에서 호출해야 한다.
-- prefetch가 꺼져 있거나 지연되는 동적 라우트 내비게이션 시 인라인 피드백을 제공하기에 적합하다.
+- prefetch가 꺼져 있거나 지연되는 다이나믹 라우트 내비게이션 시 인라인 피드백을 제공하기에 적합하다.
 - 이미 prefetch 완료된 라우트로 이동할 때는 pending 상태가 생략된다.
 - 빠른 내비게이션 시의 깜빡임을 방지하기 위해 CSS `animation-delay` 기법을 적용할 수 있다.

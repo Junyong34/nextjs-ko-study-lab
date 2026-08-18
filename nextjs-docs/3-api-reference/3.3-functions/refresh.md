@@ -104,7 +104,7 @@ export async function POST() {
 <details><summary>정답 보기</summary>
 
 정답: **B**  
-해설: 클라이언트 컴포넌트에서는 `useRouter()` 훅이 제공하는 `router.refresh()`를 사용하여 클라이언트 사이드 새로고침을 수행한다.
+해설: Client Component에서는 `useRouter()` 훅이 제공하는 `router.refresh()`를 사용하여 클라이언트 사이드 새로고침을 수행한다.
 </details>
 
 ## 챕터 요약

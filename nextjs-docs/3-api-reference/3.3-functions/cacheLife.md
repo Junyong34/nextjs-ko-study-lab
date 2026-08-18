@@ -28,10 +28,13 @@ export default async function BlogPage() {
 }
 ```
 
-> **알아두면 좋은 점**:
+> **알아두면 좋은 점 (cacheLife 모범 사례 및 내부 동작)**:
 >
-> - `cacheLife`는 모듈 최상단(파일 레벨)에서는 호출할 수 없으며, 반드시 캐시된 비동기 함수나 컴포넌트 본문 내부에서 호출해야 한다.
-> - 모든 `use cache` 스코프마다 명시적으로 `cacheLife`를 호출하는 것을 강력히 권장한다. 생략 시 암묵적으로 `default` 프로필이 적용되어 중첩 캐시의 동작을 예측하기 어려워진다.
+> - **명시적 호출 권장**: `use cache`가 적용된 모든 스코프에 `cacheLife`를 명시적으로 호출하는 것이 좋다. 호출을 생략하면 `default` 프로필이 적용되지만, 코드 위치에서 캐시 수명을 한눈에 파악할 수 있도록 명시하는 것이 권장된다.
+> - **TypeScript 자동 생성**: `cacheLife` 함수의 타입 시그니처는 `next.config.ts`에 정의된 커스텀 프로필을 기반으로 `next dev` 및 `next build` 시점에 자동 생성된다.
+> - **누락 속성 상속**: 커스텀 프로필이나 인라인 객체에서 특정 속성(`stale`, `revalidate`, `expire` 중 일부)을 생략하면 `default` 프로필의 기본값이 자동으로 상속된다.
+> - **`staleTimes`와의 차이점**: `cacheLife.stale`은 서버 캐시가 클라이언트에 전달된 후 클라이언트에서 stale 상태로 전환되기까지의 시간이다. 반면 `next.config.ts`의 `staleTimes`는 클라이언트 라우터 캐시 전체에 적용되는 전역 설정이다.
+> - **원격 캐시 영속화**: 서버리스 배포 환경에서 인스턴스 간 런타임 캐시를 공유·영속화하려면 `"use cache: remote"`를 사용할 수 있다. 생략 시 암묵적으로 `default` 프로필이 적용되어 중첩 캐시의 동작을 예측하기 어려워진다.
 > - 함수 실행 1회당 오직 하나의 `cacheLife` 호출만 실행되어야 한다. 조건문 분기에 따라 서로 다른 프로필을 호출할 수는 있다.
 
 ### 캐시 프로필의 3대 속성
@@ -153,7 +156,7 @@ export async function getPostContent(slug: string) {
 ## 예제 및 데모 설계
 
 - 실시간 환율 위젯(`cacheLife('seconds')`)과 정적 상품 소개(`cacheLife('days')`)가 한 페이지에 공존할 때 `<Suspense>` 경계를 통한 점진적 렌더링 동작을 확인한다.
-- `next.config.ts`에 `editorial` 커스텀 프로필을 등록하고 컴포넌트에서 호출했을 때의 타입 힌트와 재검증 주기를 테스트한다.
+- `next.config.ts`에 `editorial` 커스텀 프로필을 등록하고 컴포넌트에서 호출했을 때의 타입 힌트와 revalidation 주기를 테스트한다.
 - Server Action에서 `revalidateTag` 호출 시 `stale` 시간과 관계없이 클라이언트 캐시가 즉시 무효화되는지 검증한다.
 
 ## 연습 문제

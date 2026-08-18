@@ -6,166 +6,137 @@
 
 ## 학습 목표
 
-- 사용자를 다른 내부 또는 외부 URL로 리다이렉트하는 `redirect` 함수의 동작 방식과 사용법을 익힌다.
-- 기본 임시 리다이렉트 상태코드인 HTTP 307과 전통적인 302 상태코드의 차이점(HTTP 메서드 보존)을 이해한다.
-- Server Component, Client Component, Server Action, Route Handler 등 다양한 컨텍스트에서의 동작 차이를 구분한다.
-- `redirect`가 예외를 던지는 특성으로 인해 `try/catch` 블록 외부에서 호출되어야 하는 규칙을 적용한다.
+- `redirect` 함수를 사용하여 Server Component, Server Action, Route Handler에서 사용자를 다른 URL로 안전하게 리다이렉트하는 방법을 익힌다.
+- Next.js가 기본 리다이렉트 상태 코드로 302/303 대신 **307(Temporary Redirect)**을 채택한 이유와 기술적 차이를 이해한다.
+- `redirect`가 내부적으로 `NEXT_REDIRECT` 에러를 던져(throw) 흐름을 중단하는 메커니즘과 `try/catch` 블록 내에서의 올바른 처리 패턴을 파악한다.
+- `RedirectType`(`'replace'` vs `'push'`) 옵션을 통해 브라우저 히스토리 스택을 제어한다.
 
 ## 핵심 개념 및 설명
 
-`redirect` 함수는 사용자를 다른 URL로 이동시킬 때 사용하는 내장 유틸리티다.
+`redirect` 함수는 Server Component, Server Action, Route Handler에서 호출되어 즉시 다른 URL로 페이지를 이동시킨다.
 
-[Server Component](../../1-getting-started/server-and-client-components.md), [Client Component](../../1-getting-started/server-and-client-components.md)(렌더링 도중), [Route Handler](../3.1-file-conventions/route.md), [Server Function](../../1-getting-started/mutating-data.md)에서 호출할 수 있다.
-
-```tsx filename="app/team/[id]/page.tsx" switcher
+```tsx filename="app/team/[id]/page.tsx"
 import { redirect } from 'next/navigation'
 
-export default async function TeamPage({
+async function fetchTeam(id: string) {
+  const res = await fetch(`https://api.example.com/team/${id}`)
+  if (!res.ok) {
+    redirect('/login')
+  }
+  return res.json()
+}
+
+export default async function Profile({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
   const team = await fetchTeam(id)
-
-  if (!team) {
-    redirect('/login') // 로그인 페이지로 즉시 리다이렉트
-  }
-
-  return <div>팀 정보: {team.name}</div>
+  return <div>{team.name}</div>
 }
 ```
 
-```jsx filename="app/team/[id]/page.js" switcher
-import { redirect } from 'next/navigation'
-
-export default async function TeamPage({ params }) {
-  const { id } = await params
-  const team = await fetchTeam(id)
-
-  if (!team) {
-    redirect('/login')
-  }
-
-  return <div>팀 정보: {team.name}</div>
-}
-```
-
-> **알아두면 좋은 점**:
->
-> - `redirect`는 내부적으로 `NEXT_REDIRECT` 특수 에러를 던져 현재 세그먼트의 렌더링을 즉시 중단한다. 따라서 `try/catch` 블록 내부에서 호출하면 에러가 가로채져 리다이렉트가 동작하지 않으므로, 반드시 `try/catch` **외부**에서 호출해야 한다.
-> - 영구 리다이렉트(HTTP 308)가 필요한 경우 [`permanentRedirect`](./permanentRedirect.md)를 사용한다.
-> - Client Component의 클릭 이벤트 핸들러 내부에서는 `redirect()` 대신 [`useRouter`](./use-router.md)의 `router.push()` 또는 `router.replace()`를 사용해야 한다.
+---
 
 ### 매개변수 (Parameters)
 
-```tsx
-redirect(path: string, type?: 'replace' | 'push'): void
-```
+`redirect(url, type)`
 
-- `path`: 이동할 대상 URL 문자열이다. 상대 경로(`/login`) 또는 외부 절대 URL(`https://example.com`)을 모두 지원한다.
-- `type` (선택 사항): 브라우저 히스토리 스택에 쌓을지(`'push'`) 아니면 현재 URL을 교체할지(`'replace'`)를 지정한다.
-  - **Server Action**: 기본값이 `'push'`로 동작한다.
-  - **기타 모든 컨텍스트**: 기본값이 `'replace'`로 동작한다.
-  - `RedirectType` 열거형(`RedirectType.replace`, `RedirectType.push`)을 사용할 수도 있다.
+1. **`url`**: 이동할 대상 경로 문자열 (상대 경로 `/login` 또는 완전한 절대 URL `https://example.com/login`)
+2. **`type`** (선택 사항): Server Action 내에서 브라우저 히스토리 스택을 제어하는 리다이렉트 유형
+   - `'replace'` (기본값): 현재 URL을 히스토리 스택에서 교체하여 '뒤로 가기' 시 이전 페이지로 이동
+   - `'push'`: 새 URL을 히스토리 스택에 추가
 
-### HTTP 상태코드: 307 vs 302
+---
 
-`redirect()`는 기본적으로 `307 Temporary Redirect` 상태코드를 반환한다:
+### 동작 메커니즘 및 주의사항
 
-- **302 Temporary Redirect**: 브라우저에 따라 `POST` 요청을 `GET`으로 임의 변경하는 문제가 있었다.
-- **307 Temporary Redirect**: 리다이렉트 시 원래의 HTTP 요청 메서드(`POST`, `GET` 등)를 그대로 유지한다.
-- **Server Action 예외**: 점진적 향상(Progressive Enhancement) 폼 제출 시에는 브라우저가 `GET`으로 후속 요청을 보내도록 `303 See Other`를 반환하며, 클라이언트 자바스크립트가 활성화된 환경에서는 브라우저 전체 새로고침 없이 클라이언트 사이드 SPA 네비게이션으로 처리된다.
+#### 1. 에러 기반 제어 흐름 (`NEXT_REDIRECT`)
 
-### 예제
+`redirect()`는 내부적으로 `NEXT_REDIRECT` 특수 에러를 `throw`하여 컴포넌트 렌더링이나 비동기 작업의 실행을 즉시 중단하고 리다이렉트를 시작한다.
 
-#### Server Action에서 처리 후 리다이렉트
+> **알아두면 좋은 점 (try/catch 사용 시 주의)**:
+>
+> `redirect()`를 `try...catch` 블록 내부에서 호출하면 `catch` 문에 의해 `NEXT_REDIRECT` 에러가 잡혀 리다이렉트가 취소될 수 있다. 따라서 **`try/catch` 블록 외부에서 호출**하거나 `catch` 블록에서 `isRedirectError` 또는 `unstable_rethrow`로 다시 던져야 한다.
 
-```ts filename="app/actions.ts" switcher
+```tsx filename="app/actions.ts"
 'use server'
 
 import { redirect } from 'next/navigation'
 
-export async function createPost(formData: FormData) {
-  let postId: string
-
+export async function createUser(formData: FormData) {
   try {
-    const post = await db.post.create({
-      data: { title: formData.get('title') as string },
-    })
-    postId = post.id
+    await db.user.create({ data: { name: formData.get('name') } })
   } catch (error) {
-    return { error: '게시물 생성에 실패했습니다' }
+    return { error: '생성 실패' }
   }
 
-  // ⭕ try/catch 블록 바깥에서 redirect 호출
-  redirect(`/posts/${postId}`)
+  // try/catch 블록 외부에서 호출
+  redirect('/dashboard')
 }
 ```
 
-```js filename="app/actions.js" switcher
-'use server'
+#### 2. HTTP 307(Temporary Redirect)을 사용하는 이유 (FAQ)
 
-import { redirect } from 'next/navigation'
+Next.js는 기본 리다이렉트 상태 코드로 전통적인 `302 Found` 대신 **`307 Temporary Redirect`**를 사용한다.
 
-export async function createPost(formData) {
-  let postId
+- `302`는 브라우저에 따라 POST 요청을 GET 요청으로 임의 변경하는 문제가 있었다.
+- `307`은 클라이언트가 **원래의 HTTP 메서드(POST, GET 등)와 요청 본문을 그대로 유지한 채 리다이렉트 대상 URL로 재요청**하도록 보장하므로 데이터 변경 흐름에서 훨씬 안전하다.
+- 영구 리다이렉트가 필요할 때는 [`permanentRedirect`](./permanentRedirect.md)(308)를 사용한다.
 
-  try {
-    const post = await db.post.create({
-      data: { title: formData.get('title') },
-    })
-    postId = post.id
-  } catch (error) {
-    return { error: '게시물 생성에 실패했습니다' }
-  }
+---
 
-  redirect(`/posts/${postId}`)
-}
-```
+### 실행 컨텍스트별 동작 비교
+
+| 컨텍스트 | 상태 코드 / 동작 |
+|---|---|
+| **Server Component** | 렌더링 중 즉시 중단되고 클라이언트에 307 리다이렉트 응답을 반환 |
+| **Server Action** | 액션 완료 후 클라이언트 사이드에서 대상 경로로 즉시 내비게이션 |
+| **Route Handler** | `307 Temporary Redirect` HTTP 응답 헤더(`Location`)를 즉시 반환 |
+| **Client Component** | 이벤트 핸들러 대신 `useRouter().push()`를 권장하며, 렌더링 중 호출 시 Server Component와 동일하게 307로 처리 |
+
+---
 
 ### Version History
 
 | 버전 | 변경 사항 |
 |---|---|
-| `v13.0.0` | App Router에 `redirect` 도입 |
+| `v13.0.0` | App Router 전용 `redirect` 도입 |
 
 ## 예제 및 데모 설계
 
-- Server Component에서 인증 세션 확인 후 세션이 없을 때 `/login`으로 307 리다이렉트되는 흐름을 구성한다.
-- Server Action에서 글 등록 후 상세 페이지로 리다이렉트될 때 클라이언트 네비게이션으로 부드럽게 화면이 전환되는지 확인한다.
-- `try/catch` 블록 내부에 `redirect()`를 배치했을 때 발생하는 리다이렉트 누락 현상과 외부로 이동했을 때의 정상 동작을 비교 검증한다.
+- Server Action에서 폼 제출 성공 후 `redirect('/dashboard')`를 호출하여 상태 코드와 페이지 전환을 확인한다.
+- `try/catch` 내부에서 잘못 `redirect()`를 호출했을 때 리다이렉트가 실패하는 현상과, `try/catch` 밖으로 분리하여 정상 동작하는 패턴을 비교 검증한다.
 
 ## 연습 문제
 
-1. `redirect()` 함수가 기본적으로 반환하는 HTTP 임시 리다이렉트 상태코드는?
-   - A. 301
-   - B. 302
-   - C. 307
-   - D. 308
-
-<details><summary>정답 보기</summary>
-
-정답: **C**  
-해설: Next.js의 `redirect()`는 요청 메서드를 보존하는 `307 Temporary Redirect` 상태코드를 기본값으로 사용한다.
-</details>
-
-2. `redirect()`를 사용할 때 권장되는 코드 배치 규칙은?
-   - A. 반드시 `try/catch`의 `try` 블록 내부에서 호출해야 한다.
-   - B. `NEXT_REDIRECT` 예외가 차단되지 않도록 `try/catch` 블록 바깥에서 호출해야 한다.
-   - C. `return await redirect()` 형태로 비동기 호출해야 한다.
-   - D. `next.config.js` 내부에서만 호출해야 한다.
+1. Next.js의 `redirect()` 함수가 기본 상태 코드로 302 대신 307을 사용하는 주된 기술적 이유는?
+   - A. 307이 검색 엔진 크롤링 속도를 높여주기 때문
+   - B. 원래 요청의 HTTP 메서드(예: POST)와 본문을 보존하여 안전하게 리다이렉트하기 때문
+   - C. 브라우저가 응답을 영구 캐시하도록 만들기 때문
+   - D. HTTPS 연결을 강제하기 때문
 
 <details><summary>정답 보기</summary>
 
 정답: **B**  
-해설: `redirect()`는 프레임워크가 가로채야 하는 특수 예외를 던지므로 `catch` 문에 잡히지 않도록 `try/catch` 블록 외부에서 실행해야 한다.
+해설: 307 상태 코드는 HTTP 메서드(POST/GET)의 변형 없이 요청을 그대로 대상 경로로 전달하도록 보장한다.
+</details>
+
+2. `redirect()`를 Server Action에서 사용할 때 권장되는 작성 패턴은?
+   - A. `try` 블록 내부에서 호출하고 `catch`에서 에러를 무시한다.
+   - B. `try/catch` 블록 외부에서 작업 성공 후 호출한다.
+   - C. `redirect()` 호출 후 `return true`를 반드시 작성한다.
+   - D. `redirect()`를 `Promise.all`로 감싸서 실행한다.
+
+<details><summary>정답 보기</summary>
+
+정답: **B**  
+해설: `redirect`는 `NEXT_REDIRECT` 에러를 던져 흐름을 제어하므로 `try/catch` 내부에서 호출하면 에러가 가로채어 리다이렉트가 취소될 수 있다.
 </details>
 
 ## 챕터 요약
 
-- `redirect`는 사용자를 다른 내부 또는 외부 URL로 이동시키는 `next/navigation`의 함수다.
-- 기본적으로 HTTP 307 상태코드를 사용하여 요청 메서드를 보존한다.
-- Server Component, Client Component(렌더링 중), Route Handler, Server Action에서 사용할 수 있다.
-- Server Action에서는 기본적으로 `'push'`(히스토리 추가)로, 그 외에는 `'replace'`(히스토리 교체)로 동작한다.
-- 예외 전파 특성상 `try/catch` 블록 외부에서 호출해야 한다.
+- `redirect`는 307 임시 리다이렉트를 수행하여 원래의 HTTP 메서드를 안전하게 보존한다.
+- 내부적으로 특수 에러를 던지므로 `try/catch` 블록 외부에서 호출해야 한다.
+- Server Action에서는 `RedirectType`(`'replace'` / `'push'`)으로 브라우저 히스토리 스택을 제어할 수 있다.

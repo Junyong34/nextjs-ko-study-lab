@@ -8,7 +8,7 @@
 
 - 실제 사용자 관점의 웹 성능 핵심 지표인 Core Web Vitals를 수집하는 `useReportWebVitals` 훅의 역할을 이해한다.
 - TTFB, FCP, LCP, CLS, INP 등의 핵심 성능 메트릭의 의미와 `metric` 객체 구조(`rating`, `value`, `delta`)를 파악한다.
-- 클라이언트 컴포넌트 경계를 최소화하여 루트 레이아웃에 `WebVitals` 수집 컴포넌트를 구성하는 모범 사례를 적용한다.
+- Client Component 경계를 최소화하여 루트 레이아웃에 `WebVitals` 수집 컴포넌트를 구성하는 모범 사례를 적용한다.
 - `navigator.sendBeacon` 및 Google Analytics로 성능 데이터를 전송하는 파이프라인을 구축한다.
 
 ## 핵심 개념 및 설명
@@ -43,7 +43,7 @@ export function WebVitals() {
 }
 ```
 
-성능 최적화를 위해 위와 같이 클라이언트 컴포넌트로 분리한 후, 서버 컴포넌트인 루트 레이아웃(`app/layout.tsx`)에서 임포트하여 삽입하는 것이 권장된다:
+성능 최적화를 위해 위와 같이 Client Component로 분리한 후, Server Component인 루트 레이아웃(`app/layout.tsx`)에서 임포트하여 삽입하는 것이 권장된다:
 
 ```tsx filename="app/layout.tsx"
 import { WebVitals } from './components/web-vitals'
@@ -90,10 +90,27 @@ function sendToAnalytics(metric: any) {
 }
 
 export function WebVitals() {
-  useReportWebVitals(sendToAnalytics)
+  useReportWebVitals((metric) => {
+    sendToAnalytics(metric)
+
+    // Google Analytics (gtag.js) 연동 예시
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      ;(window as any).gtag('event', metric.name, {
+        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+        event_label: metric.id, // 고유 측정 ID를 통해 지표 분포 수동 집계 가능
+        non_interaction: true,
+      })
+    }
+  })
+
   return null
 }
 ```
+
+> **알아두면 좋은 점 (Google Analytics 및 모범 사례)**:
+>
+> - **Google Analytics `id` 활용**: `metric.id` 값을 이벤트 라벨로 전달하면, 단일 페이지 세션 동안 누적되는 메트릭 분포를 BigQuery나 GA 커스텀 보고서에서 수동으로 정밀 집계할 수 있다.
+> - **컴포넌트 분리 필수**: `useReportWebVitals`는 `'use client'` 훅이므로 전체 루트 레이아웃을 Client Component로 만들지 말고, 위와 같이 별도의 작은 잎새(Leaf) 컴포넌트로 분리하여 루트 레이아웃에 삽입해야 한다.
 
 ### Version History
 
@@ -137,5 +154,5 @@ export function WebVitals() {
 
 - `useReportWebVitals`는 Core Web Vitals 성능 지표를 수집하는 `next/web-vitals`의 클라이언트 훅이다.
 - TTFB, FCP, LCP, FID, CLS, INP 등의 주요 지표를 실시간 측정한다.
-- 루트 레이아웃에 별도 클라이언트 컴포넌트로 분리 배치하는 것이 권장된다.
+- 루트 레이아웃에 별도 Client Component로 분리 배치하는 것이 권장된다.
 - `navigator.sendBeacon`을 활용해 외부 분석 서버로 비차단 전송할 수 있다.

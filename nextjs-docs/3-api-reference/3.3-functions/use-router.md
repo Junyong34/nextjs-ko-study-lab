@@ -178,14 +178,14 @@ export default function Page() {
 
 1. `useRouter`의 `router.refresh()` 메서드에 대한 설명으로 올바른 것은?
    - A. 서버 측 데이터 캐시(`revalidateTag` 등)를 완전히 무효화한다.
-   - B. 현재 라우트의 Client Cache를 비우고 서버 컴포넌트를 다시 렌더링하지만, 영향을 받지 않은 클라이언트 상태(`useState` 등)는 유지한다.
+   - B. 현재 라우트의 Client Cache를 비우고 Server Component를 다시 렌더링하지만, 영향을 받지 않은 클라이언트 상태(`useState` 등)는 유지한다.
    - C. 브라우저 전체 새로고침(`window.location.reload()`)과 동일하게 동작한다.
    - D. `next/router`에서만 사용할 수 있으며 App Router에서는 지원되지 않는다.
 
 <details><summary>정답 보기</summary>
 
 정답: **B**  
-해설: `router.refresh()`는 서버에 새 요청을 보내고 Client Cache를 비우지만, 브라우저 상태나 클라이언트 React 상태(`useState` 등)를 잃지 않고 서버 컴포넌트 페이로드를 병합한다. 서버 측 영구 캐시 무효화는 `revalidatePath`/`revalidateTag`를 사용해야 한다.
+해설: `router.refresh()`는 서버에 새 요청을 보내고 Client Cache를 비우지만, 브라우저 상태나 클라이언트 React 상태(`useState` 등)를 잃지 않고 Server Component 페이로드를 병합한다. 서버 측 영구 캐시 무효화는 `revalidatePath`/`revalidateTag`를 사용해야 한다.
 </details>
 
 2. App Router에서 `useRouter`를 사용할 때 `pathname`과 쿼리 문자열을 읽는 올바른 방법은?
@@ -204,6 +204,6 @@ export default function Page() {
 
 - `useRouter`는 Client Component에서 프로그래밍 방식의 내비게이션을 수행할 때 사용하며, `next/navigation`에서 임포트한다.
 - `push`는 히스토리 스택에 추가하고 `replace`는 현재 항목을 대체하며, `scroll: false`로 스크롤 이동을 비활성화할 수 있다.
-- `refresh()`는 클라이언트 상태를 유지하면서 서버 컴포넌트 및 최신 데이터를 다시 가져와 병합한다.
+- `refresh()`는 클라이언트 상태를 유지하면서 Server Component 및 최신 데이터를 다시 가져와 병합한다.
 - `pathname`과 `query`는 각각 `usePathname()`과 `useSearchParams()` 전용 훅을 통해 읽어야 한다.
 - `bfcacheId`를 컴포넌트 키로 전달하면 새 내비게이션에서는 상태를 리셋하고 뒤로 가기 시에는 상태를 복원할 수 있다.

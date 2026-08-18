@@ -48,7 +48,7 @@ const getCachedData = unstable_cache(fetchData, keyParts?, options?)
 - `keyParts`: 캐시 키를 추가로 식별하기 위한 문자열 배열이다. 기본적으로 함수의 문자열 표현과 전달 인자가 캐시 키로 사용되지만, 함수 외부 클로저 변수를 매개변수로 넘기지 않고 참조할 때는 반드시 `keyParts`에 해당 변수를 포함해야 한다.
 - `options`: 캐시 동작을 제어하는 설정 객체다.
   - `tags`: 캐시 무효화를 제어하기 위한 태그 문자열 배열이다 ([`revalidateTag`](./revalidateTag.md)와 연동).
-  - `revalidate`: 캐시를 재검증할 주기(초 단위)다. 생략하거나 `false`로 설정하면 무기한 캐시된다.
+  - `revalidate`: 캐시를 revalidate할 주기(초 단위)다. 생략하거나 `false`로 설정하면 무기한 캐시된다.
 
 ### 반환값 (Returns)
 
@@ -73,7 +73,7 @@ export default async function Page({
     [userId], // 외부 userId 변수를 캐시 키에 명시적 포함
     {
       tags: ['users', `user-${userId}`],
-      revalidate: 60, // 60초마다 재검증
+      revalidate: 60, // 60초마다 revalidation
     }
   )
 

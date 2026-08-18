@@ -46,7 +46,7 @@ export default function Layout({ children }) {
 
 > **알아두면 좋은 점**:
 >
-> - `after`는 요청 시점 API(Request-time API)가 아니므로 호출한다고 해서 정적 페이지가 다이나믹 라우트로 강제 전환되지 않는다. 정적 페이지에서는 빌드 시점 또는 재검증 시점에 실행된다.
+> - `after`는 요청 시점 API(Request-time API)가 아니므로 호출한다고 해서 정적 페이지가 다이나믹 라우트로 강제 전환되지 않는다. 정적 페이지에서는 빌드 시점 또는 revalidation 시점에 실행된다.
 > - 응답 도중 에러가 던져지거나 [`notFound()`](./not-found.md), [`redirect()`](./redirect.md)가 호출되더라도 `after` 콜백은 항상 실행된다.
 > - 서버리스 환경에서는 플랫폼의 `waitUntil` 프리미티브를 활용하여 응답 반환 후에도 함수 인스턴스가 유지되도록 동작한다. 최대 실행 시간은 [`maxDuration`](../3.1-file-conventions/route-segment-config/maxDuration.md) 설정에 따른다.
 
@@ -148,7 +148,7 @@ export default async function Page() {
 1. `after` 함수를 사용하는 주요 목적으로 올바른 것은?
    - A. 사용자 브라우저의 DOM 렌더링을 차단하여 동기화한다.
    - B. 클라이언트에게 HTTP 응답을 전송한 후, 응답 시간을 지연시키지 않고 백그라운드 부수 작업(로깅, 분석 등)을 실행한다.
-   - C. 클라이언트 컴포넌트의 `useEffect`를 대체한다.
+   - C. Client Component의 `useEffect`를 대체한다.
    - D. 데이터베이스의 스키마 마이그레이션을 자동 실행한다.
 
 <details><summary>정답 보기</summary>

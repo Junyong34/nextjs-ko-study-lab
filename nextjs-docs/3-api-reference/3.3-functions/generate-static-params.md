@@ -6,19 +6,17 @@
 
 ## 학습 목표
 
-- [다이나믹 라우트](../3.1-file-conventions/dynamic-routes.md) 세그먼트를 빌드 시점에 정적으로 사전 렌더링(SSG)하는 `generateStaticParams` 함수의 역할을 이해한다.
-- Pages Router의 `getStaticPaths`와 비교하여 App Router에서의 직관적인 객체 배열 반환 모델을 파악한다.
-- `dynamicParams = false` 세그먼트 설정과의 조합을 통해 사전 정의되지 않은 경로의 404 처리를 구성한다.
-- 다중 중첩 다이나믹 세그먼트에서 하향식(Top-down) 및 상향식(Bottom-up) 파라미터 생성 구조를 구현한다.
+- 빌드 시점에 다이나믹 라우트 세그먼트를 정적으로 prerender하기 위한 `generateStaticParams` 함수의 동작 원리와 작성법을 마스터한다.
+- 단일 세그먼트, 다중 중첩 세그먼트, Catch-all 세그먼트 등 다양한 라우팅 구조에 맞는 반환 객체 배열 패턴을 설계한다.
+- `dynamicParams` 설정(`true` / `false`)과 결합하여 빌드되지 않은 경로에 대한 런타임 폴백 및 404 정책을 결정한다.
+- 상위 레이아웃과 하위 페이지 세그먼트 간의 하향식(Top-Down) 실행 순서 및 매개변수 전달 구조를 이해한다.
+- Route Handler(`route.ts`)와 `generateStaticParams`를 결합하여 정적 API 엔드포인트를 생성하는 방법을 파악한다.
 
 ## 핵심 개념 및 설명
 
-`generateStaticParams` 함수는 [다이나믹 라우트](../3.1-file-conventions/dynamic-routes.md) 세그먼트(`[slug]`, `[id]`, `[...slug]`)와 함께 선언되어, 요청 시점이 아닌 **빌드 시점(`next build`)에 해당 페이지들을 정적으로 사전 렌더링(Prerendering)**하도록 대상 파라미터 목록을 반환하는 함수다.
+`generateStaticParams`는 다이나믹 라우트 세그먼트(`[slug]`, `[...slug]`)와 함께 사용되어 빌드 시점에 요청 경로를 정적으로 생성(prerender)하는 Server Component 전용 함수다.
 
-Page(`page.tsx`), Layout(`layout.tsx`), [Route Handler](../3.1-file-conventions/route.md)(`route.ts`)에서 사용할 수 있다.
-
-```tsx filename="app/blog/[slug]/page.tsx" switcher
-// 1. 빌드 시 사전 생성할 [slug] 파라미터 배열 반환
+```tsx filename="app/blog/[slug]/page.tsx"
 export async function generateStaticParams() {
   const posts = await fetch('https://api.example.com/posts').then((res) => res.json())
 
@@ -27,129 +25,192 @@ export async function generateStaticParams() {
   }))
 }
 
-// 2. generateStaticParams에서 반환된 params를 받아 정적 HTML이 생성됨
 export default async function Page({
   params,
 }: {
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = await fetch(`https://api.example.com/posts/${slug}`).then((res) => res.json())
-
-  return (
-    <article>
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
-    </article>
-  )
-}
-```
-
-```jsx filename="app/blog/[slug]/page.js" switcher
-export async function generateStaticParams() {
-  const posts = await fetch('https://api.example.com/posts').then((res) => res.json())
-
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
-}
-
-export default async function Page({ params }) {
-  const { slug } = await params
-  const post = await fetch(`https://api.example.com/posts/${slug}`).then((res) => res.json())
-
-  return (
-    <article>
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
-    </article>
-  )
+  return <article>게시물: {slug}</article>
 }
 ```
 
 > **알아두면 좋은 점**:
 >
-> - `generateStaticParams` 내부의 `fetch` 요청은 동일 렌더 트리 및 `page.tsx` 내의 동일 `fetch`와 자동으로 메모이제이션되어 중복 호출되지 않는다.
-> - 개발 모드(`next dev`)에서는 해당 라우트로 네비게이션할 때 호출된다.
-> - ISR(증분 정적 재생성) 주기에 페이지가 재검증될 때는 `generateStaticParams`가 다시 실행되지 않는다.
-> - Pages Router의 `getStaticPaths`를 완전히 대체한다.
+> - `generateStaticParams` 내부에서 호출하는 `fetch` 요청은 동일한 엔드포인트일 경우 페이지 렌더링 중 호출되는 `fetch`와 자동으로 메모이제이션되어 네트워크 중복이 발생하지 않는다.
+> - ISR(증분 정적 재생성) 주기에 페이지가 revalidate될 때는 `generateStaticParams`가 다시 실행되지 않고 해당 페이지만 백그라운드에서 다시 렌더링된다.
+> - 개발 환경(`next dev`)에서는 빌드 시점 대신 경로를 요청할 때 호출된다.
+
+---
+
+### 라우트 세그먼트 패턴별 반환 구조
+
+`generateStaticParams`는 각 세그먼트의 파라미터 이름을 키로 하는 **객체들의 배열**을 반환해야 한다.
+
+#### 1. 단일 다이나믹 세그먼트 (`app/blog/[slug]/page.tsx`)
+
+```tsx
+export async function generateStaticParams() {
+  return [{ slug: 'post-1' }, { slug: 'post-2' }]
+}
+```
+
+#### 2. 다중 중첩 다이나믹 세그먼트 (`app/products/[category]/[item]/page.tsx`)
+
+상위 세그먼트와 하위 세그먼트의 파라미터를 모두 포함하는 객체 배열을 반환한다.
+
+```tsx
+export async function generateStaticParams() {
+  return [
+    { category: 'electronics', item: 'phone' },
+    { category: 'electronics', item: 'laptop' },
+    { category: 'clothing', item: 't-shirt' },
+  ]
+}
+```
+
+#### 3. Catch-all 다이나믹 세그먼트 (`app/docs/[...slug]/page.tsx`)
+
+배열 형태의 경로 조각들을 전달한다.
+
+```tsx
+export async function generateStaticParams() {
+  return [
+    { slug: ['getting-started', 'installation'] }, // /docs/getting-started/installation
+    { slug: ['components', 'buttons'] },           // /docs/components/buttons
+  ]
+}
+```
+
+#### 4. Optional Catch-all 세그먼트 (`app/shop/[[...slug]]/page.tsx`)
+
+루트 경로(`/shop`)를 포함하려면 빈 배열 `[]`을 함께 반환한다.
+
+```tsx
+export async function generateStaticParams() {
+  return [
+    { slug: [] },                  // /shop
+    { slug: ['summer-collection'] }, // /shop/summer-collection
+  ]
+}
+```
+
+---
 
 ### `dynamicParams` 옵션과의 연동
 
-`generateStaticParams`에 정의되지 않은 새로운 경로로 사용자가 접근했을 때의 동작을 제어한다:
+`generateStaticParams`에서 반환되지 않은 경로에 사용자가 접근했을 때의 동작을 제어한다.
 
 ```tsx filename="app/blog/[slug]/page.tsx"
-// generateStaticParams에 없는 slug 요청은 즉시 404를 반환
-export const dynamicParams = false
+export const dynamicParams = false // 지정되지 않은 경로는 즉시 404 반환
+
+export async function generateStaticParams() {
+  return [{ slug: 'first-post' }]
+}
 ```
 
-- `dynamicParams = true` (기본값): 정의되지 않은 경로는 요청 시점에 최초 1회 서버 렌더링된 후 정적 캐시에 추가된다.
-- `dynamicParams = false`: 목록에 없는 경로는 즉시 404 Not Found 화면을 표시한다.
+- **`dynamicParams: true` (기본값)**: `generateStaticParams`에 없는 경로로 요청이 들어오면 서버에서 온디맨드로 페이지를 다이나믹 렌더링하고 캐시한다.
+- **`dynamicParams: false`**: `generateStaticParams`에 정의되지 않은 모든 경로는 404(`notFound`)로 즉시 처리된다. (정적 파일만 허용할 때 필수)
 
-### 다중 중첩 다이나믹 세그먼트 생성
+---
 
-#### 하향식 (Top-down) 부모-자식 연계
+### 하향식 (Top-Down) 평가 순서
 
-부모 레이아웃(`app/products/[category]/layout.tsx`)에서 카테고리 목록을 생성하고, 자식 페이지(`app/products/[category]/[product]/page.tsx`)는 부모로부터 전달받은 `params.category`를 활용해 상품 목록을 생성한다:
+동일 라우트 경로 상의 상위 레이아웃과 하위 페이지에 모두 `generateStaticParams`가 선언되어 있다면, **상위 세그먼트가 먼저 실행**되고 그 결과가 하위 세그먼트의 `params` 인자로 전달된다.
 
-```tsx filename="app/products/[category]/[product]/page.tsx" switcher
+```tsx filename="app/[category]/[product]/page.tsx"
+// 상위 app/[category]/layout.tsx 의 generateStaticParams가 먼저 평가됨
 export async function generateStaticParams({
-  params: { category },
+  params,
 }: {
   params: { category: string }
 }) {
-  const products = await fetch(`https://api.example.com/products?category=${category}`).then((res) =>
-    res.json()
-  )
+  const { category } = params
+  const products = await getProductsByCategory(category)
 
-  return products.map((product: { id: string }) => ({
+  return products.map((product) => ({
     product: product.id,
   }))
 }
 ```
 
+---
+
+### Route Handler와의 연계 (`route.ts`)
+
+정적 API 엔드포인트를 빌드 시점에 미리 생성할 수도 있다.
+
+```tsx filename="app/api/posts/[id]/route.ts"
+export async function generateStaticParams() {
+  return [{ id: '1' }, { id: '2' }]
+}
+
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+  return Response.json({ id, title: `Post ${id}` })
+}
+```
+
+---
+
 ### Version History
 
 | 버전 | 변경 사항 |
 |---|---|
-| `v13.0.0` | App Router에 `generateStaticParams` 도입 (`getStaticPaths` 대체) |
+| `v15.0.0` | 페이지 컴포넌트의 `params`가 `Promise`로 변경 |
+| `v13.0.0` | `getStaticPaths`를 대체하는 `generateStaticParams` 도입 |
 
 ## 예제 및 데모 설계
 
-- 블로그 글 100개 중 상위 10개만 빌드 시점에 사전 생성(`generateStaticParams`)하고, 나머지 90개는 첫 요청 시점에 온디맨드로 정적 생성되는 하이브리드 빌드를 구성한다.
-- `export const dynamicParams = false`를 활성화한 상태에서 미등록 ID 접근 시 즉시 404 화면이 뜨는지 검증한다.
-- `generateStaticParams`와 `page.tsx`에서 같은 API를 호출하여 메모이제이션을 확인한다.
+- `[slug]` 라우트에 `generateStaticParams`를 구성하고 `next build` 실행 시 `.next/server/app`에 HTML이 정적 생성되는지 출력 로그를 확인한다.
+- `dynamicParams = false`를 설정하고 목록에 없는 슬러그로 접근 시 404 페이지가 반환되는지 테스트한다.
+- 다중 중첩 라우트(`[category]/[item]`)에서 상위 레이아웃의 `params`를 하위 세그먼트에서 수신하여 조합하는 하향식 빌드 흐름을 검증한다.
 
 ## 연습 문제
 
-1. `generateStaticParams`에서 생성하지 않은 새로운 다이나믹 경로로 사용자가 접속했을 때, 즉시 404 오류를 반환하도록 강제하는 라우트 세그먼트 설정은?
-   - A. `export const dynamic = 'error'`
-   - B. `export const dynamicParams = false`
-   - C. `export const revalidate = 0`
-   - D. `export const fallback = false`
+1. `generateStaticParams`에서 반환해야 하는 올바른 데이터 구조는?
+   - A. 경로 문자열의 배열: `['/post-1', '/post-2']`
+   - B. 세그먼트 파라미터 이름을 키로 하는 객체들의 배열: `[{ slug: 'post-1' }, { slug: 'post-2' }]`
+   - C. 단일 객체: `{ slugs: ['post-1', 'post-2'] }`
+   - D. Map 객체: `new Map()`
 
 <details><summary>정답 보기</summary>
 
 정답: **B**  
-해설: `export const dynamicParams = false`를 선언하면 `generateStaticParams`가 사전에 정의한 경로 목록 이외의 모든 요청에 대해 404 Not Found를 응답한다.
+해설: `generateStaticParams`는 각 다이나믹 세그먼트 매개변수 이름을 키로 갖는 객체들의 배열(`Array<Record<string, string | string[]>>`)을 반환해야 한다.
 </details>
 
-2. `generateStaticParams`가 Pages Router의 어떤 함수를 대체하는가?
-   - A. `getServerSideProps`
-   - B. `getStaticPaths`
-   - C. `getInitialProps`
-   - D. `getStaticProps`
+2. `generateStaticParams`에 정의되지 않은 경로로의 접근을 완전히 차단하고 404 페이지를 반환하도록 강제하는 설정은?
+   - A. `export const staticOnly = true`
+   - B. `export const dynamicParams = false`
+   - C. `export const fallback = false`
+   - D. `export const strictParams = true`
 
 <details><summary>정답 보기</summary>
 
 정답: **B**  
-해설: App Router의 `generateStaticParams`는 Pages Router에서 사전 렌더링 경로를 지정하던 `getStaticPaths`를 직관적인 모델로 대체한 함수다.
+해설: `export const dynamicParams = false`를 선언하면 사전 생성되지 않은 임의의 경로 요청 시 온디맨드 렌더링 대신 즉시 404 Not Found를 반환한다.
+</details>
+
+3. Catch-all 세그먼트(`app/docs/[...slug]/page.tsx`)에서 `/docs/a/b` 경로를 prerender하기 위한 올바른 반환 객체는?
+   - A. `{ slug: 'a/b' }`
+   - B. `{ slug: ['a', 'b'] }`
+   - C. `{ path: ['a', 'b'] }`
+   - D. `{ slug: { first: 'a', second: 'b' } }`
+
+<details><summary>정답 보기</summary>
+
+정답: **B**  
+해설: Catch-all 다이나믹 세그먼트(`[...slug]`)는 경로 세그먼트들을 문자열 배열(`['a', 'b']`) 형태로 매핑해야 한다.
 </details>
 
 ## 챕터 요약
 
-- `generateStaticParams`는 빌드 시점에 다이나믹 라우트를 정적으로 사전 생성(SSG)하는 함수다.
-- Page, Layout, Route Handler에서 파라미터 객체 배열을 반환하여 사용한다.
-- `dynamicParams = false`로 미등록 경로의 404 처리를 강제할 수 있다.
-- 다중 세그먼트의 상향식/하향식 파라미터 조합을 완벽히 지원한다.
-- 동일 렌더 트리 내 중복 데이터 패칭은 자동 메모이제이션된다.
+- `generateStaticParams`는 빌드 시점에 다이나믹 라우트의 경로들을 미리 정적으로 생성(prerender)한다.
+- 단일, 다중, Catch-all(`[...slug]`), Optional Catch-all(`[[...slug]]`) 등 모든 라우팅 구조를 지원한다.
+- `dynamicParams: false` 설정을 통해 사전 정의되지 않은 경로에 대한 엄격한 404 제어가 가능하다.
+- 상위 세그먼트부터 하위 세그먼트로 순차 평가되며, 상위 `params`가 하위 함수로 주입된다.
+- 내부의 중복 `fetch` 호출은 자동 메모이제이션된다.

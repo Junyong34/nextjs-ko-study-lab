@@ -9,7 +9,7 @@
 - 특정 캐시 태그가 지정된 데이터를 온디맨드로 무효화하는 `revalidateTag` 함수의 사용법을 익힌다.
 - 백그라운드에서 데이터를 갱신하면서 이전 캐시를 즉시 서빙하는 Stale-While-Revalidate(SWR) 동작 메커니즘을 이해한다.
 - Next.js 최신 2인자 시그니처인 `profile="max"` 옵션과 웹훅용 `{ expire: 0 }`의 역할을 파악한다.
-- Server Action 및 Route Handler(외부 CMS 웹훅 등)에서 태그 기반 재검증을 구현한다.
+- Server Action 및 Route Handler(외부 CMS 웹훅 등)에서 태그 기반 revalidate을 구현한다.
 
 ## 핵심 개념 및 설명
 
@@ -25,14 +25,18 @@
 revalidateTag(tag: string, profile: string | { expire?: number }): void
 ```
 
-- `tag`: 재검증하려는 데이터와 연결된 캐시 태그 문자열(최대 256자, 대소문자 구분).
-- `profile`: 재검증 동작 방식을 지정하는 프로필이다.
+- `tag`: revalidate하려는 데이터와 연결된 캐시 태그 문자열(최대 256자, 대소문자 구분).
+- `profile`: revalidation 동작 방식을 지정하는 프로필이다.
   - **`profile="max"` (권장)**: 태그 항목을 stale 상태로 표시하고, 다음 방문 시 백그라운드에서 새로고침을 수행하는 Stale-While-Revalidate 시맨틱을 제공한다.
   - **`{ expire: 0 }`**: 외부 웹훅 호출 시 즉각적인 만료가 필요한 경우 사용한다.
   - **단일 인자 형태 (더 이상 권장되지 않음)**: 인자 없이 `revalidateTag(tag)`만 호출하는 형태는 deprecated되었으며, 2인자 시그니처를 사용하거나 [`updateTag`](./updateTag.md)로 마이그레이션해야 한다.
 
-> **알아두면 좋은 점**:
-> `profile="max"`를 사용할 때 `revalidateTag`는 태그 데이터를 stale로 표시할 뿐이며, 실제 새 데이터 가져오기는 해당 태그를 사용하는 페이지를 사용자가 다음 번에 방문할 때 발생한다. 따라서 호출 즉시 대량의 재검증 트래픽이 한 번에 발생하지 않는다.
+> **알아두면 좋은 점 (revalidateTag 호출 규격 및 동작)**:
+>
+> - **단일 인자 호출의 Deprecation**: `revalidateTag(tag)`와 같이 1개 인자만 넘기는 형태는 deprecated되었다. TypeScript 환경에서는 수명 프로필(`'max'`)이나 옵션 객체(`{ expire: 0 }`)를 2번째 인자로 명시해야 한다.
+> - **즉시 만료 (`{ expire: 0 }`)**: Strapi, Contentful 등의 CMS 웹훅이나 실시간 업데이트가 필요한 경우, `{ expire: 0 }`을 전달하여 캐시를 즉시 만료시킬 수 있다.
+> - **`profile="max"` 동작**: `profile="max"`를 사용할 때 `revalidateTag`는 태그 데이터를 stale로 표시하며, 사용자가 해당 페이지를 방문할 때 백그라운드에서 새로운 데이터를 가져온다 (SWR).
+> - **`updateTag`와의 차이점**: `revalidateTag`는 다음 방문 시 백그라운드에서 데이터를 갱신하는 반면, [`updateTag`](./updateTag.md)는 읽기 전용 캐시를 즉시 새 값으로 덮어쓴다.
 
 ### 데이터에 태그를 부여하는 방법
 
@@ -53,7 +57,7 @@ revalidateTag(tag: string, profile: string | { expire?: number }): void
 
 ### 예제
 
-#### 1. Server Action에서 태그 재검증
+#### 1. Server Action에서 태그 revalidate
 
 ```ts filename="app/actions.ts" switcher
 'use server'
@@ -130,7 +134,7 @@ export async function POST(request) {
 
 ## 예제 및 데모 설계
 
-- Strapi/Contentful 등의 CMS 글 수정 웹훅을 수신하여 `revalidateTag('posts', 'max')`를 실행하고, 다음 페이지 접근 시 백그라운드 재검증이 일어나는 과정을 검증한다.
+- Strapi/Contentful 등의 CMS 글 수정 웹훅을 수신하여 `revalidateTag('posts', 'max')`를 실행하고, 다음 페이지 접근 시 백그라운드 revalidation이 일어나는 과정을 검증한다.
 - `profile="max"` 적용 시 기존 캐시가 즉시 응답되고 이후 백그라운드 갱신 데이터로 교체되는 SWR 시나리오를 테스트한다.
 - `updateTag`와 `revalidateTag`의 응답 대기 시간 차이를 비교한다.
 
@@ -145,7 +149,7 @@ export async function POST(request) {
 <details><summary>정답 보기</summary>
 
 정답: **B**  
-해설: `profile="max"` 옵션과 함께 `revalidateTag`를 호출하면 태그 항목이 stale로 마킹되어, 다음 요청 시 이전 캐시를 우선 반환하고 백그라운드에서 재검증을 수행한다.
+해설: `profile="max"` 옵션과 함께 `revalidateTag`를 호출하면 태그 항목이 stale로 마킹되어, 다음 요청 시 이전 캐시를 우선 반환하고 백그라운드에서 revalidation을 수행한다.
 </details>
 
 2. Next.js 최신 버전에서 `revalidateTag`의 권장 시그니처 형태는?
@@ -157,7 +161,7 @@ export async function POST(request) {
 <details><summary>정답 보기</summary>
 
 정답: **B**  
-해설: Next.js에서는 재검증 수명 프로필을 명시하는 2인자 시그니처(`revalidateTag(tag, profile)`) 사용이 권장된다.
+해설: Next.js에서는 revalidation 수명 프로필을 명시하는 2인자 시그니처(`revalidateTag(tag, profile)`) 사용이 권장된다.
 </details>
 
 ## 챕터 요약

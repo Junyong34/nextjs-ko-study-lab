@@ -43,7 +43,7 @@ export default async function submit() {
 `revalidatePath`는 서버 환경인 **Server Function**과 **Route Handler**에서만 호출할 수 있다. Client Component나 Proxy 파일에서는 실행할 수 없다.
 
 - **Server Function**: 현재 해당 경로를 보고 있는 경우 UI가 즉시 갱신된다.
-- **Route Handler**: 경로를 재검증 대상으로 표시하며, 다음 번 해당 경로 방문 시 실제 재검증이 수행된다. 따라서 다이나믹 세그먼트에 대해 호출하더라도 대량의 재검증이 즉시 한 번에 발생하지 않는다.
+- **Route Handler**: 경로를 revalidate 대상으로 표시하며, 다음 번 해당 경로 방문 시 실제 revalidation이 수행된다. 따라서 다이나믹 세그먼트에 대해 호출하더라도 대량의 revalidation이 즉시 한 번에 발생하지 않는다.
 
 ### 매개변수 (Parameters)
 
@@ -52,7 +52,7 @@ revalidatePath(path: string, type?: 'page' | 'layout'): void
 ```
 
 - `path`: 라우트 파일 구조를 나타내는 문자열이다. `/product/123`과 같은 리터럴 경로이거나 `/product/[slug]`와 같은 다이나믹 라우트 패턴이어야 한다. 대소문자를 구분하며 최대 1024자를 초과할 수 없다. `/page`나 `/layout`을 문자열 뒤에 덧붙이지 말고 `type` 매개변수를 사용해야 한다.
-- `type` (선택 사항): 재검증할 경로의 유형을 지정하는 `'page'` 또는 `'layout'` 문자열이다. `path`에 다이나믹 세그먼트(예: `/product/[slug]`)가 포함된 경우 이 매개변수는 **필수**다. 리터럴 경로(예: `/product/1`)인 경우 생략할 수 있다.
+- `type` (선택 사항): revalidate할 경로의 유형을 지정하는 `'page'` 또는 `'layout'` 문자열이다. `path`에 다이나믹 세그먼트(예: `/product/[slug]`)가 포함된 경우 이 매개변수는 **필수**다. 리터럴 경로(예: `/product/1`)인 경우 생략할 수 있다.
 
 ### 무효화 대상과 범위 (What can be invalidated)
 
@@ -104,7 +104,7 @@ export async function updatePost() {
 
 ### 예제
 
-#### Route Handler에서 웹훅 기반 재검증
+#### Route Handler에서 웹훅 기반 revalidate
 
 ```ts filename="app/api/revalidate/route.ts" switcher
 import { revalidatePath } from 'next/cache'
@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
   return Response.json({
     revalidated: false,
     now: Date.now(),
-    message: '재검증할 경로가 지정되지 않았습니다',
+    message: 'revalidation할 경로가 지정되지 않았습니다',
   })
 }
 ```
@@ -140,7 +140,7 @@ export async function GET(request) {
   return Response.json({
     revalidated: false,
     now: Date.now(),
-    message: '재검증할 경로가 지정되지 않았습니다',
+    message: 'revalidation할 경로가 지정되지 않았습니다',
   })
 }
 ```
@@ -186,7 +186,7 @@ export async function GET(request) {
 ## 챕터 요약
 
 - `revalidatePath`는 특정 URL 경로 또는 라우트 패턴의 캐시를 온디맨드로 무효화하는 서버 전용 함수다.
-- Server Function에서는 즉시 UI가 반영되며, Route Handler에서는 다음 방문 시 재검증된다.
+- Server Function에서는 즉시 UI가 반영되며, Route Handler에서는 다음 방문 시 revalidate된다.
 - `type: 'page'`는 단일 페이지만, `type: 'layout'`은 하위 레이아웃 및 페이지 전체를 무효화한다.
 - `rewrites`가 적용된 경우 브라우저 주소가 아닌 실제 파일 시스템의 대상(destination) 경로를 넘겨야 한다.
 - `updateTag`와 함께 사용하여 특정 경로와 전역 데이터 일관성을 동시에 유지할 수 있다.

@@ -54,7 +54,7 @@ export default nextConfig
 태그가 지정된 캐시는 [Server Function](../3.4-directives/use-server.md)이나 [Route Handler](../3.1-file-conventions/route.md)에서 온디맨드로 무효화할 수 있다:
 
 - [`updateTag`](./updateTag.md): 폼 제출과 같은 사용자 트리거 뮤테이션(Read-your-own-writes)에서 변경 직후 즉시 최신 데이터를 읽어야 할 때 사용한다. Server Function 내부에서만 호출 가능하다.
-- [`revalidateTag`](./revalidateTag.md): 백그라운드에서 재검증이 수행되는 동안 일시적으로 이전 캐시를 서빙해도 괜찮거나, Route Handler 또는 웹훅 컨텍스트에서 무효화할 때 사용한다.
+- [`revalidateTag`](./revalidateTag.md): 백그라운드에서 revalidation이 수행되는 동안 일시적으로 이전 캐시를 서빙해도 괜찮거나, Route Handler 또는 웹훅 컨텍스트에서 무효화할 때 사용한다.
 
 ```tsx filename="app/action.ts" switcher
 'use server'
@@ -121,7 +121,7 @@ export async function Bookings({ type = 'haircut' }) {
 }
 ```
 
-#### 2. Server Action에서 태그 기반 재검증
+#### 2. Server Action에서 태그 기반 revalidate
 
 ```tsx filename="app/actions.ts" switcher
 'use server'
@@ -143,7 +143,7 @@ export async function updateBookings() {
 ## 연습 문제
 
 1. `cacheTag` 함수가 호출되어야 하는 올바른 위치는?
-   - A. 클라이언트 컴포넌트의 `useEffect` 내부
+   - A. Client Component의 `useEffect` 내부
    - B. `use cache` 지시어가 선언된 비동기 함수나 컴포넌트 스코프 내부
    - C. `next.config.js`의 `plugins` 배열
    - D. 미들웨어 파일 최상단

@@ -6,99 +6,103 @@
 
 ## 학습 목표
 
-- Web 표준 Request API를 확장하여 Next.js 특화 편의 기능을 제공하는 `NextRequest` 객체의 역할을 이해한다.
-- `request.cookies`를 통한 간편한 쿠키 조회, 설정, 삭제 인터페이스를 습득한다.
-- `request.nextUrl`을 활용하여 URL 파싱(`pathname`, `searchParams`, `basePath`)을 처리하는 방법을 익힌다.
-- Route Handler 및 미들웨어(Proxy)에서 들어오는 HTTP 요청을 효과적으로 가공한다.
+- Web 표준 `Request` 객체를 확장한 `NextRequest`의 추가 속성과 편의 메서드를 이해한다.
+- `nextUrl`을 활용하여 URL, 쿼리 파라미터(`searchParams`), 경로명을 정밀하게 파싱하고 조작한다.
+- `cookies`, `ip`, `geo` 등 Next.js 전용 속성을 활용해 Proxy(Middleware) 및 Route Handler를 구현한다.
 
 ## 핵심 개념 및 설명
 
-`NextRequest`는 표준 [Web Request API](https://developer.mozilla.org/docs/Web/API/Request)를 상속 및 확장한 클래스로, Next.js의 [Route Handler](../3.1-file-conventions/route.md)와 [미들웨어(Proxy)](../3.1-file-conventions/proxy.md)에서 전달받는 요청 인스턴스다.
+`NextRequest`는 표준 [Web Request API](https://developer.mozilla.org/docs/Web/API/Request)를 확장하여 Next.js 전용 편의 메서드와 속성을 추가한 객체다. 주로 **Proxy(Middleware)**와 **Route Handler**의 요청 인자로 전달된다.
 
-```ts filename="app/api/hello/route.ts" switcher
-import { type NextRequest, NextResponse } from 'next/server'
+```ts filename="middleware.ts"
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
-  const name = request.nextUrl.searchParams.get('name') || 'Guest'
-  const token = request.cookies.get('auth-token')?.value
+export function middleware(request: NextRequest) {
+  // 1. nextUrl을 통한 쿼리 파라미터 확인
+  const query = request.nextUrl.searchParams.get('query')
 
-  return NextResponse.json({ message: `안녕하세요, ${name}님`, hasToken: !!token })
+  // 2. 쿠키 읽기
+  const token = request.cookies.get('token')?.value
+
+  // 3. 지리 정보 및 IP 확인
+  const country = request.geo?.country || 'US'
+  const ip = request.ip
+
+  return NextResponse.next()
 }
 ```
 
-```js filename="app/api/hello/route.js" switcher
-import { NextResponse } from 'next/server'
+---
 
-export async function GET(request) {
-  const name = request.nextUrl.searchParams.get('name') || 'Guest'
-  const token = request.cookies.get('auth-token')?.value
+### `NextRequest` 속성 레퍼런스
 
-  return NextResponse.json({ message: `안녕하세요, ${name}님`, hasToken: !!token })
-}
+| 속성명 | 타입 | 설명 |
+|---|---|---|
+| **`nextUrl`** | `NextURL` | Next.js 전용 속성(`basePath`, `pathname`, `searchParams` 등)이 포함된 확장 `URL` 객체 |
+| **`cookies`** | `RequestCookies` | 요청에 포함된 HTTP Cookie를 조회/조작할 수 있는 전용 맵 객체 (`get`, `getAll`, `has`, `set`, `delete`) |
+| **`ip`** | `string \| undefined` | 요청을 보낸 클라이언트의 IP 주소 (배포 플랫폼 연동 시 제공) |
+| **`geo`** | `Geo \| undefined` | 클라이언트의 지리적 위치 정보 객체 (`city`, `country`, `region`, `latitude`, `longitude`) |
+
+---
+
+### `nextUrl` 속성 세부 명세
+
+`request.nextUrl`은 표준 `URL` 객체를 상속하며 다음과 같은 추가 속성을 제공한다.
+
+```ts
+request.nextUrl.pathname // '/blog/article-1'
+request.nextUrl.searchParams // URLSearchParams { 'page' => '2' }
+request.nextUrl.basePath // '/custom-base' (next.config.js 설정 값)
 ```
 
-### `cookies` 인터페이스
+- **클론 및 변형**: `request.nextUrl.clone()`을 사용하여 특정 쿼리나 경로를 수정한 뒤 `NextResponse.rewrite()`나 `NextResponse.redirect()`의 대상 URL로 전달할 수 있다.
 
-인입 요청의 쿠키를 다루기 위한 다양한 헬퍼 메서드를 제공한다:
+```ts
+const url = request.nextUrl.clone()
+url.pathname = '/maintenance'
+return NextResponse.rewrite(url)
+```
 
-- `get(name)`: 이름이 일치하는 쿠키 객체(`{ name, value, path }`)를 반환한다.
-- `getAll(name?)`: 특정 이름 또는 모든 쿠키의 배열을 반환한다.
-- `set(name, value)`: 요청 객체에 쿠키를 설정한다.
-- `delete(name)`: 해당 쿠키를 삭제한다.
-- `has(name)`: 쿠키 존재 여부를 불리언으로 반환한다.
-- `clear()`: 요청의 모든 쿠키를 제거한다.
+---
 
-### `nextUrl` 확장 프로퍼티
+### `cookies` 메서드 명세
 
-표준 `URL` API를 확장하여 Next.js 전용 메타데이터를 제공한다:
+| 메서드 | 시그니처 | 설명 |
+|---|---|---|
+| `get(name)` | `(name: string) => RequestCookie \| undefined` | 이름에 해당하는 쿠키 객체(`{ name, value }`)를 반환 |
+| `getAll()` | `() => RequestCookie[]` | 모든 쿠키의 배열을 반환 |
+| `has(name)` | `(name: string) => boolean` | 해당 이름의 쿠키 존재 여부 반환 |
+| `set(name, value)` | `(name: string, value: string) => RequestCookies` | 요청 객체 내에 쿠키 값을 설정 |
+| `delete(name)` | `(name: string) => boolean` | 요청 객체 내에서 쿠키 삭제 |
 
-- `pathname`: 현재 경로 문자열 (예: `'/home'`).
-- `searchParams`: URL 쿼리 파라미터를 다루는 `URLSearchParams` 객체.
-- `basePath`: `next.config.js`에 정의된 라우트의 베이스 경로.
-- `buildId`: Next.js 애플리케이션의 고유 빌드 식별자.
+---
 
 ### Version History
 
 | 버전 | 변경 사항 |
 |---|---|
-| `v15.0.0` | `ip` 및 `geo` 프로퍼티 제거 |
-| `v13.0.0` | App Router에 `NextRequest` 도입 |
+| `v13.0.0` | App Router 및 Proxy(Middleware) 전용 `NextRequest` 안정화 |
 
 ## 예제 및 데모 설계
 
-- Route Handler에서 `request.nextUrl.searchParams`를 읽어 페이지네이션 및 필터링 쿼리를 파싱하는 데모를 설계한다.
-- `request.cookies.get('session')`을 통해 인증 여부를 분기하는 API 엔드포인트를 구현한다.
-- Web 표준 `Request`와 `NextRequest`의 편의 메서드 차이를 확인한다.
+- Route Handler(`app/api/user/route.ts`)에서 `NextRequest`의 `request.nextUrl.searchParams`를 읽어 필터링된 응답을 반환하는 API를 구성한다.
+- `request.cookies.get('session')`을 조회하여 인증 토큰 유무에 따라 다른 응답을 분기 처리한다.
 
 ## 연습 문제
 
-1. `NextRequest` 객체에서 URL의 쿼리 스트링 매개변수(`?search=nextjs`)를 읽는 가장 권장되는 방법은?
-   - A. `request.query.search`
-   - B. `request.nextUrl.searchParams.get('search')`
-   - C. `request.params.search`
-   - D. `request.body.search`
+1. `NextRequest` 객체에서 URL 쿼리 파라미터 `page` 값을 읽는 가장 권장되는 방법은?
+   - A. `request.params.page`
+   - B. `request.nextUrl.searchParams.get('page')`
+   - C. `new URL(request.url).query.page`
+   - D. `request.query.page`
 
 <details><summary>정답 보기</summary>
 
 정답: **B**  
-해설: `NextRequest`는 `request.nextUrl.searchParams`를 통해 손쉽게 URL 쿼리 매개변수에 접근할 수 있다.
-</details>
-
-2. `NextRequest`의 `cookies` 메서드 중 특정 쿠키의 존재 여부를 boolean 값으로 확인하는 메서드는?
-   - A. `request.cookies.check(name)`
-   - B. `request.cookies.has(name)`
-   - C. `request.cookies.exists(name)`
-   - D. `request.cookies.isSet(name)`
-
-<details><summary>정답 보기</summary>
-
-정답: **B**  
-해설: `request.cookies.has(name)` 메서드를 통해 쿠키 존재 여부를 불리언으로 반환받을 수 있다.
+해설: `NextRequest`의 `nextUrl.searchParams`는 웹 표준 `URLSearchParams` 인스턴스이므로 `.get('key')` 메서드를 통해 안전하게 읽을 수 있다.
 </details>
 
 ## 챕터 요약
 
-- `NextRequest`는 Web 표준 Request를 확장한 Next.js의 요청 객체다.
-- Route Handler 및 미들웨어의 인자로 제공된다.
-- `request.cookies`를 통해 간편하게 쿠키를 조회/조작한다.
-- `request.nextUrl`을 통해 `pathname`, `searchParams`, `basePath`에 손쉽게 접근한다.
+- `NextRequest`는 표준 Web Request에 `nextUrl`, `cookies`, `ip`, `geo`를 확장한 객체다.
+- Proxy 및 Route Handler에서 요청 정보를 파싱하고 재작성(rewrite)할 때 핵심 도구로 사용된다.

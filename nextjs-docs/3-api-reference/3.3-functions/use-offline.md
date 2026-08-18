@@ -57,7 +57,7 @@ const isOffline: boolean = useOffline()
 ```
 
 - `true`: 앱이 현재 오프라인 상태임 (네트워크 요청 실패 또는 브라우저 `offline` 이벤트 발생).
-- `false`: 온라인 상태이거나 서버 렌더링 중(하이드레이션 이전 기본값).
+- `false`: 온라인 상태이거나 서버 렌더링 중(hydration 이전 기본값).
 
 ### 예제
 
@@ -173,7 +173,7 @@ export default function Loading() {
    - A. Server Component
    - B. Route Handler
    - C. Client Component (`'use client'`)
-   - D. `layout.tsx` (서버 컴포넌트)
+   - D. `layout.tsx` (Server Component)
 
 <details><summary>정답 보기</summary>
 

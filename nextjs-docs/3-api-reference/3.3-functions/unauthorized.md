@@ -187,7 +187,7 @@ export async function GET() {
    - A. `unauthorized()`는 관리자 전용 페이지에, `forbidden()`은 게스트 사용자에게 사용한다.
    - B. `unauthorized()`는 로그인하지 않은 사용자(인증 실패)에게, `forbidden()`은 로그인했으나 권한이 부족한 사용자(인가 실패)에게 사용한다.
    - C. 두 함수는 완전히 동일하며 별칭(alias) 관계다.
-   - D. `unauthorized()`는 클라이언트 컴포넌트에서만 사용된다.
+   - D. `unauthorized()`는 Client Component에서만 사용된다.
 
 <details><summary>정답 보기</summary>
 
