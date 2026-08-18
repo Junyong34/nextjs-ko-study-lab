@@ -50,3 +50,6 @@ logs/
 .serena/
 .windsurf/
 .worktrees
+
+# 로컬 참고용 외부 학습 자료 (저장소 산출물이 아님)
+AI-Hero/
