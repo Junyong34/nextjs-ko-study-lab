@@ -266,11 +266,11 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 3.4.1 | use client | [공식](https://nextjs.org/docs/app/api-reference/directives/use-client) | 초안 | 미착수 |
-| 3.4.2 | use server | [공식](https://nextjs.org/docs/app/api-reference/directives/use-server) | 초안 | 미착수 |
-| 3.4.3 | use cache | [공식](https://nextjs.org/docs/app/api-reference/directives/use-cache) | 초안 | 미착수 |
-| 3.4.4 | use cache: private | [공식](https://nextjs.org/docs/app/api-reference/directives/use-cache-private) | 초안 | 미착수 |
-| 3.4.5 | use cache: remote | [공식](https://nextjs.org/docs/app/api-reference/directives/use-cache-remote) | 초안 | 미착수 |
+| 3.4.1 | use client | [공식](https://nextjs.org/docs/app/api-reference/directives/use-client) | 완료 | 미착수 |
+| 3.4.2 | use server | [공식](https://nextjs.org/docs/app/api-reference/directives/use-server) | 완료 | 미착수 |
+| 3.4.3 | use cache | [공식](https://nextjs.org/docs/app/api-reference/directives/use-cache) | 완료 | 미착수 |
+| 3.4.4 | use cache: private | [공식](https://nextjs.org/docs/app/api-reference/directives/use-cache-private) | 완료 | 미착수 |
+| 3.4.5 | use cache: remote | [공식](https://nextjs.org/docs/app/api-reference/directives/use-cache-remote) | 완료 | 미착수 |
 
 ### 3.5 Configuration
 
