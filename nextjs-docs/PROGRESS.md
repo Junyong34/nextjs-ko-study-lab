@@ -276,9 +276,9 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 | 데모 상태 |
 |---|---|---|---|---|
-| 3.5.1 | next.config.js (65개 옵션, 알파벳순 유지) | [공식](https://nextjs.org/docs/app/api-reference/config/next-config-js) | 초안 | 미착수 |
-| 3.5.2 | TypeScript | [공식](https://nextjs.org/docs/app/api-reference/config/typescript) | 초안 | 미착수 |
-| 3.5.3 | ESLint | [공식](https://nextjs.org/docs/app/api-reference/config/eslint) | 초안 | 미착수 |
+| 3.5.1 | next.config.js (65개 옵션, 알파벳순 유지) | [공식](https://nextjs.org/docs/app/api-reference/config/next-config-js) | 완료 | 미착수 |
+| 3.5.2 | TypeScript | [공식](https://nextjs.org/docs/app/api-reference/config/typescript) | 완료 | 미착수 |
+| 3.5.3 | ESLint | [공식](https://nextjs.org/docs/app/api-reference/config/eslint) | 완료 | 미착수 |
 
 ### 3.6 CLI
 
