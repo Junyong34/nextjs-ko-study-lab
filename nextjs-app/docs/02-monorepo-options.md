@@ -33,9 +33,11 @@ Next.js 앱 하나에는 `next.config` 파일이 하나뿐인데, 학습 문서�
 | 동시 dev | ✅ `turbo dev` 하나로 전부. `persistent: true` |
 | 캐시 무효화 | ✅ `dependsOn: ["^build"]` + `@study/docs` 패키지로 md 변경을 정확히 추적 |
 | 학습 부담 | ✅ 설정 파일 2개. Next.js·Turborepo·Vercel이 같은 팀이라 조합 마찰이 사실상 없음 |
-| 코드 공유 | ✅ **Internal Packages 패턴** — Next.js의 `transpilePackages`와 결합하여 패키지 번들링 빌드 단계 없이 TypeScript 소스를 직접 공유 및 HMR 가능 |
+| 코드 공유 | ✅ **Internal Packages 패턴** — 패키지 번들링 빌드 단계 없이 TypeScript 소스를 직접 공유 및 HMR 가능. Turbopack이 워크스페이스 패키지를 자동 트랜스파일하므로 `transpilePackages`는 필수가 아닙니다 |
 
-**약점**: `turbo.json`의 `inputs`는 패키지 상대 경로라 패키지 밖 파일을 직접 참조할 수 없습니다. 그래서 `nextjs-docs`를 워크스페이스 패키지로 편입하는 우회가 필요합니다 ([01. 구성 절차 3-1, 3-5](./01-project-setup.md)).
+**약점**: 뚜렷한 것이 없습니다. 조사 과정에서 약점으로 적었던 "`turbo.json`의 `inputs`는 패키지 밖 파일을 참조할 수 없다"는 **사실이 아니었습니다** — `$TURBO_ROOT$`를 쓰면 저장소 루트 기준 경로를 참조할 수 있고, 패키지 밖 md를 고쳤을 때 캐시가 무효화되는 것까지 turbo 2.10.10에서 확인했습니다 ([04. 검증 §12](./04-feasibility-verification.md)).
+
+따라서 `nextjs-docs`를 워크스페이스 패키지로 편입하는 것은 **도구의 제약을 피하는 우회가 아니라, 더 나은 쪽을 고른 선택**입니다. `$TURBO_ROOT$`는 "md가 바뀌면 무효화"까지만 표현하는 반면, `@study/docs` 패키지 + `dependsOn: ["^build"]`는 의존 그래프를 따라 **어느 zone의 캐시가 왜 깨졌는지**를 그대로 드러냅니다. 매니페스트 생성 스크립트가 어차피 필요하다는 점도 같은 방향입니다 ([01. 구성 절차 3-1, 3-5](./01-project-setup.md)).
 
 ### 2-2. npm workspaces + Turborepo
 

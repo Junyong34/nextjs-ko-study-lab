@@ -9,6 +9,8 @@ Phase 2 착수 **전**에 합의한 조사·설계 결과입니다. 아직 실�
 | 01 | [프로젝트 구성 방법 및 절차](./01-project-setup.md) | 워크스페이스 뼈대 → zone 생성 반복 절차 → 로컬 실행 → 첫 배포 검증. zone 추가 체크리스트 |
 | 02 | [모노레포 구성 방식 조사와 선택](./02-monorepo-options.md) | 후보 6가지 비교, pnpm + Turborepo 선택 근거, 기각 사유, 재검토 조건 |
 | 03 | [결합 구조 설계](./03-composition-architecture.md) | zone 배분, 라우팅 계약, 데모 지시자 파이프라인, 내비게이션, 함정 목록 |
+| 04 | [설계 실현 가능성 검증](./04-feasibility-verification.md) | 01~03의 사실 주장을 `next@16.3.1` 1차 출처와 대조한 결과. **판정과 수정 내역** |
+| 05 | [남은 설계 질문](./05-open-questions.md) | 아직 안 정한 것들. 착수 전에 정할 것과 진행하며 정해도 될 것 |
 
 ## ADR
 
@@ -16,7 +18,9 @@ Phase 2 착수 **전**에 합의한 조사·설계 결과입니다. 아직 실�
 |---|---|
 | [0001](./adr/0001-config-axis-as-app-boundary.md) | 전역 설정 충돌을 앱 경계로 삼고 Multi-Zones로 결합한다 |
 | [0002](./adr/0002-pnpm-turborepo-catalog-pinning.md) | pnpm workspaces + Turborepo, 기준 버전은 catalog에 정확 고정 |
-| [0003](./adr/0003-demo-directive-in-markdown.md) | 문서와 데모는 md 본문의 `demo` 코드펜스 지시자로 잇는다 |
+| [0003](./adr/0003-demo-directive-in-markdown.md) | 문서와 데모는 md 본문의 `demo` 코드펜스 지시자로 잇는다 *(0004가 범위를 좁힘)* |
+| [0004](./adr/0004-demo-list-as-source-of-truth.md) | 데모의 원본은 `demos.yaml`이고, 본문 지시자는 임베드 위치만 정한다 |
+| [0005](./adr/0005-hide-zone-from-learner-url.md) | 학습자 URL에서 zone을 감추고, 데모 앱 경로는 `/zone/*`으로 분리한다 |
 
 ## 용어
 
@@ -26,3 +30,5 @@ Phase 2 착수 **전**에 합의한 조사·설계 결과입니다. 아직 실�
 ## 읽는 순서
 
 처음 보는 사람은 **02 → 03 → 01** 순서를 권합니다. 왜 이렇게 나눴는지(02), 어떻게 합쳐지는지(03)를 이해한 뒤 절차(01)를 보면 각 단계의 이유가 이미 설명돼 있습니다.
+
+04는 01~03을 `next@16.3.1` 소스·동봉 문서와 대조한 검증 기록입니다. **지적된 내용은 01~03에 이미 반영돼 있으므로** 착수하려는 사람이 따로 읽을 필요는 없습니다. 무엇이 왜 그렇게 정해졌는지 근거를 확인할 때 보세요.

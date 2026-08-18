@@ -44,5 +44,7 @@
 
 - [Next.js App Router 공식 문서](https://nextjs.org/docs/app)
 - 확인한 공식 사이드바 메뉴 수: 286개
-- **학습 기준 Next.js 버전: 16.3.0** (React 19 / Node.js >=20.9 기준, 확인일 2026-08-12, [npm](https://www.npmjs.com/package/next))
-  - 버전이 올라가면 이 값을 갱신하고, 변경된 기능과 관련된 "완료" 문서를 재검토 대상으로 표시한다.
+- **학습 기준 Next.js 버전: 16.3.1** (React 19.2.8 / Node.js >=20.9 기준, 확인일 2026-08-18, [npm](https://www.npmjs.com/package/next))
+  - 버전이 올라가면 이 값을 갱신하고, 변경된 기능과 관련된 "완료" 문서를 재검토 대상으로 표시한다. **Phase 2 착수 후에는 `done` 상태의 데모도 함께 재검토 대상이다** — 데모는 실행 코드라 문서보다 훨씬 잘 깨진다.
+  - `16.3.0` → `16.3.1`(2026-08-18)은 patch이며, [04. 설계 실현 가능성 검증](../nextjs-app/docs/04-feasibility-verification.md)에서 문서 재검토를 요구하는 API 변경이 없음을 확인했다. 재검토 대상 없음.
+  - Phase 2 착수 후에는 이 값이 루트 `pnpm-workspace.yaml`의 catalog와 **같은 값**이어야 한다 ([ADR 0002](../nextjs-app/docs/adr/0002-pnpm-turborepo-catalog-pinning.md)).

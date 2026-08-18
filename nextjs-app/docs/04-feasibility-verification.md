@@ -153,7 +153,7 @@
 
 ### 7. `assetPrefix` + Turbopack dev — 실제로 되는가
 
-- **설계**: 01 §3-6 "`pnpm dev` 한 번으로 모든 zone 기동", 03 §4-3 인라인 데모(iframe)를 dev에서 조작.
+- **설계**: 01 §3-6 "`pnpm dev` 한 번으로 모든 zone 기동", 03 §4-6 인라인 데모(iframe)를 dev에서 조작.
 - **dev HMR 웹소켓 경로**: `next@16.3.1 : dist/client/dev/hot-reloader/app/web-socket.js:60`
 
   ```js
@@ -276,7 +276,7 @@ $ npm view next@16.3.1 peerDependencies
 - **설계**: 03 §5 표, AGENTS.md 규칙 4, ADR 0001 Consequences — 모두 "zone 경계를 넘으면 hard navigation, `<Link>` 금지, `<a>` 사용".
 - **1차 출처**: [multi-zones](https://nextjs.org/docs/app/guides/multi-zones) §Linking between zones — "Links to paths in a different zone should use an `a` tag instead of the Next.js `<Link>` component. This is because Next.js will try to prefetch and soft navigate to any relative path in `<Link>` component, which will not work across zones."
 - 또 "Navigating from a page in one zone to a page in another zone ... will perform a hard navigation, unloading the resources of the current page and loading the resources of the new page."
-- **설계가 이걸 반영하는가**: ✅ 세 곳에서 반영돼 있습니다. 03 §4-2의 파이프라인도 이 제약과 충돌하지 않습니다 — 인라인 데모는 `<iframe src>`(내비게이션 아님)이고, `mode: fullscreen`은 명시적으로 `<a href>`입니다.
+- **설계가 이걸 반영하는가**: ✅ 세 곳에서 반영돼 있습니다. 03 §4-5의 파이프라인도 이 제약과 충돌하지 않습니다 — 인라인 데모는 `<iframe src>`(내비게이션 아님)이고, `mode: fullscreen`은 명시적으로 `<a href>`입니다.
 - **판정**: ✅ 확인됨. 설계가 제대로 반영하고 있습니다.
 
 ### 14. 동일 오리진 주장 (03 §6-5)
@@ -284,7 +284,7 @@ $ npm view next@16.3.1 peerDependencies
 - **설계**: "셸의 rewrites를 통해 모든 zone이 단일 도메인으로 서비스되므로, 브라우저 입장에서는 **모든 데모 앱과 셸이 동일 오리진**입니다."
 - **근거**: `rewrites`는 서버 사이드 프록시입니다 — [multi-zones](https://nextjs.org/docs/app/guides/multi-zones)의 "one of the Next.js applications can also be used to route requests for the entire domain", 그리고 구현상 `dist/server/lib/router-utils/proxy-request.js`가 셸 프로세스 안에서 상류로 요청을 대신 보냅니다. 브라우저는 셸 오리진 외의 오리진을 보지 않습니다.
 - **따라서**:
-  - 03 §4-3의 `window.parent.postMessage(..., window.location.origin)`은 올바릅니다 (iframe 안에서 `location.origin`이 곧 셸 오리진).
+  - 03 §4-6의 `window.parent.postMessage(..., window.location.origin)`은 올바릅니다 (iframe 안에서 `location.origin`이 곧 셸 오리진).
   - `event.origin === window.location.origin` + `event.source === iframe.contentWindow` 이중 검증도 적절합니다.
   - 쿠키/localStorage 오염 위험과 `demo_{슬러그}_*` 네임스페이스 대응도 타당합니다.
 - **다만 이 동일 오리진 때문에** `serverActions.allowedOrigins`가 여전히 필요합니다 — 데모 앱이 보는 `Host` 헤더는 셸이 붙인 `x-forwarded-host`이고, 자기 자신의 origin(`localhost:3002`)과 다르기 때문입니다. 03 §3-2가 이걸 설정하는 것은 ✅이며, `experimental.serverActions.allowedOrigins`라는 키 경로도 `next@16.3.1 : dist/server/config-schema.js:245-247`(experimental 스키마 내부)과 [multi-zones §Server Actions](https://nextjs.org/docs/app/guides/multi-zones)에서 확인됩니다.
@@ -346,7 +346,7 @@ nextjs-app/apps/shell/package.json          # "packageManager": "pnpm@10.33.0"
 | README 다이어그램의 `/demo/baseline/*`·`/demo/cache/*` | 03 §2 표와 일치 |
 | ADR 0001의 "충돌 축 5개, 앱 3개부터" ↔ 03 §2 표의 "1차 생성" 3개 | 일치 |
 | 02 §4-1의 "`.gitignore`가 이미 `.turbo/`와 `.pnpm-store/`를 무시" | 실제로 `.gitignore:14`, `:32`에 존재 ✅ |
-| 01 §3-1·03 §4-2의 "291개 md" | `find nextjs-docs -name "*.md" \| wc -l` → 291 ✅ |
+| 01 §3-1·03 §4-5의 "291개 md" | `find nextjs-docs -name "*.md" \| wc -l` → 291 ✅ |
 
 ## 수정이 필요한 항목 — **전부 반영 완료 (2026-08-18)**
 
@@ -381,7 +381,7 @@ nextjs-app/apps/shell/package.json          # "packageManager": "pnpm@10.33.0"
 | 경로형 `assetPrefix` + Turbopack의 16.x 결함 | 경로형에 대한 공개 이슈를 찾지 못했습니다. "없다"가 아니라 **"찾지 못했다"**입니다. 확인된 16.3.0 이슈([#96831](https://github.com/vercel/next.js/issues/96831))는 cross-origin CDN 전용 |
 | `demo-export`를 Vercel에 배포했을 때 셸 rewrite 목적지로서의 동작 | 실제 배포로만 확인 가능 (**미검증**) |
 | iframe 안에서 `use cache` 데모의 캐시 동작 관찰 | 코드가 없어 검증 불가 (**미검증**) |
-| 03 §4-3 `ResizeObserver` + `postMessage` 브릿지의 실제 동작 | 프로토콜 설계는 타당하나 구현 전이라 (**미검증**) |
+| 03 §4-6 `ResizeObserver` + `postMessage` 브릿지의 실제 동작 | 프로토콜 설계는 타당하나 구현 전이라 (**미검증**) |
 | Tailwind v4 `@source "../../../../packages/ui"` 경로 4단계 | 디렉토리 배치상 계산은 맞지만, Tailwind v4의 `@source` 상대 경로 규칙을 1차 출처로 확인하지 않았습니다 (**미확인**) |
 | `nextjs-docs`의 `.webp` 자산(76개) 서빙 방식 | AGENTS.md가 문제를 정확히 짚고 있으나 해법이 두 가지로 열려 있음 (**미결정**) |
 

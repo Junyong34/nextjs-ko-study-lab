@@ -7,14 +7,14 @@ date: 2026-08-18
 
 여러 zone이 같은 Next.js 버전을 쓰도록 **도구가 강제**해야 하는데, pnpm의 `catalog:`가 이를 문법 수준에서 보장한다 — 루트 `pnpm-workspace.yaml`에 `next: 16.3.1`을 한 번 적고 각 앱이 `"next": "catalog:"`로 참조하면 버전이 갈라질 수가 없다. Turborepo는 zone 여러 개의 dev 서버를 한 명령으로 띄우고(Multi-Zones는 rewrites 목적지가 살아 있어야 개발이 되므로 필수), `dependsOn: ["^build"]`로 `nextjs-docs`의 md 변경이 셸의 빌드 캐시를 정확히 무효화하게 한다. 워크스페이스 루트는 저장소 루트에 두어 `nextjs-docs`를 `@study/docs` 패키지로 편입한다.
 
-버전은 캐럿 없이 **정확히** 고정한다.
+버전은 캐럿 없이 **정확히** 고정한다. 단 이 정확 고정은 **기준 버전 3종(`next`·`react`·`react-dom`)에만** 적용한다 — 목적이 설치 재현성이 아니라 "학습 문서의 근거 버전 = 앱 버전"이라는 문서 정합성이기 때문이다. catalog에 함께 두는 `@types/*` 같은 부수 의존성은 캐럿 범위로 둔다.
 
 ## Considered Options
 
 - **npm workspaces + Turborepo**: catalog가 없다. `overrides`로 흉내 낼 수 있지만 그것은 의존성 충돌 해결 장치이지 버전 선언 장치가 아니라 의도가 드러나지 않는다.
 - **Nx**: 기능은 더 넓지만 Nx 고유 개념(프로젝트 그래프, executor, generator)을 함께 배워야 한다. 이 저장소의 주제는 Next.js이며, zone 3~6개 규모에서 그 학습 비용은 회수되지 않는다.
 - **캐럿 범위(`^16.3.0`)**: lockfile이 있으니 재현성은 확보되지만, `nextjs-docs/README.md`가 규정한 "버전이 올라가면 값을 갱신하고 관련 완료 문서를 재검토 대상으로 표시한다"는 규칙이 **발동하지 않는다.** 버전 고정의 목적은 설치 재현성보다 문서 정합성이다.
-- **`nextjs-app/`을 독립 워크스페이스 루트로**: Phase 1/2 분리는 더 깔끔하지만 `nextjs-docs`가 워크스페이스 밖이 되어, md를 고쳐도 turbo가 셸의 빌드 캐시를 무효화하지 못한다. 원인이 코드에 없어 추적이 어려운 종류의 문제다.
+- **`nextjs-app/`을 독립 워크스페이스 루트로**: Phase 1/2 분리는 더 깔끔하지만 `nextjs-docs`가 워크스페이스 밖이 된다. 이 경우에도 `turbo.json`의 `$TURBO_ROOT$`로 패키지 밖 md를 `inputs`에 넣어 캐시를 무효화할 수는 있다(초안에 적었던 "불가능하다"는 사실이 아니었다 — [04. 검증 §12](../04-feasibility-verification.md)). 그럼에도 저장소 루트를 택한 것은, `@study/docs` 패키지 + `dependsOn: ["^build"]`가 의존 그래프를 따라 **어느 zone의 캐시가 왜 깨졌는지**까지 드러내는 반면 `$TURBO_ROOT$` 경로 나열은 그 관계를 표현하지 못하기 때문이다. 문서 매니페스트 생성 스크립트가 어차피 필요하다는 점도 같은 방향이다.
 
 ## Consequences
 

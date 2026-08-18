@@ -13,6 +13,7 @@ Next.js 학습 데모 사이트가 들어설 자리다. **설계는 완료됐고
 - [01. 프로젝트 구성 방법 및 절차](./docs/01-project-setup.md)
 - [02. 모노레포 구성 방식 조사와 선택](./docs/02-monorepo-options.md)
 - [03. 결합 구조 설계](./docs/03-composition-architecture.md)
+- [04. 설계 실현 가능성 검증](./docs/04-feasibility-verification.md) — 01~03을 `next@16.3.1` 1차 출처와 대조한 기록. 지적 사항은 01~03에 반영 완료
 - [용어집 `CONTEXT.md`](./CONTEXT.md) — zone, 셸, 설정 축, 데모 지시자, 기준 버전
 
 ## 스택
@@ -35,13 +36,23 @@ zone 배분과 포트는 [03. 결합 구조 설계 2절](./docs/03-composition-a
 
 ## 지켜야 할 것
 
-1. **버전을 `package.json`에 직접 적지 않는다.** `next`·`react`·`react-dom`은 반드시 `"catalog:"`로 참조한다. 기준 버전이 선언되는 곳은 루트 `pnpm-workspace.yaml` 하나뿐이다.
+1. **버전을 `package.json`에 직접 적지 않는다.** `next`·`react`·`react-dom`은 반드시 `"catalog:"`로 참조한다. 기준 버전이 선언되는 곳은 루트 `pnpm-workspace.yaml` 하나뿐이며, 그 값은 `nextjs-docs/README.md`의 학습 기준 버전과 **항상 같아야 한다** (현재 `16.3.1`). 올릴 때는 두 곳을 같은 커밋에서 고친다.
 2. **rewrites 목적지를 하드코딩하지 않는다.** 반드시 환경변수(`ZONE_*_URL`)로 둔다. 로컬↔배포 전환이 이것 하나에 달려 있다.
 3. **zone 사이 이동은 상대 경로로만 한다.** 학습자는 항상 셸 도메인에 있다. 절대 URL로 링크하면 주소창이 튀어나가 통합 환상이 깨진다.
-4. **zone 경계를 넘는 링크에 `<Link>`를 쓰지 않는다.** `<a>`를 쓴다. `<Link>`의 prefetch와 soft navigation은 zone 경계를 넘지 못한다.
+4. **zone 경계를 넘는 링크에 `<Link>`를 쓰지 않는다.** `<a>`를 쓴다. `<Link>`의 prefetch와 soft navigation은 zone 경계를 넘지 못한다. 다만 이 설계에서 학습자 이동은 전부 셸 안이라 그럴 일이 거의 없다.
 5. **dev 포트를 고정한다.** 셸의 rewrites 목적지가 고정 포트를 가리키므로, 포트가 밀리면 그 zone은 통째로 502가 된다.
 6. **셸에는 데모를 두지 않는다.** 셸은 문서 렌더링과 라우팅만 책임진다.
 7. **zone을 추가할 때는** [01. 구성 절차 4절](./docs/01-project-setup.md)의 체크리스트를 그대로 따른다. 항목 하나만 빠져도 그 zone은 사이트에서 보이지 않는다.
+8. **`create-next-app`에 `--turbopack`을 넘기지 않는다.** 16.3.1에는 그런 플래그가 없고, 이 CLI는 모르는 플래그를 조용히 무시한다. Turbopack은 기본값이다.
+9. **데모 앱에 `public/`을 두지 않는다.** `assetPrefix`는 `_next/static`에만 붙어서, `public/`의 파일과 `/_next/image`는 셸의 rewrites에 걸리지 않는다. 이미지는 `unoptimized`로 두거나 셸에 둔다.
+10. **데모의 존재는 `demos.yaml`이 정한다.** md의 `demo` 코드펜스는 **본문 임베드 위치만** 정한다. 지시자를 데모 목록으로 쓰지 않는다 ([ADR 0004](./docs/adr/0004-demo-list-as-source-of-truth.md)).
+11. **학습자 URL에 zone을 넣지 않는다.** 학습자는 `/demo/{문서}/{데모}`, 내부는 `/zone/{슬러그}/…`. 데모가 zone을 옮겨도 주소가 깨지지 않아야 한다 ([ADR 0005](./docs/adr/0005-hide-zone-from-learner-url.md)).
+12. **데모 앱은 chrome을 그리지 않는다.** 제목·설명·문서 링크는 셸이 그린다. 데모 앱 페이지는 임베드든 독립이든 한 가지 모습이며, `?embed=` 같은 쿼리로 분기하지 않는다 — `searchParams`는 런타임 의존 데이터라 캐싱 데모를 오염시킨다.
+13. **데모는 URL에 상태를 담지 않는다.** 항상 초기 상태에서 시작한다. 내부 이동은 iframe 안에서만 일어난다.
+14. **캐시 태그와 `cacheLife` 프로파일 이름에 데모 접두사를 붙인다.** 태그는 앱 전역이라 같은 zone의 다른 데모 캐시를 지운다. API는 감싸지 않는다 — 학습자가 진짜 `cacheTag`를 봐야 한다.
+15. **데모 화면에 기대와 실제를 함께 표시한다.** 기준 버전이 올라갈 때 회귀를 잡는 장치이자 학습 자료다. 버전을 올릴 때는 문서뿐 아니라 `done` 데모도 재검토 대상이다.
+
+`next dev`가 zone의 `AGENTS.md`·`CLAUDE.md`에 `nextjs-agent-rules` 블록을 삽입하는 것은 **정상 동작이다.** 마커 바깥 내용은 보존되니 그대로 커밋한다 ([01. 구성 절차 3-3 ⑥](./docs/01-project-setup.md)).
 
 ## nextjs-docs 참조
 

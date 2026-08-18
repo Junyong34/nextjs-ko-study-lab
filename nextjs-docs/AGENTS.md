@@ -43,7 +43,7 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 
 ## 버전
 
-학습 기준 Next.js 버전은 [README.md의 기준 출처](./README.md)에 고정되어 있다 (작성 시점: 16.3.0). 새 세션에서 이 프로젝트 작업을 시작하면, 먼저 `npm view next version`(또는 nextjs.org/blog)으로 실제 최신 버전과 비교한다. 메이저·마이너가 올라가 있으면 사용자에게 알리고, README.md의 버전 값을 갱신한 뒤 영향받을 만한 "완료" 문서를 재검토 대상으로 표시한다.
+학습 기준 Next.js 버전은 [README.md의 기준 출처](./README.md)에 고정되어 있다 (현재: 16.3.1). 새 세션에서 이 프로젝트 작업을 시작하면, 먼저 `npm view next version`(또는 nextjs.org/blog)으로 실제 최신 버전과 비교한다. 메이저·마이너가 올라가 있으면 사용자에게 알리고, README.md의 버전 값을 갱신한 뒤 영향받을 만한 "완료" 문서를 재검토 대상으로 표시한다. Phase 2 착수 후에는 `demos.yaml`의 `done` 데모도 같은 재검토 대상이다.
 
 ## Phase Gate
 
