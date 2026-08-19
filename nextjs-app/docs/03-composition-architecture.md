@@ -1,7 +1,8 @@
 # 03. 결합 구조 설계
 
 - 상위: [nextjs-app 작업 규칙](../AGENTS.md)
-- 관련 결정: [ADR 0001](./adr/0001-config-axis-as-app-boundary.md), [0003](./adr/0003-demo-directive-in-markdown.md), [0004](./adr/0004-demo-list-as-source-of-truth.md), [0005](./adr/0005-hide-zone-from-learner-url.md)
+- 관련 결정: [ADR 0001](./adr/0001-config-axis-as-app-boundary.md), [0003](./adr/0003-demo-directive-in-markdown.md), [0004](./adr/0004-demo-list-as-source-of-truth.md), [0005](./adr/0005-hide-zone-from-learner-url.md), [0006](./adr/0006-shadcn-ui-as-ui-foundation.md)
+- 이어지는 문서: [06. 화면 구성과 UI 설계](./06-ui-and-screen-design.md) — 이 계약 위에 무엇이 그려지는가
 - 근거 문서: [2.43 Multi-zones](../../nextjs-docs/2-guides/multi-zones.md)
 
 여러 개의 독립 Next.js 앱이 학습자에게 **하나의 사이트로 보이도록** 결합하는 구조를 정의합니다.
@@ -193,7 +194,7 @@ export default nextConfig
 
 **밑줄을 붙여 `_zone`으로 만들면 안 됩니다.** App Router에서 `_folder`는 폴더와 하위 전체를 라우팅에서 제외합니다 — 그 zone의 데모가 전부 404가 됩니다. `%5Fzone`으로 우회할 수 있지만 디스크의 폴더 이름이 `%5Fzone`이 되어, Next.js를 가르치는 저장소에서 설명하기 나쁩니다 ([ADR 0005](./adr/0005-hide-zone-from-learner-url.md)).
 
-**데모 앱은 chrome을 그리지 않습니다.** 제목·설명·"문서로 돌아가기"는 전부 셸이 그립니다. 데모 앱의 페이지는 임베드로 보든 독립으로 보든 **언제나 한 가지 모습**입니다. 이렇게 나눈 이유는 4-3에 있습니다.
+**데모 앱은 chrome을 그리지 않습니다.** 제목·설명·"문서로 돌아가기"는 전부 셸이 그립니다. 데모 앱의 페이지는 독립 열람에서 보든 랜딩 히어로에서 보든 **언제나 한 가지 모습**입니다. 이렇게 나눈 이유는 4-3에 있습니다.
 
 **데모 앱에는 `public/`을 두지 않습니다.** `assetPrefix`는 `_next/static`에만 붙고 `public/`의 파일과 `/_next/image`에는 붙지 않기 때문에, 이 두 경로는 셸의 rewrites 2줄로 덮이지 않습니다. 데모에 이미지가 필요하면 셸의 `public/`에 두고 절대 경로로 참조하거나, 위처럼 `unoptimized`로 최적화 엔드포인트를 우회합니다 (6-1 표).
 
@@ -293,34 +294,35 @@ ZONE_CACHE_URL=https://study-cache.vercel.app
 | `doc` | ✅ | 근거 문서의 `nextjs-docs` 기준 경로. 색인 정렬과 문서 하단 목록의 조인 키 |
 | `zone` | ✅ | 이 데모를 실행하는 zone 슬러그. **학습자에게 노출되지 않음** |
 | `status` | ✅ | `stub`(주소만 정함) / `wip`(만드는 중) / `done`(공개) |
+| `featured` | | 랜딩 히어로에 띄울 대표 데모. **전체에서 최대 1개**, `status: done`이어야 함 ([06. 2-2](./06-ui-and-screen-design.md)) |
 
-**`status`가 노출을 제어하는 유일한 스위치입니다.** `done`이 아니면 색인에도, 문서 하단 목록에도, 본문 임베드에도 나타나지 않습니다. 학습자는 도달할 방법이 없고, 개발자만 주소를 직접 쳐서 봅니다.
+**`status`가 노출을 제어하는 유일한 스위치입니다.** `done`이 아니면 색인에도, 문서 하단 목록에도, 본문 링크 카드에도, 검색 결과에도 나타나지 않습니다. 학습자는 도달할 방법이 없고, 개발자만 주소를 직접 쳐서 봅니다.
 
 `demos.yaml`은 **개발자 대시보드를 겸합니다.** 진행 상황이 grep과 diff에 남으므로 브라우저용 진행 화면을 따로 만들지 않습니다.
 
-### 4-2. 데모 지시자 — 본문 임베드 위치
+### 4-2. 데모 지시자 — 본문 링크 위치
 
-문서 본문 특정 지점에 데모를 심고 싶을 때만 `demo` 코드펜스를 둡니다 ([ADR 0003](./adr/0003-demo-directive-in-markdown.md)). **데모의 존재를 만들지는 않습니다** — 목록에 이미 있는 데모를 본문 어디에 놓을지만 정합니다.
+문서 본문 특정 지점에 데모로 가는 링크를 놓고 싶을 때만 `demo` 코드펜스를 둡니다 ([ADR 0003](./adr/0003-demo-directive-in-markdown.md)). **데모의 존재를 만들지는 않습니다** — 목록에 이미 있는 데모를 본문 어디에서 가리킬지만 정합니다.
+
+> **문서 본문에는 데모를 심지 않습니다.** 지시자가 그리는 것은 iframe이 아니라 **링크 카드**입니다 ([06. 3-2](./06-ui-and-screen-design.md)). 데모는 항상 `/demo/…`로 이동해서 봅니다.
 
 ````markdown
 `use cache`를 붙인 함수는 결과가 캐시되어 다음 요청에서 재사용됩니다.
 
 ```demo
 path: caching/use-cache-basic
-mode: inline
-height: 320
 caption: 새로고침해도 타임스탬프가 그대로인지 확인
 ```
 
-위 데모에서 [새로고침]을 여러 번 눌러도 타임스탬프가 바뀌지 않습니다.
+캐시 항목의 수명은 `cacheLife`로 정합니다.
 ````
 
 | 필드 | 필수 | 의미 |
 |---|:---:|---|
 | `path` | ✅ | `demos.yaml`의 `url`과 같은 값 |
-| `mode` | | `inline`(기본) 또는 `fullscreen` |
-| `height` | | 인라인 데모의 초기 높이(px). 기본 360 |
-| `caption` | | 학습자에게 무엇을 관찰하라고 지시하는 한 줄 |
+| `caption` | | 학습자에게 무엇을 관찰하라고 지시하는 한 줄. 카드 부제로 그려짐 |
+
+`mode`와 `height`는 **삭제된 필드**입니다. 본문 임베드가 없어지면서 쓸 자리가 사라졌습니다. lint가 남아 있는 것을 잡습니다 ([06. 3-4](./06-ui-and-screen-design.md)).
 
 `zone` 필드가 없습니다. 목록이 zone을 알고 있으므로 여기 적을 이유가 없고, 적으면 데모를 다른 zone으로 옮길 때 고칠 곳이 하나 늘어납니다.
 
@@ -328,7 +330,7 @@ caption: 새로고침해도 타임스탬프가 그대로인지 확인
 
 ### 4-3. 셸이 chrome을 그린다
 
-데모는 **독립 열람이 기본**이고 임베드는 일부에만 적용됩니다. 그러면 같은 데모가 두 문맥에서 쓰이는데, 독립일 땐 제목·설명·"문서로 돌아가기"가 필요하고 임베드일 땐 그게 전부 중복입니다.
+데모는 **언제나 독립 열람**으로 봅니다 ([06. 3-2](./06-ui-and-screen-design.md)). 그런데 같은 데모가 두 문맥에서 쓰입니다 — 독립 열람에서는 제목·설명·"문서로 돌아가기"가 필요하고, 랜딩 히어로의 대표 데모([06. 2-2](./06-ui-and-screen-design.md))에서는 그게 전부 중복입니다.
 
 **이 분기를 데모 앱이 하지 않습니다.** 데모 앱은 언제나 순수 데모 하나만 그리고, chrome은 셸이 씌웁니다.
 
@@ -358,7 +360,7 @@ caption: 새로고침해도 타임스탬프가 그대로인지 확인
 /getting-started/caching
 
   …문서 본문…
-  [지시자 자리에 iframe]        ← 임베드한 것
+  [지시자 자리에 링크 카드]      ← 본문에서 가리킨 것
   …문서 본문…
 
   ─────────────────────
@@ -381,26 +383,31 @@ nextjs-docs/**/*.md          packages/demos/demos.yaml
                    │  doc 필드로 조인
                    ▼
         ③ 셸이 렌더 (@study/docs-render)
-           · 문서 본문의 demo 코드펜스 → <DemoFrame path="…" />
+           · 문서 본문의 demo 코드펜스 → <DemoLink path="…" />
            · 문서 하단 "이 문서의 데모"
            · /demo 색인 (학습 순서 정렬)
                    │
                    ▼
-        ④ <iframe src="/zone/cache/caching/use-cache-basic">
+        ④ <a href="/demo/caching/use-cache-basic">  ← 링크 카드. iframe 아님
                    │
                    ▼
-        ⑤ 셸의 rewrites가 가로채 → demo-cache-components 앱이 응답
+        ⑤ 셸의 독립 열람 페이지가 chrome을 그리고 그 안에 iframe
+                   │
+                   ▼
+        ⑥ 셸의 rewrites가 가로채 → demo-cache-components 앱이 응답
 ```
 
 목차 트리의 **순서**는 각 카테고리 `README.md`의 `## 학습 순서` 섹션에서 나옵니다 — 순번·제목·파일 링크가 이미 거기 있고, 셸의 문서 내비게이션도 같은 것을 씁니다.
 
-`mode: fullscreen`이면 ④가 iframe 대신 셸의 독립 열람 주소(`/demo/caching/use-cache-basic`)로 가는 `<a>`가 됩니다.
+**iframe이 등장하는 곳은 ⑤ 하나뿐입니다.** 문서 페이지에는 iframe이 없습니다 ([06. 3-2](./06-ui-and-screen-design.md)). 유일한 예외는 랜딩 히어로의 대표 데모입니다 ([06. 2-2](./06-ui-and-screen-design.md)).
 
-### 4-6. 인라인 데모(iframe) 동적 높이 조절 프로토콜
+### 4-6. 데모 iframe 동적 높이 조절 프로토콜
 
-인라인 데모 화면 내부에서 아코디언, 탭 전환, 폼 에러 노출 등으로 콘텐츠 높이가 바뀔 때 내부 스크롤바가 생기거나 잘리지 않도록 `ResizeObserver` + `postMessage` 브릿지를 둡니다.
+**적용 범위는 독립 열람(4-3의 `/demo/…`) 한 곳뿐입니다.** 문서 본문에는 iframe이 없고([06. 3-2](./06-ui-and-screen-design.md)), 랜딩 히어로의 대표 데모는 CLS를 막기 위해 **고정 높이**를 쓰므로 이 브릿지를 쓰지 않습니다([06. 2-2](./06-ui-and-screen-design.md)).
 
-1. **데모 앱(`@study/ui`의 공통 데모 래퍼)**:
+독립 열람 화면 내부에서 아코디언, 탭 전환, 폼 에러 노출 등으로 콘텐츠 높이가 바뀔 때 내부 스크롤바가 생기거나 잘리지 않도록 `ResizeObserver` + `postMessage` 브릿지를 둡니다.
+
+1. **데모 앱(`@study/demo-kit`의 공통 데모 래퍼)**:
    - `ResizeObserver`로 `document.body.scrollHeight`를 감지
    - 부모 윈도우로 크기 변경 메시지 전송:
      ```ts
@@ -412,7 +419,7 @@ nextjs-docs/**/*.md          packages/demos/demos.yaml
 2. **셸(`@study/docs-render`의 `<DemoFrame />`)**:
    - `window.addEventListener('message', ...)`로 수신하되, **`event.origin === window.location.origin`과 `event.source === iframe.contentWindow`를 확인한 뒤에만** 반영합니다. 확인 없이 받으면 페이지 안 다른 프레임이 보낸 메시지로도 높이가 바뀝니다
    - 검증을 통과하면 iframe의 `style.height`를 실시간 동기화
-   - `md`에 적힌 `height`는 첫 렌더 시 깜빡임(CLS)을 막는 초기 높이로 사용
+   - 첫 렌더의 초기 높이는 셸이 정한 상수를 씁니다. `md`에서 오지 않습니다 — `height` 필드는 4-2에서 삭제됐습니다
 
 ### 4-7. 데모는 URL에 상태를 담지 않는다
 
@@ -535,9 +542,11 @@ nextjs-docs/**/*.md          packages/demos/demos.yaml
 
 ```
 push (status: done + 라우트 추가)
-   ├─ 셸 빌드 완료      → 색인·문서에 링크와 iframe 등장
-   └─ 데모 앱 빌드 중…   → iframe 404
+   ├─ 셸 빌드 완료      → 색인·문서에 링크 등장
+   └─ 데모 앱 빌드 중…   → 링크를 눌러 들어간 독립 열람의 iframe이 404
 ```
+
+**영향 범위가 문서 페이지에는 미치지 않습니다.** 문서 본문에는 iframe이 없으므로([06. 3-2](./06-ui-and-screen-design.md)) 문서는 멀쩡하고, 학습자가 링크를 눌러 들어간 독립 열람 화면에서만 드러납니다. **다만 랜딩 히어로는 예외로 iframe을 쓰므로 첫 화면이 영향을 받습니다** — 그쪽은 셸이 그리는 정적 폴백으로 덮습니다([06. 2-3](./06-ui-and-screen-design.md)).
 
 lint는 "`done`인데 워크스페이스에 라우트가 없다"를 잡지만 **"배포됐는지"는 못 잡습니다.** 진짜 위험은 몇 분의 공백이 아니라 **데모 앱 빌드 실패**입니다 — 그러면 공백이 무기한이 되고 셸은 계속 `done`이라고 믿습니다.
 
@@ -555,8 +564,9 @@ lint는 "`done`인데 워크스페이스에 라우트가 없다"를 잡지만 **
 
 - 주소창에 `localhost:3000` 외의 주소가 **한 번도** 나타나지 않는다
 - 주소창에 `/zone/`이 **한 번도** 나타나지 않는다
-- 문서 페이지 안의 인라인 데모가 조작되고, 그 데모는 셸이 아닌 다른 앱이 응답한 것이다
-- 같은 데모를 문서 본문에서 보든 독립으로 열든, 데모 앱이 내려준 화면은 **똑같다**
+- 독립 열람 화면 안의 데모가 조작되고, 그 데모는 셸이 아닌 다른 앱이 응답한 것이다
+- 문서 페이지에 iframe이 **하나도 없다**
+- 같은 데모를 랜딩 히어로에서 보든 독립으로 열든, 데모 앱이 내려준 화면은 **똑같다**
 - `cacheComponents` 끈 데모와 켠 데모가 같은 사이트에서 **동시에** 동작한다
 - 데모를 추가할 때 md를 고치지 않아도 그 문서 하단에 나타난다
 - 데모를 다른 zone으로 옮겨도 학습자 URL이 바뀌지 않는다

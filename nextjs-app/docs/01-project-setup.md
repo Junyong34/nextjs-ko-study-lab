@@ -236,7 +236,7 @@ rm shell/pnpm-workspace.yaml   # 중첩 워크스페이스 선언 제거
 
 ### 3-4-1. `packages/demos` — 데모 목록 패키지
 
-데모의 존재·주소·상태를 선언하는 단일 원본입니다 ([ADR 0004](./adr/0004-demo-list-as-source-of-truth.md)). 셸이 색인·문서 하단 목록·임베드 검증에 쓰고, 생성기와 lint가 같은 파일을 읽습니다.
+데모의 존재·주소·상태를 선언하는 단일 원본입니다 ([ADR 0004](./adr/0004-demo-list-as-source-of-truth.md)). 셸이 색인·문서 하단 목록·본문 링크 카드 검증에 쓰고, 생성기와 lint가 같은 파일을 읽습니다.
 
 ```
 nextjs-app/packages/demos/
@@ -319,7 +319,7 @@ pnpm dev              # turbo가 모든 zone의 dev 서버를 동시에 기동
 
 1. Vercel에서 프로젝트 2개 생성. 각각 Root Directory를 `nextjs-app/apps/shell`, `nextjs-app/apps/demo-baseline`으로 지정
 2. 셸 프로젝트 환경변수에 `ZONE_BASELINE_URL`을 데모 앱의 배포 도메인으로 설정
-3. 셸 도메인에서 문서 → 데모 이동, 데모 화면의 CSS·JS 로딩, 문서 안 인라인 데모 표시를 확인
+3. 셸 도메인에서 문서 → 데모 링크 이동, 독립 열람 iframe 표시, 데모 화면의 CSS·JS 로딩을 확인
 4. 확인이 끝나면 다시 로컬 중심으로 진행. zone을 추가할 때만 이 절차를 반복
 
 ## 4. zone 추가 체크리스트
@@ -350,11 +350,11 @@ zone 추가는 드물고, **데모 추가가 일상 작업**입니다. 훨씬 �
   - 캐시 태그·`cacheLife` 프로파일 이름에 **데모 접두사** ([03. 6-6](./03-composition-architecture.md))
   - 스토리지 키·쿠키에 `demo_{슬러그}_*` 접두사 ([03. 6-5](./03-composition-architecture.md))
   - 화면 하단에 **기대 / 실제** 표시 ([03. 4-8](./03-composition-architecture.md))
-- [ ] 본문에 심을 데모라면 md에 `demo` 코드펜스 삽입 (`path`만, `zone` 없음)
+- [ ] 본문에서 가리킬 데모라면 md에 `demo` 코드펜스 삽입 (`path`, 필요하면 `caption`. `zone`·`mode`·`height` 없음)
 - [ ] `pnpm --filter @study/demos lint` 통과
 - [ ] `status: done`으로 전환 — **이때 `doc`의 md 상태가 완료여야 합니다**
 
-`status`를 `done`으로 바꾸는 것이 곧 공개입니다. 그 전까지는 색인에도, 문서 하단 목록에도, 본문 임베드에도 나타나지 않습니다.
+`status`를 `done`으로 바꾸는 것이 곧 공개입니다. 그 전까지는 색인에도, 문서 하단 목록에도, 본문 링크 카드에도, 검색 결과에도 나타나지 않습니다.
 
 ## 5. 완료 판정
 
@@ -362,6 +362,6 @@ zone 추가는 드물고, **데모 추가가 일상 작업**입니다. 훨씬 �
 
 - `pnpm install`이 워크스페이스 루트에서 한 번에 끝난다
 - `pnpm dev` 한 번으로 모든 zone이 뜬다
-- `localhost:3000`에서 문서가 보이고, 문서 안 인라인 데모가 동작한다
+- `localhost:3000`에서 문서가 보이고, 문서의 데모 링크를 눌러 들어간 독립 열람 화면에서 데모가 동작한다
 - `nextjs-docs`의 md를 고치면 `pnpm build` 결과에 반영된다 (캐시가 무효화된다)
 - 어느 `package.json`에도 `next` 버전 문자열이 직접 적혀 있지 않다
