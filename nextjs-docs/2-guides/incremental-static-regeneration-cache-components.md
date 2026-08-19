@@ -103,7 +103,7 @@ export default function CategoryLayout(props: LayoutProps<'/[category]'>) {
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 2에서 구현 예정
+- 데모 가능 여부: 가능 (Phase 2에서 구현 예정)
 - 데모 목적: `known/known`, `known/unknown`, `unknown/unknown` params 조합의 첫·후속 방문 차이를 비교한다.
 - 사용자 상호작용: 상품 링크를 hover 또는 viewport에 노출해 prefetch한 뒤 이동하고, 캐시를 비운 상태와 후속 방문을 비교한다.
 - 관찰 결과: App Shell 범위와 fallback 위치가 달라지며, prefetch 뒤에는 클릭 전에 업그레이드가 시작된다.

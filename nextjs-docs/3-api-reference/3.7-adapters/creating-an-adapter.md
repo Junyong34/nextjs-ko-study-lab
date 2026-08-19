@@ -174,7 +174,7 @@ module.exports = adapter
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 1에서는 구현 예정이다.
+- 데모 가능 여부: 가능 (Phase 1에서는 구현 예정)
 - Phase 2에서는 최소 구성의 어댑터를 작성해 `modifyConfig`로 build phase별 config 분기를 확인하고, `onBuildComplete`에서 `outputs.pages`, `outputs.appPages`, `outputs.prerenders` 등을 순회하며 로그로 출력하는 데모를 계획한다.
 
 ## 연습 문제

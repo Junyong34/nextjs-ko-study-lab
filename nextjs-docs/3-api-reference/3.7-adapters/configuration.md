@@ -27,7 +27,7 @@ module.exports = nextConfig
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 1에서는 구현 예정이다.
+- 데모 가능 여부: 가능 (Phase 1에서는 구현 예정)
 - Phase 2에서는 `adapterPath`로 로컬 어댑터를 등록하는 경우와 `NEXT_ADAPTER_PATH` 환경 변수만으로 등록하는 경우를 비교하는 데모를 계획한다.
 
 ## 연습 문제

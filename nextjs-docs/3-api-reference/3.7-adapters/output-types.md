@@ -249,7 +249,7 @@ ISR이 활성화된 route와 정적 prerender다.
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 1에서는 구현 예정. 실제 빌드 출력을 순회하며 각 타입을 처리하는 어댑터가 있어야 의미 있게 보여줄 수 있으므로, Phase 2 커스텀 어댑터 데모에서 함께 다룬다.
+- 데모 가능 여부: 가능 (Phase 1에서는 구현 예정). 실제 빌드 출력을 순회하며 각 타입을 처리하는 어댑터가 있어야 의미 있게 보여줄 수 있으므로, Phase 2 커스텀 어댑터 데모에서 함께 다룬다.
 - 구현 예정 시나리오: 샘플 프로젝트를 빌드한 뒤 `outputs`를 콘솔에 출력해 `pages`/`appPages`/`appRoutes`/`prerenders`/`staticFiles`/`middleware`에 실제로 어떤 값이 들어가는지 비교하고, `config.output: 'export'`일 때 `staticFiles`만 채워지는 것을 확인한다.
 
 ## 연습 문제

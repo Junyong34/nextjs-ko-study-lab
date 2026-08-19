@@ -193,7 +193,7 @@ export default function Page({ searchParams }: PageProps<'/search'>) {
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 2에서 구현 예정
+- 데모 가능 여부: 가능 (Phase 2에서 구현 예정)
 - 데모 목적: 기본 링크의 공유 셸과 `prefetch={true}`의 URL별 콘텐츠 요청 차이를 네트워크 패널에서 비교한다.
 - 사용자 상호작용: 정적, 세션, URL별, 실시간 목적지 링크를 viewport에 노출하고 hover·click한다.
 - 관찰 결과: 셸은 라우트별 한 번 공유되고 URL별 prefetch만 링크 단위 서버 호출을 만들며 실시간 영역은 클릭 뒤 스트리밍된다.

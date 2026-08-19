@@ -173,7 +173,7 @@ stage("Build") {
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 2에서 구현 예정
+- 데모 가능 여부: 가능 (Phase 2에서 구현 예정)
 - 데모 목적: 동일한 Next.js 프로젝트를 cold cache와 warm cache로 빌드해 캐시 복원 여부와 시간을 비교한다.
 - 사용자가 확인할 화면과 상호작용:
   - CI 로그에서 `.next/cache` 복원 전후의 `next build` 시간을 비교한다.

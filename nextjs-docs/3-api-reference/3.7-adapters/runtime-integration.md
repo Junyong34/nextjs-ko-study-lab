@@ -40,7 +40,7 @@ entrypoint를 호출할 때 어댑터는 Next.js 핸들러에 `ctx` 객체를 �
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 1에서는 구현 예정. `ctx.waitUntil`, `requestMeta.onCacheEntryV2`는 실제 배포 플랫폼과 통합된 어댑터가 있어야 동작을 확인할 수 있으므로, Phase 2에서 커스텀 어댑터 데모를 만들 때 함께 다룬다.
+- 데모 가능 여부: 가능 (Phase 1에서는 구현 예정). `ctx.waitUntil`, `requestMeta.onCacheEntryV2`는 실제 배포 플랫폼과 통합된 어댑터가 있어야 동작을 확인할 수 있으므로, Phase 2에서 커스텀 어댑터 데모를 만들 때 함께 다룬다.
 - 구현 예정 시나리오: `onCacheEntryV2` 콜백을 등록해 캐시 항목이 생성·조회될 때마다 로그를 남기고, PPR 활성화 route에 대해 `pprChain.headers`가 붙은 POST 요청이 어떻게 처리되는지 확인한다.
 
 ## 연습 문제

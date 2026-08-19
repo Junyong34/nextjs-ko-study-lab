@@ -108,7 +108,7 @@ pathname 기반 방식은 세그먼트 prefetch 경로와 `output: 'export'`에�
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 2에서 구현 예정
+- 데모 가능 여부: 가능 (Phase 2에서 구현 예정)
 - 데모 목적: HTML, RSC, prefetch 요청이 어떤 캐시 키와 헤더 조합으로 분리되는지 시각화한다.
 - 사용자가 확인할 화면과 상호작용:
   - 정적·ISR·다이나믹 라우트의 `Cache-Control` 응답을 비교한다.

@@ -185,7 +185,7 @@ Cache Components는 React `<Activity mode="hidden">`로 이동한 라우트를 u
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 2에서 구현 예정
+- 데모 가능 여부: 가능 (Phase 2에서 구현 예정)
 - 데모 목적: 기존 설정을 하나씩 제거할 때 validation이 제안하는 캐시·스트리밍 경계를 관찰한다.
 - 사용자 상호작용: `force-static`, `revalidate`, runtime API가 섞인 샘플을 단계별로 전환하고 overlay를 확인한다.
 - 관찰 결과: 정적 셸은 유지되고 URL·세션별 영역만 스트리밍되며, 뒤로 이동했을 때 UI 상태가 보존된다.

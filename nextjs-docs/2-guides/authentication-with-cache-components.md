@@ -272,7 +272,7 @@ export async function addNote(formData: FormData) {
 
 ## 예제 및 데모 설계
 
-- 데모 가능 여부: Phase 2에서 구현 예정
+- 데모 가능 여부: 가능 (Phase 2에서 구현 예정)
 - 데모 목적: static shell과 인증 UI의 스트리밍, 사용자별 노트 캐시와 `updateTag` 갱신을 한 화면에서 비교한다.
 - 사용자가 확인할 화면과 상호작용:
   - 로그인 전후에도 공지 영역은 즉시 나타나고 대시보드만 fallback 뒤에서 스트리밍되는지 확인한다.
