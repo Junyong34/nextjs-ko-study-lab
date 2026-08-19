@@ -99,7 +99,7 @@
 
 | 층 | 종류 | 형식 | 예 | 소유 |
 |---|---|---|---|---|
-| 학습자 | 문서 | 그 외 전부 | `/guides/caching` | 셸 |
+| 학습자 | 문서 | `/{카테고리}/{하위그룹}/{파일명}` | `/getting-started/caching` | 셸 |
 | 학습자 | 데모 색인 | `/demo` | `/demo` | 셸 |
 | 학습자 | 데모 독립 열람 | `/demo/{문서 파일명}/{데모명}` | `/demo/caching/use-cache-basic` | 셸 |
 | 내부 | 데모 본체 | `/zone/{슬러그}/{문서 파일명}/{데모명}` | `/zone/cache/caching/use-cache-basic` | 데모 앱 |
@@ -108,6 +108,51 @@
 **한 경로는 정확히 하나의 zone에만 속합니다.** 두 zone이 같은 경로를 주장하면 라우팅이 충돌합니다.
 
 정적 자산 경로를 페이지 경로와 **다른 접두사**로 분리한 이유: 모든 zone이 자기 `_next/`를 갖는데, 접두사가 없으면 서로 덮어씁니다.
+
+### 문서 URL은 md 경로를 미러링한다
+
+`nextjs-docs`의 md 경로에서 **번호 접두사만 제거하고 그대로** 씁니다.
+
+```
+nextjs-docs/{카테고리}/{하위그룹}/{파일명}.md  →  /{카테고리}/{하위그룹}/{파일명}
+```
+
+- 각 경로 세그먼트에서 `/^\d+(\.\d+)*-/`(`1-`, `2.15-`, `3.1.21-`, `3.5.1-`)를 제거합니다
+- `README.md`는 세그먼트를 만들지 않고 **그 폴더 자체의 인덱스**가 됩니다
+
+| md 경로 | 학습자 URL |
+|---|---|
+| `1-getting-started/caching.md` | `/getting-started/caching` |
+| `1-getting-started/README.md` | `/getting-started` |
+| `2-guides/2.15-client-side-data-fetching/swr.md` | `/guides/client-side-data-fetching/swr` |
+| `3-api-reference/3.4-directives/use-cache.md` | `/api-reference/directives/use-cache` |
+| `3-api-reference/3.5-config/3.5.1-next-config-js/turbopack.md` | `/api-reference/config/next-config-js/turbopack` |
+| 루트 `README.md` | `/` |
+
+**번호를 뺀 이유**는 [nextjs-docs ADR 0002](../../nextjs-docs/docs/adr/0002-reorder-learning-sequence.md)가 학습 순서 재배열을 허용하기 때문입니다. 번호가 URL에 있으면 재배열할 때마다 모든 문서 링크와 학습자 북마크가 깨집니다. 세그먼트의 의미 부분(`getting-started`, `directives`)은 움직이지 않습니다.
+
+**폴더 경로를 유지한 이유**는 리프 md 파일명이 11건 중복되기 때문입니다(아래 소절). 데모 URL처럼 파일명만 쓰면 즉시 충돌합니다.
+
+덤으로 결과 URL이 공식 문서(`nextjs.org/docs/app` + 같은 경로)와 1:1로 대응해, 학습자가 원문과 대조하기 쉽고 각 문서 상단의 공식 링크를 기계적으로 검증할 수 있습니다.
+
+| 항목 | 규칙 |
+|---|---|
+| 대소문자 | **파일명 그대로 보존**합니다 — `3.3-functions/cacheLife.md` → `/api-reference/functions/cacheLife`. `next.config.js` 옵션 65개와 함수 문서 대부분이 camelCase이고 공식 문서 URL도 같은 표기를 씁니다 |
+| trailing slash | 없음 (Next.js 기본값 `trailingSlash: false` 유지) |
+| URL을 만들지 않는 것 | `nextjs-docs/docs/`(ADR), 모든 `assets/`, 루트의 `AGENTS.md`·`CLAUDE.md`·`CONTEXT.md`·`PROGRESS.md`·`TRANSLATION.md` |
+| 예약 세그먼트 | 최상위 `demo`·`zone`·`demo-static`은 셸과 데모 앱이 소유합니다. 카테고리 폴더 이름으로 쓸 수 없습니다 |
+
+따라오는 셸 라우트 구조입니다. 정적 세그먼트가 catch-all보다 먼저 매칭되므로 `/demo`와 충돌하지 않습니다.
+
+```
+apps/shell/src/app/
+├─ page.tsx                 → /            (루트 README.md)
+├─ [...slug]/page.tsx       → 나머지 문서 전부
+│                             generateStaticParams가 docs-manifest의 경로를 전부 생성
+└─ demo/…                   → 색인과 독립 열람 (4-3)
+```
+
+이 규칙을 md 292개에 적용하면 **284개 URL이 충돌 없이** 생성됩니다. 검사는 lint가 맡습니다 — ① 번호 제거 후 URL이 겹치는 md가 없는가, ② 카테고리 폴더가 예약 세그먼트를 쓰지 않는가 ([05. A-6](./05-open-questions.md)).
 
 ### 학습자 URL이 유일해야 한다
 
@@ -292,7 +337,7 @@ caption: 새로고침해도 타임스탬프가 그대로인지 확인
   /demo                              색인 (done만, 학습 순서)
   /demo/caching/use-cache-basic      독립 열람
        └ 제목 · 설명 · "문서로" · iframe
-  /guides/caching                    문서
+  /getting-started/caching           문서
        └ 지시자 자리에 iframe
        └ 하단 "이 문서의 데모" (자동 생성)
 
@@ -310,7 +355,7 @@ caption: 새로고침해도 타임스탬프가 그대로인지 확인
 셸이 문서 페이지 **하단에 "이 문서의 데모" 목록을 자동으로 붙입니다.** `demos.yaml`의 `doc` 필드로 조인하므로 md는 손대지 않고, 데모를 추가해도 문서를 고칠 필요가 없습니다.
 
 ```
-/guides/caching
+/getting-started/caching
 
   …문서 본문…
   [지시자 자리에 iframe]        ← 임베드한 것

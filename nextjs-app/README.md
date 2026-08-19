@@ -9,7 +9,7 @@
 학습자에게는 **사이트 하나**로 보이지만, 뒤에서는 여러 개의 독립 Next.js 앱(zone)이 동작합니다. 앱을 나누는 이유는 관리 편의가 아니라 기술적 불가피성입니다 — `cacheComponents`처럼 앱 전역 설정으로만 켤 수 있는 개념은, 켠 상태와 끈 상태를 한 앱에서 동시에 보여줄 수 없기 때문입니다.
 
 ```
-학습자: study.example.com/guides/caching
+학습자: study.example.com/getting-started/caching
               │
               ▼
         셸 (문서 렌더 + 데모 색인·독립 열람 + 정문)
