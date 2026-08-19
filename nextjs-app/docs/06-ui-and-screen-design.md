@@ -138,7 +138,7 @@
 | 2. 학습 목표 | 본문 |
 | 3. 핵심 개념 및 설명 | 본문 + 코드블록 + 이미지 |
 | 4. 예제 및 데모 설계 | 본문. `데모 가능 여부` 판정 라인은 **화면에 표시하지 않습니다** (작성자용) |
-| 5. 연습 문제 | `<details>` → `accordion`. 정답은 접힌 채 시작 |
+| 5. 연습 문제 | md의 `<details>`를 **그대로 살려** 스타일만 입힙니다. 정답은 접힌 채 시작 |
 | 6. 챕터 요약 | 본문 |
 
 본문 아래에 셸이 두 블록을 덧붙입니다.
@@ -378,11 +378,13 @@ nextjs docs 정독하기   docs 카테고리   예제      [⌕ 문서·예제 �
 | 모바일 좌측 트리 | 서랍 | `sheet` |
 | 우측 페이지 목차 | 링크 목록 | — (자체) |
 | 예제 링크 카드 | 카드 + 라벨 | `card` + `badge` |
-| 연습 문제 | 접힘 | `accordion` |
+| 연습 문제 | 접힘 | — (네이티브 `<details>`) |
 | 예제 색인 필터 | 칩 | `toggle-group` |
 | 코드블록 복사 | 버튼 + 알림 | `button` + `sonner` |
 | 기대/실제 패널 | 상태 알림 | `alert` |
 | 이전/다음 문서 | 버튼 | `button` |
+
+연습 문제에 `accordion`을 쓰지 않는 이유는, md에 이미 `<details><summary>`로 쓰여 있고 네이티브 요소가 **JS 없이 동작**하기 때문입니다. 3-2에서 문서 페이지의 클라이언트 JS를 걷어낸 방향과 같습니다.
 
 **shadcn의 `sidebar` 컴포넌트는 쓰지 않습니다.** 접힘 상태를 `sidebar_state` 쿠키에 저장하는데, 이 이름이 [03. 6-5](./03-composition-architecture.md)의 네임스페이스 규칙(셸은 `study_*`)을 어깁니다. 모든 zone이 동일 오리진이므로 쿠키 이름 하나가 zone을 넘어 새어 나갑니다. `collapsible` + `scroll-area`로 직접 조립하고 상태는 `study_sidebar`에 둡니다.
 
@@ -390,11 +392,11 @@ nextjs docs 정독하기   docs 카테고리   예제      [⌕ 문서·예제 �
 
 | 용도 | 선택 | 비고 |
 |---|---|---|
-| 코드 하이라이팅 | `shiki` + `rehype-pretty-code` | 빌드 타임. 런타임 JS 0 |
+| 코드 하이라이팅 | `shiki` + `@shikijs/rehype` | 빌드 타임. 런타임 JS 0. shiki 1차 패키지라 버전이 함께 움직임 |
 | md → React | `remark` / `rehype` 파이프라인 | `@study/docs-render`가 소유 |
 | 테마 | `next-themes` | 6-2의 스토리지 키 규칙 적용 |
 | 아이콘 | `lucide-react` | shadcn 기본 |
-| 폰트 | `next/font` | 본문 Pretendard, 코드 JetBrains Mono |
+| 폰트 | `next/font` | 본문 Pretendard(npm `pretendard` 패키지의 woff2 → `next/font/local`), 코드 JetBrains Mono(`next/font/google`) |
 
 ### 7-4. 패키지 배치 — 05 A-2의 답
 
@@ -482,8 +484,8 @@ iframe 안의 데모는 셸의 테마를 따르지 않습니다. **데모는 항
 
 | 용도 | 폰트 | 비고 |
 |---|---|---|
-| 본문 (한글) | Pretendard | `next/font/local` |
-| 코드 · 수치 | JetBrains Mono | 지표·경로·태그에도 사용 |
+| 본문 (한글) | Pretendard Variable | npm `pretendard` 패키지의 woff2를 `src/app/fonts/`로 복사해 `next/font/local` |
+| 코드 · 수치 | JetBrains Mono | `next/font/google`. 지표·경로·태그에도 사용 |
 
 | 요소 | 크기 | 행간 |
 |---|---|---|
