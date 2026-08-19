@@ -56,6 +56,65 @@ YAML은 오타를 잡아주지 않습니다. `zone: cahce` 하나로 그 데모�
 
 **안 정해진 것**: 도구(Playwright / 단순 fetch + HTML 검사), 실행 지점(CI / 배포 후 / 로컬 pre-push), 그리고 **어느 환경을 때리는가**. 배포된 사이트를 때려야 배포 함정을 잡지만, 그러면 배포 후 실패라 되돌릴 게 이미 나가 있습니다.
 
+### A-6. 학습 문서 페이지의 URL 매핑 규칙
+
+데모 URL(`/demo/{문서 파일명}/{데모명}`)은 [03. 3-1](./03-composition-architecture.md)에 확정돼 있지만, **문서 자체의 URL**은 예시 하나(`/guides/caching`)만 있고 규칙이 없었습니다. 셸의 라우트 파일을 만들려면 이것이 먼저입니다.
+
+**정해진 것**: md 경로에서 **번호 접두사만 제거하고 그대로 미러링**합니다.
+
+```
+nextjs-docs/{카테고리}/{하위그룹}/{파일명}.md  →  /{카테고리}/{하위그룹}/{파일명}
+```
+
+- 각 경로 세그먼트에서 `/^\d+(\.\d+)*-/`(`1-`, `2.15-`, `3.1.21-`, `3.5.1-`)를 제거합니다
+- `README.md`는 세그먼트를 만들지 않고 **그 폴더 자체의 인덱스**가 됩니다
+
+| md 경로 | 학습자 URL |
+|---|---|
+| `1-getting-started/caching.md` | `/getting-started/caching` |
+| `1-getting-started/README.md` | `/getting-started` |
+| `2-guides/server-actions.md` | `/guides/server-actions` |
+| `2-guides/2.15-client-side-data-fetching/swr.md` | `/guides/client-side-data-fetching/swr` |
+| `3-api-reference/3.4-directives/use-cache.md` | `/api-reference/directives/use-cache` |
+| `3-api-reference/3.1-file-conventions/3.1.21-metadata/opengraph-image.md` | `/api-reference/file-conventions/metadata/opengraph-image` |
+| `3-api-reference/3.5-config/3.5.1-next-config-js/turbopack.md` | `/api-reference/config/next-config-js/turbopack` |
+| `3-api-reference/edge.md` | `/api-reference/edge` |
+| `5-architecture/accessibility.md` | `/architecture/accessibility` |
+| 루트 `README.md` | `/` |
+
+**왜 이렇게 정했나**
+
+1. **번호를 뺀 이유** — [nextjs-docs ADR 0002](../../nextjs-docs/docs/adr/0002-reorder-learning-sequence.md)가 학습 순서 재배열을 허용합니다. 번호가 URL에 있으면 재배열할 때마다 모든 문서 링크와 학습자 북마크가 깨집니다. 반면 세그먼트의 의미 부분(`getting-started`, `directives`)은 움직이지 않습니다.
+2. **폴더 경로를 유지한 이유** — 리프 md 파일명이 **11건 중복**됩니다(`cacheLife`, `draft-mode`, `forbidden`, `headers`, `images`, `instrumentation`, `not-found`, `proxy`, `turbopack`, `typescript`, `unauthorized`). 데모 URL처럼 파일명만 쓰면 즉시 충돌합니다.
+3. **덤** — 결과 URL이 공식 문서(`nextjs.org/docs/app` + 같은 경로)와 1:1로 대응합니다. 학습자가 원문과 대조하기 쉽고, 각 문서 상단의 공식 링크가 맞는지 기계적으로 검증할 수 있습니다.
+
+**데모 URL과 형태가 다른 것은 의도된 것입니다.** 데모 URL은 md 지시자에 **손으로 적는 값**이라 짧아야 하고 zone을 옮겨도 안 깨져야 합니다. 문서 URL은 **기계가 파일 경로에서 생성**하므로 길어도 비용이 없습니다. 둘의 조인은 URL이 아니라 `demos.yaml`의 `doc`(md 경로)로 하므로 형태가 달라도 문제가 없습니다.
+
+**세부 규칙**
+
+| 항목 | 규칙 |
+|---|---|
+| 대소문자 | **파일명 그대로 보존**합니다 — `3.3-functions/cacheLife.md` → `/api-reference/functions/cacheLife`. `next.config.js` 옵션 65개와 함수 문서 대부분이 camelCase이고, 공식 문서 URL도 같은 표기를 씁니다 |
+| trailing slash | 없음 (Next.js 기본값 `trailingSlash: false` 유지) |
+| URL을 만들지 않는 것 | `nextjs-docs/docs/`(ADR), 모든 `assets/`, 루트의 `AGENTS.md`·`CLAUDE.md`·`CONTEXT.md`·`PROGRESS.md`·`TRANSLATION.md` |
+| 예약 세그먼트 | 최상위 `demo`·`zone`·`demo-static`은 셸과 데모 앱이 소유합니다. 카테고리 폴더 이름으로 쓸 수 없습니다 |
+
+**따라오는 셸 라우트 구조**
+
+```
+apps/shell/src/app/
+├─ page.tsx                 → /            (루트 README.md)
+├─ [...slug]/page.tsx       → 나머지 문서 전부
+│                             generateStaticParams가 docs-manifest의 경로를 전부 생성
+└─ demo/…                   → 정적 세그먼트가 catch-all보다 먼저 매칭되므로 충돌 없음
+```
+
+**안 정해진 것**: lint 항목 두 개를 `@study/docs`의 `build`에 넣을지, `@study/demos`의 `lint`에 넣을지 — ① 번호 제거 후 URL이 충돌하는 md가 없는가, ② 카테고리 폴더가 예약 세그먼트를 쓰지 않는가.
+
+**선행 정리 (nextjs-docs 쪽) — 완료**: `3-api-reference/3.5-configuration/`이 `3.5-config/`와 별개로 존재하면서 `/api-reference/config`와 `/api-reference/configuration` 두 갈래 URL을 만들고 있었습니다. 완성된 3.5.1~3.5.3 본문이 **아무 데서도 링크되지 않는** 그 폴더에 들어가 있었고, 목차가 가리키는 `3.5-config/typescript.md`·`eslint.md`는 스텁이었습니다. 완성본을 `3.5-config/`로 옮기고(`next-config-js.md`는 `3.5.1-next-config-js/README.md`에 병합) 폴더를 삭제했습니다. 중복 파일명도 12건에서 11건으로 돌아왔습니다.
+
+> 이 결정은 [03. 3-1 경로 규칙](./03-composition-architecture.md) 표에 반영돼야 합니다. 반영하면 이 항목은 05에서 내려갑니다.
+
 ---
 
 ## B. 대량 단계 전에 정해야 할 것
