@@ -1,0 +1,49 @@
+name: 저장소 질문
+description: 이 저장소의 학습 문서·데모 사용에 관한 질문을 남깁니다.
+title: "[질문] "
+labels:
+  - kind:question
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        이 Form은 이 저장소의 학습 문서와 데모 사용 질문만 받습니다. 일반적인 Next.js 기술 지원은 [Next.js 공식 문서](https://nextjs.org/docs/app)를 먼저 확인해 주세요. 공개하면 안 되는 정보는 [보안 정책](https://github.com/Junyong34/nextjs-ko-study-lab/security/policy)을 따르세요.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 제출 전 확인
+      options:
+        - label: 기존 open·closed 이슈와 관련 문서를 검색했습니다.
+          required: true
+        - label: 이 내용은 공개 가능한 질문이며 민감한 보안 정보가 포함되지 않았습니다.
+          required: true
+  - type: input
+    id: related-document
+    attributes:
+      label: 관련 문서·챕터·데모
+      description: 질문과 관련된 경로, URL 또는 메뉴 이름을 적어 주세요.
+      placeholder: 문서 경로 또는 데모 URL
+    validations:
+      required: true
+  - type: textarea
+    id: attempted
+    attributes:
+      label: 시도한 내용
+      description: 문서를 읽거나 실행해 본 과정과 확인한 결과를 적어 주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: blocked-point
+    attributes:
+      label: 막힌 지점
+      description: 예상과 달랐던 부분이나 이해되지 않는 개념을 적어 주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: 명확한 질문
+      description: 답변받고 싶은 질문을 한 문장 이상으로 적어 주세요.
+    validations:
+      required: true
