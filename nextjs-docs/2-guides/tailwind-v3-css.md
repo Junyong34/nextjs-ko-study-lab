@@ -32,7 +32,7 @@ pnpm과 Yarn도 설치 뒤 `npx tailwindcss init -p`를 실행한다. Bun에서�
 
 `tailwind.config.js`의 `content`에는 Tailwind 클래스를 사용하는 템플릿 경로를 지정한다. 공식 예제는 `app`, `pages`, `components` 아래의 JavaScript, TypeScript, JSX, TSX, MDX 파일을 탐색 대상으로 둔다.
 
-```js
+```js filename="tailwind.config.js"
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -50,7 +50,7 @@ module.exports = {
 
 전역 CSS 파일에는 Tailwind의 세 레이어를 추가한다.
 
-```css
+```css filename="app/globals.css"
 /* app/globals.css */
 @tailwind base;
 @tailwind components;
@@ -59,7 +59,7 @@ module.exports = {
 
 App Router에서는 이 전역 CSS를 [루트 레이아웃](../3-api-reference/3.1-file-conventions/layout.md)에서 import한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 // app/layout.tsx
 import './globals.css'
 
@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 설치와 전역 스타일 연결을 마치면 컴포넌트의 `className`에 Tailwind 유틸리티 클래스를 사용할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 // app/page.tsx
 export default function Page() {
   return <h1 className="text-3xl font-bold underline">Hello, Next.js!</h1>

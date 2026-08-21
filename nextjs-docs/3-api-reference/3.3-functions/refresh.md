@@ -58,7 +58,7 @@ export async function createPost(formData) {
 
 ### 시그니처 (Parameters & Returns)
 
-```tsx
+```tsx filename="app/actions.ts"
 refresh(): void
 ```
 

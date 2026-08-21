@@ -27,7 +27,7 @@
 
 `<form>`과 [Server Action](../1-getting-started/mutating-data.md), `useActionState`를 사용하면 자격 증명을 수집하고 서버에서 입력을 검증한 뒤 인증 제공자나 데이터베이스를 호출할 수 있다. Server Action은 서버에서 실행되지만 공개 POST 진입점처럼 취급해야 한다.
 
-```tsx
+```tsx filename="app/ui/signup-form.tsx"
 'use client'
 
 import { useActionState } from 'react'
@@ -49,7 +49,7 @@ export function SignupForm() {
 
 서버에서는 Zod나 Yup 같은 스키마 라이브러리로 필드를 다시 검증한다. 검증에 실패하면 인증 제공자나 데이터베이스를 호출하기 전에 반환한다. 유효한 비밀번호는 평문으로 저장하지 않고 해시한 뒤 사용자를 만든다. 그다음 세션을 만들고 적절한 페이지로 이동한다.
 
-```ts
+```ts filename="app/actions/auth.tsx"
 'use server'
 
 import * as z from 'zod'
@@ -106,15 +106,15 @@ export async function signup(_: unknown, formData: FormData) {
 
 비밀 키는 예측하기 어려운 충분한 길이로 만들고 저장소에 커밋하지 않는다.
 
-```bash
+```bash filename="terminal"
 openssl rand -base64 32
 ```
 
-```bash
+```bash filename=".env"
 SESSION_SECRET=your_secret_key
 ```
 
-```ts
+```ts filename="app/lib/definitions.ts"
 import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 
@@ -141,7 +141,7 @@ export async function decrypt(session = '') {
 
 세션 쿠키는 서버에서 설정한다. `HttpOnly`는 클라이언트 JavaScript의 접근을 막고, `Secure`는 HTTPS로만 전송하며, `SameSite`는 교차 사이트 요청 규칙을 정한다. `Expires` 또는 `Max-Age`와 `Path`도 명시한다.
 
-```ts
+```ts filename="app/lib/session.ts"
 import 'server-only'
 import { cookies } from 'next/headers'
 
@@ -189,7 +189,7 @@ export async function createSession(userId: string) {
 
 [Proxy](../3-api-reference/3.1-file-conventions/proxy.md)는 여러 라우트의 리다이렉트를 한곳에 모으고 정적 유료 콘텐츠 같은 라우트를 사전 필터링할 수 있다. 그러나 prefetch된 라우트를 포함해 넓게 실행되므로 쿠키만 읽고, 성능을 해칠 데이터베이스 검사는 피한다.
 
-```ts
+```ts filename="app/actions/auth.ts"
 import { NextRequest, NextResponse } from 'next/server'
 import { decrypt } from '@/app/lib/session'
 
@@ -210,7 +210,7 @@ Proxy는 첫 번째 방어선일 뿐이다. 대부분의 보안 검사는 데이
 
 DAL은 데이터 요청과 인가를 중앙화한다. 최소한 세션 유효성을 확인하고 리다이렉트하거나 이후 요청에 필요한 사용자 정보만 반환하는 함수를 둔다. React `cache`는 한 렌더링 패스에서 중복 검증을 줄인다.
 
-```ts
+```ts filename="app/lib/dal.ts"
 import 'server-only'
 import { cache } from 'react'
 import { cookies } from 'next/headers'
@@ -257,7 +257,7 @@ leaf 컴포넌트의 역할 기반 UI는 사용자 경험을 조정할 뿐이다
 
 [Server Action](./server-actions.md)은 공개 API 엔드포인트처럼 취급한다. UI가 이미 권한을 검사했더라도 각 Action에서 인증과 인가를 다시 수행한다.
 
-```ts
+```ts filename="app/lib/actions.ts"
 'use server'
 
 export async function deleteUser() {

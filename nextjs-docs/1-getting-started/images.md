@@ -21,7 +21,7 @@ Next.js의 [`<Image>`](../3-api-reference/3.2-components/image.md) 컴포넌트�
 
 `<Image>`를 쓰려면 `next/image`에서 import하고 컴포넌트 안에서 렌더링한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Image from 'next/image'
 
 export default function Page() {
@@ -39,7 +39,7 @@ export default function Page() {
 
 ![app 폴더와 public 폴더가 나란히 있는 예시 폴더 구조](./assets/images-01.webp)
 
-```tsx
+```tsx filename="app/page.tsx"
 import Image from 'next/image'
 
 export default function Page() {
@@ -56,7 +56,7 @@ export default function Page() {
 
 이미지를 정적으로 import하면, Next.js가 고유한(intrinsic) [`width`](../3-api-reference/3.2-components/image.md)와 [`height`](../3-api-reference/3.2-components/image.md)를 자동으로 알아낸다. 이 값들은 이미지 비율을 정하고 이미지가 로딩되는 동안 [Cumulative Layout Shift](https://web.dev/articles/cls)를 막는 데 쓰인다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Image from 'next/image'
 import ProfileImage from './profile.png'
 
@@ -78,7 +78,7 @@ export default function Page() {
 
 이미지에 정적 `import`를 쓸 수 없는 상황이라면, Server Component 안에서 다이나믹 `import()`를 써도 `width`, `height`, `blurDataURL`을 자동으로 얻을 수 있다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 import Image from 'next/image'
 
 async function PostImage({
@@ -98,7 +98,7 @@ async function PostImage({
 
 [경로 별칭](../3-api-reference/3.5-config/README.md)(예: `@/`)을 설정해뒀다면, 상대 경로 대신 이를 쓸 수 있다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 const { default: image } = await import(
   `@/content/blog/images/${imageFilename}`
 )
@@ -110,7 +110,7 @@ const { default: image } = await import(
 
 리모트 이미지를 쓰려면 `src` prop에 URL 문자열을 전달한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Image from 'next/image'
 
 export default function Page() {
@@ -129,7 +129,7 @@ Next.js는 빌드 과정에서 리모트 파일에 접근할 수 없기 때문�
 
 리모트 서버의 이미지를 안전하게 허용하려면 [`next.config.js`](../3-api-reference/3.5-config/README.md)에 지원할 URL 패턴 목록을 정의해야 한다. 악의적인 사용을 막기 위해 최대한 구체적으로 지정한다. 예를 들어 아래 설정은 특정 AWS S3 버킷의 이미지만 허용한다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const config: NextConfig = {

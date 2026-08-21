@@ -107,9 +107,6 @@ export function DemoIframe({
               <div key={tone} className={`${style.dot} rounded-full ${tone}`} />
             ))}
           </div>
-          <span className="truncate text-xs font-mono text-zinc-500 dark:text-zinc-400 ml-2">
-            {label}
-          </span>
         </div>
 
         <div className={style.actions}>

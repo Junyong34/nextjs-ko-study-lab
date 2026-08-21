@@ -17,7 +17,7 @@ Next.js CLI로 애플리케이션을 개발하고, 빌드하고, 시작하는 �
 
 기본 사용법은 다음과 같다.
 
-```
+```bash filename="Terminal"
 pnpm next [command] [options]
 ```
 
@@ -72,7 +72,7 @@ pnpm next [command] [options]
 
 `next build`는 애플리케이션의 최적화된 프로덕션 빌드를 만든다. 출력에는 각 라우트에 대한 정보가 표시된다. 예를 들면 다음과 같다.
 
-```
+```bash filename="Terminal"
 Route (app)
 ┌ ○ /_not-found
 └ ƒ /products/[id]
@@ -122,7 +122,7 @@ Route (app)
 
 출력은 다음과 같은 형태다.
 
-```
+```bash filename="Terminal"
 Operating System:
   Platform: darwin
   Arch: arm64
@@ -171,7 +171,7 @@ Next.js는 일반적인 사용에 대한 **완전히 익명인** 텔레메트리
 
 이전에는 라우트 타입이 `next dev`나 `next build` 중에만 생성되어, `tsc --noEmit`을 직접 실행해서는 라우트 타입을 검증할 수 없었다. 이제는 타입을 독립적으로 생성해 외부에서 검증할 수 있다.
 
-```
+```bash filename="Terminal"
 # 먼저 라우트 타입을 생성한 뒤 TypeScript로 검증한다
 next typegen && tsc --noEmit
  
@@ -188,7 +188,7 @@ next typegen && npm run type-check
 
 출력 파일은 `<distDir>/types`에 작성된다 (일반적으로 개발 환경에서는 `.next/dev/types`, 프로덕션에서는 `.next/types`).
 
-```
+```bash filename="Terminal"
 next typegen
 # 또는 특정 앱에 대해
 next typegen ./apps/web
@@ -219,7 +219,7 @@ next typegen ./apps/web
 
 `next experimental-analyze`는 [Turbopack](https://nextjs.org/docs/app/api-reference/turbopack)을 사용해 애플리케이션의 번들 출력을 분석한다. 이 명령은 JavaScript, CSS, 기타 에셋을 포함한 번들의 크기와 구성을 파악하는 데 도움을 준다. 이 명령은 애플리케이션 빌드를 만들지 않는다.
 
-```
+```bash filename="Terminal"
 pnpm next experimental-analyze
 ```
 
@@ -233,7 +233,7 @@ pnpm next experimental-analyze
 
 서버를 시작하지 않고 분석 출력을 디스크에 쓰려면 `--output` 플래그를 사용한다. 출력은 `.next/diagnostics/analyze`에 작성되며 다른 곳으로 복사하거나 공유할 수 있는 정적 파일로 구성된다.
 
-```
+```bash filename="Terminal"
 # .next/diagnostics/analyze에 출력을 쓴다
 npx next experimental-analyze --output
  
@@ -258,7 +258,7 @@ cp -r .next/diagnostics/analyze ./analyze-before-refactor
 
 `next build` 중 prerender 오류가 발생하면 `--debug-prerender` 플래그를 사용해 더 자세한 출력을 얻을 수 있다.
 
-```
+```bash filename="Terminal"
 next build --debug-prerender
 ```
 
@@ -280,7 +280,7 @@ next build --debug-prerender
 
 `--debug-build-paths` 옵션으로 App Router와 Pages Router에서 특정 라우트만 빌드할 수 있다. 대규모 애플리케이션에서 더 빠르게 디버깅할 때 유용하다. `--debug-build-paths` 옵션은 쉼표로 구분된 파일 경로를 받고, glob 패턴을 지원하며, `!`를 접두어로 붙인 경로는 제외한다.
 
-```
+```bash filename="Terminal"
 # 특정 라우트 하나만 빌드한다
 next build --debug-build-paths="app/page.tsx"
  
@@ -304,13 +304,13 @@ next build --debug-build-paths="app/**/page.tsx,!app/admin/**"
 
 Next.js는 기본적으로 개발 중과 `next start` 실행 시 `http://localhost:3000`을 사용한다. 기본 포트는 다음처럼 `-p` 옵션으로 바꿀 수 있다.
 
-```
+```bash filename="Terminal"
 next dev -p 4000
 ```
 
 또는 `PORT` 환경 변수를 사용한다.
 
-```
+```bash filename="Terminal"
 PORT=4000 next dev
 ```
 
@@ -320,7 +320,7 @@ PORT=4000 next dev
 
 웹훅이나 인증 같은 특정 사용 사례에서는 `localhost`에서 안전한 환경을 갖추기 위해 [HTTPS](https://developer.mozilla.org/en-US/docs/Glossary/HTTPS)를 사용할 수 있다. Next.js는 `next dev`에서 `--experimental-https` 플래그로 자체 서명 인증서를 생성할 수 있다.
 
-```
+```bash filename="Terminal"
 next dev --experimental-https
 ```
 
@@ -328,7 +328,7 @@ next dev --experimental-https
 
 `--experimental-https-key`와 `--experimental-https-cert`로 커스텀 인증서와 키를 제공할 수도 있다. 선택적으로 `--experimental-https-ca`로 커스텀 CA 인증서도 제공할 수 있다.
 
-```
+```bash filename="Terminal"
 next dev --experimental-https --experimental-https-key ./certificates/localhost-key.pem --experimental-https-cert ./certificates/localhost.pem
 ```
 
@@ -340,7 +340,7 @@ Next.js를 다운스트림 프록시(예: AWS ELB/ALB 같은 로드 밸런서) �
 
 프로덕션 Next.js 서버의 타임아웃 값을 설정하려면 `next start`에 `--keepAliveTimeout`(밀리초)을 전달한다.
 
-```
+```bash filename="Terminal"
 next start --keepAliveTimeout 70000
 ```
 
@@ -348,7 +348,7 @@ next start --keepAliveTimeout 70000
 
 `next` 명령에 [node 인수](https://nodejs.org/api/cli.html#cli_node_options_options)를 전달할 수 있다. 예를 들면 다음과 같다.
 
-```
+```bash filename="Terminal"
 NODE_OPTIONS='--throw-deprecation' next
 NODE_OPTIONS='-r esm' next
 NODE_OPTIONS='--inspect' next
@@ -358,7 +358,7 @@ NODE_OPTIONS='--inspect' next
 
 CPU 프로파일을 캡처해 Next.js 애플리케이션의 성능 병목을 분석할 수 있다. `--experimental-cpu-prof` 플래그는 V8의 내장 CPU 프로파일러를 활성화하고 프로세스가 종료될 때 프로파일을 `.next-profiles/`에 저장한다.
 
-```
+```bash filename="Terminal"
 # 빌드 프로세스를 프로파일링한다
 next build --experimental-cpu-prof
  

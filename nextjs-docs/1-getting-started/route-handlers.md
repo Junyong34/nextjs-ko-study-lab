@@ -25,7 +25,7 @@ Route Handler는 Web [`Request`](https://developer.mozilla.org/docs/Web/API/Requ
 
 `app` 안에 [`route.js|ts`](../3-api-reference/3.1-file-conventions/route.md)를 만들고 HTTP 메서드 이름의 함수를 export한다.
 
-```ts
+```ts filename="app/api/route.ts"
 export async function GET(request: Request) {}
 ```
 
@@ -43,7 +43,7 @@ Web 표준 API 외에도 Next.js는 고급 사용 사례를 위한 편의 기능
 
 Route Handler는 기본적으로 캐시되지 않는다. `GET`만 `dynamic = 'force-static'` 같은 라우트 설정으로 캐싱을 선택할 수 있다. 다른 HTTP 메서드는 캐시되지 않는다.
 
-```ts
+```ts filename="app/items/route.ts"
 export const dynamic = 'force-static'
 
 export async function GET() {
@@ -64,7 +64,7 @@ export async function GET() {
 
 [Cache Components](./caching.md)를 켜면 `GET` Route Handler는 일반 UI 라우트와 같은 모델을 따른다. 기본적으로 요청 시점에 실행되지만, 캐시되지 않은 데이터나 런타임 데이터에 접근하지 않으면 빌드 시점에 prerender할 수 있다.
 
-```ts
+```ts filename="app/items/route.ts"
 // 다이나믹·런타임 데이터가 없어 빌드 시점에 prerender할 수 있다
 export async function GET() {
   return Response.json({ projectName: 'Next.js' })
@@ -77,7 +77,7 @@ export async function GET() {
 
 캐시되지 않은 데이터도 별도 도우미 함수에서 `use cache`와 `cacheLife`를 사용하면 정적 응답에 포함할 수 있다.
 
-```ts
+```ts filename="app/api/products/route.ts"
 import { cacheLife } from 'next/cache'
 
 export async function GET() {
@@ -113,7 +113,7 @@ async function getProducts() {
 
 TypeScript에서는 전역 `RouteContext`로 다이나믹 세그먼트의 `context`를 타입 지정한다.
 
-```ts
+```ts filename="app/users/[id]/route.ts"
 import type { NextRequest } from 'next/server'
 
 export async function GET(_req: NextRequest, ctx: RouteContext<'/users/[id]'>) {

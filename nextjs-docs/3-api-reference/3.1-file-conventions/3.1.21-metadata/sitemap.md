@@ -407,7 +407,7 @@ export default async function sitemap(props) {
 
 `sitemap.(xml|ts|js)`에서 내보낸 기본 함수는 다음 속성을 가진 객체 배열을 반환해야 한다.
 
-```tsx
+```tsx filename="app/sitemap.ts"
 type Sitemap = Array<{
   url: string
   lastModified?: string | Date

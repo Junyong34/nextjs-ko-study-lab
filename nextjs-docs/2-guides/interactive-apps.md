@@ -24,7 +24,7 @@
 
 페이지 최상위에서 모든 데이터를 `await`하면 가장 느린 읽기가 끝날 때까지 전체 화면이 막힌다. 각 읽기를 별도 컴포넌트로 나누고 `Suspense`로 감싸면 페이지는 셸을 즉시 반환하고, 서버는 준비된 섹션부터 스트리밍한다.
 
-```tsx
+```tsx filename="app/task/[id]/page.tsx"
 import { Suspense } from 'react'
 
 export default function TaskPage({ params }) {
@@ -49,7 +49,7 @@ export default function TaskPage({ params }) {
 
 `useOptimistic`은 서버가 넘긴 오래된 prop 대신 transition이 진행되는 동안 표시할 임시 값을 제공한다. `useTransition`은 Server Function을 transition 안에서 실행하고, 오류가 발생하면 가까운 error boundary로 전달한다.
 
-```tsx
+```tsx filename="app/task/[id]/page.tsx"
 'use client'
 
 import { useOptimistic, useTransition } from 'react'
@@ -75,7 +75,7 @@ export function TaskCard({ id, priority }) {
 
 필터 컴포넌트는 목적 URL을 결정하고, 재사용 가능한 `ChipGroup`은 콜백 prop을 transition 안에서 실행한다. `useOptimistic`으로 선택된 칩과 `data-pending`을 즉시 갱신하면 조상은 상태를 끌어올리지 않고 CSS로 보드를 흐리게 할 수 있다.
 
-```tsx
+```tsx filename="app/task/[id]/page.tsx"
 function handleClick(newValue) {
   startTransition(async () => {
     setOptimisticValue(newValue)
@@ -103,7 +103,7 @@ Server Component는 저장된 댓글을 렌더링하고, Client Component는 `us
 
 `useActionState`는 제출 버튼의 대기 상태, 필드 재설정, dialog 닫기를 한 action 수명 주기에 묶는다. 성공할 때 반환 상태의 `key`를 증가시키면 입력 영역이 다시 마운트되어 모든 필드가 초기화된다.
 
-```tsx
+```tsx filename="features/task/components/task-detail.tsx"
 const [{ key }, formAction, isPending] = useActionState(
   async (prev, formData) => {
     await createTask({ title: String(formData.get('title')) })
@@ -128,7 +128,7 @@ const [{ key }, formAction, isPending] = useActionState(
 
 1~7단계는 Cache Components 없이도 작동한다. Next.js 16에서 도입된 Cache Components를 켜면 요청 사이에 재사용할 읽기를 `'use cache'`와 [`cacheTag`](../3-api-reference/3.3-functions/cacheTag.md)로 캐싱할 수 있다. mutation 뒤에는 [`updateTag`](../3-api-reference/3.3-functions/updateTag.md)로 바뀐 읽기의 태그만 즉시 만료한다. 다이나믹 읽기에는 태그가 없으므로 `refresh()`를 사용한다.
 
-```tsx
+```tsx filename="features/task/task-queries.ts"
 export async function getTask(id: string) {
   'use cache'
   cacheLife('hours')

@@ -25,7 +25,7 @@ nonce는 한 번만 사용하는 예측 불가능한 무작위 문자열이다. 
 
 [Proxy](../3-api-reference/3.1-file-conventions/proxy.md)는 페이지 렌더링 전에 헤더를 추가하고 nonce를 만들 수 있다. 요청마다 새 nonce가 필요하므로 nonce 기반 CSP에는 다이나믹 렌더링을 사용해야 한다.
 
-```ts
+```ts filename="proxy.ts"
 import { NextRequest, NextResponse } from 'next/server'
 
 export function proxy(request: NextRequest) {
@@ -58,7 +58,7 @@ export function proxy(request: NextRequest) {
 
 Proxy는 기본적으로 모든 요청에서 실행된다. CSP가 필요 없는 정적 asset과 `next/link` prefetch는 [`matcher`](../3-api-reference/3.1-file-conventions/proxy.md)에서 제외하는 것을 권장한다.
 
-```ts
+```ts filename="proxy.ts"
 export const config = {
   matcher: [
     {
@@ -82,7 +82,7 @@ export const config = {
 
 ##### 다이나믹 렌더링 강제하기
 
-```tsx
+```tsx filename="app/page.tsx"
 import { connection } from 'next/server'
 
 export default async function Page() {
@@ -95,7 +95,7 @@ export default async function Page() {
 
 Server Component에서는 [`headers()`](../3-api-reference/3.3-functions/headers.md)로 nonce를 읽어 서드파티 `<Script>`에 전달할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { headers } from 'next/headers'
 import Script from 'next/script'
 
@@ -123,7 +123,7 @@ nonce를 사용하면 모든 페이지를 다이나믹 렌더링해야 한다. �
 
 nonce가 필요 없는 앱은 `next.config.js`의 `headers()`에서 CSP 응답 헤더를 설정할 수 있다. 이 예는 inline 스크립트와 스타일을 허용하므로 엄격한 nonce 정책과 같은 보장 수준은 아니다.
 
-```js
+```js filename="next.config.js"
 const isDev = process.env.NODE_ENV === 'development'
 const csp = `
   default-src 'self';
@@ -161,7 +161,7 @@ Next.js는 nonce의 대안으로 hash 기반 CSP를 위한 SRI를 실험적으�
 
 #### SRI 활성화하기
 
-```js
+```js filename="next.config.js"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -178,7 +178,7 @@ module.exports = nextConfig
 
 SRI를 활성화해도 기존 CSP 정책을 계속 사용할 수 있다. SRI는 asset에 `integrity` 속성을 추가해 CSP와 독립적으로 동작한다. 다이나믹 렌더링이 필요한 경로에서는 필요에 따라 Proxy에서 nonce도 함께 생성할 수 있다.
 
-```js
+```js filename="next.config.js"
 const isDev = process.env.NODE_ENV === 'development'
 
 const csp = `
@@ -240,7 +240,7 @@ module.exports = {
 
 Google Tag Manager 같은 서드파티 컴포넌트에는 `headers()`로 읽은 nonce를 전달한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { GoogleTagManager } from '@next/third-parties/google'
 import { headers } from 'next/headers'
 
@@ -264,7 +264,7 @@ export default async function RootLayout({
 
 `script-src`, `connect-src`, `img-src`에는 실제 사용하는 도메인만 추가한다.
 
-```ts
+```ts filename="proxy.ts"
 const csp = `
   default-src 'self';
   script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://www.googletagmanager.com;

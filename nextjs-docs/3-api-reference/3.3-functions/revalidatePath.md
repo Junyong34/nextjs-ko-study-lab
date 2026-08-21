@@ -47,7 +47,7 @@ export default async function submit() {
 
 ### 매개변수 (Parameters)
 
-```tsx
+```tsx filename="app/api/revalidate/route.ts"
 revalidatePath(path: string, type?: 'page' | 'layout'): void
 ```
 
@@ -74,7 +74,7 @@ module.exports = {
 }
 ```
 
-```ts
+```ts filename="next.config.js"
 // ⭕ 올바른 예: 실제 파일 경로인 대상(destination) 경로 전달
 revalidatePath('/news')
 
@@ -89,7 +89,7 @@ revalidatePath('/blog')
 
 특정 페이지만 즉시 갱신하고 동일 데이터를 공유하는 다른 페이지를 놓치지 않으려면 두 함수를 함께 사용하는 유틸리티 패턴을 구성할 수 있다:
 
-```ts
+```ts filename="app/actions.ts"
 'use server'
 
 import { revalidatePath, updateTag } from 'next/cache'

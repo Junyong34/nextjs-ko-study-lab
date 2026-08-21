@@ -38,7 +38,7 @@ Proxy는 느린 데이터 fetching을 위한 기능이 아니다. 권한에 따�
 
 Proxy 함수는 기본 export 또는 이름 있는 `proxy` export로 제공한다. `matcher`는 Proxy가 실행될 경로를 제한한다.
 
-```ts
+```ts filename="proxy.ts"
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 

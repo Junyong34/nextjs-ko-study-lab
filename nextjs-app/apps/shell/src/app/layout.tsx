@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Header, DocTree, Footer, type TreeNode } from '@study/ui'
-import { getManifest } from '@/lib/docs'
+import { getAugmentedTree } from '@/lib/docs'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -19,10 +19,9 @@ export default function RootLayout({
 }>) {
   let tree: TreeNode[] = []
   try {
-    const manifest = getManifest()
-    tree = manifest.tree || []
+    tree = getAugmentedTree()
   } catch (err) {
-    console.error('Failed to load docs-manifest.json:', err)
+    console.error('Failed to load tree:', err)
   }
 
   return (

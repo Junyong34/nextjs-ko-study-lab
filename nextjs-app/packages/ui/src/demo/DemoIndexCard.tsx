@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { BookOpen, ArrowRight } from 'lucide-react'
 import { cardClass } from '../primitives/Card'
-import { DemoStatusBadge, DemoZoneBadge } from './DemoStatus'
+import { DemoStatusBadge } from './DemoStatus'
 
 export interface DemoIndexCardProps {
   /** 학습자 URL 조각 (예: "caching/basic") */
@@ -26,7 +26,6 @@ export function DemoIndexCard({ url, title, zone, status, doc, docUrl }: DemoInd
             <span className="rounded-md bg-zinc-100 px-2 py-0.5 font-mono text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
               {url}
             </span>
-            <DemoZoneBadge zone={zone} size="sm" />
           </div>
           <DemoStatusBadge status={status} />
         </div>

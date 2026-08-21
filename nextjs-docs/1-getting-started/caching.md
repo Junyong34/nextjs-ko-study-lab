@@ -22,7 +22,7 @@
 
 Next 설정 파일에 [`cacheComponents`](../3-api-reference/3.5-config/3.5.1-next-config-js/README.md) 옵션을 추가하면 Cache Components를 켤 수 있다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -51,7 +51,7 @@ export default nextConfig
 
 데이터를 가져오는 비동기 함수를 캐시하려면, 함수 본문 맨 위에 `use cache` 지시어를 추가한다.
 
-```tsx
+```tsx filename="app/lib/data.ts"
 import { cacheLife } from 'next/cache'
 
 export async function getUsers() {
@@ -67,7 +67,7 @@ export async function getUsers() {
 
 컴포넌트, 페이지, 레이아웃 전체를 캐시하려면, 그 컴포넌트나 페이지 본문 맨 위에 `use cache` 지시어를 추가한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { cacheLife } from 'next/cache'
 
 export default async function Page() {
@@ -94,7 +94,7 @@ API, 데이터베이스, 그 외 비동기 작업 같은 비동기 소스에서 
 
 대신 컴포넌트를 [`<Suspense>`](https://react.dev/reference/react/Suspense)로 감싸고 fallback UI를 제공한다. fallback은 prerender된 셸과 함께 나가고, 비동기 작업은 요청 시점에 실행된다.
 
-```tsx
+```tsx filename="page.tsx"
 import { Suspense } from 'react'
 
 async function LatestPosts() {
@@ -125,7 +125,7 @@ export default function Page() {
 
 `<Suspense>` 바운더리 없이 캐시되지 않은 읽기를 두면, dev 오버레이에 **blocking-route** 인사이트가 다음 수정 방법과 함께 나타난다.
 
-```
+```tsx filename="page.tsx"
 <Suspense fallback={…}>
   <DataChild />
 </Suspense>
@@ -146,7 +146,7 @@ export default function Page() {
 
 런타임 API에 접근하는 컴포넌트는 `<Suspense>`로 감싸야 한다.
 
-```tsx
+```tsx filename="page.tsx"
 import { cookies } from 'next/headers'
 import { Suspense } from 'react'
 
@@ -178,7 +178,7 @@ export default function Page() {
 
 런타임 API에서 값을 추출해서 캐시된 함수에 인자로 전달할 수 있다.
 
-```tsx
+```tsx filename="app/profile/page.tsx"
 import { cookies } from 'next/headers'
 import { Suspense } from 'react'
 
@@ -215,7 +215,7 @@ async function CachedContent({ sessionId }: { sessionId: string }) {
 
 정적 콘텐츠, 캐시된 다이나믹 콘텐츠, 스트리밍되는 다이나믹 콘텐츠가 한 페이지에서 함께 동작하는 전체 예시다.
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import { cacheLife, cacheTag } from 'next/cache'
@@ -301,7 +301,7 @@ prerendering 중에 헤더(정적)와 블로그 포스트(`use cache`로 캐시)
 
 **요청마다 고유한 값을 생성**하려면, 이런 작업 전에 [`connection()`](../3-api-reference/3.3-functions/connection.md)을 호출해 요청 시점으로 미루고, 컴포넌트를 `<Suspense>`로 감싼다.
 
-```tsx
+```tsx filename="page.tsx"
 import { connection } from 'next/server'
 import { Suspense } from 'react'
 
@@ -322,7 +322,7 @@ export default function Page() {
 
 또는 **결과를 캐시**해서 revalidation 전까지 모든 사용자가 같은 값을 보게 할 수도 있다.
 
-```tsx
+```tsx filename="page.tsx"
 export default async function Page() {
   'use cache'
   const buildId = crypto.randomUUID()
@@ -332,13 +332,13 @@ export default async function Page() {
 
 어떤 작업이 이렇게 동작하는지 굳이 외우지 않아도 된다. dev 오버레이가 호출에 따라 **blocking-prerender-random**, **blocking-prerender-current-time**, **blocking-prerender-crypto** 인사이트를 다음 수정 방법과 함께 보여준다.
 
-```
+```tsx filename="page.tsx"
 await connection()
 const id = Math.random()
 return <Item id={id} />
 ```
 
-```
+```tsx filename="page.tsx"
 function RandomId() {
   "use cache"
   return String(Math.random())
@@ -348,7 +348,7 @@ function RandomId() {
 
 렌더링마다 달라질 수 있는 랜덤 값·타임스탬프와 달리, 모듈 import, 동기 I/O, 순수 계산은 실행할 때마다 같은 결과를 낸다. 이런 작업만 쓰는 컴포넌트는 자동으로 prerender되고, 그 결과는 빌드 타임에 정적 HTML의 일부가 된다.
 
-```tsx
+```tsx filename="page.tsx"
 import fs from 'node:fs'
 
 export default async function Page() {
@@ -375,7 +375,7 @@ export default async function Page() {
 
 데이터가 렌더링 중에 계산되어 요청 사이에 재사용되어야 한다면, 그 읽기를 [`use cache`](../3-api-reference/3.4-directives/use-cache.md)로 감싼다. 데이터가 들어오는 요청에 의존하거나 시간에 따라 바뀔 것으로 예상되면, 요청 시점 렌더링 중에 읽는다.
 
-```tsx
+```tsx filename="page.tsx"
 import { readFile } from 'node:fs/promises'
 
 const content = await readFile('./config.json', 'utf-8')
@@ -423,7 +423,7 @@ Next.js는 prerendering 중에 완료될 수 없는 컴포넌트를 명시적으
 
 `params`를 최상위 레벨에서 구조 분해하는 레이아웃을 생각해보자.
 
-```tsx
+```tsx filename="app/shop/[slug]/layout.tsx"
 export default async function Layout({
   children,
   params,
@@ -444,7 +444,7 @@ export default async function Layout({
 
 하지만 종종 트리에서 더 아래쪽에서 파라미터 값을 읽을 수 있다. 레이아웃 레벨에서 await하는 대신, params promise를 아래로 전달하고 거기서 await한다.
 
-```tsx
+```tsx filename="app/shop/[slug]/layout.tsx"
 import { Suspense } from 'react'
 
 // async가 아님: 이 레이아웃은 params를 절대 await하지 않는다
@@ -495,7 +495,7 @@ Cache Components는 16.0.0에서 다이렉트 방문이 정적 셸을 만든다�
 
 예를 들어 URL에서 `searchParams`를 읽는 검색 페이지를 보자.
 
-```tsx
+```tsx filename="app/search/page.tsx"
 import { Suspense } from 'react'
 
 export default function SearchPage(props: PageProps<'/search'>) {

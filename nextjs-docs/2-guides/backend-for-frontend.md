@@ -21,13 +21,13 @@ Next.js는 HTTP 요청을 받아 HTML뿐 아니라 JSON, XML, 이미지, 파일,
 
 `route.ts` 또는 `route.js`는 모든 클라이언트가 접근할 수 있는 공개 HTTP endpoint를 만든다.
 
-```ts
+```ts filename="/app/api/route.ts"
 export function GET(request: Request) {}
 ```
 
 예외가 날 수 있는 작업은 `try/catch`로 다루되 민감한 내부 정보를 오류 응답에 노출하지 않는다. 접근을 제한하려면 [Authentication](./authentication.md)의 인증과 인가를 endpoint 안에서 확인한다.
 
-```ts
+```ts filename="/app/api/route.ts"
 export async function POST(request: Request) {
   try {
     await submit(request)
@@ -46,7 +46,7 @@ Next.js는 [`sitemap.xml`](../3-api-reference/3.1-file-conventions/3.1.21-metada
 
 요청의 `Accept` 헤더와 일치하는 [`rewrites`](../3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md)를 두면 하나의 URL에서 HTML과 Markdown처럼 서로 다른 표현을 제공할 수 있다. 응답에 `Vary: Accept`를 설정해야 공유 캐시가 두 형식을 섞지 않는다. `generateStaticParams`를 함께 사용하면 형식별 결과를 빌드 시점에 prerender할 수 있다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   async rewrites() {
     return [{
@@ -76,7 +76,7 @@ Route Handler는 여러 데이터 소스를 변환·필터링·집계해 프런�
 
 catch-all Route Handler에서 요청을 복제해 검증한 뒤 다른 백엔드로 전달할 수 있다. 단순한 경로 전달이라면 `next.config.js`의 `rewrites`가 더 간결하다.
 
-```ts
+```ts filename="/app/api/[...slug]/route.ts"
 export async function POST(request: Request, { params }) {
   const isValid = await isValidRequest(request.clone())
   if (!isValid) return new Response(null, { status: 400 })
@@ -98,7 +98,7 @@ Route Handler는 CMS 변경 webhook을 받아 `revalidateTag`를 호출하거나
 
 Route Handler에서도 [`redirect`](../3-api-reference/3.3-functions/redirect.md)와 [`permanentRedirect`](../3-api-reference/3.3-functions/permanentRedirect.md)를 사용할 수 있다.
 
-```ts
+```ts filename="/app/api/route.ts"
 import { redirect } from 'next/navigation'
 
 export async function GET() {
@@ -110,7 +110,7 @@ export async function GET() {
 
 프로젝트에는 `proxy` 파일을 하나만 둘 수 있고 `config.matcher`로 적용 경로를 정한다. `proxy`는 라우트에 도달하기 전에 인증 실패 응답, rewrite, redirect를 만들 수 있다.
 
-```ts
+```ts filename="proxy.ts"
 export const config = { matcher: '/api/:function*' }
 
 export function proxy(request: Request) {
@@ -146,7 +146,7 @@ export function proxy(request: Request) {
 
 커뮤니티 라이브러리는 method와 pathname을 읽는 factory로 Route Handler나 `proxy`를 제공할 수 있다.
 
-```ts
+```ts filename="/app/api/[...path]/route.ts"
 const handler = createHandler({ /* 라이브러리 옵션 */ })
 export const GET = handler
 export { handler as POST }

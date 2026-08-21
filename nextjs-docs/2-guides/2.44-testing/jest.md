@@ -33,7 +33,7 @@ pnpm create jest@latest
 
 `next/jest`는 Next.js Compiler transform, CSS·이미지·`next/font` mock, `.env` 로드, `node_modules`와 `.next` 제외, `next.config.js` 로드를 자동 구성한다.
 
-```ts
+```ts filename="jest.config.ts"
 import type { Config } from 'jest'
 import nextJest from 'next/jest.js'
 
@@ -54,7 +54,7 @@ export default createJestConfig(config)
 
 `tsconfig.json`이나 `jsconfig.json`의 경로 별칭은 Jest의 `moduleNameMapper`에도 맞춰야 한다.
 
-```json
+```json filename="tsconfig.json"
 {
   "compilerOptions": {
     "module": "esnext",
@@ -67,7 +67,7 @@ export default createJestConfig(config)
 }
 ```
 
-```ts
+```ts filename="jest.config.js"
 moduleNameMapper: {
   '^@/components/(.*)$': '<rootDir>/components/$1',
 }
@@ -77,7 +77,7 @@ moduleNameMapper: {
 
 `jest.setup.ts`에서 `@testing-library/jest-dom`을 불러오면 `toBeInTheDocument()` 같은 matcher를 쓸 수 있다.
 
-```ts
+```ts filename="jest.setup.ts"
 import '@testing-library/jest-dom'
 ```
 
@@ -87,7 +87,7 @@ import '@testing-library/jest-dom'
 
 `package.json`에는 일반 실행과 watch 실행을 나눈다.
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "test": "jest",
@@ -100,7 +100,7 @@ import '@testing-library/jest-dom'
 
 테스트할 페이지를 만든다.
 
-```tsx
+```tsx filename="app/page.js"
 // app/page.tsx
 import Link from 'next/link'
 
@@ -114,7 +114,7 @@ export default function Page() {
 }
 ```
 
-```tsx
+```tsx filename="jest.setup.ts"
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import Page from '../app/page'
@@ -129,7 +129,7 @@ describe('Page', () => {
 
 스냅샷은 예상하지 못한 렌더링 변경을 찾는 보조 수단이다. 변경된 스냅샷을 무조건 갱신하지 말고 의도한 결과인지 검토한다.
 
-```tsx
+```tsx filename="__tests__/snapshot.js"
 import { render } from '@testing-library/react'
 import Page from '../app/page'
 

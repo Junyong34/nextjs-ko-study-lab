@@ -16,7 +16,7 @@
 
 여러 라우트에서 쓰는 서드파티 script는 [`next/script`](../3-api-reference/3.2-components/script.md)를 가져와 해당 라우트들의 공통 layout에 넣는다.
 
-```tsx
+```tsx filename="app/dashboard/layout.tsx"
 import Script from 'next/script'
 
 export default function DashboardLayout({
@@ -39,7 +39,7 @@ export default function DashboardLayout({
 
 모든 라우트에 필요한 script는 root layout에 넣는다. 애플리케이션의 어느 라우트에 접근해도 로드되고 실행되며, 페이지를 여러 번 이동해도 한 번만 로드한다.
 
-```tsx
+```tsx filename="app/layout.js"
 import Script from 'next/script'
 
 export default function RootLayout({ children }) {
@@ -73,7 +73,7 @@ export default function RootLayout({ children }) {
 
 `worker` 전략은 Partytown을 통해 script를 Web Worker에서 실행해 메인 thread가 애플리케이션 코드에 집중하도록 할 수 있다. 이 실험적 기능은 `next.config.js`에서 `nextScriptWorkers`를 켜야 한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     nextScriptWorkers: true,
@@ -114,7 +114,7 @@ module.exports = {
 
 이 handler들은 파일 첫 줄에 `'use client'`가 있는 Client Component에서 `next/script`를 사용할 때만 작동한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 'use client'
 
 import Script from 'next/script'
@@ -135,7 +135,7 @@ export default function Page() {
 
 `nonce`나 사용자 정의 `data-*` 속성처럼 `Script`가 직접 사용하지 않는 DOM 속성을 전달할 수 있다. Next.js는 이를 최종 최적화된 `<script>` 요소로 전달한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 <Script
   src="https://example.com/script.js"
   id="example-script"

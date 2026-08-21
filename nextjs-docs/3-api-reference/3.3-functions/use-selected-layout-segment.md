@@ -49,7 +49,7 @@ export default function ExampleClientComponent() {
 
 ### 매개변수 (Parameters)
 
-```tsx
+```tsx filename="app/blog/blog-nav-link.tsx"
 const segment = useSelectedLayoutSegment(parallelRoutesKey?: string)
 ```
 

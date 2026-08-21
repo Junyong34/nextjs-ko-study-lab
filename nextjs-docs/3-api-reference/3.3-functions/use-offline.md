@@ -52,7 +52,7 @@ module.exports = nextConfig
 
 ### 시그니처 및 반환값
 
-```tsx
+```tsx filename="app/offline-status.tsx"
 const isOffline: boolean = useOffline()
 ```
 

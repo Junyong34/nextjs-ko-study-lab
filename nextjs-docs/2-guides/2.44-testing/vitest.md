@@ -26,14 +26,14 @@ pnpm create next-app --example with-vitest with-vitest-app
 
 TypeScript 프로젝트는 경로 별칭 플러그인까지 설치한다.
 
-```bash
+```bash filename="vitest.config.mts"
 # TypeScript
 pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom vite-tsconfig-paths
 # JavaScript
 pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom
 ```
 
-```ts
+```ts filename="vitest.config.mts"
 // vitest.config.mts
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
@@ -49,7 +49,7 @@ export default defineConfig({
 
 `package.json`에 `"test": "vitest"`를 추가한다. 기본 실행은 파일 변경을 감지하는 watch 모드다.
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "test": "vitest"
@@ -61,7 +61,7 @@ export default defineConfig({
 
 테스트할 페이지를 만든다.
 
-```tsx
+```tsx filename="app/page.tsx"
 // app/page.tsx
 import Link from 'next/link'
 
@@ -75,7 +75,7 @@ export default function Page() {
 }
 ```
 
-```tsx
+```tsx filename="__tests__/page.test.tsx"
 import { expect, test } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import Page from '../app/page'

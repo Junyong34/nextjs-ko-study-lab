@@ -18,7 +18,7 @@ static export를 사용하면 Next.js 애플리케이션을 정적 사이트나 
 
 `next.config.js`에서 출력 모드를 설정한다.
 
-```js
+```js filename="next.config.js"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
@@ -44,7 +44,7 @@ module.exports = nextConfig
 
 `app` 디렉터리의 Server Component는 `next build` 중 실행된다. 결과는 최초 로드용 정적 HTML과 클라이언트 라우트 전환용 정적 payload로 저장된다. 빌드 시점에 계산할 수 없는 다이나믹 Server Function만 사용하지 않으면 별도 변경이 필요 없다.
 
-```tsx
+```tsx filename="app/page.tsx"
 export default async function Page() {
   // 빌드 프로세스의 서버에서 한 번 실행된다.
   const res = await fetch('https://api.example.com/products')
@@ -58,7 +58,7 @@ export default async function Page() {
 
 브라우저에서 최신 데이터를 가져와야 하면 Client Component와 [SWR](./2.15-client-side-data-fetching/swr.md) 같은 도구를 사용할 수 있다. 라우트 전환은 클라이언트에서 일어나므로 전통적인 SPA처럼 동작한다.
 
-```tsx
+```tsx filename="app/other/page.tsx"
 import Link from 'next/link'
 
 export default function Page() {
@@ -66,7 +66,7 @@ export default function Page() {
 }
 ```
 
-```tsx
+```tsx filename="app/other/page.tsx"
 'use client'
 
 import useSWR from 'swr'
@@ -85,7 +85,7 @@ export default function Page() {
 
 기본 [Image Optimization](../3-api-reference/3.2-components/image.md)은 요청 시점 서버가 필요하므로 static export에서 지원하지 않는다. `next/image`를 유지하려면 Cloudinary 같은 외부 이미지 서비스의 custom loader를 설정한다.
 
-```js
+```js filename="next.config.js"
 const nextConfig = {
   output: 'export',
   images: {
@@ -99,7 +99,7 @@ module.exports = nextConfig
 
 loader는 `src`, `width`, `quality`를 받아 외부 서비스 URL을 구성한다. 그러면 컴포넌트에서는 일반적인 `next/image` API를 계속 사용할 수 있다.
 
-```ts
+```ts filename="my-loader.ts"
 export default function cloudinaryLoader({
   src,
   width,
@@ -114,7 +114,7 @@ export default function cloudinaryLoader({
 }
 ```
 
-```tsx
+```tsx filename="app/page.tsx"
 import Image from 'next/image'
 
 export default function Page() {
@@ -126,7 +126,7 @@ export default function Page() {
 
 static export에서는 `GET` Route Handler만 정적 파일로 만들 수 있다. 다음 예제처럼 정적 응답을 생성한다.
 
-```ts
+```ts filename="app/data.json/route.ts"
 export async function GET() {
   return Response.json({ name: 'Lee' })
 }
@@ -138,7 +138,7 @@ export async function GET() {
 
 Client Component도 빌드 중 HTML로 prerender된다. 따라서 [`window`](https://developer.mozilla.org/docs/Web/API/Window), [`localStorage`](https://developer.mozilla.org/docs/Web/API/Window/localStorage), [`navigator`](https://developer.mozilla.org/docs/Web/API/Navigator) 같은 Web API는 렌더링 중 바로 읽지 말고 브라우저에서만 실행되는 Effect나 이벤트에서 접근한다.
 
-```tsx
+```tsx filename="app/other/page.tsx"
 'use client'
 
 import { useEffect } from 'react'
@@ -170,7 +170,7 @@ Node.js 서버나 빌드 시점에 계산할 수 없는 다이나믹 로직이 �
 
 이 기능을 `next dev`에서 사용하면 Root Layout에 다음 설정을 둔 것과 비슷한 오류가 발생한다.
 
-```ts
+```ts filename="app/other/page.tsx"
 export const dynamic = 'error'
 ```
 
@@ -183,7 +183,7 @@ export const dynamic = 'error'
 
 `out/index.html`, `out/404.html`, `out/blog/post-1.html`, `out/blog/post-2.html`이 생성된다. Nginx 같은 정적 호스트에서는 요청 URL을 해당 HTML 파일로 연결한다.
 
-```nginx
+```nginx filename="nginx.conf"
 server {
   listen 80;
   server_name acme.com;

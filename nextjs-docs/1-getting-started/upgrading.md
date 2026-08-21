@@ -25,7 +25,7 @@ pnpm next upgrade
 
 16.1.0 이전 버전은 이 명령을 지원하지 않으므로 별도 codemod 패키지를 사용한다.
 
-```bash
+```bash filename="Terminal"
 npx @next/codemod@canary upgrade latest
 ```
 

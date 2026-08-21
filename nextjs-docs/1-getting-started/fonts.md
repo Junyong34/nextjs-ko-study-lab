@@ -19,7 +19,7 @@
 
 또한 웹 폰트를 로드할 때 레이아웃 시프트가 발생하지 않도록 최적화한다. 폰트를 사용하려면 `next/font/local` 또는 `next/font/google`에서 로더를 import하고, 적절한 옵션으로 함수처럼 호출한다. 반환된 객체의 `className`을 폰트를 적용할 요소에 지정한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { Geist } from 'next/font/google'
 
 const geist = Geist({
@@ -41,7 +41,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 Google Font는 `next/font/google`에서 원하는 폰트를 import해 사용한다. Next.js는 Google Font를 자동으로 self-hosting한다. 폰트는 정적 자산으로 포함되어 배포와 함께 애플리케이션과 같은 도메인에서 제공된다. 따라서 사용자가 사이트를 방문할 때 브라우저가 Google로 요청을 보내지 않는다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { Geist } from 'next/font/google'
 
 const geist = Geist({
@@ -63,7 +63,7 @@ export default function RootLayout({
 
 최상의 성능과 유연성을 위해 variable font를 사용하는 것을 권장한다. variable font를 사용할 수 없다면 폰트의 `weight`를 지정해야 한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { Roboto } from 'next/font/google'
 
 const roboto = Roboto({
@@ -90,7 +90,7 @@ export default function RootLayout({
 
 예를 들어 `app/fonts/`에 폰트를 저장했다면 다음처럼 설정한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import localFont from 'next/font/local'
 
 const myFont = localFont({

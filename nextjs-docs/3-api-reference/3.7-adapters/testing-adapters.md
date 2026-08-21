@@ -32,7 +32,7 @@ deploy 스크립트는 다음 계약을 따라야 한다.
 
 deploy 스크립트와 logs 스크립트는 서로 별도의 프로세스로 실행되므로, 이후 사용할 build ID나 서버 로그 같은 데이터는 작업 디렉토리 안의 파일에 영속화(persist)해야 한다.
 
-```bash
+```bash filename="scripts/e2e-deploy.sh"
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -81,7 +81,7 @@ provider-cli-to-deploy
 
 이 마커들 뒤에는 실패를 디버깅하는 데 도움이 되는 추가 빌드·서버 로그를 자유롭게 출력할 수 있다.
 
-```bash
+```bash filename="scripts/e2e-logs.sh"
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -110,7 +110,7 @@ deploy 스크립트가 `.adapter-build.log`와 `.adapter-server.log`를 기록�
 - **build**: Next.js 저장소와 어댑터 저장소를 함께 체크아웃하고, Next.js와 어댑터를 빌드한 뒤 Playwright까지 설치해 캐시에 저장한다.
 - **test**: build job의 캐시를 복원하고, `NEXT_TEST_MODE=deploy`와 세 스크립트 경로 환경 변수를 설정한 뒤 `node run-tests.js --timings -g <group> -c 2 --type e2e`로 테스트를 16-way 매트릭스(matrix)로 병렬 실행한다.
 
-```yaml
+```yaml filename=".github/workflows/test-e2e-deploy.yml"
 name: test-e2e-deploy
 
 on:

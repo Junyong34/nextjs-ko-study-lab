@@ -117,7 +117,7 @@ export interface NextAdapter {
 
 최소 구성의 어댑터 예제는 다음과 같다.
 
-```js
+```js filename="my-adapter.js"
 /** @type {import('next').NextAdapter} */
 const adapter = {
   name: 'my-custom-adapter',

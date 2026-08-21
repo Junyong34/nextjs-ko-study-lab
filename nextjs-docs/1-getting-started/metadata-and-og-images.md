@@ -30,7 +30,7 @@ Metadata API는 SEO와 웹 공유에 필요한 정보를 정의한다. 정적 `m
 
 값이 데이터에 따라 달라지지 않으면 정적 `layout.js` 또는 `page.js`에서 [`Metadata`](../3-api-reference/3.3-functions/generate-metadata.md) 객체를 export한다.
 
-```tsx
+```tsx filename="app/blog/layout.tsx"
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -45,7 +45,7 @@ export default function Layout() {}
 
 콘텐츠에 따라 값이 달라지면 `generateMetadata`에서 데이터를 가져와 `Metadata`를 반환한다. 아래 예에서는 URL의 `slug`로 게시물 제목과 설명을 구한다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 import type { Metadata } from 'next'
 
 type Props = {
@@ -75,7 +75,7 @@ metadata가 `<head>`에 있기를 기대하는 `Twitterbot`, `Slackbot`, `Bingbo
 
 metadata와 페이지가 같은 데이터를 읽으면 React의 `cache`로 반환값을 메모이제이션해 실제 조회를 한 번만 실행할 수 있다.
 
-```ts
+```ts filename="app/lib/data.ts"
 import { cache } from 'react'
 import { db } from '@/app/lib/db'
 
@@ -111,7 +111,7 @@ OG 이미지는 소셜 미디어에서 사이트를 대표한다. 모든 라우�
 
 [`ImageResponse`](../3-api-reference/3.3-functions/image-response.md)는 JSX와 CSS로 데이터 기반 이미지를 만든다. 게시물마다 고유한 이미지를 만들려면 `app/blog/[slug]/opengraph-image.tsx`를 추가한다.
 
-```tsx
+```tsx filename="app/blog/[slug]/opengraph-image.tsx"
 import { ImageResponse } from 'next/og'
 import { getPost } from '@/app/lib/data'
 

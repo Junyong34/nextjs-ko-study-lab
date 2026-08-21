@@ -38,7 +38,7 @@ Server Function은 애플리케이션 UI뿐 아니라 직접적인 POST 요청�
 
 Server Function은 [`use server`](https://react.dev/reference/rsc/use-server) 지시어로 정의한다. **비동기** 함수 맨 위에 지시어를 붙여 그 함수를 Server Function으로 마킹할 수도 있고, 별도 파일 맨 위에 붙여 그 파일의 모든 export를 마킹할 수도 있다.
 
-```tsx
+```tsx filename="app/lib/actions.ts"
 import { auth } from '@/lib/auth'
 
 export async function createPost(formData: FormData) {
@@ -74,7 +74,7 @@ export async function deletePost(formData: FormData) {
 
 Server Component 안에서 함수 본문 맨 위에 `"use server"` 지시어를 추가하면 Server Function을 인라인으로 정의할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 export default function Page() {
   // Server Action
   async function createPost(formData: FormData) {
@@ -92,13 +92,13 @@ export default function Page() {
 
 Client Component 안에서 Server Function을 정의할 수는 없다. 다만 맨 위에 `"use server"` 지시어가 있는 파일에서 import하면 Client Component에서도 호출할 수 있다.
 
-```tsx
+```tsx filename="app/actions.ts"
 'use server'
 
 export async function createPost() {}
 ```
 
-```tsx
+```tsx filename="app/ui/button.tsx"
 'use client'
 
 import { createPost } from '@/app/actions'
@@ -114,11 +114,11 @@ export function Button() {
 
 Client Component에 action을 prop으로도 전달할 수 있다.
 
-```tsx
+```tsx filename="app/client-component.tsx"
 <ClientComponent updateItemAction={updateItem} />
 ```
 
-```tsx
+```tsx filename="app/client-component.tsx"
 'use client'
 
 export default function ClientComponent({
@@ -145,7 +145,7 @@ React는 HTML [`<form>`](https://react.dev/reference/react-dom/components/form) 
 
 폼에서 호출되면, 함수는 자동으로 [`FormData`](https://developer.mozilla.org/docs/Web/API/FormData/FormData) 객체를 받는다. 네이티브 [`FormData` 메서드](https://developer.mozilla.org/en-US/docs/Web/API/FormData#instance_methods)로 데이터를 꺼낼 수 있다.
 
-```tsx
+```tsx filename="app/ui/form.tsx"
 import { createPost } from '@/app/actions'
 
 export function Form() {
@@ -159,7 +159,7 @@ export function Form() {
 }
 ```
 
-```tsx
+```tsx filename="app/actions.ts"
 'use server'
 
 import { auth } from '@/lib/auth'
@@ -182,7 +182,7 @@ export async function createPost(formData: FormData) {
 
 Client Component에서는 `onClick` 같은 이벤트 핸들러로 Server Function을 호출할 수 있다.
 
-```tsx
+```tsx filename="app/like-button.tsx"
 'use client'
 
 import { incrementLike } from './actions'
@@ -213,7 +213,7 @@ export default function LikeButton({ initialLikes }: { initialLikes: number }) {
 
 Server Function을 실행하는 동안, React의 [`useActionState`](https://react.dev/reference/react/useActionState) 훅으로 로딩 인디케이터를 보여줄 수 있다. 이 훅은 `pending` boolean을 반환한다.
 
-```tsx
+```tsx filename="app/ui/button.tsx"
 'use client'
 
 import { useActionState, startTransition } from 'react'
@@ -239,7 +239,7 @@ export function Button() {
 
 mutation 이후, 최신 데이터를 보여주기 위해 현재 페이지를 새로고침하고 싶을 때가 있다. Server Action 안에서 `next/cache`의 [`refresh`](../3-api-reference/3.3-functions/refresh.md)를 호출하면 된다.
 
-```tsx
+```tsx filename="app/lib/actions.ts"
 'use server'
 
 import { auth } from '@/lib/auth'
@@ -263,7 +263,7 @@ export async function updatePost(formData: FormData) {
 
 mutation을 수행한 뒤, Server Function 안에서 [`revalidatePath`](../3-api-reference/3.3-functions/revalidatePath.md)나 [`revalidateTag`](../3-api-reference/3.3-functions/revalidateTag.md)를 호출해서 Next.js 캐시를 revalidate하고 갱신된 데이터를 보여줄 수 있다.
 
-```tsx
+```tsx filename="app/lib/actions.ts"
 import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 
@@ -284,7 +284,7 @@ export async function createPost(formData: FormData) {
 
 mutation 이후 사용자를 다른 페이지로 리다이렉트하고 싶을 때가 있다. Server Function 안에서 [`redirect`](../3-api-reference/3.3-functions/redirect.md)를 호출하면 된다.
 
-```tsx
+```tsx filename="app/lib/actions.ts"
 'use server'
 
 import { auth } from '@/lib/auth'
@@ -314,7 +314,7 @@ Server Action에서 쿠키를 [설정하거나 삭제](../3-api-reference/3.3-fu
 
 > **알아두면 좋은 점**: 서버 갱신은 현재 React 트리에 적용되어, 필요에 따라 컴포넌트를 다시 렌더링·마운트·언마운트한다. 다시 렌더링되는 컴포넌트의 클라이언트 상태는 보존되고, 의존성이 바뀐 effect는 다시 실행된다.
 
-```tsx
+```tsx filename="app/actions.ts"
 'use server'
 
 import { cookies } from 'next/headers'
@@ -337,7 +337,7 @@ export async function exampleAction() {
 
 컴포넌트가 마운트되거나 의존성이 바뀔 때 Server Action을 호출하려면 React [`useEffect`](https://react.dev/reference/react/useEffect) 훅을 쓸 수 있다. 전역 이벤트에 의존하거나 자동으로 트리거되어야 하는 mutation에 유용하다. 예를 들어 앱 단축키를 위한 `onKeyDown`, 무한 스크롤을 위한 intersection observer 훅, 또는 조회수를 갱신하기 위해 컴포넌트가 마운트될 때.
 
-```tsx
+```tsx filename="app/view-count.tsx"
 'use client'
 
 import { incrementViews } from './actions'

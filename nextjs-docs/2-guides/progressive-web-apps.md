@@ -21,7 +21,7 @@ Progressive Web Application(PWA)은 웹의 접근성과 배포 방식에 네이�
 
 App Router는 정적 또는 다이나믹 [web app manifest](../3-api-reference/3.1-file-conventions/3.1.21-metadata/manifest.md)를 지원한다. `app/manifest.ts`나 `app/manifest.json`에 이름, 아이콘, 시작 URL, 표시 방식을 적는다.
 
-```ts
+```ts filename="app/manifest.ts"
 import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -48,7 +48,7 @@ Web Push는 홈 화면에 설치된 iOS 16.4 이상, macOS 13 이상의 Safari 1
 
 Client Component는 `serviceWorker`와 `PushManager` 지원 여부를 확인하고 Service Worker를 등록한다. 준비된 registration의 `pushManager.subscribe()`에 공개 VAPID 키를 전달해 구독을 만든다. 구독은 직렬화해 Server Action에 저장한다.
 
-```tsx
+```tsx filename="app/actions.ts"
 'use client'
 
 async function subscribeToPush() {
@@ -69,7 +69,7 @@ async function subscribeToPush() {
 
 `app/actions.ts`의 Server Action은 구독 생성·삭제와 알림 발송을 담당한다. `web-push`에 공개 키와 비공개 키를 설정한다.
 
-```ts
+```ts filename="app/actions.ts"
 'use server'
 
 import webpush from 'web-push'
@@ -87,7 +87,7 @@ webpush.setVapidDetails(
 
 Web Push API에는 VAPID 키 쌍이 필요하다.
 
-```bash
+```bash filename="Terminal"
 pnpm add -g web-push
 web-push generate-vapid-keys
 ```
@@ -98,7 +98,7 @@ web-push generate-vapid-keys
 
 `lib/service-worker.js`는 `push` 이벤트 payload를 알림으로 표시하고 `notificationclick`에서 알림을 닫은 뒤 지정한 URL을 연다.
 
-```js
+```js filename="lib/service-worker.js"
 self.addEventListener('push', function (event) {
   if (!event.data) return
   const data = event.data.json()
@@ -138,7 +138,7 @@ next dev --experimental-https
 
 전역 응답에는 MIME sniffing, clickjacking, referrer 노출을 줄이는 헤더를 둘 수 있다. Service Worker에는 올바른 JavaScript 콘텐츠 유형과 캐시 방지, 같은 origin 스크립트만 허용하는 CSP를 설정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   async headers() {
     return [{

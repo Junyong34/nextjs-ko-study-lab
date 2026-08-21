@@ -46,7 +46,7 @@ export default async function Page() {
 
 ### 시그니처 및 반환값
 
-```tsx
+```tsx filename="app/page.tsx"
 function connection(): Promise<void>
 ```
 

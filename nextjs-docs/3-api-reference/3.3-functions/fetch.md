@@ -50,7 +50,7 @@ export default async function Page() {
 | **`0`** | 캐시를 건너뛰고 매 요청마다 네트워크를 통해 새로 가져온다. (`cache: 'no-store'`와 동일) |
 | **`number`** (양의 정수) | 지정된 초 동안 리소스를 캐시하며, 만료 후 첫 요청 시 stale 데이터를 반환하면서 백그라운드에서 revalidate한다 (SWR). |
 
-```tsx
+```tsx filename="app/page.tsx"
 // 60초 주기로 revalidate
 fetch('https://api.example.com/data', { next: { revalidate: 60 } })
 ```
@@ -59,7 +59,7 @@ fetch('https://api.example.com/data', { next: { revalidate: 60 } })
 
 온디맨드 캐시 무효화를 위한 캐시 태그(문자열 배열)를 등록한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 fetch('https://api.example.com/posts/1', {
   next: { tags: ['posts', 'post-1'] },
 })
@@ -81,7 +81,7 @@ fetch('https://api.example.com/posts/1', {
 
 React Server Component 렌더링 주기 동안, **동일한 URL과 옵션을 가진 `fetch` 요청은 단 1회만 네트워크를 호출**하고 그 결과를 컴포넌트 트리 전체에서 공유한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 // Header.tsx
 const user = await fetch('https://api.example.com/user')
 

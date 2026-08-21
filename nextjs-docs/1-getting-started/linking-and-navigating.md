@@ -36,7 +36,7 @@ prefetching은 사용자가 실제로 이동하기 **전에** 백그라운드에
 
 Next.js는 [`<Link>` 컴포넌트](../3-api-reference/3.2-components/link.md)로 연결된 라우트가 사용자의 뷰포트에 들어오면 자동으로 prefetch한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import Link from 'next/link'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -81,7 +81,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 ![app/dashboard 폴더 안에 layout.js, loading.js, page.js가 나란히 있는 예시 폴더 구조](./assets/linking-and-navigating-03.webp)
 
-```tsx
+```tsx filename="app/dashboard/loading.tsx"
 export default function Loading() {
   // 라우트가 로딩되는 동안 보여줄 대체 UI를 추가한다.
   return <LoadingSkeleton />
@@ -129,7 +129,7 @@ Next.js는 클라이언트 사이드 전환 중 [페이지 맨 위로 스크롤]
 
 [다이나믹 세그먼트](../3-api-reference/3.1-file-conventions/dynamic-routes.md)가 prerender될 수 있는데도 [`generateStaticParams`](../3-api-reference/3.3-functions/generate-static-params.md)가 없어서 되지 않는다면, 그 라우트는 요청 시점의 다이나믹 렌더링으로 폴백한다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 export async function generateStaticParams() {
   const posts = await fetch('https://.../posts').then((res) => res.json())
 
@@ -154,7 +154,7 @@ export default async function Page({
 
 체감 성능을 높이려면 [`useLinkStatus` 훅](../3-api-reference/3.3-functions/use-link-status.md)으로 전환이 진행되는 동안 즉각적인 피드백을 보여줄 수 있다.
 
-```tsx
+```tsx filename="app/ui/loading-indicator.tsx"
 'use client'
 
 import { useLinkStatus } from 'next/link'
@@ -177,7 +177,7 @@ export default function LoadingIndicator() {
 
 `<Link>` 컴포넌트의 `prefetch` prop을 `false`로 설정해서 prefetching을 끌 수 있다. 무한 스크롤 테이블처럼 링크를 대량으로 렌더링할 때 불필요한 리소스 사용을 피하는 데 유용하다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 <Link prefetch={false} href="/blog">
   Blog
 </Link>
@@ -190,7 +190,7 @@ export default function LoadingIndicator() {
 
 prefetching을 완전히 끄지 않고도 리소스 사용을 줄이려면, hover 시에만 prefetch할 수 있다. 이렇게 하면 뷰포트 안의 모든 링크가 아니라, 사용자가 방문할 가능성이 더 높은 라우트만 prefetching된다.
 
-```tsx
+```tsx filename="app/ui/hover-prefetch-link.tsx"
 'use client'
 
 import Link from 'next/link'
@@ -263,7 +263,7 @@ export default function SortProducts() {
 
 브라우저 히스토리 스택의 현재 엔트리를 교체할 때 쓴다. 사용자는 이전 상태로 돌아갈 수 없다. 예를 들어 애플리케이션의 로케일을 전환할 때:
 
-```tsx
+```tsx filename="app/ui/hover-prefetch-link.tsx"
 'use client'
 
 import { usePathname } from 'next/navigation'

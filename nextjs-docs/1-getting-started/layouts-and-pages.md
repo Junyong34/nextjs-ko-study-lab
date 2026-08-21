@@ -19,7 +19,7 @@
 
 ![app 디렉토리 안에 page.js 특수 파일이 추가된 구조](./assets/layouts-and-pages-01.webp)
 
-```tsx
+```tsx filename="app/page.tsx"
 export default function Page() {
   return <h1>Hello Next.js!</h1>
 }
@@ -35,7 +35,7 @@ export default function Page() {
 
 ![app 디렉토리 안에 layout.js 특수 파일이 추가된 구조](./assets/layouts-and-pages-02.webp)
 
-```tsx
+```tsx filename="app/layout.tsx"
 export default function DashboardLayout({
   children,
 }: {
@@ -72,7 +72,7 @@ Next.js에서는:
 
 ![blog 폴더와 page.js 파일이 있는 파일 계층 구조](./assets/layouts-and-pages-03.webp)
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 // 예시 import
 import { getPosts } from '@/lib/posts'
 import { Post } from '@/ui/post'
@@ -94,7 +94,7 @@ export default async function Page() {
 
 ![blog 폴더 안에 중첩된 slug 폴더와 page.js 파일이 있는 파일 계층 구조](./assets/layouts-and-pages-04.webp)
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 function generateStaticParams() {}
 
 export default function Page() {
@@ -112,7 +112,7 @@ export default function Page() {
 
 ![루트 레이아웃이 블로그 레이아웃을 감싸는 파일 계층 구조](./assets/layouts-and-pages-05.webp)
 
-```tsx
+```tsx filename="app/blog/layout.tsx"
 export default function BlogLayout({
   children,
 }: {
@@ -130,7 +130,7 @@ export default function BlogLayout({
 
 다이나믹 세그먼트를 만들려면 세그먼트(폴더) 이름을 대괄호로 감싼다: `[segmentName]`. 예를 들어 `app/blog/[slug]/page.tsx` 라우트에서 `[slug]`가 다이나믹 세그먼트다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 export default async function BlogPostPage({
   params,
 }: {
@@ -154,7 +154,7 @@ export default async function BlogPostPage({
 
 Server Component **페이지**에서는 [`searchParams`](../3-api-reference/3.1-file-conventions/page.md) prop으로 검색 파라미터에 접근할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 export default async function Page({
   searchParams,
 }: {
@@ -180,7 +180,7 @@ Client Component는 [`useSearchParams`](../3-api-reference/3.3-functions/use-sea
 
 예를 들어 블로그 포스트 목록을 만들 때 `next/link`에서 `<Link>`를 import하고 `href` prop을 넘긴다.
 
-```tsx
+```tsx filename="app/ui/post.tsx"
 import Link from 'next/link'
 import { getPosts } from '@/lib/posts'
 
@@ -210,14 +210,14 @@ Next.js는 라우트 구조로부터 `params`와 이름 붙인 슬롯을 추론�
 
 이 헬퍼들은 `next dev`, `next build`, [`next typegen`](../3-api-reference/3.6-cli/next.md) 실행 시 자동으로 생성되어 전역에서 쓸 수 있다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 export default async function Page(props: PageProps<'/blog/[slug]'>) {
   const { slug } = await props.params
   return <h1>Blog post: {slug}</h1>
 }
 ```
 
-```tsx
+```tsx filename="app/dashboard/layout.tsx"
 export default function Layout(props: LayoutProps<'/dashboard'>) {
   return (
     <section>

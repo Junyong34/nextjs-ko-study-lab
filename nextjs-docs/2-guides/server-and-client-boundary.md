@@ -39,7 +39,7 @@ Next.js는 라우트에 따라 빌드 시점의 SSG, 빌드 뒤의 ISR, 요청�
 
 RSC 이전에는 `getStaticProps`나 `getServerSideProps`가 렌더링 전에 데이터를 모아 props로 트리에 전달했다. Server Component는 서버에서만 실행되므로 렌더링 도중 데이터베이스, 파일 시스템, 내부 서비스, 비밀 값에 직접 접근할 수 있다. 데이터를 브라우저에 노출하는 API 라우트를 먼저 만들 필요가 없다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { PostList } from '@/app/ui/post-list'
 import { getPosts } from '@/lib/data'
 
@@ -74,7 +74,7 @@ Server Component 코드는 브라우저에 도달하지 않는다. Next.js가 �
 
 렌더링된 React 엘리먼트는 직렬화 가능한 데이터이므로 경계를 통과할 수 있다. 따라서 Client Component가 Server Component 코드를 import하지 않고 그 결과를 `children`으로 배치할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { Cart } from '@/app/ui/cart'
 import { Modal } from '@/app/ui/modal'
 

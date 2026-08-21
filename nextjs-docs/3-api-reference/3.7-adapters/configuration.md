@@ -13,7 +13,7 @@
 
 어댑터를 사용하려면 `next.config.js`의 `adapterPath`에 어댑터 모듈 경로를 지정한다.
 
-```js
+```js filename="next.config.js"
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {

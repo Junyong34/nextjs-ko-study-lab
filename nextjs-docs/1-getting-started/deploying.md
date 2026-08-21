@@ -26,7 +26,7 @@ Next.js는 Node.js 서버, Docker 컨테이너, 정적 export로 배포하거나
 
 Node.js를 지원하는 제공자라면 Next.js를 배포할 수 있다. `package.json`에 빌드와 시작 스크립트를 둔다.
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "dev": "next dev",

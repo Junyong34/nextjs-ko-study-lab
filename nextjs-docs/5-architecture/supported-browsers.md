@@ -18,7 +18,7 @@
 
 Next.js는 **별도 설정 없이도 모던 브라우저를 지원한다.** 별도로 `browserslist`를 지정하지 않으면 다음 설정이 기본값으로 적용된다.
 
-```json
+```json filename="package.json"
 {
   "browserslist": ["chrome 111", "edge 111", "firefox 111", "safari 16.4"]
 }
@@ -46,7 +46,7 @@ Next.js는 [널리 쓰이는 폴리필](https://github.com/vercel/next.js/blob/c
 
 App Router에서는 [`instrumentation-client.js` 파일](../3-api-reference/3.1-file-conventions/instrumentation-client.md)에 폴리필을 import해서 포함시킬 수 있다.
 
-```js
+```js filename="instrumentation-client.ts"
 import './polyfills'
 ```
 
@@ -54,7 +54,7 @@ import './polyfills'
 
 Pages Router에서는 필요한 **특정 폴리필**만 골라 [커스텀 `<App>`](https://nextjs.org/docs/pages/building-your-application/routing/custom-app) 또는 개별 컴포넌트 최상단에 import해야 한다.
 
-```tsx
+```tsx filename="pages/_app.tsx"
 import './polyfills'
 
 import type { AppProps } from 'next/app'
@@ -68,7 +68,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
 가장 좋은 접근 방식은 지원되지 않는 기능을 특정 UI 영역으로 격리하고, 필요할 때만 폴리필을 조건부로 로드하는 것이다.
 
-```tsx
+```tsx filename="hooks/analytics.ts"
 import { useCallback } from 'react'
 
 export const useAnalytics = () => {

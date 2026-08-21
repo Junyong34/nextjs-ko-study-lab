@@ -24,7 +24,7 @@ revalidation은 캐시된 데이터를 갱신하는 과정이다. 빠른 캐시 
 
 [`cacheLife`](../3-api-reference/3.3-functions/cacheLife.md)는 캐시된 데이터가 얼마나 유효한지 제어한다. [`use cache`](../3-api-reference/3.4-directives/use-cache.md) 스코프 안에서 캐시 수명을 지정하는 데 쓴다.
 
-```tsx
+```tsx filename="app/lib/data.ts"
 import { cacheLife } from 'next/cache'
 
 export async function getProducts() {
@@ -65,7 +65,7 @@ cacheLife({
 
 [`cacheTag`](../3-api-reference/3.3-functions/cacheTag.md)는 캐시된 데이터에 태그를 붙여 온디맨드로 무효화할 수 있게 해준다. [`use cache`](../3-api-reference/3.4-directives/use-cache.md) 스코프 안에서 쓴다.
 
-```tsx
+```tsx filename="app/lib/data.ts"
 import { cacheTag } from 'next/cache'
 
 export async function getProducts() {
@@ -83,7 +83,7 @@ export async function getProducts() {
 
 `revalidateTag`는 stale-while-revalidate 시맨틱으로 태그별 캐시 엔트리를 무효화한다 — stale 콘텐츠를 즉시 제공하면서 백그라운드에서 최신 콘텐츠를 로드한다. 블로그 포스트나 상품 카탈로그처럼, 갱신이 약간 지연되어도 괜찮은 콘텐츠에 적합하다.
 
-```tsx
+```tsx filename="app/lib/actions.ts"
 import { revalidateTag } from 'next/cache'
 
 export async function updateUser(id: string) {
@@ -102,7 +102,7 @@ export async function updateUser(id: string) {
 
 `updateTag`는 read-your-own-writes 시나리오를 위해 캐시된 데이터를 즉시 만료시킨다 — 사용자가 stale 콘텐츠 대신 자신의 변경사항을 바로 본다. `revalidateTag`와 달리, [Server Actions](../2-guides/server-actions.md)에서만 쓸 수 있다.
 
-```tsx
+```tsx filename="app/lib/actions.ts"
 import { updateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -131,7 +131,7 @@ export async function createPost(formData: FormData) {
 
 `revalidatePath`는 특정 라우트 경로의 모든 캐시된 데이터를 무효화한다. 그 경로에 어떤 태그가 연결되어 있는지 모를 때 라우트를 revalidate하고 싶다면 이걸 쓴다.
 
-```tsx
+```tsx filename="app/lib/actions.ts"
 import { revalidatePath } from 'next/cache'
 
 export async function updateUser(id: string) {

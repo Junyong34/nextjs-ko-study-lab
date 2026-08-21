@@ -21,7 +21,7 @@
 
 빌드가 끝나면 각 prerender 항목의 fallback shell 파일을 읽어 플랫폼 캐시에 저장한다. 이때 postponed state와 초기 헤더·상태·revalidation 정보도 함께 저장해야 요청 시점에 재개할 수 있다.
 
-```ts
+```ts filename="my-adapter.ts"
 import { readFile } from 'node:fs/promises'
 
 async function seedPprEntries(outputs: AdapterOutputs) {
@@ -84,7 +84,7 @@ Adapter Router
 > - `requestMeta.onCacheEntryV2`를 사용하는 편이 낫다.
 > - 어댑터에 내부 `onCacheCallback` 추상화가 있다면 `requestMeta.onCacheEntryV2`에 연결한다.
 
-```ts
+```ts filename="my-adapter.ts"
 await handler(req, res, {
   waitUntil,
   requestMeta: {
@@ -113,7 +113,7 @@ await handler(req, res, {
 })
 ```
 
-```text
+```text filename="my-adapter.ts"
 Entrypoint (handler)
   | onCacheEntryV2(cacheEntry, { url })
   v

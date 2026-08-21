@@ -24,16 +24,16 @@ export function DemoLinkCard({ path, title, caption, className = '' }: DemoLinkC
   return (
     <a
       href={`/demo/${path}`}
-      className={`group my-6 flex items-center justify-between gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-xs transition-all hover:border-zinc-400 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600 ${className}`}
+      className={`not-prose group my-6 flex items-center justify-between gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-xs transition-all hover:border-zinc-400 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600 no-underline text-inherit ${className}`}
     >
       <div className="flex min-w-0 items-start gap-3">
         <PlayCircle className="mt-0.5 h-4 w-4 shrink-0 text-zinc-900 dark:text-zinc-100" />
         <div className="min-w-0">
-          <div className="text-sm font-semibold text-zinc-900 transition-colors group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300">
+          <div className="text-sm font-semibold text-zinc-900 transition-colors group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300 no-underline">
             예제 — {title || path}
           </div>
           {caption && (
-            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{caption}</p>
+            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 no-underline">{caption}</p>
           )}
         </div>
       </div>

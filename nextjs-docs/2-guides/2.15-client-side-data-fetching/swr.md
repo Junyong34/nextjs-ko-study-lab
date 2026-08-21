@@ -21,7 +21,7 @@ SWR은 Client Component에서 데이터를 가져오고, Server Component의 초
 
 초기 화면이 hydration 뒤 브라우저 요청을 기다려도 되면 `useSWR`로 인라인 로딩·오류 상태를 렌더링한다. 조건부 key는 상호작용 입력이 생길 때까지 요청을 늦춘다.
 
-```tsx
+```tsx filename="app/product-autocomplete.tsx"
 'use client'
 
 import useSWR from 'swr'
@@ -48,7 +48,7 @@ export function ProductAutocomplete({ query }: { query: string }) {
 
 가까운 Suspense boundary가 로딩 UI를 담당해야 하면 `suspense: true`를 쓴다. 상호작용 shell은 boundary 밖에 두어 결과를 불러오는 동안에도 사용할 수 있게 한다.
 
-```tsx
+```tsx filename="app/product-autocomplete.tsx"
 'use client'
 
 import { Suspense } from 'react'
@@ -74,7 +74,7 @@ function Results({ query }: { query: string }) {
 
 초기 렌더링에 데이터가 필요하면 SWR 2.3.0과 React 19에서 `<SWRConfig fallback>`에 서버의 Promise를 전달할 수 있다. provider는 데이터를 소유한 라우트 세그먼트 가까이에 둔다.
 
-```tsx
+```tsx filename="app/products/[id]/page.tsx"
 import { Suspense } from 'react'
 import { SWRConfig } from 'swr'
 
@@ -97,7 +97,7 @@ fallback은 초기값이며 SWR은 기본적으로 이를 오래된 데이터로
 
 `cacheComponents`를 활성화한 뒤 서버 읽기에 `'use cache'`, `cacheLife`, `cacheTag`를 적용한다.
 
-```tsx
+```tsx filename="app/products/[id]/data.ts"
 import { cacheLife, cacheTag } from 'next/cache'
 
 export async function getProduct(id: string) {
@@ -114,7 +114,7 @@ export async function getProduct(id: string) {
 
 `mutate`에 쓰기 함수, `optimisticData`, `rollbackOnError`를 제공하면 브라우저 값을 즉시 바꾸고 실패 시 되돌릴 수 있다.
 
-```tsx
+```tsx filename="app/activity/mark-read-button.tsx"
 'use client'
 
 import { useSWRConfig } from 'swr'

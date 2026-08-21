@@ -24,7 +24,7 @@
 
 HTML [`<video>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video) 태그는 self-host하거나 직접 서빙되는 비디오 콘텐츠를 임베드할 수 있고, 재생과 화면 표시를 완전히 제어할 수 있다.
 
-```tsx
+```tsx filename="app/ui/video.jsx"
 export function Video() {
   return (
     <video width="320" height="240" controls preload="none">
@@ -69,7 +69,7 @@ export function Video() {
 
 HTML `<iframe>` 태그를 사용하면 YouTube나 Vimeo 같은 외부 플랫폼의 비디오를 임베드할 수 있다.
 
-```tsx
+```tsx filename="app/page.jsx"
 export default function Page() {
   return (
     <iframe src="https://www.youtube.com/embed/19g66ezsKAg" allowFullScreen />
@@ -108,7 +108,7 @@ Next.js 애플리케이션에 비디오를 임베드하는 방법은 두 가지�
 
 첫 단계는 비디오를 임베드할 iframe을 생성하는 [Server Component](../1-getting-started/server-and-client-components.md)를 만드는 것이다. 이 컴포넌트는 비디오의 소스 URL을 가져와 iframe을 렌더링한다.
 
-```tsx
+```tsx filename="app/ui/video-component.jsx"
 export default async function VideoComponent() {
   const src = await getVideoSrc()
 
@@ -120,7 +120,7 @@ export default async function VideoComponent() {
 
 비디오를 임베드하는 Server Component를 만든 다음에는, [React Suspense](https://react.dev/reference/react/Suspense)를 사용해 그 컴포넌트를 [스트리밍](../3-api-reference/3.1-file-conventions/loading.md)한다.
 
-```tsx
+```tsx filename="app/page.jsx"
 import { Suspense } from 'react'
 import VideoComponent from '../ui/VideoComponent.jsx'
 
@@ -145,7 +145,7 @@ export default function Page() {
 
 더 나은 로딩 경험을 제공하려면, 단순한 로딩 메시지 대신 비디오 플레이어와 비슷한 모양의 로딩 스켈레톤을 fallback UI로 사용할 수 있다.
 
-```tsx
+```tsx filename="app/page.jsx"
 import { Suspense } from 'react'
 import VideoComponent from '../ui/VideoComponent.jsx'
 import VideoSkeleton from '../ui/VideoSkeleton.jsx'
@@ -185,7 +185,7 @@ Vercel 대시보드에서 "Storage" 탭으로 이동해 [Vercel Blob](https://ve
 
 비디오가 업로드되어 저장되면 Next.js 애플리케이션에서 그 비디오를 표시할 수 있다. 다음은 `<video>` 태그와 React Suspense를 사용하는 예시다.
 
-```tsx
+```tsx filename="app/page.jsx"
 import { Suspense } from 'react'
 import { list } from '@vercel/blob'
 
@@ -219,7 +219,7 @@ async function VideoComponent({ fileName }) {
 
 비디오에 자막이 있다면 `<video>` 태그 안에 `<track>` 엘리먼트를 사용해 쉽게 추가할 수 있다. 비디오 파일과 비슷한 방식으로 [Vercel Blob](https://vercel.com/docs/vercel-blob?utm_source=next-site&utm_medium=docs&utm_campaign=next-website)에서 자막 파일을 가져올 수 있다. 자막을 포함하도록 `<VideoComponent>`를 갱신하는 방법은 다음과 같다.
 
-```tsx
+```tsx filename="app/page.jsx"
 async function VideoComponent({ fileName }) {
   const { blobs } = await list({
     prefix: fileName,

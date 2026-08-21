@@ -49,8 +49,7 @@ import { TriangleIcon } from '@phosphor-icons/react/dist/csr/Triangle'
 
 Webpack에서 barrel 파일이 큰 패키지는 `experimental.optimizePackageImports`를 검토한다. Turbopack은 import를 자동 분석하므로 이 설정이 필요 없다.
 
-```js
-// next.config.js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     optimizePackageImports: ['package-name'],
@@ -62,7 +61,7 @@ module.exports = {
 
 `content` glob이 `node_modules`나 넓은 상위 디렉토리까지 훑지 않도록 실제 소스 범위로 좁힌다. Tailwind CSS 3.4.8 이상은 빌드를 느리게 할 수 있는 설정에 경고를 표시한다.
 
-```js
+```js filename="tailwind.config.js"
 module.exports = {
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
@@ -94,7 +93,7 @@ macOS와 Windows의 Docker bind mount는 HMR을 크게 늦출 수 있다. 가능
 
 개발 중 데이터 요청을 자세히 보려면 fetch 전체 URL 로그를 켠다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   logging: {
     fetches: {

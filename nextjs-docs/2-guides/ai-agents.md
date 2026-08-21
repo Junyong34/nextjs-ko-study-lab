@@ -53,7 +53,7 @@ npx create-next-app@canary --no-agents-md
 
 Next.js 16.3 이상에서는 `next dev`를 실행한다. 환경에서 AI 코딩 에이전트가 감지되고 관리 블록이 없으면, Next.js가 프로젝트 루트에 `AGENTS.md`와 `CLAUDE.md`를 자동으로 생성한다. 기존 `AGENTS.md`나 `CLAUDE.md` 파일은 upsert(있으면 갱신, 없으면 생성)되므로 관리 블록 밖의 내용은 그대로 유지된다.
 
-```
+```md filename="AGENTS.md"
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
@@ -67,7 +67,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 `CLAUDE.md`에는 다음 한 줄만 들어간다.
 
-```
+```md filename="CLAUDE.md"
 @AGENTS.md
 ```
 
@@ -77,7 +77,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 Next.js 팀은 자동 생성을 켜 두는 것을 기본값으로 권장한다. [nextjs.org/evals의 벤치마크 결과](https://nextjs.org/evals)는 에이전트가 번들 문서를 읽을 때 더 나은 결과를 낸다는 것을 보여준다. 그래도 opt-out하려면 설정에서 `agentRules`를 `false`로 지정한다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -93,7 +93,7 @@ export default nextConfig
 
 16.1 이하 버전에서는 문서 자체가 번들되어 있지 않다. 레거시 `agents-md` 명령을 사용하면 버전에 맞는 문서 사본을 프로젝트 루트의 `.next-docs/`에 내려받고 `AGENTS.md`에 색인을 만든다.
 
-```bash
+```bash filename="Terminal"
 npx @next/codemod@canary agents-md
 ```
 
@@ -125,7 +125,7 @@ Next.js 문서는 `node_modules`를 읽는 대신 페이지를 가져오는 에�
 
 같은 메뉴가 `next dev` 터미널과 `next build` 출력에도 그대로 출력되므로, CI 로그를 읽는 에이전트도 이를 볼 수 있다.
 
-```
+```txt filename="Terminal"
 Route "/products/[slug]": Next.js encountered uncached data during prerendering.
 
 `fetch(...)` or `connection()` accessed outside of `<Suspense>` prevents the route
@@ -161,7 +161,7 @@ Skill은 세 가지 워크플로 유형으로 나뉜다.
 
 [`next-dev-loop`](https://www.skills.sh/vercel/next.js/next-dev-loop)는 [MCP 서버](./mcp.md)와 브라우저를 이용해 실행 중인 dev 서버를 기준으로 변경 사항을 검증하는 런타임 기반 Skill이다.
 
-```bash
+```bash filename="Terminal"
 npx skills add vercel/next.js --skill next-dev-loop
 ```
 
@@ -181,7 +181,7 @@ After every edit, verify the page still works at runtime using the next-dev-loop
 
 작업 결과를 여러 개의 PR로 나눌지, 하나의 브랜치에 유지할지는 사용자가 선택한다.
 
-```bash
+```bash filename="Terminal"
 npx skills add vercel/next.js --skill next-cache-components-adoption
 ```
 
@@ -201,7 +201,7 @@ Adopt Cache Components in this project using the next-cache-components-adoption 
 
 이미 [Cache Components](../1-getting-started/caching.md)로 빌드되는 라우트가 필요하다.
 
-```bash
+```bash filename="Terminal"
 npx skills add vercel/next.js --skill next-cache-components-optimizer
 ```
 
@@ -221,7 +221,7 @@ Make the navigation from /settings to /dashboard instant using the next-cache-co
 
 이미 [Cache Components](../1-getting-started/caching.md)가 도입되어 있어야 한다.
 
-```bash
+```bash filename="Terminal"
 npx skills add vercel/next.js --skill next-partial-prefetching-adoption
 ```
 

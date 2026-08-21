@@ -32,7 +32,7 @@ pnpm create next-app --example with-cypress with-cypress-app
 pnpm add -D cypress
 ```
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "cypress:open": "cypress open"
@@ -42,7 +42,7 @@ pnpm add -D cypress
 
 `pnpm cypress:open`을 처음 실행하면 E2E Testing과 Component Testing 중 필요한 구성을 선택할 수 있다. Cypress가 `cypress.config.js`와 `cypress` 폴더를 만든다.
 
-```bash
+```bash filename="package.json"
 pnpm cypress:open
 ```
 
@@ -52,7 +52,7 @@ E2E 모드는 실행 중인 Next.js 서버에 접속한다. 실제 배포 동작
 
 홈과 About 페이지를 먼저 만든다.
 
-```tsx
+```tsx filename="app/page.js"
 // app/page.tsx
 import Link from 'next/link'
 
@@ -66,7 +66,7 @@ export default function Page() {
 }
 ```
 
-```tsx
+```tsx filename="app/about/page.js"
 // app/about/page.tsx
 import Link from 'next/link'
 
@@ -80,7 +80,7 @@ export default function Page() {
 }
 ```
 
-```ts
+```ts filename="cypress.config.ts"
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
@@ -90,7 +90,7 @@ export default defineConfig({
 })
 ```
 
-```ts
+```ts filename="cypress/e2e/app.cy.js"
 describe('Navigation', () => {
   it('should navigate to the about page', () => {
     cy.visit('http://localhost:3000/')
@@ -114,7 +114,7 @@ describe('Navigation', () => {
 
 컴포넌트 테스트는 앱 전체를 번들링하거나 Next.js 서버를 띄우지 않고 특정 컴포넌트만 마운트한다.
 
-```ts
+```ts filename="cypress.config.ts"
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
@@ -127,7 +127,7 @@ export default defineConfig({
 })
 ```
 
-```tsx
+```tsx filename="cypress/component/about.cy.tsx"
 import Page from '../../app/page'
 
 describe('<Page />', () => {
@@ -152,7 +152,7 @@ describe('<Page />', () => {
 
 `cypress open`은 대화형 개발에, `cypress run`은 headless CI 실행에 적합하다.
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "e2e": "start-server-and-test dev http://localhost:3000 \"cypress open --e2e\"",

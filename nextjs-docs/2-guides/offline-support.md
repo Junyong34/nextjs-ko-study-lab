@@ -30,7 +30,7 @@ soft navigation, 데이터 fetch, mutation 중 네트워크가 끊기면 보통 
 
 `experimental.useOffline`을 켠다. 공식 예제는 [`cacheComponents`](../3-api-reference/3.5-config/3.5.1-next-config-js/cacheComponents.md)와 [`partialPrefetching`](../3-api-reference/3.5-config/3.5.1-next-config-js/partialPrefetching.md)도 활성화한다. Cache Components는 캐시하지 않은 데이터 가까이에 Suspense 경계를 두고 주변 [App Shell](../4-glossary/README.md)을 렌더링한다. Partial Prefetching은 `<Link>`가 그 App Shell을 prefetch하게 한다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -50,7 +50,7 @@ export default nextConfig
 
 `useOffline`은 브라우저가 `offline` 이벤트를 보내거나 내비게이션·prefetch·Server Action fetch가 실패하면 `true`를 반환한다. 백그라운드 연결 확인이 성공하면 다시 `false`가 된다. 운영체제 네트워크 인터페이스만 보는 `navigator.onLine`보다 실제 인터넷 연결 실패를 더 잘 반영한다.
 
-```tsx
+```tsx filename="app/dashboard/connectivity-fallback.tsx"
 'use client'
 
 import { useOffline } from 'next/offline'
@@ -65,7 +65,7 @@ export function ConnectivityFallback() {
 
 이 컴포넌트를 데이터 경계의 fallback으로 쓰거나 root layout에 배너로 두면 연결 상태를 필요한 범위에 알릴 수 있다.
 
-```tsx
+```tsx filename="app/dashboard/page.tsx"
 <Suspense fallback={<ConnectivityFallback />}>
   <MetricsTable />
 </Suspense>
@@ -79,7 +79,7 @@ flag가 없으면 오프라인 Server Action 호출의 Promise가 fetch 오류�
 
 `useTransition`과 `useOffline`을 결합해 버튼이 멈춘 것처럼 보이지 않게 한다.
 
-```tsx
+```tsx filename="app/ping/ping-form.tsx"
 'use client'
 
 import { useState, useTransition } from 'react'

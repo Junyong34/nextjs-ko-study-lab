@@ -29,7 +29,7 @@ non-immutable 정적 자산(`public` 폴더의 자산이나 이전 버전 Next.j
 1. `modifyConfig`에서 `config.supportsImmutableAssets` 속성을 `true`로 설정한다(사용자가 이미 `false`로 설정하지 않았다면). 이를 통해 immutable 정적 자산 배포를 지원한다는 것을 알린다.
 2. `onBuildComplete`에서 `outputs.staticFiles[].immutableHash` 속성을 읽어, 어떤 정적 자산이 immutable하며 `?dpl` 쿼리 매개변수 없이 요청되어야 하는지 판단한다.
 
-```ts
+```ts filename="my-adapter.js"
 /** @type {import('next').NextAdapter} */
 const adapter = {
   name: 'my-custom-adapter',

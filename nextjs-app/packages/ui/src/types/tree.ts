@@ -12,5 +12,8 @@ export interface TreeNode {
   order?: string
   section?: string
   demos?: unknown[]
+  hasDemo?: boolean
+  demoCount?: number
+  isDemoItem?: boolean
   children?: TreeNode[]
 }

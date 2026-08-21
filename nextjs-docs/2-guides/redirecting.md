@@ -27,7 +27,7 @@
 
 `redirect`는 Server Component, Route Handler, Server Function에서 사용한다. mutation 뒤 관련 캐시를 갱신하고 새 위치로 이동할 때 흔히 쓴다.
 
-```tsx
+```tsx filename="app/actions.ts"
 'use server'
 
 import { redirect } from 'next/navigation'
@@ -56,7 +56,7 @@ export async function createPost(id: string) {
 
 `permanentRedirect`는 사용자명 변경처럼 엔티티의 canonical URL이 영구적으로 달라졌을 때 사용한다.
 
-```tsx
+```tsx filename="app/actions.ts"
 'use server'
 
 import { permanentRedirect } from 'next/navigation'
@@ -75,7 +75,7 @@ export async function updateUsername(username: string) {
 
 Client Component 이벤트 핸들러에서 프로그래밍 방식으로 이동하려면 `useRouter().push()`를 쓴다.
 
-```tsx
+```tsx filename="app/page.tsx"
 'use client'
 
 import { useRouter } from 'next/navigation'
@@ -92,7 +92,7 @@ export default function Page() {
 
 미리 알고 있는 경로 변경은 `redirects()`에 선언한다. 경로뿐 아니라 헤더, 쿠키, query 조건도 매칭할 수 있다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -117,7 +117,7 @@ export default nextConfig
 
 인증·세션 같은 요청 조건에 따라 렌더링 전에 이동하려면 Proxy에서 `NextResponse.redirect`를 반환한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { NextRequest, NextResponse } from 'next/server'
 
 export function proxy(request: NextRequest) {
@@ -138,7 +138,7 @@ export const config = { matcher: '/dashboard/:path*' }
 
 소스 경로를 key로 하고 목적지와 영구 여부를 값으로 하는 map을 JSON 파일이나 빠른 key-value 저장소에 둔다. Proxy는 요청 pathname으로 entry를 읽어 307 또는 308을 선택한다.
 
-```json
+```json filename="next.config.ts"
 {
   "/old": { "destination": "/new", "permanent": true },
   "/blog/post-old": { "destination": "/blog/post-new", "permanent": true }

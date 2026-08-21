@@ -43,7 +43,7 @@ Next.js Compiler는 `babel-plugin-styled-components`를 이식하는 작업을 �
 
 먼저 Next.js를 최신 버전으로 업데이트한다: `npm install next@latest`. 그리고 `next.config.js`를 다음과 같이 수정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     styledComponents: true,
@@ -55,7 +55,7 @@ module.exports = {
 
 > **참고**: `ssr`과 `displayName` 변환은 Next.js에서 `styled-components`를 사용하기 위한 핵심 요구 사항이다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     // 각 옵션에 대한 자세한 내용은 https://styled-components.com/docs/tooling#babel-plugin 참고.
@@ -99,7 +99,7 @@ Next.js Compiler는 테스트 코드를 트랜스파일하고, Jest를 Next.js�
 
 먼저 Next.js를 최신 버전으로 업데이트한다: `npm install next@latest`. 그리고 `jest.config.js`를 다음과 같이 수정한다.
 
-```js
+```js filename="jest.config.js"
 const nextJest = require('next/jest')
 
 // next.config.js와 .env 파일을 로드할 수 있도록 Next.js 앱 경로를 전달한다.
@@ -118,7 +118,7 @@ module.exports = createJestConfig(customJestConfig)
 
 [Relay](https://relay.dev/) 지원을 활성화하려면 다음과 같이 설정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     relay: {
@@ -140,7 +140,7 @@ JSX 속성을 제거할 수 있게 해준다. 주로 테스트 용도로 사용�
 
 기본 정규식 `^data-test`에 매칭되는 속성을 제거하려면 다음과 같이 설정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     reactRemoveProperties: true,
@@ -150,7 +150,7 @@ module.exports = {
 
 커스텀 속성을 제거하려면 다음과 같이 설정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     // 여기 정의한 정규식은 Rust에서 처리되므로 JavaScript의 RegExp와 문법이 다르다.
@@ -166,7 +166,7 @@ module.exports = {
 
 모든 `console.*` 호출을 제거하려면 다음과 같이 설정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     removeConsole: true,
@@ -176,7 +176,7 @@ module.exports = {
 
 `console.error`를 제외한 나머지 `console.*` 출력을 제거하려면 다음과 같이 설정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     removeConsole: {
@@ -222,7 +222,7 @@ Next.js Compiler는 `@emotion/babel-plugin`을 이식하는 작업을 진행하�
 
 먼저 Next.js를 최신 버전으로 업데이트한다: `npm install next@latest`. 그리고 `next.config.js`를 다음과 같이 수정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     emotion: boolean | {
@@ -264,7 +264,7 @@ Next.js는 v13부터 기본적으로 자체 swc 컴파일러를 압축(minificat
 
 Next.js는 로컬 패키지(모노레포 등)나 외부 의존성(`node_modules`)의 의존성을 자동으로 트랜스파일하고 번들링할 수 있다. 이는 `next-transpile-modules` 패키지를 대체한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   transpilePackages: ['@acme/ui', 'lodash-es'],
 }
@@ -280,7 +280,7 @@ module.exports = {
 
 `next.config.js`의 `compiler.define` 필드는 모든 환경(서버, edge, 클라이언트)에 대한 변수를 정의할 때 사용한다. 서버 사이드(서버와 edge) 코드에만 변수를 정의하려면 `compiler.defineServer`를 사용한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     define: {
@@ -302,7 +302,7 @@ Next.js Compiler는 빌드 프로세스의 특정 시점에 커스텀 코드를 
 
 프로덕션 빌드 컴파일이 끝난 뒤, 타입 체크나 정적 페이지 생성 같은 컴파일 이후 작업이 실행되기 전에 호출되는 훅 함수다. 이 훅은 프로젝트 디렉터리와 빌드 출력 디렉터리 등 프로젝트 메타데이터에 접근할 수 있게 해주므로, 소스맵 같은 빌드 산출물을 수집하는 서드파티 도구에 유용하다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   compiler: {
     runAfterProductionCompile: async ({ distDir, projectDir }) => {
@@ -323,7 +323,7 @@ module.exports = {
 
 SWC의 내부 변환 트레이스를 Chromium의 [trace event format](https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview?mode=html#%21=)으로 생성할 수 있다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     swcTraceProfiling: true,
@@ -337,7 +337,7 @@ module.exports = {
 
 wasm으로 작성된 SWC의 실험적 플러그인 지원을 사용해 변환 동작을 커스터마이즈하도록 swc의 변환을 설정할 수 있다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     swcPlugins: [

@@ -46,7 +46,7 @@ CSS-in-JS는 다음 세 요소를 직접 구성해야 하는 opt-in 방식이다
 
 Client Component에서 `styled-jsx`를 쓰려면 `v5.1.0`을 사용해야 한다. 레지스트리는 최초 렌더링에서 한 번만 만들고, 서버가 HTML을 만들 때 수집한 스타일을 반환한 뒤 비운다.
 
-```tsx
+```tsx filename="app/registry.tsx"
 // app/registry.tsx
 'use client'
 
@@ -74,7 +74,7 @@ export default function StyledJsxRegistry({
 
 그다음 [루트 레이아웃](../3-api-reference/3.1-file-conventions/layout.md)을 레지스트리로 감싼다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 // app/layout.tsx
 import StyledJsxRegistry from './registry'
 
@@ -95,7 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 다음 구성은 `styled-components@6` 이상을 기준으로 한다. 먼저 Next.js 컴파일러의 `styledComponents` 지원을 켠다.
 
-```js
+```js filename="next.config.js"
 // next.config.js
 module.exports = {
   compiler: {
@@ -106,7 +106,7 @@ module.exports = {
 
 전역 레지스트리는 렌더링 중 만들어진 규칙을 모으고, `useServerInsertedHTML`은 루트 레이아웃의 `<head>`에 해당 규칙을 삽입한다. 브라우저에서는 `styled-components`가 평소처럼 동작하므로 레지스트리 래퍼 없이 자식을 반환한다.
 
-```tsx
+```tsx filename="lib/registry.tsx"
 // lib/registry.tsx
 'use client'
 
@@ -134,7 +134,7 @@ export default function StyledComponentsRegistry({
 }
 ```
 
-```tsx
+```tsx filename="app/layout.tsx"
 // app/layout.tsx
 import StyledComponentsRegistry from './lib/registry'
 

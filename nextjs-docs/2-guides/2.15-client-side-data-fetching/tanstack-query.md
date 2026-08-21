@@ -21,7 +21,7 @@ TanStack Query는 Client Component 데이터 fetching, Server Component 초기 �
 
 사용 라우트를 `QueryClientProvider`로 감싼다. 서버 렌더링마다 새 `QueryClient`를 만들고 브라우저에서는 하나를 재사용해 요청 간 서버 상태는 격리하고 브라우저 캐시는 유지한다.
 
-```tsx
+```tsx filename="app/products/providers.tsx"
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -45,7 +45,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 초기 화면이 hydration 뒤 요청을 기다려도 되면 `useQuery`로 컴포넌트 자체의 로딩과 오류 상태를 그린다. `enabled`는 입력이 준비될 때까지 요청을 늦춘다.
 
-```tsx
+```tsx filename="app/products/layout.tsx"
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
@@ -67,7 +67,7 @@ export function ProductAutocomplete({ query }: { query: string }) {
 
 가까운 Suspense boundary가 로딩 UI를 정의해야 하면 `useSuspenseQuery`를 사용한다. 상호작용 shell은 boundary 밖에 둔다. 초기 요청 오류는 가까운 error boundary로 전파된다. 데이터가 생긴 뒤 같은 query를 refetch할 때는 기존 값을 계속 렌더링하고 `isFetching`으로 백그라운드 피드백을 줄 수 있다.
 
-```tsx
+```tsx filename="app/product-autocomplete.tsx"
 'use client'
 
 import { useSuspenseQuery } from '@tanstack/react-query'
@@ -87,7 +87,7 @@ function ProductResults({ query }: { query: string }) {
 
 초기 렌더링에 데이터가 필요하면 Server Component가 query를 prefetch하고 `<HydrationBoundary>`로 넘긴다. TanStack Query 5.40.0 이상은 pending query를 dehydration할 수 있다. `prefetchQuery`를 await하지 않으면 렌더링 전체를 막지 않고 읽는 컴포넌트만 suspend한다.
 
-```tsx
+```tsx filename="app/product-autocomplete.tsx"
 import {
   defaultShouldDehydrateQuery,
   dehydrate,
@@ -126,7 +126,7 @@ Cache Components는 Client Component도 prerender한다. 초기 렌더링에 필
 
 `useMutation`의 `onMutate`에서 진행 중 query를 취소하고 이전 값을 저장한 뒤 낙관적 값을 설정한다. 실패하면 `onError`에서 이전 값을 복원한다.
 
-```tsx
+```tsx filename="app/products/[id]/page.tsx"
 'use client'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -158,7 +158,7 @@ Server Action은 데이터베이스를 갱신하고 `updateTag`로 같은 계약
 
 Cache Components에서 일반 `dehydrate()`가 prerender 중 `Date.now()`를 읽으면 current-time 오류가 발생한다. 대신 timestamp 읽기만 `'use cache'`로 캐시하고 데이터와 같은 tag를 부여한다. mutation이 tag를 무효화하면 데이터와 timestamp가 함께 전진해 다음 내비게이션의 `<HydrationBoundary>`가 브라우저 query를 덮어쓴다.
 
-```tsx
+```tsx filename="app/lib/hydrate.ts"
 import { cacheLife, cacheTag } from 'next/cache'
 
 async function getHydrationUpdatedAt(tags: string[]) {

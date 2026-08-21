@@ -25,7 +25,7 @@
 
 이런 에러는 `try`/`catch`로 던지지 말고, 예상된 에러를 반환값으로 모델링한다.
 
-```tsx
+```tsx filename="app/actions.ts"
 'use server'
 
 export async function createPost(prevState: any, formData: FormData) {
@@ -46,7 +46,7 @@ export async function createPost(prevState: any, formData: FormData) {
 
 action을 `useActionState` 훅에 전달하고, 반환된 `state`로 에러 메시지를 보여줄 수 있다.
 
-```tsx
+```tsx filename="app/ui/form.tsx"
 'use client'
 
 import { useActionState } from 'react'
@@ -76,7 +76,7 @@ export function Form() {
 
 Server Component 안에서 데이터를 fetch할 때, 그 응답을 이용해 에러 메시지를 조건부로 렌더링하거나 [`redirect`](../3-api-reference/3.3-functions/redirect.md)할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 export default async function Page() {
   const res = await fetch(`https://...`)
   const data = await res.json()
@@ -93,7 +93,7 @@ export default async function Page() {
 
 라우트 세그먼트 안에서 [`notFound`](../3-api-reference/3.3-functions/not-found.md) 함수를 호출하고 [`not-found.js`](../3-api-reference/3.1-file-conventions/not-found.md) 파일로 404 UI를 보여줄 수 있다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 import { notFound } from 'next/navigation'
 import { getPostBySlug } from '@/lib/posts'
 
@@ -113,7 +113,7 @@ export default async function Page({
 }
 ```
 
-```tsx
+```tsx filename="app/blog/[slug]/not-found.tsx"
 export default function NotFound() {
   return <div>404 - Page Not Found</div>
 }
@@ -129,7 +129,7 @@ Next.js는 처리되지 않은 예외를 다루기 위해 에러 바운더리를
 
 라우트 세그먼트 안에 [`error.js`](../3-api-reference/3.1-file-conventions/error.md) 파일을 추가하고 React 컴포넌트를 export하면 에러 바운더리를 만들 수 있다.
 
-```tsx
+```tsx filename="app/dashboard/error.tsx"
 'use client' // 에러 바운더리는 Client Component여야 한다
 
 import { useEffect } from 'react'
@@ -168,7 +168,7 @@ export default function ErrorPage({
 
 컴포넌트 레벨의 에러 복구를 위해, [`catchError`](../3-api-reference/3.3-functions/catchError.md) 함수로 컴포넌트 트리의 어느 부분이든 감쌀 수 있는 에러 바운더리를 만들 수 있다.
 
-```tsx
+```tsx filename="app/custom-error-boundary.tsx"
 'use client'
 
 import { catchError, type ErrorInfo } from 'next/error'
@@ -188,7 +188,7 @@ export default catchError(ErrorFallback)
 
 그다음 반환된 컴포넌트를 어떤 레이아웃이나 페이지에서도 래퍼로 쓸 수 있다.
 
-```tsx
+```tsx filename="app/some-component.tsx"
 import ErrorBoundary from './custom-error-boundary'
 
 export default function Component({ children }: { children: React.ReactNode }) {
@@ -202,7 +202,7 @@ export default function Component({ children }: { children: React.ReactNode }) {
 
 이런 경우를 다루려면, 에러를 직접 잡아서 `useState`나 `useReducer`로 저장하고, UI를 갱신해서 사용자에게 알린다.
 
-```tsx
+```tsx filename="app/dashboard/error.tsx"
 'use client'
 
 import { useState } from 'react'
@@ -233,7 +233,7 @@ export function Button() {
 
 `useTransition`의 `startTransition` 안에서 처리되지 않은 에러는 가장 가까운 에러 바운더리로 버블링된다는 점도 알아두자.
 
-```tsx
+```tsx filename="app/ui/form.tsx"
 'use client'
 
 import { useTransition } from 'react'
@@ -258,7 +258,7 @@ export function Button() {
 
 흔하지는 않지만, 루트 레이아웃에서 [`global-error.js`](../3-api-reference/3.1-file-conventions/error.md#global-error) 파일로 에러를 처리할 수 있다. 이 파일은 루트 `app` 디렉토리에 위치하며, [국제화](../2-guides/internationalization.md)를 쓰고 있어도 동작한다. 전역 에러 UI는 활성화됐을 때 루트 레이아웃이나 template을 대체하기 때문에, 자체 `<html>`과 `<body>` 태그를 정의해야 한다.
 
-```tsx
+```tsx filename="app/global-error.tsx"
 'use client' // 에러 바운더리는 Client Component여야 한다
 
 export default function GlobalError({

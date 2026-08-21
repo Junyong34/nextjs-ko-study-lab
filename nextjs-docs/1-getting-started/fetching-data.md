@@ -25,7 +25,7 @@ Server Component에서는 어떤 비동기 I/O로도 데이터를 가져올 수 
 
 `fetch` API로 데이터를 가져오려면, 컴포넌트를 비동기 함수로 만들고 `fetch` 호출을 await한다.
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 export default async function Page() {
   const data = await fetch('https://api.vercel.app/blog')
   const posts = await data.json()
@@ -49,7 +49,7 @@ export default async function Page() {
 
 Server Component는 서버에서 렌더링되므로, 자격 증명이나 쿼리 로직이 클라이언트 번들에 포함되지 않는다. 즉 ORM이나 DB 클라이언트로 안전하게 데이터베이스 쿼리를 실행할 수 있다.
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 import { db, posts } from '@/lib/db'
 
 export default async function Page() {
@@ -87,7 +87,7 @@ Server Component에서 데이터를 가져올 때, 데이터는 매 요청마다
 
 ![app/blog 폴더 안에 loading.tsx 파일이 추가된 구조](./assets/fetching-data-02.webp)
 
-```tsx
+```tsx filename="app/blog/loading.tsx"
 export default function Loading() {
   // 여기에 로딩 UI를 정의한다.
   return <div>Loading...</div>
@@ -112,7 +112,7 @@ export default function Loading() {
 
 `<Suspense>`는 페이지의 어느 부분을 스트리밍할지 더 세밀하게 제어할 수 있게 해준다. 예를 들어 `<Suspense>` 바운더리 밖의 페이지 콘텐츠는 즉시 보여주고, 바운더리 안의 블로그 포스트 목록만 스트리밍할 수 있다.
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 import { Suspense } from 'react'
 import BlogList from '@/components/BlogList'
 import BlogListSkeleton from '@/components/BlogListSkeleton'
@@ -153,7 +153,7 @@ Client Component에서 데이터를 가져오는 방법은 두 가지다.
 
 React의 [`use` API](https://react.dev/reference/react/use)로 서버에서 클라이언트로 데이터를 [스트리밍](#스트리밍)할 수 있다. Server Component에서 데이터를 fetch하는 것부터 시작해, 그 Promise를 Client Component에 prop으로 전달한다.
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 import Posts from '@/app/ui/posts'
 import { Suspense } from 'react'
 
@@ -171,7 +171,7 @@ export default function Page() {
 
 그다음 Client Component에서 `use` API로 그 Promise를 읽는다.
 
-```tsx
+```tsx filename="app/ui/posts.tsx"
 'use client'
 import { use } from 'react'
 
@@ -200,7 +200,7 @@ Promise는 서버에서 `await`로 resolve할 수도 있고, Client Component에
 
 [SWR](https://swr.vercel.app/)이나 [React Query](https://tanstack.com/query/latest) 같은 커뮤니티 라이브러리로 Client Component에서 데이터를 가져올 수 있다. 이 라이브러리들은 캐싱, 스트리밍 등에 대해 자체적인 시맨틱을 갖고 있다. 예를 들어 SWR로는:
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 'use client'
 import useSWR from 'swr'
 
@@ -233,7 +233,7 @@ export default function BlogPage() {
 
 예를 들어 `<Playlists>`는 `getArtist()`가 resolve된 뒤에야 fetch를 시작할 수 있다. `artistID`가 필요하기 때문이다.
 
-```tsx
+```tsx filename="app/artist/[username]/page.tsx"
 export default async function Page({
   params,
 }: {
@@ -281,7 +281,7 @@ async function Playlists({ artistID }: { artistID: string }) {
 
 다만 _어떤_ 컴포넌트 안에서든, 여러 `async`/`await` 요청이 순서대로 배치되면 여전히 순차적일 수 있다. 예를 들어 `getAlbums`는 `getArtist`가 resolve될 때까지 막힌다.
 
-```tsx
+```tsx filename="app/artist/[username]/page.tsx"
 import { getArtist, getAlbums } from '@/app/lib/data'
 
 export default async function Page({ params }) {
@@ -295,7 +295,7 @@ export default async function Page({ params }) {
 
 `fetch`를 호출해 여러 요청을 시작한 뒤 [`Promise.all`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)로 await하면 병렬로 시작된다. 요청은 `fetch`가 호출되는 즉시 시작된다.
 
-```tsx
+```tsx filename="app/artist/[username]/page.tsx"
 import Albums from './albums'
 
 async function getArtist(username: string) {
@@ -336,7 +336,7 @@ export default async function Page({
 
 데이터 fetch 함수를 [`React.cache`](https://react.dev/reference/react/cache)로 감싸면, 같은 요청 안의 여러 컴포넌트가 다시 fetch하지 않고 하나의 결과를 공유한다.
 
-```tsx
+```tsx filename="app/lib/user.ts"
 import { cache } from 'react'
 
 export const getUser = cache(async () => {
@@ -347,7 +347,7 @@ export const getUser = cache(async () => {
 
 Server Component는 `getUser()`를 직접 호출할 수 있다.
 
-```tsx
+```tsx filename="app/dashboard/page.tsx"
 import { getUser } from '../lib/user'
 
 export default async function DashboardPage() {

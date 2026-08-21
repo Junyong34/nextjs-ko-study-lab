@@ -1,41 +1,31 @@
 import React from 'react'
-import { DemoLinkCard } from '../demo/DemoLinkCard'
-import { DocDemoList, type DemoItem } from '../demo/DocDemoList'
 import { CodeBlock } from '../code/CodeBlock'
+import { DocDemoList, type DemoItem } from '../demo/DocDemoList'
+import { DemoLinkCard } from '../demo/DemoLinkCard'
 import { parseDemoBlock } from './parse/demo-block'
-import { renderInline } from './parse/inline'
 import { slugify } from './parse/slugify'
+import { renderInline } from './parse/inline'
 import { resolveAssetUrl } from './resolve/asset-url'
+import { Heading, Figure, Table, Alert, matchAlert } from './nodes'
 import {
-  Alert,
-  Blockquote,
-  Figure,
-  Heading,
-  HorizontalRule,
-  ListItem,
-  OfficialDocLink,
   Paragraph,
-  Table,
-  matchAlert,
-  type HeadingLevel,
-} from './nodes'
+  Blockquote,
+  UnorderedList,
+  OrderedList,
+  ListItem,
+} from './nodes/blocks'
 
 export interface MarkdownRendererProps {
-  /** 렌더링할 마크다운 원문 */
   content: string
-  /** 문서와 연관된 데모 목록 (demos.yaml에서 온 것) */
   demos?: DemoItem[]
-  /** 현재 문서의 경로 (예: "1-getting-started/caching.md") */
   docPath?: string
-  /** 문서 하단에 관련 데모 목록을 붙일지 (기본값: true) */
   showDemoList?: boolean
   className?: string
 }
 
-/** 본문에서 걷어내는 메타 링크 줄. 목차는 사이드바가 그리므로 본문에 중복될 필요가 없다. */
-const META_LINE_PREFIXES = ['상위 메뉴:', '상위 목차:', '전체 목차:']
+const META_LINE_PREFIXES = ['- 공식 문서:', '- 상위 메뉴:', '- 전체 목차:']
 
-const HEADING_MARKS: Array<{ mark: string; level: HeadingLevel }> = [
+const HEADING_MARKS: Array<{ mark: string; level: 1 | 2 | 3 | 4 }> = [
   { mark: '#### ', level: 4 },
   { mark: '### ', level: 3 },
   { mark: '## ', level: 2 },
@@ -46,7 +36,7 @@ const HEADING_MARKS: Array<{ mark: string; level: HeadingLevel }> = [
  * 경량 마크다운 렌더러입니다.
  *
  * 줄 단위 스캐너가 블록을 알아보고 `nodes/`의 컴포넌트로 넘깁니다.
- * 파싱은 `parse/`, 경로 변환은 `resolve/`, 구문 강조는 `code/`가 맡습니다.
+ * 파싱은 `parse/`, 경로 변환은 `resolve/`, 구문 강조 및 파일명 헤더는 `code/`가 맡습니다.
  */
 export function MarkdownRenderer({
   content,
@@ -63,6 +53,7 @@ export function MarkdownRenderer({
 
   let inCodeBlock = false
   let codeBlockLang = ''
+  let codeBlockFilename = ''
   let codeBlockLines: string[] = []
 
   let inTable = false
@@ -86,17 +77,48 @@ export function MarkdownRenderer({
 
       if (!inCodeBlock) {
         inCodeBlock = true
-        codeBlockLang = trimmed.slice(3).trim()
+        const rawFence = trimmed.slice(3).trim()
+        
+        let lang = rawFence
+        let fenceFilename = ''
+
+        // ```tsx filename="app/page.tsx" or ```tsx title="app/page.tsx" or ```tsx app/page.tsx
+        const filenameAttrMatch = rawFence.match(/^(?:([a-zA-Z0-9_\-]+)\s+)?(?:filename|title)=["']?([^"'\s]+)["']?/)
+        if (filenameAttrMatch) {
+          lang = filenameAttrMatch[1] || ''
+          fenceFilename = filenameAttrMatch[2] || ''
+        } else {
+          const parts = rawFence.split(/\s+/)
+          if (parts.length >= 2 && parts[1].includes('.')) {
+            lang = parts[0]
+            fenceFilename = parts[1]
+          }
+        }
+
+        codeBlockLang = lang || 'text'
+        codeBlockFilename = fenceFilename
         codeBlockLines = []
         continue
       }
 
       inCodeBlock = false
-      const fullCode = codeBlockLines.join('\n')
+      let finalCode = codeBlockLines.join('\n')
+      let finalFilename = codeBlockFilename
+
+      // 파일명이 지정되지 않았고 코드 첫 줄이 파일명 주석인 경우 (예: // app/page.tsx, /* app/globals.css */) 스마트 추출
+      if (!finalFilename && codeBlockLines.length > 0) {
+        const firstLine = codeBlockLines[0].trim()
+        const commentMatch = firstLine.match(/^(?:\/\/|\/\*|#)\s*([a-zA-Z0-9_\-\./\[\]]+\.[a-zA-Z0-9]+)(?:\s*\*\/)?$/)
+        if (commentMatch) {
+          finalFilename = commentMatch[1]
+          // 첫 줄 주석을 코드 본문에서 깔끔하게 제거하여 파일명 헤더로 승격
+          finalCode = codeBlockLines.slice(1).join('\n')
+        }
+      }
 
       if (codeBlockLang === 'demo') {
         // 코드펜스는 본문에 예제를 심지 않는다. 링크 카드만 그린다 (규칙 16).
-        const demoConfig = parseDemoBlock(fullCode)
+        const demoConfig = parseDemoBlock(finalCode)
         const matchedDemo = demos.find((d) => d.url === demoConfig.path)
 
         elements.push(
@@ -108,7 +130,14 @@ export function MarkdownRenderer({
           />,
         )
       } else {
-        elements.push(<CodeBlock key={`code-${idx++}`} code={fullCode} language={codeBlockLang} />)
+        elements.push(
+          <CodeBlock
+            key={`code-${idx++}`}
+            code={finalCode}
+            language={codeBlockLang}
+            filename={finalFilename}
+          />,
+        )
       }
       continue
     }
@@ -181,32 +210,28 @@ export function MarkdownRenderer({
         continue
       }
 
-      const officialDocMatch = listContent.match(/^공식\s*문서:\s*\[([^\]]+)\]\(([^)]+)\)/)
-      if (officialDocMatch) {
-        elements.push(<OfficialDocLink key={`official-doc-${idx++}`} href={officialDocMatch[2]} />)
-        continue
-      }
-
       elements.push(
-        <ListItem key={`li-${idx++}`}>{renderInline(listContent, docPath)}</ListItem>,
+        <UnorderedList key={`ul-${idx++}`}>
+          <ListItem>{renderInline(listContent, docPath)}</ListItem>
+        </UnorderedList>,
       )
       continue
     }
 
     // 7. 순서 있는 목록
-    const olMatch = trimmed.match(/^(\d+)\.\s+(.*)/)
+    const olMatch = trimmed.match(/^(\d+)\.\s+(.+)$/)
     if (olMatch) {
       elements.push(
-        <ListItem key={`ol-${idx++}`} ordered>
-          {renderInline(olMatch[2], docPath)}
-        </ListItem>,
+        <OrderedList key={`ol-${idx++}`}>
+          <ListItem>{renderInline(olMatch[2], docPath)}</ListItem>
+        </OrderedList>,
       )
       continue
     }
 
-    // 8. 구분선
+    // 8. 수평선
     if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
-      elements.push(<HorizontalRule key={`hr-${idx++}`} />)
+      elements.push(<hr key={`hr-${idx++}`} className="my-6 border-zinc-200 dark:border-zinc-800" />)
       continue
     }
 

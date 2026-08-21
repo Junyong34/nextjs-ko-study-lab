@@ -162,7 +162,7 @@ DevTools는 `next-instant-navigation-testing` 쿠키를 사용하여 동적 콘�
 <a id="typescript"></a>
 ### TypeScript
 
-```tsx
+```tsx filename="page.tsx"
 type InstantConfig =
   | true
   | false

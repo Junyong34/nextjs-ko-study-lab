@@ -18,7 +18,7 @@
 > **참고**:
 > 이 API는 Next.js 16에서 [`use cache`](../3.4-directives/use-cache.md) 지시어로 대체되었다. Next.js 16 이상에서는 [Cache Components](../../1-getting-started/caching.md)를 활성화하고 `unstable_cache` 대신 `use cache`를 사용하는 것을 권장한다.
 
-```jsx
+```jsx filename="app/page.tsx"
 import { getUser } from './data'
 import { unstable_cache } from 'next/cache'
 

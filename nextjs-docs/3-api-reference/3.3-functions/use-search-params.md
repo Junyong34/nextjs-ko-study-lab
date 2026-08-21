@@ -53,7 +53,7 @@ export default function SearchBar() {
 
 ### 매개변수 (Parameters)
 
-```tsx
+```tsx filename="app/dashboard/search-bar.tsx"
 const searchParams = useSearchParams()
 ```
 

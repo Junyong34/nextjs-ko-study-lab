@@ -87,7 +87,7 @@ export async function GET(request) {
 
 ### 지원 옵션 (Parameters)
 
-```tsx
+```tsx filename="app/opengraph-image.tsx"
 new ImageResponse(element: ReactElement, options?: ImageResponseOptions)
 ```
 

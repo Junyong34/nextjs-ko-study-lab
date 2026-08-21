@@ -45,7 +45,7 @@ export default function Template({ children }) {
 <Layout>
 
 <Template key={routeParam}>{children}</Template></Layout>
-```
+```jsx filename="Output"
 ```
 
 [컴포넌트 계층 구조](../../1-getting-started/project-structure.md#component-hierarchy)에서 `template.js`는 `layout.js`와 `error.js` 사이를 렌더링한다.`error.js`,`loading.js`,`not-found.js` 및 `page.js`를 래핑하지만 동일한 세그먼트에서 `layout.js`를 래핑하지 **않는다**.
@@ -63,7 +63,7 @@ export default function Template({ children }) {
 <Layout>
 
 <Template key={routeParam}>{children}</Template></Layout>
-```
+```jsx filename="Output"
 ```
 
 <a id="behavior"></a>
@@ -105,7 +105,7 @@ app
 <RootLayout>
 
 <Template key="/"><Page /></Template></RootLayout>
-```
+```jsx filename="Output"
 ```
 
 `/about`(첫 번째 세그먼트 변경)로 이동하면 루트 템플릿 키가 변경되고 다시 마운트된다.

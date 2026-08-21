@@ -29,7 +29,7 @@ Next.js는 프로젝트의 규모와 연혁에 따라 세 가지 접근을 권�
 
 기존 프로젝트에 Server Component를 도입할 때는 Zero Trust 모델을 따른다. Client Component에서 하던 것처럼 REST나 GraphQL API를 `fetch`로 호출하되, 기존 API의 인증·인가 검사를 그대로 유지한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { cookies } from 'next/headers'
 
 export default async function Page() {
@@ -46,7 +46,7 @@ export default async function Page() {
 
 DAL은 데이터에 언제 어떻게 접근하고 렌더링 컨텍스트로 무엇을 전달할지 제어하는 서버 전용 라이브러리다. 인가를 수행하고 안전한 최소 Data Transfer Object(DTO)를 반환한다. 데이터 접근을 중앙화하면 인가 누락을 줄이고 한 요청 안에서 메모리 캐시를 공유할 수 있다.
 
-```ts
+```ts filename="data/auth.ts"
 import 'server-only'
 import { cache } from 'react'
 import { cookies } from 'next/headers'
@@ -74,7 +74,7 @@ export async function getProfileDTO(slug: string) {
 
 Server Component에서 직접 데이터베이스를 조회하는 방식은 빠른 프로토타입에 편리하다. 하지만 전체 레코드를 Client Component prop으로 넘기기 쉬워 비공개 필드가 노출될 위험이 커진다. 클라이언트에는 렌더링에 필요한 좁은 타입과 정제된 객체만 전달한다.
 
-```tsx
+```tsx filename="data/user-dto.tsx"
 // 전체 User 레코드 대신 공개 필드만 반환한다.
 async function getPublicUser(slug: string) {
   const user = await db.user.findUnique({ where: { slug } })
@@ -104,7 +104,7 @@ export default async function Page({ params }: {
 
 React의 `experimental_taintObjectReference`는 객체를, `experimental_taintUniqueValue`는 특정 값을 클라이언트로 전달하지 못하게 표시한다. Next.js에서는 `experimental.taint` 옵션을 켠다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     taint: true,
@@ -141,7 +141,7 @@ Action ID는 컴파일 때 만들어져 최대 14일 캐시되고, 새 빌드나
 
 페이지 수준 인증 검사는 그 안의 Server Action으로 이어지지 않는다. Action에서 사용자를 다시 인증하고, 해당 리소스의 소유자인지도 확인해야 IDOR 취약점을 막을 수 있다.
 
-```ts
+```ts filename="app/actions.ts"
 'use server'
 
 import { auth } from '@/lib/auth'
@@ -191,7 +191,7 @@ openssl rand -base64 32
 
 Server Action은 `POST`만 허용하고 `Origin`과 `Host` 또는 `X-Forwarded-Host` 헤더를 비교한다. 값이 다르면 요청을 중단한다. reverse proxy 때문에 공개 도메인과 서버 API 도메인이 다르면 [`serverActions.allowedOrigins`](../3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md)에 안전한 origin 목록을 지정하는 것을 권장한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     serverActions: {

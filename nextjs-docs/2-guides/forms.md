@@ -23,7 +23,7 @@ React Server Action은 서버에서 실행되는 [Server Function](https://react
 
 React는 HTML `<form>`의 `action` 속성으로 Server Action을 호출할 수 있게 확장한다. 폼에서 호출된 함수는 `FormData`를 자동으로 받는다.
 
-```tsx
+```tsx filename="app/invoices/page.tsx"
 import { auth } from '@/lib/auth'
 
 export default function Page() {
@@ -51,7 +51,7 @@ export default function Page() {
 
 폼 필드가 아닌 값을 Server Function에 넘기려면 `bind`를 사용한다. `bind`는 Server Component와 Client Component에서 모두 작동하고 점진적 향상을 지원한다.
 
-```tsx
+```tsx filename="app/client-component.tsx"
 'use client'
 
 import { updateUser } from './actions'
@@ -62,7 +62,7 @@ export function UserProfile({ userId }: { userId: string }) {
 }
 ```
 
-```tsx
+```tsx filename="app/actions.ts"
 'use server'
 
 export async function updateUser(userId: string, formData: FormData) {}
@@ -74,7 +74,7 @@ export async function updateUser(userId: string, formData: FormData) {}
 
 기본적인 클라이언트 검증에는 `required`, `type="email"` 같은 HTML 속성을 사용한다. 서버에서는 Zod 같은 스키마 라이브러리로 다시 검증한다.
 
-```tsx
+```tsx filename="app/actions.ts"
 'use server'
 
 import { z } from 'zod'
@@ -94,7 +94,7 @@ export async function createUser(formData: FormData) {
 
 오류 메시지를 화면에 표시하려면 폼 컴포넌트를 Client Component로 만들고 `useActionState`를 사용한다. 이때 Server Function의 첫 번째 인수로 `prevState`가 추가되고 `FormData`는 두 번째 인수가 된다.
 
-```tsx
+```tsx filename="app/ui/signup.tsx"
 'use client'
 
 import { useActionState } from 'react'
@@ -118,7 +118,7 @@ export function Signup() {
 
 `useActionState`가 반환하는 `pending`으로 제출 버튼을 비활성화하거나 로딩 UI를 표시할 수 있다. 폼 내부의 별도 버튼 컴포넌트에서는 `useFormStatus`를 쓸 수 있다. 이 훅은 자신이 렌더링된 폼의 제출 상태를 읽으므로 버튼 컴포넌트를 폼 안에 배치해야 한다.
 
-```tsx
+```tsx filename="app/ui/button.tsx"
 'use client'
 
 import { useFormStatus } from 'react-dom'
@@ -137,7 +137,7 @@ export function SubmitButton() {
 
 `useOptimistic`은 Server Function 응답을 기다리기 전에 예상 결과를 UI에 반영한다. 실제 쓰기가 실패할 수 있으므로 오류 처리와 원래 상태 복원 전략도 함께 설계한다.
 
-```tsx
+```tsx filename="app/actions.ts"
 'use client'
 
 import { useOptimistic } from 'react'
@@ -165,7 +165,7 @@ export function Thread({ messages }: { messages: string[] }) {
 
 `requestSubmit()`은 가장 가까운 `<form>`을 실제 제출 절차로 보낸다. 예를 들어 `⌘`/`Ctrl` + `Enter` 단축키를 제공할 수 있다.
 
-```tsx
+```tsx filename="app/entry.tsx"
 'use client'
 
 export function Entry() {

@@ -53,7 +53,7 @@ prerender 검증 실패는 프로덕션 빌드가 실패하는 가장 흔한 이
 
 이 예제는 `id`로 데이터를 불러오는 다이나믹 상품 페이지를 가진 스토어 앱을 사용한다.
 
-```text
+```text filename="Terminal"
 app/
 ├── layout.tsx
 ├── page.tsx
@@ -64,7 +64,7 @@ app/
 
 `app/products/[id]/page.tsx`에서 작업한다.
 
-```tsx
+```tsx filename="app/products/[id]/page.tsx"
 // app/products/[id]/page.tsx
 export default async function Page(props: PageProps<'/products/[id]'>) {
   const { id } = await props.params
@@ -78,7 +78,7 @@ export default async function Page(props: PageProps<'/products/[id]'>) {
 
 `next build`를 실행하면 `params` 읽기와 캐시되지 않은 `fetch`가 `<Suspense>` 경계 밖에서 실행되기 때문에 prerender-blocking 오류로 실패한다.
 
-```text
+```text filename="Terminal"
 Error: Route "/products/[id]": Next.js encountered uncached or runtime data during prerendering.
 
 `fetch(...)`, `cookies()`, `headers()`, `params`, `searchParams`, or `connection()` accessed outside of `<Suspense>` prevents the route from being prerendered, blocking the page load and leading to a slower user experience.
@@ -95,7 +95,7 @@ Learn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic
 
 때로는 오류만으로 충분한 정보를 얻을 수 없다. 프로덕션 빌드는 서버 코드를 압축하고 소스맵을 생성하지 않기 때문이다. `--debug-prerender`를 붙여 다시 실행한다.
 
-```bash
+```bash filename="Terminal"
 next build --debug-prerender
 ```
 
@@ -111,7 +111,7 @@ next build --debug-prerender
 
 오류의 첫 번째 제안인 `[stream]`은 데이터 접근 주변에 placeholder를 두는 것이다. `loading.js` 파일을 추가해 전체 세그먼트를 `<Suspense>` 경계로 감싼다. Next.js는 이 fallback을 라우트의 정적 shell로 prerender하고, `params`와 데이터 처리는 요청 시점에 실행된다. 경계를 다른 위치에 두는 방법은 [Streaming](./streaming.md)을 참고한다.
 
-```tsx
+```tsx filename="app/products/[id]/loading.tsx"
 // app/products/[id]/loading.tsx
 export default function Loading() {
   return <div>Loading...</div>
@@ -120,7 +120,7 @@ export default function Loading() {
 
 빌드를 실행하면 통과하고, 라우트는 부분적으로 prerender된다.
 
-```text
+```text filename="Terminal"
 Route (app)
 ┌ ○ /                   # 빌드 시점에 prerender됨
 ├ ○ /_not-found
@@ -137,7 +137,7 @@ Route (app)
 
 이 라우트 하나만 반복 작업하는 큰 앱이라면, 전체를 다시 빌드하는 대신 빌드 범위를 이 라우트로 좁힐 수도 있다. `--debug-build-paths`에 포함할 라우트 파일을 넘긴다.
 
-```bash
+```bash filename="Terminal"
 next build --debug-build-paths="app/products/[id]/page.tsx"
 ```
 
@@ -147,7 +147,7 @@ Next.js는 일치하는 라우트만 컴파일하고 prerender하며, 나머지 
 
 다이나믹 세그먼트가 fallback 행 하나만 보여주는 이유는 Next.js가 어떤 `param` 값이 존재하는지 모르기 때문이다. `generateStaticParams`를 export해 값을 나열한다.
 
-```tsx
+```tsx filename="app/products/[id]/page.tsx"
 // app/products/[id]/page.tsx
 export async function generateStaticParams() {
   const res = await fetch('https://api.example.com/products')
@@ -165,7 +165,7 @@ export default async function Page(props: PageProps<'/products/[id]'>) {
 
 다시 빌드하면 나열한 `param`마다 `/products/[id]` 라우트 아래에 들여쓴 행이 추가된다.
 
-```text
+```text filename="Terminal"
 Route (app)
 ┌ ○ /
 ├ ○ /_not-found
@@ -189,7 +189,7 @@ Route (app)
 
 오류의 `[cache]` 해결 방법은 조회를 빌드 시점으로 옮기는 것이다. `use cache`를 추가해 prerender 중에 실행되도록 한다.
 
-```tsx
+```tsx filename="app/products/[id]/page.tsx"
 // app/products/[id]/page.tsx
 export async function generateStaticParams() {
   const res = await fetch('https://api.example.com/products')
@@ -212,7 +212,7 @@ export default async function Page(props: PageProps<'/products/[id]'>) {
 
 다시 빌드하면 나열된 `param`들이 `○`로 표시된다. `param`은 알고 있고 데이터는 캐시되어 있으므로, Next.js는 각 페이지를 완전히 prerender한다. 나열되지 않은 `param`에는 여전히 `◐` 행이 남아, 정적 shell을 서비스하는 동안 콘텐츠가 스트리밍된다.
 
-```text
+```text filename="Terminal"
 Route (app)
 ┌ ○ /
 ├ ○ /_not-found
@@ -234,7 +234,7 @@ prerender된 경로가 표에 다 담기지 않을 만큼 많으면, Next.js는 
 
 캐시된 함수나 컴포넌트를 포함한 라우트에는 Revalidate와 Expire 열도 표시된다. 라우트는 자신이 포함한 모든 캐시 중 가장 짧은 revalidate와 expire 값을 보여준다. 이는 `cacheLife`를 명시적으로 호출하지 않아도 적용되는데, 캐시가 기본 프로필을 사용하기 때문이다. 같은 캐시된 상품 데이터를 렌더링하는 `/products` 목록 페이지를 추가해본다.
 
-```text
+```text filename="Terminal"
 Route (app)           Revalidate  Expire
 ┌ ○ /
 ├ ○ /_not-found
@@ -252,7 +252,7 @@ Route (app)           Revalidate  Expire
 
 오류의 마지막 제안인 `[block]`은 위 두 방법의 대안이다. 앞의 수정을 모두 제거하고, 원래 페이지에 `instant = false`만 설정했다고 가정한다. 이는 라우트가 렌더링되는 방식을 바꾸지 않는다. 단지 검증에서 벗어나 블로킹 라우트를 의도적으로 허용할 뿐이다.
 
-```tsx
+```tsx filename="app/products/[id]/page.tsx"
 // app/products/[id]/page.tsx
 export const instant = false
 
@@ -266,7 +266,7 @@ export default async function Page(props: PageProps<'/products/[id]'>) {
 
 빌드는 통과하고, 출력은 스트리밍 라우트와 같은 모습이다. 다이나믹 세그먼트는 실제로 prerender되는 것이 없어도 `◐` fallback 행을 표시한다.
 
-```text
+```text filename="Terminal"
 Route (app)
 ┌ ○ /
 ├ ○ /_not-found
