@@ -230,7 +230,47 @@ check-types 8/8, build 5/5, DOM 스냅샷 11/11 동일.
 
 ---
 
-## 7. Phase 3 — 셸 UI 이동 + 분해
+## 7. Phase 3 — 셸 UI 이동 + 분해 ✅ 완료 (2026-08-21, 우측 목차 제외)
+
+### 7-0. 실제로 한 일과 계획에서 달라진 점
+
+**우측 목차(`TableOfContents`)는 Phase 4로 미뤘습니다.** 지금 옮기면 `slugify` 때문에
+`@study/ui` → `@study/docs-render` 의존이 생깁니다. 14절이 예고한 순서 그대로,
+Phase 4-1에서 `slugify`를 떼어낸 뒤 옮깁니다.
+
+| 원본 | 줄 | 결과 |
+|---|---:|---|
+| `Header.tsx` | 95 | `Header`(18) + `HeaderBrand`(32) + `HeaderNav`(60) |
+| `Footer.tsx` | 100 | `Footer`(35, **서버 컴포넌트**) + `FooterBrand`(19) + `FooterLinks`(42) |
+| `FeedbackModal.tsx` | 155 | `FeedbackModal`(68) + `FeedbackForm`(90) + `FeedbackSuccess`(17) + `FeedbackTrigger`(35) |
+| `Sidebar.tsx` | 280 | `DocTree`(94) + `DocTreeNode`(132) + `DocTreeSearch`(36) + `useTreeFilter`(46) |
+
+`apps/shell/src/components/`에는 `DemoViewer.tsx`만 남았습니다 (Phase 5 대상).
+
+추가로 `site.ts`를 만들어 Header·Footer에 흩어져 있던 `v16.3.1`·저장소 URL·릴리스 URL·
+피드백 주소를 한곳에 모았습니다. **버전 문자열이 화면에 하드코딩돼 있어 catalog를 올릴 때
+따로 고쳐야 한다는 점은 그 자체로 결함이며(F4), 별도 티켓입니다.**
+
+### 7-1. 검증에서 배운 것
+
+DOM 스냅샷이 **두 번 실패했고, 둘 다 도구 문제였습니다.**
+
+1. **속성 순서** — 컴포넌트로 감싸면 `{...props}`를 펼치는 위치 때문에
+   `<input type= placeholder= class=>`가 `<input class= type= …>`이 됩니다.
+   DOM 의미는 같으므로 `to-dom.sh`가 속성도 정렬하도록 했습니다.
+2. **정규화 로직 중복** — `snapshot.sh`와 `to-dom.sh`에 같은 규칙을 복사해 뒀다가
+   한쪽만 고쳐서 어긋났고, 없는 회귀를 쫓았습니다. 이제 `snapshot.sh`가 `to-dom.sh`를
+   호출합니다.
+
+**진짜 차이는 하나 있었습니다.** `<span>Next.js {version}</span>`이 텍스트 노드 두 개가 되면서
+React가 `<!-- -->` 마커를 끼워 넣었습니다. 정규화로 감추지 않고 템플릿 리터럴로 합쳐
+노드를 하나로 되돌렸습니다 — **마커 위치는 컴포넌트 경계를 반영하므로 가리면 안 됩니다.**
+
+CSS 카나리아에 `480px`(HeaderNav의 `min-[480px]:block`)를 추가했습니다. Phase 3부터
+셸 CSS가 `@study/ui`를 실제로 포함하는지 확인하는 지표입니다. 임의값 클래스는 정규식으로
+찾으면 이스케이프에 걸리므로 `grep -F`로 바꿨습니다.
+
+### 7-2. 원래 계획 항목
 
 `apps/shell/src/components/` → `packages/ui/src/`. 파일을 옮기면서 동시에 쪼갭니다.
 

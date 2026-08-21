@@ -15,15 +15,10 @@ export interface DocEntry {
   }>
 }
 
-export interface TreeNode {
-  title: string
-  url: string
-  path: string
-  order?: string
-  section?: string
-  demos?: any[]
-  children?: TreeNode[]
-}
+// 좌측 트리가 그리는 노드 타입은 @study/ui가 소유합니다 (화면 계약이므로).
+// 셸은 docs-manifest.json을 이 모양으로 읽어 넘기기만 합니다.
+export type { TreeNode } from '@study/ui'
+import type { TreeNode } from '@study/ui'
 
 export interface DocsManifest {
   $schema?: string

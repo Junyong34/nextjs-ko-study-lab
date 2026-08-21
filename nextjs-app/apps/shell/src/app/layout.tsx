@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
-import { Header } from '@/components/Header'
-import { Sidebar } from '@/components/Sidebar'
-import { Footer } from '@/components/Footer'
-import { getManifest, type TreeNode } from '@/lib/docs'
+import { Header, DocTree, Footer, type TreeNode } from '@study/ui'
+import { getManifest } from '@/lib/docs'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -32,7 +30,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
         <Header />
         <div className="mx-auto flex w-full max-w-[90rem] flex-1 items-start px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
-          <Sidebar tree={tree} />
+          <DocTree tree={tree} />
           <main className="flex-1 min-w-0 lg:pl-8 lg:pr-4 pb-16">
             {children}
           </main>
