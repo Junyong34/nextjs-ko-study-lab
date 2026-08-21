@@ -1,0 +1,59 @@
+name: 기능 제안
+description: 학습자 문제를 해결하는 기능이나 학습 경험 개선을 제안합니다.
+title: "[제안] "
+labels:
+  - kind:feature
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        제안은 문제와 학습자 가치를 중심으로 작성해 주세요. 제안이 곧 구현 일정이나 Phase Gate 우회를 의미하지는 않습니다. 취약점, 토큰, 개인정보는 입력하지 말고 [보안 정책](https://github.com/Junyong34/nextjs-ko-study-lab/security/policy)의 Private Vulnerability Reporting을 이용하세요.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 제출 전 확인
+      options:
+        - label: 기존 open·closed 이슈를 검색했으며 같은 제안을 찾지 못했습니다.
+          required: true
+        - label: 이 내용은 공개 가능한 제안이며 민감한 보안 정보가 포함되지 않았습니다.
+          required: true
+  - type: textarea
+    id: learner-problem
+    attributes:
+      label: 해결하려는 학습자 문제
+      description: 누가 어떤 상황에서 무엇을 이해하거나 수행하기 어려운지 적어 주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-outcome
+    attributes:
+      label: 기대 결과
+      description: 제안이 받아들여졌을 때 학습자에게 어떤 변화가 생기는지 적어 주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 제안 내용과 범위
+      description: 가능한 해결 방향과 영향을 받는 문서·데모·저장소 영역을 적어 주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 검토한 대안
+      description: 고려했지만 선택하지 않은 방법과 그 이유를 적어 주세요. 없으면 `없음`이라고 적어도 됩니다.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: 관련 영역
+      options:
+        - nextjs-docs
+        - nextjs-app
+        - repository
+        - cross-cutting
+    validations:
+      required: true

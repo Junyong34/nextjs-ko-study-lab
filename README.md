@@ -24,6 +24,12 @@ nextjs-ko-study-lab/
 - [전체 진행 상태 트래킹](./nextjs-docs/PROGRESS.md)
 - [문서 작성 규칙](./nextjs-docs/AGENTS.md)
 
+### 이슈·보안 신고
+
+- [이슈 등록 안내](./.github/CONTRIBUTING.md)
+- [지원 범위](./.github/SUPPORT.md)
+- [보안 정책](./.github/SECURITY.md)
+
 ## 데모 사이트 설계 바로가기
 
 - [설계 문서 목차](./nextjs-app/docs/README.md)

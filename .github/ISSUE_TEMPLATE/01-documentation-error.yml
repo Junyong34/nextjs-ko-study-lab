@@ -1,0 +1,67 @@
+name: 문서 오류
+description: 한국어 학습 문서의 내용·구조·공식 출처 오류를 제보합니다.
+title: "[문서] "
+labels:
+  - kind:documentation
+  - area:nextjs-docs
+  - phase:1
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        제출 전에 기존 open·closed 이슈를 검색해 주세요. 취약점, 토큰, 개인정보는 이 Form에 입력하지 말고 [보안 정책](https://github.com/Junyong34/nextjs-ko-study-lab/security/policy)의 Private Vulnerability Reporting을 이용하세요.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: 제출 전 확인
+      options:
+        - label: 기존 이슈를 검색했으며 같은 문제를 찾지 못했습니다.
+          required: true
+        - label: 이 내용은 공개 가능한 문서 오류이며 민감한 보안 정보가 포함되지 않았습니다.
+          required: true
+  - type: input
+    id: document-location
+    attributes:
+      label: 대상 문서 경로 또는 공개 URL
+      description: "예: `nextjs-docs/1-getting-started/...` 또는 배포된 페이지 URL"
+      placeholder: 문서 경로 또는 URL
+    validations:
+      required: true
+  - type: input
+    id: section
+    attributes:
+      label: 문제가 있는 섹션
+      description: H1~H3 제목이나 표·콜아웃·이미지 위치를 적어 주세요.
+      placeholder: "예: 핵심 개념 및 설명 > 캐싱"
+    validations:
+      required: true
+  - type: textarea
+    id: current-content
+    attributes:
+      label: 현재 내용
+      description: 현재 문서에서 문제가 되는 문장이나 구조를 적어 주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-correction
+    attributes:
+      label: 기대하는 수정
+      description: 어떤 내용·구조로 바뀌어야 하는지 적어 주세요.
+    validations:
+      required: true
+  - type: input
+    id: official-source
+    attributes:
+      label: 공식 Next.js 근거 URL
+      description: 해당 내용을 확인할 수 있는 nextjs.org 공식 문서 URL을 적어 주세요. 모르면 `모름`이라고 적어도 됩니다.
+      placeholder: https://nextjs.org/docs/app/...
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 추가 맥락
+      description: 누락된 제목·콜아웃·표 행·이미지·용어 등 확인에 도움이 되는 내용을 적어 주세요.
+    validations:
+      required: false
