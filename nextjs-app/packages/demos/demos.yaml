@@ -1,0 +1,11 @@
+- url: server-actions/basic
+  title: Server Actions 기본 폼 처리 및 상태 변경
+  doc: 2-guides/2.14-server-actions.md
+  zone: baseline
+  status: done
+
+- url: caching/basic
+  title: use cache 기본 동작 및 revalidateTag 무효화
+  doc: 1-getting-started/caching.md
+  zone: cache
+  status: done

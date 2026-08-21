@@ -1,50 +1,29 @@
-# Next.js 학습 사이트 문서 설계
+# next.js 학습
 
-> Next.js 공식 문서의 App Router 사이드바를 기준으로, 설명·예제·시각적 데모를 단계적으로 설계하기 위한 문서 구조입니다.
+> Next.js 공식 문서(App Router)를 체계적인 한국어 커리큘럼으로 학습하고, Next.js 16의 최신 기능들을 인터랙티브 실습 데모로 직접 검증할 수 있는 학습입니다.
 
-## 문서 범위
+---
 
-이 디렉토리는 코드 구현 전에 학습 콘텐츠의 목차, 용어, 설명 방식, 데모 방향을 합의하기 위한 문서 공간입니다. 각 메뉴 문서는 현재 초안 상태이며, 교육 설계가 완료된 뒤 구현 단계로 넘어갑니다.
+## 📚 권장 학습 로드맵
 
-## 권장 학습 흐름
+1. **[1. 시작하기 (Getting Started)](./1-getting-started/README.md)**: 프로젝트 설치부터 App Router의 핵심 흐름(라우팅, 서버/클라이언트 컴포넌트, 데이터 페칭, 캐싱 기초)을 단계별로 학습합니다.
+2. **[2. 실무 가이드 (Guides)](./2-guides/README.md)**: 렌더링 철학, Server Actions, 최신 `use cache` 아키텍처, 폼 처리, 인증 및 보안 등 실제 프로덕션 환경에서 마주하는 문제 해결 가이드입니다.
+3. **[3. API 레퍼런스 (API Reference)](./3-api-reference/README.md)**: Next.js의 모든 컴포넌트(`<Image>`, `<Link>`), 함수(`cookies()`, `revalidateTag()`), 파일 규칙(`layout.tsx`, `page.tsx`, `route.ts`)의 세부 동작을 다룹니다.
+4. **[4. 용어집 (Glossary)](./4-glossary/README.md)**: Server Components, Hydration, Partial Prerendering(PPR), Cache Tags 등 핵심 용어들을 빠르게 조회하고 복습합니다.
+5. **[5. 아키텍처 (Architecture)](./5-architecture/README.md)**: Next.js 컴파일러, Turbopack, 번들링 구조, 고속 캐싱 시스템의 내부 설계 원리를 깊이 있게 탐구합니다.
 
-1. [Getting Started](./1-getting-started/README.md): 기본 프로젝트와 App Router의 핵심 흐름 (기존 순서 유지)
-2. [Guides](./2-guides/README.md): 실제 문제를 해결하는 주제별 학습 (학습 의존성 기준 재배열, ADR 0002)
-3. [API Reference](./3-api-reference/README.md): 기능별 세부 동작과 사용법 (하위 그룹 순서 재배열, ADR 0002)
-4. [Glossary](./4-glossary/README.md): 반복해서 등장하는 용어 확인 (참고용, 하위 순번 없음)
-5. [Architecture](./5-architecture/README.md): 내부 동작과 설계 원리 (기존 순서 유지)
+---
 
-> 위 번호(1~5)는 카테고리 대분류 번호입니다. 하위 메뉴까지 포함한 전체 트리형 순번(`1.1`, `3.1.1` 등)은 각 카테고리 `README.md`와 [PROGRESS.md](./PROGRESS.md)에 동일하게 반영되어 있습니다. 카테고리·하위그룹 폴더명에도 같은 번호를 접두어로 붙여, 탐색기에서 폴더만 봐도 학습 순서가 보이도록 했습니다 (개별 md 파일명에는 붙이지 않습니다).
+## ⚡ 인터랙티브 실습 데모 활용법
 
-## 공식 메뉴 구조
+- **본문 인라인 실습**: 문서 본문을 읽는 도중 삽입된 실습 데모(`DemoFrame`)를 통해 코드를 직접 실행하고 결과를 실시간으로 확인할 수 있습니다.
+- **독립 데모 랩**: 상단 헤더의 **[데모](/demo)** 메뉴를 통해 전체 인터랙티브 실습 목록을 한눈에 둘러보고 독립된 화면에서 집중 테스트할 수 있습니다.
+- **기대값 vs 실제값 검증 패널**: 각 데모마다 기대되는 동작과 실제 서버 상태가 일치하는지(`✓` 패널) 즉각 확인할 수 있습니다.
 
-- [Getting Started](./1-getting-started/README.md)
-- [Guides](./2-guides/README.md)
-- [API Reference](./3-api-reference/README.md)
-- [Glossary](./4-glossary/README.md)
-- [Architecture](./5-architecture/README.md)
+---
 
-## 문서 작성 원칙
+## 🌐 기준 및 환경
 
-- 공식 문서의 메뉴 계층과 링크를 유지합니다.
-- 각 항목은 개념 설명, 예제/데모 설계, 학습 확인 항목으로 확장합니다.
-- 코드 구현은 문서 설계가 완료되고 학습 목표와 검증 방법이 합의된 뒤 시작합니다.
-- 공식 문서 링크를 함께 남겨 원문과 학습 문서를 오갈 수 있게 합니다.
-
-## 설계 기록
-
-- [용어집](./CONTEXT.md)
-- [공식 사이드바 계층 미러링 결정](./docs/adr/0001-mirror-official-sidebar-hierarchy.md)
-- [학습 순서 재배열 결정](./docs/adr/0002-reorder-learning-sequence.md)
-- [문서 작성 규칙 (AGENTS.md)](./AGENTS.md)
-- [번역 규칙 (TRANSLATION.md)](./TRANSLATION.md)
-- [전체 진행 트래킹](./PROGRESS.md)
-
-## 기준 출처
-
-- [Next.js App Router 공식 문서](https://nextjs.org/docs/app)
-- 확인한 공식 사이드바 메뉴 수: 286개
-- **학습 기준 Next.js 버전: 16.3.1** (React 19.2.8 / Node.js >=20.9 기준, 확인일 2026-08-18, [npm](https://www.npmjs.com/package/next))
-  - 버전이 올라가면 이 값을 갱신하고, 변경된 기능과 관련된 "완료" 문서를 재검토 대상으로 표시한다. **Phase 2 착수 후에는 `done` 상태의 데모도 함께 재검토 대상이다** — 데모는 실행 코드라 문서보다 훨씬 잘 깨진다.
-  - `16.3.0` → `16.3.1`(2026-08-18)은 patch이며, [04. 설계 실현 가능성 검증](../nextjs-app/docs/04-feasibility-verification.md)에서 문서 재검토를 요구하는 API 변경이 없음을 확인했다. 재검토 대상 없음.
-  - Phase 2 착수 후에는 이 값이 루트 `pnpm-workspace.yaml`의 catalog와 **같은 값**이어야 한다 ([ADR 0002](../nextjs-app/docs/adr/0002-pnpm-turborepo-catalog-pinning.md)).
+- **Next.js 공식 문서 기준**: [Next.js App Router Documentation](https://nextjs.org/docs/app)
+- **학습 기준 버전**: **Next.js 16.3.1** (React 19.2.8 / Turbopack)
+- **오픈소스 커리큘럼**: 모든 문서는 오픈소스로 유지관리되며, 개선 제안이나 오류 제보는 하단 **[피드백 보내기]**를 통해 언제든 전달하실 수 있습니다.

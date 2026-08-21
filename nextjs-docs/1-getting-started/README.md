@@ -1,42 +1,34 @@
-# Getting Started
+# 1. 시작하기 (Getting Started)
 
-> Next.js 공식 문서의 **Getting Started** 메뉴를 학습 사이트로 옮기기 위한 설계용 목차입니다.
+> Next.js App Router의 핵심 기초를 단계별로 빠르게 학습하고 프로젝트를 구축하는 입문 커리큘럼입니다.
 
-- 공식 문서: [Getting Started](https://nextjs.org/docs/app/getting-started)
-- 상위 목차: [Next.js 학습 문서](../README.md)
+---
 
-## 학습 목표
+## 🎯 학습 목표
 
-- 기본 프로젝트와 App Router의 핵심 흐름을 단계적으로 이해합니다.
-- 각 주제를 실제 애플리케이션 상황과 연결합니다.
-- 구현 가능한 주제는 시각적 데모와 검증 시나리오로 확장합니다.
+- `create-next-app`을 사용해 최신 Next.js 프로젝트를 생성하고 기본 구조를 이해합니다.
+- App Router의 레이아웃 시스템, 서버 컴포넌트와 클라이언트 컴포넌트의 차이를 명확히 구분합니다.
+- 데이터 페칭, 변이, 캐싱 및 무효화의 기본 동작 방식을 실습을 통해 체득합니다.
 
-## 학습 순서
+---
 
-- 1.1 [Installation](./installation.md)
-- 1.2 [Project Structure](./project-structure.md)
-- 1.3 [Layouts and Pages](./layouts-and-pages.md)
-- 1.4 [Linking and Navigating](./linking-and-navigating.md)
-- 1.5 [Server and Client Components](./server-and-client-components.md)
-- 1.6 [Fetching Data](./fetching-data.md)
-- 1.7 [Mutating Data](./mutating-data.md)
-- 1.8 [Caching](./caching.md)
-- 1.9 [Revalidating](./revalidating.md)
-- 1.10 [Error Handling](./error-handling.md)
-- 1.11 [CSS](./css.md)
-- 1.12 [Image Optimization](./images.md)
-- 1.13 [Font Optimization](./fonts.md)
-- 1.14 [Metadata and OG images](./metadata-and-og-images.md)
-- 1.15 [Route Handlers](./route-handlers.md)
-- 1.16 [Proxy](./proxy.md)
-- 1.17 [Deploying](./deploying.md)
-- 1.18 [Upgrading](./upgrading.md)
+## 📖 추천 학습 순서
 
-> 공식 문서 순서를 그대로 유지합니다 (재배열 없음).
-
-## 문서 작성 규칙
-
-- 설명: 개념, 사용 시점, 주의점을 정리합니다.
-- 예제: 실제로 실행하거나 화면에서 확인할 수 있는 범위를 정의합니다.
-- 검증: 학습자가 결과를 눈으로 확인할 수 있는 체크포인트를 둡니다.
-- 상태: 현재는 초안이며, 교육 설계가 끝난 뒤 내용을 확정합니다.
+- 1.1 [Installation](./installation.md): 새 프로젝트 생성 및 환경 설정
+- 1.2 [Project Structure](./project-structure.md): 파일 및 폴더 구조 규칙
+- 1.3 [Layouts and Pages](./layouts-and-pages.md): 중첩 레이아웃과 페이지 라우팅
+- 1.4 [Linking and Navigating](./linking-and-navigating.md): 클라이언트 내비게이션과 프리페칭
+- 1.5 [Server and Client Components](./server-and-client-components.md): 서버 컴포넌트와 클라이언트 컴포넌트 경계
+- 1.6 [Fetching Data](./fetching-data.md): 서버에서 데이터 가져오기
+- 1.7 [Mutating Data](./mutating-data.md): Server Actions를 활용한 데이터 변경
+- 1.8 [Caching](./caching.md): Next.js 캐싱 메커니즘 기초
+- 1.9 [Revalidating](./revalidating.md): 캐시 무효화 및 데이터 재검증
+- 1.10 [Error Handling](./error-handling.md): 에러 바운더리와 예외 처리
+- 1.11 [CSS](./css.md): Tailwind CSS 및 CSS 모듈 스타일링
+- 1.12 [Image Optimization](./images.md): `<Image>` 컴포넌트 이미지 최적화
+- 1.13 [Font Optimization](./fonts.md): `next/font`를 통한 웹폰트 최적화
+- 1.14 [Metadata and OG images](./metadata-and-og-images.md): SEO 및 소셜 공유 메타데이터
+- 1.15 [Route Handlers](./route-handlers.md): API 엔드포인트 구축
+- 1.16 [Proxy](./proxy.md): 리라이트 및 프록시 설정
+- 1.17 [Deploying](./deploying.md): 프로덕션 빌드 및 배포
+- 1.18 [Upgrading](./upgrading.md): 최신 Next.js 버전으로 업그레이드

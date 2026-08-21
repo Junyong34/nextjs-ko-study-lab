@@ -1,0 +1,12 @@
+{
+  "name": "@study/docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-manifest.mjs",
+    "check-types": "node -e 'process.exit(0)'"
+  },
+  "exports": {
+    "./manifest": "./docs-manifest.json"
+  }
+}

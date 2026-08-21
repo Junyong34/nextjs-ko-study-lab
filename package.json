@@ -1,0 +1,18 @@
+{
+  "name": "nextjs-ko-study-lab",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "check-types": "turbo check-types",
+    "gen-stubs": "pnpm --filter @study/demos gen-stubs"
+  },
+  "devDependencies": {
+    "turbo": "^2.10.10"
+  }
+}

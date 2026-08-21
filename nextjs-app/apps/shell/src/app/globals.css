@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@source "../../../../packages/ui";
+@source "../../../../packages/docs-render";
+
+@theme {
+  --color-indigo-50: #14161a0f;
+  --color-indigo-100: #14161a1a;
+  --color-indigo-200: #14161a33;
+  --color-indigo-300: #71717a;
+  --color-indigo-400: #a1a1aa;
+  --color-indigo-500: #52525b;
+  --color-indigo-600: #18181b;
+  --color-indigo-700: #14161a;
+  --color-indigo-800: #09090b;
+  --color-indigo-900: #000000;
+  --color-indigo-950: #14161a0f;
+}
+
+html {
+  scroll-behavior: smooth;
+}

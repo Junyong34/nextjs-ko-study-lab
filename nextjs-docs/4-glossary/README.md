@@ -1,11 +1,6 @@
-# Glossary
+# 4. 용어집 (Glossary)
 
-> Next.js 공식 문서에서 반복해서 등장하는 핵심 용어들을 한곳에 정리한 전체 용어집입니다.
-
-- 공식 출처: [Glossary](https://nextjs.org/docs/app/glossary)
-- 상위 메뉴: [Next.js 학습 문서](../README.md)
-- 전체 목차: [Next.js 학습 문서](../README.md)
-- 카테고리 번호: **4** (참고용 카테고리 — 순차 학습 대상이 아니므로 하위 순번을 부여하지 않습니다)
+> Next.js 공식 문서 전반에서 사용되는 핵심 개념과 용어 48종에 대한 기술 용어 사전입니다.
 
 ## 학습 목표
 

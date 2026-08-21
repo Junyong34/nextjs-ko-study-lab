@@ -1,13 +1,10 @@
-# Guides
+# 2. 실무 가이드 (Guides)
 
-> Next.js 공식 문서의 **Guides** 메뉴를 주제별 학습 문서로 확장하기 위한 설계용 목차입니다.
+> 프로덕션 수준의 Next.js 애플리케이션 개발 시 마주하는 핵심 주제별 심층 가이드입니다.
 
-- 공식 문서: [Guides](https://nextjs.org/docs/app/guides)
-- 상위 목차: [Next.js 학습 문서](../README.md)
+---
 
-## 학습 순서
-
-> 공식 사이드바는 알파벳순이지만, 학습 순서는 의존성·난이도 기준으로 재배열했습니다 ([ADR 0002](../docs/adr/0002-reorder-learning-sequence.md)).
+## 📖 주제별 학습 커리큘럼
 
 ### 핵심 모델 (렌더링·캐싱의 기본 개념)
 
@@ -114,8 +111,3 @@
 
 - 2.63 [Migrating](./2.63-migrating/README.md)
 - 2.64 [Upgrading](./2.64-upgrading/README.md)
-
-## 문서 작성 규칙
-
-- 각 가이드는 문제 상황, 선택 기준, 예제, 시각적 확인 방법 순으로 설계합니다.
-- 위 순번은 테마 그룹 단위로 재배열한 학습 순서입니다. 그룹 내부에서 항목 간 뚜렷한 선후 관계가 없는 경우(예: Testing, Migrating, Upgrading 하위 항목)는 공식 문서 순서를 유지합니다.
