@@ -469,18 +469,18 @@ props를 `internalPath` 하나에서 `zone`·`url` 둘로 되돌려 원본 구�
 
 ---
 
-## 11. Phase 7 (동작 변경) — 문서 본문 iframe 제거
+## 11. Phase 7 (동작 변경) — 문서 본문 iframe 제거 ✅ 완료 (2026-08-21)
 
 규칙 16과 [06. 10](../06-ui-and-screen-design.md)의 "문서 페이지에 iframe이 **하나도 없다**"를 만족시킵니다. **Phase 1~6이 끝난 뒤 별도 커밋으로 진행합니다.**
 
-- [ ] `docs-render/demo/DemoLinkCard.tsx` 추가 — `ui/demo/DemoCard`를 본문 폭에 맞춘 형태
-- [ ] `MarkdownRenderer`의 ` ```demo ` 처리를 `DemoFrame` → `DemoLinkCard`로 교체
-- [ ] 지시자 필드에서 `mode`·`height` 폐기 ([06. 9](../06-ui-and-screen-design.md)의 변경표)
-- [ ] `DemoFrame`의 사용처는 **독립 열람 하나**로 줄어든다 ([03. 4-6](../03-composition-architecture.md)의 "높이 브릿지는 독립 열람으로 한정")
-- [ ] `MarkdownRenderer`에서 `'use client'` 제거 가능 여부 확인
+- [x] `docs-render/demo/DemoLinkCard.tsx` 추가 — `ui/demo/DemoCard`를 본문 폭에 맞춘 형태
+- [x] `MarkdownRenderer`의 ` ```demo ` 처리를 `DemoFrame` → `DemoLinkCard`로 교체
+- [x] 지시자 필드에서 `mode`·`height` 폐기 ([06. 9](../06-ui-and-screen-design.md)의 변경표)
+- [x] `DemoFrame`의 사용처는 **독립 열람 하나**로 줄어든다 ([03. 4-6](../03-composition-architecture.md)의 "높이 브릿지는 독립 열람으로 한정")
+- [x] `MarkdownRenderer`에서 `'use client'` 제거 가능 여부 확인
   - 남는 클라이언트 요소는 `CodeBlock`(복사 버튼 + shiki 런타임 하이라이팅)뿐이다. `CodeBlock`만 클라이언트 경계로 내리면 본문은 서버 컴포넌트가 된다
   - shiki를 빌드 타임으로 옮기는 것([06. 7-3](../06-ui-and-screen-design.md)의 `@shikijs/rehype`)은 이 계획 범위 밖 — 별도 티켓
-- [ ] **문서 갱신** (안 하면 설계 문서끼리 모순됨)
+- [x] **문서 갱신** (안 하면 설계 문서끼리 모순됨)
   - [ADR 0003](../adr/0003-demo-directive-in-markdown.md) — 코드펜스가 링크 카드를 그린다, `mode`·`height` 삭제
   - [03. 4-2 / 4-5 / 4-6](../03-composition-architecture.md)
   - [CONTEXT.md](../../CONTEXT.md) — `인라인 데모` 정의
@@ -489,14 +489,14 @@ props를 `internalPath` 하나에서 `zone`·`url` 둘로 되돌려 원본 구�
 
 ---
 
-## 12. Phase 8 (동작 변경) — 데모 앱 chrome 제거
+## 12. Phase 8 (동작 변경) — 데모 앱 chrome 제거 ✅ 완료 (2026-08-21)
 
 규칙 12를 만족시킵니다. 셸이 이미 같은 정보를 그리고 있어 **중복 제거이기도 합니다.**
 
-- [ ] `demo-baseline/…/server-actions/basic/page.tsx` — 상단 컨트롤 바에서 제목("Server Actions 기본 폼 처리 데모")·설명·`zone: baseline` 배지 제거. `DemoResetButton`은 데모 조작이므로 **남긴다**
-- [ ] `demo-cache-components/…/caching/basic/page.tsx` — 헤더 블록 전체(zone 배지·제목·근거 문서 경로) 제거. 캐시 타임스탬프/ID 카드와 검증 패널은 **데모 본체이므로 남긴다**
-- [ ] 제거된 제목·설명의 단일 원본이 `demos.yaml`임을 확인. 부족하면 `description` 필드를 채운다
-- [ ] `packages/demos/scripts/gen-stubs.mjs`의 스텁 템플릿에서도 chrome을 뺀다 — **안 하면 새 데모마다 위반이 재생산된다**
+- [x] `demo-baseline/…/server-actions/basic/page.tsx` — 상단 컨트롤 바에서 제목("Server Actions 기본 폼 처리 데모")·설명·`zone: baseline` 배지 제거. `DemoResetButton`은 데모 조작이므로 **남긴다**
+- [x] `demo-cache-components/…/caching/basic/page.tsx` — 헤더 블록 전체(zone 배지·제목·근거 문서 경로) 제거. 캐시 타임스탬프/ID 카드와 검증 패널은 **데모 본체이므로 남긴다**
+- [x] 제거된 제목·설명의 단일 원본이 `demos.yaml`임을 확인. 부족하면 `description` 필드를 채운다
+- [x] `packages/demos/scripts/gen-stubs.mjs`의 스텁 템플릿에서도 chrome을 뺀다 — **안 하면 새 데모마다 위반이 재생산된다**
 
 **검증:** `/demo/{url}` 독립 열람에서 제목이 한 번만 보인다(셸이 그린 것). iframe 안이 데모 본체만 남는다.
 

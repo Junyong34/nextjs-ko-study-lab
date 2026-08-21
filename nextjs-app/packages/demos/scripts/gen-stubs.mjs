@@ -43,54 +43,35 @@ function generateStubContent(demo) {
  * Status: ${demo.status}
  */
 
+import { DemoContainer, ExpectedActualPanel } from '@study/demo-kit'
+
 export default function DemoPage() {
   const timestamp = new Date().toLocaleTimeString('ko-KR')
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-6">
-      {/* 데모 헤더 영역 */}
-      <div className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-mono uppercase px-2 py-0.5 rounded bg-muted text-muted-foreground">
-            Zone: ${demo.zone}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            로드 시각: {timestamp}
-          </span>
-        </div>
-        <h2 className="text-xl font-semibold mb-2">${demo.title}</h2>
-        <p className="text-sm text-muted-foreground">
-          근거 문서: <code className="text-xs bg-muted px-1.5 py-0.5 rounded">${demo.doc}</code>
-        </p>
-      </div>
+    <DemoContainer className="p-4 sm:p-6 max-w-2xl mx-auto space-y-4 sm:space-y-6">
+      {/* 제목·설명·zone은 셸이 그린다 (규칙 12). 여기는 데모 본체와 조작만 둔다. */}
 
       {/* 데모 상호작용 및 실증 영역 */}
-      <div className="p-6 rounded-lg border bg-background space-y-4">
-        <div className="p-4 bg-muted/40 rounded border text-sm space-y-2">
-          <p className="font-medium text-foreground">데모 실행 공간</p>
-          <p className="text-muted-foreground">
-            이곳에 [${demo.title}] 실증 코드를 작성하세요.
+      <div className="p-4 rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 space-y-4 shadow-xs">
+        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/60 rounded border border-zinc-200/80 dark:border-zinc-700/60 text-sm space-y-2">
+          <p className="font-medium text-zinc-900 dark:text-zinc-100">데모 실행 공간</p>
+          <p className="text-zinc-600 dark:text-zinc-400">
+            이곳에 [\${demo.title}] 실증 코드를 작성하세요.
           </p>
-          {/* 캐시 태그 규칙 예시 주석: cacheTag('${normalizedTag}') */}
+          {/* 캐시 태그 규칙 예시 주석: cacheTag('\${normalizedTag}') */}
         </div>
       </div>
 
       {/* 기대 / 실제 관찰 결과 (03. 결합 구조 설계 §4-8) */}
-      <div className="p-4 rounded-lg border bg-muted/20 text-sm space-y-2">
-        <div className="flex items-start gap-2">
-          <span className="font-semibold text-primary min-w-12">기대:</span>
-          <span className="text-muted-foreground">
-            데모 조작 시 명시된 사양에 따른 정상 동작 및 상태 변화 관찰
-          </span>
-        </div>
-        <div className="flex items-start gap-2">
-          <span className="font-semibold text-primary min-w-12">실제:</span>
-          <span className="text-foreground font-mono">
-            렌더링 완료 ({timestamp})
-          </span>
-        </div>
-      </div>
-    </div>
+      <ExpectedActualPanel
+        title="\${demo.title} 실증 검증"
+        description="데모 조작 시 명시된 사양에 따른 정상 동작 및 상태 변화 관찰"
+        expected="데모 조작 시 명시된 사양에 따른 정상 동작 및 상태 변화 관찰"
+        actual={\`렌더링 완료 (\${timestamp})\`}
+        isMatched={true}
+      />
+    </DemoContainer>
   )
 }
 `
