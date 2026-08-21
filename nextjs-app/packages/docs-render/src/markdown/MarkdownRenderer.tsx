@@ -328,19 +328,16 @@ export function MarkdownRenderer({
       continue
     }
 
-    // 7. 복수 선택 체크박스 목록 (- [ ] 또는 - [x])
+    // 7. 복수 선택 목록 (- [ ] 또는 - [x] -> 번호 있는 목록 1, 2, 3, 4로 렌더링)
     const taskMatch = trimmed.match(/^-\s+\[([ xX])\]\s+(.*)$/)
     if (taskMatch) {
       if (inTable) flushTable()
       if (inDetails) flushDetails()
-      if (listType !== 'unordered') flushList()
-      listType = 'unordered'
+      if (listType !== 'ordered') flushList()
+      listType = 'ordered'
 
-      const isChecked = taskMatch[1].toLowerCase() === 'x'
       listItems.push(
-        <ListItem key={`li-${idx++}`} checked={isChecked}>
-          {renderInline(taskMatch[2], docPath)}
-        </ListItem>,
+        <ListItem key={`ol-${idx++}`}>{renderInline(taskMatch[2], docPath)}</ListItem>,
       )
       continue
     }

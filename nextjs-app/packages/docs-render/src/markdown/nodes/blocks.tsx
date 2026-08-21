@@ -21,27 +21,7 @@ export function OrderedList({ children }: { children: React.ReactNode }) {
 }
 
 /** 목록 항목 */
-export function ListItem({
-  children,
-  checked,
-}: {
-  children: React.ReactNode
-  checked?: boolean
-}) {
-  if (checked !== undefined) {
-    return (
-      <li className="flex items-start gap-2.5 list-none -ml-6 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
-        <input
-          type="checkbox"
-          checked={checked}
-          readOnly
-          className="mt-1 h-3.5 w-3.5 shrink-0 rounded border-zinc-300 text-zinc-900 focus:ring-0 dark:border-zinc-700 dark:bg-zinc-800 pointer-events-none"
-        />
-        <span className="flex-1">{children}</span>
-      </li>
-    )
-  }
-
+export function ListItem({ children }: { children: React.ReactNode }) {
   return (
     <li className="leading-relaxed text-zinc-700 dark:text-zinc-300">
       {children}
