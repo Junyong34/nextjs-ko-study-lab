@@ -9,6 +9,7 @@ import { resolveAssetUrl } from './resolve/asset-url'
 import {
   Alert,
   Blockquote,
+  Details,
   Figure,
   Heading,
   HorizontalRule,
@@ -68,12 +69,44 @@ export function MarkdownRenderer({
   let inTable = false
   let tableLines: string[] = []
 
+  let inDetails = false
+  let detailsSummary = ''
+  let detailsLines: string[] = []
+
   const flushTable = () => {
     if (tableLines.length >= 2) {
       elements.push(<Table key={`table-${idx++}`} lines={tableLines} docPath={docPath} />)
     }
     tableLines = []
     inTable = false
+  }
+
+  const flushDetails = () => {
+    const contentNodes: React.ReactNode[] = []
+    const contentText = detailsLines.join('\n').trim()
+    if (contentText) {
+      const paragraphs = contentText.split(/\n\s*\n/)
+      paragraphs.forEach((p, pIdx) => {
+        const cleanP = p.trim()
+        if (cleanP) {
+          contentNodes.push(
+            <p key={`details-p-${pIdx}`} className={pIdx > 0 ? 'mt-2' : ''}>
+              {renderInline(cleanP, docPath)}
+            </p>,
+          )
+        }
+      })
+    }
+
+    elements.push(
+      <Details key={`details-${idx++}`} summary={detailsSummary || '정답 보기'}>
+        {contentNodes.length > 0 ? contentNodes : null}
+      </Details>,
+    )
+
+    inDetails = false
+    detailsSummary = ''
+    detailsLines = []
   }
 
   for (let i = 0; i < lines.length; i++) {
@@ -83,6 +116,7 @@ export function MarkdownRenderer({
     // 1. 코드펜스
     if (trimmed.startsWith('```')) {
       if (inTable) flushTable()
+      if (inDetails) flushDetails()
 
       if (!inCodeBlock) {
         inCodeBlock = true
@@ -118,7 +152,74 @@ export function MarkdownRenderer({
       continue
     }
 
-    // 2. 한 줄을 통째로 차지하는 이미지
+    // 2. <details> 블록 파싱 (연습 문제 정답 및 접기 영역)
+    const singleLineDetailsMatch = trimmed.match(
+      /^<details>\s*<summary>(.*?)<\/summary>(.*?)<\/details>$/i,
+    )
+    if (singleLineDetailsMatch) {
+      if (inTable) flushTable()
+      if (inDetails) flushDetails()
+
+      const summaryText = singleLineDetailsMatch[1].trim() || '정답 보기'
+      const bodyText = singleLineDetailsMatch[2].trim()
+
+      elements.push(
+        <Details key={`details-${idx++}`} summary={summaryText}>
+          {bodyText ? <p>{renderInline(bodyText, docPath)}</p> : null}
+        </Details>,
+      )
+      continue
+    }
+
+    if (trimmed.startsWith('<details')) {
+      if (inTable) flushTable()
+      if (inDetails) flushDetails()
+
+      inDetails = true
+      detailsSummary = ''
+      detailsLines = []
+
+      const summaryMatch = trimmed.match(/<summary>(.*?)<\/summary>/i)
+      if (summaryMatch) {
+        detailsSummary = summaryMatch[1].trim()
+        const afterSummary = trimmed
+          .replace(/^<details[^>]*>/i, '')
+          .replace(/<summary>.*?<\/summary>/i, '')
+          .trim()
+        if (afterSummary) {
+          detailsLines.push(afterSummary)
+        }
+      }
+      continue
+    }
+
+    if (inDetails) {
+      if (!detailsSummary) {
+        const summaryMatch = trimmed.match(/<summary>(.*?)<\/summary>/i)
+        if (summaryMatch) {
+          detailsSummary = summaryMatch[1].trim()
+          const afterSummary = trimmed.replace(/<summary>.*?<\/summary>/i, '').trim()
+          if (afterSummary) {
+            detailsLines.push(afterSummary)
+          }
+          continue
+        }
+      }
+
+      if (trimmed.includes('</details>')) {
+        const beforeClose = trimmed.replace(/<\/details>/i, '').trim()
+        if (beforeClose) {
+          detailsLines.push(beforeClose)
+        }
+        flushDetails()
+        continue
+      }
+
+      detailsLines.push(line)
+      continue
+    }
+
+    // 3. 한 줄을 통째로 차지하는 이미지
     const imgBlockMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
     if (imgBlockMatch) {
       if (inTable) flushTable()
@@ -132,7 +233,7 @@ export function MarkdownRenderer({
       continue
     }
 
-    // 3. 표
+    // 4. 표
     if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
       inTable = true
       tableLines.push(trimmed)
@@ -219,6 +320,10 @@ export function MarkdownRenderer({
 
   if (inTable) {
     flushTable()
+  }
+
+  if (inDetails) {
+    flushDetails()
   }
 
   return (
