@@ -219,6 +219,10 @@ importers:
         version: 5.9.3
 
   nextjs-app/packages/ui:
+    dependencies:
+      lucide-react:
+        specifier: ^1.16.0
+        version: 1.32.0(react@19.2.8)
     devDependencies:
       '@types/react':
         specifier: 'catalog:'
@@ -226,6 +230,9 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.4(@types/react@19.2.18)
+      next:
+        specifier: 'catalog:'
+        version: 16.3.1(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
         specifier: 'catalog:'
         version: 19.2.8

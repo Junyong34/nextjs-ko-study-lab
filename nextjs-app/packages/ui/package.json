@@ -9,11 +9,16 @@
   "scripts": {
     "check-types": "tsc --noEmit"
   },
+  "dependencies": {
+    "lucide-react": "^1.16.0"
+  },
   "peerDependencies": {
+    "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
   "devDependencies": {
+    "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "@types/react": "catalog:",

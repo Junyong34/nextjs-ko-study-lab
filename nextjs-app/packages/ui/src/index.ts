@@ -3,4 +3,7 @@
 // 데모 앱 빌드에 끌려 들어갑니다.
 //
 // 셸 UI(Header·DocTree·TableOfContents·Footer 등)는 Phase 3에서 이 자리로 옮겨옵니다.
-export {}
+export * from './cn'
+export * from './styles'
+export * from './brand'
+export * from './primitives'

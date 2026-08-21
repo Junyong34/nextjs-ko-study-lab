@@ -35,8 +35,8 @@ TSX/TS 합계 약 3,200줄 중 **1,629줄(51%)이 상위 3개 파일**에 있습
 | GitHub 로고 SVG path (24줄) | `Header.tsx`, `Footer.tsx` |
 | Next.js 삼각형 로고 SVG | `Header.tsx`, `Footer.tsx` |
 | 활성 항목 클래스 `bg-[#14161a0f] font-bold text-zinc-950 dark:bg-white/10 dark:text-zinc-50` | `Sidebar.tsx`, `TableOfContents.tsx`(2곳) — 리터럴 복붙 |
-| primary 버튼 클래스 `bg-zinc-900 … dark:bg-zinc-100 dark:text-zinc-900` | 6곳 이상 |
-| input 클래스 체인 (11개 유틸리티) | `Sidebar.tsx` 검색, `FeedbackModal.tsx` 3필드 |
+| primary 버튼 색 팔레트 `bg-zinc-900 … dark:bg-zinc-100 dark:text-zinc-900` | 4곳 — **형태는 전부 다름**, 아래 참고 |
+| input 클래스 체인 (11개 유틸리티) | `Sidebar.tsx` 검색, `FeedbackModal.tsx` 3필드 — **2곳은 완전 동일** |
 | 헤딩 렌더링 블록 (id·alias 스팬·`#` 앵커) | `MarkdownRenderer.tsx` 안에서 **4번** |
 | Alert 블록 (아이콘+배경+테두리) | `MarkdownRenderer.tsx` 안에서 **3번** |
 | "맨 위로 이동" 버튼 | `TableOfContents.tsx` 안에서 **2번** |
@@ -167,39 +167,66 @@ F2·F3은 이 계획과 무관한 별도 티켓이다.
 
 ---
 
-## 5. Phase 1 — `@study/demo-kit` 신설 (규칙 17 정합)
+## 5. Phase 1 — `@study/demo-kit` 신설 (규칙 17 정합) ✅ 완료 (2026-08-21)
 
 패키지 경계를 먼저 바로잡습니다. **이걸 나중에 하면 Phase 2~3에서 옮긴 파일을 또 옮기게 됩니다.**
 
-- [ ] `packages/demo-kit/` 생성 — `package.json`(`@study/demo-kit`, `exports` 맵은 `@study/ui`와 동형), `tsconfig.json`, `src/index.ts`
-- [ ] `packages/ui/src/{DemoContainer,ExpectedActualPanel,DemoResetButton}.tsx` → `packages/demo-kit/src/`로 **이동** (내용 변경 없음)
-- [ ] `apps/demo-baseline` · `apps/demo-cache-components` 각각:
+- [x] `packages/demo-kit/` 생성 — `package.json`(`@study/demo-kit`, `exports` 맵은 `@study/ui`와 동형), `tsconfig.json`, `src/index.ts`
+- [x] `packages/ui/src/{DemoContainer,ExpectedActualPanel,DemoResetButton}.tsx` → `packages/demo-kit/src/`로 **이동** (내용 변경 없음)
+- [x] `apps/demo-baseline` · `apps/demo-cache-components` 각각:
   - `package.json` 의존성 `@study/ui` → `@study/demo-kit`
   - `next.config.ts`의 `transpilePackages`
   - `src/app/globals.css`의 `@source "../../../../packages/demo-kit"`
   - `page.tsx`의 import
-- [ ] `packages/ui/src/index.ts`를 비운다 (Phase 3에서 셸 UI가 채운다)
-- [ ] `apps/shell`의 `@study/ui` 의존은 **유지** — Phase 3에서 실제로 쓰기 시작한다
+- [x] `packages/ui/src/index.ts`를 비운다 (Phase 3에서 셸 UI가 채운다)
+- [x] `apps/shell`의 `@study/ui` 의존은 **유지** — Phase 3에서 실제로 쓰기 시작한다
 
 **검증:** `pnpm build` 통과 + 데모 2개 화면 무변경. 데모 앱 빌드 산출물에서 셸 UI 코드가 빠졌는지 확인.
 
----
+## 6. Phase 2 — 원자 컴포넌트 추출 ✅ 완료 (2026-08-21)
 
-## 6. Phase 2 — 원자 컴포넌트 추출
+`@study/ui`에 재사용 단위를 먼저 만듭니다. 아직 아무도 쓰지 않습니다 — Phase 3~6이 소비합니다.
 
-`@study/ui`에 재사용 단위를 먼저 만듭니다. 아직 아무도 쓰지 않아도 됩니다 — Phase 3~6이 소비합니다.
+### 6-1. 착수 전 실측에서 드러난 것
 
-- [ ] `packages/ui/package.json`에 `next`를 **peerDependency**로 추가 (`Link`·`usePathname` 사용)
-- [ ] `primitives/Badge.tsx` — `variant: 'status' | 'zone' | 'neutral' | 'count'`. 1-2의 status/zone 배지 6곳을 흡수
-- [ ] `primitives/Button.tsx` — `variant: 'primary' | 'outline' | 'ghost'`, `size`. primary 클래스 6곳 흡수
-- [ ] `primitives/IconButton.tsx` — 툴바·모달 닫기용
-- [ ] `primitives/Input.tsx` — Sidebar 검색 + FeedbackModal 3필드의 클래스 체인 흡수
-- [ ] `primitives/Card.tsx` — 데모 카드·통계 타일의 공통 껍데기
-- [ ] `primitives/Spinner.tsx` — `DemoViewer`·`DemoFrame`의 로딩 스피너
-- [ ] `brand/NextLogo.tsx` · `brand/GitHubIcon.tsx` — Header/Footer 복붙 제거
-- [ ] `styles.ts` — `ACTIVE_ITEM`(활성 트리/목차 항목) 등 반복 리터럴을 명명 상수로
+계획을 세울 때 "primary 버튼 6곳 중복"이라고 적었지만, 클래스 문자열을 실제로 대조하니 **형태가 전부 달랐습니다.**
 
-**검증:** `pnpm check-types`. 화면 변화 없음(아직 미사용).
+| 사용처 | 형태 |
+|---|---|
+| 데모 색인 "데모 열기" | `rounded-lg px-3.5 py-1.5 text-xs font-semibold` |
+| 피드백 모달 제출 | `rounded-lg px-4 py-2 text-xs font-semibold shadow-sm` |
+| `DemoFrame` fullscreen 링크 | `rounded-md px-3 py-1.5 text-xs font-medium` |
+| 모바일 트리 토글 | `rounded-full h-12 w-12` |
+
+공통은 **색 팔레트뿐**입니다. zone 배지도 데모 색인은 `text-[11px] font-medium`, 독립 열람은 `text-xs font-semibold`로 다르고, status 배지는 pill 2곳과 tag 1곳이 아예 다른 모양입니다.
+
+**그래서 방침을 이렇게 잡았습니다.**
+
+- **색과 상태 표현은 `styles.ts` 상수로 뽑는다** — 중복 제거 효과의 대부분이 여기서 나오고, DOM은 안 바뀝니다
+- **형태는 variant로 그대로 보존한다** — 통일하면 화면이 바뀌어 "동작 무변경" 불변식이 깨집니다
+- **형태 통일은 별도 티켓**으로 넘깁니다. shadcn 도입 티켓과 함께 다루는 편이 자연스럽습니다
+
+### 6-2. 한 일
+
+- [x] `packages/ui/package.json` — `next`·`react`를 peerDependency로, `lucide-react`를 dependency로 추가
+- [x] `cn.ts` — 클래스 연결 유틸. **`tailwind-merge`는 일부러 쓰지 않습니다** (13-1의 DOM 비교가 예측 가능한 클래스 문자열에 의존)
+- [x] `styles.ts` — `ACTIVE_ITEM` · `INACTIVE_ITEM` · `ACCENT_SURFACE` · `PRIMARY_SURFACE` · `OUTLINE_SURFACE` · `FIELD_SURFACE` · `STATUS_TONE` · `CARD_SURFACE` · `CARD_HOVER`
+  - **규칙 20(디자인 토큰) 대응 지점이 이 파일 하나로 좁혀집니다**
+- [x] `brand/NextLogo.tsx` · `brand/GitHubIcon.tsx` — Header/Footer의 SVG path 복붙 제거 (GitHub path는 24줄짜리)
+- [x] `primitives/Button.tsx` — `Button` + `ButtonLink`. `variant`(primary/outline/ghost) × `shape`(cta/submit/compact/block)
+- [x] `primitives/IconButton.tsx` — `density`(tight/normal)
+- [x] `primitives/Badge.tsx` — `StatusBadge`(pill/tag) · `ZoneBadge`(sm/md) · `CountBadge`
+- [x] `primitives/Input.tsx` — `Input`(padding: normal/withIcon) · `Textarea`
+- [x] `primitives/Spinner.tsx` — `size`(sm/md) × `tone`(strong/soft)
+- [x] `primitives/Card.tsx` — `cardClass()`. 링크·div 어느 태그에나 붙일 수 있도록 클래스 문자열만 반환
+
+### 6-3. 검증
+
+check-types 8/8, build 5/5, DOM 스냅샷 11/11 동일.
+
+셸 CSS가 828 → **831 rules**(+482 bytes)로 늘었습니다. `@source`가 아직 아무도 쓰지 않는 `packages/ui`의 새 클래스를 스캔하기 때문이며 정상입니다. Phase 3~6에서 원본 리터럴이 사라지면 상쇄됩니다.
+
+**검증 도구를 한 가지 보완했습니다.** 공통 상수를 조립하면 클래스 *순서*가 바뀌는데 Tailwind는 순서와 무관하므로, `to-dom.sh`가 `class` 속성의 토큰을 정렬한 뒤 비교하도록 했습니다. 확인할 것은 "클래스 집합이 같은가"입니다.
 
 ---
 
