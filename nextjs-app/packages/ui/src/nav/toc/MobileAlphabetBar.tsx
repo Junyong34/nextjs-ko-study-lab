@@ -21,10 +21,14 @@ export function MobileAlphabetBar({
       {ALL_ALPHABETS.filter((l) => available.has(l)).map((letter) => {
         const isActive = activeLetter === letter
         return (
-          <button
+          <a
             key={letter}
-            type="button"
-            onClick={() => onJump(letter.toLowerCase())}
+            href={`#${letter.toLowerCase()}`}
+            onClick={(e) => {
+              e.preventDefault()
+              onJump(letter.toLowerCase())
+            }}
+            title={`알파벳 ${letter} 섹션으로 이동`}
             className={`
                   flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all cursor-pointer
                   ${
@@ -35,7 +39,7 @@ export function MobileAlphabetBar({
                 `}
           >
             {letter}
-          </button>
+          </a>
         )
       })}
     </div>

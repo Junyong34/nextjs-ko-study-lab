@@ -39,10 +39,13 @@ export function AlphabetGrid({ available, activeLetter, onJump }: AlphabetGridPr
           }
 
           return (
-            <button
+            <a
               key={letter}
-              type="button"
-              onClick={() => onJump(letter.toLowerCase())}
+              href={`#${letter.toLowerCase()}`}
+              onClick={(e) => {
+                e.preventDefault()
+                onJump(letter.toLowerCase())
+              }}
               title={`알파벳 ${letter} 섹션으로 이동`}
               className={`
                       flex h-7 items-center justify-center rounded-md text-xs font-semibold transition-all cursor-pointer
@@ -54,7 +57,7 @@ export function AlphabetGrid({ available, activeLetter, onJump }: AlphabetGridPr
                     `}
             >
               {letter}
-            </button>
+            </a>
           )
         })}
       </div>

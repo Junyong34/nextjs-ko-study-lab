@@ -53,16 +53,20 @@ export function GlossaryIndex({
           <ul className="space-y-1 text-xs">
             {majorSections.map((sec) => (
               <li key={sec.id}>
-                <button
-                  type="button"
-                  onClick={() => onJump(sec.id)}
+                <a
+                  href={`#${sec.id}`}
+                  title={sec.text}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    onJump(sec.id)
+                  }}
                   className={cn(
-                    'w-full text-left truncate rounded-md px-2 py-1 transition-colors cursor-pointer',
+                    'block w-full text-left truncate rounded-md px-2 py-1 transition-colors cursor-pointer',
                     activeId === sec.id ? ACTIVE_ITEM : INACTIVE_ITEM,
                   )}
                 >
                   {sec.text}
-                </button>
+                </a>
               </li>
             ))}
           </ul>

@@ -30,16 +30,20 @@ export function TocList({ headings, activeId, onJump, onTop }: TocListProps) {
           .filter((h) => h.level === 2 || h.level === 3)
           .map((h) => (
             <li key={h.id} style={{ paddingLeft: h.level === 3 ? '12px' : '0px' }}>
-              <button
-                type="button"
-                onClick={() => onJump(h.id)}
+              <a
+                href={`#${h.id}`}
+                title={h.text}
+                onClick={(e) => {
+                  e.preventDefault()
+                  onJump(h.id)
+                }}
                 className={cn(
-                  'w-full text-left truncate rounded-md px-2 py-1 transition-colors cursor-pointer',
+                  'block w-full text-left truncate rounded-md px-2 py-1 transition-colors cursor-pointer',
                   activeId === h.id ? ACTIVE_ITEM : INACTIVE_ITEM,
                 )}
               >
                 {h.text}
-              </button>
+              </a>
             </li>
           ))}
       </ul>
