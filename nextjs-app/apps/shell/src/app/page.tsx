@@ -1,6 +1,7 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import { MarkdownRenderer, TableOfContents } from '@study/docs-render'
+import { MarkdownRenderer, parseHeadings, isGlossaryDoc } from '@study/docs-render'
+import { TableOfContents } from '@study/ui'
 import { getDocContent, getDemos } from '@/lib/docs'
 
 export const metadata: Metadata = {
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   const content = getDocContent('README.md')
   const allDemos = getDemos()
+  const headings = parseHeadings(content)
 
   return (
     <div className="flex items-start gap-8">
@@ -21,7 +23,7 @@ export default function HomePage() {
           demos={allDemos}
         />
       </div>
-      <TableOfContents content={content} docPath="README.md" />
+      <TableOfContents headings={headings} isGlossary={isGlossaryDoc(content, headings, 'README.md')} />
     </div>
   )
 }

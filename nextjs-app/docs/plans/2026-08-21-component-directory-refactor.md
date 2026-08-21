@@ -297,7 +297,47 @@ CSS 카나리아에 `480px`(HeaderNav의 `min-[480px]:block`)를 추가했습니
 
 ---
 
-## 8. Phase 4 — `docs-render` 분해
+## 8. Phase 4 — `docs-render` 분해 ✅ 완료 (2026-08-21)
+
+### 8-0. 결과
+
+| 원본 | 줄 | 결과 |
+|---|---:|---|
+| `MarkdownRenderer.tsx` | **861** | `MarkdownRenderer`(234) + 파서 4 + 경로해석 2 + 노드 5 + shiki 2 = **14파일** |
+| `TableOfContents.tsx` | **488** | `TableOfContents`(85) + `useScrollSpy`(147) + 화면 5 + config = **8파일**, `@study/ui`로 이관 |
+
+**300줄 넘는 파일이 0개가 됐습니다.** 최대는 `MarkdownRenderer` 234줄(스캐너 루프)입니다.
+
+없앤 복붙: 헤딩 4벌 → `Heading level={n}` 하나, Alert 3벌 → `Alert variant` 하나,
+"맨 위로" 버튼 2벌 → `ScrollTopButton` 하나, 헤딩 파싱 2벌 → `parseHeadings` 하나.
+
+### 8-1. 패키지 경계를 어떻게 갈랐나
+
+`TableOfContents`를 `@study/ui`로 옮기려면 `parseHeadings`가 걸립니다. 파싱을 따라 옮기면
+UI 패키지가 마크다운을 알게 되고, 그대로 두면 `@study/ui` → `@study/docs-render` 의존이 생깁니다.
+
+**파싱과 그리기를 갈랐습니다.**
+
+- `@study/docs-render` — `parseHeadings()` · `isGlossaryDoc()` : 문서 내용에 대한 판단
+- `@study/ui` — `<TableOfContents headings={…} isGlossary={…} />` : 받은 것을 그리기만
+
+셸 라우트가 둘을 잇습니다. 인터페이스는 `content: string` → `headings: HeadingItem[]`으로 바뀌었지만
+렌더 결과는 동일합니다.
+
+### 8-2. `slugify`는 동등성을 따로 증명했습니다
+
+정규식에 한글 유니코드 범위(`가-힣` 등)가 들어 있어 눈으로 대조하기 어렵고,
+**파일을 옮기는 과정에서 이스케이프가 실제 문자로 풀려 범위가 어긋날 뻔했습니다.**
+원본 라인을 그대로 이식한 뒤, 원본 함수와 새 함수에 같은 입력 17개를 넣어 결과가
+일치하는지 스크립트로 확인했습니다 (`slug-test.mjs`).
+
+### 8-3. 검증 도구를 또 한 번 보완했습니다
+
+원본은 `className={\`\n  w-full …\n\`}` 형태라 클래스 값 앞뒤에 공백이 남습니다.
+`cn()`은 깔끔하게 이어 붙이므로 `class=" cursor-pointer …"` vs `class="cursor-pointer …"`로
+갈렸습니다. 브라우저가 무시하는 차이이므로 토큰 분리 전에 trim하도록 했습니다.
+
+### 8-4. 원래 계획 항목
 
 861줄짜리 파일을 해체합니다. 이 계획에서 가장 큰 단계이므로 **커밋을 나눕니다.**
 
