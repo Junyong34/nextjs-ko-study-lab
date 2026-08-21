@@ -132,14 +132,38 @@ nextjs-app/
 
 ---
 
-## 4. Phase 0 — 기준선 확보
+## 4. Phase 0 — 기준선 확보 ✅ 완료 (2026-08-21)
 
-- [ ] `pnpm install` (이 워크트리에는 `node_modules`가 없다)
-- [ ] `pnpm check-types` · `pnpm build` 통과 확인. **실패 항목이 있으면 여기서 기록해 두고, 리팩토링이 만든 실패와 구분한다**
-- [ ] `pnpm dev`로 3개 앱을 띄우고 회귀 비교용 스크린샷 확보
-  - `/` · 문서 1편(`/getting-started/…`) · 용어집(`/glossary`) · `/demo` · `/demo/caching/basic` · `/demo/server-actions/basic`
-  - 라이트/다크, 그리고 `< 768` / `768~1279` / `≥ 1280` 폭
-- [ ] 각 Phase 종료 시 이 스크린샷과 대조한다
+- [x] `pnpm install` — 8개 워크스페이스, 4.3s
+- [x] `pnpm check-types` — **7/7 통과**
+- [x] `pnpm build` — **5/5 성공**. 문서 283편 SSG, 데모 2건
+- [x] dev 서버 기동 — **3100(셸) / 3101(baseline) / 3102(cache)**
+  - 메인 체크아웃이 3000/3001/3002를 쓰고 있어 포트를 옮겼다. 각 앱의 `.env.local`(gitignore 대상)에 `ZONE_BASELINE_URL`·`ZONE_CACHE_URL`·`PUBLIC_ORIGIN`을 맞춰 넣었다 — [`AGENTS.md`](../../AGENTS.md) 규칙 2가 요구하는 환경변수 방식 그대로다
+  - 셸 라우트 8종 + zone 프록시 2종 전부 200
+- [x] 회귀 비교 기준선 확보 — **스크린샷 대신 렌더 HTML 스냅샷**을 쓴다 (13절)
+
+### 4-1. 기준선 수치
+
+| 항목 | 값 |
+|---|---:|
+| 스냅샷 라우트 | 11개 (전부 200) |
+| 셸 CSS | 88,743 bytes / 828 rules |
+| demo-baseline CSS | 28,942 bytes / 293 rules |
+| demo-cache CSS | 28,715 bytes / 287 rules |
+
+---
+
+## 4-2. 기준선에서 발견한 기존 결함
+
+**리팩토링이 만든 것이 아니라 원래 있던 것들이다.** 이번 범위에서는 고치지 않고 기록만 한다 — 고치면 "동작 무변경" 불변식이 깨진다.
+
+| # | 결함 | 위치 | 영향 |
+|---|---|---|---|
+| F1 | **`backdrop-blur-2xs`는 Tailwind v4에 없는 클래스다.** 생성된 CSS에 규칙이 없어 블러가 실제로 걸리지 않는다 (v4의 스케일은 `xs`부터) | `apps/shell/src/components/DemoViewer.tsx:104`, `packages/docs-render/src/DemoFrame.tsx:177` | 데모 로딩 오버레이의 블러가 무효. **Phase 5에서 두 파일이 하나로 합쳐지므로 그때 고칠지 판단한다** |
+| F2 | `fs.readFileSync`의 경로가 동적이라 Turbopack이 **프로젝트 전체를 트레이싱**한다 | `packages/demos/src/index.ts:68` | 배포 산출물에 소스 전체가 포함된다. 빌드 경고로 매번 출력됨 |
+| F3 | `turbo.json`의 `@study/docs#build`에 `outputs`가 없어 `no output files found` 경고 | `turbo.json` | [03. 6-2](../03-composition-architecture.md)가 경고한 "md를 고쳐도 사이트가 안 바뀜"과 직결 |
+
+F2·F3은 이 계획과 무관한 별도 티켓이다.
 
 ---
 
@@ -306,10 +330,44 @@ nextjs-app/
 | 단계 | 통과 조건 |
 |---|---|
 | 매 Phase | `pnpm check-types` · `pnpm build` 통과 |
-| Phase 1~6 | Phase 0 스크린샷과 **픽셀 단위로 동일** |
+| Phase 1~6 | **HTML 스냅샷 11개가 Phase 0과 완전히 동일** + CSS 카나리아 전부 존재 |
 | Phase 7~8 | 의도한 차이만 발생 (본문 iframe 0건 / 데모 안 chrome 없음) |
 
-**순수 함수 추출은 테스트를 붙일 기회입니다.** Phase 4-1에서 나오는 `slugify`·`resolveDocLink`·`resolveAssetUrl`·`parseHeadings`·`parseDemoBlock`은 전부 입출력이 명확한 순수 함수라, 추출 직후 Vitest 케이스를 붙여두면 이후 Phase의 회귀를 자동으로 잡습니다. (테스트 도구 도입 여부는 별건이므로 선택 항목으로 둡니다.)
+### 13-1. HTML 스냅샷 — 주 검증 수단
+
+스크린샷보다 정확합니다. 순수 리팩토링에서 확인해야 할 것은 "**클래스 문자열과 DOM 구조가 한 글자도 안 바뀌었는가**"이고, 그건 렌더된 HTML을 그대로 비교하는 게 정확합니다.
+
+```
+snapshot.sh <라벨>          # 11개 라우트를 받아 정규화 후 저장
+compare.sh phase0 <라벨>    # 기준선과 비교. 차이 0이 합격
+```
+
+요청마다 바뀌는 값은 Next.js 런타임 ID(`self.__next_r`)와 `_rsc` 쿼리뿐이라 그 둘만 정규화합니다. **연속 두 번 캡처해 11/11 동일함을 확인**했으므로 도구 자체는 결정적입니다.
+
+대상 라우트: 랜딩 · 문서 3편 · 용어집 · 카테고리 홈 · 데모 색인 · 데모 독립 열람 2건 · zone 프록시 2건.
+
+### 13-2. CSS 카나리아 — `@source` 누락 탐지
+
+[06. 7-5](../06-ui-and-screen-design.md)가 경고한 함정은 HTML 스냅샷으로 **잡히지 않습니다**. 클래스 이름은 HTML에 그대로 남고 CSS 규칙만 사라지기 때문입니다. Phase 1(`demo-kit` 신설)과 Phase 3(셸 UI 이동)이 정확히 그 위험 구간입니다.
+
+```
+css-check.sh <라벨>   # CSS 번들 크기·규칙 수 + 패키지별 카나리아 클래스 존재 확인
+```
+
+| 대상 | 카나리아 | 출처 |
+|---|---|---|
+| 셸 | `grid-cols-6` | `docs-render`/TableOfContents 알파벳 그리드 |
+| 셸 | `line-clamp-2` | `docs-render`/DocDemoList 설명 말줄임 |
+| 셸 | `w-80` | `apps/shell`/Sidebar 폭 |
+| 데모 앱 | `divide-inherit` · `border-inherit` | ExpectedActualPanel — **Phase 1에서 `ui` → `demo-kit`으로 옮겨지는 바로 그 파일** |
+
+**마커 클래스(`shiki-wrapper`, `demo-container`)는 카나리아로 쓸 수 없습니다.** Tailwind 유틸리티가 아니라 원래 CSS에 규칙이 없습니다. 반드시 Tailwind가 생성하는 유틸리티를 골라야 합니다.
+
+Phase 3에서 셸 UI가 `@study/ui`로 옮겨지면 **`@study/ui` 전용 카나리아를 하나 추가**해야 합니다. 그 전까지 셸 CSS는 `@study/ui`의 클래스를 하나도 포함하지 않습니다 (셸이 그 패키지를 쓰지 않으므로).
+
+### 13-3. 순수 함수 테스트 (선택)
+
+Phase 4-1에서 나오는 `slugify`·`resolveDocLink`·`resolveAssetUrl`·`parseHeadings`·`parseDemoBlock`은 전부 입출력이 명확한 순수 함수라, 추출 직후 Vitest 케이스를 붙여두면 이후 Phase의 회귀를 자동으로 잡습니다. 테스트 도구 도입 여부는 별건이므로 선택 항목으로 둡니다.
 
 ---
 
