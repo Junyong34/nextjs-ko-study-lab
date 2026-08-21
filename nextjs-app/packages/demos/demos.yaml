@@ -9,3 +9,22 @@
   doc: 1-getting-started/caching.md
   zone: cache
   status: done
+
+- url: layouts-and-pages/nested-layouts
+  title: 쇼핑몰 GNB 및 사이드바 중첩 레이아웃 (Partial Rendering)
+  doc: 1-getting-started/layouts-and-pages.md
+  zone: baseline
+  status: done
+
+- url: layouts-and-pages/template-lifecycle
+  title: template.tsx 생명주기 및 인스턴스 재생성
+  doc: 1-getting-started/layouts-and-pages.md
+  zone: baseline
+  status: done
+
+- url: layouts-and-pages/route-groups-layouts
+  title: Route Groups를 활용한 다중 루트 레이아웃 분리
+  doc: 1-getting-started/layouts-and-pages.md
+  zone: baseline
+  status: done
+

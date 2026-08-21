@@ -1,4 +1,7 @@
 export * from './DemoContainer'
+export * from './DemoGuideCard'
+export * from './DemoPlaygroundCard'
+export * from './DemoDeepDiveCard'
 export * from './ExpectedActualPanel'
 export * from './DemoResetButton'
 export * from './useResizeBridge'

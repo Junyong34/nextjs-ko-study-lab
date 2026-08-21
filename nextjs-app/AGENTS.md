@@ -15,6 +15,7 @@ Next.js 학습 데모 사이트가 들어설 자리다. **착수 조건이 충�
 - [03. 결합 구조 설계](./docs/03-composition-architecture.md)
 - [04. 설계 실현 가능성 검증](./docs/04-feasibility-verification.md) — 01~03을 `next@16.3.1` 1차 출처와 대조한 기록. 지적 사항은 01~03에 반영 완료
 - [06. 화면 구성과 UI 설계](./docs/06-ui-and-screen-design.md) — 페이지 타입 5종, 헤더·검색 UI, UI 기반, 디자인 토큰
+- [09. 데모 표준 구조 및 4단 레이아웃 패턴](./docs/09-demo-standard-and-layout-pattern.md) — 실제 Next.js 동작 원칙 및 통일된 fieldset 4단 템플릿
 - [용어집 `CONTEXT.md`](./CONTEXT.md) — zone, 셸, 설정 축, 데모 지시자, 기준 버전
 
 ## 스택
@@ -60,7 +61,16 @@ zone 배분과 포트는 [03. 결합 구조 설계 2절](./docs/03-composition-a
 20. **디자인 토큰 이름을 새로 만들지 않는다.** shadcn의 Tailwind v4 규약(`@theme inline` + oklch)을 그대로 쓴다 ([06. 8-1](./docs/06-ui-and-screen-design.md)).
 21. **Next.js MCP(`next-devtools`)를 적극 활용한다.** 데모 설계 및 구현 시 `next-devtools` MCP(`nextjs_docs`, `nextjs_index`, `nextjs_call`)를 호출하여 `next@16.3.1` 공식 최신 API 스펙, 올바른 시그니처 및 주의사항을 1차 출처로 교차 검증한다.
 22. **단일 파일 250줄 제한과 모듈별 분리를 엄격히 준수한다.** 한 파일에 모든 로직을 쏟아붓지 않는다. `page.tsx`(100~150줄 내외, 고수준 조립), `actions.ts`(Server Actions), `types.ts`(타입 정의), `components/*.tsx`(하위 위젯/폼 분리), `hooks/*.ts`(상태 로직)로 분할하여 유지보수성과 가독성을 극대화한다.
-23. **`@study/demo-kit`의 재사용성을 극대화한다.** `DemoContainer`, `ExpectedActualPanel`, `DemoResetButton` 등의 공통 컴포넌트를 필수로 활용하여 보일러플레이트 중복을 방지하고, 데모 코드는 핵심 기능에만 집중하도록 컴팩트하게 작성한다.
+23. **`@study/demo-kit`의 재사용성을 극대화한다.** `DemoContainer`, `DemoGuideCard`, `ExpectedActualPanel`, `DemoResetButton`, `DemoDeepDiveCard` 등의 공통 컴포넌트를 필수로 활용하여 보일러플레이트 중복을 방지하고, 데모 코드는 핵심 기능에만 집중하도록 컴팩트하게 작성한다.
+24. **가짜 시뮬레이션(Fake Mocking)을 엄격히 금지하고, 실제 Next.js 파일 시스템 규칙과 라우터를 사용한다.**
+    - 단일 컴포넌트 안에서 `useState`로 탭을 갈아 끼우며 라우팅이나 레이아웃을 흉내 내지 않는다.
+    - 중첩 레이아웃은 실제 `layout.tsx`와 실제 서브 라우트(`shoes/page.tsx` 등)를 생성하고 실제 Next.js `<Link>` / `useRouter`로 이동한다.
+    - `template.tsx`, Route Groups `(folder)`, `loading.tsx`, `error.tsx`, Server Actions 등 Next.js의 모든 기능은 **프레임워크의 실제 파일 컨벤션과 런타임 메커니즘을 그대로 구축**하여 시연한다.
+25. **모든 데모는 4단 표준 레이아웃 패턴(fieldset + legend)을 통일하여 구현한다.**
+    - `1단 [가이드] DemoGuideCard`: 핵심 원리 한 줄 요약 + 컴팩트 슬림 타임라인 스텝 (이모지 남발 금지).
+    - `2단 [실습 화면] fieldset`: 실제 Next.js 컴포넌트 실습 조작 영역 (인위적 내부 용어 뱃지 배제, 깔끔한 서비스 UI).
+    - `3단 [검증] ExpectedActualPanel`: 기대 결과(Expected) vs 실제 감지값(Actual) 2단 대조 + 상태 뱃지.
+    - `4단 [개념 정리] DemoDeepDiveCard`: 동작 원리, children 주입 구조 및 컴포넌트 트리 다이어그램 해설.
 
 `next dev`가 zone의 `AGENTS.md`·`CLAUDE.md`에 `nextjs-agent-rules` 블록을 삽입하는 것은 **정상 동작이다.** 마커 바깥 내용은 보존되니 그대로 커밋한다 ([01. 구성 절차 3-3 ⑥](./docs/01-project-setup.md)).
 
