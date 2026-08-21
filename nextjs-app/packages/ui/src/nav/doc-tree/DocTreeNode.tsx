@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronRight, ChevronDown, Play } from 'lucide-react'
 import { cn } from '../../cn'
@@ -72,6 +72,13 @@ export function DocTreeNode({
   // 최상위 카테고리는 기본으로 펼치고, 활성 항목을 품고 있어도 펼친다
   const [isOpen, setIsOpen] = useState<boolean>(level === 0 || containsActive)
 
+  // URL 경로 변경 시 하위에 활성 항목이 있으면 자동으로 펼침
+  useEffect(() => {
+    if (containsActive) {
+      setIsOpen(true)
+    }
+  }, [containsActive])
+
   const displayTitle = formatNodeTitle(node.title, node.order)
 
   // 1. 단일 문서 노드 (클릭 시 이동하는 링크)
@@ -81,6 +88,7 @@ export function DocTreeNode({
         href={targetUrl}
         onClick={onNavigate}
         title={node.title}
+        data-active={isSelected ? 'true' : undefined}
         className={cn(
           'group flex items-center justify-between gap-1.5 rounded-md px-2 py-1 text-xs transition-colors',
           isSelected ? ACTIVE_ITEM : INACTIVE_ITEM,
@@ -136,6 +144,7 @@ export function DocTreeNode({
   return (
     <div className="space-y-0.5">
       <div
+        data-active={isSelected ? 'true' : undefined}
         className={cn(
           'group flex items-center justify-between gap-1.5 rounded-md px-2 py-1 text-xs font-medium cursor-pointer select-none transition-colors',
           level === 0

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "generatedAt": "2026-08-21T04:54:19.814Z",
+  "generatedAt": "2026-08-21T07:56:43.429Z",
   "totalDocs": 284,
   "docs": [
     {
@@ -3095,7 +3095,7 @@
       "path": "README.md",
       "url": "/",
       "slug": [],
-      "title": "next.js 학습",
+      "title": "Next.js App Router 학습",
       "demos": []
     }
   ],
@@ -6192,13 +6192,13 @@
       "path": "README.md",
       "url": "/",
       "slug": [],
-      "title": "next.js 학습",
+      "title": "Next.js App Router 학습",
       "demos": []
     }
   },
   "tree": [
     {
-      "title": "next.js 학습",
+      "title": "Next.js App Router 학습",
       "url": "/",
       "path": "README.md",
       "order": "0"

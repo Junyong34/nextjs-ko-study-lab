@@ -7,6 +7,7 @@ import type { TreeNode } from '../../types'
 import { DocTreeNode } from './DocTreeNode'
 import { DocTreeSearch } from './DocTreeSearch'
 import { useTreeFilter } from './useTreeFilter'
+import { useTreeScrollToActive } from './useTreeScrollToActive'
 
 export interface DocTreeProps {
   tree: TreeNode[]
@@ -21,6 +22,7 @@ export function DocTree({ tree }: DocTreeProps) {
   const pathname = usePathname()
   const [query, setQuery] = useState('')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null)
 
   const isDemoMode = pathname.startsWith('/demo')
 
@@ -28,6 +30,12 @@ export function DocTree({ tree }: DocTreeProps) {
   useEffect(() => {
     setMobileOpen(false)
   }, [pathname])
+
+  // 활성 메뉴 항목으로 스크롤 이동 (상/하단 치우침 감지 시 중앙으로 정렬)
+  useTreeScrollToActive(scrollContainerRef, [pathname, mobileOpen], {
+    topThresholdRatio: 0.2, // 상단 20%
+    bottomThresholdRatio: 0.75, // 하단 75%
+  })
 
   const filteredTree = useTreeFilter(tree, query)
 
@@ -105,7 +113,10 @@ export function DocTree({ tree }: DocTreeProps) {
         <DocTreeSearch value={query} onChange={setQuery} placeholder={isDemoMode ? '데모 및 메뉴 검색...' : '문서 검색...'} />
 
         {/* 트리 본문 — 검색창과 별개로 스크롤된다 */}
-        <div className="flex-1 overflow-y-auto pr-0.5 space-y-0.5 pb-16 [scrollbar-width:thin]">
+        <div
+          ref={scrollContainerRef}
+          className="flex-1 overflow-y-auto pr-0.5 space-y-0.5 pb-16 [scrollbar-width:thin]"
+        >
           {filteredTree.map((rootNode, idx) => (
             <DocTreeNode
               key={rootNode.url + '-' + idx}

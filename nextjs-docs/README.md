@@ -1,24 +1,37 @@
-# next.js 학습
+# Next.js App Router 학습
 
-> Next.js 공식 문서(App Router)를 체계적인 한국어 커리큘럼으로 학습하고, Next.js 16의 최신 기능들을 인터랙티브 실습 데모로 직접 검증할 수 있는 학습입니다.
-
----
-
-## 📚 권장 학습 로드맵
-
-1. **[1. 시작하기 (Getting Started)](./1-getting-started/README.md)**: 프로젝트 설치부터 App Router의 핵심 흐름(라우팅, 서버/클라이언트 컴포넌트, 데이터 페칭, 캐싱 기초)을 단계별로 학습합니다.
-2. **[2. 실무 가이드 (Guides)](./2-guides/README.md)**: 렌더링 철학, Server Actions, 최신 `use cache` 아키텍처, 폼 처리, 인증 및 보안 등 실제 프로덕션 환경에서 마주하는 문제 해결 가이드입니다.
-3. **[3. API 레퍼런스 (API Reference)](./3-api-reference/README.md)**: Next.js의 모든 컴포넌트(`<Image>`, `<Link>`), 함수(`cookies()`, `revalidateTag()`), 파일 규칙(`layout.tsx`, `page.tsx`, `route.ts`)의 세부 동작을 다룹니다.
-4. **[4. 용어집 (Glossary)](./4-glossary/README.md)**: Server Components, Hydration, Partial Prerendering(PPR), Cache Tags 등 핵심 용어들을 빠르게 조회하고 복습합니다.
-5. **[5. 아키텍처 (Architecture)](./5-architecture/README.md)**: Next.js 컴파일러, Turbopack, 번들링 구조, 고속 캐싱 시스템의 내부 설계 원리를 깊이 있게 탐구합니다.
+> 공식 문서 기반의 체계적인 한국어 학습 로드맵과 인터랙티브 실습 랩입니다.
 
 ---
 
-## ⚡ 인터랙티브 실습 데모 활용법
+## 🗺️ 학습 로드맵
 
-- **본문 인라인 실습**: 문서 본문을 읽는 도중 삽입된 실습 데모(`DemoFrame`)를 통해 코드를 직접 실행하고 결과를 실시간으로 확인할 수 있습니다.
-- **독립 데모 랩**: 상단 헤더의 **[데모](/demo)** 메뉴를 통해 전체 인터랙티브 실습 목록을 한눈에 둘러보고 독립된 화면에서 집중 테스트할 수 있습니다.
-- **기대값 vs 실제값 검증 패널**: 각 데모마다 기대되는 동작과 실제 서버 상태가 일치하는지(`✓` 패널) 즉각 확인할 수 있습니다.
+```mermaid
+flowchart TD
+    Step1["<b>Step 1. 시작하기</b><br/>기본 구조 · 라우팅 · 서버 컴포넌트 · 페칭"]
+    Step2["<b>Step 2. 실무 가이드</b><br/>렌더링 · Server Actions · use cache · 인증/보안"]
+    Step3["<b>Step 3. API 레퍼런스</b><br/>컴포넌트 · 함수 · 지시어 · 설정"]
+    Step4["<b>Step 4. 핵심 용어집</b><br/>48종 핵심 개념 · PPR · Hydration"]
+    Step5["<b>Step 5. 아키텍처</b><br/>Turbopack · 컴파일러 · HMR"]
+
+    Step1 --> Step2
+    Step2 --> Step3
+    Step1 -.-> Step4
+    Step2 -.-> Step4
+    Step2 --> Step5
+```
+
+---
+
+## 📚 단계별 커리큘럼 요약
+
+| 단계 | 카테고리 | 분량 | 주요 학습 내용 | 바로가기 |
+| :--- | :--- | :---: | :--- | :--- |
+| **Step 01** | **시작하기 (Getting Started)** | 18개 챕터 | 설치, App Router 구조, 레이아웃, 서버/클라이언트 컴포넌트, 페칭, 캐싱 기초 | [학습 시작](./1-getting-started/README.md) |
+| **Step 02** | **실무 가이드 (Guides)** | 64개 챕터 | 렌더링 철학, Server Actions, `use cache` 아키텍처, Forms, 인증·보안, 배포 | [가이드 탐색](./2-guides/README.md) |
+| **Step 03** | **API 레퍼런스 (API Reference)** | 9개 분류 | `<Image>`, `<Link>`, `cookies()`, `'use cache'`, `next.config.js` 등 상세 명세 | [레퍼런스 조회](./3-api-reference/README.md) |
+| **Step 04** | **용어집 (Glossary)** | 48개 용어 | RSC, PPR, App Shell, Hydration, Cache Tags 등 필수 용어 사전 | [용어집 검색](./4-glossary/README.md) |
+| **Step 05** | **아키텍처 (Architecture)** | 4개 챕터 | Turbopack, SWC 컴파일러, Fast Refresh 동작 원리 및 브라우저 호환성 | [원리 탐구](./5-architecture/README.md) |
 
 ---
 

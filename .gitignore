@@ -37,6 +37,9 @@ test-results/
 *.log
 logs/
 
+# TypeScript
+*.tsbuildinfo
+
 # AI tools and local agent state
 .ai/
 .ai-cache/
@@ -47,6 +50,7 @@ logs/
 .continue/
 .cursor/
 .mcp/
+.mcp.json
 .serena/
 .windsurf/
 .worktrees
@@ -56,3 +60,4 @@ AI-Hero/
 
 # 브레인스토밍 시각 컴패니언 (로컬 세션 산출물)
 .superpowers/
+
