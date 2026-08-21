@@ -1,0 +1,340 @@
+# 컴포넌트 디렉토리 정리 리팩토링 계획
+
+> **에이전트 작업자에게:** Phase 1~6은 **동작 무변경**이 합격 기준입니다. 화면이 한 픽셀이라도 달라지면 그 단계는 실패입니다. Phase 7~8만 의도적으로 동작을 바꿉니다.
+
+**Goal:** 한 파일에 뭉쳐 있는 컴포넌트·파서·스타일을 책임 단위로 쪼개고, `@study/ui` / `@study/demo-kit` / `@study/docs-render`의 경계를 [06. 7-4](../06-ui-and-screen-design.md)의 설계표와 일치시킨다.
+
+**전제:** 이 계획은 `main`(`96844a7`) 시점의 코드를 대상으로 한다.
+
+---
+
+## 1. 왜 지금 해야 하는가
+
+### 1-1. 측정값
+
+| 파일 | 줄 | 담고 있는 것 |
+|---|---:|---|
+| `packages/docs-render/src/MarkdownRenderer.tsx` | **861** | 파서 5종 · 링크/에셋 경로 해석 2종 · `CodeBlock` · `renderTable` · 헤딩 4종 복붙 · Alert 3종 복붙 · 스캐너 루프 |
+| `packages/docs-render/src/TableOfContents.tsx` | **488** | 헤딩 파서 · ScrollSpy · 용어집 화면 · 일반 TOC 화면 · 맨위로 버튼 2벌 |
+| `apps/shell/src/components/Sidebar.tsx` | **280** | 재귀 `NavItem` · 검색 필터 · 모바일 드로어 · 데스크톱 aside |
+| `packages/docs-render/src/DemoFrame.tsx` | 208 | URL 계산 · postMessage 브릿지 · 툴바 · fullscreen 분기 |
+| `apps/shell/src/app/demo/page.tsx` | 157 | 통계 타일 · 데모 카드 · 배지 (전부 인라인) |
+| `apps/shell/src/components/FeedbackModal.tsx` | 155 | 모달 껍데기 · 폼 3필드 · 성공 화면 |
+| `apps/shell/src/components/DemoViewer.tsx` | 125 | `DemoFrame`과 **거의 같은** postMessage 브릿지 |
+
+TSX/TS 합계 약 3,200줄 중 **1,629줄(51%)이 상위 3개 파일**에 있습니다.
+
+### 1-2. 중복 목록
+
+| 중복된 것 | 나타나는 곳 |
+|---|---|
+| iframe + `DEMO_RESIZE` 수신 + origin 검증 + 로딩 오버레이 + 신호등 툴바 | `DemoViewer.tsx`, `DemoFrame.tsx` — **두 벌** |
+| status 배지 (`done`→emerald+`CheckCircle2` / else→amber+`Clock`) | `demo/page.tsx`, `demo/[...slug]/page.tsx`, `DocDemoList.tsx` — **3곳** |
+| zone 배지 (`Layers` + `zone: {slug}`) | 위와 같은 3곳 |
+| 데모 카드 (제목·상태·zone·"데모 열기"+`ArrowRight`) | `demo/page.tsx`, `DocDemoList.tsx` — **두 벌** |
+| GitHub 로고 SVG path (24줄) | `Header.tsx`, `Footer.tsx` |
+| Next.js 삼각형 로고 SVG | `Header.tsx`, `Footer.tsx` |
+| 활성 항목 클래스 `bg-[#14161a0f] font-bold text-zinc-950 dark:bg-white/10 dark:text-zinc-50` | `Sidebar.tsx`, `TableOfContents.tsx`(2곳) — 리터럴 복붙 |
+| primary 버튼 클래스 `bg-zinc-900 … dark:bg-zinc-100 dark:text-zinc-900` | 6곳 이상 |
+| input 클래스 체인 (11개 유틸리티) | `Sidebar.tsx` 검색, `FeedbackModal.tsx` 3필드 |
+| 헤딩 렌더링 블록 (id·alias 스팬·`#` 앵커) | `MarkdownRenderer.tsx` 안에서 **4번** |
+| Alert 블록 (아이콘+배경+테두리) | `MarkdownRenderer.tsx` 안에서 **3번** |
+| "맨 위로 이동" 버튼 | `TableOfContents.tsx` 안에서 **2번** |
+| 헤딩 파싱 로직 | `MarkdownRenderer.tsx` 스캐너, `TableOfContents.tsx`의 `parseHeadings` |
+
+### 1-3. 설계 문서와 어긋난 것
+
+| # | 규칙 | 현재 상태 |
+|---|---|---|
+| 17 | `@study/ui`는 **셸 전용**, 데모 공통 UI는 `@study/demo-kit` ([06. 7-4](../06-ui-and-screen-design.md)) | **정확히 반대**. `@study/ui`가 `DemoContainer`·`ExpectedActualPanel`·`DemoResetButton`을 담고 데모 앱 2개가 의존. 셸 UI는 `apps/shell/src/components/`에 있고 셸은 `@study/ui`를 **한 번도 import하지 않음** |
+| 16 | 문서 본문에 데모를 심지 않는다 — 코드펜스는 **링크 카드** | `MarkdownRenderer`가 ` ```demo `를 `DemoFrame`(iframe)으로 렌더 → Phase 7 |
+| 12 | 데모 앱은 chrome을 그리지 않는다 | 두 데모 `page.tsx` 모두 제목·설명·zone 배지·근거 문서 링크를 직접 그림 → Phase 8 |
+| 20 | shadcn 토큰(`@theme inline` + oklch) | 미도입. `globals.css`가 `--color-indigo-*`를 회색으로 덮어쓰는 편법, 전 컴포넌트가 `zinc-*` 하드코딩 → **이번 범위 밖** |
+
+### 1-4. 구조적 결함
+
+- **역방향 의존**: `TableOfContents` → `MarkdownRenderer`(`slugify`). 렌더러가 파서를 export하고 있어, TOC를 쓰려면 861줄짜리 클라이언트 모듈이 끌려온다.
+- **파일 중간 import**: `MarkdownRenderer.tsx` 158행에 `import { codeToHtml } from 'shiki'`가 함수 정의 사이에 끼어 있다.
+- **불필요한 클라이언트 경계**: `Footer.tsx`가 피드백 모달 상태 하나 때문에 통째로 `'use client'`. `MarkdownRenderer` 861줄 전체가 `'use client'`.
+- **`lib/docs.ts` 겸직**: 경로 탐색 + fs 읽기 + 매니페스트 파싱 + `@study/demos` re-export.
+
+---
+
+## 2. 범위
+
+**포함 (Phase 1~6, 동작 무변경)** — 파일 이동, 컴포넌트 추출, 중복 제거, 패키지 경계 정정.
+
+**포함 (Phase 7~8, 동작 변경)** — 문서 본문 iframe 제거, 데모 앱 chrome 제거. 구조 리팩토링이 끝난 뒤에 별도 커밋으로 진행합니다.
+
+**이 계획에 없음**
+
+| 항목 | 이유 |
+|---|---|
+| shadcn/ui 소스 도입, `zinc-*` → 디자인 토큰 치환 | 작업량이 2~3배가 되고 UI 회귀 위험이 커진다. 규칙 20은 별도 티켓 |
+| `remark`/`rehype` 파이프라인 교체 ([06. 7-3](../06-ui-and-screen-design.md)) | 자체 파서를 표준 파이프라인으로 바꾸는 것은 재작성이지 정리가 아니다 |
+| 검색 팔레트·테마 토글·랜딩 히어로 등 미구현 화면 | 리팩토링이 아니라 신규 기능 |
+| `getDocsRoot()`의 후보 경로 5개 순회 방식 개선 | 배포 경로 검증이 필요해 별도 티켓 |
+
+---
+
+## 3. 목표 디렉토리 구조
+
+```
+nextjs-app/
+├─ apps/
+│  ├─ shell/src/
+│  │  ├─ app/                          # 라우트: 데이터 로딩 + 조립만
+│  │  │  ├─ [...slug]/page.tsx
+│  │  │  ├─ demo/page.tsx
+│  │  │  ├─ demo/[...slug]/page.tsx
+│  │  │  ├─ docs-assets/[...path]/route.ts
+│  │  │  └─ layout.tsx
+│  │  └─ lib/
+│  │     ├─ docs-root.ts               # 경로 탐색만
+│  │     ├─ manifest.ts                # docs-manifest 로드·조회
+│  │     └─ demos.ts                   # @study/demos re-export
+│  │                                   # └ components/ 는 사라진다
+│  ├─ demo-baseline/
+│  └─ demo-cache-components/
+└─ packages/
+   ├─ ui/src/                          # 셸 전용 (규칙 17)
+   │  ├─ primitives/                   # Badge Button IconButton Input Card Spinner
+   │  ├─ brand/                        # NextLogo GitHubIcon
+   │  ├─ layout/
+   │  │  ├─ header/                    # Header HeaderNav
+   │  │  └─ footer/                    # Footer FooterLinks FeedbackTrigger
+   │  ├─ nav/
+   │  │  ├─ doc-tree/                  # DocTree DocTreeNode DocTreeSearch DocTreeDrawer useTreeFilter
+   │  │  └─ toc/                       # TableOfContents TocList GlossaryIndex AlphabetGrid
+   │  │                                #   MobileAlphabetBar ScrollTopButton useScrollSpy config
+   │  ├─ demo/                         # DemoCard DemoStatusBadge ZoneBadge DemoPageHeader DemoIndexStats
+   │  ├─ feedback/                     # FeedbackModal FeedbackForm FeedbackSuccess
+   │  ├─ types/                        # TreeNode 등 화면 계약 타입
+   │  ├─ styles.ts                     # 반복 클래스 리터럴 상수
+   │  └─ index.ts
+   ├─ docs-render/src/                 # 셸 전용
+   │  ├─ markdown/
+   │  │  ├─ parse/                     # slugify headings demo-block inline
+   │  │  ├─ resolve/                   # asset-url doc-link segment
+   │  │  ├─ nodes/                     # Heading Alert Table Figure Blockquote ListItem Paragraph OfficialDocLink
+   │  │  └─ MarkdownRenderer.tsx       # 스캐너 루프만
+   │  ├─ code/                         # shiki lang-map highlight-cache CodeBlock
+   │  ├─ demo/                         # DemoIframe useDemoResizeBridge DemoFrame DocDemoList
+   │  └─ index.ts
+   ├─ demo-kit/src/                    # 신설 — 데모 앱 전용 (규칙 17)
+   │  ├─ DemoContainer.tsx
+   │  ├─ ExpectedActualPanel.tsx
+   │  ├─ DemoResetButton.tsx
+   │  ├─ useResizeBridge.ts
+   │  └─ index.ts
+   └─ demos/                           # 변경 없음
+```
+
+---
+
+## 4. Phase 0 — 기준선 확보
+
+- [ ] `pnpm install` (이 워크트리에는 `node_modules`가 없다)
+- [ ] `pnpm check-types` · `pnpm build` 통과 확인. **실패 항목이 있으면 여기서 기록해 두고, 리팩토링이 만든 실패와 구분한다**
+- [ ] `pnpm dev`로 3개 앱을 띄우고 회귀 비교용 스크린샷 확보
+  - `/` · 문서 1편(`/getting-started/…`) · 용어집(`/glossary`) · `/demo` · `/demo/caching/basic` · `/demo/server-actions/basic`
+  - 라이트/다크, 그리고 `< 768` / `768~1279` / `≥ 1280` 폭
+- [ ] 각 Phase 종료 시 이 스크린샷과 대조한다
+
+---
+
+## 5. Phase 1 — `@study/demo-kit` 신설 (규칙 17 정합)
+
+패키지 경계를 먼저 바로잡습니다. **이걸 나중에 하면 Phase 2~3에서 옮긴 파일을 또 옮기게 됩니다.**
+
+- [ ] `packages/demo-kit/` 생성 — `package.json`(`@study/demo-kit`, `exports` 맵은 `@study/ui`와 동형), `tsconfig.json`, `src/index.ts`
+- [ ] `packages/ui/src/{DemoContainer,ExpectedActualPanel,DemoResetButton}.tsx` → `packages/demo-kit/src/`로 **이동** (내용 변경 없음)
+- [ ] `apps/demo-baseline` · `apps/demo-cache-components` 각각:
+  - `package.json` 의존성 `@study/ui` → `@study/demo-kit`
+  - `next.config.ts`의 `transpilePackages`
+  - `src/app/globals.css`의 `@source "../../../../packages/demo-kit"`
+  - `page.tsx`의 import
+- [ ] `packages/ui/src/index.ts`를 비운다 (Phase 3에서 셸 UI가 채운다)
+- [ ] `apps/shell`의 `@study/ui` 의존은 **유지** — Phase 3에서 실제로 쓰기 시작한다
+
+**검증:** `pnpm build` 통과 + 데모 2개 화면 무변경. 데모 앱 빌드 산출물에서 셸 UI 코드가 빠졌는지 확인.
+
+---
+
+## 6. Phase 2 — 원자 컴포넌트 추출
+
+`@study/ui`에 재사용 단위를 먼저 만듭니다. 아직 아무도 쓰지 않아도 됩니다 — Phase 3~6이 소비합니다.
+
+- [ ] `packages/ui/package.json`에 `next`를 **peerDependency**로 추가 (`Link`·`usePathname` 사용)
+- [ ] `primitives/Badge.tsx` — `variant: 'status' | 'zone' | 'neutral' | 'count'`. 1-2의 status/zone 배지 6곳을 흡수
+- [ ] `primitives/Button.tsx` — `variant: 'primary' | 'outline' | 'ghost'`, `size`. primary 클래스 6곳 흡수
+- [ ] `primitives/IconButton.tsx` — 툴바·모달 닫기용
+- [ ] `primitives/Input.tsx` — Sidebar 검색 + FeedbackModal 3필드의 클래스 체인 흡수
+- [ ] `primitives/Card.tsx` — 데모 카드·통계 타일의 공통 껍데기
+- [ ] `primitives/Spinner.tsx` — `DemoViewer`·`DemoFrame`의 로딩 스피너
+- [ ] `brand/NextLogo.tsx` · `brand/GitHubIcon.tsx` — Header/Footer 복붙 제거
+- [ ] `styles.ts` — `ACTIVE_ITEM`(활성 트리/목차 항목) 등 반복 리터럴을 명명 상수로
+
+**검증:** `pnpm check-types`. 화면 변화 없음(아직 미사용).
+
+---
+
+## 7. Phase 3 — 셸 UI 이동 + 분해
+
+`apps/shell/src/components/` → `packages/ui/src/`. 파일을 옮기면서 동시에 쪼갭니다.
+
+- [ ] `ui/types/tree.ts` — `TreeNode`를 `apps/shell/src/lib/docs.ts`에서 이관. shell은 이걸 re-export (순환 방지: **타입 소유권은 `@study/ui`**)
+- [ ] `ui/layout/header/` ← `Header.tsx`(95줄) → `Header.tsx` + `HeaderNav.tsx`. 로고 SVG는 `brand/`가 대신함
+- [ ] `ui/layout/footer/` ← `Footer.tsx`(100줄) → `Footer.tsx`(**서버 컴포넌트로 전환**) + `FooterLinks.tsx` + `FeedbackTrigger.tsx`(`'use client'`)
+  - **`'use client'` 경계가 Footer 전체 → 버튼 하나로 줄어든다**
+- [ ] `ui/feedback/` ← `FeedbackModal.tsx`(155줄) → `FeedbackModal.tsx`(껍데기) + `FeedbackForm.tsx` + `FeedbackSuccess.tsx`
+- [ ] `ui/nav/doc-tree/` ← `Sidebar.tsx`(280줄) → 5파일
+  - `DocTree.tsx` (조립) · `DocTreeNode.tsx` (재귀 항목) · `DocTreeSearch.tsx` · `DocTreeDrawer.tsx` (모바일) · `useTreeFilter.ts` (검색 필터 로직)
+- [ ] `ui/nav/toc/` ← `TableOfContents.tsx`(488줄) → 9파일
+  - `useScrollSpy.ts` — 스크롤 감지·클릭 잠금·`scrollToId`·`scrollToTop` (약 150줄이 여기로)
+  - `scrollspy-config.ts` — `SCROLLSPY_CONFIG`, `ALL_ALPHABETS`
+  - `TableOfContents.tsx` — 용어집/일반 분기만 (목표 40줄 이하)
+  - `TocPanel.tsx` — 공통 `aside` 껍데기
+  - `TocList.tsx` — 일반 문서 목차
+  - `GlossaryIndex.tsx` · `AlphabetGrid.tsx` · `MobileAlphabetBar.tsx` — 용어집 전용
+  - `ScrollTopButton.tsx` — 2번 복붙 제거
+  - `parseHeadings`는 Phase 4에서 `docs-render`로 넘긴다 (여기서는 import만 바꿀 준비)
+- [ ] `apps/shell/src/app/layout.tsx`의 import를 `@/components/*` → `@study/ui`로
+- [ ] `apps/shell/src/components/` 삭제
+
+**검증:** 스크린샷 대조. 특히 사이드바 검색·접힘, 용어집 알파벳 점프, 모바일 드로어를 손으로 확인.
+
+---
+
+## 8. Phase 4 — `docs-render` 분해
+
+861줄짜리 파일을 해체합니다. 이 계획에서 가장 큰 단계이므로 **커밋을 나눕니다.**
+
+**4-1. 순수 함수 먼저 (JSX 없음)**
+- [ ] `markdown/parse/slugify.ts` ← `slugify`, `SlugResult`
+  - **`TableOfContents` → `MarkdownRenderer` 역방향 의존이 여기서 끊긴다**
+- [ ] `markdown/parse/headings.ts` ← `TableOfContents`의 `parseHeadings`. `slugify`를 공유해 중복 제거
+- [ ] `markdown/parse/demo-block.ts` ← `parseDemoBlock`, `DemoConfig`
+- [ ] `markdown/resolve/segment.ts` ← `cleanSegment`
+- [ ] `markdown/resolve/doc-link.ts` ← `resolveDocLink`
+- [ ] `markdown/resolve/asset-url.ts` ← `resolveAssetUrl`
+- [ ] `code/lang-map.ts` · `code/highlight.ts` ← `LANG_MAP`, `highlightCache`, `codeToHtml` 호출
+  - **파일 중간에 있던 `import { codeToHtml } from 'shiki'`가 정상 위치로 간다**
+
+**4-2. 노드 컴포넌트**
+- [ ] `code/CodeBlock.tsx` ← `CodeBlock`
+- [ ] `markdown/nodes/Heading.tsx` — `level: 1|2|3|4` **하나로 4벌 복붙 제거**. 레벨별 클래스는 룩업 테이블
+- [ ] `markdown/nodes/Alert.tsx` — `variant: 'note' | 'warning' | 'caution'` **하나로 3벌 복붙 제거**. 아이콘·색은 룩업 테이블
+- [ ] `markdown/nodes/Table.tsx` ← `renderTable`
+- [ ] `markdown/nodes/Figure.tsx` · `Blockquote.tsx` · `ListItem.tsx` · `Paragraph.tsx` · `OfficialDocLink.tsx`
+- [ ] `markdown/parse/inline.tsx` ← `renderInline` (인라인 이미지/코드/링크/굵게/기울임)
+
+**4-3. 조립**
+- [ ] `markdown/MarkdownRenderer.tsx` — 스캐너 루프와 디스패치만. **목표 150줄 이하**
+- [ ] `index.ts` 재구성. 기존 `export *` 표면을 유지해 소비자 코드가 안 깨지게 한다
+
+**검증:** 문서 페이지를 여러 편 대조. 코드 하이라이팅, 표, Alert 3종, 헤딩 앵커(`#`), 상대 링크 변환, 이미지 경로, `상위 메뉴:` 제외 규칙까지 확인.
+
+---
+
+## 9. Phase 5 — iframe 브릿지 단일화
+
+- [ ] `docs-render/demo/useDemoResizeBridge.ts` — origin 검증 + `event.source` 검증 + `DEMO_RESIZE` 수신 + 2px 임계 높이 상태. **`DemoViewer`와 `DemoFrame`의 중복 로직이 여기 하나로**
+- [ ] `docs-render/demo/DemoIframe.tsx` — 신호등 툴바 + 로딩 오버레이 + `iframe`(`sandbox` 속성 포함) + 새로고침 핸들러
+- [ ] `docs-render/demo/DemoFrame.tsx` — URL 계산과 `fullscreen` 분기만 남기고 `DemoIframe` 사용
+- [ ] `apps/shell/src/components/DemoViewer.tsx` → 제거. 셸 라우트가 `DemoIframe`을 직접 쓴다 (125줄 → 0)
+- [ ] `demo-kit/useResizeBridge.ts` — `DemoContainer`에서 **송신 쪽** 로직(ResizeObserver·MutationObserver·postMessage) 추출
+
+두 브릿지의 유일한 실제 차이는 최소 높이(`DemoViewer` 400px / `DemoFrame` 80px)와 초기 높이입니다. props로 받습니다.
+
+**검증:** 데모 2개에서 항목을 추가해 높이가 늘어날 때 iframe이 따라 늘어나는지, 무한 루프가 없는지 확인.
+
+---
+
+## 10. Phase 6 — 데모 UI 통합 + 셸 라우트 슬림화
+
+- [ ] `ui/demo/DemoStatusBadge.tsx` · `ui/demo/ZoneBadge.tsx` — Phase 2의 `Badge` 위에 얹는다. 3곳 중복 제거
+- [ ] `ui/demo/DemoCard.tsx` — `demo/page.tsx`와 `DocDemoList.tsx`가 공유. `variant`로 밀도만 다르게
+- [ ] `ui/demo/DemoIndexStats.tsx` — `/demo`의 통계 타일 3개
+- [ ] `ui/demo/DemoPageHeader.tsx` — `/demo/[...slug]`의 브레드크럼 + 제목 + 배지 + 근거 문서 링크
+- [ ] `docs-render/demo/DocDemoList.tsx` — `DemoCard`를 쓰도록 축소
+- [ ] `apps/shell/src/lib/docs.ts` 분해
+  - `lib/docs-root.ts` — `getDocsRoot()`
+  - `lib/manifest.ts` — `getManifest()`·`getDocBySlug()`·`getDocContent()`·`DocEntry`·`DocsManifest`
+  - `lib/demos.ts` — `@study/demos` re-export
+- [ ] 라우트 3개(`[...slug]`, `demo`, `demo/[...slug]`)를 데이터 로딩 + 조립만 남긴다. 목표: 각 60줄 이하
+
+**검증:** `/demo` 색인과 문서 하단 데모 목록의 카드가 이전과 동일하게 보이는지 대조.
+
+---
+
+## 11. Phase 7 (동작 변경) — 문서 본문 iframe 제거
+
+규칙 16과 [06. 10](../06-ui-and-screen-design.md)의 "문서 페이지에 iframe이 **하나도 없다**"를 만족시킵니다. **Phase 1~6이 끝난 뒤 별도 커밋으로 진행합니다.**
+
+- [ ] `docs-render/demo/DemoLinkCard.tsx` 추가 — `ui/demo/DemoCard`를 본문 폭에 맞춘 형태
+- [ ] `MarkdownRenderer`의 ` ```demo ` 처리를 `DemoFrame` → `DemoLinkCard`로 교체
+- [ ] 지시자 필드에서 `mode`·`height` 폐기 ([06. 9](../06-ui-and-screen-design.md)의 변경표)
+- [ ] `DemoFrame`의 사용처는 **독립 열람 하나**로 줄어든다 ([03. 4-6](../03-composition-architecture.md)의 "높이 브릿지는 독립 열람으로 한정")
+- [ ] `MarkdownRenderer`에서 `'use client'` 제거 가능 여부 확인
+  - 남는 클라이언트 요소는 `CodeBlock`(복사 버튼 + shiki 런타임 하이라이팅)뿐이다. `CodeBlock`만 클라이언트 경계로 내리면 본문은 서버 컴포넌트가 된다
+  - shiki를 빌드 타임으로 옮기는 것([06. 7-3](../06-ui-and-screen-design.md)의 `@shikijs/rehype`)은 이 계획 범위 밖 — 별도 티켓
+- [ ] **문서 갱신** (안 하면 설계 문서끼리 모순됨)
+  - [ADR 0003](../adr/0003-demo-directive-in-markdown.md) — 코드펜스가 링크 카드를 그린다, `mode`·`height` 삭제
+  - [03. 4-2 / 4-5 / 4-6](../03-composition-architecture.md)
+  - [CONTEXT.md](../../CONTEXT.md) — `인라인 데모` 정의
+
+**검증:** 문서 페이지 HTML에 `<iframe>`이 0건. 코드펜스가 있는 문서에서 링크 카드가 그려지고 `/demo/{url}`로 이동한다.
+
+---
+
+## 12. Phase 8 (동작 변경) — 데모 앱 chrome 제거
+
+규칙 12를 만족시킵니다. 셸이 이미 같은 정보를 그리고 있어 **중복 제거이기도 합니다.**
+
+- [ ] `demo-baseline/…/server-actions/basic/page.tsx` — 상단 컨트롤 바에서 제목("Server Actions 기본 폼 처리 데모")·설명·`zone: baseline` 배지 제거. `DemoResetButton`은 데모 조작이므로 **남긴다**
+- [ ] `demo-cache-components/…/caching/basic/page.tsx` — 헤더 블록 전체(zone 배지·제목·근거 문서 경로) 제거. 캐시 타임스탬프/ID 카드와 검증 패널은 **데모 본체이므로 남긴다**
+- [ ] 제거된 제목·설명의 단일 원본이 `demos.yaml`임을 확인. 부족하면 `description` 필드를 채운다
+- [ ] `packages/demos/scripts/gen-stubs.mjs`의 스텁 템플릿에서도 chrome을 뺀다 — **안 하면 새 데모마다 위반이 재생산된다**
+
+**검증:** `/demo/{url}` 독립 열람에서 제목이 한 번만 보인다(셸이 그린 것). iframe 안이 데모 본체만 남는다.
+
+---
+
+## 13. 검증 방법
+
+| 단계 | 통과 조건 |
+|---|---|
+| 매 Phase | `pnpm check-types` · `pnpm build` 통과 |
+| Phase 1~6 | Phase 0 스크린샷과 **픽셀 단위로 동일** |
+| Phase 7~8 | 의도한 차이만 발생 (본문 iframe 0건 / 데모 안 chrome 없음) |
+
+**순수 함수 추출은 테스트를 붙일 기회입니다.** Phase 4-1에서 나오는 `slugify`·`resolveDocLink`·`resolveAssetUrl`·`parseHeadings`·`parseDemoBlock`은 전부 입출력이 명확한 순수 함수라, 추출 직후 Vitest 케이스를 붙여두면 이후 Phase의 회귀를 자동으로 잡습니다. (테스트 도구 도입 여부는 별건이므로 선택 항목으로 둡니다.)
+
+---
+
+## 14. 순서를 바꾸면 안 되는 이유
+
+```
+Phase 1 (demo-kit)  ─┐  먼저 안 하면 Phase 2~3에서 옮긴 파일을 또 옮긴다
+Phase 2 (primitives) ─┤  Phase 3~6이 전부 이걸 소비한다
+Phase 3 (셸 UI)      ─┤
+Phase 4 (docs-render)─┤  4-1의 slugify 추출이 Phase 3의 TOC 의존을 끊는다
+Phase 5 (브릿지)     ─┤  Phase 3에서 DemoViewer가 이미 옮겨져 있어야 통합이 쉽다
+Phase 6 (데모 UI)    ─┘  Phase 2의 Badge/Card 위에 얹는다
+─────────────────────
+Phase 7 (iframe)     ─┐  Phase 6의 DemoCard가 있어야 링크 카드를 만든다
+Phase 8 (chrome)     ─┘  독립적. 7과 순서 무관
+```
+
+## 15. 예상 결과
+
+| 지표 | 현재 | 목표 |
+|---|---:|---:|
+| 최대 파일 크기 | 861줄 | 150줄 이하 |
+| 300줄 초과 파일 수 | 2 | 0 |
+| iframe 브릿지 구현 | 2벌 | 1벌 |
+| 데모 카드 구현 | 2벌 | 1벌 |
+| status/zone 배지 구현 | 3벌 | 1벌 |
+| 셸의 `@study/ui` 사용 | 0건 (죽은 의존성) | 실사용 |
+| 규칙 12·16·17 위반 | 3건 | 0건 |
