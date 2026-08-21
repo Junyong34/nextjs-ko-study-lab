@@ -1,4 +1,4 @@
-import { DemoContainer } from '@study/ui'
+import { DemoContainer } from '@study/demo-kit'
 
 export default function NotFound() {
   return (

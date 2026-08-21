@@ -7,7 +7,7 @@
  */
 
 import { cacheTag, revalidateTag } from 'next/cache'
-import { DemoContainer, ExpectedActualPanel } from '@study/ui'
+import { DemoContainer, ExpectedActualPanel } from '@study/demo-kit'
 import { CacheActions } from './CacheActions'
 
 // 1. 'use cache' 적용 데이터 로딩 함수 (타임스탬프와 캐시 ID 반환)

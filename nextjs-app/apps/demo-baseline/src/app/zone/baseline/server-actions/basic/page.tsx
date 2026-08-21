@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useTransition } from 'react'
-import { DemoContainer, ExpectedActualPanel, DemoResetButton } from '@study/ui'
+import { DemoContainer, ExpectedActualPanel, DemoResetButton } from '@study/demo-kit'
 import { addItem, resetItems, type DemoItem } from './actions'
 
 export default function ServerActionsBasicDemoPage() {

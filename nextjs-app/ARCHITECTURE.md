@@ -22,7 +22,8 @@ graph TD
 
     subgraph Packages ["📂 packages/ (공유 도메인 & UI 레이어)"]
         DemosPkg["@study/demos<br/>• demos.yaml (SSOT)<br/>• Zod 스키마 검증<br/>• manifest & stubs 빌더"]:::pkgStyle
-        UIPkg["@study/ui<br/>• DemoContainer (ResizeObserver)<br/>• ExpectedActualPanel<br/>• DemoResetButton"]:::pkgStyle
+        UIPkg["@study/ui<br/>• 셸 전용 UI (규칙 17)<br/>• 헤더·좌측 트리·우측 목차·카드<br/>• Phase 3에서 채워짐"]:::pkgStyle
+        DemoKitPkg["@study/demo-kit<br/>• DemoContainer (ResizeObserver)<br/>• ExpectedActualPanel<br/>• DemoResetButton"]:::pkgStyle
         RenderPkg["@study/docs-render<br/>• MarkdownRenderer<br/>• Shiki 구문 강조 (github-dark)<br/>• DemoFrame (postMessage)"]:::pkgStyle
     end
 
@@ -36,8 +37,9 @@ graph TD
     DocsSource -->|docs-manifest.json| ShellApp
     DemosPkg -->|demos-manifest.json| ShellApp
     DemosPkg -->|demos-manifest.json| RenderPkg
-    UIPkg -->|DemoContainer, 검증패널| DemoBaseline
-    UIPkg -->|DemoContainer, 검증패널| DemoCache
+    DemoKitPkg -->|DemoContainer, 검증패널| DemoBaseline
+    DemoKitPkg -->|DemoContainer, 검증패널| DemoCache
+    UIPkg -->|셸 전용 UI| ShellApp
     RenderPkg -->|MarkdownRenderer, DemoFrame| ShellApp
 
     %% 런타임 멀티 존 프록시 연결
@@ -105,7 +107,7 @@ graph TD
 ```
 - **`dependsOn: ["^build"]` (위상 정렬 의존성 빌드)**:
   - `^` 기호는 **'내가 의존하고 있는 업스트림 패키지 먼저'**를 의미합니다.
-  - 즉, `apps/shell`이 빌드되기 전에 먼저 의존 대상인 `@study/docs`, `@study/demos`, `@study/ui`, `@study/docs-render`의 빌드가 완료되도록 실행 순서를 보장합니다.
+  - 즉, `apps/shell`이 빌드되기 전에 먼저 의존 대상인 `@study/docs`, `@study/demos`, `@study/ui`, `@study/docs-render`의 빌드가 완료되도록 실행 순서를 보장합니다. 데모 앱은 `@study/demo-kit`이 선행됩니다.
 - **`outputs` & `env` 캐싱**:
   - 소스 코드와 지정된 환경변수(`ZONE_*_URL`)가 바뀌지 않았다면, 이전에 빌드된 `.next/**` 산출물을 캐시에서 0.1초 만에 복원하여 빌드 속도를 극대화합니다.
 - **`persistent: true` & `cache: false`**:
@@ -117,13 +119,14 @@ graph TD
 
 | 디렉토리 경로 | 패키지명 | 포트 | 주요 역할 및 담당 화면 |
 |---|---|---|---|
-| [`apps/shell`](file:///Users/devpark/.gemini/antigravity/worktrees/nextjs-ko-study-lab/init_nextjs_demo_priority/nextjs-app/apps/shell) | `@study/shell` | `3000` | • **사용자 진입점 웹 앱 (셸 게이트웨이)**<br>• 상단 `Header`, 좌측 `Sidebar`(284개 목차), 하단 `Footer`, `FeedbackModal`<br>• `/[...slug]`: 284개 공식 마크다운 SSG 정적 렌더링<br>• `/demo`: 실습 데모 색인 카드 뷰어<br>• `/demo/[...slug]`: 독립 데모 열람 Chrome 및 iframe 호스팅<br>• `/docs-assets/[...path]`: 문서 내 상대 경로 이미지 스트리밍 서빙<br>• Multi-zones 프록시(Rewrites) 라우터 |
-| [`apps/demo-baseline`](file:///Users/devpark/.gemini/antigravity/worktrees/nextjs-ko-study-lab/init_nextjs_demo_priority/nextjs-app/apps/demo-baseline) | `@study/demo-baseline` | `3001` | • **기본 기능 데모 존 (Baseline Zone)**<br>• Server Actions, Route Handlers, 클라이언트 컴포넌트 등 표준 App Router 기능 실습<br>• 셸의 chrome 없이 순수 데모 UI만 iframe으로 렌더링 |
-| [`apps/demo-cache-components`](file:///Users/devpark/.gemini/antigravity/worktrees/nextjs-ko-study-lab/init_nextjs_demo_priority/nextjs-app/apps/demo-cache-components) | `@study/demo-cache-components` | `3002` | • **캐시 기능 전용 데모 존 (Cache Zone)**<br>• Next.js 16 `cacheComponents: true` 환경 격리<br>• `'use cache'`, `cacheTag()`, `revalidateTag()` 등 캐시 무효화 실습 |
-| [`packages/ui`](file:///Users/devpark/.gemini/antigravity/worktrees/nextjs-ko-study-lab/init_nextjs_demo_priority/nextjs-app/packages/ui) | `@study/ui` | - | • **데모 존 공통 UI 키트**<br>• `DemoContainer`: 내부 DOM 높이를 실시간 측정하여 부모 셸에 `DEMO_RESIZE` postMessage 전송<br>• `ExpectedActualPanel`: 기대값과 실제 관찰 상태를 비교하는 검증 배지 패널<br>• `DemoResetButton`: 데모 상태 초기화 버튼 |
-| [`packages/docs-render`](file:///Users/devpark/.gemini/antigravity/worktrees/nextjs-ko-study-lab/init_nextjs_demo_priority/nextjs-app/packages/docs-render) | `@study/docs-render` | - | • **문서 렌더링 엔진**<br>• `MarkdownRenderer`: 마크다운 파싱 및 인라인/블록 이미지 자동 경로 변환<br>• `Shiki` 구문 강조 연동 (`github-dark` 테마, 메모리 캐싱)<br>• `DemoFrame`: iframe 임베딩 및 `DEMO_RESIZE` 이벤트 수신 높이 동기화<br>• `DocDemoList`: 문서 하단 관련 데모 카드 목록 표시 |
-| [`packages/demos`](file:///Users/devpark/.gemini/antigravity/worktrees/nextjs-ko-study-lab/init_nextjs_demo_priority/nextjs-app/packages/demos) | `@study/demos` | - | • **데모 메타데이터 및 도구 (SSOT)**<br>• `demos.yaml`: 전역 데모 목록 및 상태 관리<br>• Zod 스키마 검증 (`DemoSchema`)<br>• 스텁 자동 생성 및 린터 도구 제공 |
-| [`nextjs-docs`](file:///Users/devpark/.gemini/antigravity/worktrees/nextjs-ko-study-lab/init_nextjs_demo_priority/nextjs-docs) | `@study/docs` | - | • **Next.js 공식 문서 한국어 원본 (284편)**<br>• 다이어그램, 아키텍처 도표 등 정적 WebP/PNG 이미지 에셋(`assets/`)<br>• `docs-manifest.json` 생성 스크립트 |
+| [`apps/shell`](./apps/shell) | `@study/shell` | `3000` | • **사용자 진입점 웹 앱 (셸 게이트웨이)**<br>• 상단 `Header`, 좌측 `Sidebar`(284개 목차), 하단 `Footer`, `FeedbackModal`<br>• `/[...slug]`: 284개 공식 마크다운 SSG 정적 렌더링<br>• `/demo`: 실습 데모 색인 카드 뷰어<br>• `/demo/[...slug]`: 독립 데모 열람 Chrome 및 iframe 호스팅<br>• `/docs-assets/[...path]`: 문서 내 상대 경로 이미지 스트리밍 서빙<br>• Multi-zones 프록시(Rewrites) 라우터 |
+| [`apps/demo-baseline`](./apps/demo-baseline) | `@study/demo-baseline` | `3001` | • **기본 기능 데모 존 (Baseline Zone)**<br>• Server Actions, Route Handlers, 클라이언트 컴포넌트 등 표준 App Router 기능 실습<br>• 셸의 chrome 없이 순수 데모 UI만 iframe으로 렌더링 |
+| [`apps/demo-cache-components`](./apps/demo-cache-components) | `@study/demo-cache-components` | `3002` | • **캐시 기능 전용 데모 존 (Cache Zone)**<br>• Next.js 16 `cacheComponents: true` 환경 격리<br>• `'use cache'`, `cacheTag()`, `revalidateTag()` 등 캐시 무효화 실습 |
+| [`packages/ui`](./packages/ui) | `@study/ui` | - | • **셸 전용 UI 패키지** ([`AGENTS.md`](./AGENTS.md) 규칙 17, [06. 7-4](./docs/06-ui-and-screen-design.md))<br>• 헤더, 좌측 문서 트리, 우측 목차, 카드 등<br>• 데모 앱은 이 패키지를 의존하지 않는다 — 의존하면 헤더·검색 팔레트가 데모 앱 빌드에 끌려 들어간다<br>• 셸 UI 이관은 리팩토링 Phase 3에서 진행 |
+| [`packages/demo-kit`](./packages/demo-kit) | `@study/demo-kit` | - | • **데모 존 공통 UI 키트**<br>• `DemoContainer`: 내부 DOM 높이를 실시간 측정하여 부모 셸에 `DEMO_RESIZE` postMessage 전송<br>• `ExpectedActualPanel`: 기대값과 실제 관찰 상태를 비교하는 검증 배지 패널<br>• `DemoResetButton`: 데모 상태 초기화 버튼<br>• 데모 앱에는 shadcn을 넣지 않는다 — 학습자가 읽을 코드다 |
+| [`packages/docs-render`](./packages/docs-render) | `@study/docs-render` | - | • **문서 렌더링 엔진**<br>• `MarkdownRenderer`: 마크다운 파싱 및 인라인/블록 이미지 자동 경로 변환<br>• `Shiki` 구문 강조 연동 (`github-dark` 테마, 메모리 캐싱)<br>• `DemoFrame`: iframe 임베딩 및 `DEMO_RESIZE` 이벤트 수신 높이 동기화<br>• `DocDemoList`: 문서 하단 관련 데모 카드 목록 표시 |
+| [`packages/demos`](./packages/demos) | `@study/demos` | - | • **데모 메타데이터 및 도구 (SSOT)**<br>• `demos.yaml`: 전역 데모 목록 및 상태 관리<br>• Zod 스키마 검증 (`DemoSchema`)<br>• 스텁 자동 생성 및 린터 도구 제공 |
+| [`nextjs-docs`](../nextjs-docs) | `@study/docs` | - | • **Next.js 공식 문서 한국어 원본 (284편)**<br>• 다이어그램, 아키텍처 도표 등 정적 WebP/PNG 이미지 에셋(`assets/`)<br>• `docs-manifest.json` 생성 스크립트 |
 
 ---
 
@@ -254,7 +257,7 @@ sequenceDiagram
     participant Renderer as MarkdownRenderer / Shiki
     participant DemoFrame as DemoFrame (Client)
     participant Zone as apps/demo-* (:3001/:3002)
-    participant Container as DemoContainer (@study/ui)
+    participant Container as DemoContainer (@study/demo-kit)
 
     User->>Shell: GET /getting-started/caching
     Shell->>Shell: docs-manifest.json 기반 SSG 캐시에서 정적 HTML 준비

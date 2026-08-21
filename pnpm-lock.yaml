@@ -32,9 +32,9 @@ importers:
 
   nextjs-app/apps/demo-baseline:
     dependencies:
-      '@study/ui':
+      '@study/demo-kit':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../packages/demo-kit
       next:
         specifier: 'catalog:'
         version: 16.3.1(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -69,9 +69,9 @@ importers:
 
   nextjs-app/apps/demo-cache-components:
     dependencies:
-      '@study/ui':
+      '@study/demo-kit':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../packages/demo-kit
       next:
         specifier: 'catalog:'
         version: 16.3.1(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -152,6 +152,24 @@ importers:
       tailwindcss:
         specifier: ^4.0.0
         version: 4.3.3
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+
+  nextjs-app/packages/demo-kit:
+    devDependencies:
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.4(@types/react@19.2.18)
+      react:
+        specifier: 'catalog:'
+        version: 19.2.8
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.2.8(react@19.2.8)
       typescript:
         specifier: ^5.7.3
         version: 5.9.3
