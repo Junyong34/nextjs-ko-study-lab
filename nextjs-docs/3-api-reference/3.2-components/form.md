@@ -20,7 +20,7 @@
 - **클라이언트 사이드 내비게이션**: 제출 시 전체 페이지를 새로고침하는 대신, 공유 레이아웃과 클라이언트 상태를 유지한 채 새 페이지로 이동한다.
 - **progressive enhancement**: JavaScript가 아직 로드되지 않았더라도 서버 사이드 내비게이션으로 폼 제출이 동작한다.
 
-```tsx
+```tsx filename="/app/page.tsx"
 import Form from 'next/form'
 
 export default function Page() {
@@ -76,7 +76,7 @@ export default function Page() {
 
 경로를 `action`으로 받아 검색 결과 페이지로 이동하는 검색 폼을 만들 수 있다.
 
-```tsx
+```tsx filename="/app/page.tsx"
 import Form from 'next/form'
 
 export default function Page() {
@@ -93,7 +93,7 @@ export default function Page() {
 
 대상 페이지는 [`searchParams`](../3.1-file-conventions/page.md) prop으로 쿼리 파라미터를 받아 검색 결과를 렌더링한다.
 
-```tsx
+```tsx filename="/app/page.tsx"
 import { getSearchResults } from '@/lib/search'
 
 export default async function SearchPage({
@@ -110,7 +110,7 @@ export default async function SearchPage({
 
 `Form`이 보이는 순간 `SearchPage`용 [`loading.js`](../3.1-file-conventions/loading.md) 파일이 prefetch되므로, 사용자가 폼을 제출하면 새 페이지로 이동하는 동안 로딩 UI가 즉시 나타난다.
 
-```tsx
+```tsx filename="/app/search/loading.tsx"
 export default function Loading() {
   return <div>Loading...</div>
 }
@@ -118,7 +118,7 @@ export default function Loading() {
 
 prefetch되지 않는 경우를 대비해, [`useFormStatus`](https://react.dev/reference/react-dom/hooks/useFormStatus)로 제출 중 대기 상태를 보여줄 수도 있다.
 
-```tsx
+```tsx filename="/app/ui/search-button.tsx"
 'use client'
 
 import { useFormStatus } from 'react-dom'
@@ -133,7 +133,7 @@ export default function SearchButton() {
 
 이 버튼을 검색 페이지에서 사용한다.
 
-```tsx
+```tsx filename="/app/page.tsx"
 import Form from 'next/form'
 import { SearchButton } from '@/ui/search-button'
 
@@ -151,7 +151,7 @@ export default function Page() {
 
 `action`에 함수를 전달하면 데이터 변경(mutation)을 수행할 수 있다.
 
-```tsx
+```tsx filename="/app/search/loading.tsx"
 import Form from 'next/form'
 import { createPost } from '@/posts/actions'
 
@@ -170,7 +170,7 @@ export default function Page() {
 
 Server Function은 [Server Function](../../1-getting-started/mutating-data.md)으로 정의하며, 아래처럼 성공 시 `redirect`로 새 페이지로 이동시킬 수 있다.
 
-```tsx
+```tsx filename="/app/posts/actions.ts"
 'use server'
 
 import { redirect } from 'next/navigation'
@@ -185,7 +185,7 @@ export async function createPost(formData: FormData) {
 
 리다이렉트 대상 페이지는 [`params`](../3.1-file-conventions/page.md) prop으로 라우트 세그먼트 값을 받는다.
 
-```tsx
+```tsx filename="/app/ui/search-button.tsx"
 import { getPost } from '@/posts/data'
 
 export default async function PostPage({

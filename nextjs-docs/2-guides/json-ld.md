@@ -16,7 +16,7 @@ JSON-LD는 구조화된 데이터(structured data)를 표현하는 형식이다.
 
 Next.js에서는 `layout.js` 또는 `page.js` 컴포넌트에 네이티브 `<script type="application/ld+json">` 태그를 렌더링하는 방식을 권장한다. JSON-LD는 실행할 JavaScript가 아니라 데이터이므로, JavaScript 로딩과 실행에 최적화된 [`next/script`](../3-api-reference/3.2-components/script.md) 대신 네이티브 `<script>` 태그를 사용한다.
 
-```tsx
+```tsx filename="app/products/[id]/page.tsx"
 export default async function Page({
   params,
 }: {
@@ -52,7 +52,7 @@ export default async function Page({
 
 구조화된 데이터는 [Google Rich Results Test](https://search.google.com/test/rich-results) 또는 [Schema Markup Validator](https://validator.schema.org/)로 검사할 수 있다. TypeScript 타입이 필요하면 `schema-dts` 같은 커뮤니티 패키지를 사용할 수 있다.
 
-```tsx
+```tsx filename="app/products/[id]/page.tsx"
 import type { Product, WithContext } from 'schema-dts'
 
 const jsonLd: WithContext<Product> = {

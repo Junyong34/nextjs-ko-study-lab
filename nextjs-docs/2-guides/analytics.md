@@ -22,7 +22,7 @@ Next.js는 성능 지표를 측정하고 보고하는 기능을 기본으로 제
 
 사용하려면 애플리케이션 루트 디렉터리에 `instrumentation-client.js` 또는 `instrumentation-client.ts` 파일을 만든다.
 
-```ts
+```ts filename="instrumentation-client.js"
 // 앱이 시작하기 전에 분석 도구를 초기화한다
 console.log('Analytics initialized')
 
@@ -37,7 +37,7 @@ window.addEventListener('error', (event) => {
 
 `useReportWebVitals`를 직접 사용해 리포팅을 관리할 수도 있다.
 
-```tsx
+```tsx filename="app/_components/web-vitals.js"
 'use client'
 
 import { useReportWebVitals } from 'next/web-vitals'
@@ -49,7 +49,7 @@ export function WebVitals() {
 }
 ```
 
-```tsx
+```tsx filename="app/layout.js"
 import { WebVitals } from './_components/web-vitals'
 
 export default function Layout({ children }) {
@@ -81,7 +81,7 @@ export default function Layout({ children }) {
 
 `name` 속성을 사용하면 이 지표들의 결과를 모두 처리할 수 있다.
 
-```tsx
+```tsx filename="app/_components/web-vitals.tsx"
 'use client'
 
 import { useReportWebVitals } from 'next/web-vitals'

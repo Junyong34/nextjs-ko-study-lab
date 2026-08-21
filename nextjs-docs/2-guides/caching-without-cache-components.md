@@ -20,7 +20,7 @@
 
 기본적으로 `fetch` 요청은 캐싱되지 않는다. 개별 요청의 `cache`를 `'force-cache'`로 지정하면 캐싱할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 export default async function Page() {
   const data = await fetch('https://...', { cache: 'force-cache' })
 }
@@ -30,7 +30,7 @@ export default async function Page() {
 
 `unstable_cache`는 데이터베이스 질의처럼 `fetch`를 사용하지 않는 비동기 함수 결과를 영속적으로 캐싱한다. 두 번째 인자는 캐시 키 접두사, 세 번째 인자의 `tags`는 요청 기반 revalidation용 태그, `revalidate`는 다시 확인하기까지의 초 단위 기간이다.
 
-```ts
+```ts filename="app/lib/data.ts"
 import { unstable_cache } from 'next/cache'
 
 export const getCachedUser = unstable_cache(
@@ -73,7 +73,7 @@ Page, Layout, Route Handler에서 설정을 export해 라우트 수준 동작을
 
 `fetch`의 `next.revalidate`에 초를 지정한다. `fetch`가 아닌 함수는 `unstable_cache`의 같은 이름 옵션을 사용한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 const data = await fetch('https://...', { next: { revalidate: 3600 } })
 ```
 
@@ -99,7 +99,7 @@ Server Action이나 Route Handler에서 이벤트 뒤 캐시를 갱신할 때 `r
 
 #### 캐시 데이터에 태그 지정
 
-```tsx
+```tsx filename="app/lib/data.ts"
 export async function getUserById(id: string) {
   return fetch(`https://.../${id}`, { next: { tags: ['user'] } })
 }
@@ -109,7 +109,7 @@ export async function getUserById(id: string) {
 
 #### `revalidateTag`
 
-```ts
+```ts filename="app/lib/actions.ts"
 import { revalidateTag } from 'next/cache'
 
 export async function updateUser(id: string) {
@@ -122,7 +122,7 @@ export async function updateUser(id: string) {
 
 #### `revalidatePath`
 
-```ts
+```ts filename="app/lib/actions.ts"
 import { revalidatePath } from 'next/cache'
 
 export async function updateUser(id: string) {
@@ -137,7 +137,7 @@ export async function updateUser(id: string) {
 
 `fetch`는 한 서버 렌더링 동안 동일한 요청을 자동으로 메모이제이션한다. ORM이나 데이터베이스를 직접 사용한다면 React `cache`로 데이터 접근 함수를 감싸 같은 렌더링 과정의 중복 호출을 하나로 합칠 수 있다.
 
-```ts
+```ts filename="app/lib/data.ts"
 import { cache } from 'react'
 
 export const getPost = cache(async (id: string) => {
@@ -151,7 +151,7 @@ React `cache`는 한 렌더링 과정의 중복 제거용이다. 요청을 넘�
 
 차단 작업보다 먼저 데이터 요청을 시작하는 `preload` 유틸리티를 만들 수 있다. `server-only`와 React `cache`를 함께 사용하면 같은 함수를 미리 호출해도 실제 데이터 접근은 중복되지 않는다.
 
-```ts
+```ts filename="utils/get-item.ts"
 import { cache } from 'react'
 import 'server-only'
 

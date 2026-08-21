@@ -16,7 +16,7 @@
 
 ### 시작하기
 
-```bash
+```bash filename="app/layout.tsx"
 pnpm add @next/third-parties@latest next@latest
 ```
 
@@ -30,7 +30,7 @@ pnpm add @next/third-parties@latest next@latest
 
 `GoogleTagManager`는 페이지에 Google Tag Manager(GTM) container를 만든다. 기본적으로 페이지 hydration 뒤에 원본 인라인 script를 가져온다. 모든 라우트에서 사용하면 root layout에, 한 라우트에서만 사용하면 해당 page에 넣는다.
 
-```tsx
+```tsx filename="app/layout.js"
 import { GoogleTagManager } from '@next/third-parties/google'
 
 export default function RootLayout({ children }) {
@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
 
 Client Component에서 `sendGTMEvent`로 사용자 상호작용을 `dataLayer`에 보낼 수 있다. 함수가 작동하려면 `<GoogleTagManager />`가 같은 파일이나 부모 layout, page, 컴포넌트에 포함되어 있어야 한다.
 
-```tsx
+```tsx filename="app/page.js"
 'use client'
 
 import { sendGTMEvent } from '@next/third-parties/google'
@@ -82,7 +82,7 @@ export function EventButton() {
 
 `GoogleAnalytics`는 Google tag(`gtag.js`)를 통해 Google Analytics 4를 page에 넣는다. 기본적으로 hydration 뒤에 원본 script를 가져온다. 모든 라우트에서 사용하면 root layout에 두고 측정 ID를 전달한다.
 
-```tsx
+```tsx filename="app/layout.js"
 import { GoogleAnalytics } from '@next/third-parties/google'
 
 export default function RootLayout({ children }) {
@@ -101,7 +101,7 @@ export default function RootLayout({ children }) {
 
 `sendGAEvent`는 `dataLayer`를 통해 상호작용 이벤트를 보낸다. `<GoogleAnalytics />`가 같은 파일이나 부모에 있어야 한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 'use client'
 
 import { sendGAEvent } from '@next/third-parties/google'
@@ -134,7 +134,7 @@ Google Analytics는 브라우저 history 상태가 바뀌면 pageview를 자동�
 
 `GoogleMapsEmbed`는 Google Maps Embed를 page에 추가한다. 기본적으로 `loading` 속성으로 fold 아래 embed를 lazy loading한다.
 
-```tsx
+```tsx filename="app/page.js"
 import { GoogleMapsEmbed } from '@next/third-parties/google'
 
 export default function Page() {
@@ -172,7 +172,7 @@ export default function Page() {
 
 `YouTubeEmbed`는 YouTube 영상을 표시한다. 내부적으로 `lite-youtube-embed`를 사용해 더 빠르게 로드한다.
 
-```tsx
+```tsx filename="app/page.js"
 import { YouTubeEmbed } from '@next/third-parties/google'
 
 export default function Page() {

@@ -35,7 +35,7 @@
 
 예를 들어 `<Page>` 컴포넌트는 포스트 데이터를 가져오는 Server Component이고, 그 데이터를 클라이언트 인터랙티비티를 담당하는 `<LikeButton>`에 props로 넘긴다.
 
-```tsx
+```tsx filename="app/[id]/page.tsx"
 import LikeButton from '@/app/ui/like-button'
 import { getPost } from '@/lib/data'
 
@@ -59,7 +59,7 @@ export default async function Page({
 }
 ```
 
-```tsx
+```tsx filename="app/ui/like-button.tsx"
 'use client'
 
 import { useState } from 'react'
@@ -111,7 +111,7 @@ export default function LikeButton({ likes }: { likes: number }) {
 
 파일 맨 위, import 위에 [`"use client"`](../3-api-reference/3.4-directives/use-client.md) 지시어를 추가하면 Client Component를 만들 수 있다.
 
-```tsx
+```tsx filename="app/ui/counter.tsx"
 'use client'
 
 import { useState } from 'react'
@@ -142,7 +142,7 @@ Server와 Client Component를 어떻게 함께 조합할 수 있는지는 [Serve
 
 예를 들어 `<Layout>` 컴포넌트는 로고와 내비게이션 링크 같은 대부분 정적인 요소를 담고 있지만, 인터랙티브한 검색바를 포함한다. `<Search />`는 인터랙티브해서 Client Component여야 하지만, 나머지 레이아웃은 Server Component로 남을 수 있다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 // Client Component
 import Search from './search'
 // Server Component
@@ -162,7 +162,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 ```
 
-```tsx
+```tsx filename="app/ui/search.tsx"
 'use client'
 
 export default function Search() {
@@ -174,7 +174,7 @@ export default function Search() {
 
 props를 이용해 Server Component에서 Client Component로 데이터를 전달할 수 있다.
 
-```tsx
+```tsx filename="app/[id]/page.tsx"
 import LikeButton from '@/app/ui/like-button'
 import { getPost } from '@/lib/data'
 
@@ -190,7 +190,7 @@ export default async function Page({
 }
 ```
 
-```tsx
+```tsx filename="app/ui/like-button.tsx"
 'use client'
 
 export default function LikeButton({ likes }: { likes: number }) {
@@ -208,7 +208,7 @@ Server Component를 Client Component의 prop으로 전달할 수 있다. 이렇�
 
 흔한 패턴은 `children`을 써서 `<ClientComponent>` 안에 _슬롯_을 만드는 것이다. 예를 들어 서버에서 데이터를 가져오는 `<Cart>`를, 클라이언트 상태로 표시 여부를 토글하는 `<Modal>` 컴포넌트 안에 넣는 경우다.
 
-```tsx
+```tsx filename="app/ui/modal.tsx"
 'use client'
 
 export default function Modal({ children }: { children: React.ReactNode }) {
@@ -218,7 +218,7 @@ export default function Modal({ children }: { children: React.ReactNode }) {
 
 그다음 부모 Server Component(예: `<Page>`)에서 `<Cart>`를 `<Modal>`의 자식으로 전달할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Modal from './ui/modal'
 import Cart from './ui/cart'
 
@@ -239,7 +239,7 @@ export default function Page() {
 
 context를 쓰려면 `children`을 받는 Client Component를 만든다.
 
-```tsx
+```tsx filename="app/theme-provider.tsx"
 'use client'
 
 import { createContext } from 'react'
@@ -257,7 +257,7 @@ export default function ThemeProvider({
 
 그다음 Server Component(예: `layout`)에서 이를 import한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import ThemeProvider from './theme-provider'
 
 export default function RootLayout({
@@ -287,7 +287,7 @@ export default function RootLayout({
 
 Client Component 안에서 `<Carousel />`을 쓰면 예상대로 동작한다.
 
-```tsx
+```tsx filename="app/gallery.tsx"
 'use client'
 
 import { useState } from 'react'
@@ -310,7 +310,7 @@ export default function Gallery() {
 
 이를 해결하려면, 클라이언트 전용 기능에 의존하는 서드파티 컴포넌트를 직접 만든 Client Component로 감싼다.
 
-```tsx
+```tsx filename="app/carousel.tsx"
 'use client'
 
 import { Carousel } from 'acme-carousel'
@@ -320,7 +320,7 @@ export default Carousel
 
 이제 `<Carousel />`을 Server Component 안에서 직접 쓸 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Carousel from './carousel'
 
 export default function Page() {
@@ -344,7 +344,7 @@ export default function Page() {
 
 JavaScript 모듈은 Server와 Client Component 모듈 양쪽에서 공유될 수 있다. 즉 서버 전용 코드가 실수로 클라이언트로 import될 수도 있다. 다음 함수를 보자.
 
-```tsx
+```tsx filename="lib/data.ts"
 export async function getData() {
   const res = await fetch('https://external-service.com/data', {
     headers: {
@@ -364,7 +364,7 @@ Next.js에서는 `NEXT_PUBLIC_` 접두사가 붙은 환경 변수만 클라이�
 
 Client Component에서 실수로 쓰이는 걸 막으려면 [`server-only` 패키지](https://www.npmjs.com/package/server-only)를 쓸 수 있다.
 
-```tsx
+```tsx filename="lib/data.ts"
 import 'server-only'
 
 export async function getData() {
@@ -384,7 +384,7 @@ export async function getData() {
 
 Next.js에서 `server-only`나 `client-only`를 설치하는 건 **선택 사항**이다. 다만 린트 규칙이 불필요한 의존성을 지적한다면 설치해서 문제를 피할 수 있다.
 
-```bash
+```bash filename="lib/data.js"
 pnpm add server-only
 ```
 

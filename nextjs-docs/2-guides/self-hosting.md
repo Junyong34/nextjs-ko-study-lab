@@ -40,7 +40,7 @@ Next.js 서버를 인터넷에 직접 노출하기보다 nginx 같은 reverse pr
 
 서버의 다이나믹 렌더링 중에는 런타임 환경 변수를 안전하게 읽을 수 있다.
 
-```tsx
+```tsx filename="app/page.ts"
 import { connection } from 'next/server'
 
 export default async function Component() {
@@ -74,7 +74,7 @@ JavaScript와 CSS를 별도 도메인이나 CDN에서 제공하려면 [`assetPre
 
 기본 생성 캐시는 메모리(기본 50MB)와 디스크에 저장된다. ephemeral compute에서는 짧게 유지되고 Kubernetes의 각 pod는 서로 다른 캐시를 갖는다. custom `cacheHandler`와 외부 저장소를 사용하고 기본 메모리 캐시를 끄면 인스턴스 간 결과를 공유할 수 있다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   cacheHandler: require.resolve('./cache-handler.js'),
   cacheMaxMemorySize: 0,
@@ -83,7 +83,7 @@ module.exports = {
 
 `cache-handler.js`는 `get`, `set`, tag 무효화, 요청 단위 임시 캐시 초기화 계약을 구현한다. 다음 메모리 구현은 인터페이스를 설명하기 위한 출발점이며 프로덕션에서는 외부 저장소로 바꾼다.
 
-```js
+```js filename="cache-handler.js"
 const cache = new Map()
 
 module.exports = class CacheHandler {
@@ -124,7 +124,7 @@ module.exports = class CacheHandler {
 
 Next.js는 `next build` 중 배포 버전을 식별하는 ID를 만든다. 여러 컨테이너는 같은 빌드 산출물과 build ID로 시작해야 한다. 환경 단계마다 다시 빌드한다면 `generateBuildId`로 일관된 값을 제공한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   generateBuildId: async () => process.env.GIT_HASH,
 }
@@ -154,7 +154,7 @@ rolling deployment의 version skew를 감지하려면 [`deploymentId`](../3-api-
 
 여러 버전이 동시에 서비스될 때 생기는 [version skew](../4-glossary/README.md)로 오래된 클라이언트가 사라진 JavaScript/CSS를 요청하거나, 이전 Server Function ID를 호출하거나, 새 서버와 호환되지 않는 prefetch 데이터를 사용할 수 있다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   deploymentId: process.env.DEPLOYMENT_VERSION,
 }
@@ -168,7 +168,7 @@ deployment ID를 설정하면 정적 자산에 `?dpl=<deploymentId>`, 클라이�
 
 App Router는 자체 호스팅에서도 [스트리밍 응답](../3-api-reference/3.1-file-conventions/loading.md)을 지원한다. nginx 같은 proxy가 버퍼링하지 않도록 구성해야 한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   async headers() {
     return [{

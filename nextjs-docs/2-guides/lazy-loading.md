@@ -18,7 +18,7 @@ lazy loading은 라우트를 렌더링하는 데 필요한 JavaScript 양을 줄
 
 `next/dynamic`은 `React.lazy()`와 `<Suspense>`를 조합한 API이며 `app`과 `pages` 디렉터리에서 같은 방식으로 동작한다. Next.js가 모듈과 번들을 연결해 미리 로드할 수 있도록 `import()` 경로는 템플릿 문자열이나 변수가 아닌 명시적 문자열이어야 한다. `import()`는 `dynamic()` 호출 안에 있어야 하고, `dynamic()`은 렌더링 함수 안이 아니라 모듈 최상위에 둔다.
 
-```tsx
+```tsx filename="app/page.js"
 import dynamic from 'next/dynamic'
 
 const ComponentA = dynamic(() => import('../components/A'))
@@ -27,7 +27,7 @@ const ComponentB = dynamic(() => import('../components/B'))
 
 Client Component의 SSR을 건너뛰려면 Client Component에서 `ssr: false`를 사용한다. Server Component에서 이 옵션을 쓰면 오류가 발생한다.
 
-```tsx
+```tsx filename="app/page.js"
 'use client'
 
 const NoSSR = dynamic(() => import('../components/no-ssr'), { ssr: false })
@@ -35,7 +35,7 @@ const NoSSR = dynamic(() => import('../components/no-ssr'), { ssr: false })
 
 사용자에게 로딩 상태를 보여주려면 `loading` 옵션을 제공한다. named export는 `import()` Promise의 `then`에서 선택한다.
 
-```tsx
+```tsx filename="app/page.js"
 const WithLoading = dynamic(() => import('../components/WithLoading'), {
   loading: () => <p>Loading...</p>,
 })
@@ -49,7 +49,7 @@ const ClientComponent = dynamic(() =>
 
 외부 라이브러리는 상호작용 시점에 동적으로 가져올 수 있다. 다음 패턴은 입력 이벤트가 발생할 때 `fuse.js`를 로드하므로 초기 번들에서 제외한다.
 
-```tsx
+```tsx filename="app/page.js"
 'use client'
 
 export default function Page() {
@@ -72,7 +72,7 @@ Magic comment는 정적 `import`가 아니라 동적 `import()` 식에만 적용
 
 > **알아두면 좋은 점**: `webpackOptional`은 지원하지 않는다. Turbopack에서는 `turbopackOptional`을 사용한다.
 
-```ts
+```ts filename="app/page.js"
 await import(/* webpackIgnore: true */ externalUrl)
 await import(/* turbopackOptional: true */ './optional-module')
 ```

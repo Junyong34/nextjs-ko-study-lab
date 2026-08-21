@@ -49,7 +49,7 @@ export default async function Page({
 
 #### 1. 단일 다이나믹 세그먼트 (`app/blog/[slug]/page.tsx`)
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 export async function generateStaticParams() {
   return [{ slug: 'post-1' }, { slug: 'post-2' }]
 }
@@ -59,7 +59,7 @@ export async function generateStaticParams() {
 
 상위 세그먼트와 하위 세그먼트의 파라미터를 모두 포함하는 객체 배열을 반환한다.
 
-```tsx
+```tsx filename="app/product/[id]/page.tsx"
 export async function generateStaticParams() {
   return [
     { category: 'electronics', item: 'phone' },
@@ -73,7 +73,7 @@ export async function generateStaticParams() {
 
 배열 형태의 경로 조각들을 전달한다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 export async function generateStaticParams() {
   return [
     { slug: ['getting-started', 'installation'] }, // /docs/getting-started/installation
@@ -86,7 +86,7 @@ export async function generateStaticParams() {
 
 루트 경로(`/shop`)를 포함하려면 빈 배열 `[]`을 함께 반환한다.
 
-```tsx
+```tsx filename="app/products/[category]/[product]/page.tsx"
 export async function generateStaticParams() {
   return [
     { slug: [] },                  // /shop

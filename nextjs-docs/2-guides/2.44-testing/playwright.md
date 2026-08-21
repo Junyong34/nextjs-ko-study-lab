@@ -32,7 +32,7 @@ pnpm create playwright
 
 테스트는 브라우저에서 홈을 열고 About 링크를 누른 뒤 URL과 제목을 검사한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 // app/page.tsx
 import Link from 'next/link'
 
@@ -46,7 +46,7 @@ export default function Page() {
 }
 ```
 
-```tsx
+```tsx filename="app/about/page.tsx"
 // app/about/page.tsx
 import Link from 'next/link'
 
@@ -60,7 +60,7 @@ export default function Page() {
 }
 ```
 
-```ts
+```ts filename="tests/example.spec.ts"
 import { test, expect } from '@playwright/test'
 
 test('should navigate to the about page', async ({ page }) => {
@@ -85,7 +85,7 @@ npx playwright test
 
 > **알아두면 좋은 점**: `webServer` 기능을 사용하면 Playwright가 개발 서버를 시작하고 완전히 준비될 때까지 기다리게 할 수 있다.
 
-```ts
+```ts filename="playwright.config.ts"
 import { defineConfig } from '@playwright/test'
 
 export default defineConfig({

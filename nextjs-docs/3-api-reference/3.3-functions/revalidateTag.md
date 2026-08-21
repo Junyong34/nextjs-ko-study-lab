@@ -41,11 +41,11 @@ revalidateTag(tag: string, profile: string | { expire?: number }): void
 ### 데이터에 태그를 부여하는 방법
 
 1. **`fetch` 요청 시**:
-   ```tsx
+```tsx filename="app/actions.ts"
    fetch(url, { next: { tags: ['posts'] } })
    ```
 2. **`'use cache'` 스코프 내부에서**:
-   ```tsx
+```tsx filename="app/actions.ts"
    import { cacheTag } from 'next/cache'
 
    async function getData() {

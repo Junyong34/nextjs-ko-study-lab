@@ -65,7 +65,7 @@ pnpm create next-app
 
 설치 중 다음과 같은 프롬프트가 표시된다.
 
-```
+```txt filename="Terminal"
 What is your project named? my-app
 Would you like to use the recommended Next.js defaults?
     Yes, use recommended defaults - TypeScript, ESLint, Tailwind CSS, App Router, AGENTS.md
@@ -75,7 +75,7 @@ Would you like to use the recommended Next.js defaults?
 
 `customize settings`를 선택하면 다음 프롬프트가 이어진다.
 
-```
+```txt filename="Terminal"
 Would you like to use TypeScript? No / Yes
 Which linter would you like to use? ESLint / Biome / None
 Would you like to use React Compiler? No / Yes

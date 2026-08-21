@@ -38,7 +38,7 @@ Cache Components와 Partial Prefetching을 켠다. `'use cache'`와 변형 지�
 
 검증 오류는 uncached fetch나 runtime API가 `<Suspense>` 밖에 있는 위치를 보여준다. slug에 의존하는 데이터는 하위 컴포넌트로 옮겨 `<Suspense>`로 감싸고, 라우트와 무관하며 수명이 있는 데이터는 `'use cache'`를 사용한다.
 
-```tsx
+```tsx filename="app/products/[slug]/page.tsx"
 export default async function ProductPage(props: PageProps<'/products/[slug]'>) {
   const featured = await getFeatured()
   return (

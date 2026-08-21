@@ -47,7 +47,7 @@ Cache Components와 `partialPrefetching`을 함께 켜면 전부 또는 전무 �
 
 기본 자동 동작은 다음 코드처럼 `<Link>`만으로 사용한다.
 
-```tsx
+```tsx filename="app/ui/nav-link.tsx"
 import Link from 'next/link'
 
 export default function NavLink() {
@@ -57,7 +57,7 @@ export default function NavLink() {
 
 viewport 밖의 라우트를 분석 결과나 사용자 동작에 맞춰 준비하려면 `router.prefetch()`를 호출한다.
 
-```tsx
+```tsx filename="app/ui/hover-prefetch-link.tsx"
 'use client'
 
 import { useRouter } from 'next/navigation'

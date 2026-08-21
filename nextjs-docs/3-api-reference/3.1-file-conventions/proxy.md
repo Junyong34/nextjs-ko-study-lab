@@ -740,7 +740,7 @@ Next.js 15.1부터 `next/experimental/testing/server` 패키지에는 단위 테
 
 `unstable_doesProxyMatch` 함수를 사용하여 제공된 URL, 헤더 및 쿠키에 대해 프록시가 실행되는지 여부를 확인할 수 있다.
 
-```js
+```js filename="proxy.ts"
 import { unstable_doesProxyMatch } from 'next/experimental/testing/server'
 
 expect(
@@ -754,7 +754,7 @@ expect(
 
 전체 프록시 기능도 테스트할 수 있다.
 
-```js
+```js filename="proxy.ts"
 import { isRewrite, getRewrittenUrl } from 'next/experimental/testing/server'
 
 const request = new NextRequest('https://nextjs.org/docs')
@@ -806,7 +806,7 @@ npx @next/codemod@canary middleware-to-proxy .
 
 codemod는 파일 이름과 함수 이름을 `middleware`에서 `proxy`로 바꿉니다.
 
-```diff
+```diff filename="proxy.ts"
 // middleware.ts -> Proxy.ts
 
 - export function middleware() {

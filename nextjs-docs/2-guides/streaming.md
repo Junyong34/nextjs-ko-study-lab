@@ -49,7 +49,7 @@ RSC payload는 React가 페이지를 hydration하고 클라이언트 갱신을 �
 
 ![loading.js 파일 위치](./assets/streaming-02.webp)
 
-```tsx
+```tsx filename="app/dashboard/loading.tsx"
 // app/dashboard/loading.tsx
 export default function Loading() {
   return <div className="animate-pulse">Loading dashboard...</div>
@@ -68,7 +68,7 @@ layout은 `static shell`로 즉시 렌더링되고 loading skeleton이 바로 �
 
 여러 컴포넌트가 비동기 작업을 한다면 각각 별도 `<Suspense>`로 감싼다. 각 영역은 다른 영역을 기다리지 않고 완료되는 순서대로 스트리밍된다.
 
-```tsx
+```tsx filename="app/dashboard/page.tsx"
 import { Suspense } from 'react'
 
 export default function Dashboard() {
@@ -109,7 +109,7 @@ export default function Dashboard() {
 
 Server Component에서 요청을 시작하고 완료되지 않은 Promise를 Client Component의 prop으로 전달할 수 있다. Promise는 여러 계층을 지나도 되며 React `use`로 값을 읽는 컴포넌트만 `<Suspense>`로 감싸면 된다. 여러 컴포넌트가 같은 데이터가 필요하면 한 번 시작한 Promise를 Context Provider로 공유할 수 있다.
 
-```tsx
+```tsx filename="app/dashboard/page.tsx"
 // 서버에서 요청을 시작하지만 기다리지 않는다.
 const statsPromise = getStats()
 return (
@@ -123,7 +123,7 @@ return (
 
 React UI 밖에서는 Web Streams API로 원시 응답을 스트리밍한다. Server-Sent Events, 큰 파일 생성, 점진적 데이터 전송에 사용할 수 있다.
 
-```ts
+```ts filename="app/api/stream/route.ts"
 export async function GET() {
   const encoder = new TextEncoder()
   const stream = new ReadableStream({

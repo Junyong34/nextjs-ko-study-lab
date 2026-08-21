@@ -33,7 +33,7 @@ Next.js Bundle Analyzer는 Turbopack의 모듈 그래프와 통합되어 있다.
 
 다음 명령을 실행하고 브라우저에서 인터랙티브 뷰를 연다.
 
-```bash
+```bash filename="Terminal"
 npm run next experimental-analyze
 # 또는 pnpm next experimental-analyze / yarn next experimental-analyze / bun next experimental-analyze
 ```
@@ -54,14 +54,14 @@ treemap은 각 모듈을 사각형으로 보여주며, 사각형의 넓이가 �
 
 동료와 분석 결과를 공유하거나 최적화 전후의 번들 크기를 비교하려면, 인터랙티브 뷰 대신 `--output` 플래그로 분석 결과를 정적 파일로 저장할 수 있다.
 
-```bash
+```bash filename="Terminal"
 npm run next experimental-analyze -- --output
 # 또는 pnpm next experimental-analyze --output / yarn next experimental-analyze --output / bun next experimental-analyze --output
 ```
 
 이 명령은 결과를 `.next/diagnostics/analyze`에 기록한다. 이 디렉토리를 다른 곳에 복사해 결과를 비교할 수 있다.
 
-```bash
+```bash filename="Terminal"
 cp -r .next/diagnostics/analyze ./analyze-before-refactor
 ```
 
@@ -82,7 +82,7 @@ npm install @next/bundle-analyzer
 
 그다음 `next.config.js`에 bundle analyzer 설정을 추가한다.
 
-```js
+```js filename="next.config.js"
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {}
@@ -98,7 +98,7 @@ module.exports = withBundleAnalyzer(nextConfig)
 
 다음 명령으로 번들을 분석한다.
 
-```bash
+```bash filename="Terminal"
 ANALYZE=true npm run build
 # 또는 ANALYZE=true yarn build
 # 또는 ANALYZE=true pnpm build
@@ -114,7 +114,7 @@ ANALYZE=true npm run build
 
 아이콘 라이브러리나 유틸리티 라이브러리처럼 수백 개의 모듈을 export하는 패키지를 사용한다면, `next.config.js`의 `optimizePackageImports` 옵션으로 import가 처리되는 방식을 최적화할 수 있다. 이 옵션은 실제로 사용하는 모듈만 불러오면서도, named export가 많은 import 문을 그대로 편하게 쓸 수 있게 해준다.
 
-```js
+```js filename="next.config.js"
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -136,7 +136,7 @@ module.exports = nextConfig
 
 다음 예제에서는 prism 기반 하이라이터가 Client Component 안에서 실행된다. 최종 결과물은 `<code>` 블록 하나뿐이지만, 하이라이팅 라이브러리 전체가 클라이언트 JavaScript 번들에 포함된다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 // app/blog/[slug]/page.tsx
 'use client'
 
@@ -177,7 +177,7 @@ export default function Page() {
 
 대신 하이라이팅 로직을 Server Component로 옮기고 최종 HTML을 서버에서 렌더링한다. 클라이언트는 렌더링된 마크업만 받는다.
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 // app/blog/[slug]/page.tsx
 import { codeToHtml } from 'shiki'
 
@@ -211,7 +211,7 @@ Server Component와 Route Handler 안에서 import된 패키지는 Next.js가 �
 
 `next.config.js`의 `serverExternalPackages` 옵션으로 특정 패키지를 번들링에서 제외할 수 있다.
 
-```js
+```js filename="next.config.js"
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {

@@ -88,7 +88,7 @@ export default function Header() {
 
 ### 매개변수 (Parameters)
 
-```tsx
+```tsx filename="app/hint.tsx"
 const { pending } = useLinkStatus()
 ```
 

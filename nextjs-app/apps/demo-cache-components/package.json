@@ -12,7 +12,7 @@
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "@study/ui": "workspace:*"
+    "@study/demo-kit": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "catalog:",

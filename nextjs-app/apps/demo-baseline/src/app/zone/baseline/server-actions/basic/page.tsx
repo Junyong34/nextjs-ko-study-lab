@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useTransition } from 'react'
-import { DemoContainer, ExpectedActualPanel, DemoResetButton } from '@study/ui'
+import { DemoContainer, ExpectedActualPanel, DemoResetButton } from '@study/demo-kit'
 import { addItem, resetItems, type DemoItem } from './actions'
 
 export default function ServerActionsBasicDemoPage() {
@@ -56,23 +56,7 @@ export default function ServerActionsBasicDemoPage() {
 
   return (
     <DemoContainer className="space-y-4">
-      {/* 데모 컨트롤 바 */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-zinc-200 bg-zinc-50/80 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/60">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-zinc-900 dark:text-zinc-100">
-              Server Actions 기본 폼 처리 데모
-            </span>
-            <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-[10px] text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-              zone: baseline
-            </span>
-          </div>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-            Next.js Server Action(`'use server'`)을 실행하여 서버 상태를 갱신하고 결과를 실시간 반영합니다.
-          </p>
-        </div>
-        <DemoResetButton onReset={handleReset} label="상태 초기화" />
-      </div>
+      {/* 제목·설명·zone은 셸이 그린다 (규칙 12). 여기는 데모 본체와 조작만 둔다. */}
 
       {/* 폼 인터랙션 */}
       <form onSubmit={handleFormSubmit} className="flex gap-2">
@@ -93,6 +77,11 @@ export default function ServerActionsBasicDemoPage() {
           {isPending ? '처리 중...' : '항목 추가'}
         </button>
       </form>
+
+      {/* 상태 초기화는 chrome이 아니라 데모 조작이므로 남긴다 */}
+      <div className="flex justify-end">
+        <DemoResetButton onReset={handleReset} label="상태 초기화" />
+      </div>
 
       {/* 기대값 vs 실제값 검증 패널 */}
       <ExpectedActualPanel

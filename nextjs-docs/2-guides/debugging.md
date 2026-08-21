@@ -18,7 +18,7 @@ Next.js는 source map을 제공하므로 번들 결과가 아니라 작성한 �
 
 프로젝트 루트에 `.vscode/launch.json`을 만들고 서버, 클라이언트, full stack 구성을 나눈다.
 
-```json
+```json filename="launch.json"
 {
   "version": "0.2.0",
   "configurations": [
@@ -73,13 +73,13 @@ React 전용 디버깅에는 React Developer Tools 브라우저 확장을 사용
 
 Node.js inspector를 켜서 개발 서버를 실행한다.
 
-```bash
+```bash filename="launch.json"
 pnpm dev --inspect
 ```
 
 실행하면 다음과 같이 inspector 주소와 서버 주소가 출력된다.
 
-```text
+```text filename="Terminal"
 Debugger listening on ws://127.0.0.1:9229/0cf90313-350d-4466-a748-cd60f4e47c95
 For help, see: https://nodejs.org/learn/getting-started/debugging
 ready - started server on 0.0.0.0:3000, url: http://localhost:3000

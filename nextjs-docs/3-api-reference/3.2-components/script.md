@@ -17,7 +17,7 @@
 
 이 API reference는 Script 컴포넌트에서 사용할 수 있는 [props](#props)를 이해하는 데 도움을 준다. 기능과 사용법은 [Optimizing Scripts](../../2-guides/scripts.md) 문서를 참고한다.
 
-```tsx
+```tsx filename="app/dashboard/page.tsx"
 import Script from 'next/script'
 
 export default function Dashboard() {
@@ -72,7 +72,7 @@ Script 컴포넌트에서 사용할 수 있는 props는 다음과 같다.
 
 **이 전략은 가능한 한 빨리 가져와야 하는 중요한 스크립트에만 사용해야 한다.**
 
-```tsx
+```tsx filename="app/layout.tsx"
 import Script from 'next/script'
 
 export default function RootLayout({
@@ -107,7 +107,7 @@ export default function RootLayout({
 
 `afterInteractive` 스크립트는 어떤 페이지나 레이아웃 안에도 배치할 수 있으며, 해당 페이지(또는 페이지 그룹)가 브라우저에서 열릴 때만 로드되고 실행된다.
 
-```tsx
+```tsx filename="app/page.js"
 import Script from 'next/script'
 
 export default function Page() {
@@ -130,7 +130,7 @@ export default function Page() {
 
 `lazyOnload` 스크립트는 어떤 페이지나 레이아웃 안에도 배치할 수 있으며, 해당 페이지(또는 페이지 그룹)가 브라우저에서 열릴 때만 로드되고 실행된다.
 
-```tsx
+```tsx filename="app/page.js"
 import Script from 'next/script'
 
 export default function Page() {
@@ -155,7 +155,7 @@ export default function Page() {
 
 `worker`를 전략으로 사용하려면 `next.config.js`에서 `nextScriptWorkers` 플래그를 활성화해야 한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     nextScriptWorkers: true,
@@ -165,7 +165,7 @@ module.exports = {
 
 `worker` 스크립트는 **현재 `pages/` 디렉터리에서만** 사용할 수 있다.
 
-```tsx
+```tsx filename="pages/home.tsx"
 import Script from 'next/script'
 
 export default function Home() {
@@ -185,7 +185,7 @@ export default function Home() {
 
 다음은 라이브러리가 로드된 뒤에만 lodash 메서드를 실행하는 예시다.
 
-```tsx
+```tsx filename="app/page.tsx"
 'use client'
 
 import Script from 'next/script'
@@ -212,7 +212,7 @@ export default function Page() {
 
 다음은 컴포넌트가 마운트될 때마다 Google Maps JS 임베드를 다시 초기화하는 예시다.
 
-```tsx
+```tsx filename="app/page.tsx"
 'use client'
 
 import { useRef } from 'react'
@@ -245,7 +245,7 @@ export default function Page() {
 
 스크립트가 로드에 실패한 경우를 잡아내는 것이 유용할 때가 있다. 이런 오류는 `onError` 속성으로 처리할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 'use client'
 
 import Script from 'next/script'

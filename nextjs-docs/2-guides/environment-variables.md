@@ -21,7 +21,7 @@ Next.js는 `.env*` 파일의 값을 `process.env`에 로드한다. 기본 환경
 
 프로젝트 루트의 `.env`에 값을 정의하면 Next.js가 Node.js 환경의 `process.env`로 로드한다.
 
-```bash
+```bash filename=".env"
 DB_HOST=localhost
 DB_USER=myuser
 DB_PASS=mypassword
@@ -29,7 +29,7 @@ DB_PASS=mypassword
 
 App Router에서는 Server Component와 Route Handler 같은 서버 코드에서 사용할 수 있다.
 
-```ts
+```ts filename="app/api/route.js"
 // app/api/route.ts
 export async function GET() {
   const db = await myDB.connect({
@@ -57,18 +57,18 @@ PRIVATE_KEY_ESCAPED="-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE 
 
 ORM 설정이나 테스트 실행기처럼 Next.js 런타임 밖의 루트 설정 파일에서도 같은 규칙으로 환경 변수를 읽으려면 `@next/env`의 `loadEnvConfig`를 사용한다.
 
-```bash
+```bash filename="envConfig.ts"
 npm install @next/env
 ```
 
-```ts
+```ts filename="envConfig.ts"
 // envConfig.ts
 import { loadEnvConfig } from '@next/env'
 
 loadEnvConfig(process.cwd())
 ```
 
-```ts
+```ts filename="orm.config.ts"
 // orm.config.ts
 import './envConfig'
 
@@ -83,7 +83,7 @@ export default defineConfig({
 
 `.env*` 안에서 `$VARIABLE`로 다른 환경 변수를 참조하면 Next.js가 값을 확장한다.
 
-```bash
+```bash filename=".env"
 TWITTER_USER=nextjs
 TWITTER_URL=https://x.com/$TWITTER_USER
 ```
@@ -96,7 +96,7 @@ TWITTER_URL=https://x.com/$TWITTER_USER
 
 `NEXT_PUBLIC_`이 없는 변수는 Node.js 환경에서만 사용할 수 있다. 브라우저에서 필요한 값은 접두사를 붙인다.
 
-```bash
+```bash filename=".env"
 NEXT_PUBLIC_ANALYTICS_ID=abcdefghijk
 ```
 
@@ -106,7 +106,7 @@ Next.js는 `next build` 때 `process.env.NEXT_PUBLIC_ANALYTICS_ID` 참조를 실
 
 Next.js는 정적 속성 접근만 inline한다. 다음과 같은 다이나믹 조회는 변환하지 않는다.
 
-```js
+```js filename="pages/index.js"
 const key = 'NEXT_PUBLIC_ANALYTICS_ID'
 setupAnalyticsService(process.env[key])
 
@@ -118,7 +118,7 @@ setupAnalyticsService(env.NEXT_PUBLIC_ANALYTICS_ID)
 
 환경 변수는 기본적으로 서버에서만 사용할 수 있으므로 App Router의 다이나믹 렌더링에서는 요청 시점 값을 안전하게 읽을 수 있다. [`connection()`](../3-api-reference/3.3-functions/connection.md), `cookies()`, `headers()` 같은 요청 시점 API를 사용하면 해당 코드는 런타임에 평가된다.
 
-```tsx
+```tsx filename="app/page.ts"
 import { connection } from 'next/server'
 
 export default async function Component() {
@@ -140,7 +140,7 @@ export default async function Component() {
 
 테스트 전역 설정에서도 `@next/env`를 사용할 수 있다.
 
-```js
+```js filename="app/page.ts"
 import { loadEnvConfig } from '@next/env'
 
 export default async () => {

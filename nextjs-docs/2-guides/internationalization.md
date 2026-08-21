@@ -26,7 +26,7 @@ Next.js는 여러 언어를 지원하도록 콘텐츠 라우팅과 렌더링을 
 
 브라우저의 언어 선호를 사용해 locale을 고르는 것을 권장한다. 사용자가 선호 언어를 바꾸면 요청의 `Accept-Language` 헤더가 달라진다. `Negotiator`로 선호 목록을 읽고 `@formatjs/intl-localematcher`로 지원 locale과 대조할 수 있다.
 
-```ts
+```ts filename="proxy.js"
 import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 
@@ -39,7 +39,7 @@ match(languages, locales, 'en-US') // 'en-US'
 
 국제화 라우트는 `/fr/products` 같은 sub-path나 `my-site.fr/products` 같은 도메인을 사용할 수 있다. locale이 없는 요청은 [Proxy](../3-api-reference/3.1-file-conventions/proxy.md)에서 선택한 locale 경로로 redirect한다.
 
-```ts
+```ts filename="proxy.js"
 import { NextResponse } from 'next/server'
 
 const locales = ['en-US', 'nl-NL', 'nl']
@@ -61,7 +61,7 @@ export const config = { matcher: ['/((?!_next).*)'] }
 
 `app/`의 모든 특수 파일을 `app/[lang]` 아래에 두면 Router가 locale을 다이나믹 segment로 처리하고 모든 layout과 page에 `lang`을 전달한다. root layout도 `app/[lang]/layout.js`에 둘 수 있다.
 
-```tsx
+```tsx filename="app/[lang]/page.tsx"
 export default async function Page({ params }: PageProps<'/[lang]'>) {
   const { lang } = await params
   return <p>{lang}</p>
@@ -74,7 +74,7 @@ export default async function Page({ params }: PageProps<'/[lang]'>) {
 
 사용자 locale에 따라 표시 문자열을 바꾸는 localization은 Next.js에만 있는 패턴이 아니다. 언어별 dictionary를 만들고 키를 번역 문자열에 대응시킨다.
 
-```json
+```json filename="dictionaries/en.json"
 {
   "products": {
     "cart": "Add to Cart"
@@ -84,7 +84,7 @@ export default async function Page({ params }: PageProps<'/[lang]'>) {
 
 dictionary는 다이나믹 import로 요청한 locale만 불러온다. `hasLocale` type guard는 `string`인 `lang`을 지원 locale로 좁히고 번역이 없는 경로에는 runtime 오류 대신 404를 반환하게 한다.
 
-```ts
+```ts filename="app/[lang]/dictionaries.ts"
 import 'server-only'
 
 const dictionaries = {
@@ -104,7 +104,7 @@ export const getDictionary = async (locale: Locale) => dictionaries[locale]()
 
 공유 데이터 유틸리티나 깊은 Server Component까지 `lang` prop을 계속 전달하는 대신 [`next/root-params`](../3-api-reference/3.3-functions/next-root-params.md)를 사용할 수 있다. `[lang]`이 root layout 위의 다이나믹 segment이므로 `next/root-params`가 `lang()` getter를 제공한다.
 
-```ts
+```ts filename="app/[lang]/dictionaries.ts"
 import { lang } from 'next/root-params'
 import { notFound } from 'next/navigation'
 
@@ -125,7 +125,7 @@ export const getDictionary = async () => {
 
 `generateStaticParams`로 지원 locale 경로를 빌드 시점에 생성할 수 있다. root layout에 두면 전체 앱의 locale segment에 적용할 수 있다.
 
-```tsx
+```tsx filename="app/[lang]/layout.tsx"
 export async function generateStaticParams() {
   return [{ lang: 'en-US' }, { lang: 'de' }]
 }

@@ -38,7 +38,7 @@ Turbopack은 플랫폼별 네이티브 바인딩이 필요하다. 다음 플랫�
 
 네이티브 바인딩이 없는 플랫폼(예: FreeBSD, OpenBSD)에서는 Next.js가 WebAssembly(WASM) 바인딩으로 대체(fallback)한다. WASM 바인딩은 컴파일·최소화(minification) 같은 핵심 SWC 기능은 지원하지만 **Turbopack은 지원하지 않는다**. 이런 플랫폼에서는 `--webpack` 플래그를 사용한다.
 
-```bash
+```bash filename="package.json"
 next dev --webpack
 next build --webpack
 ```
@@ -47,7 +47,7 @@ next build --webpack
 
 Turbopack은 이제 Next.js의 **기본 번들러**다. Turbopack을 사용하는 데 별도의 설정이 필요하지 않다.
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "dev": "next dev",
@@ -61,7 +61,7 @@ Turbopack은 이제 Next.js의 **기본 번들러**다. Turbopack을 사용하�
 
 Turbopack 대신 webpack이 필요하다면 `--webpack` 플래그로 선택할 수 있다.
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "dev": "next dev --webpack",
@@ -158,7 +158,7 @@ Turbopack은 `import.meta.env`를 통해 내장 환경 메타데이터를 지원
 
 이 값들은 정적으로 분석되므로, Turbopack이 도달 불가능한 분기를 제거할 수 있다.
 
-```ts
+```ts filename="app/example.ts"
 if (import.meta.env.DEV) {
   console.log('development mode')
 }
@@ -166,7 +166,7 @@ if (import.meta.env.DEV) {
 
 전체 객체를 읽거나, 구조 분해하거나, 정적 대괄호 접근으로 사용할 수도 있다.
 
-```ts
+```ts filename="app/example.ts"
 const { MODE, SSR } = import.meta.env
 const baseUrl = import.meta.env['BASE_URL']
 ```
@@ -177,7 +177,7 @@ const baseUrl = import.meta.env['BASE_URL']
 
 Turbopack은 glob 패턴으로 여러 모듈을 한 번에 import하는, Vite와 호환되는 API인 `import.meta.glob()`을 지원한다. 결과는 호출 파일 기준 상대 경로를 키로 하는 객체다.
 
-```ts
+```ts filename="app/example.ts"
 const modules = import.meta.glob('./dir/*.js')
 // {
 //   './dir/foo.js': () => import('./dir/foo.js'),
@@ -228,13 +228,13 @@ const setups = import.meta.glob('./dir/*.js', { import: 'setup', eager: true })
 
 `query` 옵션으로 모든 import 요청에 쿼리 문자열을 덧붙일 수 있다.
 
-```ts
+```ts filename="next.config.ts"
 const rawFiles = import.meta.glob('./dir/*.txt', { query: '?raw' })
 ```
 
 `query` 옵션은 객체도 받을 수 있다. 키와 값은 URL 인코딩되어 쿼리 문자열로 합쳐진다.
 
-```ts
+```ts filename="next.config.ts"
 const modules = import.meta.glob('./*.ts', {
   query: { bar: 'foo', raw: true },
 })
@@ -243,7 +243,7 @@ const modules = import.meta.glob('./*.ts', {
 
 이 쿼리는 module rule로 그대로 전달될 뿐 그 자체로는 의미가 없다. Vite와 달리 Turbopack에는 내장된 `?raw`나 `?url` 처리가 없으므로, 해당 파일을 어떻게 로드할지 [rule](./3.5-config/3.5.1-next-config-js/turbopack.md#module-types)로 직접 매칭해야 한다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -262,7 +262,7 @@ export default nextConfig
 
 첫 번째 인자로 glob 패턴 배열을 전달할 수 있다. 패턴 앞에 `!`를 붙이면 일치하는 파일을 제외한다.
 
-```ts
+```ts filename="app/example.ts"
 // 여러 디렉토리를 결합한다
 const modules = import.meta.glob(['./dir/*.js', './other/*.js'])
 
@@ -327,7 +327,7 @@ Turbopack은 모듈을 해석할 때 루트 디렉토리를 기준으로 삼는�
 
 Turbopack은 별도로 순서가 정해지지 않은 [CSS 모듈](../1-getting-started/css.md#css-modules)의 순서를 JS import 순서에 따라 정한다. 예를 들어 다음 코드에서
 
-```tsx
+```tsx filename="components/BlogPost.jsx"
 import utilStyles from './utils.module.css'
 import buttonStyles from './button.module.css'
 export default function BlogPost() {
@@ -351,19 +351,19 @@ Turbopack은 `node_modules` 안의 Sass 파일을 import하는 것을 별도 설
 
 변경 전:
 
-```scss
+```scss filename="styles/globals.scss"
 @import '~bootstrap/dist/css/bootstrap.min.css';
 ```
 
 변경 후:
 
-```scss
+```scss filename="styles/globals.scss"
 @import 'bootstrap/dist/css/bootstrap.min.css';
 ```
 
 import 구문을 직접 수정할 수 없다면, `turbopack.resolveAlias` 설정을 추가해 `~` 문법을 실제 경로로 매핑할 수 있다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   turbopack: {
     resolveAlias: {
@@ -445,7 +445,7 @@ Turbopack은 `next.config.js`(또는 `next.config.ts`)의 `turbopack` 키를 통
 
 `turbopack` 키 아래에서 별칭과 커스텀 파일 확장자를 함께 설정하는 예시는 다음과 같다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   turbopack: {
     resolveAlias: {
@@ -462,7 +462,7 @@ module.exports = {
 
 성능이나 메모리 문제를 겪고 있고 Next.js 팀이 이를 진단하는 데 도움을 주고 싶다면, dev 명령어에 `--internal-trace` 플래그를 추가해 추적 파일을 생성할 수 있다.
 
-```bash
+```bash filename="package.json"
 next dev --internal-trace
 ```
 

@@ -19,7 +19,7 @@
 
 기본 사용법:
 
-```tsx
+```tsx filename="app/page.tsx"
 import Link from 'next/link'
 
 export default function Page() {
@@ -46,7 +46,7 @@ export default function Page() {
 
 이동할 경로 또는 URL이다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Link from 'next/link'
 
 // /about?name=test 로 이동한다
@@ -68,7 +68,7 @@ export default function Page() {
 
 **기본값은 `false`다.** `true`로 설정하면 `next/link`는 새 URL을 [브라우저 히스토리](https://developer.mozilla.org/docs/Web/API/History_API) 스택에 추가하는 대신 현재 히스토리 상태를 교체한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Link from 'next/link'
 
 export default function Page() {
@@ -88,7 +88,7 @@ export default function Page() {
 
 > **알아두면 좋은 점**: Next.js는 스크롤 동작을 관리하기 전에 `scroll: false` 여부를 먼저 확인한다. 스크롤이 활성화돼 있다면 내비게이션과 관련된 DOM 노드를 찾아 각 최상위 엘리먼트를 검사한다. `sticky`나 `fixed`로 위치가 고정된 엘리먼트, `getBoundingClientRect`로 계산했을 때 보이지 않는 엘리먼트처럼 스크롤이 불가능하거나 렌더링된 HTML이 없는 엘리먼트는 모두 건너뛴다. 이후 뷰포트 안에서 보이는 스크롤 가능한 엘리먼트를 찾을 때까지 형제 엘리먼트를 계속 탐색한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Link from 'next/link'
 
 export default function Page() {
@@ -112,7 +112,7 @@ prefetch는 `<Link />` 컴포넌트가 사용자의 뷰포트에 들어올 때(�
 
 > **Partial Prefetching이 활성화된 경우**([`partialPrefetching: true`](../3.5-config/3.5.1-next-config-js/partialPrefetching.md)): 기본 동작이 달라진다. `auto`는 전체 페이지 대신 라우트별 [App Shell](https://nextjs.org/docs/app/glossary#app-shell)(라우트의 정적·캐시된 콘텐츠)을 prefetch한다. 전체 동작 변화는 [Adopting Partial Prefetching](../../2-guides/adopting-partial-prefetching.md)을 참고한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Link from 'next/link'
 
 export default function Page() {
@@ -128,7 +128,7 @@ export default function Page() {
 
 클라이언트 사이드 내비게이션 중에 호출되는 이벤트 핸들러다. 핸들러는 `preventDefault()` 메서드를 포함한 이벤트 객체를 받으므로, 필요하다면 내비게이션을 취소할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Link from 'next/link'
 
 export default function Page() {
@@ -159,7 +159,7 @@ export default function Page() {
 
 내비게이션에 적용할 전환 타입(transition type) 목록이다. 이 타입들은 내비게이션 전환 내부에서 [`React.addTransitionType`](https://react.dev/reference/react/addTransitionType)에 전달되며, [`<ViewTransition>`](https://react.dev/reference/react/ViewTransition) 컴포넌트가 내비게이션 종류에 따라 다른 애니메이션을 적용할 수 있게 한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Link from 'next/link'
 
 export default function Page() {
@@ -179,7 +179,7 @@ export default function Page() {
 
 [다이나믹 세그먼트](../3.1-file-conventions/page.md)로 링크할 때는 [템플릿 리터럴과 문자열 삽입](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals)을 사용해 링크 목록을 생성할 수 있다. 예를 들어 블로그 글 목록을 생성하는 경우다.
 
-```tsx
+```tsx filename="app/blog/post-list.tsx"
 import Link from 'next/link'
 
 interface Post {
@@ -205,7 +205,7 @@ export default function PostList({ posts }: { posts: Post[] }) {
 
 [`usePathname()`](../3.3-functions/use-pathname.md)을 사용하면 링크가 활성 상태인지 확인할 수 있다. 예를 들어 현재 `pathname`이 링크의 `href`와 일치하는지 확인해 활성 링크에 클래스를 추가할 수 있다.
 
-```tsx
+```tsx filename="app/ui/nav-links.tsx"
 'use client'
 
 import { usePathname } from 'next/navigation'
@@ -235,7 +235,7 @@ export function Links() {
 
 내비게이션 시 특정 `id`로 스크롤을 이동시키고 싶다면, URL 뒤에 `#` 해시 링크를 붙이거나 `href` prop에 해시 링크를 바로 전달하면 된다. `<Link>`가 `<a>` 엘리먼트로 렌더링되기 때문에 가능한 동작이다.
 
-```tsx
+```tsx filename="app/page.tsx"
 <Link href="/dashboard#settings">Settings</Link>
 
 // 출력 결과
@@ -248,7 +248,7 @@ export function Links() {
 
 `Link` 컴포넌트의 기본 동작은 새 URL을 `history` 스택에 `push`하는 것이다. 다음 예시처럼 `replace` prop을 사용하면 새 항목을 추가하지 않게 할 수 있다.
 
-```tsx
+```tsx filename="app/page.js"
 import Link from 'next/link'
 
 export default function Page() {
@@ -266,7 +266,7 @@ Next.js에서 `<Link>`의 기본 스크롤 동작은 브라우저의 뒤로/앞�
 
 다만 Page가 뷰포트 안에 보이지 않는 상태라면 Next.js는 첫 Page 엘리먼트로 스크롤을 이동시킨다. 이 동작을 비활성화하려면 `<Link>` 컴포넌트에 `scroll={false}`를, 또는 `router.push()`나 `router.replace()`에 `scroll: false`를 전달한다.
 
-```tsx
+```tsx filename="app/page.js"
 import Link from 'next/link'
 
 export default function Page() {
@@ -280,7 +280,7 @@ export default function Page() {
 
 `router.push()`나 `router.replace()`를 사용하는 경우:
 
-```tsx
+```tsx filename="app/page.tsx"
 // useRouter
 import { useRouter } from 'next/navigation'
 
@@ -293,7 +293,7 @@ router.push('/dashboard', { scroll: false })
 
 Next.js는 스크롤 대상을 찾을 때 `sticky`나 `fixed`로 위치가 고정된 엘리먼트를 건너뛰기 때문에, 내비게이션 이후 콘텐츠가 sticky 헤더 뒤에 가려질 수 있다. 예를 들어 레이아웃에 sticky 헤더가 있는 경우다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import './globals.css'
 
 export default function RootLayout({
@@ -316,7 +316,7 @@ export default function RootLayout({
 
 스크롤 컨테이너에 [`scroll-padding-top`](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-top)을 사용해 헤더 높이를 보정할 수 있다.
 
-```css
+```css filename="app/globals.css"
 html {
   scroll-padding-top: 64px; /* sticky 헤더의 높이와 맞춘다 */
 }
@@ -330,7 +330,7 @@ html {
 
 예를 들어 인증된 사용자와 방문자 뷰가 모두 있는 `/dashboard` 라우트를 제공하려면, Proxy에서 다음과 같이 올바른 페이지로 사용자를 리다이렉트할 수 있다.
 
-```tsx
+```tsx filename="proxy.ts"
 import { NextResponse } from 'next/server'
 
 export function proxy(request: Request) {
@@ -347,7 +347,7 @@ export function proxy(request: Request) {
 
 이 경우 `<Link />` 컴포넌트에서는 다음 코드를 사용해야 한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 'use client'
 
 import Link from 'next/link'
@@ -368,7 +368,7 @@ export default function Page() {
 
 폼에 저장하지 않은 변경 사항이 있는 경우처럼 특정 조건에서 내비게이션을 막고 싶다면 `onNavigate` prop을 사용할 수 있다. 폼을 편집하는 동안 앱의 모든 링크에서 내비게이션을 막는 것처럼 여러 컴포넌트에 걸쳐 내비게이션 차단이 필요하다면, React Context로 이 차단 상태를 깔끔하게 공유할 수 있다. 먼저 내비게이션 차단 상태를 추적하는 Context를 만든다.
 
-```tsx
+```tsx filename="app/contexts/navigation-blocker.tsx"
 'use client'
 
 import { createContext, useState, useContext } from 'react'
@@ -405,7 +405,7 @@ export function useNavigationBlocker() {
 
 Context를 사용하는 폼 컴포넌트를 만든다.
 
-```tsx
+```tsx filename="app/components/form.tsx"
 'use client'
 
 import { useNavigationBlocker } from '../contexts/navigation-blocker'
@@ -430,7 +430,7 @@ export default function Form() {
 
 내비게이션을 막는 커스텀 Link 컴포넌트를 만든다.
 
-```tsx
+```tsx filename="app/components/custom-link.tsx"
 'use client'
 
 import Link from 'next/link'
@@ -463,7 +463,7 @@ export function CustomLink({ children, ...props }: CustomLinkProps) {
 
 내비게이션 컴포넌트를 만든다.
 
-```tsx
+```tsx filename="app/components/nav.tsx"
 'use client'
 
 import { CustomLink as Link } from './custom-link'
@@ -480,7 +480,7 @@ export default function Nav() {
 
 마지막으로 루트 레이아웃을 `NavigationBlockerProvider`로 감싸고, 페이지에서 이 컴포넌트들을 사용한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { NavigationBlockerProvider } from './contexts/navigation-blocker'
 
 export default function RootLayout({
@@ -500,7 +500,7 @@ export default function RootLayout({
 
 이제 `Nav`와 `Form` 컴포넌트를 페이지에서 사용한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Nav from './components/nav'
 import Form from './components/form'
 

@@ -23,7 +23,7 @@ Next.js는 애플리케이션 안의 로컬 MDX와 서버에서 동적으로 가
 
 `@next/mdx`와 관련 패키지를 설치하면 `/pages` 또는 `/app` 안의 `.md`, `.mdx` 파일을 page로 처리하거나 다른 파일에서 가져올 수 있다.
 
-```bash
+```bash filename="mdx-components.tsx"
 pnpm add @next/mdx @mdx-js/loader @mdx-js/react @types/mdx
 ```
 
@@ -31,7 +31,7 @@ pnpm add @next/mdx @mdx-js/loader @mdx-js/react @types/mdx
 
 프로젝트 root의 설정 파일에서 Markdown과 MDX 확장자를 page로 인식시키고 MDX 설정을 결합한다.
 
-```js
+```js filename="next.config.mjs"
 import createMDX from '@next/mdx'
 
 /** @type {import('next').NextConfig} */
@@ -53,7 +53,7 @@ export default withMDX(nextConfig)
 
 `@next/mdx`는 기본적으로 `.mdx`만 컴파일한다. webpack에서 `.md`까지 처리하려면 `extension` 옵션을 추가한다.
 
-```js
+```js filename="next.config.mjs"
 const withMDX = createMDX({
   extension: /\.(md|mdx)$/,
 })
@@ -63,7 +63,7 @@ const withMDX = createMDX({
 
 프로젝트 root에 [`mdx-components.tsx`](../3-api-reference/3.1-file-conventions/mdx-components.md) 또는 `.js` 파일을 만든다. `app`이나 `pages`와 같은 수준에 두며, `src`를 사용한다면 그 안에 둘 수 있다.
 
-```tsx
+```tsx filename="mdx-components.tsx"
 import type { MDXComponents } from 'mdx/types'
 
 const components: MDXComponents = {}
@@ -88,7 +88,7 @@ export function useMDXComponents(): MDXComponents {
 
 MDX를 라우트 밖의 콘텐츠 디렉터리에 두고 page에서 컴포넌트처럼 가져올 수 있다.
 
-```tsx
+```tsx filename="app/mdx-page/page.tsx"
 import Welcome from '@/markdown/welcome.mdx'
 
 export default function Page() {
@@ -102,7 +102,7 @@ export default function Page() {
 
 ![다이나믹 MDX 컴포넌트를 위한 라우트 segment](./assets/mdx-01.webp)
 
-```tsx
+```tsx filename="app/blog/[slug]/page.tsx"
 export default async function Page({
   params,
 }: {
@@ -133,7 +133,7 @@ Markdown은 렌더링될 때 `h2`, `p`, `ul`, `li` 같은 네이티브 HTML 요�
 
 `mdx-components.tsx`에 등록한 매핑은 모든 MDX 파일에 적용된다. 예를 들어 `h1`을 별도 markup으로 바꾸거나 Markdown의 `img`를 `next/image`로 렌더링할 수 있다.
 
-```tsx
+```tsx filename="mdx-components.tsx"
 import type { MDXComponents } from 'mdx/types'
 import Image, { type ImageProps } from 'next/image'
 
@@ -159,7 +159,7 @@ export function useMDXComponents(): MDXComponents {
 
 가져온 MDX 컴포넌트에 `components` prop을 넘기면 전역 매핑과 병합되고 같은 키는 지역 설정이 덮어쓴다.
 
-```tsx
+```tsx filename="app/mdx-page/page.tsx"
 import Welcome from '@/markdown/welcome.mdx'
 
 const overrideComponents = {
@@ -179,7 +179,7 @@ App Router의 `layout.tsx`로 여러 MDX page에 공통 구조와 style을 적�
 
 Tailwind를 쓴다면 [`@tailwindcss/typography`](https://tailwindcss.com/docs/typography-plugin) plugin의 `prose` class를 공유 layout에 적용해 Markdown 콘텐츠의 typography를 재사용할 수 있다.
 
-```tsx
+```tsx filename="mdx-components.tsx"
 export default function MdxLayout({
   children,
 }: {
@@ -195,7 +195,7 @@ Frontmatter는 page 정보를 담는 YAML과 비슷한 key/value 형식이다. `
 
 MDX도 JavaScript 컴포넌트처럼 값을 export할 수 있다. 콘텐츠 파일이 `metadata`를 export하면 page에서 함께 가져올 수 있다.
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 import BlogPost, { metadata } from '@/content/blog-post.mdx'
 
 export default function Page() {
@@ -219,7 +219,7 @@ remark는 Markdown을 다루는 도구 생태계고 rehype는 HTML을 다룬다.
 
 Turbopack에서는 최신 `@next/mdx`를 사용하고 plugin 이름을 문자열로 지정한다. 옵션이 있으면 `[pluginName, serializableOptions]` 형태로 전달한다.
 
-```js
+```js filename="next.config.mjs"
 const withMDX = createMDX({
   options: {
     remarkPlugins: [
@@ -246,7 +246,7 @@ React는 Markdown을 직접 이해하지 못한다. `unified` pipeline에서 `re
 
 Next.js는 Rust로 작성된 새 MDX 컴파일러를 지원한다. 아직 실험적이며 프로덕션 사용을 권장하지 않는다. `withMDX`에 전달하는 Next.js 설정에서 `experimental.mdxRs`를 켠다.
 
-```js
+```js filename="next.config.js"
 module.exports = withMDX({
   experimental: {
     mdxRs: true,

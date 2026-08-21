@@ -27,7 +27,7 @@ observability는 로그, metric, trace로 앱의 동작과 성능을 이해하�
 pnpm add @vercel/otel @opentelemetry/sdk-logs @opentelemetry/api-logs @opentelemetry/instrumentation
 ```
 
-```ts
+```ts filename="your-project/instrumentation.ts"
 // instrumentation.ts
 import { registerOTel } from '@vercel/otel'
 
@@ -46,11 +46,11 @@ export function register() {
 
 `@vercel/otel`이 제공하지 않는 기능이 필요하면 NodeSDK를 직접 구성할 수 있다. NodeSDK는 Edge Runtime과 호환되지 않으므로 Node.js에서만 import한다.
 
-```bash
+```bash filename="instrumentation.node.ts"
 pnpm add @opentelemetry/sdk-node @opentelemetry/resources @opentelemetry/semantic-conventions @opentelemetry/sdk-trace-node @opentelemetry/exporter-trace-otlp-http
 ```
 
-```ts
+```ts filename="instrumentation.ts"
 // instrumentation.ts
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
@@ -59,7 +59,7 @@ export async function register() {
 }
 ```
 
-```ts
+```ts filename="instrumentation.node.ts"
 // instrumentation.node.ts
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { resourceFromAttributes } from '@opentelemetry/resources'

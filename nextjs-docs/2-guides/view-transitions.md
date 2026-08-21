@@ -18,7 +18,7 @@ React의 `<ViewTransition>`은 DOM 변화 전후를 연결해 브라우저 View 
 
 목록과 상세 화면의 같은 이미지에 동일한 `name`을 부여하면 shared element로 연결된다.
 
-```tsx
+```tsx filename="components/photo-grid.tsx"
 <ViewTransition name={`photo-${photo.id}`}>
   <Image src={photo.src} alt={photo.title} />
 </ViewTransition>
@@ -36,7 +36,7 @@ forward/back 방향에 서로 다른 전환 class를 사용하면 계층을 더 
 
 `prefers-reduced-motion: reduce`에서는 이동과 scale을 제거하거나 전환 시간을 사실상 없애 사용자의 모션 설정을 존중한다.
 
-```css
+```css filename="app/globals.css"
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*) {
     animation-duration: 0.01ms;

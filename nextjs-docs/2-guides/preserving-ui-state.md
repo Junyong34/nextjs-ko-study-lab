@@ -30,7 +30,7 @@ mount 시 한 번 실행하는 초기화 로직은 트리가 보존되면 다시
 
 작성 중 입력은 뒤로 갔다 돌아올 때 보존하면 유용하다. 제출 완료 뒤에는 명시적으로 `reset()`하거나 form에 새 `key`를 부여한다. 제출 상태와 성공 메시지는 다음 제출 또는 내비게이션에서 초기화해 과거 결과가 남지 않게 한다.
 
-```tsx
+```tsx filename="app/new/page.tsx"
 'use client'
 
 export function ContactForm() {

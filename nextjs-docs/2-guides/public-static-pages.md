@@ -22,7 +22,7 @@ public page는 모든 사용자에게 같은 콘텐츠를 보여주는 랜딩 �
 
 #### 1단계: 정적 헤더
 
-```tsx
+```tsx filename="app/products/page.tsx"
 function Header() {
   return <h1>Shop</h1>
 }
@@ -38,7 +38,7 @@ export default async function Page() {
 
 [`next build`](../3-api-reference/3.6-cli/next.md) 출력의 `○` 표시는 라우트가 별도 설정 없이 정적 콘텐츠로 prerender되었음을 뜻한다.
 
-```text
+```text filename="Terminal"
 Route (app)      Revalidate  Expire
 ┌ ○ /products           15m      1y
 └ ○ /_not-found
@@ -48,7 +48,7 @@ Route (app)      Revalidate  Expire
 
 #### 2단계: 상품 목록 추가
 
-```tsx
+```tsx filename="app/products/page.tsx"
 import db from '@/db'
 import { List } from '@/app/products/ui'
 
@@ -78,7 +78,7 @@ export default async function Page() {
 
 ### Cache Components
 
-```tsx
+```tsx filename="app/products/page.tsx"
 async function ProductList() {
   'use cache'
 
@@ -89,7 +89,7 @@ async function ProductList() {
 
 [`'use cache'`](../3-api-reference/3.4-directives/use-cache.md)를 붙이면 반환 결과가 저장되고 재사용된다. 컴포넌트 입력을 요청 전에 알 수 있으면 정적 컴포넌트처럼 prerender할 수 있다. 다시 빌드하면 `/products`는 여전히 `○`로 표시된다.
 
-```text
+```text filename="Terminal"
 Route (app)      Revalidate  Expire
 ┌ ○ /products           15m      1y
 └ ○ /_not-found
@@ -99,7 +99,7 @@ Route (app)      Revalidate  Expire
 
 #### 3단계: 다이나믹 프로모션 추가
 
-```tsx
+```tsx filename="app/products/page.tsx"
 async function PromotionContent() {
   const promotion = await getPromotion()
   return <Promotion data={promotion} />
@@ -112,7 +112,7 @@ async function PromotionContent() {
 
 [`<Suspense>` 경계](../4-glossary/README.md)는 스트리밍 응답을 나눌 위치와 기다리는 동안 보여줄 fallback을 정한다.
 
-```tsx
+```tsx filename="app/products/page.tsx"
 import { Suspense } from 'react'
 
 export default async function Page() {
@@ -130,7 +130,7 @@ export default async function Page() {
 
 fallback은 정적 헤더와 캐시한 상품 목록과 함께 prerender된다. 요청별 프로모션은 준비되는 대로 스트리밍되어 fallback 자리를 바꾼다. 이처럼 Next.js가 prerender 가능한 작업과 요청 시점 작업을 분리하면 라우트는 부분적으로 prerender된다.
 
-```text
+```text filename="Terminal"
 Route (app)      Revalidate  Expire
 ┌ ◐ /products           15m      1y
 └ ◐ /_not-found

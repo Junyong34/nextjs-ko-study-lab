@@ -51,7 +51,7 @@ Next.js는 별도 설정 없이 최신 브라우저를 지원한다.
 
 가장 빠르고 권장되는 방법은 [`create-next-app`](../3-api-reference/3.6-cli/create-next-app.md)이다. 프롬프트 없이 진행하지 않으면(`--yes` 없이 실행하면) 다음과 같은 질문을 받는다.
 
-```
+```txt filename="Terminal"
 프로젝트 이름은 무엇인가요? my-app
 Next.js 추천 기본값을 사용할까요?
     예, 추천 기본값 사용 - TypeScript, ESLint, Tailwind CSS, App Router, AGENTS.md
@@ -61,7 +61,7 @@ Next.js 추천 기본값을 사용할까요?
 
 `직접 설정`을 선택하면 아래 항목들을 하나씩 물어본다.
 
-```
+```txt filename="Terminal"
 TypeScript를 사용할까요? No / Yes
 어떤 린터를 사용할까요? ESLint / Biome / None
 React Compiler를 사용할까요? No / Yes
@@ -90,7 +90,7 @@ pnpm i next@latest react@latest react-dom@latest
 
 이어서 `package.json`에 다음 스크립트를 추가한다.
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "dev": "next dev",
@@ -117,7 +117,7 @@ Next.js는 파일 시스템 기반 라우팅을 쓴다. 즉 파일·폴더 구�
 
 `app` 폴더를 만들고, 그 안에 `layout.tsx`를 만든다. 이 파일이 [루트 레이아웃](../3-api-reference/3.1-file-conventions/layout.md)이며 반드시 있어야 하고, `<html>`과 `<body>` 태그를 포함해야 한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 export default function RootLayout({
   children,
 }: {
@@ -133,7 +133,7 @@ export default function RootLayout({
 
 그리고 초기 콘텐츠를 담은 홈페이지 `app/page.tsx`를 만든다.
 
-```tsx
+```tsx filename="app/page.tsx"
 export default function Page() {
   return <h1>Hello, Next.js!</h1>
 }
@@ -154,7 +154,7 @@ export default function Page() {
 
 예를 들어 `public/profile.png`는 `/profile.png`로 참조한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import Image from 'next/image'
 
 export default function Page() {
@@ -186,7 +186,7 @@ App Router는 `page.tsx`, `layout.tsx`, `route.ts`처럼 파일명이 관례로 
 
 VS Code 1.88+ 또는 Cursor에서는 `.vscode/settings.json`에 커스텀 에디터 레이블을 추가한다. 폴더 2단계까지 표시해야 `blog/[id]/page.tsx` 같은 다이나믹 라우트들이 전부 `[id]`로만 뭉쳐 보이지 않는다.
 
-```json
+```json filename=".vscode/settings.json"
 {
   "workbench.editor.customLabels.patterns": {
     "**/app/**/page.tsx": "${dirname(1)}/${dirname} - page.tsx",
@@ -209,7 +209,7 @@ Next.js는 ESLint와 Biome 둘 다 지원한다. 원하는 린터를 골라 `pac
 
 - **ESLint**(더 폭넓은 규칙):
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "lint": "eslint",
@@ -220,7 +220,7 @@ Next.js는 ESLint와 Biome 둘 다 지원한다. 원하는 린터를 골라 `pac
 
 - **Biome**(빠른 린터 + 포매터):
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "lint": "biome check",
@@ -231,7 +231,7 @@ Next.js는 ESLint와 Biome 둘 다 지원한다. 원하는 린터를 골라 `pac
 
 이전에 `next lint`를 쓰던 프로젝트라면 codemod로 ESLint CLI로 옮길 수 있다.
 
-```bash
+```bash filename="Terminal"
 npx @next/codemod@canary next-lint-to-eslint-cli .
 ```
 
@@ -243,7 +243,7 @@ ESLint를 쓴다면 명시적인 설정 파일(`eslint.config.mjs` 권장)을 �
 
 Next.js는 `tsconfig.json`/`jsconfig.json`의 `paths`, `baseUrl` 옵션을 기본 지원한다. 이 옵션들로 프로젝트 디렉토리를 절대 경로로 별칭 지정해, 모듈 임포트를 더 짧고 명확하게 만들 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 // 이전
 import { Button } from '../../../components/button'
 
@@ -253,7 +253,7 @@ import { Button } from '@/components/button'
 
 절대 경로 임포트를 설정하려면 `tsconfig.json`(또는 `jsconfig.json`)에 `baseUrl`을 추가한다.
 
-```json
+```json filename="tsconfig.json"
 {
   "compilerOptions": {
     "baseUrl": "src/"
@@ -263,7 +263,7 @@ import { Button } from '@/components/button'
 
 `baseUrl`만으로도 절대 경로 임포트가 가능하지만, `paths` 옵션을 함께 쓰면 세부 별칭까지 지정할 수 있다. 아래는 `@/components/*`를 `components/*`로 매핑하는 예시다.
 
-```json
+```json filename="tsconfig.json"
 {
   "compilerOptions": {
     "baseUrl": "src/",

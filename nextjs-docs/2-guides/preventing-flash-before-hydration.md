@@ -24,7 +24,7 @@
 
 화면에 표시할 원시 값을 `data-*` 속성에 넣고, 해당 요소 바로 뒤의 동기식 script가 `textContent`를 브라우저 형식으로 바꾼다. script는 parser를 잠시 막지만 첫 paint 전에 실행되므로 잘못된 값이 보이지 않는다. 사용자 입력을 문자열로 조합하지 말고 직렬화가 안전한 데이터만 전달한다.
 
-```tsx
+```tsx filename="app/components/event-date.tsx"
 function LocalDate({ iso }: { iso: string }) {
   const id = `date-${iso}`
   return (

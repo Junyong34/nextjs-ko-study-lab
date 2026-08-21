@@ -16,7 +16,7 @@
 
 Cache Components와 Partial Prefetching을 켜면 `<Link>`는 기본적으로 라우트마다 재사용 가능한 App Shell 하나를 prefetch한다. 셸에는 정적 출력과 `cookies()` 또는 `headers()`를 읽는 라우트의 세션별 UI가 포함된다. 그러나 목적지마다 다른 `searchParams`와 `params`는 공유 셸에 포함되지 않는다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -33,7 +33,7 @@ export default nextConfig
 
 `<Link prefetch={true}>`는 링크의 URL 데이터를 내비게이션 전에 해석한다. 목적지에는 전역 `partialPrefetching` 또는 세그먼트별 `prefetch = 'partial'` 설정이 필요하다.
 
-```tsx
+```tsx filename="app/page.tsx"
 <Link href="/search?q=react" prefetch={true}>React</Link>
 <Link href="/search?q=next" prefetch={true}>Next.js</Link>
 ```
@@ -56,7 +56,7 @@ export default nextConfig
 
 캐시 함수 밖에서 cookie를 읽어 인자로 넘긴다. 함수 시그니처가 결정적이 되고 인자가 캐시 키가 되므로 같은 팀 값을 가진 여러 세션이 엔트리를 공유한다.
 
-```tsx
+```tsx filename="app/search/page.tsx"
 async function UserNav() {
   const team = (await cookies()).get('team')?.value
   const topics = await getTopics(team)
@@ -75,7 +75,7 @@ App Shell은 준비 가능한 범위까지만 전진한다. 캐시 지시어가 
 
 조회가 한 세션에 묶여 있거나 auth helper 내부에서 runtime API를 읽어 밖으로 추출할 수 없으면 `"use cache: private"`를 사용한다. 결과는 서버가 아니라 해당 세션의 브라우저에만 캐시된다. 수명은 지시어 범위 전체에 적용되므로 runtime 데이터 접근에 최대한 가까이 둔다.
 
-```tsx
+```tsx filename="app/dashboard/user-nav.tsx"
 async function getUser() {
   'use cache: private'
   const session = (await cookies()).get('session')?.value

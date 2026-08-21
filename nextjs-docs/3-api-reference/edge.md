@@ -172,7 +172,7 @@ Edge Runtime에는 다음과 같은 제약이 있다.
 
 드문 경우지만, 코드(또는 그 코드가 import하는 모듈)에 런타임에는 **도달할 수 없지만** 트리쉐이킹으로 제거되지 않는 동적 코드 평가 구문이 포함될 수 있다. 이럴 때는 Proxy 설정에서 특정 파일에 대한 검사를 완화할 수 있다.
 
-```ts
+```ts filename="proxy.ts"
 export const config = {
   unstable_allowDynamic: [
     // 단일 파일을 허용한다

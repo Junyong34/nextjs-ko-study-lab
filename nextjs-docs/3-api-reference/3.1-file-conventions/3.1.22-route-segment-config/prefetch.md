@@ -77,7 +77,7 @@ prefetch는 의도(이 대상을 prefetch해야 하는지, 얼마나 열심히 �
 <a id="typescript"></a>
 ### TypeScript
 
-```tsx
+```tsx filename="layout.tsx"
 type Prefetch = 'auto' | 'partial' | 'force-disabled'
 
 export const prefetch: Prefetch = 'partial'

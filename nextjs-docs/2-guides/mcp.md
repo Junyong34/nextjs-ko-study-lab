@@ -26,7 +26,7 @@ Next.js 16 이상에는 코딩 에이전트가 애플리케이션 내부 상태�
 
 프로젝트 루트의 `.mcp.json` 파일에 `next-devtools-mcp`를 추가한다.
 
-```json
+```json filename=".mcp.json"
 {
   "mcpServers": {
     "next-devtools": {

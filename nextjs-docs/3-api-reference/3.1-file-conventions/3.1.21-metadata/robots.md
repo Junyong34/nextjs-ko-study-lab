@@ -61,7 +61,7 @@ export default function robots() {
 
 산출:
 
-```txt
+```txt filename="app/robots.txt"
 User-Agent: *
 Allow: /
 Disallow: /private/
@@ -116,7 +116,7 @@ export default function robots() {
 
 산출:
 
-```txt
+```txt filename="app/robots.txt"
 User-Agent: Googlebot
 Allow: /
 Disallow: /private/
@@ -173,7 +173,7 @@ export default function robots() {
 
 산출:
 
-```txt
+```txt filename="app/robots.txt"
 User-Agent: *
 Allow: /
 
@@ -187,7 +187,7 @@ Request-Rate: 10/1m
 <a id="robots-object"></a>
 #### 로봇 객체
 
-```tsx
+```tsx filename="app/robots.ts"
 type Robots = {
   rules:
     | {

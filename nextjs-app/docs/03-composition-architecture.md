@@ -340,7 +340,7 @@ caption: 새로고침해도 타임스탬프가 그대로인지 확인
   /demo/caching/use-cache-basic      독립 열람
        └ 제목 · 설명 · "문서로" · iframe
   /getting-started/caching           문서
-       └ 지시자 자리에 iframe
+       └ 지시자 자리에 링크 카드
        └ 하단 "이 문서의 데모" (자동 생성)
 
 데모 앱 소유

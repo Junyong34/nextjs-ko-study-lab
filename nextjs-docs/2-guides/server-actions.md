@@ -36,7 +36,7 @@ Server Action이 즉시 캐시를 무효화하면 한 HTTP 요청 안에서 Acti
 - `cookies()`로 쿠키 설정·삭제: 새 값을 반영하도록 현재 페이지를 다시 렌더링한다.
 - `redirect`: 목적지로 이동하며 그곳의 RSC Payload를 스트리밍한다.
 
-```tsx
+```tsx filename="app/posts/actions.ts"
 'use server'
 
 import { revalidatePath } from 'next/cache'
@@ -64,7 +64,7 @@ Next.js는 다음 프레임워크 보호를 제공한다.
 
 각 Action에서 인증, 인가, 입력 검증을 수행한다. 스키마 검증은 입력 모양만 확인하며 행의 소유권은 증명하지 않는다. 클라이언트에서는 대상 ID와 변경 내용만 받고, 세션을 기준으로 신뢰할 수 있는 저장소에서 소유권을 다시 조회한다. 속도 제한을 포함한 종단 간 보안 패턴은 [Data Security](./data-security.md)를 참고한다.
 
-```tsx
+```tsx filename="app/items/actions.ts"
 'use server'
 
 export async function completeItem(itemId: string) {
@@ -95,7 +95,7 @@ export async function completeItem(itemId: string) {
 
 `next.config.js`의 `serverActions`로 허용 origin과 본문 크기를 설정한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     serverActions: {

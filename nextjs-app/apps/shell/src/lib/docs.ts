@@ -1,98 +1,56 @@
-import fs from 'node:fs'
-import path from 'node:path'
+/**
+ * 셸이 쓰는 데이터 접근 표면입니다.
+ *
+ * 실제 구현은 책임별로 나눠져 있습니다.
+ *   - `docs-root.ts` — nextjs-docs 경로 찾기
+ *   - `manifest.ts`  — 문서 색인 읽기와 조회
+ *   - `@study/demos` — 데모 목록 (demos.yaml이 단일 원본)
+ */
+import { getManifest, type DocsManifest, type DocEntry } from './manifest'
 import { getDemos, getDemoByUrl, getDemosByDoc, type Demo } from '@study/demos'
+import type { TreeNode } from '@study/ui'
 
-export interface DocEntry {
-  path: string
-  url: string
-  slug: string[]
-  title: string
-  demos: Array<{
-    path: string
-    mode?: 'inline' | 'fullscreen'
-    height?: number
-    caption?: string
-  }>
-}
+export { getDocsRoot } from './docs-root'
+export {
+  getManifest,
+  getDocBySlug,
+  getDocContent,
+  findDocForDemo,
+  type DocEntry,
+  type DocsManifest,
+} from './manifest'
+export { getDemos, getDemoByUrl, getDemosByDoc, type Demo } from '@study/demos'
 
-export interface TreeNode {
-  title: string
-  url: string
-  path: string
-  order?: string
-  section?: string
-  demos?: any[]
-  children?: TreeNode[]
-}
-
-export interface DocsManifest {
-  $schema?: string
-  generatedAt: string
-  totalDocs: number
-  docs: DocEntry[]
-  urlMap: Record<string, DocEntry>
-  tree: TreeNode[]
-}
+// 좌측 트리가 그리는 노드 타입은 @study/ui가 소유합니다 (화면 계약이므로).
+export type { TreeNode } from '@study/ui'
 
 /**
- * nextjs-docs 디렉토리의 절대 경로를 탐색합니다.
+ * demos.yaml의 데모 데이터를 트리 노드에 결합하여
+ * 각 노드의 데모 보유 여부(`hasDemo`, `demoCount`, `demos`)를 포함한 트리를 반환합니다.
+ * 기존 문서 노드의 트리 계층(카테고리 - 문서 리프 노드)을 그대로 유지합니다.
  */
-export function getDocsRoot(): string {
-  const candidates = [
-    path.resolve(process.cwd(), '../../../nextjs-docs'),
-    path.resolve(process.cwd(), '../../nextjs-docs'),
-    path.resolve(process.cwd(), '../nextjs-docs'),
-    path.resolve(process.cwd(), 'nextjs-docs'),
-    path.resolve(__dirname, '../../../../nextjs-docs'),
-  ]
+export function getAugmentedTree(): TreeNode[] {
+  try {
+    const manifest = getManifest()
+    const allDemos = getDemos()
 
-  for (const candidate of candidates) {
-    if (fs.existsSync(path.join(candidate, 'docs-manifest.json'))) {
-      return candidate
+    const augmentNode = (node: TreeNode): TreeNode => {
+      const nodeDemos = node.path ? getDemosByDoc(node.path, allDemos) : []
+      const hasDemos = nodeDemos.length > 0
+      const children = node.children ? node.children.map(augmentNode) : undefined
+
+      return {
+        ...node,
+        demos: nodeDemos,
+        hasDemo: hasDemos,
+        demoCount: nodeDemos.length,
+        children,
+      }
     }
+
+    return (manifest.tree || []).map(augmentNode)
+  } catch (err) {
+    console.error('Failed to get augmented tree:', err)
+    return []
   }
-
-  return candidates[0]
 }
-
-/**
- * docs-manifest.json을 로드합니다.
- */
-export function getManifest(): DocsManifest {
-  const docsRoot = getDocsRoot()
-  const manifestPath = path.join(docsRoot, 'docs-manifest.json')
-  if (fs.existsSync(manifestPath)) {
-    const raw = fs.readFileSync(manifestPath, 'utf-8')
-    return JSON.parse(raw) as DocsManifest
-  }
-  throw new Error(`docs-manifest.json을 찾을 수 없습니다: ${manifestPath}`)
-}
-
-/**
- * slug 배열로 해당 문서 항목을 탐색합니다.
- */
-export function getDocBySlug(slug: string[]): DocEntry | undefined {
-  const manifest = getManifest()
-  const url = '/' + slug.join('/')
-  if (manifest.urlMap[url]) {
-    return manifest.urlMap[url]
-  }
-
-  // fallback: slug 일치 항목 탐색
-  const slugStr = slug.join('/')
-  return manifest.docs.find((d) => d.slug.join('/') === slugStr)
-}
-
-/**
- * 문서 상대 경로(예: '1-getting-started/caching.md')로 마크다운 원문을 읽습니다.
- */
-export function getDocContent(relPath: string): string {
-  const docsRoot = getDocsRoot()
-  const fullPath = path.join(docsRoot, relPath)
-  if (fs.existsSync(fullPath)) {
-    return fs.readFileSync(fullPath, 'utf-8')
-  }
-  throw new Error(`문서 파일을 찾을 수 없습니다: ${fullPath}`)
-}
-
-export { getDemos, getDemoByUrl, getDemosByDoc, type Demo }

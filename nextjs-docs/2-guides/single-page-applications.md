@@ -36,7 +36,7 @@ Next.js는 JavaScript 번들을 자동으로 코드 분할하고 라우트마다
 
 Server Component에서 데이터를 요청하고 Promise를 기다리지 않은 채 Client Component에 넘길 수 있다. Client Component는 렌더링 중 `await`할 수 없으므로 React `use()`로 Promise를 푼다. 서버에서 요청을 먼저 시작하면 응답을 바로 스트리밍하고 클라이언트 waterfall을 피할 수 있다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   const userPromise = getUser() // 여기서 기다리지 않는다.
   return <UserProvider userPromise={userPromise}>{children}</UserProvider>
@@ -45,7 +45,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
 
 Provider는 Promise를 Context로 전달하고 소비자는 `use()`로 읽는다.
 
-```tsx
+```tsx filename="app/profile.tsx"
 'use client'
 
 import { use } from 'react'
@@ -65,7 +65,7 @@ export function Profile() {
 
 Client Component도 `next build` 중 prerender된다. `window`나 `document`에 의존하는 라이브러리는 [`next/dynamic`](./lazy-loading.md)과 `ssr: false`로 브라우저에서만 불러올 수 있다.
 
-```tsx
+```tsx filename="app/ui/sort-products.tsx"
 import dynamic from 'next/dynamic'
 
 const ClientOnlyComponent = dynamic(() => import('./component'), {
@@ -79,7 +79,7 @@ const ClientOnlyComponent = dynamic(() => import('./component'), {
 
 파일 시스템 라우팅 없이 URL 상태만 바꿔야 하면 `window.history.pushState`와 `replaceState`를 사용할 수 있다. 두 API는 Next.js Router와 통합되므로 [`usePathname`](../3-api-reference/3.3-functions/use-pathname.md)과 [`useSearchParams`](../3-api-reference/3.3-functions/use-search-params.md)에도 변경이 반영된다.
 
-```tsx
+```tsx filename="app/ui/sort-products.tsx"
 'use client'
 
 import { useSearchParams } from 'next/navigation'
@@ -103,7 +103,7 @@ Client Component는 Server Action을 호출해 서버에서 mutation할 수 있�
 
 낙관적 UI와 서버가 같은 다음 상태를 계산하려면 순수 reducer를 공유한다.
 
-```ts
+```ts filename="app/todos-reducer.ts"
 export function applyAction(todos: Todo[], action: TodoAction): Todo[] {
   if (action.type === 'toggle') {
     return todos.map((todo) =>
@@ -120,7 +120,7 @@ Client Component는 같은 reducer를 `useOptimistic`에 전달하고 transition
 
 정적 export는 라우트별 HTML을 만든다. 하나의 `index.html`과 큰 번들만 보내는 엄격한 SPA보다 콘텐츠를 빨리 보여주면서 클라이언트 전환은 SPA처럼 유지할 수 있다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = { output: 'export' }

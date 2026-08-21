@@ -25,7 +25,7 @@ Multi-Zones는 하나의 도메인에 있는 큰 애플리케이션을 경로 �
 
 zone은 일반 Next.js 앱이며 다른 zone의 페이지·정적 파일과 충돌하지 않도록 [`assetPrefix`](../3-api-reference/3.5-config/3.5.1-next-config-js/assetPrefix.md)를 설정한다.
 
-```js
+```js filename="next.config.js"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   assetPrefix: '/blog-static',
@@ -36,7 +36,7 @@ JavaScript와 CSS 같은 Next.js 자산은 `/blog-static/_next/...` 아래에서
 
 Next.js 15보다 오래된 버전에서는 정적 자산용 rewrite가 추가로 필요할 수 있다. Next.js 15부터는 필요하지 않다.
 
-```js
+```js filename="next.config.js"
 const nextConfig = {
   assetPrefix: '/blog-static',
   async rewrites() {
@@ -54,7 +54,7 @@ const nextConfig = {
 
 각 앱이 다른 경로를 제공하므로 HTTP proxy에서 요청을 올바른 zone으로 보내야 한다. 한 Next.js 앱이 전체 도메인의 router 역할을 할 수도 있다. 다른 zone이 맡은 페이지 경로와 그 zone의 정적 자산 경로를 [`rewrites`](../3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md)로 목적지 도메인에 전달한다.
 
-```js
+```js filename="next.config.js"
 async rewrites() {
   return [
     { source: '/blog', destination: `${process.env.BLOG_DOMAIN}/blog` },
@@ -72,7 +72,7 @@ async rewrites() {
 
 요청 지연을 줄이려면 정적인 라우팅에 `rewrites`를 권장한다. 마이그레이션 중 feature flag처럼 요청마다 다이나믹 결정을 해야 하면 `proxy`를 사용할 수 있다.
 
-```js
+```js filename="proxy.js"
 export async function proxy(request) {
   const { pathname, search } = request.nextUrl
   if (pathname === '/your-path' && myFeatureFlag.isEnabled()) {
@@ -93,7 +93,7 @@ zone 앱은 서로 다른 저장소에 둘 수 있다. monorepo에 함께 두면
 
 사용자에게 보이는 한 도메인이 여러 앱을 제공하므로 Multi-Zones에서 [Server Action](../1-getting-started/mutating-data.md)을 사용할 때는 사용자-facing origin을 명시적으로 허용해야 한다.
 
-```js
+```js filename="next.config.js"
 const nextConfig = {
   experimental: {
     serverActions: {

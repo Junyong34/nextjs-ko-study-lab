@@ -51,7 +51,7 @@ const nextConfig = {
 module.exports = nextConfig
 ```
 
-```tsx
+```tsx filename="app/page.tsx"
 // 1. 파일 수준
 'use cache'
 

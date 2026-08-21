@@ -21,7 +21,7 @@ Cache Components를 활성화하면 세션은 요청 시점에 읽는다. 따라
 
 [`cacheComponents`](../3-api-reference/3.5-config/3.5.1-next-config-js/cacheComponents.md)를 활성화한다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -43,7 +43,7 @@ Cache Components를 켜면 instant navigation 검증은 세션을 읽는 모든 
 
 이때 [`use cache: private`](../3-api-reference/3.4-directives/use-cache-private.md)를 사용한다. 이 지시어는 `cookies()`와 `headers()`를 직접 읽을 수 있으며 결과를 서버가 아닌 브라우저에만 보관한다.
 
-```ts
+```ts filename="lib/session.ts"
 import 'server-only'
 import { cookies } from 'next/headers'
 import { sealData, unsealData } from 'iron-session'
@@ -62,7 +62,7 @@ export async function getSession(): Promise<SessionData> {
 }
 ```
 
-```ts
+```ts filename="lib/auth.ts"
 import 'server-only'
 import { redirect } from 'next/navigation'
 import { getSession } from './session'
@@ -93,7 +93,7 @@ export async function getCurrentUser(): Promise<User> {
 
 세션을 읽는 컴포넌트는 `Suspense` 경계 안에 있어야 한다. Cache Components를 사용할 때 경계 밖에서 `cookies()`를 읽으면 빌드 오류가 발생한다. 경계 밖의 정적 콘텐츠나 일반 `use cache`로 감싼 콘텐츠는 static shell에 들어가 즉시 표시되고, 인증 영역만 요청을 기다린다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { Suspense } from 'react'
 import { getCurrentUser } from '@/lib/auth'
 import { getAnnouncements } from '@/lib/data'
@@ -129,7 +129,7 @@ async function Dashboard() {
 
 같은 경계 안에서는 세션을 컴포넌트마다 다시 읽을 필요가 없다. Server Component는 `getCurrentUser()`를 직접 호출할 수 있다. Client Component에 prop을 여러 단계로 전달하고 싶지 않다면 Promise를 한 번 만들고 Context로 전달한 뒤 React의 `use()`로 해제한다. Promise는 레이아웃 최상위가 아니라 `Suspense` 경계 안에서 만든다.
 
-```tsx
+```tsx filename="app/user-provider.tsx"
 'use client'
 
 import { createContext, use } from 'react'
@@ -156,7 +156,7 @@ export function useUser() {
 
 Server Component는 Promise를 기다리지 않고 Provider에 넘긴다. 각 Client Component는 `useUser()`를 호출하며, `use()`가 Promise 해결까지 중단하므로 자체 `Suspense` 경계 뒤에 둔다.
 
-```tsx
+```tsx filename="app/page.tsx"
 function Dashboard() {
   const userPromise = getCurrentUser()
 
@@ -170,7 +170,7 @@ function Dashboard() {
 }
 ```
 
-```tsx
+```tsx filename="app/user-badge.tsx"
 'use client'
 
 import { useUser } from './user-provider'
@@ -190,7 +190,7 @@ export function UserBadge() {
 - 사용자 ID를 일반 `use cache` 함수에 넘기면 ID가 캐시 키의 일부가 되고 결과는 서버에 저장된다. [`cacheTag`](../3-api-reference/3.3-functions/cacheTag.md)로 나중에 무효화할 수 있다.
 - `use cache: private` 범위 안에서 읽으면 결과는 서버가 아닌 브라우저에만 저장된다. 데이터를 서버에 일시적으로도 저장하면 안 되는 요구사항에 적합하다.
 
-```ts
+```ts filename="lib/data.ts"
 import 'server-only'
 import { cacheLife, cacheTag } from 'next/cache'
 import { getCurrentUser } from './auth'
@@ -221,7 +221,7 @@ async function getNotesByUserId(userId: string) {
 
 [Server Action](../1-getting-started/mutating-data.md)이 사용자 데이터를 변경하면 같은 태그로 [`updateTag`](../3-api-reference/3.3-functions/updateTag.md)를 호출해 캐시 항목을 갱신한다. 클라이언트가 보낸 사용자 정보를 신뢰하지 말고 Action 안에서 세션을 다시 읽어 인가한다.
 
-```ts
+```ts filename="app/actions.ts"
 'use server'
 
 import { redirect } from 'next/navigation'
@@ -248,7 +248,7 @@ export async function addNote(formData: FormData) {
 - `cacheLife`를 조정할 때 `stale`을 30초 이상으로 유지한다. 이보다 짧으면 해당 범위가 prefetch 대상에서 빠진다.
 - `params`나 `searchParams`에도 의존하는 라우트의 링크에는 [`<Link prefetch={true}>`](../3-api-reference/3.2-components/link.md)를 지정한다. 링크마다 URL 데이터를 미리 해결하는 방식은 [Optimizing prefetching](./optimizing-prefetching.md)을 참고한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 <Link href={`/notes/${note.id}`} prefetch={true}>
   {note.text}
 </Link>

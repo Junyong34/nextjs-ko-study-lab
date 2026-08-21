@@ -24,7 +24,7 @@ Next.js는 기본적으로 `next start`로 실행되는 자체 서버를 포함�
 
 다음은 커스텀 서버의 [예제](https://github.com/vercel/next.js/tree/canary/examples/custom-server)다.
 
-```ts
+```ts filename="server.ts"
 // server.ts
 import { createServer } from 'http'
 import next from 'next'
@@ -51,7 +51,7 @@ app.prepare().then(() => {
 
 커스텀 서버를 실행하려면 `package.json`의 스크립트를 다음과 같이 갱신해야 한다.
 
-```json
+```json filename="package.json"
 // package.json
 {
   "scripts": {
@@ -64,7 +64,7 @@ app.prepare().then(() => {
 
 또는 nodemon을 설정할 수도 있다([예제](https://github.com/vercel/next.js/tree/canary/examples/custom-server)). 커스텀 서버는 다음 import로 서버와 Next.js 애플리케이션을 연결한다.
 
-```ts
+```ts filename="server.ts"
 import next from 'next'
 
 const app = next({})

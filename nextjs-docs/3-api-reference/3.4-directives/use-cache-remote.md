@@ -121,7 +121,7 @@ async function getCMSContent(language: string) {
 - `private` 내부에 `remote` 중첩 ❌ (에러 발생)
 - `remote` 내부에 `private` 중첩 ❌ (에러 발생)
 
-```tsx
+```tsx filename="app/product/[id]/page.tsx"
 // ⭕ 올바른 예: 일반 캐시 내부의 원격 캐시
 async function outerCache() {
   'use cache'

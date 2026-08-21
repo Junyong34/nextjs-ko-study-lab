@@ -1,127 +1,207 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, BookOpen, Layers, CheckCircle2, Clock } from 'lucide-react'
-import { getDemos, getDemoByUrl, getManifest } from '@/lib/docs'
-import { DemoViewer } from '@/components/DemoViewer'
+import { DemoIframe } from '@study/docs-render'
+import { DemoPageHeader, DemoEmptyState, DocDemoHub } from '@study/ui'
+import {
+  getDemos,
+  getDemoByUrl,
+  getDemosByDoc,
+  getManifest,
+  getDocBySlug,
+  findDocForDemo,
+} from '@/lib/docs'
 
 interface DemoPageProps {
   params: Promise<{
     slug: string[]
   }>
+  searchParams?: Promise<{
+    run?: string
+  }>
 }
 
 export async function generateStaticParams() {
   const demos = getDemos()
-  return demos.map((demo) => ({
+  const manifest = getManifest()
+
+  const demoParams = demos.map((demo) => ({
     slug: demo.url.split('/'),
   }))
-}
 
-export async function generateMetadata({ params }: DemoPageProps): Promise<Metadata> {
-  const { slug } = await params
-  const demoUrl = slug.join('/')
-  const demo = getDemoByUrl(demoUrl)
+  const docParams = (manifest.docs || [])
+    .filter((doc) => doc.slug && doc.slug.length > 0)
+    .map((doc) => ({
+      slug: doc.slug,
+    }))
 
-  if (!demo) {
-    return {
-      title: '데모를 찾을 수 없습니다',
+  // 중복 slug 제거
+  const seen = new Set<string>()
+  const result: Array<{ slug: string[] }> = []
+
+  for (const item of [...demoParams, ...docParams]) {
+    const key = item.slug.join('/')
+    if (!seen.has(key)) {
+      seen.add(key)
+      result.push(item)
     }
   }
 
-  return {
-    title: `${demo.title} - 인터랙티브 데모`,
-    description: `${demo.title} 실습 데모 - Next.js App Router 학습`,
-  }
+  return result
 }
 
-export default async function DemoStandalonePage({ params }: DemoPageProps) {
+export async function generateMetadata({ params, searchParams }: DemoPageProps): Promise<Metadata> {
   const { slug } = await params
-  const demoUrl = slug.join('/')
-  const demo = getDemoByUrl(demoUrl)
+  const { run } = (await searchParams) || {}
+  const slugStr = slug.join('/')
 
-  if (!demo) {
+  const directDemo = getDemoByUrl(slugStr)
+  if (directDemo) {
+    return {
+      title: `${directDemo.title} - 실습 데모`,
+      description: `${directDemo.title} 실습 데모 - Next.js App Router 학습`,
+    }
+  }
+
+  const doc = getDocBySlug(slug)
+  if (doc) {
+    if (run) {
+      const runningDemo = getDemoByUrl(run)
+      if (runningDemo) {
+        return {
+          title: `${runningDemo.title} - ${doc.title} 데모`,
+          description: `${doc.title} - ${runningDemo.title} 실습 데모`,
+        }
+      }
+    }
+    return {
+      title: `${doc.title} 실습 데모`,
+      description: `${doc.title} 관련 인터랙티브 실습 예제 목록`,
+    }
+  }
+
+  return { title: '데모를 찾을 수 없습니다' }
+}
+
+export default async function DemoPage({ params, searchParams }: DemoPageProps) {
+  const { slug } = await params
+  const { run } = (await searchParams) || {}
+  const slugStr = slug.join('/')
+  const manifest = getManifest()
+
+  // 1. 직접 데모 URL 접근인 경우 (예: /demo/server-actions/basic)
+  const directDemo = getDemoByUrl(slugStr)
+  if (directDemo) {
+    const matchedDoc = findDocForDemo(manifest, directDemo.doc)
+    const siblingDemos = matchedDoc ? getDemosByDoc(matchedDoc.path) : [directDemo]
+    const docSlug = matchedDoc ? matchedDoc.slug.join('/') : ''
+    const backUrl = docSlug ? `/demo/${docSlug}` : '/demo'
+    const backLabel = matchedDoc ? `${matchedDoc.title} 데모 목록` : '전체 데모 목록'
+    const iframeSrc = `/zone/${directDemo.zone}/${directDemo.url}`
+
+    return (
+      <div className="space-y-6">
+        <DemoPageHeader
+          title={directDemo.title}
+          zone={directDemo.zone}
+          status={directDemo.status}
+          url={directDemo.url}
+          docUrl={matchedDoc?.url ?? '/'}
+          docTitle={matchedDoc?.title ?? directDemo.doc}
+          backUrl={backUrl}
+          backLabel={backLabel}
+          siblingDemos={siblingDemos}
+          currentDemoUrl={directDemo.url}
+        />
+
+        <div className="w-full">
+          <DemoIframe
+            variant="standalone"
+            src={iframeSrc}
+            label={iframeSrc}
+            title={directDemo.title}
+            externalHref={iframeSrc}
+            initialHeight={600}
+            minHeight={400}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  // 2. 문서 슬러그 기준 데모 메뉴 접근인 경우 (예: /demo/getting-started/caching)
+  const doc = getDocBySlug(slug)
+  if (!doc) {
     notFound()
   }
 
-  const manifest = getManifest()
-  const matchedDoc = manifest.docs.find(
-    (d) => d.path === demo.doc || d.path.endsWith(demo.doc)
-  )
-  const docUrl = matchedDoc ? matchedDoc.url : '/'
-  const docTitle = matchedDoc ? matchedDoc.title : demo.doc
+  const docDemos = getDemosByDoc(doc.path)
+  const docSlug = doc.slug.join('/')
+  const category =
+    doc.slug.length > 1
+      ? doc.slug
+          .slice(0, -1)
+          .map((s) => s.replace(/-/g, ' '))
+          .join(' > ')
+      : undefined
 
-  const iframeSrc = `/zone/${demo.zone}/${demo.url}`
-  const isDone = demo.status === 'done'
+  // 2-A. 등록된 데모가 없는 문서인 경우 -> Empty State 노출
+  if (docDemos.length === 0) {
+    return (
+      <DemoEmptyState
+        docTitle={doc.title}
+        category={category}
+        docUrl={doc.url}
+      />
+    )
+  }
 
+  // 2-B. 특정 데모 실행 쿼리(?run=...)가 지정된 경우 -> 데모 실행 뷰어 노출
+  if (run) {
+    const runningDemo = docDemos.find((d) => d.url === run) || getDemoByUrl(run) || docDemos[0]
+    const iframeSrc = `/zone/${runningDemo.zone}/${runningDemo.url}`
+    const backUrl = `/demo/${docSlug}`
+    const backLabel = `${doc.title} 데모 목록`
+
+    return (
+      <div className="space-y-6">
+        <DemoPageHeader
+          title={runningDemo.title}
+          zone={runningDemo.zone}
+          status={runningDemo.status}
+          url={runningDemo.url}
+          docUrl={doc.url}
+          docTitle={doc.title}
+          backUrl={backUrl}
+          backLabel={backLabel}
+          siblingDemos={docDemos}
+          currentDemoUrl={runningDemo.url}
+          getDemoHref={(targetUrl) => `/demo/${docSlug}?run=${encodeURIComponent(targetUrl)}`}
+        />
+
+        <div className="w-full">
+          <DemoIframe
+            variant="standalone"
+            src={iframeSrc}
+            label={iframeSrc}
+            title={runningDemo.title}
+            externalHref={iframeSrc}
+            initialHeight={600}
+            minHeight={400}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  // 2-C. 해당 문서의 데모 메인 페이지 (데모 카드 목록 허브)
   return (
-    <div className="space-y-6">
-      {/* Top Chrome: Back Link & Breadcrumbs */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-3 text-xs">
-          <Link
-            href="/demo"
-            className="inline-flex items-center gap-1 font-medium text-zinc-500 hover:text-zinc-800 transition dark:text-zinc-400 dark:hover:text-zinc-200"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            <span>전체 데모</span>
-          </Link>
-          <span className="text-zinc-300 dark:text-zinc-700">/</span>
-          <Link
-            href={docUrl}
-            className="inline-flex items-center gap-1 font-medium text-zinc-700 hover:text-zinc-950 transition dark:text-zinc-300 dark:hover:text-zinc-100"
-          >
-            <BookOpen className="h-3.5 w-3.5" />
-            <span>근거 문서: {docTitle}</span>
-          </Link>
-        </div>
-
-        {/* Demo Header */}
-        <div className="flex flex-wrap items-start justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
-          <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="inline-flex items-center gap-1 rounded bg-[#14161a0f] px-2 py-0.5 text-xs font-semibold text-zinc-800 dark:bg-white/10 dark:text-zinc-200">
-                <Layers className="h-3 w-3" />
-                zone: {demo.zone}
-              </span>
-              <span
-                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                  isDone
-                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300'
-                    : 'bg-amber-50 text-amber-700 dark:bg-amber-950/80 dark:text-amber-300'
-                }`}
-              >
-                {isDone ? (
-                  <CheckCircle2 className="h-3 w-3" />
-                ) : (
-                  <Clock className="h-3 w-3" />
-                )}
-                <span>{demo.status.toUpperCase()}</span>
-              </span>
-            </div>
-            <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-2xl">
-              {demo.title}
-            </h1>
-            <p className="mt-1 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-              /zone/{demo.zone}/{demo.url}
-            </p>
-          </div>
-
-          <Link
-            href={docUrl}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-xs hover:bg-zinc-50 hover:text-zinc-900 transition dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-          >
-            <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
-            <span>근거 문서 보기</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* Main Body: Demo Viewer with Chrome */}
-      <div className="w-full">
-        <DemoViewer src={iframeSrc} title={demo.title} />
-      </div>
-    </div>
+    <DocDemoHub
+      docTitle={doc.title}
+      category={category}
+      docUrl={doc.url}
+      docSlug={docSlug}
+      demos={docDemos}
+    />
   )
 }

@@ -20,7 +20,7 @@ instrumentation은 모니터링과 로깅 도구를 앱 코드에 연결하는 �
 
 `register` 함수는 새 Next.js 서버 인스턴스가 시작될 때 한 번 호출되며 요청을 처리하기 전에 끝나야 한다.
 
-```ts
+```ts filename="instrumentation.ts"
 // instrumentation.ts
 import { registerOTel } from '@vercel/otel'
 
@@ -38,7 +38,7 @@ export function register() {
 
 전역 변수 등록처럼 import 자체가 필요한 코드는 `register` 안에서 동적으로 불러온다.
 
-```ts
+```ts filename="instrumentation.ts"
 export async function register() {
   await import('package-with-side-effect')
 }
@@ -50,7 +50,7 @@ export async function register() {
 
 Next.js는 모든 runtime에서 `register`를 호출한다. Node.js 전용 패키지를 Edge Runtime에서 불러오지 않도록 `NEXT_RUNTIME`을 확인한 뒤 조건부 import한다.
 
-```ts
+```ts filename="instrumentation.ts"
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     await import('./instrumentation-node')

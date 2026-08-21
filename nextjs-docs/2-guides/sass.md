@@ -27,7 +27,7 @@ pnpm은 `pnpm add -D sass`, Yarn은 `yarn add -D sass`, Bun은 `bun add -D sass`
 
 Sass 옵션을 바꾸려면 `next.config`의 `sassOptions`를 사용한다. 예를 들어 `additionalData`는 모든 Sass 파일 앞에 공통 코드를 추가할 수 있다.
 
-```ts
+```ts filename="next.config.ts"
 // next.config.ts
 import type { NextConfig } from 'next'
 
@@ -44,7 +44,7 @@ export default nextConfig
 
 `implementation` 속성으로 사용할 Sass 구현체를 지정할 수 있다. 기본적으로 Next.js는 `sass` 패키지를 사용한다. `sass-embedded`를 선택하려면 다음과 같이 설정한다.
 
-```ts
+```ts filename="next.config.ts"
 // next.config.ts
 import type { NextConfig } from 'next'
 
@@ -61,7 +61,7 @@ export default nextConfig
 
 Next.js는 CSS Module 파일에서 내보낸 Sass 변수를 지원한다. `:export` 블록은 Sass 값을 JavaScript에서 import할 수 있는 이름으로 노출한다.
 
-```scss
+```scss filename="app/variables.module.scss"
 // app/variables.module.scss
 $primary-color: #64ff00;
 
@@ -72,7 +72,7 @@ $primary-color: #64ff00;
 
 App Router의 페이지에서 이 모듈을 import하면 내보낸 값을 컴포넌트에서 사용할 수 있다.
 
-```jsx
+```jsx filename="app/page.js"
 // app/page.js
 import variables from './variables.module.scss'
 

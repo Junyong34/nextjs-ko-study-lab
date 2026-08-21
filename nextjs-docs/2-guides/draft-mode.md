@@ -45,7 +45,7 @@ CMS가 편집자의 Preview 클릭 때 `/api/draft?secret=XXX&slug=/posts/foo`�
 
 `app/api/draft/route.ts` 같은 Route Handler에서 `draftMode().enable()`을 호출한다.
 
-```tsx
+```tsx filename="app/api/draft/route.ts"
 import { draftMode } from 'next/headers'
 
 export async function GET() {
@@ -61,13 +61,13 @@ export async function GET() {
 
 CMS와 Next.js 앱만 아는 secret token을 만들고 다음 preview URL을 설정한다.
 
-```text
+```text filename="Terminal"
 https://<your-site>/api/draft?secret=<token>&slug=<path>
 ```
 
 Handler는 secret과 slug를 확인하고, slug가 실제 CMS 콘텐츠인지 검증한 뒤 cookie를 설정한다. open redirect를 막으려면 query string의 slug로 바로 이동하지 않고 CMS에서 조회한 게시물의 경로를 사용한다.
 
-```tsx
+```tsx filename="app/api/draft/route.ts"
 import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -90,7 +90,7 @@ export async function GET(request: Request) {
 
 Draft Mode가 캐시를 자동으로 우회하므로 같은 endpoint를 쓰는 CMS라면 페이지가 활성 여부를 알 필요가 없다.
 
-```tsx
+```tsx filename="app/posts/[slug]/page.tsx"
 async function getPost(slug: string) {
   const res = await fetch(`https://cms.example.com/posts/${slug}`)
   return res.json()
@@ -109,7 +109,7 @@ cookie가 있으면 CMS에서 현재 초안을 직접 가져오고, 없으면 �
 
 `isEnabled`는 편집자가 초안을 보고 있다는 것을 알려주는 신호로 유용하다. 모든 preview 페이지에서 보이도록 root layout에 banner와 종료 폼을 렌더링한다.
 
-```tsx
+```tsx filename="app/preview-banner.tsx"
 import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -139,7 +139,7 @@ export async function PreviewBanner() {
 
 초안 콘텐츠 URL이나 인증 정보가 다르면 `isEnabled`로 fetch 대상만 분기한다.
 
-```tsx
+```tsx filename="app/posts/[slug]/page.tsx"
 import { draftMode } from 'next/headers'
 
 async function getPost(slug: string) {

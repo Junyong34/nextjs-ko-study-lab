@@ -1,7 +1,8 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { MarkdownRenderer, TableOfContents } from '@study/docs-render'
+import { MarkdownRenderer, parseHeadings, isGlossaryDoc } from '@study/docs-render'
+import { TableOfContents } from '@study/ui'
 import { getManifest, getDocBySlug, getDocContent, getDemos } from '@/lib/docs'
 
 interface PageProps {
@@ -51,6 +52,7 @@ export default async function DocPage({ params }: PageProps) {
   }
 
   const allDemos = getDemos()
+  const headings = parseHeadings(content)
   const breadcrumbs = doc.slug ? doc.slug.slice(0, -1).map((s) => s.replace(/-/g, ' ')) : []
 
   return (
@@ -81,7 +83,7 @@ export default async function DocPage({ params }: PageProps) {
       </div>
 
       {/* Right Sticky Table of Contents / Index Map */}
-      <TableOfContents content={content} docPath={doc.path} />
+      <TableOfContents headings={headings} isGlossary={isGlossaryDoc(content, headings, doc.path)} />
     </div>
   )
 }

@@ -62,7 +62,7 @@ export default async function UserProfile({
 
 `permanentRedirect()` 역시 내부적으로 `NEXT_REDIRECT` 에러를 던지므로 `try/catch` 블록 외부에서 호출해야 한다.
 
-```tsx
+```tsx filename="app/team/[id]/page.js"
 'use server'
 
 import { permanentRedirect } from 'next/navigation'

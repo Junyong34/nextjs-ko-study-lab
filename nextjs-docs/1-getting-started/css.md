@@ -28,13 +28,13 @@ Next.js는 애플리케이션을 스타일링하는 여러 방법을 제공한�
 
 Tailwind CSS를 설치한다.
 
-```bash
+```bash filename="postcss.config.mjs"
 pnpm add -D tailwindcss @tailwindcss/postcss
 ```
 
 `postcss.config.mjs` 파일에 PostCSS 플러그인을 추가한다.
 
-```js
+```js filename="postcss.config.mjs"
 export default {
   plugins: {
     '@tailwindcss/postcss': {},
@@ -44,13 +44,13 @@ export default {
 
 전역 CSS 파일에서 Tailwind를 import한다.
 
-```css
+```css filename="app/globals.css"
 @import 'tailwindcss';
 ```
 
 루트 레이아웃에서 그 CSS 파일을 import한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import './globals.css'
 
 export default function RootLayout({
@@ -68,7 +68,7 @@ export default function RootLayout({
 
 이제 애플리케이션에서 Tailwind의 유틸리티 클래스를 쓸 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -86,13 +86,13 @@ CSS Modules는 고유한 클래스명을 생성해서 CSS를 로컬 스코프로
 
 CSS Modules를 쓰려면 `.module.css` 확장자로 새 파일을 만들고, `app` 디렉토리 안의 어떤 컴포넌트에서든 import한다.
 
-```css
+```css filename="app/blog/blog.module.css"
 .blog {
   padding: 24px;
 }
 ```
 
-```tsx
+```tsx filename="app/blog/page.tsx"
 import styles from './blog.module.css'
 
 export default function Page() {
@@ -106,7 +106,7 @@ export default function Page() {
 
 `app/global.css` 파일을 만들고 루트 레이아웃에서 import하면 애플리케이션의 **모든 라우트**에 스타일이 적용된다.
 
-```css
+```css filename="app/global.css"
 body {
   padding: 20px 20px 60px;
   max-width: 680px;
@@ -114,7 +114,7 @@ body {
 }
 ```
 
-```tsx
+```tsx filename="app/layout.tsx"
 // 이 스타일은 애플리케이션의 모든 라우트에 적용된다
 import './global.css'
 
@@ -137,7 +137,7 @@ export default function RootLayout({
 
 외부 패키지가 배포한 스타일시트는 콜로케이션된 컴포넌트를 포함해 `app` 디렉토리 어디에서든 import할 수 있다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import 'bootstrap/dist/css/bootstrap.css'
 
 export default function RootLayout({
@@ -161,7 +161,7 @@ Next.js는 프로덕션 빌드 중에 스타일시트를 자동으로 청킹(병
 
 예를 들어 `<BaseButton>`이 `page.module.css`보다 먼저 import되므로, `base-button.module.css`가 `page.module.css`보다 먼저 정렬된다.
 
-```tsx
+```tsx filename="page.tsx"
 import { BaseButton } from './base-button'
 import styles from './page.module.css'
 
@@ -170,7 +170,7 @@ export default function Page() {
 }
 ```
 
-```tsx
+```tsx filename="base-button.tsx"
 import styles from './base-button.module.css'
 
 export function BaseButton() {

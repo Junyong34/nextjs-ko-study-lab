@@ -2,7 +2,7 @@
 
 `nextjs-docs/`의 학습 문서를 화면에 그리고, 각 개념의 데모를 실행하는 학습 사이트가 들어설 자리입니다.
 
-**설계는 완료됐고 실행 코드는 아직 없습니다.**
+**설계 및 멀티 존 기본 뼈대/공통 패키지 구축과 리팩토링이 완료된 상태입니다.**
 
 ## 무엇을 만드는가
 
@@ -34,6 +34,7 @@
 | 04 | [설계 실현 가능성 검증](./docs/04-feasibility-verification.md) |
 | 05 | [남은 설계 질문](./docs/05-open-questions.md) |
 | 06 | [화면 구성과 UI 설계](./docs/06-ui-and-screen-design.md) |
+| 07 | [코드베이스 심층 분석 및 데이터 흐름 가이드](./docs/07-codebase-deep-dive-guide.md) |
 
 ADR 6건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있습니다.
 

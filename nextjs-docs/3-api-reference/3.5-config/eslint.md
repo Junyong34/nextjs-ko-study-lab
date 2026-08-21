@@ -46,7 +46,7 @@ export default eslintConfig
 
 린트 실행은 표준 ESLint CLI를 사용한다:
 
-```bash
+```bash filename="eslint.config.mjs"
 npx eslint .
 ```
 

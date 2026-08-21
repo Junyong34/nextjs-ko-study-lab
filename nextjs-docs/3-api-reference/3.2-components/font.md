@@ -21,7 +21,7 @@
 
 [Google Fonts](https://fonts.google.com/)도 편리하게 사용할 수 있다. CSS와 폰트 파일은 빌드 시점에 다운로드되어 나머지 정적 자산과 함께 셀프 호스팅된다. **브라우저가 Google로 요청을 보내지 않는다.**
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { Inter } from 'next/font/google'
 
 // variable 폰트를 불러올 때는 font weight를 지정하지 않아도 된다
@@ -217,7 +217,7 @@ export default function RootLayout({
 
 Google 폰트를 사용하려면 `next/font/google`에서 함수로 임포트한다. 최고의 성능과 유연성을 위해 [variable 폰트](https://fonts.google.com/variablefonts) 사용을 권장한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { Inter } from 'next/font/google'
 
 // variable 폰트를 불러올 때는 font weight를 지정하지 않아도 된다
@@ -241,7 +241,7 @@ export default function RootLayout({
 
 variable 폰트를 사용할 수 없다면 **weight를 지정해야 한다**.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { Roboto } from 'next/font/google'
 
 const roboto = Roboto({
@@ -265,7 +265,7 @@ export default function RootLayout({
 
 배열을 사용하면 여러 weight와 style을 함께 지정할 수 있다.
 
-```tsx
+```tsx filename="app/layout.js"
 const roboto = Roboto({
   weight: ['400', '700'],
   style: ['normal', 'italic'],
@@ -282,7 +282,7 @@ Google Fonts는 자동으로 [서브셋](https://fonts.google.com/knowledge/glos
 
 함수 호출에 다음과 같이 추가해 지정할 수 있다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 const inter = Inter({ subsets: ['latin'] })
 ```
 
@@ -294,7 +294,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 첫 번째 방법은 폰트를 내보내는(export) 유틸리티 함수를 만들어 필요한 곳에서 임포트하고 `className`을 적용하는 것이다. 이렇게 하면 렌더링될 때만 폰트가 프리로드된다.
 
-```tsx
+```tsx filename="app/fonts.ts"
 import { Inter, Roboto_Mono } from 'next/font/google'
 
 export const inter = Inter({
@@ -308,7 +308,7 @@ export const roboto_mono = Roboto_Mono({
 })
 ```
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { inter } from './fonts'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -322,7 +322,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 ```
 
-```tsx
+```tsx filename="app/page.tsx"
 import { roboto_mono } from './fonts'
 
 export default function Page() {
@@ -338,7 +338,7 @@ export default function Page() {
 
 또는 [CSS 변수](#css-변수)를 만들어 원하는 CSS 방식과 함께 사용할 수도 있다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { Inter, Roboto_Mono } from 'next/font/google'
 import styles from './global.css'
 
@@ -370,7 +370,7 @@ export default function RootLayout({
 }
 ```
 
-```css
+```css filename="app/global.css"
 html {
   font-family: var(--font-inter);
 }
@@ -388,7 +388,7 @@ h1 {
 
 `next/font/local`을 임포트하고 로컬 폰트 파일의 `src`를 지정한다. 최고의 성능과 유연성을 위해 [variable 폰트](https://fonts.google.com/variablefonts) 사용을 권장한다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import localFont from 'next/font/local'
 
 // 폰트 파일은 `app` 안에 함께 둘 수 있다
@@ -412,7 +412,7 @@ export default function RootLayout({
 
 하나의 폰트 패밀리에 여러 파일을 사용하고 싶다면 `src`를 배열로 지정할 수 있다.
 
-```tsx
+```tsx filename="app/layout.js"
 const roboto = localFont({
   src: [
     {
@@ -449,7 +449,7 @@ const roboto = localFont({
 
 > **알아두면 좋은 점**: 취향, 스타일링 요구 사항, 프로젝트 요구 사항에 따라 이 변수들을 `<html>` 또는 `<body>` 태그에 추가할 수 있다.
 
-```tsx
+```tsx filename="app/layout.tsx"
 import { Inter, Roboto_Mono } from 'next/font/google'
 
 const inter = Inter({
@@ -482,7 +482,7 @@ export default function RootLayout({
 
 마지막으로 [Tailwind CSS 설정](../../1-getting-started/css.md#tailwind-css)에 CSS 변수를 추가한다.
 
-```css
+```css filename="global.css"
 @import 'tailwindcss';
 
 @theme inline {
@@ -493,7 +493,7 @@ export default function RootLayout({
 
 ##### Tailwind CSS v3
 
-```js
+```js filename="tailwind.config.js"
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -532,7 +532,7 @@ module.exports = {
 
 불러온 폰트의 읽기 전용 CSS `className`을 반환하며, HTML 엘리먼트에 전달한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 <p className={inter.className}>Hello, Next.js!</p>
 ```
 
@@ -540,7 +540,7 @@ module.exports = {
 
 불러온 폰트의 읽기 전용 CSS `style` 객체를 반환하며, HTML 엘리먼트에 전달한다. 폰트 패밀리 이름과 대체 폰트에 접근할 수 있는 `style.fontFamily`를 포함한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 <p style={inter.style}>Hello World</p>
 ```
 
@@ -550,7 +550,7 @@ module.exports = {
 
 폰트를 임포트할 때, CSS 변수가 정의된 CSS 파일도 함께 임포트하고 폰트 로더 객체의 `variable` 옵션을 다음과 같이 설정한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { Inter } from 'next/font/google'
 import styles from '../styles/component.module.css'
 
@@ -561,7 +561,7 @@ const inter = Inter({
 
 폰트를 사용하려면, 스타일을 적용하고 싶은 텍스트의 부모 컨테이너의 `className`을 폰트 로더의 `variable` 값으로 설정하고, 텍스트의 `className`을 외부 CSS 파일의 `styles` 속성으로 설정한다.
 
-```tsx
+```tsx filename="app/page.tsx"
 <main className={inter.variable}>
   <p className={styles.text}>Hello World</p>
 </main>
@@ -569,7 +569,7 @@ const inter = Inter({
 
 `component.module.css` CSS 파일에 `text` 선택자 클래스를 다음과 같이 정의한다.
 
-```css
+```css filename="styles/component.module.css"
 .text {
   font-family: var(--font-inter);
   font-weight: 200;
@@ -587,7 +587,7 @@ const inter = Inter({
 
 그다음 폰트 정의를 다음과 같이 지정한다.
 
-```tsx
+```tsx filename="styles/fonts.ts"
 import { Inter, Lora, Source_Sans_3 } from 'next/font/google'
 import localFont from 'next/font/local'
 
@@ -605,7 +605,7 @@ export { inter, lora, sourceCodePro400, sourceCodePro700, greatVibes }
 
 이제 코드에서 다음과 같이 이 정의들을 사용할 수 있다.
 
-```tsx
+```tsx filename="app/page.tsx"
 import { inter, lora, sourceCodePro700, greatVibes } from '../styles/fonts'
 
 export default function Page() {
@@ -624,7 +624,7 @@ export default function Page() {
 
 `tsconfig.json`이나 `jsconfig.json` 파일에 경로 별칭을 정의하면 코드에서 폰트 정의에 더 쉽게 접근할 수 있다.
 
-```json
+```json filename="tsconfig.json"
 {
   "compilerOptions": {
     "paths": {
@@ -636,7 +636,7 @@ export default function Page() {
 
 이제 다음과 같이 어떤 폰트 정의도 임포트할 수 있다.
 
-```tsx
+```tsx filename="app/about/page.tsx"
 import { greatVibes, sourceCodePro400 } from '@/fonts'
 ```
 

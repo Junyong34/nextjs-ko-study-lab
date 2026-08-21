@@ -22,7 +22,7 @@ Bundle Analyzer로 큰 의존성을 찾아 제거하거나 더 작은 모듈로 
 
 Webpack을 사용한다면 Next.js 15.0.0부터 다음 옵션으로 최대 메모리 사용량을 낮출 수 있다. 컴파일 시간은 조금 늘 수 있다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   experimental: {
     webpackMemoryOptimizations: true,
@@ -67,7 +67,7 @@ NODE_OPTIONS=--inspect next build
 
 Webpack build worker는 별도 Node.js worker에서 컴파일해 주 프로세스 메모리를 줄인다. Next.js 14.1.0부터 커스텀 Webpack 설정이 없으면 기본 활성화된다. 오래된 버전이나 커스텀 구성에서는 `experimental.webpackBuildWorker: true`를 검토한다.
 
-```js
+```js filename="next.config.mjs"
 module.exports = {
   experimental: {
     webpackBuildWorker: true,
@@ -81,7 +81,7 @@ module.exports = {
 
 Webpack cache는 빌드 속도를 높이는 대신 메모리와 디스크를 쓴다. 메모리가 더 중요한 환경에서는 프로덕션 cache 방식을 조정할 수 있지만 재빌드가 느려지는지 함께 측정한다.
 
-```js
+```js filename="next.config.mjs"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config, { dev }) => {
@@ -101,7 +101,7 @@ export default nextConfig
 
 TypeScript 검사는 대형 프로젝트에서 많은 메모리를 쓸 수 있다. 빌드에서 `ignoreBuildErrors: true`를 사용하면 타입 오류가 있어도 산출물이 만들어지므로 위험하다. 별도 CI의 타입 검사가 성공하고 staging 검증까지 끝난 결과만 프로덕션으로 승격한다.
 
-```js
+```js filename="next.config.mjs"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -117,7 +117,7 @@ export default nextConfig
 
 source map 생성도 빌드 메모리를 쓴다. `productionBrowserSourceMaps`, `experimental.serverSourceMaps`, prerender 단계의 `enablePrerenderSourceMaps`를 끌 수 있지만 운영 오류 추적 능력이 줄어든다. 일부 plugin이 source map을 다시 켤 수 있으므로 최종 설정을 확인한다.
 
-```js
+```js filename="next.config.js"
 module.exports = {
   productionBrowserSourceMaps: false,
   experimental: {
@@ -137,7 +137,7 @@ Edge Runtime 메모리 문제는 Next.js 14.1.3에서 수정됐으므로 그 이
 
 서버 시작 시 모든 page 모듈을 미리 올리는 동작은 첫 응답을 빠르게 하지만 초기 메모리를 늘린다.
 
-```ts
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const config: NextConfig = {

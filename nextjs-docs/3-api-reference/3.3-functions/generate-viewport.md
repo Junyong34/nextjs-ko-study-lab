@@ -72,7 +72,7 @@ export default function RootLayout({ children }) {
 
 #### 1. `themeColor`
 - 단일 색상 문자열 또는 미디어 쿼리 배열을 지정한다.
-  ```tsx
+```tsx filename="layout.tsx"
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#0ea5e9' },
     { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
