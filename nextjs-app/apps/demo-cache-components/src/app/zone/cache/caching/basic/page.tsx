@@ -42,23 +42,7 @@ export default async function DemoPage() {
 
   return (
     <DemoContainer className="p-4 sm:p-6 max-w-2xl mx-auto space-y-4 sm:space-y-6">
-      {/* 데모 헤더 영역 */}
-      <div className="p-4 rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/50">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[11px] font-mono uppercase px-2 py-0.5 rounded bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 font-semibold">
-            Zone: cache (Cache Components)
-          </span>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            캐시 생성 시각: {cachedData.timestamp}
-          </span>
-        </div>
-        <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-          use cache 기본 동작 및 revalidateTag 무효화
-        </h2>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-          근거 문서: <code className="bg-zinc-200/60 dark:bg-zinc-800 px-1 py-0.5 rounded">1-getting-started/caching.md</code>
-        </p>
-      </div>
+      {/* 제목·zone·근거 문서는 셸이 그린다 (규칙 12). 여기는 데모 본체만 둔다. */}
 
       {/* 데모 실증 영역 */}
       <div className="p-4 rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 space-y-4 shadow-xs">

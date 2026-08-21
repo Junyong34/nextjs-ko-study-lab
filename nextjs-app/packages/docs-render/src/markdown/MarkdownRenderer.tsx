@@ -1,7 +1,5 @@
-'use client'
-
 import React from 'react'
-import { DemoFrame } from '../demo/DemoFrame'
+import { DemoLinkCard } from '../demo/DemoLinkCard'
 import { DocDemoList, type DemoItem } from '../demo/DocDemoList'
 import { CodeBlock } from '../code/CodeBlock'
 import { parseDemoBlock } from './parse/demo-block'
@@ -97,17 +95,15 @@ export function MarkdownRenderer({
       const fullCode = codeBlockLines.join('\n')
 
       if (codeBlockLang === 'demo') {
+        // 코드펜스는 본문에 예제를 심지 않는다. 링크 카드만 그린다 (규칙 16).
         const demoConfig = parseDemoBlock(fullCode)
         const matchedDemo = demos.find((d) => d.url === demoConfig.path)
-        const zone = demoConfig.zone || matchedDemo?.zone
 
         elements.push(
-          <DemoFrame
+          <DemoLinkCard
             key={`demo-${demoConfig.path || idx++}`}
             path={demoConfig.path}
-            zone={zone}
-            mode={demoConfig.mode}
-            height={demoConfig.height}
+            title={matchedDemo?.title}
             caption={demoConfig.caption}
           />,
         )
