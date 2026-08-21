@@ -7,10 +7,15 @@ import { Input } from '../../primitives/Input'
 export interface DocTreeSearchProps {
   value: string
   onChange: (next: string) => void
+  placeholder?: string
 }
 
 /** 트리 상단에 고정된 검색창. 스크롤되지 않는다. */
-export function DocTreeSearch({ value, onChange }: DocTreeSearchProps) {
+export function DocTreeSearch({
+  value,
+  onChange,
+  placeholder = '문서 목차 검색...',
+}: DocTreeSearchProps) {
   return (
     <div className="shrink-0 pb-2">
       <div className="relative">
@@ -18,7 +23,7 @@ export function DocTreeSearch({ value, onChange }: DocTreeSearchProps) {
         <Input
           type="text"
           padding="withIcon"
-          placeholder="문서 목차 검색..."
+          placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />

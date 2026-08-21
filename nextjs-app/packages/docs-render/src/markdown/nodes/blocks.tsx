@@ -12,26 +12,18 @@ export function Blockquote({ children }: { children: React.ReactNode }) {
 
 /** 순서 없는 목록 (ul) 컨테이너 */
 export function UnorderedList({ children }: { children: React.ReactNode }) {
-  return <ul className="my-2 space-y-1">{children}</ul>
+  return <ul className="my-3 space-y-1.5 list-disc pl-6 text-sm text-zinc-700 dark:text-zinc-300">{children}</ul>
 }
 
 /** 순서 있는 목록 (ol) 컨테이너 */
 export function OrderedList({ children }: { children: React.ReactNode }) {
-  return <ol className="my-2 space-y-1">{children}</ol>
+  return <ol className="my-3 space-y-1.5 list-decimal pl-6 text-sm text-zinc-700 dark:text-zinc-300">{children}</ol>
 }
 
-/** 목록 항목. 순서 있는 목록과 없는 목록은 마커만 다르다. */
-export function ListItem({
-  ordered = false,
-  children,
-}: {
-  ordered?: boolean
-  children: React.ReactNode
-}) {
+/** 목록 항목 */
+export function ListItem({ children }: { children: React.ReactNode }) {
   return (
-    <li
-      className={`ml-6 ${ordered ? 'list-decimal' : 'list-disc'} text-sm leading-relaxed text-zinc-700 dark:text-zinc-300`}
-    >
+    <li className="leading-relaxed text-zinc-700 dark:text-zinc-300">
       {children}
     </li>
   )
