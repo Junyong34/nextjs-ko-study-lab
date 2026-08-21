@@ -22,9 +22,9 @@ graph TD
 
     subgraph Packages ["📂 packages/ (공유 도메인 & UI 레이어)"]
         DemosPkg["@study/demos<br/>• demos.yaml (SSOT)<br/>• Zod 스키마 검증<br/>• manifest & stubs 빌더"]:::pkgStyle
-        UIPkg["@study/ui<br/>• 셸 전용 UI (규칙 17)<br/>• 헤더·좌측 트리·우측 목차·카드<br/>• Phase 3에서 채워짐"]:::pkgStyle
+        UIPkg["@study/ui<br/>• 셸 전용 UI (규칙 17)<br/>• 헤더·좌측 트리·우측 목차·피드백·카드"]:::pkgStyle
         DemoKitPkg["@study/demo-kit<br/>• DemoContainer (ResizeObserver)<br/>• ExpectedActualPanel<br/>• DemoResetButton"]:::pkgStyle
-        RenderPkg["@study/docs-render<br/>• MarkdownRenderer<br/>• Shiki 구문 강조 (github-dark)<br/>• DemoFrame (postMessage)"]:::pkgStyle
+        RenderPkg["@study/docs-render<br/>• MarkdownRenderer (Server Component)<br/>• Shiki 구문 강조<br/>• DemoLinkCard & DemoIframe"]:::pkgStyle
     end
 
     subgraph Apps ["🚀 apps/ (독립 실행형 Next.js 16 애플리케이션)"]
@@ -40,7 +40,7 @@ graph TD
     DemoKitPkg -->|DemoContainer, 검증패널| DemoBaseline
     DemoKitPkg -->|DemoContainer, 검증패널| DemoCache
     UIPkg -->|셸 전용 UI| ShellApp
-    RenderPkg -->|MarkdownRenderer, DemoFrame| ShellApp
+    RenderPkg -->|MarkdownRenderer, DemoIframe| ShellApp
 
     %% 런타임 멀티 존 프록시 연결
     ShellApp -.->|Rewrite /zone/baseline/*| DemoBaseline
@@ -122,9 +122,9 @@ graph TD
 | [`apps/shell`](./apps/shell) | `@study/shell` | `3000` | • **사용자 진입점 웹 앱 (셸 게이트웨이)**<br>• 상단 `Header`, 좌측 `Sidebar`(284개 목차), 하단 `Footer`, `FeedbackModal`<br>• `/[...slug]`: 284개 공식 마크다운 SSG 정적 렌더링<br>• `/demo`: 실습 데모 색인 카드 뷰어<br>• `/demo/[...slug]`: 독립 데모 열람 Chrome 및 iframe 호스팅<br>• `/docs-assets/[...path]`: 문서 내 상대 경로 이미지 스트리밍 서빙<br>• Multi-zones 프록시(Rewrites) 라우터 |
 | [`apps/demo-baseline`](./apps/demo-baseline) | `@study/demo-baseline` | `3001` | • **기본 기능 데모 존 (Baseline Zone)**<br>• Server Actions, Route Handlers, 클라이언트 컴포넌트 등 표준 App Router 기능 실습<br>• 셸의 chrome 없이 순수 데모 UI만 iframe으로 렌더링 |
 | [`apps/demo-cache-components`](./apps/demo-cache-components) | `@study/demo-cache-components` | `3002` | • **캐시 기능 전용 데모 존 (Cache Zone)**<br>• Next.js 16 `cacheComponents: true` 환경 격리<br>• `'use cache'`, `cacheTag()`, `revalidateTag()` 등 캐시 무효화 실습 |
-| [`packages/ui`](./packages/ui) | `@study/ui` | - | • **셸 전용 UI 패키지** ([`AGENTS.md`](./AGENTS.md) 규칙 17, [06. 7-4](./docs/06-ui-and-screen-design.md))<br>• 헤더, 좌측 문서 트리, 우측 목차, 카드 등<br>• 데모 앱은 이 패키지를 의존하지 않는다 — 의존하면 헤더·검색 팔레트가 데모 앱 빌드에 끌려 들어간다<br>• 셸 UI 이관은 리팩토링 Phase 3에서 진행 |
+| [`packages/ui`](./packages/ui) | `@study/ui` | - | • **셸 전용 UI 패키지** ([`AGENTS.md`](./AGENTS.md) 규칙 17, [06. 7-4](./docs/06-ui-and-screen-design.md))<br>• 상단 `Header`, 좌측 `DocTree`, 우측 `TableOfContents`, 하단 `Footer`, `FeedbackModal`, `primitives`/`brand` 컴포넌트<br>• 데모 앱은 이 패키지를 의존하지 않는다 — 의존하면 헤더·검색 팔레트가 데모 앱 빌드에 끌려 들어간다 |
 | [`packages/demo-kit`](./packages/demo-kit) | `@study/demo-kit` | - | • **데모 존 공통 UI 키트**<br>• `DemoContainer`: 내부 DOM 높이를 실시간 측정하여 부모 셸에 `DEMO_RESIZE` postMessage 전송<br>• `ExpectedActualPanel`: 기대값과 실제 관찰 상태를 비교하는 검증 배지 패널<br>• `DemoResetButton`: 데모 상태 초기화 버튼<br>• 데모 앱에는 shadcn을 넣지 않는다 — 학습자가 읽을 코드다 |
-| [`packages/docs-render`](./packages/docs-render) | `@study/docs-render` | - | • **문서 렌더링 엔진**<br>• `MarkdownRenderer`: 마크다운 파싱 및 인라인/블록 이미지 자동 경로 변환<br>• `Shiki` 구문 강조 연동 (`github-dark` 테마, 메모리 캐싱)<br>• `DemoFrame`: iframe 임베딩 및 `DEMO_RESIZE` 이벤트 수신 높이 동기화<br>• `DocDemoList`: 문서 하단 관련 데모 카드 목록 표시 |
+| [`packages/docs-render`](./packages/docs-render) | `@study/docs-render` | - | • **문서 렌더링 엔진 (Server Component)**<br>• `MarkdownRenderer`: 마크다운 파싱, 인라인/블록 이미지 자동 경로 변환, `DemoLinkCard` (규칙 16 링크 카드)<br>• `Shiki` 구문 강조 연동 (`github-dark` 테마, 메모리 캐싱)<br>• `DemoIframe` & `useDemoResizeBridge`: 독립 열람용 iframe 호스팅 및 `DEMO_RESIZE` 이벤트 수신 높이 동기화<br>• `DocDemoList`: 문서 하단 관련 데모 카드 목록 표시 |
 | [`packages/demos`](./packages/demos) | `@study/demos` | - | • **데모 메타데이터 및 도구 (SSOT)**<br>• `demos.yaml`: 전역 데모 목록 및 상태 관리<br>• Zod 스키마 검증 (`DemoSchema`)<br>• 스텁 자동 생성 및 린터 도구 제공 |
 | [`nextjs-docs`](../nextjs-docs) | `@study/docs` | - | • **Next.js 공식 문서 한국어 원본 (284편)**<br>• 다이어그램, 아키텍처 도표 등 정적 WebP/PNG 이미지 에셋(`assets/`)<br>• `docs-manifest.json` 생성 스크립트 |
 
@@ -247,39 +247,44 @@ flowchart LR
 
 ## 7. 문서 및 데모 렌더링 파이프라인 흐름도 (Mermaid Sequence)
 
-문서 페이지에서 인라인 데모가 로드되고, 사용자가 인터랙션을 수행할 때의 전체 통신 흐름입니다.
+문서 페이지에서 링크 카드가 렌더링되고, 사용자가 독립 데모를 열어 인터랙션을 수행할 때의 전체 통신 흐름입니다.
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor User as 사용자 (브라우저)
     participant Shell as apps/shell (:3000)
-    participant Renderer as MarkdownRenderer / Shiki
-    participant DemoFrame as DemoFrame (Client)
+    participant Renderer as MarkdownRenderer (Server)
+    participant DemoIframe as DemoIframe (useDemoResizeBridge)
     participant Zone as apps/demo-* (:3001/:3002)
     participant Container as DemoContainer (@study/demo-kit)
 
+    %% 1. 문서 페이지 조회 (규칙 16: iframe 없음)
     User->>Shell: GET /getting-started/caching
     Shell->>Shell: docs-manifest.json 기반 SSG 캐시에서 정적 HTML 준비
-    Shell->>Renderer: 마크다운 텍스트 파싱 요청
-    Renderer->>Renderer: Shiki를 통한 코드 블록 구문 강조 (github-dark)
-    Renderer->>Renderer: ```demo 블록 감지 -> DemoFrame 컴포넌트로 치환
-    Renderer->>User: 문서 본문 및 iframe 마크업 전송
+    Shell->>Renderer: 마크다운 텍스트 파싱 요청 (서버 컴포넌트)
+    Renderer->>Renderer: Shiki를 통한 코드 블록 구문 강조
+    Renderer->>Renderer: ```demo 블록 감지 -> DemoLinkCard(링크 카드)로 치환
+    Renderer->>User: 문서 본문 및 링크 카드 마크업 전송 (iframe 0건)
 
-    User->>Shell: GET /zone/cache/caching/basic (iframe 내부 로드)
+    %% 2. 독립 데모 열람 (/demo/...)
+    User->>Shell: 링크 카드 클릭 -> GET /demo/caching/basic (독립 열람)
+    Shell->>DemoIframe: 셸 크롬(DemoPageHeader) + DemoIframe 렌더링
+    DemoIframe->>Shell: iframe 로드 요청: GET /zone/cache/caching/basic
     Shell->>Zone: Next.js Rewrite 프록시 전달 (:3002)
-    Zone->>Container: 데모 컴포넌트 렌더링
+    Zone->>Container: 데모 컴포넌트 렌더링 (순수 데모 본체)
     Container->>Container: ResizeObserver로 실제 내부 scrollHeight 측정 (예: 248px)
-    Container->>DemoFrame: window.parent.postMessage({ type: 'DEMO_RESIZE', height: 248 }, origin)
-    DemoFrame->>DemoFrame: origin 검증 후 iframe.style.height = '248px' 동기화
+    Container->>DemoIframe: window.parent.postMessage({ type: 'DEMO_RESIZE', height: 248 }, origin)
+    DemoIframe->>DemoIframe: origin/source 검증 후 iframe.style.height = '248px' 동기화
 
+    %% 3. 데모 상호작용
     Note over User,Zone: 사용자가 데모 내 버튼 클릭 (Server Action 실행)
     User->>Zone: Server Action 호출 (캐시 무효화 및 데이터 추가)
     Zone->>Container: 서버 응답 반영 후 내부 UI 상태 갱신 (리스트 확장)
     Container->>Container: ResizeObserver가 증가된 높이 감지 (예: 312px)
-    Container->>DemoFrame: postMessage({ type: 'DEMO_RESIZE', height: 312 })
-    DemoFrame->>DemoFrame: 2px 이상 차이 감지 시 부드럽게 iframe 높이 312px로 확장
-    DemoFrame->>User: 깜빡임이나 무한 높이 루프 없이 완벽한 반응형 렌더링 완성
+    Container->>DemoIframe: postMessage({ type: 'DEMO_RESIZE', height: 312 })
+    DemoIframe->>DemoIframe: 2px 이상 차이 감지 시 부드럽게 iframe 높이 312px로 확장
+    DemoIframe->>User: 깜빡임이나 무한 높이 루프 없이 완벽한 반응형 렌더링 완성
 ```
 
 ---
