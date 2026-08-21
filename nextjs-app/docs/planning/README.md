@@ -42,3 +42,19 @@
     ↓
 [다음 목차로 이동]
 ```
+
+---
+
+## 4. 컴포넌트 개발 & MCP 활용 원칙
+
+1. **Next.js MCP(`next-devtools`) 상시 검증**:
+   - 데모 개발 전/중에 `next-devtools` MCP(`nextjs_docs`, `nextjs_index`, `nextjs_call`)를 호출하여 `next@16.3.1` 공식 스펙 및 올바른 API 시그니처를 교차 검증합니다.
+2. **단일 파일 250줄 제한 및 모듈별 분리**:
+   - `page.tsx`: 100~150줄 내외의 고수준 조합 및 레이아웃 조립만 담당.
+   - `actions.ts`: Server Actions 함수 분리.
+   - `types.ts`: 비즈니스/아이템 데이터 인터페이스 분리.
+   - `components/*.tsx`: 개별 위젯, 입력 폼, 리스트 아이템 컴포넌트 단위로 분리.
+   - `hooks/*.ts`: 복잡한 클라이언트 상태 로직 분리.
+3. **`@study/demo-kit` 재사용 극대화**:
+   - `DemoContainer`, `ExpectedActualPanel`, `DemoResetButton`을 필수로 사용하여 중복 코드를 제거하고, 간결하고 유지보수하기 쉬운 데모 코드를 작성합니다.
+

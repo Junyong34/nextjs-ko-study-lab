@@ -58,6 +58,9 @@ zone 배분과 포트는 [03. 결합 구조 설계 2절](./docs/03-composition-a
 18. **셸의 스토리지 키에도 접두사를 붙인다.** 모든 zone이 동일 오리진이라 데모가 셸의 상태를 덮어쓸 수 있다. 셸은 `study_*`(테마는 `study_theme`), 데모 앱은 `demo_{슬러그}_*`를 쓴다 ([06. 8-2](./docs/06-ui-and-screen-design.md), [03. 6-5](./docs/03-composition-architecture.md)).
 19. **화면 라벨과 도메인 용어를 섞지 않는다.** 화면에는 `예제`라고 쓰지만 URL·파일·설계 문서의 용어는 `데모`다. 코드에서 `example`로 바꿔 쓰지 않는다 ([06. 6-2](./docs/06-ui-and-screen-design.md)).
 20. **디자인 토큰 이름을 새로 만들지 않는다.** shadcn의 Tailwind v4 규약(`@theme inline` + oklch)을 그대로 쓴다 ([06. 8-1](./docs/06-ui-and-screen-design.md)).
+21. **Next.js MCP(`next-devtools`)를 적극 활용한다.** 데모 설계 및 구현 시 `next-devtools` MCP(`nextjs_docs`, `nextjs_index`, `nextjs_call`)를 호출하여 `next@16.3.1` 공식 최신 API 스펙, 올바른 시그니처 및 주의사항을 1차 출처로 교차 검증한다.
+22. **단일 파일 250줄 제한과 모듈별 분리를 엄격히 준수한다.** 한 파일에 모든 로직을 쏟아붓지 않는다. `page.tsx`(100~150줄 내외, 고수준 조립), `actions.ts`(Server Actions), `types.ts`(타입 정의), `components/*.tsx`(하위 위젯/폼 분리), `hooks/*.ts`(상태 로직)로 분할하여 유지보수성과 가독성을 극대화한다.
+23. **`@study/demo-kit`의 재사용성을 극대화한다.** `DemoContainer`, `ExpectedActualPanel`, `DemoResetButton` 등의 공통 컴포넌트를 필수로 활용하여 보일러플레이트 중복을 방지하고, 데모 코드는 핵심 기능에만 집중하도록 컴팩트하게 작성한다.
 
 `next dev`가 zone의 `AGENTS.md`·`CLAUDE.md`에 `nextjs-agent-rules` 블록을 삽입하는 것은 **정상 동작이다.** 마커 바깥 내용은 보존되니 그대로 커밋한다 ([01. 구성 절차 3-3 ⑥](./docs/01-project-setup.md)).
 
