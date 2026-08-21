@@ -63,12 +63,31 @@ export function MarkdownRenderer({
   let detailsSummary = ''
   let detailsLines: string[] = []
 
+  let listType: 'ordered' | 'unordered' | null = null
+  let listItems: React.ReactNode[] = []
+
   const flushTable = () => {
     if (tableLines.length >= 2) {
       elements.push(<Table key={`table-${idx++}`} lines={tableLines} docPath={docPath} />)
     }
     tableLines = []
     inTable = false
+  }
+
+  const flushList = () => {
+    if (listItems.length > 0 && listType) {
+      if (listType === 'ordered') {
+        elements.push(
+          <OrderedList key={`ol-${idx++}`}>{listItems}</OrderedList>,
+        )
+      } else {
+        elements.push(
+          <UnorderedList key={`ul-${idx++}`}>{listItems}</UnorderedList>,
+        )
+      }
+    }
+    listType = null
+    listItems = []
   }
 
   const flushDetails = () => {
@@ -107,6 +126,7 @@ export function MarkdownRenderer({
     if (trimmed.startsWith('```')) {
       if (inTable) flushTable()
       if (inDetails) flushDetails()
+      if (listType) flushList()
 
       if (!inCodeBlock) {
         inCodeBlock = true
@@ -187,6 +207,7 @@ export function MarkdownRenderer({
     if (singleLineDetailsMatch) {
       if (inTable) flushTable()
       if (inDetails) flushDetails()
+      if (listType) flushList()
 
       const summaryText = singleLineDetailsMatch[1].trim() || '정답 보기'
       const bodyText = singleLineDetailsMatch[2].trim()
@@ -202,6 +223,7 @@ export function MarkdownRenderer({
     if (trimmed.startsWith('<details')) {
       if (inTable) flushTable()
       if (inDetails) flushDetails()
+      if (listType) flushList()
 
       inDetails = true
       detailsSummary = ''
@@ -251,6 +273,7 @@ export function MarkdownRenderer({
     const imgBlockMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
     if (imgBlockMatch) {
       if (inTable) flushTable()
+      if (listType) flushList()
       elements.push(
         <Figure
           key={`fig-${idx++}`}
@@ -263,6 +286,7 @@ export function MarkdownRenderer({
 
     // 4. 표
     if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      if (listType) flushList()
       inTable = true
       tableLines.push(trimmed)
       continue
@@ -270,9 +294,10 @@ export function MarkdownRenderer({
       flushTable()
     }
 
-    // 4. 헤딩 — 원본의 네 벌 복붙을 표 순회로 접었다
+    // 5. 헤딩 — 원본의 네 벌 복붙을 표 순회로 접었다
     const heading = HEADING_MARKS.find((h) => trimmed.startsWith(h.mark))
     if (heading) {
+      if (listType) flushList()
       const headingText = trimmed.slice(heading.mark.length).trim()
       const { primary, alias } = slugify(headingText)
       elements.push(
@@ -283,8 +308,9 @@ export function MarkdownRenderer({
       continue
     }
 
-    // 5. 인용문과 경고 블록
+    // 6. 인용문과 경고 블록
     if (trimmed.startsWith('>')) {
+      if (listType) flushList()
       const bqContent = trimmed.replace(/^>\s?/, '')
       const alert = matchAlert(bqContent)
 
@@ -302,7 +328,24 @@ export function MarkdownRenderer({
       continue
     }
 
-    // 6. 순서 없는 목록
+    // 7. 복수 선택 체크박스 목록 (- [ ] 또는 - [x])
+    const taskMatch = trimmed.match(/^-\s+\[([ xX])\]\s+(.*)$/)
+    if (taskMatch) {
+      if (inTable) flushTable()
+      if (inDetails) flushDetails()
+      if (listType !== 'unordered') flushList()
+      listType = 'unordered'
+
+      const isChecked = taskMatch[1].toLowerCase() === 'x'
+      listItems.push(
+        <ListItem key={`li-${idx++}`} checked={isChecked}>
+          {renderInline(taskMatch[2], docPath)}
+        </ListItem>,
+      )
+      continue
+    }
+
+    // 8. 순서 없는 목록
     if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       const listContent = trimmed.slice(2).trim()
 
@@ -310,35 +353,46 @@ export function MarkdownRenderer({
         continue
       }
 
-      elements.push(
-        <UnorderedList key={`ul-${idx++}`}>
-          <ListItem>{renderInline(listContent, docPath)}</ListItem>
-        </UnorderedList>,
+      if (inTable) flushTable()
+      if (inDetails) flushDetails()
+      if (listType !== 'unordered') flushList()
+      listType = 'unordered'
+
+      listItems.push(
+        <ListItem key={`li-${idx++}`}>{renderInline(listContent, docPath)}</ListItem>,
       )
       continue
     }
 
-    // 7. 순서 있는 목록
-    const olMatch = trimmed.match(/^(\d+)\.\s+(.+)$/)
+    // 9. 순서 있는 목록 (1. 또는 A.)
+    const olMatch = trimmed.match(/^(\d+|[A-Z])\.\s+(.+)$/)
     if (olMatch) {
-      elements.push(
-        <OrderedList key={`ol-${idx++}`}>
-          <ListItem>{renderInline(olMatch[2], docPath)}</ListItem>
-        </OrderedList>,
+      if (inTable) flushTable()
+      if (inDetails) flushDetails()
+      if (listType !== 'ordered') flushList()
+      listType = 'ordered'
+
+      listItems.push(
+        <ListItem key={`ol-${idx++}`}>{renderInline(olMatch[2], docPath)}</ListItem>,
       )
       continue
     }
 
-    // 8. 수평선
+    // 10. 수평선
     if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
+      if (listType) flushList()
       elements.push(<hr key={`hr-${idx++}`} className="my-6 border-zinc-200 dark:border-zinc-800" />)
       continue
     }
 
-    // 9. 빈 줄
-    if (!trimmed) continue
+    // 11. 빈 줄
+    if (!trimmed) {
+      if (listType) flushList()
+      continue
+    }
 
-    // 10. 그 밖엔 문단
+    // 12. 그 밖엔 문단
+    if (listType) flushList()
     elements.push(<Paragraph key={`p-${idx++}`}>{renderInline(line, docPath)}</Paragraph>)
   }
 
@@ -348,6 +402,10 @@ export function MarkdownRenderer({
 
   if (inDetails) {
     flushDetails()
+  }
+
+  if (listType) {
+    flushList()
   }
 
   return (

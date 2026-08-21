@@ -12,26 +12,38 @@ export function Blockquote({ children }: { children: React.ReactNode }) {
 
 /** 순서 없는 목록 (ul) 컨테이너 */
 export function UnorderedList({ children }: { children: React.ReactNode }) {
-  return <ul className="my-2 space-y-1">{children}</ul>
+  return <ul className="my-3 space-y-1.5 list-disc pl-6 text-sm text-zinc-700 dark:text-zinc-300">{children}</ul>
 }
 
 /** 순서 있는 목록 (ol) 컨테이너 */
 export function OrderedList({ children }: { children: React.ReactNode }) {
-  return <ol className="my-2 space-y-1">{children}</ol>
+  return <ol className="my-3 space-y-1.5 list-decimal pl-6 text-sm text-zinc-700 dark:text-zinc-300">{children}</ol>
 }
 
-/** 목록 항목. 순서 있는 목록과 없는 목록은 마커만 다르다. */
+/** 목록 항목 */
 export function ListItem({
-  ordered = false,
   children,
+  checked,
 }: {
-  ordered?: boolean
   children: React.ReactNode
+  checked?: boolean
 }) {
+  if (checked !== undefined) {
+    return (
+      <li className="flex items-start gap-2.5 list-none -ml-6 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+        <input
+          type="checkbox"
+          checked={checked}
+          readOnly
+          className="mt-1 h-3.5 w-3.5 shrink-0 rounded border-zinc-300 text-zinc-900 focus:ring-0 dark:border-zinc-700 dark:bg-zinc-800 pointer-events-none"
+        />
+        <span className="flex-1">{children}</span>
+      </li>
+    )
+  }
+
   return (
-    <li
-      className={`ml-6 ${ordered ? 'list-decimal' : 'list-disc'} text-sm leading-relaxed text-zinc-700 dark:text-zinc-300`}
-    >
+    <li className="leading-relaxed text-zinc-700 dark:text-zinc-300">
       {children}
     </li>
   )
