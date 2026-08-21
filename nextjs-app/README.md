@@ -34,6 +34,7 @@
 | 04 | [설계 실현 가능성 검증](./docs/04-feasibility-verification.md) |
 | 05 | [남은 설계 질문](./docs/05-open-questions.md) |
 | 06 | [화면 구성과 UI 설계](./docs/06-ui-and-screen-design.md) |
+| 07 | [코드베이스 심층 분석 및 데이터 흐름 가이드](./docs/07-codebase-deep-dive-guide.md) |
 
 ADR 6건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있습니다.
 
