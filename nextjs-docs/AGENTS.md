@@ -19,7 +19,7 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
     1. 공식 출처(원문 링크) / 상위 메뉴 / 전체 목차 링크
     2. 학습 목표
     3. 핵심 개념 및 설명 — 번역문이 아니라 학습 목표·핵심 개념에 맞게 재구성한 한글 본문. 코드는 md 코드블록으로 작성하고, 코드 식별자는 원문 그대로 유지한다.
-    4. 예제 및 데모 설계 — **첫 줄은 반드시 `- 데모 가능 여부: 가능` / `불가` / `검토 예정` 중 하나로 시작한다.** 뒤에 괄호나 문장으로 부연을 덧붙이는 것은 자유지만, 세 값 중 하나로 시작하지 않으면 안 된다. 이 줄은 **"브라우저에서 관찰 가능한가"만 판정한다** — 언제 만들지는 데모 목록(`demos.yaml`)의 `status`가 관리하므로 판정 자리에 시점만 적지 않는다 ([ADR 0004](../nextjs-app/docs/adr/0004-demo-list-as-source-of-truth.md)). 나머지 줄에는 데모 아이디어를 자유롭게 쓴다 (Phase 1에서는 설계만 남기고 구현은 하지 않는다 — 아래 Phase Gate 참고).
+    4. 예제 및 데모 설계 — **첫 줄은 반드시 `- 데모 가능 여부: 가능` / `불가` / `검토 예정` 중 하나로 시작한다.** 뒤에 괄호나 문장으로 부연을 덧붙이는 것은 자유지만, 세 값 중 하나로 시작하지 않으면 안 된다. 이 줄은 **"브라우저에서 관찰 가능한가"만 판정한다** — 언제 만들지는 데모 목록(`demos.yaml`)의 `status`가 관리하므로 판정 자리에 시점만 적지 않는다 ([ADR 0004](../nextjs-app/docs/adr/0004-demo-list-as-source-of-truth.md)). 나머지 줄에는 데모 아이디어를 자유롭게 쓴다 (이 디렉토리에는 데모 설계만 남기고 구현 코드는 두지 않는다 — 데모 실행 코드는 `nextjs-app/`의 몫이다. 아래 Phase Gate 참고).
     5. 연습 문제 1~3개 — 객관식(단일 선택 또는 복수 선택)만 사용한다. `<details><summary>정답 보기</summary>` 안에 정답과 한 줄 해설을 적어 접어둔다.
     6. 챕터 요약 — 5줄 내외 불릿 포인트.
 4. 2번에서 확인한 이미지가 있으면 공식 문서 페이지를 직접 열어 캡쳐하고, `<카테고리>/assets/<slug>-NN.webp`(무손실 WebP, chrome-devtools `take_screenshot`의 `format: "webp"` 옵션 사용)로 저장해 원문과 같은 위치에 참조한다. 캡쳐가 잘못됐거나 대상이 애매하면 사용자에게 확인받거나 대체 이미지 경로를 받는다.
@@ -47,4 +47,4 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 
 ## Phase Gate
 
-지금은 **Phase 1: 문서화**다. 데모 앱이나 실행 코드는 만들지 않는다. `PROGRESS.md`의 항목이 대부분 "완료"가 된 뒤에야 Phase 2(로컬 Next.js 데모 앱: App Router + TypeScript + Tailwind)로 넘어간다. Phase 2 앱은 저장소 루트의 형제 폴더 [`nextjs-app/`](../nextjs-app/README.md)에 배치하기로 미리 정했다(루트 [README.md](../README.md) 참고). 실제 스캐폴딩과 세부 라우팅 구조는 Phase 2 착수 시점에 확정한다.
+**Phase 1(문서화)은 완료됐다** — `PROGRESS.md`의 항목 194건 전부 "완료"다. **Phase 2(데모 사이트: App Router + TypeScript + Tailwind)는 이미 착수되어 진행 중**이며, 저장소 루트의 형제 폴더 [`nextjs-app/`](../nextjs-app/README.md)에 있다(루트 [README.md](../README.md) 참고). 이 디렉토리(`nextjs-docs/`)에는 여전히 데모 실행 코드를 두지 않는다 — 그 몫은 `nextjs-app/`이다.

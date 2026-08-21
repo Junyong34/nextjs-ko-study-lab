@@ -1,10 +1,10 @@
 # nextjs-app 작업 규칙 (Phase 2)
 
-Next.js 학습 데모 사이트가 들어설 자리다. **설계는 완료됐고 실행 코드는 아직 없다.** 착수 조건이 충족되기 전까지 코드를 만들지 않는다.
+Next.js 학습 데모 사이트가 들어설 자리다. **착수 조건이 충족되어 Phase 2가 시작됐다.** 셸(`apps/shell`)과 개념 증명(PoC) 데모 2개(`demo-baseline`의 Server Actions, `demo-cache-components`의 `use cache`)가 구현되어 `status: done`으로 공개돼 있다. 지금은 [05. 남은 설계 질문](./docs/05-open-questions.md) B절(대량 확장 전 단계)이 다음 작업이다.
 
-## 착수 조건
+## 착수 조건 — 충족됨
 
-[`nextjs-docs/PROGRESS.md`](../nextjs-docs/PROGRESS.md)의 항목이 대부분 "완료"가 되어야 한다 ([루트 Phase Gate](../AGENTS.md#phase-gate) 참고).
+[`nextjs-docs/PROGRESS.md`](../nextjs-docs/PROGRESS.md)의 항목이 194건 전부 "완료"다 ([루트 Phase Gate](../AGENTS.md#phase-gate) 참고). 개념 증명(PoC, 셸 + 데모 2개, 스모크 배포 없이 로컬 기준)도 끝났다.
 
 ## 설계 문서를 먼저 읽는다
 

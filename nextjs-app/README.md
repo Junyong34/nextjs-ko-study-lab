@@ -24,7 +24,7 @@
 
 ## 설계 문서
 
-착수 전에 [`docs/`](./docs/README.md)를 먼저 읽어주세요.
+작업 전에 [`docs/`](./docs/README.md)를 먼저 읽어주세요.
 
 | # | 문서 |
 |---|---|
@@ -46,8 +46,8 @@ ADR 6건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있�
 - pnpm workspaces + Turborepo (워크스페이스 루트는 저장소 루트)
 - 기준 버전은 루트 `pnpm-workspace.yaml`의 catalog 한 곳에서만 선언하며, `nextjs-docs/README.md`의 학습 기준 버전과 같은 값입니다
 
-## 착수 조건
+## 착수 조건 — 충족됨
 
-`nextjs-docs/PROGRESS.md`의 항목이 대부분 "완료"가 되어야 합니다 ([Phase Gate](../AGENTS.md#phase-gate) 참고).
+`nextjs-docs/PROGRESS.md`의 항목이 194건 전부 "완료"입니다 ([Phase Gate](../AGENTS.md#phase-gate) 참고). 셸과 개념 증명(PoC) 데모 2개가 구현돼 있습니다.
 
 작업 규칙은 [`AGENTS.md`](./AGENTS.md)에 있습니다.

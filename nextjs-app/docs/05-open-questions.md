@@ -10,21 +10,19 @@
 
 이어서 읽는 사람이 문맥을 잡기 위한 한 문단입니다. 상세는 각 문서에 있습니다.
 
-데모의 존재는 `packages/demos/demos.yaml`이 정하고([ADR 0004](./adr/0004-demo-list-as-source-of-truth.md)), md의 `demo` 코드펜스는 본문 **링크** 위치만 정합니다. 데모는 **언제나 독립 열람**으로 보며 문서 본문에는 심지 않습니다 — iframe이 있는 곳은 독립 열람과 랜딩 히어로의 대표 데모뿐입니다([06](./06-ui-and-screen-design.md)). 학습 문서 주소는 md 경로에서 번호만 뗀 형태(`/getting-started/caching`)이고, 데모 주소는 `/demo/{문서 파일명}/{데모명}`으로 둘 다 zone이 드러나지 않으며([ADR 0005](./adr/0005-hide-zone-from-learner-url.md)), 데모 앱은 `/zone/{슬러그}/…`에서 chrome 없는 순수 데모만 그립니다. `status`(`stub`/`wip`/`done`)가 학습자 노출을 제어하는 유일한 스위치입니다. 라우트 스텁은 미리 만들지 않고 목록만 먼저 채웁니다. 1차 작업은 **배관 증명 데모 2개 + 셸**로 시작해 배포 검증을 통과한 뒤 대량으로 갑니다. 화면은 페이지 타입 5종으로 나뉘고, UI 기반은 shadcn/ui입니다([ADR 0006](./adr/0006-shadcn-ui-as-ui-foundation.md)).
+데모의 존재는 `packages/demos/demos.yaml`이 정하고([ADR 0004](./adr/0004-demo-list-as-source-of-truth.md)), md의 `demo` 코드펜스는 본문 **링크** 위치만 정합니다. 데모는 **언제나 독립 열람**으로 보며 문서 본문에는 심지 않습니다 — iframe이 있는 곳은 독립 열람과 랜딩 히어로의 대표 데모뿐입니다([06](./06-ui-and-screen-design.md)). 학습 문서 주소는 md 경로에서 번호만 뗀 형태(`/getting-started/caching`)이고, 데모 주소는 `/demo/{문서 파일명}/{데모명}`으로 둘 다 zone이 드러나지 않으며([ADR 0005](./adr/0005-hide-zone-from-learner-url.md)), 데모 앱은 `/zone/{슬러그}/…`에서 chrome 없는 순수 데모만 그립니다. `status`(`stub`/`wip`/`done`)가 학습자 노출을 제어하는 유일한 스위치입니다. 라우트 스텁은 미리 만들지 않고 목록만 먼저 채웁니다. 1차 작업은 **개념 증명(PoC) 데모 2개 + 셸**로 시작해 배포 검증을 통과한 뒤 대량으로 갑니다. 화면은 페이지 타입 5종으로 나뉘고, UI 기반은 shadcn/ui입니다([ADR 0006](./adr/0006-shadcn-ui-as-ui-foundation.md)).
 
 ---
 
-## A. 배관 증명 전에 정해야 할 것
+## A. 개념 증명(PoC) 전에 정해야 할 것
 
 여기서 막히면 첫 배포까지 못 갑니다.
 
-### A-1. 배관 증명 데모 2개의 구체 내용
+### A-1. 개념 증명(PoC) 데모 2개의 구체 내용 — **해결됨**
 
-**정해진 것**: `demo-baseline`은 2.14 Server Actions, `demo-cache-components`는 1.8 Caching. 이 둘이 [03. 6-1](./03-composition-architecture.md) 표의 배포 전용 함정을 전부 건드려야 합니다.
+`demo-baseline`은 `zone/baseline/server-actions/basic`(Server Action 호출로 서버 상태 추가·초기화), `demo-cache-components`는 `zone/cache/caching/basic`(`use cache` 및 `revalidateTag` 무효화)으로 구현되어 둘 다 `demos.yaml`에 `status: done`으로 등록돼 있습니다. `DemoContainer`·`ExpectedActualPanel`·`DemoResetButton`(`@study/demo-kit`)을 공통으로 사용합니다.
 
-**안 정해진 것**: 각 데모가 학습자에게 **무엇을 관찰시키는가**. 두 문서의 "예제 및 데모 설계" 섹션에 이미 초안이 있으니 거기서 출발하되, 배관 검증 항목(Server Action 호출 · 높이 변화 · 공유 컴포넌트 · `next/image` · 스토리지 키)을 모두 포함하도록 조정해야 합니다.
-
-**주의**: 배관을 다 쓰려다 데모가 복잡해지면 첫 배포가 늦어집니다. 학습 내용은 최소로 두고 `status: wip`으로 배포 검증을 먼저 통과시킨 뒤 살을 붙이는 편이 낫습니다.
+**남은 것**: 실제 배포 환경(Vercel 등)에서 [03. 6-1](./03-composition-architecture.md) 표의 배포 전용 함정(rewrites, `assetPrefix`, `allowedOrigins`)까지 검증하는 것은 아직입니다 — 지금까지는 로컬 기준입니다.
 
 ### A-2. 데모 공통 UI를 어느 패키지에 둘 것인가 — **해결됨**
 
@@ -37,17 +35,13 @@
 | `@study/ui` | shadcn 컴포넌트, 헤더, 좌측 트리, 우측 목차, 카드 | 셸만 |
 | `@study/demo-kit` | 기대/실제 패널, 리셋 버튼, 높이 브릿지의 데모 쪽 절반 | 데모 앱 (셸은 타입만) |
 
-### A-3. `demos.yaml`의 타입 검증 수단
+### A-3. `demos.yaml`의 타입 검증 수단 — **해결됨**
 
-YAML은 오타를 잡아주지 않습니다. `zone: cahce` 하나로 그 데모가 사라집니다.
+**zod 스키마**를 채택했습니다 (`packages/demos/src/index.ts`의 `DemoSchema`/`DemosListSchema`, `packages/demos/scripts/lint.mjs`가 `safeParse`로 실행). YAML 원본은 그대로 두고 런타임 검증만 zod가 담당합니다 — "사람이 손으로 훑고 grep한다"는 성질은 유지됩니다.
 
-**후보**: zod 스키마(런타임 검증 + 타입 추론) / JSON Schema(에디터 자동완성) / TypeScript 파일로 아예 전환.
+### A-4. `gen-stubs`가 만드는 스텁의 최소 내용 — **해결됨**
 
-**연관**: YAML을 고른 이유가 "사람이 손으로 훑고 grep한다"였습니다. `.ts`로 바꾸면 타입은 공짜지만 그 성질이 약해집니다.
-
-### A-4. `gen-stubs`가 만드는 스텁의 최소 내용
-
-스텁은 학습자에게 안 보이므로([03. 4-1](./03-composition-architecture.md)) 렌더 내용은 중요하지 않지만, **작업 시작점**이라 형태는 정해야 합니다. `page.tsx` 하나인가, 기대/실제 패널까지 미리 넣은 골격인가.
+`gen-stubs.mjs`가 `@study/demo-kit`의 `DemoContainer` · `ExpectedActualPanel`을 미리 불러온 골격을 생성합니다 — `page.tsx` 하나만 던지지 않고, 데모 실행 영역을 갖춘 뼈대로 시작합니다.
 
 ### A-5. 스모크 테스트 도구와 실행 지점
 
@@ -74,7 +68,7 @@ YAML은 오타를 잡아주지 않습니다. `zone: cahce` 하나로 그 데모�
 
 ## B. 대량 단계 전에 정해야 할 것
 
-배관이 증명된 뒤, 데모를 30~90개로 늘리기 전에 필요합니다.
+개념 증명(PoC)이 끝난 뒤, 데모를 30~90개로 늘리기 전에 필요합니다.
 
 ### B-1. 데모 가능 여부 판정 패스 (231건)
 
@@ -180,8 +174,8 @@ lint는 진입점만 검사하기로 했습니다 ([03. 4-7](./03-composition-ar
 | 경로형 `assetPrefix` + Turbopack의 16.x 결함 | 공개 이슈를 찾지 못함 (없다는 뜻이 아님) |
 | Tailwind v4 `@source` 상대 경로 규칙 | 계산은 맞지만 1차 출처 미확인 |
 | `.next/dev/` 존재 여부 | `turbo.json`의 부정 glob이라 틀려도 무해 |
-| `demo-export` 배포 시 rewrite 목적지 동작 | 실제 배포로만 확인 가능 |
-| iframe 안 `use cache` 데모의 캐시 동작 | 코드가 없어 검증 불가 |
-| `ResizeObserver` + `postMessage` 브릿지 실동작 | 구현 전 |
+| `demo-export` 배포 시 rewrite 목적지 동작 | 실제 배포로만 확인 가능 (`demo-export` zone 자체가 아직 없음) |
+| iframe 안 `use cache` 데모의 캐시 동작 | 코드 있음 (`zone/cache/caching/basic`) — 배포 환경 검증은 아직 |
+| `ResizeObserver` + `postMessage` 브릿지 실동작 | 구현됨 (`packages/demo-kit/src/useResizeBridge.ts`, `DemoContainer.tsx`) — 배포 환경 검증은 아직 |
 
-A-1의 배관 증명 데모가 이 중 여럿을 한 번에 닫습니다.
+A-1의 개념 증명(PoC) 데모가 이 중 여럿을 로컬 기준으로 닫았습니다. 남은 것은 실제 배포 환경 검증입니다.

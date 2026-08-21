@@ -8,12 +8,12 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 
 | 디렉토리 | 상태 | 규칙 |
 |---|---|---|
-| [`nextjs-docs/`](./nextjs-docs/AGENTS.md) | Phase 1, 진행 중 | 문서 작성 규칙 |
-| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 착수 전 | 착수 조건 및 Phase Gate |
+| [`nextjs-docs/`](./nextjs-docs/AGENTS.md) | Phase 1, 완료 | 문서 작성 규칙 |
+| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 진행 중 | 실행 코드 작업 규칙 |
 
 ## Phase Gate
 
-지금은 **Phase 1: 문서화**다. [`nextjs-docs/PROGRESS.md`](./nextjs-docs/PROGRESS.md)의 항목이 대부분 "완료"가 되기 전까지 `nextjs-app/`에 실행 코드를 만들지 않는다.
+**Phase 1(문서화)은 완료됐다** ([`nextjs-docs/PROGRESS.md`](./nextjs-docs/PROGRESS.md) 194건 전부 "완료"). `nextjs-app/`은 착수 조건을 충족해 **Phase 2가 진행 중**이다 — 셸과 개념 증명(PoC) 데모 2개가 구현돼 있고, 지금은 대량 확장 전 단계다. 새 코드는 [`nextjs-app/AGENTS.md`](./nextjs-app/AGENTS.md)의 규칙을 따른다.
 
 ## 커밋 작성 규칙
 

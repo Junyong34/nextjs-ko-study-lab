@@ -4,8 +4,8 @@
 
 ## Contexts
 
-- [학습 문서](./nextjs-docs/CONTEXT.md) — 공식 문서를 한국어 학습 콘텐츠로 재구성한다 (Phase 1, 진행 중)
-- [데모 사이트](./nextjs-app/CONTEXT.md) — 학습 문서를 화면에 그리고 각 개념의 데모를 실행한다 (Phase 2, 설계 완료·착수 전)
+- [학습 문서](./nextjs-docs/CONTEXT.md) — 공식 문서를 한국어 학습 콘텐츠로 재구성한다 (Phase 1, 완료)
+- [데모 사이트](./nextjs-app/CONTEXT.md) — 학습 문서를 화면에 그리고 각 개념의 데모를 실행한다 (Phase 2, 진행 중)
 
 ## Relationships
 

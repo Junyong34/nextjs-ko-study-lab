@@ -1,13 +1,13 @@
 # nextjs-ko-study-lab
 
-Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리큘럼으로 재구성하는 저장소입니다. 문서 설계가 먼저이고, 실행 가능한 데모 앱은 그 다음입니다.
+Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리큘럼으로 재구성하고, 실행 가능한 데모 사이트로 실습을 더하는 저장소입니다.
 
 ## 저장소 구조
 
 ```
 nextjs-ko-study-lab/
-├─ nextjs-docs/   # Next.js App Router 학습 문서 (Phase 1, 진행 중)
-├─ nextjs-app/    # Next.js 데모 사이트 (Phase 2, 설계 완료·착수 전)
+├─ nextjs-docs/   # Next.js App Router 학습 문서 (Phase 1, 완료)
+├─ nextjs-app/    # Next.js 데모 사이트 (Phase 2, 진행 중)
 ├─ CONTEXT-MAP.md # 컨텍스트 용어집과 관계
 ├─ AGENTS.md      # 저장소 전체 작업 규칙
 ├─ CLAUDE.md
