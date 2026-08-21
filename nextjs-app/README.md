@@ -20,7 +20,7 @@
  cacheComponents 끔  cacheComponents 켬
 ```
 
-데모는 **독립 페이지로 열리는 것이 기본**이고, 문서를 읽다가 그 자리에서 조작해야 하는 것만 본문에 심습니다. 학습자가 보는 주소에는 zone이 나타나지 않습니다 — 데모를 다른 zone으로 옮겨도 주소가 깨지지 않게 하기 위해서입니다.
+데모는 **언제나 독립 페이지로 열립니다.** 문서 본문에는 심지 않고 링크로 넘깁니다 ([06](./docs/06-ui-and-screen-design.md)). 학습자가 보는 주소에는 zone이 나타나지 않습니다 — 데모를 다른 zone으로 옮겨도 주소가 깨지지 않게 하기 위해서입니다.
 
 ## 설계 문서
 
@@ -33,8 +33,9 @@
 | 03 | [결합 구조 설계](./docs/03-composition-architecture.md) |
 | 04 | [설계 실현 가능성 검증](./docs/04-feasibility-verification.md) |
 | 05 | [남은 설계 질문](./docs/05-open-questions.md) |
+| 06 | [화면 구성과 UI 설계](./docs/06-ui-and-screen-design.md) |
 
-ADR 5건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있습니다.
+ADR 6건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있습니다.
 
 01~03의 사실 주장은 `next@16.3.1`의 소스와 동봉 문서에 대조해 검증했고, 지적된 12건은 모두 반영했습니다 (04). 아직 안 정한 것은 05에 모아뒀습니다.
 
