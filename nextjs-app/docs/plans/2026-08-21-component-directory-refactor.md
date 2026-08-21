@@ -368,7 +368,52 @@ UI 패키지가 마크다운을 알게 되고, 그대로 두면 `@study/ui` → 
 
 ---
 
-## 9. Phase 5 — iframe 브릿지 단일화
+## 9. Phase 5 — iframe 브릿지 단일화 ✅ 완료 (2026-08-21)
+
+### 9-0. 결과
+
+| 원본 | 줄 | 결과 |
+|---|---:|---|
+| `DemoViewer.tsx` (셸) | 125 | **삭제**. 셸 라우트가 `DemoIframe`을 직접 쓴다 |
+| `DemoFrame.tsx` | 208 | `DemoFrame`(99, URL 계산 + fullscreen) + `DemoIframe`(178) + `useDemoResizeBridge`(65) |
+| `DemoContainer.tsx` | 96 | `DemoContainer`(28) + `useResizeBridge`(63) |
+
+**`apps/shell/src/components/` 디렉토리가 사라졌습니다.** 셸에는 `app/`과 `lib/`만 남았습니다.
+
+브릿지 구현은 이제 각 방향에 하나씩입니다.
+
+| 방향 | 위치 |
+|---|---|
+| 받기 (셸) | `@study/docs-render` `useDemoResizeBridge` |
+| 보내기 (데모 앱) | `@study/demo-kit` `useResizeBridge` |
+
+**origin 검증이 복사돼 있던 것이 특히 문제였습니다** — 보안이 걸린 코드가 두 벌이면
+한쪽만 고쳤을 때 다른 쪽 구멍이 남습니다.
+
+두 프레임의 겉모습(툴바 버튼에 글자가 붙는지, 신호등 크기, 로딩 문구, 최소 높이)은
+`variant: 'standalone' | 'inline'` 표로 보존했습니다. Phase 7에서 문서 본문의 iframe이
+링크 카드로 바뀌면 `inline`은 쓰이지 않게 됩니다.
+
+### 9-1. F1(`backdrop-blur-2xs`)은 고치지 않았습니다
+
+두 파일이 하나로 합쳐지면서 무효 클래스도 한 곳(`DemoIframe`)으로 모였습니다.
+**고치면 없던 블러가 생겨 화면이 바뀌므로 원본 그대로 두고 주석만 남겼습니다.**
+Phase 7~8이나 별도 티켓에서 판단합니다.
+
+### 9-2. 검증 한계 — 손으로 확인해야 하는 것
+
+DOM 스냅샷 11/11 동일, check-types 8/8, build 5/5는 통과했습니다.
+그러나 **iframe 높이 동기화는 상호작용이라 정적 스냅샷으로 잡히지 않습니다.**
+브라우저 확장이 연결되지 않아 자동 확인을 하지 못했습니다.
+
+아래를 손으로 확인해야 합니다.
+
+- [ ] `/demo/server-actions/basic`에서 항목을 추가하면 iframe이 따라 늘어나는가
+- [ ] 높이가 진동하거나 무한히 자라지 않는가 (2px 문턱이 도는지)
+- [ ] 툴바의 새로고침 버튼이 프레임만 다시 띄우는가
+- [ ] 문서 본문의 인라인 데모 프레임도 같은지 (Phase 7 전까지)
+
+### 9-3. 원래 계획 항목
 
 - [ ] `docs-render/demo/useDemoResizeBridge.ts` — origin 검증 + `event.source` 검증 + `DEMO_RESIZE` 수신 + 2px 임계 높이 상태. **`DemoViewer`와 `DemoFrame`의 중복 로직이 여기 하나로**
 - [ ] `docs-render/demo/DemoIframe.tsx` — 신호등 툴바 + 로딩 오버레이 + `iframe`(`sandbox` 속성 포함) + 새로고침 핸들러

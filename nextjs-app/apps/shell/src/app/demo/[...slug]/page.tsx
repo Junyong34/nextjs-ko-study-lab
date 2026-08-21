@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, BookOpen, Layers, CheckCircle2, Clock } from 'lucide-react'
 import { getDemos, getDemoByUrl, getManifest } from '@/lib/docs'
-import { DemoViewer } from '@/components/DemoViewer'
+import { DemoIframe } from '@study/docs-render'
 
 interface DemoPageProps {
   params: Promise<{
@@ -120,7 +120,15 @@ export default async function DemoStandalonePage({ params }: DemoPageProps) {
 
       {/* Main Body: Demo Viewer with Chrome */}
       <div className="w-full">
-        <DemoViewer src={iframeSrc} title={demo.title} />
+        <DemoIframe
+          variant="standalone"
+          src={iframeSrc}
+          label={iframeSrc}
+          title={demo.title}
+          externalHref={iframeSrc}
+          initialHeight={600}
+          minHeight={400}
+        />
       </div>
     </div>
   )

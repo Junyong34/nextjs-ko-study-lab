@@ -1,4 +1,3 @@
-export * from './DemoFrame'
-export * from './DocDemoList'
 export * from './code'
+export * from './demo'
 export * from './markdown'

@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import { DemoFrame } from '../DemoFrame'
-import { DocDemoList, type DemoItem } from '../DocDemoList'
+import { DemoFrame } from '../demo/DemoFrame'
+import { DocDemoList, type DemoItem } from '../demo/DocDemoList'
 import { CodeBlock } from '../code/CodeBlock'
 import { parseDemoBlock } from './parse/demo-block'
 import { renderInline } from './parse/inline'
