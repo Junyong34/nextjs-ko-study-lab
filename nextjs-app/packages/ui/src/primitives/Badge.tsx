@@ -78,8 +78,9 @@ export function ZoneBadge({ zone, size = 'md', icon, className = '' }: ZoneBadge
         className,
       )}
     >
+      {/* 라벨을 span으로 감싸지 않는다 — 원본이 아이콘 뒤에 텍스트를 바로 두었다 */}
       {icon}
-      <span>zone: {zone}</span>
+      zone: {zone}
     </span>
   )
 }

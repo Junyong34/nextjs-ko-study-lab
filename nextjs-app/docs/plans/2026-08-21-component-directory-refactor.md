@@ -427,7 +427,32 @@ DOM 스냅샷 11/11 동일, check-types 8/8, build 5/5는 통과했습니다.
 
 ---
 
-## 10. Phase 6 — 데모 UI 통합 + 셸 라우트 슬림화
+## 10. Phase 6 — 데모 UI 통합 + 셸 라우트 슬림화 ✅ 완료 (2026-08-21)
+
+### 10-0. 결과
+
+| 대상 | 전 | 후 |
+|---|---:|---:|
+| `app/demo/page.tsx` | 157 | **55** |
+| `app/demo/[...slug]/page.tsx` | 127 | **71** |
+| `lib/docs.ts` | 98 | **21** (+ `docs-root.ts` 28, `manifest.ts` 63) |
+
+status 배지·zone 배지가 `DemoStatusBadge`·`DemoZoneBadge` 하나씩으로 모였습니다.
+`findDocForDemo()`는 두 라우트에 복사돼 있던 문서 매칭 로직입니다.
+
+**데모 카드는 합치지 않았습니다.** 데모 색인 카드(`<div>` 기반, 지표·근거 문서 링크 포함)와
+문서 하단 카드(`<a>` 기반, 설명 말줄임)는 구조가 달라서 합치면 화면이 바뀝니다.
+각각 `DemoIndexCard`와 `DocDemoList`로 두되 배지만 공유합니다.
+
+### 10-1. 또 텍스트 노드였습니다
+
+원본이 `/zone/{demo.zone}/{demo.url}`을 JSX로 조각내 써서 React가 마커를 넣습니다.
+한 문자열로 합쳤더니 마커가 사라져 DOM이 달라졌습니다. **Phase 3의 `FooterLinks`와 정확히
+반대 방향의 같은 실수입니다** — 그때는 나눠서, 이번엔 합쳐서 어긋났습니다.
+
+props를 `internalPath` 하나에서 `zone`·`url` 둘로 되돌려 원본 구조를 지켰습니다.
+
+### 10-2. 원래 계획 항목
 
 - [ ] `ui/demo/DemoStatusBadge.tsx` · `ui/demo/ZoneBadge.tsx` — Phase 2의 `Badge` 위에 얹는다. 3곳 중복 제거
 - [ ] `ui/demo/DemoCard.tsx` — `demo/page.tsx`와 `DocDemoList.tsx`가 공유. `variant`로 밀도만 다르게
