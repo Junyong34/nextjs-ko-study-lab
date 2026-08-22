@@ -97,6 +97,8 @@
 
 **주의**: 151건을 채우는 것은 판정 기준이 정해진 뒤입니다. 기준 없이 채우면 나중에 전부 다시 봐야 합니다.
 
+**진행 상황 (2026-08-22)**: 좌측 트리 UI 쪽 배관은 먼저 끝냈습니다 — `nextjs-docs/scripts/build-manifest.mjs`가 이 판정 라인을 파싱해 `docs-manifest.json`에 `demoFeasibility`(`possible`/`not-applicable`/`pending`)로 반영하고, 셸 좌측 트리(`DocTreeNode.tsx`)가 `DEMO(n)` / `설명 대체`(`불가`) / `준비중`(`가능`·`검토 예정`·판정 없음 통합) 3단계 뱃지로 그립니다. **다만 위 표대로 `불가` 판정이 아직 0건이라 `설명 대체` 뱃지는 실제로는 어디에도 뜨지 않습니다.** 이 231건 판정 패스(판정 기준 확정 → 문서마다 판정 라인 채우기)를 끝내야 배관해 둔 3단계가 실제로 화면에 다 나타납니다. `nextjs-docs` md를 갱신한 뒤에는 `node nextjs-docs/scripts/build-manifest.mjs`만 다시 돌리면 됩니다.
+
 ### B-2. 데모명 작명 규칙
 
 `url`의 두 번째 세그먼트입니다. 지금은 예시만 있고 규칙이 없습니다 — `basic`, `use-cache-basic`, `no-cache-baseline`.
@@ -114,6 +116,19 @@
 ### B-4. 한 문서 안 데모 여러 개의 순서
 
 `demos.yaml`의 배열 순서를 쓰기로 잠정 정했습니다. 파일이 길어졌을 때도 유지되는지, 아니면 명시 `order`가 필요한지는 실제로 늘려보고 판단합니다.
+
+### B-5. 기존 데모의 Next.js 16.3.1 정합성 검증 (미착수)
+
+`demos.yaml`에 `status: done`으로 등록된 241건이 실제로 학습 기준 버전인 `16.3.1`([`nextjs-docs/README.md` 기준 출처](../../nextjs-docs/README.md#기준-출처), `pnpm-workspace.yaml` 고정)의 API·동작을 정확히 반영하는지는 아직 아무도 검증하지 않았습니다.
+
+**문제 상황**: 각 zone의 `AGENTS.md`가 "This is NOT the Next.js you know — APIs, conventions, and file structure may all differ from your training data"라고 못박아 둔 이유가 여기 있습니다. 모델의 학습 데이터는 16.3.1 이전 관례를 담고 있을 수 있어서, 데모의 "개념 정리"(`DemoDeepDiveCard`) 설명이나 "예제" 코드가 **구버전 관례를 최신인 것처럼 옮겨왔을 가능성**이 있습니다. 화면이 정상 렌더되고 스모크 테스트(200 응답, `✗` 없음, [A-5](#a-5-스모크-테스트-도구와-실행-지점))를 통과해도, 서술된 개념 설명 자체가 낡거나 틀렸을 수 있어 별개로 잡히지 않습니다.
+
+**남은 일**:
+- 241건 각각을 `node_modules/next/dist/docs/`(1차 출처)와 `next-devtools` MCP(`nextjs_docs`/`nextjs_index`/`nextjs_call`)로 교차 검증하는 패스가 필요합니다 ([nextjs-app/AGENTS.md](../AGENTS.md) 규칙 21).
+- 검증 결과를 추적할 자리가 없습니다 — `demos.yaml`의 `status`(`stub`/`wip`/`done`)와 별개로 "버전 정합성 확인 완료" 여부를 어디에 어떻게 표시할지 결정 안 됨.
+- 문제가 발견됐을 때 재작업 우선순위를 어떻게 매길지도 안 정해짐.
+
+**주의**: `nextjs-docs/AGENTS.md`의 "버전" 절이 "메이저·마이너가 올라가면 `done` 데모를 재검토 대상으로 표시한다"는 절차를 이미 두고 있지만, 이건 **버전이 미래에 올라갈 때**를 위한 것입니다. 여기서 필요한 건 **이미 만들어진 241건이 애초에 기준 버전을 제대로 반영했는지** 처음 확인하는 작업이라 별개입니다.
 
 ---
 
