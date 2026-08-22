@@ -1,0 +1,15 @@
+'use client'
+import React, { useState } from 'react'
+
+export function UpdateTagInstantDemo() {
+  const [qty, setQty] = useState(3)
+
+  return (
+    <div className="space-y-3 rounded border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 text-xs">
+      <div className="font-bold text-zinc-900 dark:text-zinc-100">장바구니 캐시 수량: {qty}개 (DB 재조회 0건)</div>
+      <button type="button" onClick={() => setQty(q => q + 1)} className="rounded bg-emerald-600 px-3.5 py-1.5 font-bold text-white cursor-pointer">
+        updateTag('cart', {'{ count: ' + (qty + 1) + ' }'}) 즉시 패치
+      </button>
+    </div>
+  )
+}

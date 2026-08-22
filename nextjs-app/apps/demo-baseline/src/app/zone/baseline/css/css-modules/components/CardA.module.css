@@ -1,0 +1,29 @@
+.card {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #93c5fd;
+  background-color: #eff6ff;
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-family: monospace;
+  font-weight: 700;
+  border-radius: 9999px;
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.description {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #1e40af;
+}

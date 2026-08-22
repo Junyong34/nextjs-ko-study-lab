@@ -8,7 +8,7 @@
 
 ## 1. 개요
 
-전체 264편의 학습 문서 중 **데모 제작 대상 144편(총 242개 데모)**을 기능적 응집도와 학습 난이도에 따라 **5개 작업 페이즈(Phase)**로 분할하여 관리합니다.
+전체 264편의 학습 문서 중 **데모 제작 대상 148편(총 241개 데모)**을 기능적 응집도와 학습 난이도에 따라 **5개 작업 페이즈(Phase)**로 분할하여 관리합니다.
 
 각 페이즈 문서에는 각 목차별 데모의 URL, 소속 Zone, 이커머스 시나리오, 3단계 체험 절차 및 기대/실제 검증 기준이 상세히 정의되어 있습니다.
 
@@ -18,12 +18,12 @@
 
 | 페이즈 | 대상 영역 | 문서 수 | 데모 수 | 주요 담당 기능 | 상세 문서 |
 |---|---|---:|---:|---|---|
-| **Phase 1** | **1. Getting Started** | 14편 | 28개 | App Router 기본 골격, 렌더링 합성, 라우팅 기초, 폼 및 기본 캐싱 | [phase-1-getting-started.md](./phase-1-getting-started.md) |
-| **Phase 2** | **2. Guides** | 40편 | 69개 | 렌더링 심화, 스트리밍, ISR/use cache 심화, 인증/보안, SWR/TanStack Query | [phase-2-guides.md](./phase-2-guides.md) |
-| **Phase 3** | **3.1 File Conventions & 3.2 Components** | 31편 | 53개 | 라우트 세그먼트 파일(layout, page, loading, error, slots) 및 빌트인 컴포넌트(Image, Form, Link) | [phase-3-api-conventions-components.md](./phase-3-api-conventions-components.md) |
-| **Phase 4** | **3.3 Functions & 3.4 Directives** | 34편 | 63개 | 대표 네비게이션 훅(useRouter, useSearchParams), 캐시 함수(cacheTag, revalidateTag), use client/server/cache | [phase-4-api-functions-directives.md](./phase-4-api-functions-directives.md) |
-| **Phase 5** | **3.5 Config, 3.8 Edge & 5. Architecture** | 25편 | 29개 | next.config.ts 런타임 설정(rewrites, redirects, images), Edge Runtime, 접근성(a11y) | [phase-5-api-config-architecture.md](./phase-5-api-config-architecture.md) |
-| **합계** | **전체 5개 페이즈** | **144편** | **242개** | **이커머스 통합 플랫폼 실무 데모** | - |
+| **Phase 1** | **1. Getting Started** | 14편 | 25개 | App Router 기본 골격, 렌더링 합성, 라우팅 기초, 폼 및 기본 캐싱 | [phase-1-getting-started.md](./phase-1-getting-started.md) |
+| **Phase 2** | **2. Guides** | 45편 | 77개 | 렌더링 심화, 스트리밍, ISR/use cache 심화, 인증/보안, SWR/TanStack Query | [phase-2-guides.md](./phase-2-guides.md) |
+| **Phase 3** | **3.1 File Conventions & 3.2 Components** | 32편 | 54개 | 라우트 세그먼트 파일(layout, page, loading, error, slots) 및 빌트인 컴포넌트(Image, Form, Link) | [phase-3-api-conventions-components.md](./phase-3-api-conventions-components.md) |
+| **Phase 4** | **3.3 Functions & 3.4 Directives** | 35편 | 54개 | 대표 네비게이션 훅(useRouter, useSearchParams), 캐시 함수(cacheTag, revalidateTag), use client/server/cache | [phase-4-api-functions-directives.md](./phase-4-api-functions-directives.md) |
+| **Phase 5** | **3.5 Config, 3.8 Edge & 5. Architecture** | 22편 | 31개 | next.config.ts 런타임 설정(rewrites, redirects, images), Edge Runtime, SWC/Turbopack, 접근성(a11y) | [phase-5-api-config-architecture.md](./phase-5-api-config-architecture.md) |
+| **합계** | **전체 5개 페이즈** | **148편** | **241개** | **이커머스 통합 플랫폼 실무 데모** | - |
 
 ---
 

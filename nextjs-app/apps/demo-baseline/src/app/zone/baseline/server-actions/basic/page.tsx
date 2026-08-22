@@ -59,7 +59,7 @@ export default function ServerActionsBasicDemoPage() {
     '클라이언트 폼에서 Server Action(addItem)을 호출하면 별도 API 라우트 없이 서버 함수가 실행되고, 서버 데이터가 갱신되어 클라이언트에 즉시 반영됨'
   const actualText =
     items.length > 0
-      ? `• 등록된 항목 수: ${items.length}개\n• 최신 항목: "${items[0]?.text}" (${items[0]?.createdAt})\n• 전송 상태: Server Action POST 성공`
+      ? `- 등록된 항목 수: ${items.length}개\n- 최신 항목: "${items[0]?.text}" (${items[0]?.createdAt})\n- 전송 상태: Server Action POST 성공`
       : '등록된 항목 없음 (초기 상태)'
 
   return (
@@ -168,25 +168,37 @@ export default function ServerActionsBasicDemoPage() {
       />
 
       {/* 4단. 최하단 개념 정리 카드 */}
-      <DemoDeepDiveCard title="Server Actions 동작 메커니즘과 보안 이점">
-        <div className="space-y-3">
+      <DemoDeepDiveCard title="Server Actions 기본 배관 & 폼 데이터 변이 메커니즘">
+        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
-              1. Server Actions는 내부적으로 어떻게 동작하는가?
-            </h4>
-            <p className="leading-relaxed">
-              <code className="font-mono text-[11px]">'use server'</code>로 선언된 함수는 빌드 타임에 고유한 암호화 Action ID가 부여됩니다. 클라이언트에서 이 함수를 호출하면 브라우저는 해당 Action ID를 담아 동일 오리진으로 <code className="font-mono text-[11px]">POST</code> 요청을 전송하고, 서버는 함수를 실행한 뒤 결과를 반환합니다.
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <p>
+              Server Actions는 <code>'use server'</code> 지시어로 선언된 서버 비동기 함수로, 클라이언트에서 별도의 API 엔드포인트(/api/*)를 생성하지 않고도 일반 함수처럼 직접 호출하여 서버 데이터 변이(Mutation)와 상태 갱신을 안전하게 수행합니다.
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
-              2. 전통적인 API Routes (/api/*) 대비 핵심 장점
-            </h4>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400">
-              <li><strong className="text-zinc-800 dark:text-zinc-200">엔드포인트 보일러플레이트 제거:</strong> 별도 라우트 핸들러를 만들지 않고 일반 함수처럼 import하여 호출 가능.</li>
-              <li><strong className="text-zinc-800 dark:text-zinc-200">완벽한 엔드투엔드 타입 안전성:</strong> 매개변수와 반환값의 TypeScript 타입이 그대로 유지됨.</li>
-              <li><strong className="text-zinc-800 dark:text-zinc-200">내장 보안:</strong> Next.js가 Action ID 검증 및 CSRF 방어를 자동으로 수행.</li>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <p>
+              본 예제에서는 배송지 폼 또는 상품 후기 텍스트를 입력하고 [항목 추가]를 누르면, 클라이언트가 Server Action(<code>addItem</code>)을 POST 요청으로 호출합니다. 서버 함수가 실행되어 서버 메모리 목록이 갱신되고, 갱신된 최신 목록이 클라이언트에 0ms 체감 속도로 즉시 반영됩니다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>API 보일러플레이트 제거</strong>: 별도 Route Handler와 DTO 작성 없이 매개변수와 반환값의 완벽한 TypeScript 타입 추론을 제공합니다.</li>
+              <li><strong>보안 자동화</strong>: Next.js가 암호화된 Action ID 검증 및 Origin 헤더 기반 CSRF 방어를 자동으로 수행합니다.</li>
+              <li><strong>점진적 향상(Progressive Enhancement)</strong>: 자바스크립트가 비활성화되거나 로딩 중인 환경에서도 표준 HTML form action으로 기본 동작합니다.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li>쇼핑몰 주문서 배송지 입력 폼 검증 및 결제 요청</li>
+              <li>상품 상세 페이지의 구매 후기 작성, Q&A 문의 등록</li>
+              <li>장바구니 옵션 변경 및 할인 쿠폰 적용 유효성 검사</li>
             </ul>
           </div>
         </div>

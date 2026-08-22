@@ -40,9 +40,9 @@ export default async function DemoPage() {
   const cachedData = await getCachedTimestamp()
 
   const expectedText =
-    '• 일반 브라우저 새로고침: getCachedTimestamp()의 반환값이 영구 캐싱되어 캐시 ID와 시각이 유지됨\n• revalidateTag() 실행: 캐시 태그가 무효화되어 다음 요청 시 새 캐시 ID가 발급됨'
+    '- 일반 브라우저 새로고침: getCachedTimestamp()의 반환값이 영구 캐싱되어 캐시 ID와 시각이 유지됨\n- revalidateTag() 실행: 캐시 태그가 무효화되어 다음 요청 시 새 캐시 ID가 발급됨'
 
-  const actualText = `• 캐시 고유 ID: #${cachedData.cacheId}\n• 캐시 생성 시각: ${cachedData.timestamp}\n• 적용 태그: cacheTag('caching-basic:data')`
+  const actualText = `- 캐시 고유 ID: #${cachedData.cacheId}\n- 캐시 생성 시각: ${cachedData.timestamp}\n- 적용 태그: cacheTag('caching-basic:data')`
 
   return (
     <DemoContainer className="space-y-6">
@@ -128,24 +128,37 @@ export default async function DemoPage() {
       />
 
       {/* 4단. 최하단 개념 정리 카드 */}
-      <DemoDeepDiveCard title="use cache 지시어의 특징과 cacheTag 무효화 메커니즘">
-        <div className="space-y-3">
+      <DemoDeepDiveCard title="use cache 지시어 & cacheTag 온디맨드 무효화 메커니즘">
+        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
-              1. Next.js 16 use cache의 핵심 특징
-            </h4>
-            <p className="leading-relaxed">
-              기존의 페이지/라우트 단위 캐싱(<code className="font-mono text-[11px]">revalidate = 60</code>)과 달리, <code className="font-mono text-[11px]">'use cache'</code>는 <strong>함수나 컴포넌트 단위로 정밀하게 캐싱 범위를 지정(Cache Components)</strong>할 수 있습니다.
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <p>
+              Next.js 16의 <code>use cache</code>는 함수나 컴포넌트 단위로 정밀하게 캐싱 범위를 지정(Cache Components)할 수 있는 차세대 캐싱 지시어입니다. <code>cacheTag</code>로 고유한 태그를 바인딩하면, 이후 데이터 변이 시 <code>revalidateTag</code>를 통해 특정 캐시만 즉시 무효화할 수 있습니다.
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
-              2. cacheTag와 revalidateTag의 관계
-            </h4>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400">
-              <li><strong className="text-zinc-800 dark:text-zinc-200">cacheTag:</strong> 캐시 데이터에 고유한 태그(라벨)를 붙입니다. (예: `product-123`, `user-profile`)</li>
-              <li><strong className="text-zinc-800 dark:text-zinc-200">revalidateTag:</strong> 데이터가 수정되었을 때 Server Action에서 해당 태그만 즉시 무효화하여 최신 데이터로 갱신합니다.</li>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <p>
+              본 예제에서는 <code>getCachedTimestamp()</code> 함수에 <code>use cache</code>와 <code>cacheTag('caching-basic:data')</code>가 선언되어 있어 브라우저를 새로고침해도 고유 캐시 ID가 변하지 않고 0ms로 즉시 반환됩니다. [캐시 무효화 (revalidateTag)] 버튼을 누르면 서버 액션이 실행되어 해당 태그만 즉시 파기되고 새 캐시 ID가 발급됩니다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>함수 단위 초정밀 캐싱</strong>: 페이지 전체를 ISR로 묶지 않고도 무거운 DB 쿼리나 외부 API 결과만 선택적으로 캐싱합니다.</li>
+              <li><strong>태그 기반 연쇄 무효화</strong>: 상품 가격 변경 시 관련 카테고리, 추천 목록, 메인 배너의 캐시를 단 한 번의 <code>revalidateTag</code>로 일괄 갱신합니다.</li>
+              <li><strong>서버 인프라 부하 감소</strong>: 동일 요청에 대해 불필요한 중복 DB 조회를 원천 차단합니다.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li>쇼핑몰 타임세일 상품 카탈로그 및 기획전 목록 캐싱</li>
+              <li>관리자 상품 정보 수정 시 실시간 웹훅 연동 캐시 무효화</li>
+              <li>환율, 날씨, 주가 등 주기적/온디맨드 갱신이 필요한 공통 데이터</li>
             </ul>
           </div>
         </div>
