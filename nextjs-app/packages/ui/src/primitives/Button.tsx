@@ -54,26 +54,3 @@ export function Button({
     </button>
   )
 }
-
-export interface ButtonLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  variant?: ButtonVariant
-  shape?: ButtonShape
-}
-
-/**
- * 버튼처럼 보이는 링크입니다.
- * zone 경계를 넘는 이동에는 `<Link>`가 아니라 이걸 씁니다 (AGENTS.md 규칙 4).
- */
-export function ButtonLink({
-  variant = 'primary',
-  shape = 'cta',
-  className = '',
-  children,
-  ...props
-}: ButtonLinkProps) {
-  return (
-    <a className={cn(SHAPE[shape], VARIANT[variant], className)} {...props}>
-      {children}
-    </a>
-  )
-}

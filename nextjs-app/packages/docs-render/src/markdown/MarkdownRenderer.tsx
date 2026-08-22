@@ -6,7 +6,8 @@ import { parseDemoBlock } from './parse/demo-block'
 import { slugify } from './parse/slugify'
 import { renderInline } from './parse/inline'
 import { resolveAssetUrl } from './resolve/asset-url'
-import { Heading, Figure, Table, Alert, matchAlert, Details } from './nodes'
+import { resolveDocLink } from './resolve/doc-link'
+import { Heading, Figure, Table, Alert, matchAlert, Details, OfficialDocLink } from './nodes'
 import {
   Paragraph,
   Blockquote,
@@ -345,6 +346,21 @@ export function MarkdownRenderer({
     // 8. 순서 없는 목록
     if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       const listContent = trimmed.slice(2).trim()
+
+      // "- 공식 문서: [제목](url)" 줄은 배지 링크로 그린다
+      const officialDocMatch = listContent.match(/^공식 문서:\s*\[([^\]]+)\]\(([^)]+)\)/)
+      if (officialDocMatch) {
+        if (inTable) flushTable()
+        if (inDetails) flushDetails()
+        if (listType) flushList()
+        elements.push(
+          <OfficialDocLink
+            key={`official-doc-${idx++}`}
+            href={resolveDocLink(officialDocMatch[2], docPath)}
+          />,
+        )
+        continue
+      }
 
       if (META_LINE_PREFIXES.some((p) => listContent.startsWith(p))) {
         continue

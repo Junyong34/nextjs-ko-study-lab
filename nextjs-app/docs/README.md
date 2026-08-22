@@ -16,7 +16,6 @@ Phase 2의 아키텍처 조사·설계 결과 및 ADR 기록입니다. 멀티 �
 | 08 | [전체 목차 데모 기획 및 판정 매트릭스](./08-demo-planning-matrix.md) | 264편 전체 1차 필터링, 예상 데모 수 산출, 4대 이커머스 시나리오 매핑, 대체 설명 가이드 |
 | 09 | [데모 표준 구조 및 4단 레이아웃 패턴](./09-demo-standard-and-layout-pattern.md) | 실제 Next.js 파일 컨벤션/라우팅 원칙(No-Simulation) 및 fieldset 4단 표준 템플릿 |
 | 10 | [데모 감사 보고서](./10-demo-audit-report.md) | 241건 전체 정적 코드 전수 검사 결과 및 구조적 결함 리포트 |
-| 11 | [데모 중복 분석 및 통폐합 권고 보고서](./11-demo-duplication-analysis-report.md) | 241개 데모 중복 클러스터 12종 분류, 82개 다중 매핑 문서 전수 조사 및 압축 로드맵 |
 
 ## ADR
 

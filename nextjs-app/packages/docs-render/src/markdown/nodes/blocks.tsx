@@ -35,10 +35,6 @@ export function Paragraph({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function HorizontalRule() {
-  return <hr className="my-6 border-zinc-200 dark:border-zinc-800" />
-}
-
 /**
  * `- 공식 문서: [제목](url)` 줄을 배지 링크로 바꿉니다.
  * 목록 항목으로 그냥 두면 본문 흐름에 묻힙니다.

@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '../cn'
-import { ACCENT_SURFACE, STATUS_TONE } from '../styles'
+import { STATUS_TONE } from '../styles'
 
 /**
  * 화면의 배지들은 서로 미묘하게 다릅니다. 예를 들어 zone 배지는
@@ -53,34 +53,6 @@ export function StatusBadge({
     >
       {icon}
       <span>{status.toUpperCase()}</span>
-    </span>
-  )
-}
-
-export interface ZoneBadgeProps {
-  zone: string
-  /**
-   * sm: 데모 색인 (text-[11px] font-medium)
-   * md: 독립 열람 (text-xs font-semibold)
-   */
-  size?: 'sm' | 'md'
-  icon?: React.ReactNode
-  className?: string
-}
-
-export function ZoneBadge({ zone, size = 'md', icon, className = '' }: ZoneBadgeProps) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded px-2 py-0.5',
-        size === 'sm' ? 'text-[11px] font-medium' : 'text-xs font-semibold',
-        ACCENT_SURFACE,
-        className,
-      )}
-    >
-      {/* 라벨을 span으로 감싸지 않는다 — 원본이 아이콘 뒤에 텍스트를 바로 두었다 */}
-      {icon}
-      zone: {zone}
     </span>
   )
 }
