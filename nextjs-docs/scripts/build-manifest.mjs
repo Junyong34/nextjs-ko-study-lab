@@ -59,6 +59,17 @@ function extractTitle(content, fallback) {
   return fallback;
 }
 
+// "예제 및 데모 설계" 섹션의 `- 데모 가능 여부: 가능/불가/검토 예정` 판정 라인 파싱
+function extractDemoFeasibility(content) {
+  const match = content.match(/^-\s*데모\s*가능\s*여부:\s*(가능|불가|검토\s*예정)/m);
+  if (!match) return undefined;
+  const value = match[1].replace(/\s+/g, '');
+  if (value === '가능') return 'possible';
+  if (value === '불가') return 'not-applicable';
+  if (value === '검토예정') return 'pending';
+  return undefined;
+}
+
 // ```demo 코드펜스 파싱
 function extractDemos(content) {
   const demos = [];
@@ -252,6 +263,7 @@ function buildCategoryTree(allDocsMap) {
           order: item.order || undefined,
           section: item.section || undefined,
           demos: targetDoc.demos,
+          demoFeasibility: targetDoc.demoFeasibility,
         });
       }
     }
@@ -274,6 +286,7 @@ function buildCategoryTree(allDocsMap) {
               path: doc.path,
               order: fileOrderMatch ? fileOrderMatch[1] : undefined,
               demos: doc.demos,
+              demoFeasibility: doc.demoFeasibility,
             });
           }
         }
@@ -306,6 +319,7 @@ function buildManifest() {
     const fallbackTitle = path.basename(relPath, '.md');
     const title = extractTitle(content, fallbackTitle);
     const demos = extractDemos(content);
+    const demoFeasibility = extractDemoFeasibility(content);
 
     const docEntry = {
       path: relPath,
@@ -313,6 +327,7 @@ function buildManifest() {
       slug,
       title,
       demos,
+      demoFeasibility,
     };
 
     docs.push(docEntry);

@@ -14,6 +14,7 @@ export interface DocEntry {
     height?: number
     caption?: string
   }>
+  demoFeasibility?: 'possible' | 'not-applicable' | 'pending'
 }
 
 export interface DocsManifest {

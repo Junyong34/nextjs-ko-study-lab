@@ -2,12 +2,19 @@
 
 import React, { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
-import { ChevronRight, ChevronDown, Play } from 'lucide-react'
+import { ChevronRight, ChevronDown, Play, FileText } from 'lucide-react'
 import { cn } from '../../cn'
 import { ACTIVE_ITEM, INACTIVE_ITEM } from '../../styles'
 import { CountBadge } from '../../primitives/Badge'
 import type { TreeNode } from '../../types'
 import { formatNodeTitle } from './useTreeFilter'
+
+/** '준비중' 뱃지의 툴팁을 판정 상태별로 다르게 보여줍니다. */
+function getPendingTooltip(feasibility?: TreeNode['demoFeasibility']) {
+  if (feasibility === 'possible') return '데모 제작 예정 (가능 판정, 아직 미구현)'
+  if (feasibility === 'pending') return '데모 가능 여부 검토 중'
+  return '데모 가능 여부 미판정'
+}
 
 export interface DocTreeNodeProps {
   node: TreeNode
@@ -96,7 +103,7 @@ export function DocTreeNode({
         style={{ paddingLeft: `${Math.max(8, level * 10)}px` }}
       >
         <div className="flex items-center gap-1.5 min-w-0">
-          {/* 데모 모드: 앞에 [DEMO] 또는 [문서] 뱃지 표시 */}
+          {/* 데모 모드: 앞에 [DEMO] / [설명 대체] / [준비중] 3단계 뱃지 표시 */}
           {isDemoMode ? (
             hasDemos ? (
               <span
@@ -107,12 +114,20 @@ export function DocTreeNode({
                 <span className="leading-none">DEMO</span>
                 {demoCount > 1 && <span className="opacity-80 leading-none">({demoCount})</span>}
               </span>
+            ) : node.demoFeasibility === 'not-applicable' ? (
+              <span
+                className="inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[9px] font-bold leading-none bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
+                title="브라우저 시연 불가 판정 — 문서 설명으로 대체"
+              >
+                <FileText className="h-2 w-2 shrink-0" />
+                <span className="leading-none">설명 대체</span>
+              </span>
             ) : (
               <span
                 className="inline-flex shrink-0 items-center rounded px-1.5 py-0.5 font-mono text-[9px] font-medium leading-none bg-zinc-100 text-zinc-400 dark:bg-zinc-800/60 dark:text-zinc-500"
-                title="데모 미등록 (문서만 제공)"
+                title={getPendingTooltip(node.demoFeasibility)}
               >
-                문서
+                준비중
               </span>
             )
           ) : (

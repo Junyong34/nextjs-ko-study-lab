@@ -15,5 +15,7 @@ export interface TreeNode {
   hasDemo?: boolean
   demoCount?: number
   isDemoItem?: boolean
+  /** `nextjs-docs` md의 "데모 가능 여부" 판정 라인. 판정 라인이 없는 문서는 undefined. */
+  demoFeasibility?: 'possible' | 'not-applicable' | 'pending'
   children?: TreeNode[]
 }
