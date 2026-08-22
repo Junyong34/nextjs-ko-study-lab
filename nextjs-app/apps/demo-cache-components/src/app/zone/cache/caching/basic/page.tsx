@@ -124,7 +124,7 @@ export default async function DemoPage() {
         description="새로고침 시 캐시 유지 및 무효화 Server Action 호출 시 갱신 동작 대조"
         expected={expectedText}
         actual={actualText}
-        isMatched={true}
+        isMatched={Boolean(cachedData && cachedData.cacheId)}
       />
 
       {/* 4단. 최하단 개념 정리 카드 */}

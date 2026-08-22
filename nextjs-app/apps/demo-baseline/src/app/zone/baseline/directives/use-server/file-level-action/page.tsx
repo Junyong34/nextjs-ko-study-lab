@@ -1,6 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { DirectiveUseServerFileDemo } from './components/DirectiveUseServerFileDemo'
+import { DirectiveUseServerDemo } from './components/DirectiveUseServerDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
@@ -31,7 +31,7 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"파일 레벨 'use server' Server Action 모듈 분리 실습"}>
-        <DirectiveUseServerFileDemo />
+        <DirectiveUseServerDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

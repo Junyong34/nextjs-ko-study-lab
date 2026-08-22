@@ -10,7 +10,16 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "check-types": "turbo check-types",
-    "gen-stubs": "pnpm --filter @study/demos gen-stubs"
+    "gen-stubs": "pnpm --filter @study/demos gen-stubs",
+    "test": "pnpm --filter @study/test-suite test",
+    "test:all": "pnpm --filter @study/test-suite test:all",
+    "test:manifest": "pnpm --filter @study/test-suite test:manifest",
+    "test:no-static-matched": "pnpm --filter @study/test-suite test:no-static-matched",
+    "test:tier1": "pnpm --filter @study/test-suite test:tier1",
+    "test:tier2": "pnpm --filter @study/test-suite test:tier2",
+    "test:tier3": "pnpm --filter @study/test-suite test:tier3",
+    "test:tier4": "pnpm --filter @study/test-suite test:tier4",
+    "test:tier5": "pnpm --filter @study/test-suite test:tier5"
   },
   "devDependencies": {
     "turbo": "^2.10.10"

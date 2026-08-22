@@ -1,39 +1,54 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { NextRequestGeoDemo } from './components/NextRequestGeoDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [geoState, setGeoState] = useState<{
+    ip?: string
+    country?: string
+    currency?: string
+    isLoaded: boolean
+  }>({
+    isLoaded: false,
+  })
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"NextRequest Geo 위치 및 클라이언트 IP 파싱"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'NextRequest Geo 위치 및 클라이언트 IP 파싱'을 활용하는 실무 개발 패턴입니다."}
+        title="NextRequest IP/Geo 텔레메트리 파싱 (route.ts)"
+        concept="Next.js App Router route.ts의 NextRequest 객체로부터 클라이언트 IP(request.ip) 및 지리적 위치(request.geo/헤더)를 파싱하여 이커머스 통화 및 가격을 자동 현지화하는 실습입니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "NextRequest 핸들러 선언",
+            description: "api/route.ts에서 NextRequest를 파라미터로 받아 ip, geo, headers를 추출합니다.",
+            actionBadge: "핸들러 수신",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "지리 정보 기반 통화 매핑",
+            description: "감지된 국가 코드(KR/US/JP/EU)에 맞춰 통화 단위와 환율을 자동 매핑합니다.",
+            actionBadge: "통화 현지화",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "텔레메트리 검증",
+            description: "클라이언트에서 실시간 수신된 IP, 국가, 포맷팅 가격 정보를 대조 검증합니다.",
+            actionBadge: "데이터 대조",
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"NextRequest Geo 위치 및 클라이언트 IP 파싱 실습"}>
-        <NextRequestGeoDemo />
+      <DemoPlaygroundCard title="NextRequest IP/Geo 텔레메트리 파싱 실습">
+        <NextRequestGeoDemo onStatusChange={setGeoState} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        ip={geoState.ip}
+        country={geoState.country}
+        currency={geoState.currency}
+        isLoaded={geoState.isLoaded}
+      />
     </DemoContainer>
   )
 }

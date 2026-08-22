@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useTransition } from 'react'
-import { MOCK_COUPONS, type Coupon } from '@study/demo-kit'
+import { type Coupon } from '@study/demo-kit'
+import { applyCouponAction } from '../actions'
 
 export function DirectiveUseServerDemo() {
   const [couponCode, setCouponCode] = useState('WELCOME2026')
@@ -13,20 +14,13 @@ export function DirectiveUseServerDemo() {
   const handleApply = (e: React.FormEvent) => {
     e.preventDefault()
     startTransition(async () => {
-      // Simulate server action
-      await new Promise(r => setTimeout(r, 600))
-      const found = MOCK_COUPONS.find(c => c.code === couponCode.toUpperCase().trim())
-      if (found) {
-        if (orderAmount < found.minOrderAmount) {
-          setStatus(`쿠폰 적용 불가: 최소 주문금액 ${found.minOrderAmount.toLocaleString()}원 이상이어야 합니다.`)
-          setAppliedCoupon(null)
-        } else {
-          setAppliedCoupon(found)
-          setStatus(`쿠폰 적용 성공! (${found.name})`)
-        }
+      const res = await applyCouponAction(couponCode, orderAmount)
+      if (res.success && res.coupon) {
+        setAppliedCoupon(res.coupon)
+        setStatus(`쿠폰 적용 성공! (${res.coupon.name}) - 할인액: ${res.discount?.toLocaleString()}원`)
       } else {
-        setStatus('유효하지 않은 쿠폰 코드입니다.')
         setAppliedCoupon(null)
+        setStatus(res.error || '쿠폰 적용에 실패했습니다.')
       }
     })
   }

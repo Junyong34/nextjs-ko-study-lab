@@ -1,100 +1,79 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
+import Link from 'next/link'
 
 export function OptionalCatchAllDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
+  const BASE_PATH = '/zone/baseline/file-conventions/dynamic-segments/optional-catch-all'
 
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
-  }
+  const DEMO_LINKS = [
+    {
+      title: '0단계 (루트): 개발자 문서 인덱스',
+      path: `${BASE_PATH}/docs`,
+      paramDesc: 'slug: undefined (파라미터 없음)',
+      badge: '루트 매칭',
+    },
+    {
+      title: '1단계: 설치 가이드',
+      path: `${BASE_PATH}/docs/installation`,
+      paramDesc: "slug: ['installation']",
+      badge: '1단계',
+    },
+    {
+      title: '2단계: 동적 라우팅 가이드',
+      path: `${BASE_PATH}/docs/routing/dynamic-routes`,
+      paramDesc: "slug: ['routing', 'dynamic-routes']",
+      badge: '2단계',
+    },
+    {
+      title: '3단계: 특수 파일 page.tsx API',
+      path: `${BASE_PATH}/docs/api-reference/file-conventions/page`,
+      paramDesc: "slug: ['api-reference', 'file-conventions', 'page']",
+      badge: '3단계',
+    },
+  ]
 
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">[[...slug]] Optional Catch-all 동적 세그먼트 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
+          <div className="flex items-center gap-2">
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100">[[...slug]] 선택적 포괄 세그먼트 네비게이션</h4>
+            <span className="rounded bg-purple-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-purple-800 dark:bg-purple-950 dark:text-purple-300">
+              docs/[[...slug]] 온디스크 구축 완료
+            </span>
+          </div>
+          <p className="text-xs text-zinc-500">이중 대괄호(<code>[[...slug]]</code>)는 파라미터가 없는 <code>/docs</code> 루트 경로까지 함께 포괄합니다.</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
-          </div>
-        </div>
-
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {DEMO_LINKS.map((item) => (
+          <div
+            key={item.path}
+            className="flex flex-col justify-between rounded-lg border border-zinc-200 bg-zinc-50 p-4 transition-all hover:border-purple-400 dark:border-zinc-800 dark:bg-zinc-900/50"
+          >
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <h5 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">{item.title}</h5>
+                <span className="rounded bg-purple-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-purple-800 dark:bg-purple-950 dark:text-purple-300">
+                  {item.badge}
+                </span>
               </div>
-            ))}
+              <code className="block rounded bg-zinc-200/70 px-2 py-1 font-mono text-[11px] text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                {item.paramDesc}
+              </code>
+            </div>
+
+            <div className="mt-3 pt-2 border-t border-zinc-200 dark:border-zinc-800 flex justify-end">
+              <Link
+                href={item.path}
+                className="rounded bg-zinc-900 px-3 py-1 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 transition-colors"
+              >
+                해당 문서로 이동 →
+              </Link>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   )

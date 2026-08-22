@@ -2,43 +2,65 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export function VerificationFooter() {
+interface VerificationFooterProps {
+  httpStatus?: number | null
+  orderCount?: number
+  lastMethod?: string
+}
+
+export function VerificationFooter({
+  httpStatus,
+  orderCount = 0,
+  lastMethod = 'GET',
+}: VerificationFooterProps) {
+  const isMatched = Boolean(httpStatus && (httpStatus === 200 || httpStatus === 201) && orderCount > 0)
+
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
         title="REST GET/POST 주문 API (route.ts) 실증 검증"
-        expected="• REST GET/POST 주문 API (route.ts) 사양에 따른 정상 동작 및 상태 변화 관찰"
-        actual="• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-        isMatched={true}
-        description="Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."
+        expected="• Next.js App Router route.ts에서 GET(200 OK) 및 POST(201 Created) 응답 처리\n• 주문 수명 주기(Order Lifecycle) 동기화 완료"
+        actual={
+          httpStatus
+            ? `• [HTTP ${httpStatus}] ${lastMethod} 요청 성공 (주문 ${orderCount}건 확인)\n• route.ts 실제 엔드포인트 응답 감지`
+            : '• route.ts 요청 대기 중...'
+        }
+        isMatched={isMatched}
+        description="Next.js App Router 공식 표준 스펙에 따라 route.ts 파일 컨벤션이 생성한 엔드포인트와의 실제 HTTP 통신 결과를 대조 검증합니다."
       />
       <DemoDeepDiveCard title="REST GET/POST 주문 API (route.ts)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>REST GET/POST 주문 API (route.ts)는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>route.ts</code>는 App Router에서 특정 URL 경로에 대한 웹 표준 <code>Request</code>/<code>Response</code> 기반 HTTP 엔드포인트를 선언하는 파일 컨벤션입니다.
+              동일 디렉토리에 <code>page.tsx</code>가 없더라도 독립적인 REST API 역할을 수행합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(REST GET/POST 주문 API (route.ts))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              <code>GET</code> 함수는 현재 저장된 주문 목록 배열을 <code>NextResponse.json()</code>으로 반환하고,
+              <code>POST</code> 함수는 클라이언트가 전송한 JSON 페이로드를 파싱하여 새로운 주문을 생성한 후 <code>201 Created</code> 상태 코드와 함께 응답합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li>웹 표준 Response 기반: <code>fetch</code>, <code>Headers</code>, <code>Request</code> 등 Web 표준 API와 완벽 호환됩니다.</li>
+              <li>HTTP 메서드 분기: <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>PATCH</code>, <code>DELETE</code>, <code>HEAD</code>, <code>OPTIONS</code>를 함수 단위로 깔끔하게 분리합니다.</li>
+              <li>NextResponse 유틸리티: JSON 응답, 쿠키 설정, 리라이트, 리다이렉트를 간결하게 작성할 수 있습니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>모바일 앱이나 외부 서비스와의 통신을 위한 공용 REST API 제공</li>
+              <li>PG사 결제 웹훅 수신 및 타사 연동 데이터 수신</li>
+              <li>파일 다운로드, 스트리밍(SSE), 이미지 동적 생성 등 바이너리 및 특수 포맷 응답</li>
             </ul>
           </div>
         </div>

@@ -2,43 +2,63 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export function VerificationFooter() {
+interface VerificationFooterProps {
+  currentPhotoId?: string
+  isDirectPage?: boolean
+}
+
+export function VerificationFooter({
+  currentPhotoId,
+  isDirectPage = false,
+}: VerificationFooterProps) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Intercepting Routes ((..)segment) 라우트 인터셉트 실증 검증"
-        expected="• Intercepting Routes ((..)segment) 라우트 인터셉트 사양에 따른 정상 동작 및 상태 변화 관찰"
-        actual="• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-        isMatched={true}
-        description="Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."
+        title="Intercepting Routes ((..), (.)) 모달 인터셉트 실증 검증"
+        expected="• 클라이언트 내비게이션(Link) 시 @modal/(.)photos/[id]가 현재 컨텍스트를 가로채 모달 표시\n• URL 새로고침 또는 직접 주소 입력 시 독립 photos/[id]/page.tsx 전체 화면 마운트"
+        actual={
+          isDirectPage
+            ? `• [직접 접속 모드 감지] photos/${currentPhotoId} 풀 페이지 렌더링 확인\n• 독립 레이아웃 및 딥 링크 주소 직접 파싱 완료`
+            : '• 갤러리 피드 대기 상태 (상품 카드의 [모달 열기]를 클릭하여 (.)photos/[id] 인터셉트를 확인하세요)'
+        }
+        isMatched={isDirectPage || Boolean(currentPhotoId) ? true : undefined}
+        description="Next.js App Router의 Intercepting Routes((.), (..), (..)(..), (...))와 Parallel Slots(@modal)를 조합한 컨텍스트 보존 모달 패턴을 검증합니다."
       />
-      <DemoDeepDiveCard title="Intercepting Routes ((..)segment) 라우트 인터셉트">
+      <DemoDeepDiveCard title="Intercepting Routes ((..), (.))">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Intercepting Routes ((..)segment) 라우트 인터셉트는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 매칭 규칙</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><code>(.)</code>: 동일한 세그먼트 레벨의 경로 가로채기</li>
+              <li><code>(..)</code>: 한 단계 상위 세그먼트 레벨의 경로 가로채기</li>
+              <li><code>(..)(..)</code>: 두 단계 상위 세그먼트 레벨의 경로 가로채기</li>
+              <li><code>(...)</code>: 루트 <code>app</code> 디렉토리 레벨의 경로 가로채기</li>
+            </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Intercepting Routes ((..)segment) 라우트 인터셉트)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 모달 컨텍스트 유지 원리</h5>
+            <p>
+              <code>layout.tsx</code>에서 <code>{`{ children, modal }`}</code>을 동시에 렌더링하도록 구성하면,
+              사용자가 <code>&lt;Link href="/photos/1"&gt;</code>를 클릭했을 때 <code>children</code>(배경 목록)은 그대로 유지되면서 <code>modal</code> 슬롯에 <code>(.)photos/1/page.tsx</code>가 오버레이됩니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li>공유 가능한 URL: 모달이 떠 있는 상태에서도 URL이 <code>/photos/101</code>로 변경되어 링크 공유 가능</li>
+              <li>뒤로 가기(Back Button) 지원: 브라우저 뒤로 가기를 누르면 모달만 닫히고 배경 스크롤 위치 보존</li>
+              <li>하드 리로드 복원력: 새로고침 시 404가 아닌 온전한 상세 페이지로 안전하게 폴백</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>쇼핑몰 상품 퀵뷰(Quick View) 모달</li>
+              <li>인스타그램/핀터레스트 스타일 사진 피드 오버레이</li>
+              <li>로그인/회원가입 인터셉트 모달 팝업</li>
             </ul>
           </div>
         </div>

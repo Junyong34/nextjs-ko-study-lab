@@ -1,6 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { AfterBackgroundLoggingDemo } from './components/AfterBackgroundLoggingDemo'
+import { AfterLoggingDemo } from './components/AfterLoggingDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
@@ -31,7 +31,7 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"after() 백그라운드 주문 로깅 (응답 지연 0ms) 실습"}>
-        <AfterBackgroundLoggingDemo />
+        <AfterLoggingDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

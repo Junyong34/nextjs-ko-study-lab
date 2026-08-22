@@ -1,6 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { DirectiveUseClientStorageDemo } from './components/DirectiveUseClientStorageDemo'
+import { StorageClientDemo } from './components/StorageClientDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
@@ -31,7 +31,7 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"'use client' 내부 브라우저 window.localStorage 접근 실습"}>
-        <DirectiveUseClientStorageDemo />
+        <StorageClientDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

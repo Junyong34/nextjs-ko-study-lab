@@ -1,98 +1,136 @@
 'use client'
-import React, { useState } from 'react'
+
+import React, { useState, useTransition } from 'react'
+import { MOCK_PRODUCTS, type Product } from '@study/demo-kit'
 
 export function UnstableCacheDbDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
+  const [selectedProduct, setSelectedProduct] = useState('prod-001')
+  const [productData, setProductData] = useState<Product>(() => MOCK_PRODUCTS[0])
+  const [cacheStatus, setCacheStatus] = useState<'HIT' | 'MISS' | 'PURGED'>('HIT')
+  const [latencyMs, setLatencyMs] = useState(0)
+  const [isPending, startTransition] = useTransition()
+  const [cachedSkus, setCachedSkus] = useState<Set<string>>(new Set(['prod-001']))
 
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
+  const handleFetch = (id: string) => {
+    setSelectedProduct(id)
+    startTransition(async () => {
+      const isCached = cachedSkus.has(id)
+      const start = performance.now()
+
+      if (!isCached) {
+        // Simulated PostgreSQL / Prisma DB Latency
+        await new Promise((r) => setTimeout(r, 380))
+        const found = MOCK_PRODUCTS.find((p) => p.id === id) || MOCK_PRODUCTS[0]
+        setProductData(found)
+        setLatencyMs(Math.round(performance.now() - start))
+        setCacheStatus('MISS')
+        setCachedSkus((prev) => new Set([...prev, id]))
+      } else {
+        // Instant In-Memory / Data Cache Hit
+        const found = MOCK_PRODUCTS.find((p) => p.id === id) || MOCK_PRODUCTS[0]
+        setProductData(found)
+        setLatencyMs(Math.max(0, Math.round(performance.now() - start)))
+        setCacheStatus('HIT')
+      }
+    })
+  }
+
+  const handlePurge = () => {
+    startTransition(() => {
+      setCachedSkus(new Set())
+      setCacheStatus('PURGED')
+      setLatencyMs(0)
+    })
   }
 
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
+      {/* 1. 제어 툴바 */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">unstable_cache를 통한 DB 쿼리 결과 캐싱 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
+          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">
+            Next.js unstable_cache DB 쿼리 캐싱 및 태그 재검증 콘솔
+          </h4>
+          <p className="text-xs text-zinc-500">
+            데이터베이스 호출 결과를 Data Cache에 보관하고 지정된 revalidate 주기와 태그로 무효화합니다.
+          </p>
         </div>
-        <div className="flex gap-2">
+
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1.5">
+            {MOCK_PRODUCTS.slice(0, 3).map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => handleFetch(p.id)}
+                disabled={isPending}
+                className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer transition ${
+                  selectedProduct === p.id
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300'
+                }`}
+              >
+                {p.id.toUpperCase()} ({cachedSkus.has(p.id) ? 'HIT' : 'MISS'})
+              </button>
+            ))}
+          </div>
+
           <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
+            type="button"
+            onClick={handlePurge}
+            disabled={isPending}
+            className="rounded bg-rose-600 px-3 py-1 text-xs font-semibold text-white hover:bg-rose-700 cursor-pointer shadow-2xs"
           >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
+            태그 무효화 (revalidateTag)
           </button>
         </div>
       </div>
 
+      {/* 2. 캐시 상태 및 제품 카드 */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-3">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-bold text-zinc-700 dark:text-zinc-300">Data Cache 적중 상태</span>
+            <span
+              className={`rounded px-2 py-0.5 font-mono text-[10px] font-bold text-white ${
+                cacheStatus === 'HIT'
+                  ? 'bg-emerald-600'
+                  : cacheStatus === 'MISS'
+                    ? 'bg-amber-600'
+                    : 'bg-rose-600'
+              }`}
+            >
+              {cacheStatus === 'HIT' ? 'CACHE HIT' : cacheStatus === 'MISS' ? 'DB MISS' : 'TAG PURGED'}
+            </span>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
+
+          <div className="rounded bg-white p-3 shadow-2xs dark:bg-zinc-950 border border-zinc-200/60 dark:border-zinc-800 space-y-1">
+            <div className="flex justify-between text-xs font-bold text-zinc-900 dark:text-zinc-100">
+              <span>{productData.name}</span>
+              <span className="font-mono text-indigo-600 dark:text-indigo-400">
+                {productData.price.toLocaleString()}원
+              </span>
+            </div>
+            <div className="text-[11px] text-zinc-500 line-clamp-1">{productData.description}</div>
+          </div>
+
+          <div className="flex items-center justify-between text-xs font-mono text-zinc-500 pt-1">
+            <span>응답 시간: <strong className="text-zinc-800 dark:text-zinc-200">{isPending ? '쿼리 중...' : `${latencyMs}ms`}</strong></span>
+            <span>재고: {productData.stock}개 잔여</span>
           </div>
         </div>
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
-              </div>
-            ))}
+        {/* 3. unstable_cache 시그니처 인스펙터 */}
+        <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1.5">
+          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">
+            unstable_cache 함수 정의:
+          </div>
+          <div className="space-y-1 text-[11px]">
+            <div className="text-blue-300">const getCachedProduct = unstable_cache(</div>
+            <div className="pl-3 text-zinc-400">async (id) =&gt; db.products.findUnique({'{ where: { id } }'}),</div>
+            <div className="pl-3 text-emerald-400">['ecommerce-product-detail'],</div>
+            <div className="pl-3 text-amber-300">{'{'} revalidate: 3600, tags: ['products', 'product-{selectedProduct}'] {'}'}</div>
+            <div className="text-blue-300">)</div>
           </div>
         </div>
       </div>

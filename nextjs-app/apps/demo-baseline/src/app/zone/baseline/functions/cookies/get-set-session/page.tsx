@@ -1,6 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { CookiesGetSetDemo } from './components/CookiesGetSetDemo'
+import { CookiesSessionDemo } from './components/CookiesSessionDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
@@ -31,7 +31,7 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"cookies().get() 읽기 & cookies().set() 세션 쿠키 발급 실습"}>
-        <CookiesGetSetDemo />
+        <CookiesSessionDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

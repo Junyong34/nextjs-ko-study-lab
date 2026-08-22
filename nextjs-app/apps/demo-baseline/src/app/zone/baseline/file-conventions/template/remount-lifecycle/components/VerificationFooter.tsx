@@ -2,43 +2,83 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export function VerificationFooter() {
+export interface VerificationFooterProps {
+  isMatched?: boolean
+  expected?: React.ReactNode
+  actual?: React.ReactNode
+  status?: string | number | null
+  description?: string
+  isLoaded?: boolean
+  logs?: string[]
+  count?: number
+  [key: string]: any
+}
+
+export function VerificationFooter(props: VerificationFooterProps = {}) {
+  const {
+    isMatched: propIsMatched,
+    expected: propExpected,
+    actual: propActual,
+    status,
+    description: propDescription,
+    isLoaded,
+    logs,
+    count,
+    ...rest
+  } = props
+
+  const isMatched =
+    propIsMatched !== undefined
+      ? propIsMatched
+      : status !== undefined && status !== null
+      ? typeof status === 'number'
+        ? status >= 200 && status < 400
+        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
+      : isLoaded !== undefined
+      ? Boolean(isLoaded)
+      : logs && Array.isArray(logs) && logs.length > 0
+      ? true
+      : count !== undefined && count > 0
+      ? true
+      : undefined
+
+  const defaultExpected = "• layout.tsx는 자식 경로 전환 시에도 상태(state)와 DOM을 지속 보존\n• template.tsx는 경로 이동 시마다 새 인스턴스로 재생성되어 상태 초기화 및 진입 애니메이션 재실행"
+  const defaultActual = "• layout.tsx 지속 보존 & template.tsx 재마운트 수명 주기 분리 감지 완료\n• 탭 간 전환 시 template DOM 재생성 확인"
+
+  const actualContent =
+    propActual !== undefined
+      ? propActual
+      : isMatched === true
+      ? defaultActual
+      : isMatched === false
+      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
+      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="template.tsx 인스턴스 재생성 및 수명주기 실증 검증"
-        expected="• template.tsx 인스턴스 재생성 및 수명주기 사양에 따른 정상 동작 및 상태 변화 관찰"
-        actual="• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-        isMatched={true}
-        description="Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."
+        title="template.tsx vs layout.tsx 리마운트 수명 주기 실증 검증"
+        expected={propExpected || defaultExpected}
+        actual={actualContent}
+        isMatched={isMatched}
+        description={propDescription || "Next.js App Router의 template.tsx 컨벤션을 통해 레이아웃 상태 보존과 템플릿 리마운트 메커니즘의 차이를 검증합니다."}
       />
-      <DemoDeepDiveCard title="template.tsx 인스턴스 재생성 및 수명주기">
+      <DemoDeepDiveCard title="template.tsx vs layout.tsx">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>template.tsx 인스턴스 재생성 및 수명주기는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 렌더링 계층</h5>
+            <p>
+              Next.js의 라우팅 계층에서 컴포넌트 렌더링 순서는 <code>Layout &gt; Template &gt; ErrorBoundary &gt; Suspense &gt; Page</code>입니다.
+              <code>template.tsx</code>는 각 내비게이션마다 고유한 React <code>key</code>를 부여받아 완전히 새 인스턴스로 마운트됩니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(template.tsx 인스턴스 재생성 및 수명주기)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 언제 layout 대신 template을 쓰는가?</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>페이지 전환 애니메이션: CSS/Framer-motion 진입 트랜지션을 매번 재실행할 때</li>
+              <li>페이지 진입 로깅: <code>useEffect</code>를 통해 페이지 뷰(PV) 이벤트를 매 전환마다 트리거할 때</li>
+              <li>폼 입력값 자동 리셋: 하위 탭 이동 시 검색어/필터 입력 필드를 초기화할 때</li>
             </ul>
           </div>
         </div>

@@ -2,43 +2,65 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export function VerificationFooter() {
+interface VerificationFooterProps {
+  isConnected?: boolean
+  ticksReceived?: number
+}
+
+export function VerificationFooter({
+  isConnected = false,
+  ticksReceived = 0,
+}: VerificationFooterProps) {
+  const isMatched = isConnected || ticksReceived > 0
+
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="SSE 실시간 재고 스트리밍 (route.ts) 실증 검증"
-        expected="• SSE 실시간 재고 스트리밍 (route.ts) 사양에 따른 정상 동작 및 상태 변화 관찰"
-        actual="• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-        isMatched={true}
-        description="Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."
+        title="실시간 재고 스트리밍 (SSE route.ts) 실증 검증"
+        expected="• route.ts에서 ReadableStream을 생성하고 Content-Type: text/event-stream으로 지속적인 청크 스트리밍\n• 클라이언트에서 실시간 재고 틱(tick) 데이터 수신"
+        actual={
+          ticksReceived > 0
+            ? `• [SSE 스트리밍 활성] 실시간 재고 변동 틱 ${ticksReceived}회 수신 완료\n• ReadableStream 청크 정상 파싱 및 상태 동기화`
+            : isConnected
+            ? '• [SSE 스트림 연결 수립] 초기 데이터 수신 및 첫 번째 틱 대기 중...'
+            : '• SSE 스트림 대기 상태'
+        }
+        isMatched={isMatched}
+        description="Next.js App Router route.ts의 Web Streams API (ReadableStream)를 활용하여 SSE 스트리밍이 정상 작동하는지 대조 검증합니다."
       />
-      <DemoDeepDiveCard title="SSE 실시간 재고 스트리밍 (route.ts)">
+      <DemoDeepDiveCard title="실시간 재고 스트리밍 (SSE route.ts)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>SSE 실시간 재고 스트리밍 (route.ts)는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              Server-Sent Events(SSE)는 단방향 실시간 데이터 스트리밍을 위한 웹 표준 프로토콜입니다.
+              Next.js App Router <code>route.ts</code>는 <code>ReadableStream</code>을 반환하여 연결을 유지하면서 <code>data: ...\n\n</code> 형식의 텍스트 청크를 지속적으로 푸시할 수 있습니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(SSE 실시간 재고 스트리밍 (route.ts))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. force-dynamic 및 버퍼링 비활성화</h5>
+            <p>
+              SSE 엔드포인트는 정적 빌드 시점에 캐시되지 않도록 <code>export const dynamic = 'force-dynamic'</code>을 선언해야 합니다.
+              또한 프록시나 CDN에서 버퍼링되어 지연되는 것을 방지하기 위해 <code>Cache-Control: no-cache, no-transform</code> 및 <code>x-accel-buffering: no</code> 헤더를 지정합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li>WebSocket 대비 가벼운 구조: HTTP/2 또는 HTTP/3 연결 위에서 가볍게 동작하며 별도의 웹소켓 서버가 불필요합니다.</li>
+              <li>자동 재연결: 브라우저 표준 <code>EventSource</code>는 네트워크 단절 시 자동으로 재연결을 시도합니다.</li>
+              <li>서버 푸시 최적화: LLM 생성 텍스트 스트리밍, 대시보드 지표 업데이트, 주문 진행 상태 실시간 표시에 최적입니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>쇼핑몰 타임세일 실시간 잔여 재고 카운트다운</li>
+              <li>AI 챗봇 답변 텍스트 토큰 단위 스트리밍</li>
+              <li>배송 상태 추적 및 결제 처리 단계별 진행률 피드백</li>
             </ul>
           </div>
         </div>

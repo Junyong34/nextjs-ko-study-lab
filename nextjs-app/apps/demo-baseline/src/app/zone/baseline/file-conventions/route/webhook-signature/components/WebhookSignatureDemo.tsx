@@ -1,12 +1,36 @@
 'use client'
 import React, { useState } from 'react'
 
-export function WebhookSignatureDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
+interface WebhookSignatureDemoProps {
+  onStatusChange?: (status: { httpStatus: number; verified: boolean; eventName?: string }) => void
+}
+
+const WEBHOOK_SECRET = 'study_webhook_secret_key_2026'
+
+async function computeHmacSha256(message: string, secret: string): Promise<string> {
+  const enc = new TextEncoder()
+  const key = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  )
+  const signature = await crypto.subtle.sign('HMAC', key, enc.encode(message))
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+}
+
+export function WebhookSignatureDemo({ onStatusChange }: WebhookSignatureDemoProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [lastStatus, setLastStatus] = useState<number | null>(null)
+  const [responseJson, setResponseJson] = useState<Record<string, unknown> | null>(null)
   const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
+    '웹훅 수신 대기: HMAC-SHA256 암호화 서명 검증 준비'
   ])
+
+  const API_ENDPOINT = '/zone/baseline/file-conventions/route/webhook-signature/api'
 
   const addLog = (msg: string) => {
     setActionLog(prev => [
@@ -15,81 +39,118 @@ export function WebhookSignatureDemo() {
     ])
   }
 
+  const sendWebhook = async (tamper: boolean) => {
+    setIsLoading(true)
+    try {
+      const payloadObj = {
+        event: 'payment.captured',
+        paymentId: 'PAY-2026-98124',
+        orderId: 'ORD-2026-001',
+        amount: 129000,
+        currency: 'KRW',
+        timestamp: new Date().toISOString(),
+      }
+      const rawBody = JSON.stringify(payloadObj)
+
+      let signature = await computeHmacSha256(rawBody, WEBHOOK_SECRET)
+      if (tamper) {
+        // 위변조된 서명 생성
+        signature = 'deadbeef' + signature.slice(8)
+      }
+
+      addLog(`웹훅 요청 전송: 서명=${signature.slice(0, 10)}... (위변조=${tamper})`)
+
+      const res = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-signature-sha256': signature,
+        },
+        body: rawBody,
+      })
+
+      const data = await res.json()
+      setLastStatus(res.status)
+      setResponseJson(data)
+
+      if (res.ok && data.verified) {
+        addLog(`HTTP 200 검증 통과: ${data.event} (${data.paymentId})`)
+        onStatusChange?.({ httpStatus: 200, verified: true, eventName: data.event })
+      } else {
+        addLog(`HTTP ${res.status} 거절: ${data.error || '검증 실패'}`)
+        onStatusChange?.({ httpStatus: res.status, verified: false, eventName: payloadObj.event })
+      }
+    } catch {
+      addLog('웹훅 전송 네트워크 에러')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Webhook 서명 검증 핸들러 (route.ts) 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
+          <div className="flex items-center gap-2">
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100">PG 결제 웹훅 HMAC 서명 검증</h4>
+            <span className="rounded bg-indigo-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300">
+              crypto.timingSafeEqual
+            </span>
+          </div>
+          <p className="text-xs text-zinc-500">결제사 웹훅의 무결성을 검증하기 위해 헤더 서명과 비밀키를 대조합니다.</p>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
-        </div>
+        {lastStatus && (
+          <span className={`rounded px-2.5 py-1 text-xs font-mono font-bold ${
+            lastStatus === 200
+              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+              : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+          }`}>
+            HTTP {lastStatus} {lastStatus === 200 ? 'VERIFIED' : 'REJECTED'}
+          </span>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
+        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-3">
+          <div className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+            결제 웹훅 시뮬레이션 전송
           </div>
-          <div className="flex items-center gap-2">
+          <p className="text-xs text-zinc-500 leading-relaxed">
+            클라이언트에서 Web Crypto API로 페이로드를 서명한 뒤 <code>x-signature-sha256</code> 헤더를 첨부하여 전송합니다.
+          </p>
+
+          <div className="space-y-2 pt-1">
             <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
+              onClick={() => sendWebhook(false)}
+              disabled={isLoading}
+              className="w-full rounded bg-emerald-600 px-3 py-2 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50 cursor-pointer text-left flex justify-between items-center"
             >
-              -
+              <span>1. 정상 서명 웹훅 전송 (200 OK 기대)</span>
+              <span className="text-[10px] font-mono bg-emerald-700 px-1.5 py-0.5 rounded">VALID</span>
             </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
+
             <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
+              onClick={() => sendWebhook(true)}
+              disabled={isLoading}
+              className="w-full rounded bg-rose-600 px-3 py-2 text-xs font-bold text-white hover:bg-rose-700 disabled:opacity-50 cursor-pointer text-left flex justify-between items-center"
             >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
+              <span>2. 변조된 서명 웹훅 전송 (401 거절 기대)</span>
+              <span className="text-[10px] font-mono bg-rose-700 px-1.5 py-0.5 rounded">TAMPERED</span>
             </button>
           </div>
         </div>
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
+        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-2">
+          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1 flex justify-between">
+            <span>서버 route.ts 응답:</span>
+            <span className="text-[10px] text-zinc-500">{API_ENDPOINT}</span>
+          </div>
+          <pre className="text-[11px] text-zinc-300 overflow-x-auto max-h-24 bg-zinc-900 p-2 rounded">
+            {responseJson ? JSON.stringify(responseJson, null, 2) : '// 웹훅 요청 버튼을 클릭하세요.'}
+          </pre>
+          <div className="border-t border-zinc-800 pt-1 space-y-1 text-[10px]">
+            {actionLog.slice(0, 2).map((log, i) => (
+              <div key={i} className={i === 0 ? 'text-amber-400' : 'text-zinc-500'}>
                 {log}
               </div>
             ))}

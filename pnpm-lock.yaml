@@ -218,6 +218,31 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
+  nextjs-app/packages/test-suite:
+    dependencies:
+      '@study/demo-kit':
+        specifier: workspace:*
+        version: link:../demo-kit
+      '@study/demos':
+        specifier: workspace:*
+        version: link:../demos
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.3.1
+      zod:
+        specifier: ^3.24.2
+        version: 3.25.76
+    devDependencies:
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
+      '@types/node':
+        specifier: ^22.13.0
+        version: 22.20.1
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+
   nextjs-app/packages/ui:
     dependencies:
       lucide-react:

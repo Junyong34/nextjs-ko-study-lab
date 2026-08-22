@@ -2,15 +2,66 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export function VerificationFooter() {
+export interface VerificationFooterProps {
+  isMatched?: boolean
+  expected?: React.ReactNode
+  actual?: React.ReactNode
+  status?: string | number | null
+  description?: string
+  isLoaded?: boolean
+  logs?: string[]
+  count?: number
+  [key: string]: any
+}
+
+export function VerificationFooter(props: VerificationFooterProps = {}) {
+  const {
+    isMatched: propIsMatched,
+    expected: propExpected,
+    actual: propActual,
+    status,
+    description: propDescription,
+    isLoaded,
+    logs,
+    count,
+    ...rest
+  } = props
+
+  const isMatched =
+    propIsMatched !== undefined
+      ? propIsMatched
+      : status !== undefined && status !== null
+      ? typeof status === 'number'
+        ? status >= 200 && status < 400
+        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
+      : isLoaded !== undefined
+      ? Boolean(isLoaded)
+      : logs && Array.isArray(logs) && logs.length > 0
+      ? true
+      : count !== undefined && count > 0
+      ? true
+      : undefined
+
+  const defaultExpected = "• experimental_taintUniqueValue 원시 시크릿 유출 차단 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+
+  const actualContent =
+    propActual !== undefined
+      ? propActual
+      : isMatched === true
+      ? defaultActual
+      : isMatched === false
+      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
+      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
         title="experimental_taintUniqueValue 원시 시크릿 유출 차단 실증 검증"
-        expected="• experimental_taintUniqueValue 원시 시크릿 유출 차단 사양에 따른 정상 동작 및 상태 변화 관찰"
-        actual="• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-        isMatched={true}
-        description="Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."
+        expected={propExpected || defaultExpected}
+        actual={actualContent}
+        isMatched={isMatched}
+        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
       <DemoDeepDiveCard title="experimental_taintUniqueValue 원시 시크릿 유출 차단">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">

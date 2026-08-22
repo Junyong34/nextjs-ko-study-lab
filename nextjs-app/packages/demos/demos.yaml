@@ -1429,18 +1429,18 @@
 
 - url: architecture/compiler-optimization/react-compiler
   title: "React Compiler 자동 메모이제이션 최적화"
-  doc: 5-architecture/fast-refresh.md
+  doc: 5-architecture/nextjs-compiler.md
   zone: baseline
   status: done
 
 - url: architecture/server-action-security/csrf-protection
   title: "Server Actions 자동 CSRF Origin 헤더 검증"
-  doc: 5-architecture/fast-refresh.md
+  doc: 3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md
   zone: baseline
   status: done
 
 - url: architecture/turbopack/incremental-harness
   title: "Turbopack 증분 빌드 및 핫 모듈 리로딩 가속"
-  doc: 5-architecture/fast-refresh.md
+  doc: 3-api-reference/3.5-config/3.5.1-next-config-js/turbopack.md
   zone: baseline
   status: done

@@ -1,6 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { DirectiveUseServerInlineDemo } from './components/DirectiveUseServerInlineDemo'
+import { InlineActionClosureDemo } from './components/InlineActionClosureDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
@@ -31,7 +31,7 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"컴포넌트 내부 인라인 'use server' 클로저 액션 실습"}>
-        <DirectiveUseServerInlineDemo />
+        <InlineActionClosureDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

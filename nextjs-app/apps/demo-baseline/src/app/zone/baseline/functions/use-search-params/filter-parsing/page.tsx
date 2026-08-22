@@ -1,6 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { UseSearchParamsFilterDemo } from './components/UseSearchParamsFilterDemo'
+import { FilterParsingDemo } from './components/FilterParsingDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
@@ -31,7 +31,7 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"useSearchParams() URL 쿼리 파싱 및 필터링 실습"}>
-        <UseSearchParamsFilterDemo />
+        <FilterParsingDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

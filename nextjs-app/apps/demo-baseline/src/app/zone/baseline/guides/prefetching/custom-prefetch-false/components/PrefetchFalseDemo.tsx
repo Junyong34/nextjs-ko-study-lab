@@ -1,99 +1,124 @@
 'use client'
+
 import React, { useState } from 'react'
+import Link from 'next/link'
+import { MOCK_PRODUCTS } from '@study/demo-kit'
 
 export function PrefetchFalseDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
+  const [prefetchMode, setPrefetchMode] = useState<boolean | 'auto'>(false)
+  const [hoverCount, setHoverCount] = useState<number>(0)
+  const [networkLogs, setNetworkLogs] = useState<string[]>([
+    '라우터 초기화: 뷰포트 진입 감지 리스너 대기 중...',
   ])
 
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
+  const handleLinkHover = (id: string) => {
+    setHoverCount((h) => h + 1)
+    if (prefetchMode === false) {
+      setNetworkLogs((prev) => [
+        `[${new Date().toLocaleTimeString()}] prefetch={false} 설정됨: 뷰포트 자동 프리페치는 차단되었으나 마우스 호버(Hover) 시점에 필요 RSC 청크를 온디맨드로 프리페치 요청`,
+        ...prev.slice(0, 4),
+      ])
+    } else {
+      setNetworkLogs((prev) => [
+        `[${new Date().toLocaleTimeString()}] prefetch={true} 설정됨: 뷰포트 진입 즉시 백그라운드 프리페치 완료`,
+        ...prev.slice(0, 4),
+      ])
+    }
   }
 
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
+      {/* 1. 제어 툴바 */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">prefetch={false} 명시적 프리패치 차단 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
+          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">
+            Next.js &lt;Link prefetch={'{'}{String(prefetchMode)}{'}'}&gt; 프리페치 제어 콘솔
+          </h4>
+          <p className="text-xs text-zinc-500">
+            대용량 상품 목록이나 트래픽이 집중되는 페이지에서 불필요한 RSC 데이터 사전 다운로드를 방지합니다.
+          </p>
         </div>
-        <div className="flex gap-2">
+
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">prefetch 옵션:</span>
           <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+            type="button"
+            onClick={() => setPrefetchMode(false)}
+            className={`rounded px-2.5 py-1 font-mono text-xs font-semibold cursor-pointer transition ${
+              prefetchMode === false
+                ? 'bg-rose-600 text-white'
+                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300'
             }`}
           >
-            러닝화 (#001)
+            prefetch={'{false}'}
           </button>
           <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+            type="button"
+            onClick={() => setPrefetchMode(true)}
+            className={`rounded px-2.5 py-1 font-mono text-xs font-semibold cursor-pointer transition ${
+              prefetchMode === true
+                ? 'bg-emerald-600 text-white'
+                : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300'
             }`}
           >
-            윈드브레이커 (#002)
+            prefetch={'{true}'}
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
-          </div>
-        </div>
-
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
+      {/* 2. 상품 링크 그리드 */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {MOCK_PRODUCTS.slice(0, 2).map((p) => (
+          <div
+            key={p.id}
+            onMouseEnter={() => handleLinkHover(p.id)}
+            className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="font-mono text-[10px] font-bold text-zinc-400">
+                  {p.id.toUpperCase()}
+                </span>
+                <h5 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                  {p.name}
+                </h5>
               </div>
-            ))}
+              <span className="font-mono text-xs font-extrabold text-indigo-600 dark:text-indigo-400">
+                {p.price.toLocaleString()}원
+              </span>
+            </div>
+
+            <div className="pt-2 border-t border-zinc-200/60 dark:border-zinc-800 flex items-center justify-between">
+              <Link
+                href={`/zone/baseline/file-conventions/dynamic-segments/single-param/items/${p.id}`}
+                prefetch={prefetchMode}
+                className="rounded bg-zinc-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer inline-flex items-center gap-1.5"
+              >
+                <span>상품 상세로 이동</span>
+                <span className="text-[10px] font-mono text-zinc-400">
+                  (&lt;Link prefetch={'{'}{String(prefetchMode)}{'}'}&gt;)
+                </span>
+              </Link>
+            </div>
           </div>
+        ))}
+      </div>
+
+      {/* 3. 네트워크 통신 인스펙터 */}
+      <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-2">
+        <div className="flex items-center justify-between border-b border-zinc-800 pb-1 text-zinc-400">
+          <span className="font-bold">Next.js Router 프리페치 네트워크 감시:</span>
+          <span>마우스 호버 감지: {hoverCount}회</span>
+        </div>
+        <div className="space-y-1 text-[11px]">
+          {networkLogs.map((log, i) => (
+            <div
+              key={i}
+              className={i === 0 ? 'text-emerald-400 font-medium' : 'text-zinc-500'}
+            >
+              {log}
+            </div>
+          ))}
         </div>
       </div>
     </div>

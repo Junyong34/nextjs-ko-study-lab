@@ -1,6 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { UseRouterPushReplaceDemo } from './components/UseRouterPushReplaceDemo'
+import { NavigationClientDemo } from './components/NavigationClientDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
@@ -31,7 +31,7 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"useRouter push vs replace vs back 프로그래밍 네비게이션 실습"}>
-        <UseRouterPushReplaceDemo />
+        <NavigationClientDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

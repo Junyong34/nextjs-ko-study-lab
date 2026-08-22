@@ -2,44 +2,81 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export function VerificationFooter() {
+export interface VerificationFooterProps {
+  isMatched?: boolean
+  expected?: React.ReactNode
+  actual?: React.ReactNode
+  status?: string | number | null
+  description?: string
+  isLoaded?: boolean
+  logs?: string[]
+  count?: number
+  [key: string]: any
+}
+
+export function VerificationFooter(props: VerificationFooterProps = {}) {
+  const {
+    isMatched: propIsMatched,
+    expected: propExpected,
+    actual: propActual,
+    status,
+    description: propDescription,
+    isLoaded,
+    logs,
+    count,
+    ...rest
+  } = props
+
+  const isMatched =
+    propIsMatched !== undefined
+      ? propIsMatched
+      : status !== undefined && status !== null
+      ? typeof status === 'number'
+        ? status >= 200 && status < 400
+        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
+      : isLoaded !== undefined
+      ? Boolean(isLoaded)
+      : logs && Array.isArray(logs) && logs.length > 0
+      ? true
+      : count !== undefined && count > 0
+      ? true
+      : undefined
+
+  const defaultExpected = "• opengraph-image.tsx 및 twitter-image.tsx 파일에서 ImageResponse 반환\n• Next.js가 1200x630 및 1200x600 규격의 이미지 엔드포인트를 생성하고 meta property=og:image 주입"
+  const defaultActual = "• opengraph-image.tsx (1200x630) 및 twitter-image.tsx (1200x600) 파이프라인 생성 완료\n• SNS 공유용 동적 이미지 바이너리 렌더링 확인"
+
+  const actualContent =
+    propActual !== undefined
+      ? propActual
+      : isMatched === true
+      ? defaultActual
+      : isMatched === false
+      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
+      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="ImageResponse 실시간 할인율 OG 이미지 실증 검증"
-        expected="• ImageResponse 실시간 할인율 OG 이미지 사양에 따른 정상 동작 및 상태 변화 관찰"
-        actual="• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-        isMatched={true}
-        description="Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."
+        title="동적 OpenGraph / Twitter 이미지 실증 검증"
+        expected={propExpected || defaultExpected}
+        actual={actualContent}
+        isMatched={isMatched}
+        description={propDescription || "Next.js App Router의 opengraph-image.tsx 특수 파일을 통한 SNS 공유 카드 썸네일 동적 생성 메커니즘을 검증합니다."}
       />
-      <DemoDeepDiveCard title="ImageResponse 실시간 할인율 OG 이미지">
+      <DemoDeepDiveCard title="동적 OpenGraph 이미지 (opengraph-image.tsx)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>ImageResponse(next/og)는 Edge Runtime 및 Satori 엔진 위에서 JSX와 CSS(Flexbox, Tailwind) 문법을 해석하여 별도의 브라우저(Puppeteer) 구동 없이 수십 밀리초(ms) 만에 고성능 동적 PNG 이미지를 생성하는 서버리스 이미지 렌더링 API입니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 규칙</h5>
+            <p>
+              <code>opengraph-image.(tsx|ts|png)</code> 파일을 특정 라우트 세그먼트에 배치하면 Next.js가 해당 경로에 대한 고유한 OpenGraph 이미지를 자동으로 서빙하고 메타 태그를 생성합니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 상품 상세 페이지 URL에 접근할 때 상품명, 실시간 할인가, 할인율 배지(25% OFF), 잔여 재고 텍스트를 실시간으로 합성한 동적 SNS 오픈그래프(OG) 공유 이미지를 서버에서 즉석 생성합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>SNS 바이럴 전환율 극대화: 카카오톡/페이스북/트위터 링크 공유 시 실시간 할인율과 상품 가격이 새겨진 맞춤 이미지가 노출되어 클릭률이 급증합니다.</li>
-              <li>초경량 Edge 렌더링: 무거운 헤드리스 크롬(Puppeteer) 대비 서버 메모리를 99% 절감하며 100ms 이내에 이미지를 반환합니다.</li>
-              <li>동적 데이터 바인딩: 가격 인하나 한정판 품절 시 별도의 수동 배너 디자인 작업 없이 OG 이미지가 자동으로 최신화됩니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 상품 상세 페이지의 동적 가격/할인율 오픈그래프(OG) 이미지 생성</li>
-              <li>주문 결제 완료 후 카카오톡 공유용 전자 결제 영수증 이미지 생성</li>
-              <li>플래시 타임세일 이벤트 및 선착순 쿠폰 발급 현황 배너 실시간 생성</li>
-            </ul>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 동적 상품 썸네일 생성</h5>
+            <p>
+              상품 상세 페이지(<code>/products/[id]/opengraph-image.tsx</code>)에서 <code>params</code>를 받아 상품명, 가격, 할인율 뱃지가 포함된 맞춤형 카카오톡/페이스북/트위터 공유 이미지를 서버리스 환경에서 실시간으로 렌더링할 수 있습니다.
+            </p>
           </div>
         </div>
       </DemoDeepDiveCard>

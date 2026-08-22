@@ -1,0 +1,29 @@
+{
+  "name": "@study/test-suite",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/run-all-tests.ts",
+    "test:all": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/run-all-tests.ts",
+    "test:manifest": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/route-manifest-integrity.ts",
+    "test:no-static-matched": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/audit-static-matched.ts",
+    "test:tier1": "node --test --experimental-strip-types --disable-warning=ExperimentalWarning src/tier1-feature-coverage/*.test.ts",
+    "test:tier2": "node --test --experimental-strip-types --disable-warning=ExperimentalWarning src/tier2-boundaries-edge-cases/*.test.ts",
+    "test:tier3": "node --test --experimental-strip-types --disable-warning=ExperimentalWarning src/tier3-cross-feature-combinations/*.test.ts",
+    "test:tier4": "node --test --experimental-strip-types --disable-warning=ExperimentalWarning src/tier4-real-world-workloads/*.test.ts",
+    "test:tier5": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/challenger-m5-adversarial.ts",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@study/demos": "workspace:*",
+    "@study/demo-kit": "workspace:*",
+    "js-yaml": "^4.1.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.13.0",
+    "typescript": "^5.7.3"
+  }
+}

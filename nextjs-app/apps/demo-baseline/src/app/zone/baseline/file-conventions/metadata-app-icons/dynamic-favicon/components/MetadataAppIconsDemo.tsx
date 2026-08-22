@@ -1,98 +1,54 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 
 export function MetadataAppIconsDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
-
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
-  }
+  const ICON_PATH = '/zone/baseline/file-conventions/metadata-app-icons/dynamic-favicon/icon'
+  const APPLE_ICON_PATH = '/zone/baseline/file-conventions/metadata-app-icons/dynamic-favicon/apple-icon'
 
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">icon.tsx 동적 파비콘 생성 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
+          <div className="flex items-center gap-2">
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100">동적 메타데이터 앱 아이콘 (icon.tsx / apple-icon.tsx)</h4>
+            <span className="rounded bg-emerald-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+              ImageResponse 렌더링
+            </span>
+          </div>
+          <p className="text-xs text-zinc-500">JSX 코드로 브라우저 파비콘(32x32)과 애플 터치 아이콘(180x180)을 서버에서 즉석 생성합니다.</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">1. 브라우저 파비콘 (icon.tsx)</span>
+            <span className="font-mono text-[10px] text-zinc-500">32x32 PNG</span>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 text-xl text-white shadow-xs">
+              🛒
+            </div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400 space-y-0.5">
+              <div className="font-mono font-semibold text-blue-600 dark:text-blue-400">{ICON_PATH}</div>
+              <div className="text-[11px] text-zinc-500">태그: &lt;link rel="icon" ... /&gt; 자동 주입</div>
+            </div>
           </div>
         </div>
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
-              </div>
-            ))}
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">2. 애플 터치 아이콘 (apple-icon.tsx)</span>
+            <span className="font-mono text-[10px] text-zinc-500">180x180 PNG</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 text-xl text-white shadow-xs">
+              🛍️
+            </div>
+            <div className="text-xs text-zinc-600 dark:text-zinc-400 space-y-0.5">
+              <div className="font-mono font-semibold text-purple-600 dark:text-purple-400">{APPLE_ICON_PATH}</div>
+              <div className="text-[11px] text-zinc-500">태그: &lt;link rel="apple-touch-icon" ... /&gt; 자동 주입</div>
+            </div>
           </div>
         </div>
       </div>
