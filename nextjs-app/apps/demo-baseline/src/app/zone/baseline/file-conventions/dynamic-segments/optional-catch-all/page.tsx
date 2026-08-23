@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"[[...slug]] Optional Catch-all 동적 세그먼트"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 '[[...slug]] Optional Catch-all 동적 세그먼트'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"Optional Catch-all [[...slug]] 루트 인덱스 겸용"}
+        concept={"대괄호를 두 번 감싸면 세그먼트가 없는 경로까지 같은 파일이 받습니다. [...slug]는 /docs에서 404가 되지만 [[...slug]]는 slug가 undefined인 상태로 /docs 인덱스를 렌더링합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
+            step: 1,
+            title: "[해당 문서로 이동 →] 클릭",
+            description: "optional catch-all 라우트로 진입합니다.",
+            actionBadge: "[[...slug]]",
           },
           {
-                    "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
+            step: 2,
+            title: "[/docs (루트 인덱스)] 이동",
+            description: "slug 없이 진입해도 404가 아니라 인덱스 화면이 뜹니다. 이것이 선택적 catch-all의 핵심 차이입니다.",
+            actionBadge: "slug 없음",
           },
           {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
-          }
-]}
+            step: 3,
+            title: "[/docs/routing/dynamic-routes (2단계)] 이동",
+            description: "같은 파일이 2단계 경로도 그대로 처리합니다.",
+            actionBadge: "깊이 2",
+            observe: "slug가 undefined일 때와 배열일 때 모두 같은 page.tsx가 응답하는지, /docs에서 404가 뜨지 않는지 확인",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"[[...slug]] Optional Catch-all 동적 세그먼트 실습"}>
         <OptionalCatchAllDemo />

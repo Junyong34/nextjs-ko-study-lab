@@ -17,26 +17,22 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title="Webhook 서명 검증 핸들러 (route.ts)"
-        concept="외부 PG사 결제 노티피케이션 등 비동기 웹훅을 수신할 때, HMAC-SHA256 암호화 서명을 검증하여 요청의 위변조를 방지하는 실습입니다."
+        title={"Webhook 서명 검증 핸들러 (route.ts)"}
+        concept={"클라이언트가 Web Crypto API로 페이로드에 HMAC-SHA256 서명을 만들어 x-signature-sha256 헤더로 보내면, route.ts가 같은 시크릿으로 다시 계산해 대조합니다. 값이 다르면 본문을 신뢰하지 않고 401로 거절합니다."}
         steps={[
           {
             step: 1,
-            title: "route.ts 웹훅 핸들러 선언",
-            description: "api/route.ts에서 POST 요청을 수신하고 request.text()로 원본 본문을 추출합니다.",
-            actionBadge: "핸들러 선언",
+            title: "[1. 정상 서명 웹훅 전송 (200 OK 기대)] 클릭",
+            description: "올바른 시크릿으로 서명한 페이로드를 전송해 서버 검증을 통과시킵니다.",
+            actionBadge: "VALID",
           },
           {
             step: 2,
-            title: "HMAC-SHA256 서명 검증",
-            description: "crypto.timingSafeEqual을 통해 헤더의 서명과 비밀키로 계산한 해시값을 안전하게 비교합니다.",
-            actionBadge: "서명 대조",
-          },
-          {
-            step: 3,
-            title: "정상 승인 및 위조 차단 검증",
-            description: "정상 서명(200 OK)과 변조 서명(401 Unauthorized)에 따른 응답 차이를 확인합니다.",
-            actionBadge: "검증 결과",
+            title: "[2. 변조된 서명 웹훅 전송 (401 거절 기대)] 클릭",
+            description: "서명을 훼손해 보냅니다. 서버가 재계산한 해시와 헤더 값이 어긋납니다.",
+            actionBadge: "TAMPERED",
+            observe: "동일한 엔드포인트가 서명 일치 여부만으로 200과 401로 갈리는지, 거절 시 응답 본문에 처리 결과가 남지 않는지 확인",
+            observeAt: "verification",
           },
         ]}
       />

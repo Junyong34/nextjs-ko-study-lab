@@ -8,27 +8,29 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"not-found.tsx 및 notFound() 프로그래밍 404 트리거"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 'not-found.tsx 및 notFound() 프로그래밍 404 트리거'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        concept={"items/[id]/page.tsx가 VALID_PRODUCTS에 없는 id를 받으면 notFound()를 호출합니다. 이 호출은 예외를 던져 렌더링을 중단하고, 같은 세그먼트의 not-found.tsx로 화면을 교체합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
+            step: 1,
+            title: "[/items/PROD-101 진입 →] 클릭",
+            description: "DB에 등록된 ID라 notFound()가 호출되지 않고 상품 상세가 200 OK로 렌더링됩니다.",
+            actionBadge: "정상 경로",
           },
           {
-                    "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
+            step: 2,
+            title: "[← 목록으로 복귀] 후 반대 경로 시도",
+            description: "상품 목록으로 돌아와 미등록 ID 링크를 준비합니다.",
+            actionBadge: "경로 복귀",
           },
           {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
-          }
-]}
+            step: 3,
+            title: "[/items/PROD-999 진입 (404 확인) →] 클릭",
+            description: "VALID_PRODUCTS 조회에 실패해 notFound()가 발동하고 items/[id]/not-found.tsx가 대신 마운트됩니다.",
+            actionBadge: "notFound()",
+            observe: "같은 [id] 라우트 파일이 ID 값에 따라 상품 상세와 404 화면으로 갈리는지, 그리고 404일 때 레이아웃은 유지되는지 확인",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"not-found.tsx 및 notFound() 프로그래밍 404 트리거 실습"}>
         <NotFoundDemo />

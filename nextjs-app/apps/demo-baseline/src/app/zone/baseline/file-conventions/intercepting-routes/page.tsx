@@ -8,26 +8,28 @@ export default function InterceptingRoutesDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Intercepting Routes ((..)segment) 라우트 인터셉트"
-        concept="Intercepting Routes는 현재 페이지 컨텍스트(목록, 스크롤)를 유지한 채 다른 라우트의 내용을 모달 오버레이로 가로채어 보여주며, 사용자가 URL을 직접 공유하거나 새로고침했을 때는 전체 독립 페이지로 렌더링되게 합니다."
+        title={"Intercepting Routes ((.)segment) 라우트 인터셉트"}
+        concept={"@modal/(.)photos/[id]/page.tsx가 같은 레벨의 /photos/[id] 경로를 가로챕니다. 갤러리에서 소프트 내비게이션으로 진입하면 모달이 뜨고, 같은 URL을 새로고침하면 가로채기가 풀려 photos/[id]/page.tsx 전체 화면이 뜹니다."}
         steps={[
           {
             step: 1,
-            title: '상품 카드 [모달로 보기] 클릭',
-            description: '목록 페이지 위에 (..)products/[id] 인터셉트 모달이 오버레이되는 것을 확인합니다.',
-            actionBadge: '라우트 인터셉트',
+            title: "[모달 열기 →] 클릭",
+            description: "갤러리 피드에서 사진 상세로 소프트 내비게이션합니다. URL이 /photos/[id]로 바뀝니다.",
+            actionBadge: "인터셉트 진입",
           },
           {
             step: 2,
-            title: '배경 컨텍스트 보존 관찰',
-            description: '모달 뒤로 원래 상품 목록과 배경 레이아웃이 깨지지 않고 온전히 유지됨을 봅니다.',
-            actionBadge: '컨텍스트 보존',
+            title: "모달 오버레이 확인",
+            description: "URL은 상세 경로인데 화면은 갤러리 위에 얹힌 모달입니다. @modal 슬롯이 경로를 가로챈 결과입니다.",
+            actionBadge: "(.) 규칙",
           },
           {
             step: 3,
-            title: '새로고침 vs 인터셉트 차이 학습',
-            description: '하단 개념 정리 카드에서 직접 URL 접근 시 전체 페이지로 분기되는 원리를 학습합니다.',
-            actionBadge: 'URL 진입 분기',
+            title: "같은 URL에서 새로고침",
+            description: "브라우저를 새로고침하면 인터셉트가 적용되지 않아 photos/[id]/page.tsx 원본 전체 화면이 렌더링됩니다.",
+            actionBadge: "하드 내비게이션",
+            observe: "동일한 URL이 진입 경로에 따라 모달과 전체 페이지로 다르게 렌더링됨 — 소프트 내비게이션일 때만 (.) 인터셉트가 동작",
+            observeAt: "playground",
           },
         ]}
       />

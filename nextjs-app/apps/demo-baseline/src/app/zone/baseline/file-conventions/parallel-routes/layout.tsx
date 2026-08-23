@@ -15,26 +15,28 @@ export default function ParallelRoutesLayout({
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Parallel Routes (@slots) 다중 슬롯 병렬 렌더링"
-        concept="Next.js의 Parallel Routes(@폴더명)를 사용하면 동일한 레이아웃 안에서 @analytics, @team 등 여러 개의 독립된 슬롯 컴포넌트를 props로 전달받아 동시에 병렬로 조립할 수 있습니다."
+        title={"Parallel Routes (@slots) 다중 슬롯 병렬 렌더링"}
+        concept={"layout.tsx가 children 외에 analytics·team 두 개의 props를 더 받습니다. @analytics/page.tsx와 @team/page.tsx가 각각 그 props로 주입되어, 한 번의 라우트 진입에서 3개 페이지 파일이 동시에 렌더링됩니다."}
         steps={[
           {
             step: 1,
-            title: '메인 콘텐츠 (children) 확인',
-            description: '상단 메인 대시보드 요약 카드(children)가 정상 렌더링됩니다.',
-            actionBadge: '기본 슬롯',
+            title: "메인 [쇼핑몰 통합 관제 센터] 확인",
+            description: "page.tsx가 children 자리에 렌더링되어 시스템 상태 99.99%를 표시합니다.",
+            actionBadge: "children 슬롯",
           },
           {
             step: 2,
-            title: '@analytics 슬롯 확인',
-            description: '좌측 파란색 매출 분석 슬롯(@analytics)이 독립 렌더링됩니다.',
-            actionBadge: '@analytics 슬롯',
+            title: "좌측 [@analytics] 슬롯 확인",
+            description: "@analytics/page.tsx가 오늘 방문자 12,840명과 결제 전환율 4.82%를 독립 렌더링합니다.",
+            actionBadge: "슬롯 1",
           },
           {
             step: 3,
-            title: '@team 슬롯 확인',
-            description: '우측 보라색 팀 당직 슬롯(@team)이 동시에 병렬 주입되는 것을 확인합니다.',
-            actionBadge: '@team 슬롯',
+            title: "우측 [@team] 슬롯 확인",
+            description: "@team/page.tsx가 CS 대응팀·물류 출고팀의 ONLINE 상태를 같은 레이아웃 안에 병렬 주입합니다.",
+            actionBadge: "슬롯 2",
+            observe: "세 영역이 각각 [슬롯 1 (독립 렌더)] · [슬롯 2 (독립 렌더)] 배지를 달고 동시에 표시됨 — 탭 전환이나 조건 분기 없이 파일 3개가 한 화면에 조립됨",
+            observeAt: "playground",
           },
         ]}
       />

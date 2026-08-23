@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"[...slug] Catch-all 동적 세그먼트"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 '[...slug] Catch-all 동적 세그먼트'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"Catch-all 세그먼트 [...slug] 다단계 카테고리"}
+        concept={"shop/[...slug]/page.tsx의 slug는 배열입니다. /shop/fashion은 길이 1, /shop/fashion/shoes/running은 길이 3으로 들어오며, 몇 단계든 한 파일이 모두 받아 브레드크럼을 조립합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
+            step: 1,
+            title: "[해당 카테고리 진입 →] 클릭",
+            description: "catch-all 라우트로 진입합니다.",
+            actionBadge: "[...slug]",
           },
           {
-                    "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
+            step: 2,
+            title: "[/shop/fashion (1단계)] 이동",
+            description: "slug 배열에 요소가 1개 담깁니다.",
+            actionBadge: "깊이 1",
           },
           {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
-          }
-]}
+            step: 3,
+            title: "[/shop/fashion/shoes/running (3단계)] 이동",
+            description: "같은 파일에 slug 배열 요소가 3개로 늘어난 채 전달됩니다.",
+            actionBadge: "깊이 3",
+            observe: "경로 깊이가 바뀔 때 slug 배열 길이와 브레드크럼 단계 수가 함께 늘어나는지, 라우트 파일은 계속 하나인지 확인",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"[...slug] Catch-all 동적 세그먼트 실습"}>
         <CatchAllSlugDemo />

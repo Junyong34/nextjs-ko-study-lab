@@ -122,13 +122,98 @@ function stripNonPlaygroundBlocks(tsxContent: string): string {
 function cleanHtml(raw: string): string {
   return raw
     .replace(/<[^>]+>/g, ' ')
-    .replace(/\{[^}]+\}/g, ' ')
+    // 표현식은 지우되, 그 안의 문자열 리터럴은 화면에 실제로 보이는 라벨이므로 살린다.
+    // 예: {isPending ? '검증 중...' : '쿠폰 적용'} -> 검증 중... 쿠폰 적용
+    .replace(/\{[^}]+\}/g, (expr) => {
+      const literals = expr.match(/'[^']*'|"[^"]*"|`[^`${]*`/g)
+      return literals ? ` ${literals.map((s) => s.slice(1, -1)).join(' ')} ` : ' '
+    })
     .replace(/\s+/g, ' ')
     .trim()
 }
 
-export function extractPlaygroundMetadata(demoDir: string): PlaygroundMetadata {
-  const files = getAllFiles(demoDir, ['.tsx', '.ts'])
+/**
+ * JSX 여는 태그의 끝을 찾는다. `onClick={() => fn()}` 처럼 속성값 표현식 안에 `>`가
+ * 들어 있기 때문에 `<button[^>]*>` 같은 정규식은 화살표의 `>`에서 조기 종료된다.
+ * 중괄호 깊이와 따옴표 상태를 추적해 태그 밖의 `>`만 태그 끝으로 인정한다.
+ */
+function findOpenTagEnd(src: string, from: number): { end: number; selfClosing: boolean } | null {
+  let depth = 0
+  let quote: string | null = null
+  for (let i = from; i < src.length; i++) {
+    const c = src[i]
+    if (quote) {
+      if (c === quote && src[i - 1] !== '\\') quote = null
+      continue
+    }
+    if (c === '"' || c === "'" || c === '`') { quote = c; continue }
+    if (c === '{') { depth++; continue }
+    if (c === '}') { depth--; continue }
+    if (depth > 0) continue
+    if (c === '>') return { end: i, selfClosing: src[i - 1] === '/' }
+  }
+  return null
+}
+
+export interface JsxElement {
+  openTag: string
+  inner: string
+}
+
+/**
+ * 지정한 태그의 여는 태그와 그 안쪽 내용을 찾는다. 같은 태그가 중첩된 경우 깊이를 세어
+ * 짝이 맞는 닫는 태그까지를 내용으로 잡는다.
+ */
+export function findJsxElements(src: string, ...tagNames: string[]): JsxElement[] {
+  const out: JsxElement[] = []
+  for (const tag of tagNames) {
+    const openRe = new RegExp(`<${tag}(?=[\\s/>])`, 'g')
+    let m: RegExpExecArray | null
+    while ((m = openRe.exec(src)) !== null) {
+      const tagEnd = findOpenTagEnd(src, m.index + 1 + tag.length)
+      if (!tagEnd) continue
+      const openTag = src.slice(m.index, tagEnd.end + 1)
+      if (tagEnd.selfClosing) {
+        out.push({ openTag, inner: '' })
+        continue
+      }
+      // 짝이 맞는 닫는 태그 탐색 (동일 태그 중첩 대응)
+      const scanRe = new RegExp(`<${tag}(?=[\\s/>])|</${tag}>`, 'g')
+      scanRe.lastIndex = tagEnd.end + 1
+      let depth = 1
+      let closeAt = -1
+      let s: RegExpExecArray | null
+      while ((s = scanRe.exec(src)) !== null) {
+        if (s[0].startsWith('</')) {
+          depth--
+          if (depth === 0) { closeAt = s.index; break }
+        } else {
+          const nested = findOpenTagEnd(src, s.index + 1 + tag.length)
+          if (nested && !nested.selfClosing) depth++
+        }
+      }
+      out.push({ openTag, inner: closeAt >= 0 ? src.slice(tagEnd.end + 1, closeAt) : '' })
+    }
+  }
+  return out
+}
+
+/**
+ * 데모 디렉토리 안에 다른 데모가 중첩돼 있으면(예: parallel-routes 안의
+ * parallel-routes/conditional-slot) 그 하위 트리는 이 데모의 것이 아니다.
+ * 배제하지 않으면 부모 데모가 자식 데모의 가이드와 UI 라벨을 자기 것으로 집는다.
+ */
+function isInsideNestedDemo(filePath: string, demoDir: string, nestedDirs: string[]): boolean {
+  return nestedDirs.some((nested) => filePath.startsWith(nested + path.sep))
+}
+
+export function extractPlaygroundMetadata(
+  demoDir: string,
+  nestedDemoDirs: string[] = [],
+): PlaygroundMetadata {
+  const files = getAllFiles(demoDir, ['.tsx', '.ts']).filter(
+    (f) => !isInsideNestedDemo(f, demoDir, nestedDemoDirs),
+  )
   let interactiveCount = 0
   const labelSet = new Set<string>()
   const buttons: string[] = []
@@ -140,11 +225,10 @@ export function extractPlaygroundMetadata(demoDir: string): PlaygroundMetadata {
     const clean = stripNonPlaygroundBlocks(raw)
 
     // 1. Buttons
-    const btnRegex = /<button[^>]*>([\s\S]*?)<\/button>/g
     let match: RegExpExecArray | null
-    while ((match = btnRegex.exec(clean)) !== null) {
+    for (const el of findJsxElements(clean, 'button')) {
       interactiveCount++
-      const label = cleanHtml(match[1])
+      const label = cleanHtml(el.inner)
       if (label && label.length <= 40) {
         buttons.push(label)
         labelSet.add(label)
@@ -161,10 +245,9 @@ export function extractPlaygroundMetadata(demoDir: string): PlaygroundMetadata {
     }
 
     // 3. Next.js Link
-    const linkRegex = /<Link[^>]*>([\s\S]*?)<\/Link>/g
-    while ((match = linkRegex.exec(clean)) !== null) {
+    for (const el of findJsxElements(clean, 'Link')) {
       interactiveCount++
-      const label = cleanHtml(match[1])
+      const label = cleanHtml(el.inner)
       if (label && label.length <= 40) {
         links.push(label)
         labelSet.add(label)
@@ -172,15 +255,14 @@ export function extractPlaygroundMetadata(demoDir: string): PlaygroundMetadata {
     }
 
     // 4. Inputs
-    const inputRegex = /<(?:input|textarea|select)[^>]*>/g
-    while ((match = inputRegex.exec(clean)) !== null) {
+    for (const el of findJsxElements(clean, 'input', 'textarea', 'select')) {
       interactiveCount++
-      const ph = match[0].match(/placeholder=["']([^"']+)["']/)
+      const ph = el.openTag.match(/placeholder=["']([^"']+)["']/)
       if (ph) {
         inputs.push(ph[1].trim())
         labelSet.add(ph[1].trim())
       }
-      const aria = match[0].match(/aria-label=["']([^"']+)["']/)
+      const aria = el.openTag.match(/aria-label=["']([^"']+)["']/)
       if (aria) {
         inputs.push(aria[1].trim())
         labelSet.add(aria[1].trim())
@@ -358,23 +440,33 @@ export function validateGuideConsistency(options: {
     playground: PlaygroundMetadata
   }[] = []
 
+  // 다른 데모가 이 데모의 하위 경로에 중첩돼 있으면 그 트리는 소유가 아니다.
+  const dirByUrl = new Map(demos.map((d) => [d.url, getDemoSourceDir(d)]))
+
   for (const demo of demos) {
     const dir = getDemoSourceDir(demo)
-    const files = getAllFiles(dir, ['.tsx', '.ts'])
+    const nestedDemoDirs = demos
+      .filter((other) => other.url !== demo.url && other.url.startsWith(demo.url + '/'))
+      .map((other) => dirByUrl.get(other.url)!)
+    const files = getAllFiles(dir, ['.tsx', '.ts']).filter(
+      (f) => !isInsideNestedDemo(f, dir, nestedDemoDirs),
+    )
     let guide: GuideCardData | null = null
 
-    // Check root page.tsx first for primary demo guide
-    const rootPage = path.join(dir, 'page.tsx')
-    if (fs.existsSync(rootPage)) {
-      const text = fs.readFileSync(rootPage, 'utf-8')
-      if (text.includes('DemoGuideCard')) {
-        guide = parseGuideCardFromTsx(text)
-      }
+    // 최상위 진입 파일 우선: page.tsx → layout.tsx
+    // (Parallel Routes 데모는 슬롯을 props로 받는 layout.tsx가 진입 파일이다.)
+    const rootEntries = [path.join(dir, 'page.tsx'), path.join(dir, 'layout.tsx')]
+    for (const entry of rootEntries) {
+      if (!fs.existsSync(entry)) continue
+      const text = fs.readFileSync(entry, 'utf-8')
+      if (!text.includes('DemoGuideCard')) continue
+      guide = parseGuideCardFromTsx(text)
+      if (guide && guide.steps.length > 0) break
     }
 
     if (!guide || guide.steps.length === 0) {
       for (const f of files) {
-        if (f === rootPage) continue
+        if (rootEntries.includes(f)) continue
         const text = fs.readFileSync(f, 'utf-8')
         if (text.includes('DemoGuideCard')) {
           guide = parseGuideCardFromTsx(text)
@@ -383,7 +475,7 @@ export function validateGuideConsistency(options: {
       }
     }
 
-    const playground = extractPlaygroundMetadata(dir)
+    const playground = extractPlaygroundMetadata(dir, nestedDemoDirs)
     const category = getCategoryFromDoc(demo.doc)
     parsedDemos.push({ demo, dir, category, guide, playground })
   }

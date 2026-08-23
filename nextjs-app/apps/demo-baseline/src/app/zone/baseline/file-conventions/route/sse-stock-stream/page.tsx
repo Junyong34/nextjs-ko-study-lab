@@ -16,26 +16,28 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title="실시간 재고 스트리밍 (SSE route.ts)"
-        concept="Next.js App Router의 route.ts에서 ReadableStream을 생성하여 클라이언트로 Server-Sent Events(text/event-stream)를 실시간 스트리밍하는 실습입니다."
+        title={"SSE 실시간 재고 스트리밍 (route.ts)"}
+        concept={"route.ts가 ReadableStream을 text/event-stream으로 반환하면 연결이 끊기지 않고 서버가 재고 변동을 계속 밀어냅니다. 클라이언트는 폴링 없이 EventSource로 수신만 합니다."}
         steps={[
           {
             step: 1,
-            title: "ReadableStream 기반 SSE 엔드포인트",
-            description: "api/route.ts에서 force-dynamic 설정과 함께 text/event-stream 응답 스트림을 생성합니다.",
-            actionBadge: "스트림 엔드포인트",
+            title: "스트림 자동 연결 확인",
+            description: "페이지 진입과 동시에 EventSource가 route.ts에 연결되어 재고 이벤트가 도착하기 시작합니다.",
+            actionBadge: "SSE 연결",
           },
           {
             step: 2,
-            title: "클라이언트 스트림 구독",
-            description: "fetch와 ReadableStream.getReader()를 통해 서버가 푸시하는 재고 틱을 실시간 수신합니다.",
-            actionBadge: "청크 수신",
+            title: "[스트림 일시중지] 클릭",
+            description: "연결을 끊습니다. 서버가 보내던 재고 갱신이 화면에서 멈춥니다.",
+            actionBadge: "연결 해제",
           },
           {
             step: 3,
-            title: "실시간 재고 틱 렌더링",
-            description: "수신된 재고 변동 이벤트를 대시보드 상태에 동기화하고 검증 패널에 반영합니다.",
-            actionBadge: "실시간 동기화",
+            title: "[스트림 다시 연결] 클릭",
+            description: "EventSource를 다시 열어 수신을 재개합니다.",
+            actionBadge: "재연결",
+            observe: "일시중지 구간에서 재고 수치와 수신 카운트가 멈췄다가 재연결 후 다시 증가하는지 대조",
+            observeAt: "verification",
           },
         ]}
       />
