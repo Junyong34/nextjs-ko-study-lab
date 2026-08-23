@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max)">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max)는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Next.js 16 cacheLife 내장 프리셋 프로파일">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js 16은 자주 사용되는 캐시 주기를 위해 <code>cacheLife('seconds')</code>, <code>cacheLife('minutes')</code>, <code>cacheLife('hours')</code>, <code>cacheLife('days')</code>, <code>cacheLife('weeks')</code>, <code>cacheLife('max')</code> 등 표준 내장 프리셋을 제공하여 복잡한 숫자 설정 없이 즉시 활용 가능한 프리셋 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 6가지 표준 프리셋을 각각 적용한 데이터 함수들의 TTL 파라미터(stale/revalidate/expire) 매핑 테이블을 확인하고, 프리셋 적용 시 캐시 헤더와 백그라운드 재검증 동작이 자동으로 스케줄링되는 과정을 대조 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>코드 가독성 및 생산성 극대화</strong>: 숫자 대신 <code>'hours'</code>, <code>'days'</code> 등 직관적인 문자열 프리셋을 사용하여 코드의 의도를 명확히 드러냅니다.</li>
+                    <li><strong>Next.js 프레임워크 표준 모범 사례 준수</strong>: Vercel 및 글로벌 엣지 인프라에 최적화된 사전 검증된 TTL 설정값을 그대로 활용합니다.</li>
+                    <li><strong>휴먼 에러 방지</strong>: 초/밀리초 변환 계산 실수나 비정상적인 만료 시간 설정으로 인한 버그를 원천 차단합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>실시간 환율/날씨 위젯(cacheLife('minutes'))</li>
+                    <li>쇼핑몰 일반 상품 카탈로그 및 카테고리 목록(cacheLife('hours'))</li>
+                    <li>이용약관, 개인정보처리방침 등 정적 공지 문서(cacheLife('max'))</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>프리셋 오버라이드 가능</strong>: 내장 프리셋의 기본 시간은 <code>next.config.ts</code>의 <code>experimental.cacheLife</code> 설정을 통해 전역 오버라이드할 수 있습니다.</li>
+                    <li><strong>오타 주의</strong>: 정의되지 않은 프리셋 문자열을 전달하면 빌드 시 경고 또는 기본 fallback 정책이 적용되므로 표준 프리셋 명칭을 준수해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="notFound() 404 트리거 및 not-found.tsx 렌더">
+            <DemoDeepDiveCard title="notFound() 프로그래밍 방식 404 페이지 트리거">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>notFound(), forbidden(), unauthorized() 함수는 서버 컴포넌트나 Route Handler에서 특정 상태 코드(404, 403, 401)를 트리거하여 대응하는 특수 파일(not-found.tsx, forbidden.tsx, unauthorized.tsx)을 즉각 렌더링하는 표준 에러 바운더리 API입니다.</p>
+            <p><code>notFound()</code> (<code>next/navigation</code>)는 서버 컴포넌트, Route Handler, Server Action에서 호출되어 <code>NEXT_NOT_FOUND</code> 내부 예외를 발생시키고, 가장 가까운 <code>not-found.tsx</code> 바운더리 컴포넌트를 렌더링하며 HTTP 404 상태 코드를 반환하는 함수입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 존재하지 않거나 단종된 상품 ID 접근 시 notFound()를 호출하여 맞춤형 404 안내 화면을 띄우고, 일반 고객이 판매자 정산 센터에 접근하면 forbidden()을 호출하여 403 권한 거부 화면을 렌더링합니다.</p>
+            <p>본 데모에서는 데이터베이스 조회 결과 상품(<code>id: 'invalid-999'</code>)이 존재하지 않을 때 <code>notFound()</code>를 호출하여, 상위 레이아웃을 유지한 채 본문 영역을 커스텀 404 안내 화면으로 즉각 전환하고 404 상태를 기록합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>화면 전체 크래시 방지: 상위 GNB와 레이아웃은 정상 유지하면서 메인 콘텐츠 영역에만 친절한 안내 화면을 렌더링합니다.</li>
-              <li>정확한 HTTP 상태 코드 응답: 검색엔진 크롤러에게 올바른 404/403 상태 코드를 반환하여 색인 오염을 방지합니다.</li>
-              <li>선언적 예외 처리: 복잡한 조건부 if/else JSX 분기 대신 함수 호출 하나로 표준 에러 화면을 바인딩합니다.</li>
+              <li><strong>정확한 HTTP 404 반환</strong>: 클라이언트 라우팅에서도 검색엔진 크롤러에게 올바른 404 Not Found 상태 코드를 명확히 전달하여 잘못된 색인을 방지합니다.</li>
+              <li><strong>중첩 세그먼트 지원</strong>: 하위 라우트 세그먼트에 정의된 전용 <code>not-found.tsx</code>를 우선 매칭하여 맥락에 맞는 친절한 안내를 제공합니다.</li>
+              <li><strong>조기 반환(Early Return)</strong>: 복잡한 조건문 중첩 없이 데이터 미존재 시점에 즉시 렌더링 파이프라인을 중단합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>삭제되거나 품절 후 비공개 처리된 상품 상세 페이지의 404 안내 화면</li>
-              <li>일반 회원이 판매자 전용 재고 관리 대시보드 접근 시 403 권한 차단</li>
-              <li>비로그인 사용자가 주문 취소/환불 신청서 접근 시 401 로그인 요구</li>
+              <li>존재하지 않거나 삭제/단종된 상품 상세 페이지(<code>/products/[id]</code>) 접근 시</li>
+              <li>비공개 또는 유효기간이 지난 이벤트 프로모션 페이지 접근 시</li>
+              <li>잘못된 사용자 프로필 핸들(<code>/users/[handle]</code>) 접근 시</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>try/catch 블록 내 호출 금지</strong>: <code>notFound()</code>는 내부적으로 특수 예외를 throw하므로 <code>try/catch</code> 블록으로 감싸면 예외가 잡혀 404 화면이 뜨지 않고 일반 에러로 처리됩니다.</li>
+              <li><strong>반환값 불필요</strong>: <code>notFound()</code>는 <code>never</code> 타입을 반환하므로 <code>return notFound()</code> 대신 <code>notFound()</code>로 단독 호출합니다.</li>
             </ul>
           </div>
         </div>

@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Instant Navigation loading.tsx 스켈레톤 전환">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Instant Navigation loading.tsx 스켈레톤 전환는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Instant Navigation loading.tsx 스켈레톤 전환">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p><code>loading.tsx</code>는 App Router에서 라우트 세그먼트의 <code>page.tsx</code>를 자동으로 <code>{'<'}Suspense{'>'}</code> 바운더리로 감싸고, 서버 데이터 페칭이 진행되는 동안 브라우저에 즉시 스켈레톤(Skeleton) 로딩 UI를 스트리밍하여 0ms 반응성을 보장하는 표준 인스턴트 네비게이션 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Instant Navigation loading.tsx 스켈레톤 전환)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 2초 지연되는 백엔드 상품 목록 페이지로 이동할 때 브라우저 멈춤 없이 즉각 <code>loading.tsx</code>의 상품 카드 스켈레톤 UI가 렌더링되고, 데이터 수신 완료 즉시 실제 상품 그리드로 부드럽게 전환되는 과정을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>체감 지연 시간 제로화</strong>: 링크 클릭 즉시 시각적 피드백(스켈레톤)이 나타나 사용자가 앱이 멈췄다고 느끼는 이탈 요인을 차단합니다.</li>
+                    <li><strong>점진적 HTML 스트리밍</strong>: 전체 페이지가 완료되길 기다리지 않고 공통 레이아웃 셸과 스켈레톤을 브라우저에 첫 패킷으로 즉시 전송합니다.</li>
+                    <li><strong>선언적 로딩 상태 격리</strong>: 페이지 내부에서 복잡한 <code>isLoading</code> 불리언 분기 없이 파일 단위로 깔끔하게 로딩 뷰를 분리합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>대규모 상품 카탈로그 및 카테고리 기획전 진입 시 스켈레톤 그리드 표시</li>
+                    <li>복잡한 매출 통계 그래프를 조회하는 관리자 대시보드 로딩 뷰어</li>
+                    <li>주문 결제 내역 조회 및 상세 영수증 로딩 화면</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>동일 레벨 layout.tsx 유지</strong>: <code>loading.tsx</code>는 <code>layout.tsx</code>의 자식으로 렌더링되므로, 상단 GNB나 사이드바는 스켈레톤으로 깜빡이지 않고 그대로 유지됩니다.</li>
+                    <li><strong>스켈레톤 레이아웃 일치화</strong>: 스켈레톤 카드의 크기와 여백이 실제 렌더링될 상품 카드와 정확히 일치해야 데이터 로드 시 레이아웃 이동(CLS)을 방지할 수 있습니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

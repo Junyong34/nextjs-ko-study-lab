@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="예상된 에러 vs 예외 vs global-error 계층 처리">
+      <DemoDeepDiveCard title="global-error.tsx 루트 레이아웃 에러 처리 & 3계층 에러 아키텍처">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>notFound(), forbidden(), unauthorized() 함수는 서버 컴포넌트나 Route Handler에서 특정 상태 코드(404, 403, 401)를 트리거하여 대응하는 특수 파일(not-found.tsx, forbidden.tsx, unauthorized.tsx)을 즉각 렌더링하는 표준 에러 바운더리 API입니다.</p>
+            <p>
+              <code>app/global-error.tsx</code>는 최상위 루트 레이아웃(<code>app/layout.tsx</code>)에서 발생하는 치명적 렌더링 에러를 포착하는 최후의 에러 바운더리입니다. 루트 레이아웃을 완전히 대체하므로 자체적인 <code>{'<'}html{'>'}</code>과 <code>{'<'}body{'>'}</code> 태그를 반드시 정의해야 합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 존재하지 않거나 단종된 상품 ID 접근 시 notFound()를 호출하여 맞춤형 404 안내 화면을 띄우고, 일반 고객이 판매자 정산 센터에 접근하면 forbidden()을 호출하여 403 권한 거부 화면을 렌더링합니다.</p>
+            <p>
+              루트 레이아웃의 전역 테마 프로바이더나 인증 세션 로딩 중 복구 불가능한 런타임 크래시가 발생하면, <code>global-error.tsx</code>가 활성화되어 독립적인 HTML 문서 구조로 시스템 긴급 복구 화면 및 [서비스 새로고침] 버튼을 렌더링합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>화면 전체 크래시 방지: 상위 GNB와 레이아웃은 정상 유지하면서 메인 콘텐츠 영역에만 친절한 안내 화면을 렌더링합니다.</li>
-              <li>정확한 HTTP 상태 코드 응답: 검색엔진 크롤러에게 올바른 404/403 상태 코드를 반환하여 색인 오염을 방지합니다.</li>
-              <li>선언적 예외 처리: 복잡한 조건부 if/else JSX 분기 대신 함수 호출 하나로 표준 에러 화면을 바인딩합니다.</li>
+              <li><strong>완전한 3계층 에러 방어망 완성</strong>: 컴포넌트(ErrorBoundary) -{'>'} 세그먼트(error.tsx) -{'>'} 전역 루트(global-error.tsx)로 이어지는 무결점 에러 핸들링 아키텍처를 구축합니다.</li>
+              <li><strong>브라우저 흰 화면(White Screen) 방지</strong>: 루트 레벨 장애 상황에서도 사용자에게 친절한 시스템 점검 안내 및 고객센터 링크를 제공합니다.</li>
+              <li><strong>센트리(Sentry) 전역 에러 캡처</strong>: 앱 전체가 크래시되는 치명적 이벤트를 모니터링 APM에 누락 없이 전송합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>삭제되거나 품절 후 비공개 처리된 상품 상세 페이지의 404 안내 화면</li>
-              <li>일반 회원이 판매자 전용 재고 관리 대시보드 접근 시 403 권한 차단</li>
-              <li>비로그인 사용자가 주문 취소/환불 신청서 접근 시 401 로그인 요구</li>
+              <li>루트 레이아웃의 전역 세션 쿠키 파싱 실패 또는 인증 토큰 디코딩 크래시</li>
+              <li>전역 테마/다국어(i18n) 설정 프로바이더 초기화 단계의 런타임 예외</li>
+              <li>CDN 장애 또는 정적 폰트/스타일시트 로드 실패에 따른 루트 레이아웃 붕괴</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>프로덕션 빌드에서만 동작</strong>: 개발(development) 모드에서는 Next.js 고유의 개발자 에러 오버레이가 우선 표시되며, <code>global-error.tsx</code>는 <code>next build</code> 후 프로덕션 실행 시 동작합니다.</li>
+              <li><strong>루트 태그 누락 금지</strong>: <code>{'<'}html{'>'}</code>과 <code>{'<'}body{'>'}</code> 태그를 생략하면 브라우저 DOM 파싱 에러가 발생하므로 반드시 루트 마크업을 직접 포함해야 합니다.</li>
             </ul>
           </div>
         </div>

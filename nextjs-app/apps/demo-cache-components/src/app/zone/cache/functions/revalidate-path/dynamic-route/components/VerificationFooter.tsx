@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="동적 라우트 세그먼트 revalidatePath 동기화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>동적 라우트 세그먼트 revalidatePath 동기화는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="동적 세그먼트 경로 대상 revalidatePath() 정밀 무효화">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>동적 세그먼트 대상 <code>revalidatePath('/shop/[category]/[id]', 'page')</code>는 실제 URL 파라미터가 바인딩된 특정 인스턴스 경로(e.g. <code>/shop/shoes/prod-101</code>) 또는 동적 라우트 패턴 자체의 캐시를 온디맨드로 무효화하여 최신 정적 페이지를 재생성하는 표준 함수 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(동적 라우트 세그먼트 revalidatePath 동기화)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 <code>/zone/cache/products/shoes/prod-001</code> 경로의 상품 정보가 수정되었을 때, 다른 카테고리나 다른 상품 페이지의 캐시에는 전혀 영향을 주지 않고 오직 해당 단일 동적 세그먼트 페이지만 0ms 만에 즉각 무효화되는 격리성을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>불필요한 전역 캐시 소청 방지</strong>: 수정되지 않은 수만 개의 다른 상품 캐시를 보존하여 전체 사이트의 캐시 히트율을 안정적으로 유지합니다.</li>
+                    <li><strong>직관적인 URL 기반 무효화</strong>: 별도의 태그 시스템 없이 비즈니스 URL 주소만으로 특정 페이지의 캐시를 손쉽게 갱신합니다.</li>
+                    <li><strong>즉각적인 SEO 크롤러 최신화</strong>: 상품 정보 변경 즉시 검색엔진 크롤러가 접근할 정적 HTML 캐시를 새로고침합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>특정 상품의 가격 인하 및 품절 처리 즉시 해당 상품 페이지 단건 무효화</li>
+                    <li>특정 사용자의 공개 프로필 페이지(<code>/users/[username]</code>) 정보 수정</li>
+                    <li>단일 블로그 아티클(<code>/posts/[slug]</code>) 오타 수정 및 내용 업데이트</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>정확한 실제 경로 전달</strong>: 동적 라우트 패턴 문자열(<code>[id]</code>) 대신 실제 데이터가 바인딩된 실제 URL(e.g. <code>/shop/shoes/123</code>)을 전달해야 해당 페이지가 정확히 무효화됩니다.</li>
+                    <li><strong>클라이언트 Router Cache 동시 무효화</strong>: <code>revalidatePath</code>는 서버 캐시뿐만 아니라 브라우저의 클라이언트 Router Cache도 함께 무효화하므로 즉각적인 UI 반영이 가능합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

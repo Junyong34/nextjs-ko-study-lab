@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• Proxy/Middleware 기반 라우트 보호 가드 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Proxy/Middleware 기반 라우트 보호 가드는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>Next.js Middleware(<code>middleware.ts</code> / <code>proxy.ts</code>)는 들어오는 HTTP 요청을 라우트 핸들러 및 서버 컴포넌트 렌더링 전에 가로채어, 세션 쿠키 검증, JWT 인증 여부에 따라 보호된 라우트(<code>/admin/*</code>, <code>/mypage/*</code>)로의 접근을 통제하고 리다이렉트 및 헤더를 주입하는 엣지 보안 가드입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Proxy/Middleware 기반 라우트 보호 가드)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 비로그인 사용자가 주문 내역(<code>/mypage/orders</code>)에 접근할 때 미들웨어가 <code>auth-token</code> 쿠키를 검사하고, 유효하지 않은 경우 <code>/login?redirect=/mypage/orders</code>로 즉시 307 리다이렉트하며, 인증된 요청에는 <code>x-user-id</code> 커스텀 헤더를 서버로 전달합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>서버 렌더링 자원 낭비 제로</strong>: 인증되지 않은 악성/비인가 요청이 무거운 RSC 렌더링 및 DB 쿼리에 도달하기 전에 엣지 계층에서 조기 차단(Early Exit)합니다.</li>
+              <li><strong>중앙 집중식 접근 제어</strong>: 각 페이지마다 개별 인증 검사 코드를 중복 작성하지 않고 단일 미들웨어 <code>matcher</code> 설정으로 수백 개의 URL을 통합 관리합니다.</li>
+              <li><strong>원래 경로 복귀 UX</strong>: 로그인 후 원래 요청하려던 목적지 경로(<code>redirect</code> 쿼리)를 보존하여 매끄러운 사용자 경험을 제공합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>쇼핑몰 마이페이지(주문/배송/결제수단 관리) 비로그인 접근 차단</li>
+              <li>관리자 백오피스(<code>/admin/*</code>) 및 정산 대시보드 권한 분기</li>
+              <li>구독 결제 회원 전용 프리미엄 콘텐츠 라우트 보호</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>matcher 정규식 제외 패턴 필수</strong>: 정적 에셋(<code>_next/static</code>, <code>_next/image</code>, <code>favicon.ico</code>)이 미들웨어 검사에 걸려 불필요한 연산이 발생하지 않도록 <code>matcher</code>에 제외 패턴을 필수로 구성해야 합니다.</li>
+              <li><strong>미들웨어 단독 보안 맹신 금지</strong>: 데이터 뮤테이션(Server Action) 및 중요 API Route Handler 내부에서도 2차 세션 검증을 수행하는 심층 방어(Defense in Depth) 구조를 갖추어야 합니다.</li>
             </ul>
           </div>
         </div>

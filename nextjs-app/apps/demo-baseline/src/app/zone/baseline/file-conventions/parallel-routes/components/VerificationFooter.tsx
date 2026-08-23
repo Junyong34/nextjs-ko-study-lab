@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Parallel Routes (@slots) 다중 슬롯 병렬 렌더링">
+      <DemoDeepDiveCard title="Parallel Routes (@slots) 다중 슬롯 병렬 렌더링 아키텍처">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Parallel Routes (@slots) 다중 슬롯 병렬 렌더링는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              Parallel Routes는 골뱅이 기호(<code>@slotName</code>) 폴더 컨벤션을 통해 동일한 레이아웃 내에서 복수의 페이지 컴포넌트를 병렬 슬롯(<code>props.slotName</code>)으로 주입받아 동시에 렌더링하는 Next.js 코어 아키텍처입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Parallel Routes (@slots) 다중 슬롯 병렬 렌더링)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 대시보드 레이아웃에서 <code>@analytics</code>, <code>@team</code>, <code>children</code> 슬롯을 동시에 마운트하여, 각 슬롯이 독립적인 로딩 상태와 에러 바운더리를 가지며 병렬로 데이터를 페치하고 UI를 렌더링하는 과정을 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>독립적 로딩 & 에러 격리</strong>: 한 슬롯의 느린 데이터 페칭이나 런타임 오류가 다른 슬롯 및 메인 콘텐츠의 렌더링을 차단하지 않습니다.</li>
+              <li><strong>동시 다발적 뷰 조합</strong>: 단일 URL 경로 아래에서 복잡한 멀티 패널 대시보드를 선언적으로 조합합니다.</li>
+              <li><strong>조건부 슬롯 스위칭</strong>: 사용자 권한이나 상태에 따라 레이아웃에서 슬롯을 동적으로 선택 렌더링할 수 있습니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>관리자 분석 대시보드 (통계 차트 슬롯 + 실시간 활동 피드 슬롯 + 메인 그리드)</li>
+              <li>소셜 커뮤니티 피드 (게시글 목록 + 추천 친구 슬롯 + 알림 패널)</li>
+              <li>이커머스 상품 상세 (상품 정보 + 연관 추천 상품 슬롯 + 실시간 문의 채팅)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>default.tsx 필수 선언</strong>: 병렬 슬롯 중 하나만 라우트가 변경될 때 일치하지 않는 다른 슬롯의 404 방지를 위해 모든 <code>@slot</code> 폴더에 <code>default.tsx</code>를 배치해야 합니다.</li>
+              <li><strong>슬롯명 네이밍 규칙</strong>: <code>@children</code>은 기본 예약어이므로 커스텀 슬롯에는 <code>@team</code>, <code>@modal</code> 등 명확한 도메인 이름을 사용해야 합니다.</li>
             </ul>
           </div>
         </div>

@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• prefetch=&#123;false&#125; 명시적 프리패치 차단 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• prefetch={false} 명시적 프리패치 차단 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,43 +57,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="prefetch=&#123;false&#125; 명시적 프리패치 차단 실증 검증"
+        title="prefetch={false} 명시적 프리패치 차단 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="prefetch=&#123;false&#125; 명시적 프리패치 차단">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>prefetch=&#123;false&#125; 명시적 프리패치 차단는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="prefetch={false} 명시적 프리패치 차단 및 데이터 절약">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p><code>{'<'}Link prefetch={'{'}false{'}'}{'>'}</code>는 뷰포트(Viewport)에 진입한 링크를 자동으로 사전 다운로드하는 Next.js의 기본 프리패치 동작을 명시적으로 차단하여, 사용자가 실제로 링크에 마우스를 올리거나(Hover) 터치할 때까지 네트워크 요청을 지연시키는 대역폭 최적화 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(prefetch=&#123;false&#125; 명시적 프리패치 차단)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 페이지 하단에 배치된 수십 개의 푸터 링크 및 이용약관 링크에 <code>prefetch={'{'}false{'}'}</code>를 적용하여, 스크롤 다운 시 불필요한 수십 건의 RSC 청크 프리패치가 발송되지 않고 마우스 호버 시점에만 선별적으로 다운로드되는 네트워크 절감 효과를 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>모바일 사용자 데이터 대역폭 절감</strong>: 사용자가 클릭할 확률이 극히 낮은 보조 링크들의 자동 다운로드를 막아 네트워크 데이터 소모를 최소화합니다.</li>
+                    <li><strong>서버 I/O 및 프리패치 트래픽 절약</strong>: 수많은 사용자가 메인 페이지를 스크롤할 때 발생하는 수백만 건의 백그라운드 프리패치 서버 부하를 방지합니다.</li>
+                    <li><strong>초기 메인 스레드 CPU 점유율 완화</strong>: 불필요한 리소스 파싱 작업을 줄여 메인 페이지 인터랙션 반응성(INP)을 개선합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 하단 푸터(Footer)의 이용약관, 개인정보처리방침, 회사소개 링크</li>
+                    <li>수백 개의 페이지네이션 번호 링크 그리드</li>
+                    <li>로그아웃, 회원탈퇴 등 즉각 프리패치할 필요가 없는 위험/보조 액션 링크</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>마우스 호버 시점의 다운로드 지연</strong>: <code>prefetch={'{'}false{'}'}</code>를 적용해도 마우스를 올리면(Hover) 프리패치가 시작되지만, 호버 없이 초고속으로 클릭할 경우 약간의 로딩 전환이 발생할 수 있습니다.</li>
+                    <li><strong>핵심 전환 링크에는 적용 지양</strong>: [장바구니 담기], [결제하기], [다음 단계] 등 핵심 전환율에 직결되는 주요 CTA 링크에는 <code>prefetch={'{'}true{'}'}</code>를 유지해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

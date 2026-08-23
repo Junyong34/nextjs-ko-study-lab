@@ -63,33 +63,46 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="redirects() 정규식 패턴 및 와일드카드 리다이렉트">
+      <DemoDeepDiveCard title="next.config.ts redirects() 정규식 패턴 & 와일드카드 리다이렉트">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>redirect()(307/303)와 permanentRedirect()(308)는 Server Actions, Route Handlers, 서버 컴포넌트 내부에서 즉각적인 HTTP 리다이렉트를 트리거하며, 내부적으로 NEXT_REDIRECT 예외를 던져 실행을 즉시 중단하고 브라우저를 대상 URL로 이동시킵니다.</p>
+            <p>
+              <code>next.config.ts</code>의 <code>redirects()</code> 비동기 함수는 인프라 및 라우팅 계층에서 수신된 요청 URL을 정규식(Regex)과 와일드카드(<code>:path*</code>)로 매칭하여, 서버 컴포넌트 렌더링 파이프라인 진입 전 초고속 HTTP 307/308 리다이렉트를 수행하는 빌드 레벨 설정 스펙입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 Server Action으로 장바구니 주문 결제가 성공하면 redirect(&apos;/orders/success&apos;)를 호출하여 303 See Other로 영수증 화면으로 이동시키고, 단종된 구 상품 접근 시에는 permanentRedirect(&apos;/products/new-01&apos;)로 308 영구 이동을 반환합니다.</p>
+            <p>
+              본 데모에서는 구형 카탈로그 경로(<code>/old-catalog/:year(\\d{'{'}4{'}'})/:category/:id</code>)로 접근 시, 연도 정규식 그룹과 파라미터를 캡처하여 신규 표준 상품 URL(<code>/shop/:category/:id?year=:year</code>)로 자동 치환하여 클라이언트를 즉시 이동시킵니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>결제 완료 후 중복 제출 원천 방지: Post-Redirect-Get(PRG) 패턴을 구현하여 새로고침 시 결제 폼이 재제출되는 현상을 완벽히 차단합니다.</li>
-              <li>검색엔진 영구 랭킹 승계: 308 Permanent Redirect로 단종 상품의 기존 검색 색인 가치를 신상품으로 온전히 전달합니다.</li>
-              <li>트랜잭션 중단 안정성: redirect() 호출 시점 이후의 불필요한 백엔드 코드가 실행되지 않고 즉시 안전하게 탈출합니다.</li>
+              <li><strong>서버 렌더링 오버헤드 제로</strong>: React 컴포넌트 마운트 및 DB 조회 없이 HTTP 계층에서 즉각 308 응답을 반환하여 서버 CPU 자원을 절약합니다.</li>
+              <li><strong>SEO 점수 승계</strong>: <code>permanent: true</code>(308) 설정을 통해 구형 URL의 검색엔진 랭킹과 백링크 가치를 신규 경로로 온전히 보존합니다.</li>
+              <li><strong>URL 체계 개편 유연성</strong>: 복잡한 대규모 마이그레이션 시에도 단 몇 줄의 정규식 룰로 수십만 개의 레거시 엔드포인트를 매핑합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>주문서 작성 및 결제 승인 완료 후 주문 완료 페이지로 리다이렉트</li>
-              <li>세션 만료 또는 비인가 사용자의 로그인 페이지 강제 리다이렉트</li>
-              <li>쇼핑몰 도메인 개편 및 상품 카테고리 체계 변경 시 영구 리다이렉트(308)</li>
+              <li>쇼핑몰 대규모 카테고리 개편에 따른 레거시 URL(<code>/item/12345</code>)의 신규 경로 매핑</li>
+              <li>블로그/기획전 날짜 기반 URL(<code>/posts/2024-05/event</code>)의 슬러그 체계 정규화</li>
+              <li>파일명 확장자(<code>.html</code>, <code>.php</code>)가 포함된 레거시 시스템 URL 정리</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>런타임 redirect()와의 차이</strong>: 런타임 <code>redirect()</code>는 비즈니스 로직(로그인 여부 등)에 따라 동적으로 실행되지만, <code>redirects()</code>는 인프라 레벨의 정적 규칙으로 사전 실행됩니다.</li>
+              <li><strong>308 영구 캐싱 주의</strong>: <code>permanent: true</code>(308)는 브라우저와 CDN에 강력하게 영구 캐싱되므로, 개발 및 검증 단계에서는 <code>permanent: false</code>(307)로 테스트 후 배포해야 캐시 오염을 방지할 수 있습니다.</li>
+              <li><strong>basePath 고려</strong>: <code>next.config.ts</code>에 <code>basePath</code>가 설정된 경우 <code>basePath: false</code>를 주지 않으면 기본적으로 source 앞에 basePath가 자동 추가됩니다.</li>
             </ul>
           </div>
         </div>

@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="링크 호버 시 정적 셸만 사전 패칭 (Partial Prefetching)">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>링크 호버 시 정적 셸만 사전 패칭 (Partial Prefetching)는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="링크 호버 시 정적 셸만 사전 패칭 (Partial Prefetching)">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Partial Prerendering(PPR) 및 부분 프리패칭(Partial Prefetching)은 링크 마우스 호버 시점에 정적으로 사전 렌더링된 레이아웃 셸만 가볍게 사전 수신하고, 동적 데이터 청크는 실제 클릭/네비게이션 시점에 스트리밍으로 결합하는 고효율 프리패칭 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(링크 호버 시 정적 셸만 사전 패칭 (Partial Prefetching))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 [상품 카드 링크] 호버 시 50ms 이내에 경량 정적 셸(네비게이션 바, 탭 구조)만 백그라운드에서 프리패치하고, 클릭 시 동적 가격 및 재고 데이터가 Suspense 스트림을 통해 지연 없이 바인딩되는 과정을 시각화합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>클라이언트 네트워크 대역폭 절약</strong>: 모든 동적 데이터를 미리 로드하지 않고 정적 셸만 가져와 모바일 데이터 소모량을 대폭 절감합니다.</li>
+                    <li><strong>0ms 체감 네비게이션</strong>: 사용자가 클릭하는 즉시 로컬 캐시된 셸이 화면에 표시되어 전환 지연을 체감할 수 없습니다.</li>
+                    <li><strong>서버 CPU 부하 분산</strong>: 프리패치 단계에서 무거운 동적 DB 조회가 발생하지 않아 불필요한 서버 자원 낭비를 방지합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>수만 개의 상품이 노출되는 대형 쇼핑몰 메인 카탈로그 그리드</li>
+                    <li>모바일 웹 환경의 하단 네비게이션 탭 및 카테고리 퀵 메뉴</li>
+                    <li>트래픽이 집중되는 타임세일 이벤트 프로모션 랜딩 페이지</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>PPR(Partial Prerendering) 플래그 연동</strong>: 부분 프리패칭의 이점을 극대화하려면 <code>next.config.ts</code>에서 <code>experimental.ppr = true</code> 설정을 활성화해야 합니다.</li>
+                    <li><strong>loading.tsx와의 조화</strong>: 정적 셸에 명확한 Suspense 스켈레톤 영역이 정의되어 있어야 동적 데이터 수신 시 레이아웃 흔들림이 발생하지 않습니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

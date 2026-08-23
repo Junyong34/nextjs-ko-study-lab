@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• MDX 내 인터랙티브 장바구니 버튼 합성 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>MDX 내 인터랙티브 장바구니 버튼 합성는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>MDX 커스텀 컴포넌트 슬롯팅(<code>@next/mdx</code> / <code>useMDXComponents</code>)은 정적 마크다운 문서 내부에 인터랙티브한 React 클라이언트 컴포넌트(장바구니 담기, 실시간 재고 계산기, 인터랙티브 퀴즈)를 슬롯 형태로 자연스럽게 삽입 및 합성하는 콘텐츠 아키텍처 스펙입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(MDX 내 인터랙티브 장바구니 버튼 합성)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 마크다운으로 작성된 제품 소개 가이드 본문 사이에 <code>{'<'}AddToCartWidget productId="PROD-001" /{'>'}</code> 클라이언트 컴포넌트를 합성하여, 문서를 읽던 고객이 페이지 이동 없이 즉시 수량을 선택하고 장바구니에 담는 인터랙션을 수행합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>콘텐츠와 인터랙션의 완벽한 융합</strong>: 정적인 텍스트 문서 중간에 결제 버튼, 실시간 차트, 코드 실행기 등 동적 UI 위젯을 손쉽게 배치할 수 있습니다.</li>
+              <li><strong>마케터와 개발자의 협업 효율 극대화</strong>: 콘텐츠 작성자는 간단한 마크다운 및 커스텀 JSX 태그만 작성하고, 개발자는 컴포넌트 로직에만 집중할 수 있습니다.</li>
+              <li><strong>서버 컴포넌트 기반 MDX 파싱</strong>: MDX 번들을 서버에서 파싱하여 초기 번들 크기를 경량화하고 빠른 초기 렌더링 속도를 보장합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>신상품 런칭 스토리/블로그 포스트 내 원클릭 바로구매 위젯 삽입</li>
+              <li>개발자 API 가이드 문서 내 실시간 API 요청 테스트 위젯</li>
+              <li>가전/IT 기기 사용 매뉴얼 내 인터랙티브 고장 진단 진단기 위젯</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>클라이언트 컴포넌트 임포트 분리</strong>: MDX 파일 자체는 서버에서 렌더링되므로 인터랙티브 상태(<code>useState</code>)가 필요한 위젯 컴포넌트는 반드시 상단에 <code>'use client'</code>를 명시하여 분리 임포트해야 합니다.</li>
+              <li><strong>useMDXComponents 전역 정의</strong>: 프로젝트 루트의 <code>mdx-components.tsx</code> 파일에 커스텀 컴포넌트 매핑을 정확히 정의해야 누락 없이 렌더링됩니다.</li>
             </ul>
           </div>
         </div>

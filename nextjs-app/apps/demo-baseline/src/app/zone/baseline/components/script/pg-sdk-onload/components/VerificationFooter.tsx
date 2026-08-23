@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="외부 PG사 결제 SDK onLoad 이벤트">
+      <DemoDeepDiveCard title="외부 PG사 결제 SDK 동적 로딩 & onLoad 이벤트 핸들러">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>외부 PG사 결제 SDK onLoad 이벤트는 Next.js App Router의 components 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>next/script</code>의 <code>onLoad</code>, <code>onReady</code>, <code>onError</code> 생명주기 콜백은 외부 결제 SDK나 지도 API 자바스크립트 파일이 브라우저에 완전히 로드된 시점을 감지하여, 전역 객체(e.g., <code>window.TossPayments</code>, <code>window.Kakao</code>)를 안전하게 초기화하는 이벤트 바인딩 스펙입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(외부 PG사 결제 SDK onLoad 이벤트)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 토스페이먼츠/이니시스 결제 SDK 스크립트가 로드되는 즉시 <code>onLoad</code> 핸들러가 트리거되어 SDK 인스턴스를 초기화하고, 결제 버튼을 비활성(Loading) 상태에서 활성(Ready) 상태로 자동 전환하는 흐름을 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>전역 객체 미정의(Undefined) 오류 원천 차단</strong>: SDK 파일 다운로드 완료 전에 결제 함수를 호출하여 발생하는 <code>Uncaught ReferenceError</code> 런타임 크래시를 방지합니다.</li>
+              <li><strong>onReady를 통한 라우트 복귀 대응</strong>: 페이지를 벗어났다가 뒤로 가기로 돌아왔을 때 스크립트가 이미 로드된 상태라도 <code>onReady</code> 콜백이 즉각 재실행되어 안정적인 상태를 유지합니다.</li>
+              <li><strong>onError를 통한 결제 장애 폴백</strong>: 서드파티 CDN 서버 장애나 네트워크 오류 시 사용자에게 대체 결제수단 안내 UI를 제공합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>토스페이먼츠 / 포트원 / 스트라이프 외부 결제창 SDK 연동</li>
+              <li>카카오맵 / 네이버 지도 API 스크립트 로드 및 지도 인스턴스 초기화</li>
+              <li>소셜 로그인(카카오/네이버/구글 SDK) 초기화 및 인증 버튼 바인딩</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>클라이언트 컴포넌트 필수</strong>: <code>onLoad</code>, <code>onReady</code>, <code>onError</code> 함수는 클라이언트 이벤트 리스너이므로 반드시 <code>'use client'</code> 지시어가 선언된 컴포넌트 내부에서 사용해야 합니다.</li>
+              <li><strong>TypeScript 전역 Window 타입 선언</strong>: <code>window.TossPayments</code> 등 서드파티 전역 변수를 TypeScript에서 안전하게 참조하려면 <code>declare global {'{'} interface Window {'{'} TossPayments: any; {'}'} {'}'}</code> 타입 확장을 권장합니다.</li>
             </ul>
           </div>
         </div>

@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="클라이언트 성능 측정 훅 (instrumentation-client.ts)">
+      <DemoDeepDiveCard title="클라이언트 성능 측정 훅 (instrumentation-client.ts) & Core Web Vitals">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>클라이언트 성능 측정 훅 (instrumentation-client.ts)는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>instrumentation-client.ts</code> 또는 <code>useReportWebVitals</code> 훅은 클라이언트 브라우저에서 측정되는 Core Web Vitals 지표(LCP, FID, CLS, INP, TTFB, FCP)를 실시간으로 수집하여 분석 플랫폼으로 전송하는 성능 관측 아키텍처입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(클라이언트 성능 측정 훅 (instrumentation-client.ts))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 페이지 로드 및 사용자 인터랙션 발생 시 Next.js 성능 측정기가 LCP(최대 콘텐츠 렌더링 시간), INP(다음 페인트에 대한 상호작용 지연), CLS(누적 레이아웃 이동) 수치를 밀리초 단위로 집계하여 콘솔 및 분석 엔드포인트로 로깅하는 과정을 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>정량적 사용자 경험 측정</strong>: 사용자가 체감하는 로딩 속도와 인터랙션 반응성을 브라우저 실측 데이터로 수치화합니다.</li>
+              <li><strong>구글 검색 순위(SEO) 최적화</strong>: Google의 Core Web Vitals 평가 기준에 부합하도록 병목 컴포넌트와 렌더링 지연 요소를 조기 발견합니다.</li>
+              <li><strong>서드파티 분석 툴 완벽 연동</strong>: Google Analytics, Datadog RUM, Mixpanel 등으로 성능 지표를 즉각 전송합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>프로덕션 쇼핑몰 메인 홈 및 상품 상세의 LCP/INP 성능 모니터링</li>
+              <li>신규 배포 버전과 이전 버전 간의 Core Web Vitals A/B 성능 비교</li>
+              <li>결제 체크아웃 화면의 렌더링 딜레이 및 프레임 드랍 실시간 추적</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>INP(Interaction to Next Paint) 지표 대응</strong>: FID를 대체하여 구글 코어 웹 바이탈 핵심 지표로 승격된 INP 지표를 면밀히 추적해야 합니다.</li>
+              <li><strong>비동기 비콘 전송</strong>: 분석 서버로 메트릭을 전송할 때는 페이지 언로드 시에도 안전한 <code>navigator.sendBeacon()</code> 또는 비동기 fetch를 사용해야 메인 스레드를 블로킹하지 않습니다.</li>
             </ul>
           </div>
         </div>

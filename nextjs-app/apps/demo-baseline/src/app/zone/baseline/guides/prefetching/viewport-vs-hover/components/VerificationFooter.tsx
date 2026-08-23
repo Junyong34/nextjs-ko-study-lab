@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• 뷰포트 진입 자동 prefetch vs prefetch=&#123;false&#125; 호버 시점 패칭 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• 뷰포트 진입 자동 prefetch vs prefetch={false} 호버 시점 패칭 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,43 +57,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="뷰포트 진입 자동 prefetch vs prefetch=&#123;false&#125; 호버 시점 패칭 실증 검증"
+        title="뷰포트 진입 자동 prefetch vs prefetch={false} 호버 시점 패칭 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="뷰포트 진입 자동 prefetch vs prefetch=&#123;false&#125; 호버 시점 패칭">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>뷰포트 진입 자동 prefetch vs prefetch=&#123;false&#125; 호버 시점 패칭는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="뷰포트 진입 자동 prefetch vs 호버 시점 패칭 대조">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js <code>{'<'}Link{'>'}</code>의 기본 동작은 브라우저 <code>IntersectionObserver</code>를 통해 뷰포트에 나타난 링크의 정적 세그먼트를 자동 프리패치(Viewport Prefetch)하는 반면, <code>prefetch={'{'}false{'}'}</code>는 호버(Hover) 시점까지 요청을 유예하는 두 가지 서로 다른 프리패치 전략 스펙을 제공합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(뷰포트 진입 자동 prefetch vs prefetch=&#123;false&#125; 호버 시점 패칭)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 동일한 5개의 추천 상품 링크에 대해 [뷰포트 자동 프리패치 그룹]과 [호버 프리패치 그룹]을 나란히 배치하고, 스크롤 시 발생하는 네트워크 요청 발생 건수와 호버 시점의 지연 시간 차이를 실시간 비교 측정합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>트래픽 vs 속도의 최적 트레이드오프 수립</strong>: 전환율이 중요한 핵심 추천 상품과 부가 링크의 프리패치 전략을 명확히 분리하여 설계 가능합니다.</li>
+                    <li><strong>정밀한 네트워크 자원 통제</strong>: 한정된 모바일 네트워크 리소스를 중요한 콘텐츠 로딩에 우선 집중할 수 있습니다.</li>
+                    <li><strong>네트워크 탭 투명성 확보</strong>: 실제 전송되는 RSC 페이로드 크기와 발생 시점을 정확히 분석하여 프론트엔드 성능 튜닝에 기여합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>메인 홈 화면의 실시간 타임특가 배너(Viewport Prefetch 적용)</li>
+                    <li>하단 카테고리 전체보기 드롭다운 메뉴(Hover Prefetch 적용)</li>
+                    <li>대규모 B2B 사이트맵 네비게이션 트리 최적화</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>정적 vs 동적 라우트 프리패치 차이</strong>: 정적 라우트는 페이지 전체가 프리패치되지만, 동적 라우트는 <code>loading.tsx</code>를 포함한 공통 레이아웃 셸만 프리패치됩니다.</li>
+                    <li><strong>모바일 터치 환경 고려</strong>: 모바일 디바이스에서는 마우스 호버가 없으므로 <code>onTouchStart</code> 시점에 프리패치가 트리거됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

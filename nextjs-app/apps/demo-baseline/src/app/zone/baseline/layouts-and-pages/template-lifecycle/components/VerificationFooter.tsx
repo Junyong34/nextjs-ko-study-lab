@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="template.tsx 생명주기 및 인스턴스 재생성">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>template.tsx 생명주기 및 인스턴스 재생성는 Next.js App Router의 layouts-and-pages 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="template.tsx 생명주기 및 인스턴스 재생성">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p><code>template.tsx</code>는 세그먼트 이동 시 상태를 유지하는 <code>layout.tsx</code>와 달리, 라우트 이동마다 새로운 컴포넌트 인스턴스를 생성하여 마운트/언마운트 생명주기를 재실행하고, <code>useState</code> 상태 초기화, <code>useEffect</code> 재실행, CSS 진입 애니메이션을 트리거하는 표준 파일 컨벤션입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(template.tsx 생명주기 및 인스턴스 재생성)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 카테고리 탭을 전환할 때 <code>layout.tsx</code>에 위치한 검색창 상태는 그대로 유지되는 반면, <code>template.tsx</code> 내부의 폼 입력값과 페이지 전환 카운터는 0으로 초기화되며 진입 애니메이션이 매번 재생되는 차이점을 시각화합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>진입/이탈 애니메이션 자동 트리거</strong>: 페이지 전환 시마다 DOM이 새로 마운트되어 Framer Motion이나 CSS 페이드인 효과를 자연스럽게 연출합니다.</li>
+                    <li><strong>페이지별 클라이언트 상태 강제 초기화</strong>: 이전 페이지에서 입력하던 임시 폼 데이터나 모달 열림 상태를 안전하게 자동 리셋합니다.</li>
+                    <li><strong>페이지 뷰 로깅(Analytics) 정확한 수집</strong>: <code>useEffect</code> 마운트 시점을 감지하여 경로 전환 시마다 페이지 체류/방문 이벤트를 정확히 로깅합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>상품 상세 페이지 간 이동 시마다 리뷰 작성 폼 및 수량 선택 카운터 자동 리셋</li>
+                    <li>쇼핑몰 주요 기획전 진입 시 화려한 모션 그래픽 및 슬라이드 인 애니메이션 연출</li>
+                    <li>페이지 전환 시마다 Google Analytics / Amplitude 페이지뷰 추적 비콘 발송</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>불필요한 렌더링 비용 주의</strong>: 단순 레이아웃 공유 목적이라면 상태 보존과 캐싱에 유리한 <code>layout.tsx</code>를 기본으로 사용하고, 인스턴스 재생성이 반드시 필요한 경우에만 <code>template.tsx</code>를 선택해야 합니다.</li>
+                    <li><strong>컴포넌트 렌더 계층 순서</strong>: App Router의 렌더 트리는 <code>Layout {'>'} Template {'>'} ErrorBoundary {'>'} Suspense {'>'} Page</code> 순서로 중첩됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

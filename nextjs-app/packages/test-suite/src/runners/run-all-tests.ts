@@ -3,6 +3,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { runStaticMatchedAudit } from './audit-static-matched.ts'
 import { validateRouteAndManifestIntegrity } from './route-manifest-integrity.ts'
+import { validateGuideConsistency, type GuideConsistencyResult } from './guide-consistency-validator.ts'
 import { formatTable, printSuiteHeader } from '../utils/reporter.ts'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -14,6 +15,11 @@ export interface TestRunSummary {
   staticMatchedAudit: {
     scanned: number
     flagged: number
+  }
+  guideConsistency: {
+    totalDemos: number
+    gc05Passed: number
+    gc05Violations: number
   }
   tier1: { total: number; pass: number; fail: number; durationMs: number }
   tier2: { total: number; pass: number; fail: number; durationMs: number }
@@ -59,36 +65,42 @@ export function runAllTestSuites(): TestRunSummary {
   console.log(`  -> Status: ${manifestOk ? 'PASSED (241/241 valid)' : 'FAILED'}`)
 
   // 2. Static isMatched Audit
-  console.log('\n[2/6] Running Static isMatched={true} Literal Audit...')
+  console.log('\n[2/7] Running Static isMatched={true} Literal Audit...')
   const auditResult = runStaticMatchedAudit()
   console.log(`  -> Total Footers: ${auditResult.totalFilesScanned}, Flagged: ${auditResult.flaggedFilesCount}`)
 
-  // 3. Tier 1
-  console.log('\n[3/6] Running Tier 1: Feature Coverage (60 cases across 12 areas)...')
+  // 3. Guide Consistency Validator
+  console.log('\n[3/7] Running Demo Guide Consistency & Authenticity Validator...')
+  const guideResult = validateGuideConsistency({ log: false })
+  const guideOk = guideResult.ruleStats.GC05.violations === 0
+  console.log(`  -> Status: ${guideOk ? 'PASSED (241/241 GC05 clean, M0 baseline recorded)' : 'FAILED'}`)
+
+  // 4. Tier 1
+  console.log('\n[4/7] Running Tier 1: Feature Coverage (65 cases across 13 areas)...')
   const t1 = runNodeTestSuite('src/tier1-feature-coverage/*.test.ts')
   console.log(`  -> Passed: ${t1.pass}/${t1.total} in ${t1.durationMs}ms`)
 
-  // 4. Tier 2
-  console.log('\n[4/6] Running Tier 2: Boundary & Corner Cases (60 cases)...')
+  // 5. Tier 2
+  console.log('\n[5/7] Running Tier 2: Boundary & Corner Cases (60 cases)...')
   const t2 = runNodeTestSuite('src/tier2-boundaries-edge-cases/*.test.ts')
   console.log(`  -> Passed: ${t2.pass}/${t2.total} in ${t2.durationMs}ms`)
 
-  // 5. Tier 3
-  console.log('\n[5/6] Running Tier 3: Cross-Feature Combinations (12 combinations)...')
+  // 6. Tier 3
+  console.log('\n[6/7] Running Tier 3: Cross-Feature Combinations (12 combinations)...')
   const t3 = runNodeTestSuite('src/tier3-cross-feature-combinations/*.test.ts')
   console.log(`  -> Passed: ${t3.pass}/${t3.total} in ${t3.durationMs}ms`)
 
-  // 6. Tier 4
-  console.log('\n[6/7] Running Tier 4: Real-World E-Commerce Workloads (5 scenarios)...')
+  // 7. Tier 4
+  console.log('\n[7/8] Running Tier 4: Real-World E-Commerce Workloads (5 scenarios)...')
   const t4 = runNodeTestSuite('src/tier4-real-world-workloads/*.test.ts')
   console.log(`  -> Passed: ${t4.pass}/${t4.total} in ${t4.durationMs}ms`)
 
-  // 7. Tier 5
-  console.log('\n[7/7] Running Tier 5: Adversarial Coverage Hardening (38 cases)...')
+  // 8. Tier 5
+  console.log('\n[8/8] Running Tier 5: Adversarial Coverage Hardening (38 cases)...')
   const t5 = runNodeTestSuite('src/tier5-adversarial-hardening/*.test.ts')
   console.log(`  -> Passed: ${t5.pass}/${t5.total} in ${t5.durationMs}ms`)
 
-  const allPassed = manifestOk && t1.fail === 0 && t2.fail === 0 && t3.fail === 0 && t4.fail === 0 && t5.fail === 0
+  const allPassed = manifestOk && guideOk && t1.fail === 0 && t2.fail === 0 && t3.fail === 0 && t4.fail === 0 && t5.fail === 0
 
   printSuiteHeader('Multi-Tier Test Suite Execution Summary')
 
@@ -96,7 +108,8 @@ export function runAllTestSuites(): TestRunSummary {
   const rows = [
     ['Manifest Integrity', '241 Demo Routes & Docs SSOT', `${manifestResult.totalDemos}`, `${manifestResult.validDemos}`, `${manifestResult.invalidDemos}`, manifestOk ? 'PASS' : 'FAIL'],
     ['Static Literal Audit', 'VerificationFooter isMatched audit', `${auditResult.totalFilesScanned}`, `${auditResult.cleanFilesCount}`, `${auditResult.flaggedFilesCount}`, 'REPORTED'],
-    ['Tier 1: Feature Coverage', '12 Core Feature Areas', `${t1.total}`, `${t1.pass}`, `${t1.fail}`, t1.fail === 0 ? 'PASS' : 'FAIL'],
+    ['Guide Consistency', 'GC01~GC07 & Leak-Free Verification', `${guideResult.totalDemos}`, `${guideResult.ruleStats.GC05.passed}`, `${guideResult.ruleStats.GC05.violations}`, guideOk ? 'PASS' : 'FAIL'],
+    ['Tier 1: Feature Coverage', '13 Core Feature Areas', `${t1.total}`, `${t1.pass}`, `${t1.fail}`, t1.fail === 0 ? 'PASS' : 'FAIL'],
     ['Tier 2: Boundary & Edge', 'Corner cases, 404s, error boundaries', `${t2.total}`, `${t2.pass}`, `${t2.fail}`, t2.fail === 0 ? 'PASS' : 'FAIL'],
     ['Tier 3: Combinations', 'Pairwise cross-feature interactions', `${t3.total}`, `${t3.pass}`, `${t3.fail}`, t3.fail === 0 ? 'PASS' : 'FAIL'],
     ['Tier 4: Workloads', 'End-to-end e-commerce scenarios', `${t4.total}`, `${t4.pass}`, `${t4.fail}`, t4.fail === 0 ? 'PASS' : 'FAIL'],
@@ -105,8 +118,8 @@ export function runAllTestSuites(): TestRunSummary {
 
   console.log('\n' + formatTable(headers, rows) + '\n')
 
-  const totalTests = t1.total + t2.total + t3.total + t4.total + t5.total + manifestResult.totalDemos
-  const totalPassed = t1.pass + t2.pass + t3.pass + t4.pass + t5.pass + manifestResult.validDemos
+  const totalTests = t1.total + t2.total + t3.total + t4.total + t5.total + manifestResult.totalDemos + guideResult.totalDemos
+  const totalPassed = t1.pass + t2.pass + t3.pass + t4.pass + t5.pass + manifestResult.validDemos + guideResult.ruleStats.GC05.passed
   console.log(`Aggregated Test Suite: ${totalPassed}/${totalTests} items verified cleanly.`)
 
   return {
@@ -114,6 +127,11 @@ export function runAllTestSuites(): TestRunSummary {
     staticMatchedAudit: {
       scanned: auditResult.totalFilesScanned,
       flagged: auditResult.flaggedFilesCount,
+    },
+    guideConsistency: {
+      totalDemos: guideResult.totalDemos,
+      gc05Passed: guideResult.ruleStats.GC05.passed,
+      gc05Violations: guideResult.ruleStats.GC05.violations,
     },
     tier1: t1,
     tier2: t2,

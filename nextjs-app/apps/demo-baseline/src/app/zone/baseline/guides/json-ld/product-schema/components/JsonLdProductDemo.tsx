@@ -9,7 +9,7 @@ export function JsonLdProductDemo() {
   }
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-emerald-400 space-y-1">
-      <div className="text-zinc-400">// HTML &lt;head&gt;에 출력되는 JSON-LD 스키마:</div>
+      <div className="text-zinc-400">// HTML {'<'}head{'>'}에 출력되는 JSON-LD 스키마:</div>
       <pre>{JSON.stringify(jsonLd, null, 2)}</pre>
     </div>
   )

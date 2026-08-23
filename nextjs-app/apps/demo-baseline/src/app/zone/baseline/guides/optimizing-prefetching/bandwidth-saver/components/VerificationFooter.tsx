@@ -67,29 +67,42 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>대규모 카탈로그 대역폭 절약 최적화는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              Next.js의 <code>{'<'}Link prefetch={'{'}...{'}'}{'>'}</code> 속성과 Router Cache 세분화 제어는 수백~수천 개의 상품 링크가 포함된 대규모 카탈로그 화면에서 불필요한 전체 RSC 페이로드 프리패칭을 방지하고, 뷰포트 교차 시점에만 경량 정적 셸(loading.tsx)을 선별적으로 가져와 클라이언트 대역폭(Bandwidth)과 서버 리소스를 극대화하여 절약하는 최적화 스펙입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(대규모 카탈로그 대역폭 절약 최적화)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 대규모 상품 목록에서 기본 전체 프리패치(<code>prefetch={'{'}true{'}'}</code>) 적용 시(120개 요청, 1.8MB)와 선별적 프리패치/호버 기반 프리패치 최적화 적용 시(6개 요청, 92KB)의 네트워크 전송량을 대조하여, 95% 이상의 대역폭 절감 효과를 실증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>모바일 데이터 비용 95% 절감</strong>: 무선 모바일 네트워크 환경의 사용자 데이터 소모량을 최소화하고 브라우저 메인 스레드 파싱 부하를 경감합니다.</li>
+              <li><strong>서버 트래픽 및 오리진 부하 완화</strong>: 불필요한 RSC 렌더링 요청을 사전에 차단하여 피크 타임 서버 CPU 사용량을 안정화합니다.</li>
+              <li><strong>Core Web Vitals (INP/LCP) 개선</strong>: 백그라운드 프리패치 네트워크 경합을 줄여 사용자 인터랙션 응답성을 최고 수준으로 유지합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>수천 개의 상품이 나열되는 무한 스크롤(Infinite Scroll) 및 가상화 그리드 카탈로그</li>
+              <li>복잡한 필터 및 페이지네이션이 포함된 이커머스 카테고리/검색 결과 리스트</li>
+              <li>데이터 사용량에 민감한 글로벌 모바일 웹 환경 서비스</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Next.js 15 기본 prefetch 동작 이해</strong>: <code>prefetch</code> prop을 생략(undefined)하면 뷰포트 진입 시 전체 페이지가 아닌 가장 가까운 <code>loading.tsx</code> 세그먼트 페이로드만 가져오므로, 무분별하게 <code>prefetch={'{'}true{'}'}</code>를 지정하지 않는 것이 좋습니다.</li>
+              <li><strong>prefetch=false 적용 대상</strong>: 빈번히 스크롤만 지나치는 푸터 링크나 관리자 메뉴 등에는 <code>prefetch={'{'}false{'}'}</code>를 명시하고 호버(<code>onMouseEnter</code>) 시에만 <code>router.prefetch()</code>를 호출하는 전략이 권장됩니다.</li>
+              <li><strong>Connection/Data Saver 모드 감지</strong>: <code>navigator.connection.saveData</code>가 true인 모바일 환경에서는 프리패칭을 완전 비활성화하는 적응형 로직을 적용할 수 있습니다.</li>
             </ul>
           </div>
         </div>

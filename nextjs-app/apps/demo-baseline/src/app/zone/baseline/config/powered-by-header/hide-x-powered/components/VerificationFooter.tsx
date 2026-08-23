@@ -63,33 +63,40 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="poweredByHeader: false 서버 정보 은닉 보안">
+            <DemoDeepDiveCard title="next.config.ts poweredByHeader 제거를 통한 서버 정보 은닉 & 보안 강화">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>poweredByHeader: false는 모든 HTTP 응답 헤더에서 x-powered-by: Next.js 식별 정보를 제거하여 서버 프레임워크 기술 스택 정보를 은닉하는 보안 설정입니다.</p>
+            <p><code>poweredByHeader: false</code> (<code>next.config.ts</code>) 설정은 Next.js가 기본적으로 모든 HTTP 응답 헤더에 포함하는 <code>X-Powered-By: Next.js</code> 헤더를 제거하는 보안 강화 설정입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>poweredByHeader: false 선언 시 Next.js 서버가 발송하는 모든 HTML/JSON 응답에서 기술 스택 핑거프린트 헤더가 완전히 삭제됩니다.</p>
+            <p>본 데모에서는 <code>poweredByHeader: false</code> 적용 전후의 HTTP 응답 헤더를 비교하여, 외부 공격자에게 서버가 Next.js 프레임워크 기반으로 구동되고 있다는 정보를 노출하지 않도록 차단하는 보안 검증을 수행합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>서버 핑거프린팅 공격 방어: 공격자가 자동화 스캐너로 특정 Next.js 버전의 알려진 취약점(CVE)을 타겟 공격하는 것을 방지합니다.</li>
-              <li>응답 헤더 대역폭 최소화: 불필요한 메타데이터 전송을 줄여 미세한 네트워크 효율성을 확보합니다.</li>
-              <li>보안 감사(ISMS-P / PCI-DSS) 요건 준수: 서버 소프트웨어 정보 노출 금지 규정을 프레임워크 레벨에서 충족합니다.</li>
+              <li><strong>서버 지문(Server Fingerprinting) 은닉</strong>: 공격자가 특정 프레임워크의 알려진 보안 취약점(CVE)을 타겟팅하여 공격하는 것을 사전에 방지합니다.</li>
+              <li><strong>정보 유출 최소화</strong>: 전자금융감독규정 및 정보보호관리체계(ISMS)의 '시스템 정보 노출 방지' 요구사항을 충족합니다.</li>
+              <li><strong>응답 페이로드 미세 절감</strong>: 불필요한 헤더 바이트를 제거하여 네트워크 전송 효율을 미세하게 개선합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>금융 결제 연동 및 이커머스 프로덕션 서버 보안 하드닝</li>
-              <li>대외 서비스 런칭 전 전역 보안 헤더 점검</li>
-              <li>보안 취약점 진단 점검 항목 자동화 충족</li>
+              <li>엔터프라이즈 전자상거래 및 금융 서비스의 보안 취약점 조치</li>
+              <li>ISMS-P 및 공공기관 웹 보안성 심의 대응</li>
+              <li>프레임워크 버전을 숨겨야 하는 엔터프라이즈 B2B 웹 애플리케이션</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>단독 조치로 충분치 않음</strong>: <code>poweredByHeader: false</code> 외에도 Server 헤더 제거, CSP 설정 등 다계층 심층 방어(Defense in Depth) 보안 전략을 함께 적용해야 합니다.</li>
             </ul>
           </div>
         </div>

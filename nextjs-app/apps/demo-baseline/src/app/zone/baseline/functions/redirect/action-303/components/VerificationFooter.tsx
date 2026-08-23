@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Server Action 내 redirect() (303 See Other)">
+            <DemoDeepDiveCard title="redirect() Server Action 내 HTTP 303 Post-Redirect-Get">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>redirect()(307/303)와 permanentRedirect()(308)는 Server Actions, Route Handlers, 서버 컴포넌트 내부에서 즉각적인 HTTP 리다이렉트를 트리거하며, 내부적으로 NEXT_REDIRECT 예외를 던져 실행을 즉시 중단하고 브라우저를 대상 URL로 이동시킵니다.</p>
+            <p>Server Action 내부에서 호출되는 <code>redirect()</code> (<code>next/navigation</code>)는 POST 요청 완료 후 클라이언트를 다른 경로로 이동시키는 HTTP 303 See Other 리다이렉트를 수행합니다. 중복 폼 제출(F5 새로고침)을 방지하는 PRG(Post-Redirect-Get) 패턴의 표준입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 Server Action으로 장바구니 주문 결제가 성공하면 redirect(&apos;/orders/success&apos;)를 호출하여 303 See Other로 영수증 화면으로 이동시키고, 단종된 구 상품 접근 시에는 permanentRedirect(&apos;/products/new-01&apos;)로 308 영구 이동을 반환합니다.</p>
+            <p>본 데모에서는 주문 결제 폼 제출 시 Server Action에서 DB 결제 처리를 마친 후 <code>redirect('/orders/success?orderId=ORD-99')</code>를 호출하여, 브라우저가 GET 요청으로 주문 완료 페이지를 새로 조회하도록 안전하게 전환합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>결제 완료 후 중복 제출 원천 방지: Post-Redirect-Get(PRG) 패턴을 구현하여 새로고침 시 결제 폼이 재제출되는 현상을 완벽히 차단합니다.</li>
-              <li>검색엔진 영구 랭킹 승계: 308 Permanent Redirect로 단종 상품의 기존 검색 색인 가치를 신상품으로 온전히 전달합니다.</li>
-              <li>트랜잭션 중단 안정성: redirect() 호출 시점 이후의 불필요한 백엔드 코드가 실행되지 않고 즉시 안전하게 탈출합니다.</li>
+              <li><strong>중복 결제/주문 원천 차단</strong>: POST 요청 성공 후 즉시 GET 페이지로 이동하여 브라우저 새로고침 시 주문이 중복 생성되는 결제 사고를 방지합니다.</li>
+              <li><strong>부드러운 화면 전환</strong>: 클라이언트 자바스크립트 내비게이션과 결합하여 깜빡임 없는 SPA 이동 경험을 제공합니다.</li>
+              <li><strong>Action 파이프라인 자동 종료</strong>: 함수 실행 즉시 <code>NEXT_REDIRECT</code> 예외를 던져 후속 불필요한 코드 실행을 방지합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>주문서 작성 및 결제 승인 완료 후 주문 완료 페이지로 리다이렉트</li>
-              <li>세션 만료 또는 비인가 사용자의 로그인 페이지 강제 리다이렉트</li>
-              <li>쇼핑몰 도메인 개편 및 상품 카테고리 체계 변경 시 영구 리다이렉트(308)</li>
+              <li>상품 주문서 작성 및 결제 완료 후 주문 완료 결과 페이지로 이동</li>
+              <li>회원가입 완료 후 환영 페이지 또는 로그인 화면으로 이동</li>
+              <li>게시글 작성/수정 완료 후 작성된 상세 글 보기 화면으로 이동</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>try/catch 내부 호출 금지</strong>: <code>redirect()</code>는 내부적으로 에러를 throw하므로 <code>try/catch</code> 블록 안에 넣으면 catch 절에서 가로채져 리다이렉트가 실패합니다.</li>
+              <li><strong>303 vs 307 구분</strong>: Server Action(POST)에서는 303이 사용되며, Route Handler(GET)에서는 307이 기본으로 사용됩니다.</li>
             </ul>
           </div>
         </div>

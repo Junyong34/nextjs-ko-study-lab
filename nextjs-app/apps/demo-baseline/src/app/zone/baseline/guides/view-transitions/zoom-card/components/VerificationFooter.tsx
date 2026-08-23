@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="View Transitions 이미지 확대 애니메이션">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>View Transitions 이미지 확대 애니메이션는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="View Transitions API를 활용한 카드 줌 확대 애니메이션">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Document View Transitions API(<code>document.startViewTransition</code>)는 브라우저가 이전 DOM 상태와 새로운 DOM 상태의 스냅샷을 캡처하여, CSS <code>::view-transition-group</code> 및 <code>view-transition-name</code>을 통해 두 화면 간의 부드러운 확대/축소(Zoom) 및 위치 모핑 전환 효과를 네이티브 수준으로 연출하는 최신 웹 애니메이션 표준 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(View Transitions 이미지 확대 애니메이션)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 상품 그리드의 썸네일 카드(<code>view-transition-name: product-hero</code>)를 클릭했을 때, 해당 카드가 부드럽게 전체화면 상세 뷰로 확장되고 [닫기] 클릭 시 원래 카드 위치로 축소 복귀하는 네이티브 모핑 애니메이션을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>네이티브 앱급 부드러운 화면 전환</strong>: 별도의 무거운 자바스크립트 모션 라이브러리 없이 브라우저 GPU 하드웨어 가속 기반으로 60fps 전환을 달성합니다.</li>
+                    <li><strong>선언적 CSS 애니메이션 제어</strong>: CSS 의사 요소(<code>::view-transition-old</code>, <code>::view-transition-new</code>)를 통해 지속 시간, 이징(Easing), 블러 효과를 손쉽게 커스터마이징합니다.</li>
+                    <li><strong>선택적 점진적 향상(Progressive Enhancement)</strong>: View Transitions API를 지원하지 않는 브라우저에서는 기본 즉각 전환으로 우아하게 폴백됩니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 상품 카탈로그 그리드 ↔ 상품 상세 뷰 간의 확대 전환</li>
+                    <li>포토 갤러리 썸네일 클릭 시 라이트박스 전체화면 모달 오픈</li>
+                    <li>음악 재생 목록의 미니 플레이어 ↔ 전체화면 가사/커버 플레이어 전환</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>고유한 view-transition-name 지정 필수</strong>: 동일한 화면 내에 여러 요소가 동일한 <code>view-transition-name</code>을 공유하면 트랜지션이 무효화되므로 각 상품 카드마다 고유 ID(e.g. <code>card-prod-101</code>)를 부여해야 합니다.</li>
+                    <li><strong>브라우저 호환성 검사</strong>: 실행 전 반드시 <code>if (!document.startViewTransition)</code> 조건을 검사하여 미지원 브라우저에서의 크래시를 방지해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

@@ -127,7 +127,7 @@ export function UnstableCacheDbDemo() {
           </div>
           <div className="space-y-1 text-[11px]">
             <div className="text-blue-300">const getCachedProduct = unstable_cache(</div>
-            <div className="pl-3 text-zinc-400">async (id) =&gt; db.products.findUnique({'{ where: { id } }'}),</div>
+            <div className="pl-3 text-zinc-400">async (id) ={'>'} db.products.findUnique({'{ where: { id } }'}),</div>
             <div className="pl-3 text-emerald-400">['ecommerce-product-detail'],</div>
             <div className="pl-3 text-amber-300">{'{'} revalidate: 3600, tags: ['products', 'product-{selectedProduct}'] {'}'}</div>
             <div className="text-blue-300">)</div>

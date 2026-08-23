@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• &apos;use cache&apos; 지시어를 통한 비동기 함수 결과 캐싱 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• 'use cache' 지시어를 통한 비동기 함수 결과 캐싱 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,43 +57,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="&apos;use cache&apos; 지시어를 통한 비동기 함수 결과 캐싱 실증 검증"
+        title="'use cache' 지시어를 통한 비동기 함수 결과 캐싱 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="&apos;use cache&apos; 지시어를 통한 비동기 함수 결과 캐싱">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>&apos;use cache&apos; 지시어를 통한 비동기 함수 결과 캐싱는 Next.js App Router의 directives 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                                    <DemoDeepDiveCard title="비동기 함수 레벨 'use cache' 지시어 선언">
+                    <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                        <p>비동기 함수 본문 상단에 <code>'use cache'</code>를 선언하면, 함수의 인자(Arguments)를 기반으로 고유한 캐시 키를 자동 생성하여 DB 쿼리나 무거운 비즈니스 연산 결과를 서버 캐시에 저장하고 재사용하는 차세대 함수 캐싱 스펙입니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(&apos;use cache&apos; 지시어를 통한 비동기 함수 결과 캐싱)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                        <p>본 데모에서는 상품 카테고리별 복합 집계 쿼리를 수행하는 <code>getCategoryStats(categoryId)</code> 함수에 <code>'use cache'</code>를 적용하고, 동일 카테고리 ID 호출 시 100ms의 DB 조회가 0ms 캐시 응답으로 대체되는 흐름을 확인합니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>자동 인자 직렬화 캐시 키 생성</strong>: 과거 <code>unstable_cache</code>처럼 수동으로 캐시 키 배열을 문자열로 조합하던 번거로움과 휴먼 에러를 완전히 제거합니다.</li>
+                          <li><strong>다중 컴포넌트 간 결과 공유</strong>: 서로 다른 서버 컴포넌트에서 동일 함수를 동일 인자로 호출해도 캐시된 단일 결과를 공유하여 DB 부하를 차단합니다.</li>
+                          <li><strong>모듈화된 비즈니스 로직 캡슐화</strong>: 데이터 접근 계층(DAL) 함수 내부에 캐싱 정책을 직접 캡슐화하여 UI 코드와 분리합니다.</li>
+                        </ul>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li>쇼핑몰 카테고리별 실시간 상품 수량 및 최저가/최고가 가격대 집계</li>
+                          <li>외부 결제사/배송사 요율표 및 국가별 환율 변환 계산 함수</li>
+                          <li>추천 머신러닝 엔진의 상품 유사도 점수 계산 로직 캐싱</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>비동기(async) 함수 필수</strong>: <code>'use cache'</code>는 반드시 <code>async</code> 비동기 함수 내부에서만 선언할 수 있습니다.</li>
+                          <li><strong>파일 레벨 'use cache' 선언</strong>: 파일 상단에 <code>'use cache'</code>를 선언하면 해당 파일에서 export되는 모든 함수에 캐싱이 일괄 적용됩니다.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </DemoDeepDiveCard>
     </div>
   )
 }

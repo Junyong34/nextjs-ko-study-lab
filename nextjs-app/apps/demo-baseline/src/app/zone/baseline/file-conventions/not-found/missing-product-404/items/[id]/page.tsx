@@ -33,7 +33,7 @@ export default async function ProductDetailPage({
           {
             step: 1,
             title: "상품 ID 확인",
-            description: `ID '${id}'가 DB에 유효하게 존재하여 200 OK 페이지가 마운트되었습니다.`,
+            description: `ID "${id}"가 DB에 유효하게 존재하여 200 OK 페이지가 마운트되었습니다.`,
             actionBadge: "정상 ID",
           },
           {

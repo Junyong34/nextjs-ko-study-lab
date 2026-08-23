@@ -63,33 +63,46 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="startTransition을 통한 프로그래밍 방식 Server Action 호출">
+      <DemoDeepDiveCard title="startTransition 프로그래밍 방식 Server Action 호출 & 트랜지션 우선순위">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>React 19의 useActionState, useFormStatus 및 Server Actions는 클라이언트 폼 제출 상태(isPending, errors)를 선언적으로 바인딩하고, 자바스크립트가 로딩되지 않은 환경에서도 점진적 향상(Progressive Enhancement)으로 완벽 동작하는 폼 처리 표준입니다.</p>
+            <p>
+              <code>startTransition</code> 및 <code>useTransition</code>은 <code>{'<'}form{'>'}</code> 요소 없이도 버튼 클릭(<code>onClick</code>)이나 커스텀 이벤트 핸들러에서 Server Action을 프로그래밍 방식으로 실행하고, 서버 통신 및 RSC 리렌더링을 비차단(Non-blocking) 백그라운드 트랜지션으로 스케줄링하는 React 19 표준 API입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 배송지 폼 제출 시 useActionState가 실시간 필드 유효성 검사 오류를 즉시 렌더링하고, useFormStatus가 결제 버튼에 로딩 스피너를 띄우며 중복 클릭 결제 사고를 완벽히 방지합니다.</p>
+            <p>
+              본 데모에서는 [장바구니 수량 변경] 또는 [위시리스트 토글] 버튼 클릭 시 <code>startTransition(async () ={'>'} {'{'} await updateCartAction(id) {'}'})</code>을 호출합니다. <code>isPending</code> 플래그가 활성화되어 버튼에 로딩 인디케이터가 표시되는 동안에도 사용자는 다른 상품을 클릭하거나 검색창에 타이핑할 수 있습니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>중복 결제 사고 원천 방지: 폼 제출 중 결제 버튼을 자동으로 disabled 처리하여 다중 결제 승인을 막습니다.</li>
-              <li>폼 상태 관리 보일러플레이트 80% 감소: useState, useEffect 없이 서버 함수의 반환값(오류, 성공 메시지)을 폼에 직결합니다.</li>
-              <li>점진적 향상 지원: 네트워크가 불안정하여 번들이 덜 로드된 상태에서도 표준 HTML POST 요청으로 주문이 정상 접수됩니다.</li>
+              <li><strong>UI 반응성 보장(INP 최적화)</strong>: 네트워크 응답 대기 중에도 메인 스레드가 멈추지 않아 인터랙션 응답 지연(Interaction to Next Paint)을 최소화합니다.</li>
+              <li><strong>선언적 Pending 상태 관리</strong>: 별도의 <code>useState(isLoading)</code> 보일러플레이트 없이 <code>isPending</code> 불리언 값으로 버튼 비활성화 및 스피너를 자동 제어합니다.</li>
+              <li><strong>폼 없는 자유로운 제어</strong>: 단일 버튼, 드롭다운 변경, 스위치 토글 등 복잡한 폼 래핑 없이도 깔끔하게 Server Action을 트리거합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 주문서 배송지 입력 및 실시간 우편번호 유효성 검증</li>
-              <li>회원가입/로그인 폼의 비밀번호 복잡도 실시간 피드백</li>
-              <li>상품 상세 내 구매 후기 작성 및 별점 등록 폼</li>
+              <li>상품 목록에서의 원클릭 찜하기(위시리스트) 토글 및 즉각적인 카운트 동기화</li>
+              <li>장바구니 수량 증감(+/-) 버튼 클릭 시 서버 재고 확인 및 금액 갱신</li>
+              <li>다크모드/알림 수신 여부 등 사용자 환경설정 스위치 토글의 즉시 서버 저장</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>React 19 비동기 지원</strong>: React 19부터 <code>startTransition</code> 내에서 <code>async/await</code> 비동기 함수를 직접 전달할 수 있습니다(React 18의 동기 전용 제약 해결).</li>
+              <li><strong>중복 클릭 방어</strong>: 트랜지션 실행 중 사용자가 빠르게 여러 번 클릭하면 다중 액션이 병렬 발송될 수 있으므로, <code>disabled={'{'}isPending{'}'}</code> 처리를 필수로 적용해야 합니다.</li>
+              <li><strong>에러 바운더리 연동</strong>: Server Action 내부에서 예외가 발생하면 <code>startTransition</code>이 속한 가장 가까운 React Error Boundary로 에러가 전파됩니다.</li>
             </ul>
           </div>
         </div>

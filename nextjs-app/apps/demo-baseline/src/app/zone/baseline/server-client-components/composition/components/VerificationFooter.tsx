@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• Server &amp; Client Components 합성 및 경계 분리 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• Server & Client Components 합성 및 경계 분리 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,43 +57,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Server &amp; Client Components 합성 및 경계 분리 실증 검증"
+        title="Server & Client Components 합성 및 경계 분리 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Server &amp; Client Components 합성 및 경계 분리">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Server &amp; Client Components 합성 및 경계 분리는 Next.js App Router의 server-client-components 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Server & Client Components 합성 및 경계 분리">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>React Server Components(RSC) 아키텍처에서 Server Component를 Client Component(<code>'use client'</code>)의 <code>children</code> 슬롯이나 Props로 전달함으로써, 자식 컴포넌트가 클라이언트 번들에 포함되지 않고 서버에서 독립적으로 렌더링되도록 보장하는 컴포넌트 합성(Composition) 표준 패턴입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Server &amp; Client Components 합성 및 경계 분리)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 무거운 서버 데이터베이스 조회를 수행하는 <code>{'<'}ServerProductFeed{'>'}</code>를 상호작용 및 슬라이드 애니메이션을 담당하는 <code>{'<'}ClientCarouselContainer{'>'}</code>의 <code>children</code>으로 주입하여, 클라이언트 번들 크기를 0KB로 유지하면서도 풍부한 인터랙션을 구현하는 구조를 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>클라이언트 JS 번들 크기 극소화</strong>: 데이터 패칭 및 무거운 의존성 라이브러리가 브라우저 번들에 전혀 포함되지 않습니다.</li>
+                    <li><strong>렌더링 성능 최적화</strong>: 서버 컴포넌트 결과물(HTML/RSC 페이로드)이 정적으로 생성되어 브라우저 Hydration 오버헤드를 최소화합니다.</li>
+                    <li><strong>명확한 관심사 분리</strong>: 상태/이벤트 관리 컴포넌트와 비즈니스 데이터 처리 컴포넌트의 모듈성을 극대화합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>인터랙티브 캐러셀/모달 컨테이너 내부에 서버에서 렌더링된 실시간 상품 카드 목록 주입</li>
+                    <li>테마/언어 전환 Client Provider 내부에 전체 서버 페이지 트리 래핑</li>
+                    <li>무한 스크롤 클라이언트 래퍼 내부에 초기 서버 렌더링 리스트 아이템 전달</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>Client Component 내부 직접 import 금지</strong>: Client Component 파일 안에서 Server Component를 <code>import ServerComp from './ServerComp'</code>로 직접 불러오면 해당 컴포넌트가 클라이언트 컴포넌트로 강제 전환되므로, 반드시 부모(Server)에서 <code>children</code>으로 전달해야 합니다.</li>
+                    <li><strong>리프(Leaf) 노드로의 경계 밀어내기</strong>: <code>'use client'</code> 지시어는 가능한 컴포넌트 트리의 말단(Leaf) 노드(버튼, 입력창 등)에만 배치하여 서버 컴포넌트 영역을 최대화해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

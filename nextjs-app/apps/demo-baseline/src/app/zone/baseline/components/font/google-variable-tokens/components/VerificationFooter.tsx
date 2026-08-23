@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Google Fonts 가변 폰트 CSS 변수 연동">
+      <DemoDeepDiveCard title="next/font/google 가변 폰트(Variable Font) & CSS 변수 토큰">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Google Fonts 가변 폰트 CSS 변수 연동는 Next.js App Router의 components 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>next/font/google</code>은 구글 폰트를 빌드 시점에 자동 다운로드하여 자체 호스팅(Zero Layout Shift, No External Network Request)하고, <code>variable: '--font-name'</code> 옵션을 통해 Tailwind CSS 및 CSS 변수 토큰으로 바인딩하는 Next.js 공식 폰트 최적화 컴포넌트입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Google Fonts 가변 폰트 CSS 변수 연동)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 <code>Geist</code> 및 <code>Geist_Mono</code> 가변 폰트의 <code>variable</code> 속성이 최상위 <code>{'<'}body{'>'}</code>의 className에 주입되어, 하위 모든 컴포넌트에서 <code>font-sans</code> 또는 <code>var(--font-geist-sans)</code>로 가변 웨이트(100~900)를 깜빡임(FOUT/FOIT) 없이 완벽히 소비하는 동작을 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>누적 레이아웃 이동(CLS) 0 달성</strong>: 폰트 로딩 시점의 크기 불일치로 인한 텍스트 흔들림(Layout Shift)을 자동 크기 조정(size-adjust)으로 완전 제거합니다.</li>
+              <li><strong>개인정보 보호 및 네트워크 절약</strong>: 브라우저가 Google 서버로 폰트 요청을 보내지 않아 GDPR을 준수하고 외부 DNS 룩업 지연을 없앱니다.</li>
+              <li><strong>Tailwind CSS 토큰 완벽 연동</strong>: CSS 변수를 <code>tailwind.config</code>의 <code>fontFamily</code>에 직접 매핑하여 유연한 유틸리티 클래스를 제공합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>쇼핑몰 전역 본문(Sans) 및 영문 가격/수량(Mono) 타이포그래피 토큰 시스템</li>
+              <li>가변 웨이트(100~900) 단일 파일 서빙을 통한 폰트 파일 용량 다이어트</li>
+              <li>다국어 지원을 위한 서브셋(<code>subsets: ['latin']</code>) 최적화 로딩</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>모듈 최상위 스코프 선언 필수</strong>: <code>next/font</code> 인스턴스는 반드시 컴포넌트 함수 외부(모듈 최상위)에서 선언해야 컴파일 타임 폰트 추출이 정상 작동합니다.</li>
+              <li><strong>display: 'swap' 권장</strong>: 폰트 로드 지연 시 시스템 폰트로 즉시 텍스트를 먼저 표시하도록 <code>display: 'swap'</code>을 기본 지정하는 것이 좋습니다.</li>
             </ul>
           </div>
         </div>

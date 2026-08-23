@@ -61,7 +61,7 @@ export function ScriptLoadingStrategiesDemo() {
 
       <div className="rounded bg-zinc-50 p-3 dark:bg-zinc-900 font-mono space-y-1.5">
         <div className="font-bold text-zinc-700 dark:text-zinc-300">
-          활성 전략: &lt;Script strategy="{selectedStrategy}" /&gt;
+          활성 전략: {'<'}Script strategy="{selectedStrategy}" /{'>'}
         </div>
         <div className="text-emerald-600 dark:text-emerald-400">
           - {strategies.find(s => s.key === selectedStrategy)?.target} 로딩 준비 완료 (onLoad 이벤트 대기)

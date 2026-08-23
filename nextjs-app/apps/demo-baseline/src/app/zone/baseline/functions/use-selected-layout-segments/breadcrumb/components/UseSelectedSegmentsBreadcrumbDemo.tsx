@@ -11,7 +11,7 @@ export function UseSelectedSegmentsBreadcrumbDemo() {
         <span>home</span>
         {segments.map((seg, idx) => (
           <React.Fragment key={seg}>
-            <span>&gt;</span>
+            <span>{'>'}</span>
             <span className={idx === segments.length - 1 ? 'text-blue-600 dark:text-blue-400 font-bold' : ''}>{seg}</span>
           </React.Fragment>
         ))}

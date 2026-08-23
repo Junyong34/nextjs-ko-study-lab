@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• React experimental_taintObjectReference 비밀키 보호 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>React Taint API(experimental_taintUniqueValue)는 결제 API 비밀키, 암호화 솔트 등 특정 원시 문자열 값을 오염(Tainted) 상태로 등록하여, 해당 값이 실수로 클라이언트 컴포넌트의 Props나 Server Action 반환값에 직렬화되어 포함될 경우 런타임에 즉각 에러를 발생시키는 원천 보안 보호 장치입니다.</p>
+            <p>React Taint API(<code>experimental_taintObjectReference</code> / <code>experimental_taintUniqueValue</code>)는 서버 시크릿 키나 사용자 비밀번호 등 민감 객체/값을 오염(Tainted) 상태로 등록하여, 클라이언트 컴포넌트의 Props나 Server Action 반환값에 직렬화될 때 빌드/런타임 에러를 발생시키는 원천 차단 표준 API입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 예제에서는 PG사 가맹점 라이브 시크릿 키(sk_live_...)를 Taint 등록하여, 서버 컴포넌트에서 상품 결제창 클라이언트 위젯으로 해당 키를 Props로 넘기려 할 때 React가 직렬화를 즉시 차단하고 보안 경고를 발생시킵니다.</p>
+            <p>본 데모에서는 PG사 가맹점 라이브 시크릿 키(<code>sk_live_9a8b7c...</code>)가 담긴 객체를 Taint로 보호하여, 서버 컴포넌트에서 클라이언트 결제 위젯으로 해당 객체를 실수로 전달하려 할 때 React 직렬화 엔진이 이를 감지하고 전송을 즉시 차단합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>원천적인 금융 시크릿 키 유출 차단: 개발자의 사소한 Props 전달 실수로 결제 비밀키가 브라우저 네트워크 탭에 평문 노출되는 사고를 원천 방지합니다.</li>
-              <li>런타임 객체 탐지: 단순 문자열 검색뿐만 아니라 객체 내부에 중첩된 비밀값까지 React 직렬화 엔진이 심층 검사합니다.</li>
-              <li>서버 사이드 보안 인증 충족: 전자상거래 보안 규정 및 가맹점 API 보안 가이드라인을 완벽히 충족합니다.</li>
+              <li><strong>금융/인증 시크릿 유출 원천 방지</strong>: 개발자의 단순한 Props 전달 실수로 결제 API 비밀키나 DB 비밀번호가 브라우저 네트워크 탭에 평문 노출되는 사고를 원천 방어합니다.</li>
+              <li><strong>심층 객체 탐지(Deep Inspection)</strong>: 원시 문자열뿐만 아니라 객체 내부에 중첩된 프로퍼티까지 React 직렬화 파이프라인에서 전수 검사합니다.</li>
+              <li><strong>보안 컴플라이언스 준수</strong>: ISMS-P, PCI-DSS 등 엔터프라이즈 전자금융 보안 규정의 민감정보 노출 방지 요구사항을 만족합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>토스페이먼츠/이니시스 결제 비밀키 및 Webhook 서명 Secret 보호</li>
-              <li>고객 주민등록번호 뒷자리, 카드 비밀번호 앞 2자리 등 민감 개인정보 누출 차단</li>
-              <li>AWS S3 프라이빗 버킷 Access Key의 클라이언트 전송 방지</li>
+              <li>토스페이먼츠/이니시스 결제 비밀키 및 Webhook HMAC 서명 Secret 보호</li>
+              <li>사용자 계정 비밀번호 해시, 주민등록번호, 카드 CVC 등 민감 개인정보 누출 차단</li>
+              <li>AWS S3 Private Bucket Access Key 및 외부 결제 Gateway 토큰 보호</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>experimental 플래그 활성화 필요</strong>: <code>next.config.ts</code>에서 <code>experimental.taint: true</code> 설정이 활성화되어 있어야 Taint API가 동작합니다.</li>
+              <li><strong>server-only 패키지와 병행 사용 권장</strong>: Taint API는 값의 직렬화 누출을 막으며, 모듈 파일 자체의 클라이언트 임포트를 방지하기 위해서는 <code>import 'server-only'</code>를 함께 사용하는 것이 표준입니다.</li>
             </ul>
           </div>
         </div>

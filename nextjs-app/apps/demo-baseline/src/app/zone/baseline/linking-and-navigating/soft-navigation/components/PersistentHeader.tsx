@@ -29,7 +29,7 @@ export function PersistentHeader() {
           </span>
         </div>
         <span className="text-[11px] text-zinc-400">
-          Next.js &lt;Link&gt;는 브라우저 전체 새로고침 없이 전환됩니다.
+          Next.js {'<'}Link{'>'}는 브라우저 전체 새로고침 없이 전환됩니다.
         </span>
       </div>
 

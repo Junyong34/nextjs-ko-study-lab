@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• Route Handler를 통한 레거시 주문/재고 API 취합 (BFF) 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Route Handler를 통한 레거시 주문/재고 API 취합 (BFF)는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>Backend-for-Frontend(BFF) 패턴은 Next.js Route Handler나 Server Component에서 분산된 마이크로서비스(주문, 결제, 재고, 배송 API)를 서버사이드에서 병렬(<code>Promise.all</code>)로 호출하고, 프론트엔드 UI에 최적화된 단일 JSON DTO로 결합하여 클라이언트에 전달하는 통합 아키텍처 스펙입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Route Handler를 통한 레거시 주문/재고 API 취합 (BFF))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 주문 상세 조회 시 주문 서비스, 배송 추적 시스템, 결제 게이트웨이의 개별 API를 서버에서 한 번에 병렬 취합하여, 클라이언트가 단 한 번의 요청으로 완벽하게 통합된 주문 완료 화면 데이터를 수신하는 흐름을 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>클라이언트 네트워크 RTT 대폭 감소</strong>: 브라우저에서 3~4개의 마이크로서비스를 직렬로 호출하던 워터폴을 없애고 단 1회의 서버 내부 통신으로 결합합니다.</li>
+              <li><strong>내부 마이크로서비스 주소 은닉</strong>: 사내 레거시 백엔드 IP 및 내부 인증 토큰을 브라우저에 노출하지 않고 안전한 서버 네트워크에서 통신합니다.</li>
+              <li><strong>프론트엔드 맞춤형 DTO 가공</strong>: 백엔드의 복잡하고 불필요한 중첩 필드를 뷰에 필요한 구조로 평탄화(Flatten)하여 클라이언트 상태 관리를 단순화합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>쇼핑몰 마이페이지 주문 상세 내역(주문 정보 + 실시간 택배 배송 추적 + 결제 영수증)</li>
+              <li>상품 상세 화면(기본 스펙 + 실시간 물류센터 재고 + 회원별 할인 쿠폰 목록)</li>
+              <li>관리자 대시보드의 통합 매출 및 정산 통계 지표 취합</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>부분 실패(Partial Failure) 복원력 처리</strong>: 특정 서브 서비스(예: 배송 추적)가 장애를 겪더라도 전체 주문 조회가 실패하지 않도록 <code>Promise.allSettled</code>를 활용한 우아한 강등(Graceful Degradation)을 구현해야 합니다.</li>
+              <li><strong>서버사이드 캐싱 적용</strong>: 자주 변하지 않는 상품 기본 정보는 <code>use cache</code> 또는 <code>fetch(url, {'{'} next: {'{'} revalidate {'}'} {'}'})</code>로 캐싱하여 백엔드 부하를 절감해야 합니다.</li>
             </ul>
           </div>
         </div>

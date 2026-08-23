@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="unstable_noStore() 동적 렌더링 명시적 선언">
+            <DemoDeepDiveCard title="unstable_noStore() 동적 렌더링 명시적 선언 및 캐시 제외">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>unstable_noStore() 동적 렌더링 명시적 선언는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>unstable_noStore()</code> (<code>next/cache</code>)는 컴포넌트나 데이터 페칭 함수 내부에서 호출되어 해당 스코프의 정적 렌더링을 명시적으로 취소(Bailout)하고 항상 최신 데이터를 동적으로 페칭하도록 강제하는 함수입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(unstable_noStore() 동적 렌더링 명시적 선언)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 실시간 주식 호가 및 장바구니 요약 컴포넌트 내부에서 <code>unstable_noStore()</code>를 호출하여, 상위 페이지가 정적 렌더링으로 구성되어 있더라도 해당 컴포넌트 영역만큼은 요청 시마다 실시간으로 데이터를 조회하도록 처리합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>컴포넌트 레벨의 동적 제어</strong>: 페이지 전체를 <code>export const dynamic = 'force-dynamic'</code>으로 동적 전환하지 않고, 데이터 페칭 함수 단위에서 정밀하게 동적 전환을 제어합니다.</li>
+              <li><strong>선언적 캐시 차단</strong>: <code>fetch(..., {'{'} cache: 'no-store' {'}'})</code>를 지원하지 않는 ORM(Prisma, Drizzle)이나 DB 직결 쿼리에서도 캐시를 안전하게 우회합니다.</li>
+              <li><strong>데이터 신선도 100% 보장</strong>: 항상 실시간 최신 상태를 보장해야 하는 민감 데이터의 캐시 오염을 방지합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>실시간 결제 승인 상태 및 포인트 잔액 조회</li>
+              <li>라이브 방송 동시 접속자 수 및 실시간 채팅 위젯</li>
+              <li>보안 일회용 OTP 인증 코드 생성</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Next.js 15+ 대안</strong>: Next.js 15+에서는 <code>connection()</code> 함수가 정식 도입되어 <code>unstable_noStore</code>를 대체하는 공식 수명 주기 선언으로 활용됩니다.</li>
+              <li><strong>과도한 동적 전환 주의</strong>: 남용 시 CDN 캐싱 이점을 잃고 데이터베이스에 직접적인 트래픽 부하가 가해지므로 꼭 필요한 영역에만 제한적으로 사용해야 합니다.</li>
             </ul>
           </div>
         </div>

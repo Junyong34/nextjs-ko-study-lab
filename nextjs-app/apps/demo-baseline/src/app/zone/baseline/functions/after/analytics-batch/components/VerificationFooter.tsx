@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="after() 비동기 데이터 분석 배치 파이프라인">
+            <DemoDeepDiveCard title="after() 비동기 분석 배치 작업 및 응답 비차단 스케줄링">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>after() 비동기 데이터 분석 배치 파이프라인는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>after()</code> (<code>next/server</code>)는 Next.js 15+에서 도입된 표준 수명 주기 함수로, 클라이언트에게 HTTP 응답(Response)을 완전히 스트리밍한 후 백그라운드에서 비동기 작업(분석 로깅, 통계 집계, 알림 발송 등)을 실행하도록 보장합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(after() 비동기 데이터 분석 배치 파이프라인)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 주문 요청 시 클라이언트에게 200 OK 응답을 즉각 반환하고, <code>after(async () ={'>'} {'{'} await sendOrderAnalytics(); await syncInventoryDW(); {'}'})</code>를 통해 무거운 데이터 웨어하우스(DW) 배치 전송을 백그라운드에서 안전하게 완료합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>응답 지연(TTFB) 획기적 단축</strong>: 로깅이나 분석 작업 완료를 기다리지 않고 사용자에게 즉시 응답을 내려 체감 속도를 극대화합니다.</li>
+              <li><strong>서버리스 런타임 안전 보장</strong>: 일반 <code>Promise</code>와 달리 서버리스 플랫폼이 응답 종료 후 인스턴스를 즉시 프리징(Freeze)하지 않고 <code>after()</code> 태스크가 끝날 때까지 대기합니다.</li>
+              <li><strong>실패 격리</strong>: 분석 로깅 도중 발생하는 에러가 사용자의 주문 응답 성공 여부에 영향을 미치지 않습니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>주문 결제 성공 후 마케팅 서드파티 픽셀 및 데이터 웨어하우스 비동기 배치 전송</li>
+              <li>사용자 행동 감사 로그(Audit Trail) 및 클릭스트림 비동기 적재</li>
+              <li>회원가입 후 웰컴 이메일 및 슬랙 알림 백그라운드 발송</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>응답 수정 불가</strong>: <code>after()</code>는 이미 클라이언트에 응답이 전달된 후 실행되므로 쿠키를 쓰거나 응답 본문을 변경할 수 없습니다.</li>
+              <li><strong>실행 시간 제한</strong>: 플랫폼의 최대 함수 실행 제한 시간(예: 15초~60초) 내에서 완료되어야 하므로 수 분 이상 걸리는 대규모 작업은 전용 큐(SQS/BullMQ)로 이관해야 합니다.</li>
             </ul>
           </div>
         </div>

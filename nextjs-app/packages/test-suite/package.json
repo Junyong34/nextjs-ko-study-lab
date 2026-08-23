@@ -6,6 +6,8 @@
   "scripts": {
     "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/run-all-tests.ts",
     "test:all": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/run-all-tests.ts",
+    "test:guide-consistency": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/guide-consistency-validator.ts",
+    "test:guide-audit": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/guide-consistency-validator.ts --report=docs/14-demo-guide-audit-report.md",
     "test:manifest": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/route-manifest-integrity.ts",
     "test:no-static-matched": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/runners/audit-static-matched.ts",
     "test:tier1": "node --test --experimental-strip-types --disable-warning=ExperimentalWarning src/tier1-feature-coverage/*.test.ts",

@@ -43,26 +43,28 @@ export default function TimeBasedIsrDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Next.js 16 `cacheLife` 시간 기반 캐시 수명 & SWR 재검증"
-        concept="cacheLife({ revalidate: 10 })은 캐시가 생성된 지 10초 이내에는 즉각 캐시를 반환하고, 10초가 지나면 백그라운드에서 재검증(Stale-While-Revalidate)을 트리거하여 지속적으로 신선한 데이터를 유지합니다."
+        title="Next.js 16 cacheLife 시간 기반 캐시 수명 & SWR 재검증"
+        concept="'use cache' 환경에서 cacheLife({ stale: 10, revalidate: 10, expire: 60 })를 선언하면 10초간 FRESH 캐시가 유지되고, stale 이후 요청 시 기존 캐시를 즉시 반환하면서 백그라운드에서 데이터를 갱신(SWR)합니다."
         steps={[
           {
             step: 1,
-            title: '초기 캐시 ID 및 시각 확인',
-            description: '현재 발급된 캐시 ID(#...)와 생성 시각을 확인합니다.',
-            actionBadge: 'Fresh 캐시',
+            title: '[브라우저 새로고침 (SWR 테스트)] 클릭 (0~10초)',
+            description: '10초 이내에 버튼을 반복 클릭하여 캐시 시각이 변하지 않고 FRESH 상태를 유지하는 것을 확인합니다.',
+            actionBadge: 'FRESH 캐시 히트',
           },
           {
             step: 2,
-            title: '10초 이내 새로고침',
-            description: '경과 시간 10초 이전에 [새로고침]을 눌러 캐시 ID가 변하지 않음을 확인합니다.',
-            actionBadge: '캐시 보존',
+            title: '10초 경과 후 [브라우저 새로고침 (SWR 테스트)] 클릭',
+            description: '10초 경과 후 요청하여 기존 캐시를 0ms 즉시 반환받고 백그라운드에서 새 캐시가 생성되는 STALE 동작을 확인합니다.',
+            actionBadge: 'SWR 백그라운드 갱신',
           },
           {
             step: 3,
-            title: '10초 후 Stale 상태에서 새로고침',
-            description: '10초 경과 후 [새로고침]을 눌러 백그라운드 재검증을 트리거합니다.',
-            actionBadge: 'SWR 갱신',
+            title: '갱신된 새 캐시 타임스탬프 관찰',
+            description: '한 번 더 버튼을 클릭하여 백그라운드에서 갱신 완료된 최신 타임스탬프로 교체된 데이터를 관찰합니다.',
+            actionBadge: '최신 캐시 수신',
+            observe: '10초 경과 후 SWR 백그라운드 갱신이 완료되어 캐시 타임스탬프와 생성 카운트가 최신 값으로 전환됨',
+            observeAt: 'playground',
           },
         ]}
       />

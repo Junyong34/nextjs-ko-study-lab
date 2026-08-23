@@ -63,22 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router의 template.tsx 컨벤션을 통해 레이아웃 상태 보존과 템플릿 리마운트 메커니즘의 차이를 검증합니다."}
       />
-      <DemoDeepDiveCard title="template.tsx vs layout.tsx">
+      <DemoDeepDiveCard title="template.tsx vs layout.tsx 리마운트 수명 주기 & 인스턴스 재생성">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 렌더링 계층</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              Next.js의 라우팅 계층에서 컴포넌트 렌더링 순서는 <code>Layout &gt; Template &gt; ErrorBoundary &gt; Suspense &gt; Page</code>입니다.
-              <code>template.tsx</code>는 각 내비게이션마다 고유한 React <code>key</code>를 부여받아 완전히 새 인스턴스로 마운트됩니다.
+              Next.js 라우팅 계층의 컴포넌트 렌더링 순서는 <code>Layout {'>'} Template {'>'} ErrorBoundary {'>'} Suspense {'>'} Page</code>입니다. <code>template.tsx</code>는 <code>layout.tsx</code>와 달리 경로 이동 시마다 고유한 React <code>key</code>를 부여받아 매번 완전히 새 인스턴스로 마운트(Remount)되며 모든 내부 상태가 초기화됩니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 언제 layout 대신 template을 쓰는가?</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <p>
+              본 데모에서는 동일 카테고리 내에서 탭 메뉴 간 전환 시 <code>layout.tsx</code>의 상태와 DOM은 그대로 유지되는 반면, <code>template.tsx</code> 내부의 입력 폼, <code>useState</code> 카운터, CSS 진입 트랜지션 애니메이션이 즉시 리셋되고 재마운트되는 수명 주기를 검증합니다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>페이지 전환 애니메이션: CSS/Framer-motion 진입 트랜지션을 매번 재실행할 때</li>
-              <li>페이지 진입 로깅: <code>useEffect</code>를 통해 페이지 뷰(PV) 이벤트를 매 전환마다 트리거할 때</li>
-              <li>폼 입력값 자동 리셋: 하위 탭 이동 시 검색어/필터 입력 필드를 초기화할 때</li>
+              <li><strong>진입 애니메이션 100% 재실행</strong>: CSS/Framer-motion 페이드인 등 페이지 전환 시각 효과를 매번 깔끔하게 트리거합니다.</li>
+              <li><strong>페이지 뷰(PV) 분석 로깅 자동화</strong>: 컴포넌트 마운트 시점의 <code>useEffect</code>를 통해 페이지 진입 텔레메트리 이벤트를 누락 없이 수집합니다.</li>
+              <li><strong>폼 및 임시 상태 자동 클린업</strong>: 하위 세그먼트 전환 시 이전 페이지의 잔여 입력값이나 필터 상태를 부작용 없이 초기화합니다.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li>상품 상세 탭 전환 시마다 부드러운 페이드인 진입 애니메이션 적용</li>
+              <li>사용자 탐색 경로별 GA/엠플리튜드 페이지 진입 로깅 훅 연동</li>
+              <li>피드백 작성 모달이나 문의하기 폼의 페이지 이동 시 자동 리셋</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>불필요한 리렌더링 오버헤드 주의</strong>: 정적인 UI 요소(GNB, 사이드바)를 <code>template.tsx</code>에 배치하면 매 네비게이션마다 불필요한 DOM 재생성 비용이 발생하므로 반드시 상태 리셋이 필요한 서브 래퍼에만 한정해야 합니다.</li>
+              <li><strong>children Props 필수 렌더링</strong>: <code>template.tsx</code>는 <code>{'{'} children {'}'}: {'{'} children: React.ReactNode {'}'}</code>를 필수로 받아 렌더링해야 하위 페이지가 정상적으로 마운트됩니다.</li>
             </ul>
           </div>
         </div>

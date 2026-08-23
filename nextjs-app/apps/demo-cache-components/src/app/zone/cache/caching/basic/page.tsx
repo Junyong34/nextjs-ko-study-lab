@@ -48,26 +48,28 @@ export default async function DemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Next.js 16 `use cache` 지시어 & 태그 기반 온디맨드 무효화"
-        concept="함수 또는 컴포넌트에 'use cache'를 선언하면 실행 결과가 자동으로 영구 캐싱됩니다. cacheTag로 이름을 붙여두면 필요할 때 revalidateTag로 특정 캐시만 즉시 새로고침할 수 있습니다."
+        title="Next.js 16 use cache 지시어 & cacheTag/revalidateTag 무효화"
+        concept="'use cache' 지시어를 선언하면 서버 함수 결과가 캐싱되며, cacheTag('caching-basic:data')로 태그를 부여한 뒤 revalidateTag 호출 시 0ms 지연 없이 즉시 새 캐시 ID(#...)로 갱신됩니다."
         steps={[
           {
             step: 1,
-            title: '초기 캐시 상태 확인',
-            description: '아래 발급된 캐시 생성 시각과 고유 ID(#...)를 확인합니다.',
+            title: '[캐시 고유 식별자] 초기 상태 확인',
+            description: '화면에 표시된 초기 캐시 생성 시각과 고유 ID(#...)를 확인합니다.',
             actionBadge: '캐시 확인',
           },
           {
             step: 2,
-            title: '브라우저 새로고침 클릭',
-            description: '[브라우저 새로고침]을 눌러도 캐시 ID가 변하지 않고 유지되는 것을 봅니다.',
-            actionBadge: '캐시 보존 확인',
+            title: '[브라우저 새로고침] 클릭',
+            description: '버튼을 클릭해도 캐시 ID와 시각이 바뀌지 않고 영구 보존되는 것을 확인합니다.',
+            actionBadge: '캐시 유지',
           },
           {
             step: 3,
-            title: '캐시 무효화 클릭',
-            description: '[캐시 무효화 (revalidateTag)]를 눌러 새 캐시 ID로 즉시 갱신합니다.',
+            title: '[캐시 무효화 (revalidateTag)] 실행',
+            description: 'revalidateTag Server Action을 호출하여 캐시를 무효화하고 새로운 캐시 ID로 갱신합니다.',
             actionBadge: '온디맨드 무효화',
+            observe: '캐시 고유 식별자(#ID) 및 캐시 생성 시각이 새로운 값으로 즉시 갱신됨',
+            observeAt: 'verification',
           },
         ]}
       />
@@ -128,41 +130,45 @@ export default async function DemoPage() {
       />
 
       {/* 4단. 최하단 개념 정리 카드 */}
-      <DemoDeepDiveCard title="use cache 지시어 & cacheTag 온디맨드 무효화 메커니즘">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>
-              Next.js 16의 <code>use cache</code>는 함수나 컴포넌트 단위로 정밀하게 캐싱 범위를 지정(Cache Components)할 수 있는 차세대 캐싱 지시어입니다. <code>cacheTag</code>로 고유한 태그를 바인딩하면, 이후 데이터 변이 시 <code>revalidateTag</code>를 통해 특정 캐시만 즉시 무효화할 수 있습니다.
-            </p>
-          </div>
+                        <DemoDeepDiveCard title="Next.js 16 use cache 지시어 기본 동작 및 revalidateTag 무효화">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js 16의 <code>'use cache'</code> 지시어는 함수나 컴포넌트 레벨에서 비동기 연산 및 JSX 결과물을 캐싱하고, <code>cacheTag()</code>로 등록된 태그를 기반으로 <code>revalidateTag()</code> 호출 시 즉각적인 온디맨드 무효화를 수행하는 차세대 캐싱 아키텍처 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>
-              본 예제에서는 <code>getCachedTimestamp()</code> 함수에 <code>use cache</code>와 <code>cacheTag('caching-basic:data')</code>가 선언되어 있어 브라우저를 새로고침해도 고유 캐시 ID가 변하지 않고 0ms로 즉시 반환됩니다. [캐시 무효화 (revalidateTag)] 버튼을 누르면 서버 액션이 실행되어 해당 태그만 즉시 파기되고 새 캐시 ID가 발급됩니다.
-            </p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 <code>'use cache'</code>가 선언된 비동기 데이터 조회 함수에서 타임스탬프가 고정되어 캐시되는 동작을 확인하고, [캐시 무효화 (revalidateTag)] 버튼을 클릭했을 때 태그 단위로 캐시가 즉시 삭제되고 새로운 데이터로 갱신되는 수명 주기를 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>함수 단위 초정밀 캐싱</strong>: 페이지 전체를 ISR로 묶지 않고도 무거운 DB 쿼리나 외부 API 결과만 선택적으로 캐싱합니다.</li>
-              <li><strong>태그 기반 연쇄 무효화</strong>: 상품 가격 변경 시 관련 카테고리, 추천 목록, 메인 배너의 캐시를 단 한 번의 <code>revalidateTag</code>로 일괄 갱신합니다.</li>
-              <li><strong>서버 인프라 부하 감소</strong>: 동일 요청에 대해 불필요한 중복 DB 조회를 원천 차단합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>함수 단위 초정밀 캐싱</strong>: 페이지 전체를 ISR로 묶지 않고도 무거운 DB 쿼리나 외부 API 결과만 선택적으로 캐싱합니다.</li>
+                    <li><strong>태그 기반 연쇄 무효화</strong>: 상품 가격 변경 시 관련 카테고리, 추천 목록, 메인 배너의 캐시를 단 한 번의 <code>revalidateTag</code>로 일괄 갱신합니다.</li>
+                    <li><strong>서버 인프라 부하 감소</strong>: 동일 요청에 대해 불필요한 중복 DB 조회를 원천 차단하여 서버 리소스를 극대화합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 타임세일 상품 카탈로그 및 기획전 목록 캐싱</li>
-              <li>관리자 상품 정보 수정 시 실시간 웹훅 연동 캐시 무효화</li>
-              <li>환율, 날씨, 주가 등 주기적/온디맨드 갱신이 필요한 공통 데이터</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 타임세일 상품 카탈로그 및 기획전 목록 캐싱</li>
+                    <li>관리자 상품 정보 수정 시 실시간 웹훅 연동 캐시 무효화</li>
+                    <li>환율, 날씨, 주가 등 주기적/온디맨드 갱신이 필요한 공통 데이터</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>experimental.dynamicIO 설정 필수</strong>: Next.js 16에서 <code>'use cache'</code>를 사용하려면 <code>next.config.ts</code>에 <code>experimental.dynamicIO = true</code> 또는 관련 캐시 플래그가 설정되어 있어야 합니다.</li>
+                    <li><strong>인자값 기반 자동 캐시 키 생성</strong>: 함수의 매개변수는 자동으로 캐시 키에 포함되므로, 직렬화 가능한 원시값(Primitive)이나 평면 객체를 인자로 넘겨야 정확한 캐시 히트가 보장됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </DemoContainer>
   )
 }

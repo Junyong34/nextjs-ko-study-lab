@@ -136,7 +136,7 @@ export function MetadataPreviewClient({
       {/* 3. 자동 생성된 <head> 메타 태그 인스펙터 */}
       <div className="rounded border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/40">
         <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
-          Next.js가 자동 주입하는 &lt;head&gt; 메타 태그:
+          Next.js가 자동 주입하는 {'<'}head{'>'} 메타 태그:
         </span>
         <pre className="mt-1.5 overflow-x-auto rounded bg-zinc-900 p-2.5 font-mono text-[11px] text-emerald-400 leading-relaxed">
 {`<title>${title}</title>

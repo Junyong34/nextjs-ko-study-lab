@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Next.js 16 proxy.ts 요청 가로채기 및 rewrite/헤더 주입">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Next.js 16의 proxy.ts(구 middleware.ts)는 페이지 렌더링 전 네트워크 최전선에서 요청을 가로채어 URL rewrite, 조건부 redirect, 커스텀 헤더 주입을 수행하는 게이트웨이 스펙입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Next.js 16 proxy.ts 요청 가로채기 및 rewrite/헤더 주입">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js 16의 <code>proxy.ts</code>(또는 미들웨어 기반 리버스 프록시)는 들어오는 모든 HTTP 요청을 서버 사이드 렌더링 이전에 가로채어, 클라이언트 URL 변경 없이 내부 마이크로서비스로 경로를 재작성(Rewrite)하고 보안/인증 커스텀 헤더를 주입하는 인프라 라우팅 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>브라우저 주소창 URL 변경 없이 내부 마이크로서비스 또는 A/B 테스트 목적지로 요청을 rewrite하고, 요청/응답 헤더에 x-user-tier, x-auth-token, x-geo-country를 투명하게 주입합니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 클라이언트가 <code>/api/catalog</code>로 요청을 보낼 때 프록시 계층이 이를 감지하여 내부 레거시 백엔드 엔드포인트로 투명하게 리라이트하고, <code>x-gateway-auth: verified</code> 및 <code>x-client-geo: KR</code> 헤더를 주입하여 백엔드로 전달하는 흐름을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>단일 오리진(Same-Origin) 아키텍처: 클라이언트에 내부 백엔드 토폴로지를 노출하지 않고 단일 도메인으로 통합된 라우팅을 제공합니다.</li>
-              <li>제로 클라이언트 오버헤드: 자바스크립트 번들이 로드되기 전 엣지/프록시 레벨에서 라우팅과 권한 헤더를 결정하여 TTFB를 단축합니다.</li>
-              <li>무중단 마이그레이션 &amp; A/B 테스트: 사용자 그룹별로 점진적 트래픽 전환(Traffic Shifting)을 서버 사이드에서 안전하게 제어합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>CORS 이슈 원천 해결</strong>: 브라우저는 동일 도메인(Same-origin)으로 요청하므로 별도의 CORS 설정 없이 이기종 백엔드 API와 통신 가능합니다.</li>
+                    <li><strong>내부 인프라 은닉 및 보안 강화</strong>: 실제 백엔드 마이크로서비스 IP나 도메인을 외부에 노출하지 않고 프록시 뒤에 안전하게 격리합니다.</li>
+                    <li><strong>공통 인증/인가 헤더 중앙 집중화</strong>: 모든 하위 요청에 대해 게이트웨이 레벨에서 공통 API 토큰 및 트레이싱 ID를 주입합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>Multi-Zone 쇼핑몰 프론트엔드 라우팅 및 BFF(Backend For Frontend) 중계</li>
-              <li>글로벌 접속 국가(GeoIP)별 로케일 rewrite 및 관세/통화 헤더 주입</li>
-              <li>결제 게이트웨이 인증 토큰 검증 및 백엔드 프록시 전달</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>레거시 모놀리식 API 서버와 신규 마이크로서비스 간의 투명한 트래픽 라우팅</li>
+                    <li>다국어/글로벌 서비스에서 사용자 접속 국가에 따른 리전별 백엔드 프록시 분기</li>
+                    <li>서드파티 결제/물류 API 호출 시 시크릿 API Key 서버사이드 헤더 주입</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>Redirect vs Rewrite 구분</strong>: <code>redirect</code>는 브라우저 URL 주소창이 변경되고 HTTP 307/308 응답을 주지만, <code>rewrite</code>는 브라우저 URL을 유지한 채 내부 대상 경로의 응답을 그대로 반환합니다.</li>
+                    <li><strong>무한 루프 방지</strong>: rewrite 목적지가 동일한 프록시 매칭 규칙에 다시 걸리지 않도록 경로 네임스페이스나 조건을 엄격히 격리해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

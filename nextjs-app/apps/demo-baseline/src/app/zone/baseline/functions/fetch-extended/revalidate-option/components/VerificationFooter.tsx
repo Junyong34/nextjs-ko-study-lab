@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Next.js 확장 fetch revalidate 옵션">
+            <DemoDeepDiveCard title="Next.js 확장 fetch revalidate 옵션 & 시간 기반 ISR 캐싱">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Next.js 확장 fetch revalidate 옵션는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>Next.js는 Web 표준 <code>fetch</code> API를 확장하여 <code>fetch(url, {'{'} next: {'{'} revalidate: 60 {'}'} {'}'})</code> 옵션을 제공합니다. 지정된 시간(초) 동안 데이터 소스 응답을 데이터 캐시(Data Cache)에 보관하고, 만료 후 Stale-While-Revalidate 방식으로 백그라운드 갱신을 수행합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Next.js 확장 fetch revalidate 옵션)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 외부 환율 API를 60초 <code>revalidate</code> 옵션으로 호출하여, 60초 이내의 요청에는 0ms 캐시 응답을 반환하고, 60초 초과 시 다음 요청에서 백그라운드 재검증을 트리거하여 최신 환율로 캐시를 갱신합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>백엔드 API 트래픽 99% 절감</strong>: 초당 수천 건의 트래픽이 몰려도 외부 API는 60초에 단 1회만 호출하여 부하를 차단합니다.</li>
+              <li><strong>안정적인 고속 응답(TTFB)</strong>: 캐시된 응답을 즉시 서빙하여 외부 API의 레이턴시나 일시적 장애가 사용자에게 영향을 주지 않습니다.</li>
+              <li><strong>선언적 캐시 수명 관리</strong>: 별도 Redis나 캐시 서버 없이 <code>fetch</code> 옵션만으로 세분화된 수명 주기를 제어합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>실시간성이 약간 허용되는 환율, 날씨, 인기 검색어 순위 데이터 조회</li>
+              <li>상품 상세 페이지의 기본 스펙 및 카테고리 트리 캐싱 (예: <code>revalidate: 3600</code>)</li>
+              <li>외부 뉴스 피드 및 블로그 포스트 목록 캐싱</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Next.js 15+ 기본값 변경</strong>: Next.js 15부터 <code>fetch</code>의 기본 동작이 <code>force-cache</code>에서 <code>no-store</code>(비캐시)로 변경되었으므로 캐싱을 원하면 명시적으로 <code>revalidate</code> 또는 <code>force-cache</code>를 선언해야 합니다.</li>
+              <li><strong>cacheLife로의 발전</strong>: Next.js 16에서는 보다 정밀한 제어를 위해 <code>'use cache'</code> 지시어 및 <code>cacheLife()</code> 함수 사용이 권장됩니다.</li>
             </ul>
           </div>
         </div>

@@ -31,7 +31,7 @@ export function MetadataAppIconsDemo() {
             </div>
             <div className="text-xs text-zinc-600 dark:text-zinc-400 space-y-0.5">
               <div className="font-mono font-semibold text-blue-600 dark:text-blue-400">{ICON_PATH}</div>
-              <div className="text-[11px] text-zinc-500">태그: &lt;link rel="icon" ... /&gt; 자동 주입</div>
+              <div className="text-[11px] text-zinc-500">태그: {'<'}link rel="icon" ... /{'>'} 자동 주입</div>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@ export function MetadataAppIconsDemo() {
             </div>
             <div className="text-xs text-zinc-600 dark:text-zinc-400 space-y-0.5">
               <div className="font-mono font-semibold text-purple-600 dark:text-purple-400">{APPLE_ICON_PATH}</div>
-              <div className="text-[11px] text-zinc-500">태그: &lt;link rel="apple-touch-icon" ... /&gt; 자동 주입</div>
+              <div className="text-[11px] text-zinc-500">태그: {'<'}link rel="apple-touch-icon" ... /{'>'} 자동 주입</div>
             </div>
           </div>
         </div>

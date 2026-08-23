@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="unauthorized() 401 인증 필요 트리거">
+            <DemoDeepDiveCard title="unauthorized() 401 미인증 트리거 및 unauthorized.tsx 연동">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>notFound(), forbidden(), unauthorized() 함수는 서버 컴포넌트나 Route Handler에서 특정 상태 코드(404, 403, 401)를 트리거하여 대응하는 특수 파일(not-found.tsx, forbidden.tsx, unauthorized.tsx)을 즉각 렌더링하는 표준 에러 바운더리 API입니다.</p>
+            <p><code>unauthorized()</code> (<code>next/navigation</code>)는 요청에 유효한 인증 자격 증명(Authentication)이 없을 때 호출되어 <code>NEXT_UNAUTHORIZED</code> 예외를 발생시키고, <code>unauthorized.tsx</code> 컴포넌트를 렌더링하며 HTTP 401 상태 코드를 반환하는 함수입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 존재하지 않거나 단종된 상품 ID 접근 시 notFound()를 호출하여 맞춤형 404 안내 화면을 띄우고, 일반 고객이 판매자 정산 센터에 접근하면 forbidden()을 호출하여 403 권한 거부 화면을 렌더링합니다.</p>
+            <p>본 데모에서는 세션 쿠키가 없는 익명 사용자가 마이페이지 주문 내역에 접근할 때 <code>unauthorized()</code>를 트리거하여, 로그인 안내 메시지와 함께 로그인 페이지 이동 버튼이 포함된 401 화면을 표시합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>화면 전체 크래시 방지: 상위 GNB와 레이아웃은 정상 유지하면서 메인 콘텐츠 영역에만 친절한 안내 화면을 렌더링합니다.</li>
-              <li>정확한 HTTP 상태 코드 응답: 검색엔진 크롤러에게 올바른 404/403 상태 코드를 반환하여 색인 오염을 방지합니다.</li>
-              <li>선언적 예외 처리: 복잡한 조건부 if/else JSX 분기 대신 함수 호출 하나로 표준 에러 화면을 바인딩합니다.</li>
+              <li><strong>표준 HTTP 401 응답</strong>: REST 및 웹 표준 규격에 맞는 401 Unauthorized 코드를 반환하여 클라이언트 앱 및 웹 뷰와의 연동을 표준화합니다.</li>
+              <li><strong>선언적 로그인 유도</strong>: 세션 부재 시 별도의 수동 쿼리 스트링 조작 없이 통일된 401 UI를 제공합니다.</li>
+              <li><strong>레이아웃 유지 보존</strong>: GNB 네비게이션을 유지하면서 본문 영역에만 로그인 필요 안내를 안전하게 격리 표시합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>삭제되거나 품절 후 비공개 처리된 상품 상세 페이지의 404 안내 화면</li>
-              <li>일반 회원이 판매자 전용 재고 관리 대시보드 접근 시 403 권한 차단</li>
-              <li>비로그인 사용자가 주문 취소/환불 신청서 접근 시 401 로그인 요구</li>
+              <li>비로그인 사용자의 마이페이지, 위시리스트, 주문서 작성 페이지 접근</li>
+              <li>만료된 세션 토큰으로 회원 전용 비공개 커뮤니티 글 열람 시도</li>
+              <li>모바일 웹뷰 연동 시 401 상태를 감지하여 네이티브 로그인 팝업 호출</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>try/catch 래핑 금지</strong>: 내부 예외 throw 메커니즘을 방해하지 않도록 <code>try/catch</code> 외부에서 호출해야 합니다.</li>
+              <li><strong>returnUrl 처리</strong>: 로그인 후 원래 머물던 페이지로 되돌아올 수 있도록 <code>redirect('/login?returnUrl=...')</code> 방식과 요구사항에 맞춰 적절히 선택해야 합니다.</li>
             </ul>
           </div>
         </div>

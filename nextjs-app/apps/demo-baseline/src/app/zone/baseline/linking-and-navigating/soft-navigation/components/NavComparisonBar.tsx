@@ -32,7 +32,7 @@ export function NavComparisonBar() {
         >
           <span>베스트 상품</span>
           <span className="rounded bg-emerald-950 px-1 py-0.2 font-mono text-[9px] text-emerald-300">
-            &lt;Link scroll=&#123;false&#125;&gt;
+            {'<'}Link scroll={'{'}false{'}'}{'>'}
           </span>
         </Link>
 
@@ -47,7 +47,7 @@ export function NavComparisonBar() {
         >
           <span>신상품</span>
           <span className="rounded bg-zinc-200 px-1 py-0.2 font-mono text-[9px] text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300">
-            &lt;Link&gt; (기본 스크롤 상단)
+            {'<'}Link{'>'} (기본 스크롤 상단)
           </span>
         </Link>
 
@@ -63,7 +63,7 @@ export function NavComparisonBar() {
         >
           <span>추천 상품 (홈)</span>
           <span className="rounded bg-emerald-950 px-1 py-0.2 font-mono text-[9px] text-emerald-300">
-            &lt;Link scroll=&#123;false&#125;&gt;
+            {'<'}Link scroll={'{'}false{'}'}{'>'}
           </span>
         </Link>
 
@@ -74,7 +74,7 @@ export function NavComparisonBar() {
         >
           <span>베스트 상품 (하드 리로드)</span>
           <span className="rounded bg-rose-200 px-1 py-0.2 font-mono text-[9px] text-rose-900 dark:bg-rose-900 dark:text-rose-200">
-            &lt;a href&gt; (Hard Reload)
+            {'<'}a href{'>'} (Hard Reload)
           </span>
         </a>
       </div>

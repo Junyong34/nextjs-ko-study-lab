@@ -45,7 +45,7 @@ export function FontPreviewClient() {
         <div className="rounded border border-rose-200 bg-rose-50/20 p-3.5 dark:border-rose-900/40 dark:bg-rose-950/10 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-bold text-rose-950 dark:text-rose-200">
-              1. 외부 CDN &lt;link&gt;
+              1. 외부 CDN {'<'}link{'>'}
             </span>
             <span className="rounded bg-rose-100 px-1.5 py-0.2 font-mono text-[9px] text-rose-800 dark:bg-rose-950 dark:text-rose-300">
               외부 요청 발생

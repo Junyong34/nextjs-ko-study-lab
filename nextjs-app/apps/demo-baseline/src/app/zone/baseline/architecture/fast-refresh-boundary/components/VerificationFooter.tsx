@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• React Fast Refresh &amp; 핫 모듈 리로딩 (HMR) 상태 보존 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• React Fast Refresh & 핫 모듈 리로딩 (HMR) 상태 보존 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,39 +57,52 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="React Fast Refresh &amp; 핫 모듈 리로딩 (HMR) 상태 보존 실증 검증"
+        title="React Fast Refresh & 핫 모듈 리로딩 (HMR) 상태 보존 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="React Fast Refresh &amp; 핫 모듈 리로딩 (HMR) 상태 보존">
+      <DemoDeepDiveCard title="React Fast Refresh & 핫 모듈 리로딩 (HMR) 상태 보존">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>React Fast Refresh &amp; 핫 모듈 리로딩 (HMR) 상태 보존는 Next.js App Router의 architecture 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              React Fast Refresh는 Next.js 개발 서버 환경에서 파일 수정 시 브라우저 전체 새로고침 없이 변경된 React 컴포넌트만 실시간으로 교체(HMR)하면서, <code>useState</code> 및 <code>useReducer</code>의 클라이언트 상태와 스크롤 위치를 그대로 보존하는 핵심 개발자 경험(DX) 아키텍처 스펙입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(React Fast Refresh &amp; 핫 모듈 리로딩 (HMR) 상태 보존)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모의 <code>StatePreservingCounter</code>에서는 사용자가 카운터 수량(예: 15개)을 늘리고 메모 텍스트를 입력한 상태에서, 컴포넌트 내부 렌더링 로직이나 스타일 코드를 수정해도 초기 마운트 타임스탬프와 입력 데이터가 초기화되지 않고 유지되는 Fast Refresh 바운더리 동작을 실시간으로 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>초고속 피드백 루프</strong>: 복잡한 입력 폼이나 모달 깊은 곳을 디버깅할 때 매번 데이터를 재입력할 필요 없이 즉각적인 UI 반영을 확인합니다.</li>
+              <li><strong>런타임 에러 복구 탄력성</strong>: 문법/런타임 에러 발생 시 오버레이가 표시되더라도, 코드 수정 즉시 에러가 해제되며 이전 입력 상태로 안전하게 복귀합니다.</li>
+              <li><strong>상태 유실 방지</strong>: 장바구니 품목 선택이나 다단계 스텝 폼 개발 생산성을 비약적으로 향상시킵니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>다단계 주문/결제 위젯 및 복잡한 필터 폼 컴포넌트 UI/UX 인터랙션 개발</li>
+              <li>차트, 애니메이션, 드로어 등 상태 중심 인터랙티브 클라이언트 위젯 스타일링</li>
+              <li>디자인 시스템(Design System) 컴포넌트 라이브러리 개발 및 실시간 토큰 튜닝</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>React 컴포넌트 단독 Export 원칙</strong>: 파일 내에 React 컴포넌트 외에 일반 상수나 헬퍼 함수를 함께 <code>export</code>하면 Fast Refresh 바운더리가 깨져 전체 페이지가 리로드(Full Reload)될 수 있습니다. 비컴포넌트 함수는 별도 유틸 파일로 분리해야 합니다.</li>
+              <li><strong>클래스 컴포넌트 및 익명 함수 제약</strong>: 익명 화살표 함수(<code>export default () ={'>'} ...</code>)나 클래스 컴포넌트는 상태 보존이 어려우므로 명명된 함수(<code>export default function MyComponent()</code>)를 선언해야 합니다.</li>
+              <li><strong>개발 모드 전용</strong>: Fast Refresh는 <code>next dev</code> 환경 전용 엔진이며, 프로덕션 빌드(<code>next build</code>)에서는 정적 최적화된 JS 번들로 빌드됩니다.</li>
             </ul>
           </div>
         </div>

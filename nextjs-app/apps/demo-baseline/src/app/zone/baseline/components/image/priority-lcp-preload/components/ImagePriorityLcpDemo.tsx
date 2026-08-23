@@ -112,7 +112,7 @@ export function ImagePriorityLcpDemo() {
                 : '<!-- priority=false: Lazy load with loading="lazy" -->'}
             </div>
             <div className="text-blue-300 break-all">
-              &lt;img src="{product.imageUrl}" alt="{product.name}" fetchpriority="{priorityEnabled ? 'high' : 'auto'}" loading="{priorityEnabled ? 'eager' : 'lazy'}" /&gt;
+              {`<img src="${product.imageUrl}" alt="${product.name}" fetchpriority="${priorityEnabled ? 'high' : 'auto'}" loading="${priorityEnabled ? 'eager' : 'lazy'}" />`}
             </div>
             <div className="text-zinc-500 pt-1">
               • sizes: "(max-width: 768px) 100vw, 50vw"

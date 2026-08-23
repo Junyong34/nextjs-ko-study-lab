@@ -63,24 +63,28 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="주문 정산 배치 maxDuration 타임아웃 제한">
+      <DemoDeepDiveCard title="maxDuration 타임아웃 제한 세그먼트 설정 (Route Handler / SSR)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>export const maxDuration = number는 서버리스 함수 및 Route Handler의 최대 실행 시간(초 단위)을 명시하여 타임아웃 제한을 설정하는 라우트 세그먼트 스펙입니다.</p>
+            <p>
+              <code>export const maxDuration = number</code>는 서버리스 함수 및 Route Handler의 최대 실행 시간(초 단위)을 명시하여 플랫폼 기본 타임아웃을 안전하게 연장하거나 상한선을 설정하는 Next.js 표준 라우트 세그먼트 스펙입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>대규모 정산 집계나 배치 작업 시 기본 타임아웃을 maxDuration = 60으로 연장하여 긴 비동기 트랜잭션이 중단 없이 안전하게 완료되도록 보장합니다.</p>
+            <p>
+              본 데모에서는 대규모 주문 정산 집계나 AI 이미지 생성 배치 API에서 기본 타임아웃(10초~15초)을 <code>maxDuration = 60</code>으로 확장하여, 긴 비동기 트랜잭션이 도중에 504 Gateway Timeout으로 끊기지 않고 안전하게 완료되는 과정을 실증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>서버리스 실행 시간 유연한 제어: 기본 실행 제한을 초과하는 대용량 데이터 처리 라우트의 타임아웃을 안전하게 확장합니다.</li>
-              <li>무한 루프 및 리소스 낭비 방지: 불필요하게 오래 실행되는 비동기 작업에 명확한 상한선을 두어 서버 비용 폭증을 차단합니다.</li>
-              <li>결제/정산 트랜잭션 안정성: PG사 결제 승인 확인 및 대량 재고 배치 작업 도중의 타임아웃 오류(504 Gateway Timeout)를 방지합니다.</li>
+              <li><strong>대용량 비동기 배치 안정성</strong>: 결제 대사, 세무 정산, 대량 엑셀 다운로드 등 무거운 작업의 타임아웃 중단을 방지합니다.</li>
+              <li><strong>무한 루프 및 비용 낭비 방지</strong>: 버그로 인한 무한 대기 작업에 명확한 시간 상한을 두어 서버리스 실행 비용 폭증을 방어합니다.</li>
+              <li><strong>라우트 단위 정밀 튜닝</strong>: 모든 엔드포인트를 일괄 변경하지 않고 특정 배치 라우트만 선별적으로 실행 시간을 조정합니다.</li>
             </ul>
           </div>
 
@@ -90,6 +94,14 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
               <li>일일 주문 정산 데이터 집계 및 엑셀 다운로드 생성 API</li>
               <li>대용량 상품 이미지 AI 일괄 리사이징 및 워터마크 배치 처리</li>
               <li>외부 PG사 웹훅 처리 및 ERP 대량 재고 동기화 Route Handler</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>호스팅 플랫폼 요금제 한계</strong>: <code>maxDuration</code> 값은 배포 플랫폼(Vercel 등)의 플랜별 최대 허용치(Hobby: 60s, Pro: 300s)를 초과할 수 없습니다.</li>
+              <li><strong>사용자 응답성 고려</strong>: 브라우저와 직접 통신하는 웹 페이지 SSR에 너무 긴 <code>maxDuration</code>을 설정하면 사용자 이탈이 발생하므로 백그라운드 작업이나 Route Handler에 주로 적용해야 합니다.</li>
             </ul>
           </div>
         </div>

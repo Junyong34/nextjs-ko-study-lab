@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Edge Runtime V8 글로벌 Web APIs 초고속 실행">
+            <DemoDeepDiveCard title="Edge Runtime 내 표준 Web APIs 지원 & 초저지연 V8 글로벌 엣지 실행">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Edge Runtime은 전 세계에 분산된 V8 경량 엔진 위에서 표준 Web APIs(Request, Response, crypto, Streams)를 실행하여 0ms 콜드 스타트와 초고속 글로벌 응답을 제공하는 엣지 연산 환경입니다.</p>
+            <p><code>export const runtime = 'edge'</code> 설정은 전 세계 CDN 엣지 노드의 초경량 V8 Isolate 위에서 실행되며, Web 표준 API(<code>fetch</code>, <code>Request</code>, <code>Response</code>, <code>Headers</code>, <code>URL</code>, <code>crypto.subtle</code>, <code>ReadableStream</code>, <code>TextEncoder</code>)를 네이티브 지원하여 콜드 스타트 0ms의 초저지연 연산을 제공합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 글로벌 접속 고객의 국가별 환율 실시간 계산 및 접속 위치 판별 로직을 Edge Runtime에서 초고속 처리하여, 전 세계 어디서 접속하든 10ms 이내에 현지화된 가격을 렌더링합니다.</p>
+            <p>본 데모에서는 글로벌 환율 계산 및 암호화 서명 검증을 위해 Web Crypto API(<code>crypto.subtle.digest</code>)와 <code>TransformStream</code>을 활용하여, Node.js 모듈 없이 순수 Web APIs만으로 엣지 환경에서 수 밀리초 만에 계산 결과를 스트리밍 반환합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>콜드 스타트 지연 0ms: Node.js 런타임의 초기 기동 지연 없이 즉시 코드를 실행합니다.</li>
-              <li>글로벌 초저지연(Low Latency): 사용자와 가장 가까운 엣지 PoP에서 코드가 실행되어 대륙 간 네트워크 지연을 극복합니다.</li>
-              <li>자원 효율성: 가벼운 메모리 점유율로 대규모 동시 접속 트래픽을 저비용으로 안정 처리합니다.</li>
+              <li><strong>0ms 콜드 스타트</strong>: 무거운 Node.js 런타임 초기화 과정 없이 V8 엔진에서 즉각 실행되어 글로벌 사용자에게 일관된 초고속 응답을 제공합니다.</li>
+              <li><strong>웹 표준 100% 호환</strong>: 브라우저, Cloudflare Workers, Deno 등과 동일한 Web 표준 API를 사용하여 코드 이식성이 뛰어납니다.</li>
+              <li><strong>인프라 비용 극대화 절감</strong>: 인스턴스당 메모리 점유율이 수 MB에 불과하여 대규모 동시 접속 트래픽을 저비용으로 처리합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>글로벌 해외 접속 고객 대상 실시간 환율 및 관세 초고속 계산기</li>
-              <li>엣지 레벨의 A/B 테스트 기획전 트래픽 스플리팅</li>
-              <li>초고속 봇 탐지 및 IP 기반 접속 차단 미들웨어</li>
+              <li>글로벌 다국어/통화 변환 및 실시간 환율 계산기</li>
+              <li>엣지 미들웨어에서의 Web Crypto 기반 JWT 인증 토큰 초고속 유효성 검증</li>
+              <li>A/B 테스트 쿠키 파싱 및 지리적 위치(Geo-IP) 기반 엣지 라우팅</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Node.js 전용 API 사용 불가</strong>: <code>fs</code>, <code>net</code>, <code>path</code>, <code>child_process</code> 등 Node.js 내장 모듈이나 네이티브 C++ 바인딩(<code>bcrypt</code>, <code>sharp</code>)은 사용 시 빌드 에러가 발생하므로 반드시 Web 표준 대체 라이브러리(<code>jose</code>, <code>bcrypt-ts</code>)를 채택해야 합니다.</li>
+              <li><strong>CPU 실행 시간 제약</strong>: 서버리스 엣지 함수는 플랫폼별로 최대 CPU 실행 시간 제한(보통 10ms~50ms)이 있으므로 대용량 파일 처리나 무거운 연산은 Node.js 런타임으로 분리해야 합니다.</li>
             </ul>
           </div>
         </div>

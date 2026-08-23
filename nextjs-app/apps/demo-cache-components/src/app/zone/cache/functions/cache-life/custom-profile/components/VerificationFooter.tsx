@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="next.config.ts custom cacheLife 프로파일 정의 및 바인딩">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>next.config.ts custom cacheLife 프로파일 정의 및 바인딩는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="cacheLife() 런타임 커스텀 수명 프로파일 적용">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p><code>cacheLife({'{'} stale, revalidate, expire {'}'})</code> 함수는 <code>'use cache'</code> 스코프 내부에서 호출되어, 해당 캐시 엔트리의 신선도(stale), 백그라운드 재검증 시작 시점(revalidate), 최종 메모리 폐기 시점(expire)을 런타임에 동적으로 부여하는 표준 캐시 수명 제어 함수입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(next.config.ts custom cacheLife 프로파일 정의 및 바인딩)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 <code>cacheLife({'{'} stale: 5, revalidate: 15, expire: 60 {'}'})</code>을 선언한 실시간 재고 조회 함수가 5초 동안은 완전 정적 응답, 15초 이후에는 백그라운드 SWR 갱신, 60초 경과 시에는 완전 만료 후 즉시 재계산되는 3단계 수명 주기를 시각화합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>비즈니스 도메인별 정밀 TTL 부여</strong>: 초 단위(재고 현황), 분 단위(베스트셀러), 일 단위(회사 정보) 등 데이터의 변동 주기에 맞춰 완벽한 수명 설계 가능.</li>
+                    <li><strong>직관적인 선언형 수명 관리</strong>: 복잡한 HTTP Cache-Control 헤더 문자열을 직접 조합하지 않고 명확한 객체 인자로 TTL을 정의합니다.</li>
+                    <li><strong>서버 부하와 데이터 신선도의 최적화</strong>: Stale 시간 동안에는 서버 I/O를 100% 차단하여 성능을 극대화합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>선착순 타임세일 이벤트 잔여 수량 표시(stale: 5s, revalidate: 10s)</li>
+                    <li>실시간 인기 검색어 및 급상승 트렌드 랭킹(stale: 30s, revalidate: 60s)</li>
+                    <li>일간 결제 통계 및 일일 리포트 요약 카드(stale: 1h, revalidate: 6h)</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>'use cache' 스코프 내부 호출 필수</strong>: <code>cacheLife()</code>는 반드시 <code>'use cache'</code>가 선언된 함수나 컴포넌트 본문 내부에서 호출해야 유효합니다.</li>
+                    <li><strong>중첩 호출 시 최소값 병합</strong>: 한 컴포넌트 내부에서 여러 개의 <code>cacheLife</code>가 호출되면 가장 짧은 수명이 전체 캐시 수명으로 적용됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

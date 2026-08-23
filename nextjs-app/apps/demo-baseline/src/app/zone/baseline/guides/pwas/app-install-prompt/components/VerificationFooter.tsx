@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• 홈 화면 추가 PWA 프롬프트 및 manifest 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>홈 화면 추가 PWA 프롬프트 및 manifest는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>Next.js의 PWA 아키텍처는 표준 웹 앱 매니페스트(<code>app/manifest.json</code> / <code>manifest.ts</code>)와 브라우저의 <code>beforeinstallprompt</code> 이벤트를 결합하여, 모바일/데스크톱 사용자에게 앱스토어 다운로드 없이 홈 화면 설치를 유도하는 웹 표준 스펙입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(홈 화면 추가 PWA 프롬프트 및 manifest)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 브라우저의 기본 설치 배너를 가로채고, 쇼핑몰 맞춤형 [앱 설치하고 10% 할인 쿠폰 받기] 커스텀 설치 프롬프트를 띄운 후 사용자의 설치 승인/거절 인터랙션을 처리하는 흐름을 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>앱스토어 수수료 0% 및 심사 지연 제거</strong>: 앱스토어 등록 및 30% 결제 수수료 없이 웹사이트를 네이티브 앱과 동일한 풀스크린 독립 창(Standalone)으로 설치시킵니다.</li>
+              <li><strong>고객 재방문율 및 리텐션 증대</strong>: 스마트폰 홈 화면에 브랜드 아이콘을 배치하고 오프라인 캐싱 및 푸시 알림 기반을 마련합니다.</li>
+              <li><strong>타입 안전한 manifest.ts 생성</strong>: Next.js의 <code>MetadataRoute.Manifest</code> 인터페이스를 사용하여 아이콘, 테마 색상, 시작 URL의 유효성을 컴파일 타임에 보장합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>모바일 커머스 쇼핑몰 [홈 화면 바로가기 추가] 프로모션 배너</li>
+              <li>배달/주문 플랫폼의 모바일 앱 대용 PWA 설치 유도</li>
+              <li>B2B 사내 업무 포털 및 물류 창고 바코드 스캐너 웹앱 배포</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>HTTPS 환경 필수</strong>: PWA 설치 기능과 Service Worker는 보안 요구사항에 따라 로컬호스트(localhost)를 제외하고 반드시 유효한 HTTPS 환경에서만 동작합니다.</li>
+              <li><strong>iOS Safari 설치 안내 분기</strong>: iOS Safari는 <code>beforeinstallprompt</code> 이벤트를 지원하지 않으므로 [공유 버튼 -{'>'} 홈 화면에 추가] 가이드 팝업을 별도로 분기 렌더링해야 합니다.</li>
             </ul>
           </div>
         </div>

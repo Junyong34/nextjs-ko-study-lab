@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• images.formats: [&apos;image/avif&apos;, &apos;image/webp&apos;] 차세대 포맷 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• images.formats: ['image/avif', 'image/webp'] 차세대 포맷 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,39 +57,47 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="images.formats: [&apos;image/avif&apos;, &apos;image/webp&apos;] 차세대 포맷 실증 검증"
+        title="images.formats: ['image/avif', 'image/webp'] 차세대 포맷 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="images.formats: [&apos;image/avif&apos;, &apos;image/webp&apos;] 차세대 포맷">
+            <DemoDeepDiveCard title="next.config.ts images.formats 차세대 이미지 포맷 최적화 (AVIF & WebP)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>images.formats는 next/image 최적화 엔진이 클라이언트 브라우저의 Accept 헤더를 분석하여 AVIF 및 WebP 차세대 압축 이미지 포맷을 온디맨드로 서빙하도록 지정하는 설정입니다.</p>
+            <p><code>images.formats: ['image/avif', 'image/webp']</code> (<code>next.config.ts</code>) 설정은 <code>next/image</code> 최적화 파이프라인이 원본 이미지를 최신 고압축 포맷인 AVIF와 WebP로 자동 변환하도록 지정하는 옵션입니다. 브라우저의 <code>Accept</code> 헤더를 검사하여 최적 포맷을 협상 서빙합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>formats: [&apos;image/avif&apos;, &apos;image/webp&apos;] 선언 시 원본 JPEG/PNG 상품 사진을 브라우저 지원 여부에 따라 최대 50~80% 더 작은 AVIF 또는 WebP로 자동 압축 변환합니다.</p>
+            <p>본 데모에서는 대용량 JPEG 상품 화보 이미지가 <code>next/image</code>를 거치며 AVIF를 지원하는 모던 브라우저에는 용량이 최대 70% 감소된 AVIF로, 미지원 브라우저에는 WebP로 자동 다운샘플링되어 서빙되는 파이프라인을 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>이미지 용량 최대 80% 압축: 초고화질 상품 사진을 극소 용량으로 전달하여 모바일 데이터 소모를 줄입니다.</li>
-              <li>LCP 성능 지표 획기적 개선: 히어로 상품 배너 이미지의 다운로드 시간을 단축시켜 Core Web Vitals 점수를 극대화합니다.</li>
-              <li>브라우저 맞춤형 폴백: 구형 브라우저에서는 기존 WebP 또는 PNG로 안전하게 자동 폴백합니다.</li>
+              <li><strong>이미지 페이로드 50~70% 획기적 절감</strong>: 동일 화질 기준 JPEG 대비 WebP는 약 30%, AVIF는 약 50~70% 파일 크기를 줄여 네트워크 비용을 대폭 절감합니다.</li>
+              <li><strong>LCP(Largest Contentful Paint) 성능 향상</strong>: 히어로 배너 이미지 다운로드 시간을 단축하여 Core Web Vitals 점수를 극대화합니다.</li>
+              <li><strong>브라우저 자동 협상(Content Negotiation)</strong>: 브라우저 호환성을 개발자가 신경 쓸 필요 없이 인프라가 자동으로 최적 포맷을 선택합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>고화질 패션/쥬얼리 이커머스 상품 갤러리 이미지 전송</li>
-              <li>모바일 쇼핑몰 메인 히어로 배너 이미지 LCP 최적화</li>
-              <li>대규모 카탈로그 썸네일 그리드 이미지 트래픽 비용 절감</li>
+              <li>고해상도 패션/명품 룩북 및 상품 상세 화보 이미지 서빙</li>
+              <li>쇼핑몰 메인 홈 대형 프로모션 히어로 캐러셀 배너 최적화</li>
+              <li>모바일 데이터 통신 환경에서의 대규모 상품 썸네일 그리드 로딩 가속</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>AVIF 변환 CPU 연산 비용</strong>: AVIF는 압축률이 뛰어난 대신 첫 온디맨드 변환 시 WebP보다 CPU 연산 시간이 더 소요되므로 배포 전 이미지 최적화 캐시 워밍 또는 CDN 캐시를 적극 활용해야 합니다.</li>
+              <li><strong>배열 순서 중요성</strong>: <code>['image/avif', 'image/webp']</code> 순서로 작성해야 브라우저가 지원할 때 더 효율적인 AVIF가 우선 선택됩니다.</li>
             </ul>
           </div>
         </div>

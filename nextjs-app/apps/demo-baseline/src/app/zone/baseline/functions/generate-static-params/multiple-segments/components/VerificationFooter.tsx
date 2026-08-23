@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="generateStaticParams [category]/[id] 다중 세그먼트 조합">
+            <DemoDeepDiveCard title="generateStaticParams() 다중 중첩 세그먼트 매트릭스 조합 SSG">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>generateStaticParams는 동적 라우트 세그먼트([category], [id])와 결합하여 빌드 타임에 사전 렌더링(SSG)할 매개변수 목록을 배열로 반환함으로써, 수천 개의 상품 상세 페이지를 정적 HTML로 미리 빌드해 두는 Next.js 빌트인 함수입니다.</p>
+            <p>중첩된 다중 동적 라우트(예: <code>[category]/[id]</code>)에서 <code>generateStaticParams()</code>를 사용하면 부모와 자식 세그먼트의 유효한 매트릭스 조합 객체 배열(<code>[{'{'} category: 'shoes', id: '1' {'}'}, ...]</code>)을 생성하여 복합 경로 전체를 빌드 타임에 사전 렌더링합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 인기 베스트셀러 상품 100개의 ID와 카테고리 조합을 generateStaticParams에서 반환하여 빌드 시점에 사전 생성해 두고, 사용자가 해당 상품에 접속하면 DB 조회 없이 0ms 즉시 정적 페이지를 서빙합니다.</p>
+            <p>본 데모에서는 카테고리 3종과 각 카테고리별 대표 상품 2종을 매핑하여 총 6개의 중첩 경로 조합을 도출하고, 상위 레이아웃부터 하위 상세 페이지까지 계층별로 정적 산출물을 생성합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>초고속 TTFB 0ms 달성: 데이터베이스 쿼리와 서버 사이드 연산 없이 CDN 엣지에서 즉시 정적 HTML을 서빙합니다.</li>
-              <li>데이터베이스 부하 완벽 분산: 대규모 트래픽이 몰리는 메인 베스트 상품 페이지가 오리진 DB에 전혀 부하를 주지 않습니다.</li>
-              <li>증분 정적 재생성(ISR) 연계: 빌드 시점에 생성되지 않은 신규 상품은 dynamicParams 설정에 따라 첫 요청 시 생성되어 캐시에 추가됩니다.</li>
+              <li><strong>중첩 세그먼트 탑다운(Top-down) 빌드</strong>: 상위 레이아웃과 하위 페이지의 파라미터를 유기적으로 결합하여 정적 렌더링 트리를 완성합니다.</li>
+              <li><strong>무효한 URL 조합 사전 차단</strong>: <code>dynamicParams = false</code>와 결합 시 유효하지 않은 카테고리-상품 매핑(예: <code>fashion/drill</code>)의 접근을 404로 원천 차단합니다.</li>
+              <li><strong>대규모 카탈로그 최적화</strong>: 부모 세그먼트에서 반환된 파라미터를 자식 <code>generateStaticParams</code>가 인수로 받아 필요한 하위만 정밀 조회합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 상위 1,000개 베스트셀러 및 스테디셀러 상품 사전 SSG 빌드</li>
-              <li>대분류/중분류/소분류 계층형 카테고리 메인 화면 사전 렌더링</li>
-              <li>브랜드별 공식 스토어 및 시즌 기획전 정적 페이지 사전 생성</li>
+              <li>카테고리별 브랜드 상세 페이지 (<code>/shop/[category]/[brand]</code>)</li>
+              <li>연도/월별 기획전 및 매거진 아카이브 (<code>/magazine/[year]/[month]</code>)</li>
+              <li>국가/언어별 다국어 상품 상세 (<code>/[lang]/[country]/products/[id]</code>)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>조합 폭발(Combinatorial Explosion) 방지</strong>: 세그먼트가 3단계 이상 중첩될 경우 가능한 파라미터 조합 수가 수십만 개로 급증할 수 있으므로 상위 N개 인기 조합만 선별 생성해야 합니다.</li>
+              <li><strong>하위 params 전달</strong>: 부모 세그먼트의 <code>generateStaticParams</code> 결과가 자식의 <code>params</code> 인수로 전달되므로 계층별 데이터 종속성을 활용할 수 있습니다.</li>
             </ul>
           </div>
         </div>

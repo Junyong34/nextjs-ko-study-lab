@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• React Compiler 자동 메모이제이션 최적화 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>React Compiler 자동 메모이제이션 최적화는 Next.js App Router의 architecture 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>React Compiler(React Forget / <code>experimental.reactCompiler</code>)는 개발자가 수동으로 <code>useMemo</code>, <code>useCallback</code>, <code>React.memo</code>를 작성하지 않아도, 빌드 컴파일 단계에서 컴포넌트의 값과 JSX 하위 트리를 분석하여 세밀한 메모이제이션(Fine-grained Memoization) 코드를 자동 주입하는 차세대 리액트 최적화 엔진입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(React Compiler 자동 메모이제이션 최적화)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 수량 변경이나 필터 조작 시 부모 컴포넌트가 리렌더링되더라도, 변경되지 않은 하위 상품 스펙 카드와 계산 결과 컴포넌트가 수동 메모이제이션 코드 없이도 불필요한 리렌더링을 0회로 건너뛰는 최적화 동작을 시각화합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>수동 메모이제이션 보일러플레이트 100% 제거</strong>: 번거롭고 실수하기 쉬운 의존성 배열(Dependency Array) 관리와 <code>useCallback</code> 도배 없이 깔끔한 순수 자바스크립트 함수로 컴포넌트를 작성합니다.</li>
+              <li><strong>불필요한 리렌더링 원천 방어</strong>: 객체/배열 Props 생성으로 인한 하위 컴포넌트의 연쇄 리렌더링을 컴파일러가 바이트코드 레벨에서 차단합니다.</li>
+              <li><strong>런타임 연산 최적화</strong>: 실제 상태값이 변경된 세그먼트만 선별적으로 재평가하여 대규모 대시보드의 FPS와 반응 속도를 극대화합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>수천 개의 아이템이 렌더링되는 실시간 주식/암호화폐 호가창 및 차트 대시보드</li>
+              <li>복잡한 주문서 결제 계산기 및 옵션 조합 선택기</li>
+              <li>대규모 데이터 그리드(Data Grid) 및 스프레드시트 컴포넌트</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Rules of React 엄격 준수 필수</strong>: React Compiler는 렌더링 중 순수성(Purity)과 훅 규칙을 엄격히 전제하므로, 렌더링 도중 전역 변수를 수정하거나 훅을 조건문 내에서 호출하면 최적화 대상에서 제외됩니다.</li>
+              <li><strong>기존 useMemo 코드와의 점진적 공존</strong>: 기존 코드에 수동 작성된 <code>useMemo</code>가 남아 있어도 충돌 없이 동작하므로 단계적인 마이그레이션이 가능합니다.</li>
             </ul>
           </div>
         </div>

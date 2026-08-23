@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• 모달 다이얼로그 키보드 포커스 트랩(Focus Trap) 및 Esc 닫기 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>모달 다이얼로그 키보드 포커스 트랩(Focus Trap) 및 Esc 닫기는 Next.js App Router의 architecture 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>모달 다이얼로그 접근성 표준(WAI-ARIA Dialog Modal Pattern)은 팝업 오픈 시 키보드 포커스(Tab/Shift+Tab)를 모달 내부 요소들 간에만 순환(Focus Trap)시키고, <code>Esc</code> 키 입력 시 모달을 닫으며, 모달이 닫히면 원래 모달을 열었던 트리거 버튼으로 포커스를 안전하게 복귀시키는 표준 인터랙션 규격입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(모달 다이얼로그 키보드 포커스 트랩(Focus Trap) 및 Esc 닫기)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 [배송지 변경 모달] 오픈 시 첫 번째 포커스 가능 요소(입력창)로 초점이 자동 이동하고, <code>Tab</code> 키를 계속 눌러도 배경 웹페이지로 포커스가 이탈하지 않으며, <code>Escape</code> 입력 시 모달이 닫히고 [배송지 변경] 버튼으로 포커스가 복원되는 흐름을 실증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>키보드 사용자 경험 극대화</strong>: 마우스를 사용하지 못하는 지체장애인이나 전자기기 파워 유저가 팝업 뒤 배경 요소로 포커스를 잃어버리는 혼란을 방지합니다.</li>
+              <li><strong>스크린 리더 가상 커서 가둠(aria-modal)</strong>: <code>role="dialog" aria-modal="true"</code>를 선언하여 스크린 리더가 배경 페이지의 텍스트를 읽지 못하도록 완벽히 차단합니다.</li>
+              <li><strong>포커스 유실(Focus Loss) 버그 제로</strong>: 모달 닫힘 후 포커스가 <code>{'<'}body{'>'}</code> 최상단으로 튕겨 나가지 않고 원래 위치로 정확히 복귀합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>쇼핑몰 결제 약관 동의 및 본인인증 팝업 모달</li>
+              <li>주문 취소 및 환불 사유 입력 확인 다이얼로그</li>
+              <li>이미지 확대 뷰어 및 포토 상품평 갤러리 모달</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>포커스 가능한 요소 부재 처리</strong>: 모달 내부에 버튼이나 입력창이 없는 순수 알림 팝업인 경우 모달 컨테이너 자체에 <code>tabIndex={'{'}-1{'}'}</code>을 부여하고 포커스를 이동시켜야 합니다.</li>
+              <li><strong>배경 스크롤 잠금(Scroll Lock)</strong>: 모달이 열려 있는 동안 배경 페이지가 스크롤되지 않도록 <code>document.body.style.overflow = 'hidden'</code> 처리를 연동해야 모바일 사용자 경험이 쾌적합니다.</li>
             </ul>
           </div>
         </div>

@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Server Component runtime 분기 제어">
+            <DemoDeepDiveCard title="server-runtime 설정 (Edge vs Node.js 런타임 분기)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Server Component runtime 분기 제어는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>export const runtime = 'nodejs' | 'edge'</code>는 해당 라우트 세그먼트가 실행될 런타임 환경을 지정하는 Route Segment Config 옵션입니다. Node.js의 방대한 생태계(TCP/fs/네이티브)와 Edge의 초저지연 V8 Isolate(0ms 콜드 스타트) 간의 트레이드오프를 결정합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Server Component runtime 분기 제어)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 글로벌 Geo-IP 및 JWT 검증용 라우트는 <code>runtime = 'edge'</code>로, 대용량 PDF 생성 및 레거시 DB 연결 라우트는 <code>runtime = 'nodejs'</code>로 각각 배포하여 실행 런타임별 특성과 제약을 비교 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>워크로드별 최적화 배포</strong>: 가벼운 프록시/인증은 글로벌 엣지로, 무거운 연산은 Node.js 서버리스로 세분화하여 효율을 극대화합니다.</li>
+              <li><strong>글로벌 TTFB 단축</strong>: 엣지 런타임 채택 시 사용자 물리적 위치와 가장 가까운 CDN 노드에서 0ms 콜드 스타트로 응답합니다.</li>
+              <li><strong>비용 절감</strong>: 엣지 리소스의 극소 메모리 점유율을 통해 인프라 운영 비용을 절감합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>사용자 인증 토큰 검증 및 미들웨어 라우팅 (<code>runtime = 'edge'</code>)</li>
+              <li>지리적 위치(Geo-IP) 기반 통화/언어 즉시 분기 (<code>runtime = 'edge'</code>)</li>
+              <li>Sharp 이미지 리사이징, PDF 생성, PostgreSQL 직결 쿼리 (<code>runtime = 'nodejs'</code>)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Edge 런타임 내 Node.js 모듈 차단</strong>: <code>runtime = 'edge'</code>에서는 <code>fs</code>, <code>net</code>, <code>crypto</code>(Node) 등 내장 모듈 사용 시 빌드 에러가 발생하므로 Web 표준 대체재(<code>jose</code>, <code>@neondatabase/serverless</code>)를 사용해야 합니다.</li>
+              <li><strong>기본값은 nodejs</strong>: 별도 지정이 없으면 Next.js의 기본 런타임은 <code>nodejs</code>입니다.</li>
             </ul>
           </div>
         </div>

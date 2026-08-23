@@ -119,7 +119,7 @@ export function ErrorLayerSimulator() {
           </span>
           <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
             루트 레이아웃 자체 크래시. <br />
-            <code>global-error.tsx</code> + <code>&lt;html&gt;</code>.
+            <code>global-error.tsx</code> + <code>{'<'}html{'>'}</code>.
           </p>
         </div>
       </div>

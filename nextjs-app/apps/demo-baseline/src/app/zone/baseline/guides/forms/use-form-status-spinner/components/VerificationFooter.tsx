@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• useFormStatus pending 스피너 및 버튼 비활성화 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>React 19의 useActionState, useFormStatus 및 Server Actions는 클라이언트 폼 제출 상태(isPending, errors)를 선언적으로 바인딩하고, 자바스크립트가 로딩되지 않은 환경에서도 점진적 향상(Progressive Enhancement)으로 완벽 동작하는 폼 처리 표준입니다.</p>
+            <p><code>useFormStatus()</code>는 부모 <code>{'<'}form{'>'}</code>의 제출 진행 상태(<code>pending, data, method, action</code>)를 Props 전달 없이 하위 컴포넌트에서 직접 구독하는 React 19 컨텍스트 기반 훅입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 배송지 폼 제출 시 useActionState가 실시간 필드 유효성 검사 오류를 즉시 렌더링하고, useFormStatus가 결제 버튼에 로딩 스피너를 띄우며 중복 클릭 결제 사고를 완벽히 방지합니다.</p>
+            <p>본 데모에서는 결제 폼 하위의 <code>{'<'}SubmitButton{'>'}</code> 컴포넌트가 <code>useFormStatus()</code>의 <code>pending</code> 불리언 값을 읽어, 서버 액션이 네트워크 통신을 진행하는 동안 버튼을 <code>disabled</code> 처리하고 로딩 스피너 애니메이션을 노출합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>중복 결제 사고 원천 방지: 폼 제출 중 결제 버튼을 자동으로 disabled 처리하여 다중 결제 승인을 막습니다.</li>
-              <li>폼 상태 관리 보일러플레이트 80% 감소: useState, useEffect 없이 서버 함수의 반환값(오류, 성공 메시지)을 폼에 직결합니다.</li>
-              <li>점진적 향상 지원: 네트워크가 불안정하여 번들이 덜 로드된 상태에서도 표준 HTML POST 요청으로 주문이 정상 접수됩니다.</li>
+              <li><strong>Props Drilling 없는 컴포넌트 캡슐화</strong>: 상위 폼 컴포넌트에서 로딩 상태를 Props로 넘겨받지 않고도 하위 버튼 컴포넌트가 독립적으로 폼 상태를 감지합니다.</li>
+              <li><strong>중복 결제 및 다중 제출 방지</strong>: 폼 제출 중 결제 버튼을 즉시 비활성화하여 사용자의 빠른 연타 클릭으로 인한 다중 승인 사고를 원천 차단합니다.</li>
+              <li><strong>재사용 가능한 버튼 디자인 시스템</strong>: 어떤 <code>{'<'}form{'>'}</code> 내부에서도 그대로 재사용할 수 있는 범용 <code>{'<'}SubmitButton{'>'}</code> 컴포넌트 생태계를 구축합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 주문서 배송지 입력 및 실시간 우편번호 유효성 검증</li>
-              <li>회원가입/로그인 폼의 비밀번호 복잡도 실시간 피드백</li>
-              <li>상품 상세 내 구매 후기 작성 및 별점 등록 폼</li>
+              <li>쇼핑몰 결제 승인 버튼(<code>[189,000원 결제하기]</code>)의 중복 클릭 방어</li>
+              <li>대용량 첨부파일 업로드 및 상품 대량 등록 폼의 진행 인디케이터</li>
+              <li>게시글 작성, 상품 리뷰 등록, 1:1 문의 제출 폼의 상태 피드백</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>부모 form 요소 하위 호출 필수</strong>: <code>useFormStatus()</code>는 반드시 <code>{'<'}form{'>'}</code>을 렌더링하는 컴포넌트의 <strong>자식 컴포넌트 내부</strong>에서 호출해야 합니다. <code>{'<'}form{'>'}</code>과 동일한 레벨에서 호출하면 항상 <code>pending: false</code>를 반환합니다.</li>
+              <li><strong>startTransition 미추적</strong>: <code>useFormStatus</code>는 <code>{'<'}form action=...{'>'}</code>의 제출만 감지하며, 폼 외부의 독립적인 <code>startTransition</code> 호출은 감지하지 않으므로 주의가 필요합니다.</li>
             </ul>
           </div>
         </div>

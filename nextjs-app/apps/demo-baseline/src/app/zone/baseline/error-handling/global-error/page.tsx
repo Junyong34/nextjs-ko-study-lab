@@ -8,26 +8,28 @@ export default function GlobalErrorDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="예상된 에러 vs 예외 vs global-error 계층 처리"
-        concept="Next.js 에러는 세 가지 계층으로 구분됩니다: 1) 폼 유효성 등 예상된 에러는 useActionState 값으로 반환, 2) 세그먼트 예외는 error.tsx로 부분 격리, 3) 루트 레이아웃 크래시는 global-error.tsx로 전역 처리합니다."
+        title="Next.js 3계층 에러 핸들링 (Server Action Return vs error.tsx vs global-error.tsx)"
+        concept="예상된 폼 유효성 에러는 useActionState의 400 반환값으로 처리하고, 런타임 예외는 세그먼트 error.tsx로 격리하며, Root Layout 크래시는 최상위 global-error.tsx로 전체 뷰를 보호합니다."
         steps={[
           {
             step: 1,
-            title: '잘못된 폼 데이터 제출',
-            description: '이메일 형식 오류 및 0원 입력 상태에서 [주문 제출]을 클릭합니다.',
-            actionBadge: '예상된 에러 발생',
+            title: '[잘못된 이메일 (예: invalid-email)] 폼 입력',
+            description: '이메일 입력창에 잘못된 형식을 입력하고 400 검증 에러 반환 동작을 확인합니다.',
+            actionBadge: '예상된 에러 처리',
           },
           {
             step: 2,
-            title: '인라인 에러 메시지 확인',
-            description: '화면이 깨지지 않고 useActionState를 통해 각 입력창 아래에 빨간 안내 문구가 뜸을 봅니다.',
-            actionBadge: 'useActionState',
+            title: '[2. 세그먼트 예외 던지기 (error.tsx Catch)] 클릭',
+            description: '하위 세그먼트에서 발생한 예외가 상위 레이아웃을 파괴하지 않고 segment error.tsx에 격리 포착되는 것을 확인합니다.',
+            actionBadge: '세그먼트 격리',
           },
           {
             step: 3,
-            title: '에러 계층 아키텍처 학습',
-            description: '하단 카드에서 error.tsx 및 global-error.tsx의 역할 분담을 학습합니다.',
-            actionBadge: '계층 구조 이해',
+            title: '[3. 루트 레이아웃 크래시 (global-error.tsx Catch)] 클릭',
+            description: 'Root Layout 수준의 치명적 결함 발생 시 최상위 global-error.tsx가 전체 앱을 안전 폴백으로 감싸는 것을 관찰합니다.',
+            actionBadge: 'Root 크래시 포착',
+            observe: '3가지 에러 레벨(Form 400 인라인 ↔ Segment error.tsx ↔ Root global-error.tsx)별 격리 범위가 대조 시각화됨',
+            observeAt: 'playground',
           },
         ]}
       />

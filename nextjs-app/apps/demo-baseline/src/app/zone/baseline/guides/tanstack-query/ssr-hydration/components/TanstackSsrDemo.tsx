@@ -40,7 +40,7 @@ export function TanstackSsrDemo() {
             SSR Hydrated
           </span>
           <span className="font-bold text-emerald-950 dark:text-emerald-200">
-            &lt;HydrationBoundary&gt; 서버 프리페치 데이터 즉시 하이드레이션
+            {'<'}HydrationBoundary{'>'} 서버 프리페치 데이터 즉시 하이드레이션
           </span>
         </div>
         <div className="flex items-center gap-3 font-mono text-[11px] text-emerald-800 dark:text-emerald-300">

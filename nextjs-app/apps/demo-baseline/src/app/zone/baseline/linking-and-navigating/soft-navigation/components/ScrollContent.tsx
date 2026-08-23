@@ -16,7 +16,7 @@ export function ScrollContent({ title, products }: ScrollContentProps) {
           {title} ({products.length}개)
         </h3>
         <span className="text-[11px] text-zinc-400">
-          스크롤을 아래로 내린 뒤 상단의 &lt;Link scroll=&#123;false&#125;&gt; 버튼을 클릭해 보세요.
+          스크롤을 아래로 내린 뒤 상단의 {'<'}Link scroll={'{'}false{'}'}{'>'} 버튼을 클릭해 보세요.
         </span>
       </div>
 

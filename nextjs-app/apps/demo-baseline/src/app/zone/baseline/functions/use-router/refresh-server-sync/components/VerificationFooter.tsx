@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="router.refresh() 서버 데이터 강제 재검증 동기화">
+            <DemoDeepDiveCard title="router.refresh() 서버 데이터 강제 재검증 동기화">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>router.refresh() 서버 데이터 강제 재검증 동기화는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>router.refresh()</code>는 현재 라우트의 서버 컴포넌트 트리를 서버에 다시 요청하여 최신 RSC 페이로드를 가져와 병합하는 클라이언트 메서드입니다. 브라우저 새로고침(F5)과 달리 React 클라이언트 상태(입력 폼 값, 스크롤 위치 등)를 완벽히 보존합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(router.refresh() 서버 데이터 강제 재검증 동기화)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 클라이언트 입력 폼에 텍스트를 작성한 상태에서 [서버 데이터 새로고침]을 실행하여, 클라이언트의 폼 상태는 그대로 유지된 채 서버의 실시간 재고/가격 데이터만 백그라운드에서 동기화되는 동작을 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>클라이언트 상태 무손실 갱신</strong>: 사용자가 작성 중인 폼 데이터나 모달 열림 상태를 초기화하지 않고 서버 데이터만 최신화합니다.</li>
+              <li><strong>Router Cache 무효화 연동</strong>: 현재 활성화된 라우트 세그먼트의 클라이언트 캐시를 새로고침하여 최신 서버 상태를 즉각 반영합니다.</li>
+              <li><strong>낙관적 UI 후속 동기화</strong>: 클라이언트 상태를 먼저 변경한 뒤 <code>router.refresh()</code>를 트리거하여 최종 서버 상태와 안전하게 정렬합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>장바구니 수량 변경 후 총 결제 예상 금액 및 쿠폰 할인율 서버 재계산</li>
+              <li>실시간 경매/주식 호가 화면에서 주기적 서버 데이터 폴링 동기화</li>
+              <li>외부 팝업 결제창 완료 신호 수신 후 메인 주문 화면의 결제 상태 갱신</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Server Action과의 차이</strong>: Server Action은 내부에서 <code>revalidatePath</code>를 호출해 자동으로 refresh를 유발하지만, 외부 REST API 호출 후에는 명시적으로 <code>router.refresh()</code>를 호출해야 합니다.</li>
+              <li><strong>네트워크 비용 고려</strong>: 잦은 <code>router.refresh()</code> 호출은 서버 RSC 렌더링 부하를 유발하므로 정밀한 캐시 태그 무효화와 병행해야 합니다.</li>
             </ul>
           </div>
         </div>

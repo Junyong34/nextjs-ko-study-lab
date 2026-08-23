@@ -28,38 +28,41 @@ export function VerificationFooter({
         isMatched={isMatched}
         description="Next.js App Router의 NextResponse.json() 유틸리티 함수를 통한 표준화된 HTTP 응답 생성 규격을 검증합니다."
       />
-      <DemoDeepDiveCard title="NextResponse.json() 빌더">
+            <DemoDeepDiveCard title="NextResponse.json() 표준 API JSON 응답 빌더">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>
-              <code>NextResponse.json(body, init?)</code>은 <code>Response.json()</code> 웹 표준 정적 메서드를 확장한 유틸리티로,
-              적절한 <code>Content-Type: application/json</code> 헤더를 자동으로 설정하고 상태 코드 및 커스텀 헤더를 손쉽게 주입할 수 있습니다.
-            </p>
+            <p><code>NextResponse.json()</code> (<code>next/server</code>)은 Web 표준 <code>Response</code>를 확장하여 JSON 응답 객체를 간결하게 생성하는 팩토리 메서드입니다. 상태 코드(<code>status</code>), 응답 헤더(<code>headers</code>), 쿠키(<code>cookies</code>) 설정을 선언적으로 체이닝할 수 있습니다.</p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. Response.json() vs NextResponse.json()</h5>
-            <p>
-              표준 <code>Response.json()</code>과 기능적으로 유사하지만, <code>NextResponse</code>는 추가적으로 쿠키 조작(<code>response.cookies.set()</code>), 리라이트(<code>NextResponse.rewrite()</code>)와의 체이닝 연계가 용이합니다.
-            </p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <p>본 데모에서는 상품 목록 조회 API(Route Handler)에서 <code>NextResponse.json({'{'} success: true, data: products {'}'}, {'{'} status: 200, headers: {'{'} 'Cache-Control': 's-maxage=60' {'}'} {'}'})</code>를 호출하여 표준 REST 응답과 캐시 헤더를 생성합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>보일러플레이트 제거: <code>JSON.stringify()</code>와 수동 헤더 설정을 단 한 줄로 단축</li>
-              <li>타입 안정성: 제네릭을 통한 반환 데이터 타입 명시 가능</li>
-              <li>상태 코드 제어: <code>201 Created</code>, <code>400 Bad Request</code>, <code>422 Unprocessable</code> 등 REST 표준 규격 준수</li>
+              <li><strong>자동 JSON 직렬화 & Content-Type 주입</strong>: <code>JSON.stringify</code>와 <code>Content-Type: application/json</code> 헤더를 자동으로 안전하게 설정합니다.</li>
+              <li><strong>유연한 쿠키 설정</strong>: <code>response.cookies.set()</code> 메서드를 통해 응답에 <code>Set-Cookie</code> 헤더를 직관적으로 추가합니다.</li>
+              <li><strong>타입 안전한 응답 페이로드</strong>: TypeScript 제네릭을 지원하여 API 응답 데이터 구조의 타입 일관성을 유지합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>REST API 핸들러에서 DTO 객체를 클라이언트로 직렬화하여 반환할 때</li>
-              <li>유효성 검증 실패 시 구조화된 에러 JSON 응답 반환</li>
-              <li>인증 토큰 쿠키와 함께 사용자 세션 프로필 JSON 동시 반환</li>
+              <li>모바일 앱 및 외부 파트너사 연동 REST API 엔드포인트 응답 구성</li>
+              <li>클라이언트 SWR/React Query 페칭용 데이터 API 제공</li>
+              <li>에러 발생 시 표준화된 에러 JSON(<code>{'{'} errorCode: 'ERR_01', message: '...' {'}'}</code>) 반환</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>BigInt 직렬화 주의</strong>: <code>NextResponse.json()</code>은 기본 <code>JSON.stringify</code>를 사용하므로 객체에 <code>BigInt</code>나 <code>Date</code> 객체가 포함된 경우 사전 문자열 변환이 필요합니다.</li>
+              <li><strong>캐시 헤더 제어</strong>: Route Handler의 GET 메서드는 조건에 따라 기본 캐싱될 수 있으므로 동적 데이터인 경우 <code>Cache-Control: no-store</code>를 명시하는 것이 안전합니다.</li>
             </ul>
           </div>
         </div>

@@ -67,29 +67,42 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Bypass 쿠키 검증 및 CMS 초안 렌더링는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>__prerender_bypass</code> 쿠키는 Next.js Draft Mode가 생성하는 서명된 암호화 쿠키로, Next.js 내부 캐시 계층(Data Cache 및 Full Route Cache)이 이 쿠키를 감지하면 정적 캐시 조회를 건너뛰고(Bypass) 원본 데이터 소스로부터 최신 초안 데이터를 동적으로 페치하도록 지시합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Bypass 쿠키 검증 및 CMS 초안 렌더링)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 VIP 시크릿 특가전 상품 상세 화면에서 [초안 검수 모드 켜기]를 실행했을 때, Bypass 쿠키가 적용되어 정적 캐시(정상 판매가 399,000원) 대신 0ms 지연으로 미공개 VIP 40% 특가 초안 데이터(249,000원)가 즉시 페치 및 렌더링되는 과정을 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>프로덕션 무중단 검수</strong>: 일반 고객 서비스에 영향을 주지 않으면서 실제 운영 환경과 동일한 도메인/인프라에서 초안을 검증합니다.</li>
+              <li><strong>캐시 오염(Cache Poisoning) 방지</strong>: Bypass 모드로 조회된 초안 데이터는 공유 캐시나 CDN에 저장되지 않아 일반 고객에게 노출될 위험이 원천 차단됩니다.</li>
+              <li><strong>헤드리스 CMS 프리뷰 완벽 연동</strong>: Sanity, Contentful 등의 실시간 초안 미리보기 iframe 임베딩을 완벽 지원합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>이커머스 시즌 기획전(설날/추석 특가전) 오픈 전 가격 및 배너 최종 검수</li>
+              <li>마케팅팀의 블로그 포스트 및 이벤트 상세 페이지 발행 전 실시간 프리뷰</li>
+              <li>신규 입점 브랜드 상품 카탈로그 승인 심사 프로세스</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>fetch 캐시 옵션 확인</strong>: Server Component 내 <code>fetch</code> 호출 시 <code>cache: 'force-cache'</code>를 사용하더라도 Draft Mode 활성화 시 자동으로 캐시가 우회됩니다. 단, 서드파티 ORM이나 SDK 사용 시에는 <code>draftMode().isEnabled</code> 여부에 따른 분기 처리가 필요할 수 있습니다.</li>
+              <li><strong>검수 완료 후 쿠키 제거</strong>: 검수가 끝난 후에는 <code>draftMode().disable()</code> 엔드포인트를 호출하여 브라우저의 Bypass 쿠키를 반드시 삭제해야 불필요한 동적 렌더링 비용을 줄일 수 있습니다.</li>
+              <li><strong>Edge 배포 시 쿠키 전달</strong>: 프록시나 CDN 계층(Cloudflare/CloudFront)에서 <code>__prerender_bypass</code> 쿠키 헤더를 오리진 서버로 온전히 포워딩하도록 캐시 키 규칙을 설정해야 합니다.</li>
             </ul>
           </div>
         </div>

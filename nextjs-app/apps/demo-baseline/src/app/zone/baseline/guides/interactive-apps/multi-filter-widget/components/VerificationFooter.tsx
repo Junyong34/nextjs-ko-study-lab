@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• 다중 필터/정렬/장바구니 복합 인터랙티브 위젯 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>다중 필터/정렬/장바구니 복합 인터랙티브 위젯는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>Next.js의 복합 인터랙티브 위젯 아키텍처는 URL 검색 파라미터(<code>useSearchParams</code>), React 19의 비동기 트랜지션(<code>useTransition</code>), 그리고 클라이언트 상태를 결합하여 복잡한 필터링·정렬·장바구니 상호작용을 끊김 없이 반응하도록 구성하는 UI 표준 패턴입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(다중 필터/정렬/장바구니 복합 인터랙티브 위젯)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 카테고리 태그 다중 선택, 가격대 슬라이더 조절, 정렬 기준 변경 시 <code>useTransition</code>으로 감싸진 라우터 이동이 비차단(Non-blocking)으로 실행되며, 선택된 필터 뱃지와 상품 목록이 부드럽게 갱신되는 과정을 실증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>공유 및 새로고침 가능한 URL 상태 보존</strong>: 모든 필터링 및 정렬 조건이 <code>?category=outer&sort=price_asc</code> 형태로 URL에 동기화되어 링크 공유 및 북마크가 가능합니다.</li>
+              <li><strong>메인 스레드 블로킹 없는 빠른 응답(INP 최적화)</strong>: 복잡한 필터 계산 중에도 체크박스 클릭과 슬라이더 드래그가 멈춤 없이 부드럽게 동작합니다.</li>
+              <li><strong>뒤로 가기 / 앞으로 가기 완벽 지원</strong>: 브라우저 히스토리와 상태가 완벽히 연동되어 이전 필터 조건으로 즉시 복귀할 수 있습니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>패션/전자기기 쇼핑몰 카테고리 상품 목록의 다중 조건 패싯(Facet) 검색 필터</li>
+              <li>호텔/숙박 예약 사이트의 날짜, 인원수, 편의시설 다중 필터 위젯</li>
+              <li>채용 공고 포털의 직군, 경력, 지역, 연봉 복합 필터링 대시보드</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>연속 입력 시 디바운스(Debounce) 적용 필수</strong>: 가격 슬라이더나 검색어 입력처럼 고빈도로 발생하는 이벤트는 300ms 디바운스를 적용하여 불필요한 URL 갱신과 서버 요청을 방지해야 합니다.</li>
+              <li><strong>useSearchParams Suspense 래핑</strong>: 클라이언트 컴포넌트에서 <code>useSearchParams</code>를 사용할 때는 정적 렌더링 최적화를 위해 컴포넌트를 <code>{'<'}Suspense{'>'}</code>로 감싸야 빌드 경고를 피할 수 있습니다.</li>
             </ul>
           </div>
         </div>

@@ -42,7 +42,7 @@ function makeDemo(
     step1: { title: '기본 동작 확인', desc: '초기 렌더링 상태 및 파라미터를 점검합니다.', badge: '초기 렌더' },
     step2: { title: '인터랙션 및 상태 변경', desc: '버튼을 클릭하거나 입력을 변경하여 실시간 반응을 확인합니다.', badge: '인터랙션' },
     step3: { title: '원리 및 아키텍처 학습', desc: '하단 개념 정리 카드를 통해 Next.js 내부 동작을 학습합니다.', badge: '개념 검증' },
-    expected: `• ${title}: Next.js App Router 공식 표준 스펙을 준수하여 렌더링\n• 아키텍처 정합성: Server/Client 컴포넌트 경계 및 캐시 정책 정상 작동\n• 사용자 경험: 0ms 즉각 반응성 �  makeDemo('guides/rendering-philosophy/server-vs-client', '서버 렌더링 vs 클라이언트 렌더링 수명주기 대조', '2-guides/rendering-philosophy.md', 'baseline',
+    expected: `• ${title}: Next.js App Router 공식 표준 스펙을 준수하여 렌더링\n• 아키텍처 정합성: Server/Client 컴포넌트 경계 및 캐시 정책 정상 작동\n• 사용자 경험: 0ms 즉각 반응성 �  makeDemo('guides/rendering-philosophy/server-vs-client', '서버 렌더링 vs 클라이언트 렌더링 수명주기 대조', '2-guides/rendering-philosophy.md', 'baseline',
     'Server Component는 서버에서 0 KB JS로 정적 HTML을 렌더링하고, Client Component는 브라우저 이벤트와 리액트 상태를 위해 번들링되어 하이드레이션됩니다.',
     'Next.js App Router의 Server vs Client Component 렌더링 철학',
     'Next.js는 기본적으로 모든 컴포넌트를 Server Component로 렌더링합니다. 인터랙션(onClick, useState)이나 브라우저 API(window, localStorage)가 필요한 최소한의 리프 노드에만 "use client"를 선언하는 것이 번들 크기를 줄이는 핵심입니다.',
@@ -549,11 +549,11 @@ export function PrefetchModesDemo() {
     <div className="space-y-3 rounded border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs">
         <div onMouseEnter={() => setLogs(p => [...p, 'Link 1 (기본값): 뷰포트 진입 시 이미 사전 로드됨'])} className="rounded border border-blue-200 bg-blue-50/50 p-3 dark:border-blue-900 cursor-pointer">
-          <div className="font-bold text-blue-900 dark:text-blue-200">&lt;Link href="/shop"&gt;</div>
+          <div className="font-bold text-blue-900 dark:text-blue-200"><Link href="/shop"></div>
           <div className="text-zinc-500 mt-1">뷰포트 진입 즉시 자동 prefetch</div>
         </div>
         <div onMouseEnter={() => setLogs(p => [...p, 'Link 2 (prefetch={false}): 마우스 호버 시점에 방금 프리패치됨'])} className="rounded border border-amber-200 bg-amber-50/50 p-3 dark:border-amber-900 cursor-pointer">
-          <div className="font-bold text-amber-900 dark:text-amber-200">&lt;Link href="/spec" prefetch={'{false}'}&gt;</div>
+          <div className="font-bold text-amber-900 dark:text-amber-200"><Link href="/spec" prefetch={'{false}'}></div>
           <div className="text-zinc-500 mt-1">호버 시점에만 프리패치 발생</div>
         </div>
       </div>
@@ -644,7 +644,7 @@ export function NotFoundDemo() {
     <div className="space-y-3 rounded border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex gap-2 text-xs">
         <button type="button" onClick={() => setId('101')} className={\`rounded px-3 py-1 font-bold \${id === '101' ? 'bg-emerald-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800'}\`}>정상 상품 (#101)</button>
-        <button type="button" onClick={() => setId('999')} className={\`rounded px-3 py-1 font-bold \${id === '999' ? 'bg-rose-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800'}\`}>미등록 상품 (#999 -&gt; 404)</button>
+        <button type="button" onClick={() => setId('999')} className={\`rounded px-3 py-1 font-bold \${id === '999' ? 'bg-rose-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800'}\`}>미등록 상품 (#999 -> 404)</button>
       </div>
       {id === '101' ? (
         <div className="rounded bg-zinc-50 p-3 text-xs dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
@@ -834,7 +834,7 @@ export function PrivateCacheDemo() {
         <button type="button" onClick={() => setUser('user_B')} className={\`rounded px-3 py-1 font-bold \${user === 'user_B' ? 'bg-purple-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800'}\`}>사용자 B</button>
       </div>
       <div className="rounded bg-zinc-50 p-3 text-xs dark:bg-zinc-900 font-mono">
-        캐시 격리 키: private:session:{user} -&gt; 장바구니 {user === 'user_A' ? '3개' : '1개'} 캐시됨
+        캐시 격리 키: private:session:{user} -> 장바구니 {user === 'user_A' ? '3개' : '1개'} 캐시됨
       </div>
     </div>
   )
@@ -904,7 +904,7 @@ import React from 'react'
 export function PrefetchFalseDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 text-xs">
-      <div className="font-mono font-bold text-zinc-900 dark:text-zinc-100">&lt;Link href="/heavy-report" prefetch={'{false}'}&gt;</div>
+      <div className="font-mono font-bold text-zinc-900 dark:text-zinc-100"><Link href="/heavy-report" prefetch={'{false}'}></div>
       <p className="text-zinc-500 mt-1">대용량 리포트 페이지: 뷰포트에 진입해도 네트워크 프리패치가 발생하지 않습니다.</p>
     </div>
   )
@@ -922,7 +922,7 @@ export function BandwidthSaverDemo() {
     <div className="rounded border border-emerald-300 bg-emerald-50/50 p-4 dark:border-emerald-950 dark:bg-emerald-950/20 font-mono text-xs space-y-1">
       <div className="font-bold text-emerald-950 dark:text-emerald-200">📊 대역폭 절감 통계:</div>
       <div>• 기본 prefetch 시: 120개 요청 (1.8 MB)</div>
-      <div className="text-emerald-600 dark:text-emerald-400 font-bold">• 최적화 적용 후: 6개 요청 (92 KB) -&gt; 95% 대역폭 절감</div>
+      <div className="text-emerald-600 dark:text-emerald-400 font-bold">• 최적화 적용 후: 6개 요청 (92 KB) -> 95% 대역폭 절감</div>
     </div>
   )
 }`
@@ -1082,8 +1082,8 @@ import React from 'react'
 export function StyleRegistryDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">
-      <div className="text-zinc-500">// useServerInsertedHTML을 통해 HTML &lt;head&gt;에 사전 주입된 스타일:</div>
-      <div className="text-purple-600 dark:text-purple-400">&lt;style data-styled="active"&gt;.btn-primary {'{ background: #000; color: #fff; }'}&lt;/style&gt;</div>
+      <div className="text-zinc-500">// useServerInsertedHTML을 통해 HTML <head>에 사전 주입된 스타일:</div>
+      <div className="text-purple-600 dark:text-purple-400"><style data-styled="active">.btn-primary {'{ background: #000; color: #fff; }'}</style></div>
     </div>
   )
 }`
@@ -1245,7 +1245,7 @@ export function JsonLdProductDemo() {
   }
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-emerald-400 space-y-1">
-      <div className="text-zinc-400">// HTML &lt;head&gt;에 출력되는 JSON-LD 스키마:</div>
+      <div className="text-zinc-400">// HTML <head>에 출력되는 JSON-LD 스키마:</div>
       <pre>{JSON.stringify(jsonLd, null, 2)}</pre>
     </div>
   )
@@ -1340,7 +1340,7 @@ export function MdxCustomSlotDemo() {
   const [added, setAdded] = useState(false)
   return (
     <div className="rounded border border-blue-200 bg-white p-4 shadow-2xs dark:border-blue-900 dark:bg-zinc-950 space-y-2">
-      <div className="text-xs font-bold text-blue-950 dark:text-blue-200">MDX 본문 내 주입된 구매 컴포넌트 (&lt;BuyButton /&gt;)</div>
+      <div className="text-xs font-bold text-blue-950 dark:text-blue-200">MDX 본문 내 주입된 구매 컴포넌트 (<BuyButton />)</div>
       <button type="button" onClick={() => setAdded(true)} className="rounded bg-blue-600 px-3 py-1.5 text-xs font-bold text-white shadow-2xs cursor-pointer">
         {added ? '✓ 장바구니에 담김' : '문서에서 바로 구매하기 (149,000원)'}
       </button>
@@ -1358,7 +1358,7 @@ import React from 'react'
 export function ThirdPartyGaDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">
-      <div className="font-bold text-zinc-900 dark:text-zinc-100">&lt;GoogleAnalytics gaId="G-2026STUDY" /&gt;</div>
+      <div className="font-bold text-zinc-900 dark:text-zinc-100"><GoogleAnalytics gaId="G-2026STUDY" /></div>
       <div className="text-emerald-600">✓ 최적화된 웹 워커 비동기 수집 활성화됨</div>
     </div>
   )
@@ -1469,7 +1469,7 @@ export function I18nSubpathDemo() {
         <button type="button" onClick={() => setLang('ja')} className={\`rounded px-3 py-1 font-bold \${lang === 'ja' ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'bg-zinc-100 dark:bg-zinc-800'}\`}>🇯🇵 /ja/shop</button>
       </div>
       <div className="rounded bg-zinc-50 p-3 text-xs dark:bg-zinc-900 font-mono">
-        선택된 언어 세그먼트: /{lang}/products -&gt; {lang === 'ko' ? '장바구니 담기' : lang === 'en' ? 'Add to Cart' : 'カートに入れる'}
+        선택된 언어 세그먼트: /{lang}/products -> {lang === 'ko' ? '장바구니 담기' : lang === 'en' ? 'Add to Cart' : 'カートに入れる'}
       </div>
     </div>
   )
@@ -1853,7 +1853,7 @@ export function TemplateRemountDemo() {
         <button type="button" onClick={() => setKey(k => k + 1)} className="rounded bg-purple-600 px-3 py-1 text-xs font-bold text-white cursor-pointer">페이지 전환 (리마운트)</button>
       </div>
       <div key={key} className="rounded bg-purple-50 p-3 text-xs text-purple-950 dark:bg-purple-950/40 dark:text-purple-200 animate-pulse font-mono">
-        ✓ 새 템플릿 인스턴스 마운트됨 -&gt; 폼 입력값 및 스크롤 자동 초기화
+        ✓ 새 템플릿 인스턴스 마운트됨 -> 폼 입력값 및 스크롤 자동 초기화
       </div>
     </div>
   )
@@ -2007,7 +2007,7 @@ import React from 'react'
 export function SingleParamDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs">
-      <span className="font-bold text-zinc-900 dark:text-zinc-100">URL /products/101 매칭 -&gt; params.id = "101"</span>
+      <span className="font-bold text-zinc-900 dark:text-zinc-100">URL /products/101 매칭 -> params.id = "101"</span>
     </div>
   )
 }`
@@ -2022,7 +2022,7 @@ import React from 'react'
 export function CatchAllSlugDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs">
-      <span className="font-bold text-zinc-900 dark:text-zinc-100">URL /shop/clothing/tops -&gt; params.slug = ["clothing", "tops"]</span>
+      <span className="font-bold text-zinc-900 dark:text-zinc-100">URL /shop/clothing/tops -> params.slug = ["clothing", "tops"]</span>
     </div>
   )
 }`
@@ -2250,7 +2250,7 @@ export function MetadataOgBannerDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-white space-y-1">
       <div className="text-blue-400">// opengraph-image.tsx:</div>
-      <div>return new ImageResponse(&lt;div style={'{{ fontSize: 60 }}'}&gt;50% 타임 세일!&lt;/div&gt;, {'{ width: 1200, height: 630 }'})</div>
+      <div>return new ImageResponse(<div style={'{{ fontSize: 60 }}'}>50% 타임 세일!</div>, {'{ width: 1200, height: 630 }'})</div>
     </div>
   )
 }`
@@ -2390,8 +2390,8 @@ import React from 'react'
 export function ImagePriorityLcpDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-white space-y-1">
-      <div className="text-blue-400">&lt;Image src="/hero.png" priority alt="Hero" /&gt;</div>
-      <div className="text-emerald-400">→ &lt;link rel="preload" as="image" href="/_next/image?url=/hero.png..." /&gt; 자동 주입됨</div>
+      <div className="text-blue-400"><Image src="/hero.png" priority alt="Hero" /></div>
+      <div className="text-emerald-400">→ <link rel="preload" as="image" href="/_next/image?url=/hero.png..." /> 자동 주입됨</div>
     </div>
   )
 }`
@@ -2407,7 +2407,7 @@ export function LinkSoftNavScrollDemo() {
   const [scrollOpt, setScrollOpt] = useState(false)
   return (
     <div className="space-y-3 rounded border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 text-xs">
-      <div className="font-bold text-zinc-900 dark:text-zinc-100">현재 링크 설정: &lt;Link scroll={'{' + String(scrollOpt) + '}'}&gt;</div>
+      <div className="font-bold text-zinc-900 dark:text-zinc-100">현재 링크 설정: <Link scroll={'{' + String(scrollOpt) + '}'}></div>
       <button type="button" onClick={() => setScrollOpt(s => !s)} className="rounded bg-blue-600 px-3 py-1 font-bold text-white cursor-pointer">
         scroll 속성 토글 (현재: {String(scrollOpt)})
       </button>

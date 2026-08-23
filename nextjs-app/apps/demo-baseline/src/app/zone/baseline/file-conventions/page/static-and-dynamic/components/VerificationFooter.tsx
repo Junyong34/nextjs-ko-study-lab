@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="정적(Static) vs 동적(Dynamic) page.tsx 렌더링">
+      <DemoDeepDiveCard title="정적(Static) vs 동적(Dynamic) page.tsx 렌더링 수명 주기">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>정적(Static) vs 동적(Dynamic) page.tsx 렌더링는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>page.tsx</code>는 특정 라우트 세그먼트의 고유 UI를 정의하는 메인 파일입니다. 빌드 타임에 정적 HTML로 사전 렌더링되는 정적 렌더링(Static Rendering)과, 요청 시점마다 서버에서 최신 데이터를 연산하는 동적 렌더링(Dynamic Rendering)으로 자동 분기됩니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(정적(Static) vs 동적(Dynamic) page.tsx 렌더링)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 쿠키/헤더/<code>searchParams</code> 등 동적 함수(Dynamic Functions)를 사용하지 않는 정적 카탈로그 페이지(0ms CDN 서빙)와, 실시간 재고 조회 및 사용자 맞춤 가격을 계산하는 동적 페이지의 서버 렌더링 타임스탬프와 응답 헤더 차이를 비교 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>자동 최적화(Automatic Static Optimization)</strong>: 동적 API가 없는 페이지를 빌드 타임에 정적 HTML/RSC 페이로드로 자동 컴파일하여 TTFB를 0ms 수준으로 단축합니다.</li>
+              <li><strong>서버 부하 분산</strong>: 정적 페이지는 CDN Edge에서 즉각 서빙되어 원본 DB 및 백엔드 서버의 트래픽 병목을 완화합니다.</li>
+              <li><strong>하이브리드 유연성</strong>: 동일한 애플리케이션 내에서 SEO가 중요한 정적 콘텐츠와 실시간 데이터가 필요한 개인화 화면을 자유롭게 혼용합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>회사 소개, 서비스 이용약관, 자주 묻는 질문(FAQ) 등 변경 빈도가 낮은 정적 SSG 페이지</li>
+              <li>사용자 위치별 실시간 재고 현황 및 맞춤형 할인 혜택이 적용되는 동적 상품 상세 페이지</li>
+              <li>실시간 결제 승인 결과 및 배송 추적 화면</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>동적 함수 사용 시 Dynamic 전환 주의</strong>: <code>cookies()</code>, <code>headers()</code>, <code>searchParams</code>를 읽는 순간 해당 세그먼트 전체가 동적 렌더링으로 전환되므로, 정적 캐싱을 유지하려면 해당 참조를 Suspense 하위 컴포넌트로 격리해야 합니다.</li>
+              <li><strong>generateStaticParams 연계</strong>: 동적 세그먼트(<code>[id]</code>)를 정적으로 빌드하려면 <code>generateStaticParams()</code>를 선언하여 빌드 타임 생성 파라미터 목록을 제공해야 합니다.</li>
             </ul>
           </div>
         </div>

@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="useTransition 연동 디바운스 검색 쿼리 동기화">
+            <DemoDeepDiveCard title="useTransition 연동 디바운스 검색 쿼리 동기화">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>useTransition 연동 디바운스 검색 쿼리 동기화는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>useSearchParams()</code>와 <code>useTransition</code>을 결합하면 검색어 입력 시 디바운스(Debounce) 타이머를 적용하고, URL 쿼리 변경과 서버 렌더링을 React의 우선순위 트랜지션으로 스케줄링하여 타이핑 끊김을 원천 차단합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(useTransition 연동 디바운스 검색 쿼리 동기화)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 검색창에 키워드를 빠르게 입력할 때 로컬 상태로 인풋 값을 즉시 반영하고, 300ms 디바운스 후 <code>startTransition(() ={'>'} router.replace('?q=...'))</code>을 실행하여 부드러운 URL 동기화와 서버 검색 결과 스트리밍을 수행합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>타이핑 끊김(INP) 제로</strong>: URL 변경과 네트워크 요청을 백그라운드 트랜지션으로 처리하여 사용자 입력 반응성을 100% 보장합니다.</li>
+              <li><strong>불필요한 네트워크 요청 90% 절감</strong>: 디바운스를 통해 매 키스트로크마다 발생하는 과도한 서버 쿼리 요청을 방지합니다.</li>
+              <li><strong>뒤로가기 스택 오염 방지</strong>: <code>router.replace</code>를 사용하여 중간 검색어 타이핑 기록이 브라우저 히스토리에 쌓이지 않도록 정리합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>대규모 이커머스 자동완성 및 상품 실시간 통합 검색바</li>
+              <li>관리자 주문 목록의 고객명/전화번호 실시간 라이브 필터링</li>
+              <li>지도 기반 매장 위치 검색 및 주소 자동완성 입력창</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>로컬 제어 상태 분리</strong>: URL searchParams를 input의 value로 직접 바인딩하면 디바운스 지연 동안 타이핑이 버벅이므로 로컬 <code>useState</code>와 분리해야 합니다.</li>
+              <li><strong>컴포넌트 언마운트 타이머 정리</strong>: <code>useEffect</code> 내 디바운스 구현 시 <code>clearTimeout</code> 반환 함수를 작성하여 메모리 누수를 방지해야 합니다.</li>
             </ul>
           </div>
         </div>

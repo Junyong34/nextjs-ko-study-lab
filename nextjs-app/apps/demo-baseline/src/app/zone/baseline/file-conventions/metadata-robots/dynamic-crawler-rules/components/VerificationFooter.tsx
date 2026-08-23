@@ -63,20 +63,46 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router의 robots.ts 특수 파일을 통한 검색 로봇 접근 제어 및 SEO 정책 동적 구성을 검증합니다."}
       />
-      <DemoDeepDiveCard title="동적 검색 크롤러 규칙 (robots.ts)">
+      <DemoDeepDiveCard title="동적 검색 크롤러 규칙 (robots.ts) & 환경별 인덱싱 제어">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 규칙</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              <code>app</code> 디렉토리 루트에 <code>robots.(ts|js|txt)</code>를 배치하면 Next.js가 <code>/robots.txt</code> 경로로 요청을 수신하여 텍스트 형식의 검색 로봇 지침을 자동 반환합니다.
+              <code>robots.ts</code>는 App Router 루트 세그먼트에서 <code>MetadataRoute.Robots</code> 객체를 반환하여 검색엔진 크롤러(Googlebot, Yeti 등)를 위한 <code>/robots.txt</code> 텍스트 지침을 동적으로 생성하고 서빙하는 표준 파일입니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 동적 규칙의 장점</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              스테이징(Staging) 환경에서는 모든 로봇을 차단(<code>Disallow: /</code>)하고 프로덕션 환경에서는 정상 인덱싱을 허용하도록 환경변수(<code>process.env.VERCEL_ENV</code>)에 따라 동적으로 분기할 수 있습니다.
+              본 데모에서는 실행 환경(<code>process.env.VERCEL_ENV</code> 또는 <code>NODE_ENV</code>)에 따라 스테이징/QA 서버에서는 전체 크롤링을 차단(<code>Disallow: /</code>)하고, 프로덕션 환경에서는 관리자/결제 경로(<code>Disallow: ['/admin', '/checkout']</code>)만 선별 차단하며 사이트맵 인덱스 URL을 동적으로 주입하는 규칙을 검증합니다.
             </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>개발/스테이징 검색 노출 사고 원천 방지</strong>: 환경변수 조건문을 통해 테스트 사이트가 검색엔진에 무단 색인되는 치명적인 SEO 사고를 차단합니다.</li>
+              <li><strong>TypeScript 기반 크롤링 규칙 정의</strong>: 오타나 잘못된 포맷 없이 타입 안전하게 User-Agent, Allow, Disallow, Sitemap URL을 관리합니다.</li>
+              <li><strong>도메인별 멀티 호스트 대응</strong>: 요청 호스트 헤더에 따라 서로 다른 브랜드 도메인의 사이트맵 경로를 유연하게 분기합니다.</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li>프로덕션 vs 스테이징/QA 환경별 검색 인덱싱 자동 허용/차단</li>
+              <li>관리자 대시보드 및 개인정보/결제 페이지의 크롤러 접근 차단</li>
+              <li>멀티 도메인 쇼핑몰의 국가별 사이트맵 URL 동적 매핑</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>public/robots.txt 삭제 필수</strong>: <code>public/robots.txt</code> 정적 텍스트 파일이 존재하면 동적 <code>robots.ts</code>가 무시되므로 정적 파일은 반드시 제거해야 합니다.</li>
+              <li><strong>Sitemap 절대 URL 작성</strong>: <code>sitemap</code> 속성에는 상대 경로가 아닌 전체 도메인을 포함한 절대 URL(<code>https://example.com/sitemap.xml</code>)을 입력해야 검색 크롤러가 올바르게 인식합니다.</li>
+            </ul>
           </div>
         </div>
       </DemoDeepDiveCard>

@@ -9,26 +9,28 @@ export default function CssModulesDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="CSS Modules 스코프 격리 & 해시 클래스 충돌 방지"
-        concept="CSS Modules(.module.css)는 각 컴포넌트별로 고유한 해시 클래스명을 생성하여 로컬 스코프를 만듭니다. 서로 다른 컴포넌트 파일에서 .card, .title, .badge, .action 같은 동일한 클래스명을 선언해도 전역 오염 없이 안전하게 독립 스타일이 적용됩니다."
+        title="Next.js CSS Modules 컴포넌트 스코프 격리 & 고유 클래스 해시"
+        concept="동일한 클래스명(.card, .title)을 사용하더라도 Next.js App Router 빌드 엔진이 [name]_[local]__[hash] 형태의 고유 해시 클래스를 자동 생성하여 전역 오염 0건의 완벽한 스타일 격리를 보장합니다."
         steps={[
           {
             step: 1,
-            title: '동일 클래스명 선언 구조 확인',
-            description: 'ProductCard.module.css와 PromotionBannerCard.module.css가 모두 .card, .title, .badge 클래스를 사용합니다.',
-            actionBadge: '클래스명 동일',
+            title: '동일 클래스명(.card) 독립 컴포넌트 렌더링 확인',
+            description: 'ProductCard와 PromotionBannerCard가 동일한 .card, .title, .action 클래스를 사용함에도 독립된 배경색과 스타일로 렌더링된 것을 확인합니다.',
+            actionBadge: '스코프 격리 확인',
           },
           {
             step: 2,
-            title: '독립 렌더링 결과 확인',
-            description: '상품 카드는 Blue 테마, 프로모션 배너는 Emerald 테마가 각각 충돌 없이 격리 적용됩니다.',
-            actionBadge: '스코프 격리',
+            title: '[장바구니 담기] 및 [할인쿠폰 즉시 받기] 버튼 인터랙션',
+            description: '각 카드의 액션 버튼을 클릭하여 독립된 컴포넌트 스코프 상태 변경을 확인합니다.',
+            actionBadge: '컴포넌트 인터랙션',
           },
           {
             step: 3,
-            title: '해시 클래스 네이밍 원리 학습',
-            description: 'Next.js 빌드 시 각 컴포넌트별 고유 해시(예: ProductCard_card__xxx)가 부여되어 스타일이 충돌하지 않습니다.',
-            actionBadge: '빌드 타임 해싱',
+            title: '컴포넌트별 고유 해시 클래스 구조 관찰',
+            description: 'CSS Modules가 생성한 [name]_[local]__[hash] 형태의 고유 클래스 스코프 분리를 대조 관찰합니다.',
+            actionBadge: '해시 격리 검증',
+            observe: 'ProductCard와 PromotionBannerCard가 동일한 .card, .action 클래스를 사용해도 독립된 스타일로 격리 렌더링됨',
+            observeAt: 'playground',
           },
         ]}
       />

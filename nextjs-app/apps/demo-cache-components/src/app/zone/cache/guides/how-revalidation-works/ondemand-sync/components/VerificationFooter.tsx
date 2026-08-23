@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="온디맨드 캐시 무효화 및 즉시 동기화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>온디맨드 캐시 무효화 및 즉시 동기화는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Server Action 기반 온디맨드 재검증 동기화 수명 주기">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>온디맨드 재검증(On-Demand Revalidation)은 사용자의 데이터 변경 액션(Server Action) 직후 <code>revalidateTag()</code> 또는 <code>revalidatePath()</code>를 트리거하여, 서버의 Data Cache와 CDN 캐시를 즉시 만료시키고 최신 RSC 페이로드를 단일 네트워크 왕복 내에서 클라이언트에 동기화하는 수명 주기 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(온디맨드 캐시 무효화 및 즉시 동기화)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 [상품 옵션 변경] 폼 제출 시 Server Action 실행 -{'>'} DB 업데이트 -{'>'} <code>revalidateTag('product-options')</code> 실행 -{'>'} 최신 RSC 스트림 수신 -{'>'} 클라이언트 UI 갱신으로 이어지는 5단계 동기화 라이프사이클을 실시간 타임라인으로 대조 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>단일 네트워크 요청 완결</strong>: 데이터 변이(POST)와 변경된 화면 데이터 수신이 1회의 HTTP 왕복으로 처리되어 네트워크 핑퐁을 제거합니다.</li>
+                    <li><strong>클라이언트 상태 관리 부담 제로</strong>: Redux나 Zustand에 복잡한 서버 데이터 캐시를 복사해둘 필요 없이 서버가 항상 최신 상태를 제공합니다.</li>
+                    <li><strong>다중 기기 동시성 보장</strong>: 모바일 앱이나 다른 PC 브라우저에서 변경한 내용도 서버 캐시가 즉시 퍼지되어 모든 클라이언트에 최신 데이터가 보장됩니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>장바구니 담기 후 상단 미니 장바구니 카운트 즉시 동기화</li>
+                    <li>주문 배송지 변경 후 주문서 화면의 기본 배송지 텍스트 갱신</li>
+                    <li>상품 Q&A 등록 후 질문 목록 즉각 업데이트</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>트랜잭션 순서 엄수</strong>: 반드시 데이터베이스 저장이 성공적으로 커밋(Commit)된 후에 <code>revalidateTag</code>를 호출해야 DB 롤백 시 잘못된 캐시 무효화가 발생하는 것을 방지할 수 있습니다.</li>
+                    <li><strong>낙관적 UI(useOptimistic)와의 조화</strong>: 초기 반응성은 <code>useOptimistic</code>으로 0ms 처리하고, 최종 서버 정합성은 온디맨드 재검증으로 맞추는 것이 이상적입니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

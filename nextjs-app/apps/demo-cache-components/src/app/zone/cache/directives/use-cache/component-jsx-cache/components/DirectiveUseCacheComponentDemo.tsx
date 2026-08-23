@@ -84,7 +84,7 @@ export function DirectiveUseCacheComponentDemo() {
               JSX CACHE HIT
             </span>
             <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 font-mono">
-              &lt;BestSellerRankingHero category="{category}" /&gt;
+              {'<'}BestSellerRankingHero category="{category}" /{'>'}
             </span>
           </div>
           <span className="font-mono text-[11px] text-indigo-700 dark:text-indigo-300">

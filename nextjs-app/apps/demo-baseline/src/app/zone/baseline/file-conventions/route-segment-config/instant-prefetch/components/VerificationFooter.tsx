@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="세그먼트 즉시 프리패칭 (instant)">
+      <DemoDeepDiveCard title="Next.js 프리페칭 아키텍처 & Router Cache 기반 인스턴트 내비게이션">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>export const instant = true (또는 인스턴트 프리페치 세그먼트 설정)는 뷰포트에 노출된 링크의 라우트 페이로드를 즉시 백그라운드 프리페치하여 페이지 이동 지연을 0ms로 단축하는 스펙입니다.</p>
+            <p>
+              Next.js App Router는 <code>{'<'}Link prefetch{'>'}</code> 컴포넌트와 클라이언트 Router Cache, 그리고 부분 사전 렌더링(PPR)을 결합하여 페이지 이동 지연을 0ms로 단축하는 인스턴트 내비게이션 아키텍처를 제공합니다. (참고: Route Segment Config에 별도의 <code>export const instant</code> 상수는 존재하지 않으며, Link 컴포넌트 및 PPR 설정으로 제어합니다.)
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>사용자가 네비게이션 링크를 호버하거나 뷰포트에 진입할 때 Next.js 라우터 캐시에 세그먼트 RSC 페이로드를 즉시 사전 적재하여 클릭 순간 즉각 전환합니다.</p>
+            <p>
+              본 데모에서는 사용자의 뷰포트에 <code>{'<'}Link href="/products/101" prefetch={'{'}true{'}'}{'>'}</code>가 노출되거나 호버되는 순간, Next.js 라우터가 백그라운드에서 RSC 페이로드(또는 PPR 정적 셸)를 사전에 가져와 메모리 캐시에 적재함으로써 클릭 즉시 0ms 화면 전환을 구현합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>완벽한 앱 네이티브급 체감 반응 속도: 네트워크 지연 없이 즉각적인 화면 전환을 제공하여 이커머스 이탈률을 획기적으로 낮춥니다.</li>
-              <li>네트워크 대역폭 스마트 절약: 변경되지 않은 상위 레이아웃은 캐시를 유지하고 변경되는 하위 세그먼트만 선별 프리페치합니다.</li>
-              <li>쇼핑몰 구매 전환율 극대화: 장바구니 및 결제 단계로의 빠른 전환을 통해 고객 이탈을 방지합니다.</li>
+              <li><strong>네이티브 앱 수준의 반응 속도</strong>: 네트워크 왕복 시간(RTT)을 사용자의 클릭 전에 미리 소비하여 전환 체감 속도를 극대화합니다.</li>
+              <li><strong>대역폭 지능형 절약</strong>: 변경되지 않은 상위 레이아웃을 제외하고 변경되는 하위 세그먼트 데이터만 선별적으로 프리페치합니다.</li>
+              <li><strong>이커머스 구매 전환율 증대</strong>: 상품 목록에서 상세 페이지 및 주문서로의 이동 이탈률을 획기적으로 낮춥니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>베스트셀러 및 타임세일 상품 상세 페이지 링크 프리페칭</li>
-              <li>메인 카테고리 네비게이션 및 GNB 탭 메뉴 화면 전환</li>
-              <li>장바구니에서 주문서 작성 페이지로의 신속한 결제 플로우 연결</li>
+              <li>쇼핑몰 메인 GNB 카테고리 탭 메뉴 및 베스트셀러 배너 링크</li>
+              <li>장바구니 화면의 [주문서 작성/결제하기] CTA 버튼 사전 로드</li>
+              <li>검색 결과 목록 상위 노출 1~3위 핵심 상품 상세 링크</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>과도한 prefetch=true 지양</strong>: 링크가 수백 개 존재하는 대규모 리스트에서 <code>prefetch={'{'}true{'}'}</code>를 남용하면 서버 트래픽과 모바일 데이터가 낭비되므로, 기본 뷰포트 프리페치(정적 셸/loading.tsx까지만 로드)를 사용하는 것이 안전합니다.</li>
+              <li><strong>staleTimes 튜닝</strong>: 동적 데이터의 최신성이 중요한 경우 <code>next.config.ts</code>의 <code>experimental.staleTimes.dynamic</code> 설정을 통해 Router Cache 유효 시간을 조율해야 합니다.</li>
             </ul>
           </div>
         </div>

@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• Tailwind CSS v4 유틸리티 클래스 &amp; 반응형 스타일 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• Tailwind CSS v4 유틸리티 클래스 & 반응형 스타일 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,43 +57,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Tailwind CSS v4 유틸리티 클래스 &amp; 반응형 스타일 실증 검증"
+        title="Tailwind CSS v4 유틸리티 클래스 & 반응형 스타일 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Tailwind CSS v4 유틸리티 클래스 &amp; 반응형 스타일">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Tailwind CSS v4 유틸리티 클래스 &amp; 반응형 스타일는 Next.js App Router의 css 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Tailwind CSS v4 유틸리티 클래스 & 반응형 스타일">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Tailwind CSS v4는 차세대 초고속 엔진(Oxide)과 CSS-first 아키텍처를 기반으로, <code>@theme</code> 지시어를 통해 제로 자바스크립트 런타임으로 동작하며 현대적 CSS 변수와 유틸리티 클래스를 제공하는 표준 스타일 프레임워크 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Tailwind CSS v4 유틸리티 클래스 &amp; 반응형 스타일)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 반응형 브레이크포인트(<code>sm:</code>, <code>md:</code>, <code>lg:</code>), 다크모드(<code>dark:</code>), 상태 가상 클래스(<code>hover:</code>, <code>focus:</code>) 유틸리티를 적용하여 화면 크기 및 사용자 테마 전환에 따른 레이아웃 변화를 실시간으로 렌더링합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>제로 런타임 오버헤드</strong>: JS 파싱 및 런타임 스타일 계산 비용이 없어 Next.js App Router의 SSR 및 Hydration 성능을 극대화합니다.</li>
+                    <li><strong>극단적인 CSS 번들 경량화</strong>: 템플릿에 실제 작성된 유틸리티 클래스만 빌드 타임에 스캔하여 수십 KB 수준의 최소 CSS 파일만 배포합니다.</li>
+                    <li><strong>디자인 토큰 표준화</strong>: <code>@theme</code> 토큰 기반의 색상, 타이포그래피, 간격 규칙을 전사 UI 컴포넌트에 일관되게 적용합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>모바일 우선(Mobile-first) 반응형 쇼핑몰 상품 그리드 및 기획전 레이아웃</li>
+                    <li>시스템 설정 및 사용자 토글에 따른 다크모드 지원 관리자 대시보드</li>
+                    <li>고속 프로토타이핑 및 대규모 프론트엔드 디자인 시스템 구축</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>동적 클래스 템플릿 리터럴 주의</strong>: <code>className={'{'}clsx('text-' + color){'}'}</code>와 같은 런타임 문자열 합성은 빌드 시 정적 스캐너가 인식하지 못하므로, 사전 정의된 전체 클래스 매핑 객체(<code>colorMap[color]</code>)를 사용해야 합니다.</li>
+                    <li><strong>Tailwind v4 설정 방식</strong>: v4에서는 <code>tailwind.config.js</code> 대신 글로벌 CSS 파일의 <code>@import "tailwindcss";</code> 및 <code>@theme</code> 블록에서 테마를 직접 정의합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

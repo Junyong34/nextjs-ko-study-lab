@@ -60,7 +60,7 @@ export function FormStatusDemo() {
           React 19 useFormStatus 하위 버튼 상태 감지 콘솔
         </h4>
         <p className="text-xs text-zinc-500">
-          부모 &lt;form&gt;의 제출 상태를 props 드릴링 없이 독립적인 하위 컴포넌트에서 훅으로 즉시 구독합니다.
+          부모 {'<'}form{'>'}의 제출 상태를 props 드릴링 없이 독립적인 하위 컴포넌트에서 훅으로 즉시 구독합니다.
         </p>
       </div>
 

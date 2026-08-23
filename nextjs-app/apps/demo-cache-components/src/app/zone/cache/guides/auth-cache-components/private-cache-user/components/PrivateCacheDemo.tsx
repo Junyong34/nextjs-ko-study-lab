@@ -9,7 +9,7 @@ export function PrivateCacheDemo() {
         <button type="button" onClick={() => setUser('user_B')} className={`rounded px-3 py-1 font-bold ${user === 'user_B' ? 'bg-purple-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800'}`}>사용자 B</button>
       </div>
       <div className="rounded bg-zinc-50 p-3 text-xs dark:bg-zinc-900 font-mono">
-        캐시 격리 키: private:session:{user} -&gt; 장바구니 {user === 'user_A' ? '3개' : '1개'} 캐시됨
+        캐시 격리 키: private:session:{user} -{'>'} 장바구니 {user === 'user_A' ? '3개' : '1개'} 캐시됨
       </div>
     </div>
   )

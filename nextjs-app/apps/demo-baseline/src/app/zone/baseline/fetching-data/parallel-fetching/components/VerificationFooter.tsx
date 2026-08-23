@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Promise.all 병렬 데이터 패칭 vs 직렬 Waterfall 대조">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Promise.all 병렬 데이터 패칭 vs 직렬 Waterfall 대조는 Next.js App Router의 fetching-data 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Promise.all 병렬 데이터 패칭 vs 직렬 Waterfall 대조">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js Server Component에서 독립적인 비동기 I/O 작업들을 <code>await Promise.all([req1, req2])</code>로 동시 발송하여 직렬 Waterfall 지연(<code>t1 + t2</code>)을 제거하고 총 응답 시간을 최대 지연(<code>max(t1, t2)</code>)으로 단축하는 표준 데이터 패칭 패턴입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Promise.all 병렬 데이터 패칭 vs 직렬 Waterfall 대조)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 사용자 정보 조회(300ms)와 상품 주문 내역 조회(400ms)를 직렬(총 700ms)과 병렬(총 400ms)로 각각 실행하여 네트워크 타임라인과 레이턴시 차이를 실시간으로 비교 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>서버 응답 속도(TTFB) 단축</strong>: 다중 마이크로서비스 또는 DB 쿼리 호출 시 대기 시간을 획기적으로 절감하여 첫 바이트 도달 시간을 최적화합니다.</li>
+                    <li><strong>서버 리소스 처리량 향상</strong>: I/O 대기 시간을 줄여 단일 인스턴스가 처리할 수 있는 동시 요청 처리량(Throughput)을 증대시킵니다.</li>
+                    <li><strong>단일 렌더 사이클 일괄 바인딩</strong>: 병렬로 로드된 데이터를 하나의 완성된 Server Component 트리에 즉시 바인딩하여 렌더링 일관성을 유지합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>마이페이지 진입 시 사용자 프로필, 장바구니 요약, 최근 본 상품 목록을 동시 조회</li>
+                    <li>상품 상세 페이지에서 기본 상품 정보와 판매자 정보 및 리뷰 평점 병렬 조회</li>
+                    <li>관리자 대시보드에서 일간 매출 통계, 신규 가입자 수, 미처리 문의 현황 동시 패치</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>Promise.allSettled를 통한 부분 실패 격리</strong>: 비필수 데이터(e.g. 추천 배너) 실패 시 전체 페이지가 크래시되지 않도록 <code>Promise.allSettled</code>를 적용하고 개별 에러 폴백을 처리하는 것이 안전합니다.</li>
+                    <li><strong>Suspense 스트리밍과의 조화</strong>: 병렬 처리 중 극도로 느린 작업이 포함된 경우 <code>Promise.all</code>로 전체 응답을 지연시키는 대신 <code>{'<'}Suspense{'>'}</code>로 분리하여 점진적 스트리밍을 적용해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

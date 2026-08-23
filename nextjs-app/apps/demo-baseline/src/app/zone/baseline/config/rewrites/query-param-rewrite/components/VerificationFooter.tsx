@@ -63,33 +63,40 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="rewrites() 쿼리 파라미터 매핑 라우팅">
+            <DemoDeepDiveCard title="next.config.ts rewrites() 쿼리 파라미터 변환 및 Vanity URL 라우팅">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>rewrites()의 has: [&#123; type: &apos;query&apos;, key: &apos;...&apos; &#125;] 옵션은 요청의 쿼리스트링 파라미터를 기반으로 특정 목적지 경로로 요청을 조건부 중계하는 스펙입니다.</p>
+            <p><code>rewrites()</code> 설정을 통해 복잡한 내부 쿼리 스트링 경로(예: <code>/catalog?category=fashion&sort=popular</code>)를 직관적인 단축 가상 URL(예: <code>/fashion-popular</code>)로 투명하게 매핑하는 설정 스펙입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>?campaign=summer2026 쿼리가 감지되면 서버 내부에서 프로모션 전용 렌더링 세그먼트로 요청을 rewrite하여 동일한 기본 경로에서 타겟 맞춤형 콘텐츠를 서빙합니다.</p>
+            <p>본 데모에서는 사용자가 간결한 브랜드 기획전 URL(<code>/brand/:slug</code>)로 접속하면, <code>rewrites()</code> 룰이 내부 목적지(<code>/shop/brand-detail?brandSlug=:slug</code>)로 파라미터를 캡처 및 주입하여 서버 컴포넌트가 정상적으로 데이터를 조회하도록 전달합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>서버 사이드 라우트 분기: 클라이언트 분기 로직 없이 서버 라우팅 엔진에서 최적화된 컴포넌트 트리를 즉시 서빙합니다.</li>
-              <li>마케팅 캠페인 링크 관리 단순화: 사용자가 공유한 쿼리 파라미터에 따라 주소창 변경 없이 전용 이벤트 레이아웃을 제공합니다.</li>
-              <li>독립 캐시 분리: 프로모션별 독립적인 캐시 정책을 라우트 수준에서 깔끔하게 분리 적용합니다.</li>
+              <li><strong>마케팅 친화적 Vanity URL 제공</strong>: 인쇄물, SNS 광고, 배너에 노출하기 적합한 짧고 기억하기 쉬운 URL을 제공합니다.</li>
+              <li><strong>검색엔진 최적화(SEO) 친화적 경로 구성</strong>: 복잡한 쿼리 스트링 대신 의미 있는 키워드가 포함된 정적 슬러그 구조를 완성합니다.</li>
+              <li><strong>내부 아키텍처 은닉</strong>: 백엔드 데이터베이스 구조나 내부 라우팅 파라미터를 외부에 노출하지 않고 캡슐화합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>광고 추적 파라미터(?utm_source=...) 기반 전용 랜딩 페이지 rewrite</li>
-              <li>VIP 회원 전용 프로모션 쿼리 기반 특가 할인 화면 서빙</li>
-              <li>A/B 테스트 파라미터에 따른 동적 페이지 분기 처리</li>
+              <li>시즌 마케팅 캠페인 단축 프로모션 URL (<code>/blackfriday</code> -{'>'} <code>/events?type=bf2026</code>)</li>
+              <li>인플루언서 제휴 마케팅 링크 (<code>/partner/:name</code> -{'>'} <code>/shop?ref=:name</code>)</li>
+              <li>카테고리별 인기 랭킹 단축 URL (<code>/best/:category</code> -{'>'} <code>/ranking?cat=:category</code>)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>쿼리 우선순위 및 충돌</strong>: 요청에 이미 존재하는 쿼리 파라미터와 리라이트에서 주입하는 쿼리의 키가 중복될 경우의 덮어쓰기 우선순위를 명확히 설계해야 합니다.</li>
             </ul>
           </div>
         </div>

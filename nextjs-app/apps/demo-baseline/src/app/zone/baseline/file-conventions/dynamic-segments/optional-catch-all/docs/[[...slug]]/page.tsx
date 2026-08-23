@@ -50,7 +50,7 @@ export default async function OptionalCatchAllDocsPage({
           {
             step: 1,
             title: "선택적 세그먼트 params.slug 수신",
-            description: slug ? `하위 경로 '${slug.join('/')}'가 string[] 배열로 수신되었습니다.` : '루트 /docs 진입 시 params.slug는 undefined로 주입됩니다.',
+            description: slug ? `하위 경로 "${slug.join('/')}"가 string[] 배열로 수신되었습니다.` : '루트 /docs 진입 시 params.slug는 undefined로 주입됩니다.',
             actionBadge: slug ? `배열 (${slug.length}개)` : 'undefined (루트)',
           },
           {

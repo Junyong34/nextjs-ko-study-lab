@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• headers().get(&apos;user-agent&apos;) 기기 식별 및 최적화 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• headers().get('user-agent') 기기 식별 및 최적화 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,39 +57,47 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="headers().get(&apos;user-agent&apos;) 기기 식별 및 최적화 실증 검증"
+        title="headers().get('user-agent') 기기 식별 및 최적화 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="headers().get(&apos;user-agent&apos;) 기기 식별 및 최적화">
+            <DemoDeepDiveCard title="headers() 디바이스 및 브라우저 파싱 레이아웃 분기">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>headers().get(&apos;user-agent&apos;)는 클라이언트의 브라우저 및 운영체제 식별 문자열을 서버에서 분석하여 모바일/태블릿/데스크톱 기기를 분류하는 스펙입니다.</p>
+            <p><code>headers()</code> (<code>next/headers</code>)는 HTTP 요청 헤더를 비동기 조회하는 표준 함수입니다. <code>user-agent</code> 헤더 등을 분석하여 서버 사이드 렌더링(SSR) 단계에서 디바이스(모바일/태블릿/데스크톱)에 최적화된 마크업을 사전 렌더링합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>User-Agent 문자열을 파싱하여 인앱 웹뷰(카카오톡, 인스타그램) 여부를 감지하고 전용 간편결제 SDK 분기 및 기기별 최적화 뷰를 서빙합니다.</p>
+            <p>본 데모에서는 서버에서 <code>await headers()</code>를 호출하여 <code>User-Agent</code> 및 <code>Sec-CH-UA-Mobile</code> 헤더를 파싱하고, 클라이언트가 모바일인지 데스크톱인지 판별하여 디바이스 맞춤 레이아웃과 데이터 뷰를 사전 렌더링합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>깜빡임 없는 기기 맞춤 렌더링: 클라이언트 미디어 쿼리 이전에 서버에서 모바일/데스크톱 레이아웃을 직접 전송하여 레이아웃 시프트(CLS)를 방지합니다.</li>
-              <li>인앱 브라우저 호환성 극대화: 외부 앱 웹뷰 환경에서의 결제 팝업 차단 이슈를 선제적으로 우회 처리합니다.</li>
-              <li>모바일 네이티브 연동: 모바일 기기 접속 시 전용 앱스토어 설치 유도 배너를 즉각 렌더링합니다.</li>
+              <li><strong>Zero CLS 디바이스 최적화</strong>: 클라이언트 JS 하이드레이션 후 화면이 번쩍이며 모바일 UI로 전환되는 레이아웃 이동(CLS)을 원천 방지합니다.</li>
+              <li><strong>서버사이드 User-Agent 파싱</strong>: 클라이언트 번들에 무거운 디바이스 판별 라이브러리를 포함하지 않아 번들 크기를 최적화합니다.</li>
+              <li><strong>웹 표준 ReadonlyHeaders 인터페이스</strong>: 표준 <code>get()</code>, <code>has()</code>, <code>forEach()</code> 인터페이스를 제공하여 사용이 직관적입니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>모바일 앱 웹뷰 전용 간편결제(카카오페이, 네이버페이, 애플페이) UI 분기</li>
-              <li>데스크톱 고해상도 갤러리 vs 모바일 스와이프 터치 캐러셀 서버 분기</li>
-              <li>검색 엔진 크롤러(봇) 감지 및 SEO 메타데이터 전용 서빙</li>
+              <li>모바일/데스크톱 뷰포트별 적응형 GNB 메뉴 및 사이드바 렌더링</li>
+              <li>봇/크롤러(Googlebot, NaverBot) 감지 시 맞춤형 SEO 콘텐츠 사전 렌더링</li>
+              <li>글로벌 사용자의 <code>Accept-Language</code> 헤더 기반 기본 언어 감지</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>동적 렌더링(Dynamic Rendering) 전환</strong>: <code>headers()</code> 호출은 요청 시점에만 값을 알 수 있으므로 해당 라우트를 정적(SSG)에서 동적(Dynamic) 렌더링으로 자동 전환시킵니다.</li>
+              <li><strong>Next.js 15+ 비동기 호출</strong>: Next.js 15부터 <code>headers()</code>는 Promise를 반환하므로 반드시 <code>await headers()</code> 또는 React 19 <code>use(headers())</code>로 언래핑해야 합니다.</li>
             </ul>
           </div>
         </div>

@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="[category]/layout.tsx 동적 카테고리 레이아웃">
+      <DemoDeepDiveCard title="동적 세그먼트 레이아웃 ([category]/layout.tsx) 및 파라미터 컨텍스트">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>[category]/layout.tsx 동적 카테고리 레이아웃는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>[category]/layout.tsx</code>는 동적 라우트 세그먼트(Dynamic Segment)에서 동작하는 레이아웃으로, <code>params</code> Promise를 전달받아 동적 카테고리별 공통 헤더, 서브 카테고리 탭, 프로모션 배너를 하위 경로 전체에 일관되게 제공합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름([category]/layout.tsx 동적 카테고리 레이아웃)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 <code>electronics</code>, <code>fashion</code>, <code>food</code> 등 동적 카테고리 파라미터를 변경할 때, 레이아웃 레벨에서 <code>category</code> 값을 읽어 해당 카테고리 전용 서브 네비게이션 탭과 실시간 필터를 렌더링하고 하위 상품 목록 뷰를 감싸는 동작을 실증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>도메인별 맞춤 레이아웃 격리</strong>: 카테고리별 특화 UI(패션 사이즈 필터, 전자기기 스펙 비교 바 등)를 해당 하위 페이지 전체에 선언적으로 적용합니다.</li>
+              <li><strong>서브 네비게이션 상태 영속성</strong>: 카테고리 내부에서 상품 상세나 리뷰 탭 간 이동 시에도 상위 카테고리 헤더와 정렬 기준이 유지됩니다.</li>
+              <li><strong>동적 메타데이터와의 유기적 결합</strong>: <code>generateMetadata</code>와 결합하여 카테고리별 오픈그래프 배너와 SEO 태그를 레이아웃 단위에서 자동 생성합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>대형 이커머스의 카테고리별 특화 기획전 템플릿(의류/가전/식품)</li>
+              <li>다국어 및 지역별 스토어(예: <code>/[country]/[category]</code>) 레이아웃 분기</li>
+              <li>B2B 판매자 전용 센터(예: <code>/[merchantId]/analytics</code>) 상단 브랜드 헤더</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>React 19 비동기 params 처리</strong>: Next.js 15+에서는 레이아웃의 <code>params</code>가 <code>Promise</code> 타입이므로, 서버 컴포넌트에서는 <code>await params</code>, 클라이언트 컴포넌트에서는 <code>use(params)</code>로 언래핑해야 합니다.</li>
+              <li><strong>상위 세그먼트 전환 시 재렌더링</strong>: 동적 파라미터 자체가 바뀌는 경우(예: <code>/fashion</code>에서 <code>/electronics</code>로 이동)에는 레이아웃 인스턴스가 언마운트 후 재생성되므로 내부 상태가 초기화됨에 유의해야 합니다.</li>
             </ul>
           </div>
         </div>

@@ -14,26 +14,28 @@ export default function RouteGroupsRootLayout({
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Route Groups `(folder)` 및 다중 레이아웃 분리"
-        concept="(shop), (auth) 같은 괄호 폴더는 개발자가 코드를 정리하기 위한 그룹일 뿐 URL에는 전혀 노출되지 않습니다. 이를 통해 동일한 레벨의 URL(/products, /login)에 서로 완전히 다른 독립 레이아웃을 입힐 수 있습니다."
+        title="Route Groups (folder) 파일 컨벤션 & 다중 레이아웃 분리"
+        concept="(shop), (auth) 등 괄호로 감싼 Route Groups 폴더는 URL 경로(/products, /login)에 전혀 영향을 주지 않으면서 동일 계층의 라우트에 완전히 독립된 레이아웃을 분리 적용합니다."
         steps={[
           {
             step: 1,
-            title: '로그인 라우트 Link 클릭',
-            description: '상단의 [회원 로그인 페이지 (/login)] 링크를 클릭합니다.',
+            title: '[회원 로그인 페이지 (/login)] 링크 클릭',
+            description: '상단 시뮬레이터에서 [회원 로그인 페이지 (/login)] 링크를 클릭하여 [로그인] 인증 라우트로 이동합니다.',
             actionBadge: '인증 라우트 이동',
           },
           {
             step: 2,
-            title: 'URL 및 레이아웃 대조',
-            description: '주소창에 (auth)가 생략된 /login이 표시되고, GNB가 없는 뷰가 적용된 것을 봅니다.',
-            actionBadge: '독립 레이아웃 확인',
+            title: '독립 (auth) 레이아웃 적용 확인',
+            description: 'URL 경로에는 (auth)가 생략된 /login만 표시되고 GNB가 제거된 단독 로그인 레이아웃이 렌더링되는 것을 확인합니다.',
+            actionBadge: '레이아웃 분리',
           },
           {
             step: 3,
-            title: '상점 라우트 복귀',
-            description: '[상점 상품 카탈로그 (/products)]를 눌러 GNB와 배너가 있는 상점 레이아웃을 봅니다.',
-            actionBadge: '다중 레이아웃 대조',
+            title: '[상점 상품 카탈로그 (/products)] 링크 클릭',
+            description: '[상점 상품 카탈로그 (/products)]를 클릭하여 GNB와 장바구니 요약이 포함된 (shop) 레이아웃으로 즉각 전환되는 것을 관찰합니다.',
+            actionBadge: '상점 레이아웃 전환',
+            observe: 'URL 구조(/login ↔ /products)를 유지하면서 GNB 포함 여부와 레이아웃 구조가 완전히 전환됨',
+            observeAt: 'playground',
           },
         ]}
       />

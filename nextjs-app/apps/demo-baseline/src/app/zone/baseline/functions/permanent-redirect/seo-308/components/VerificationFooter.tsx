@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="permanentRedirect() 영구 URL 변경 (308 Permanent)">
+            <DemoDeepDiveCard title="permanentRedirect() HTTP 308 영구 SEO 리다이렉트">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>redirect()(307/303)와 permanentRedirect()(308)는 Server Actions, Route Handlers, 서버 컴포넌트 내부에서 즉각적인 HTTP 리다이렉트를 트리거하며, 내부적으로 NEXT_REDIRECT 예외를 던져 실행을 즉시 중단하고 브라우저를 대상 URL로 이동시킵니다.</p>
+            <p><code>permanentRedirect()</code> (<code>next/navigation</code>)는 요청 메서드를 보존하면서 영구적인 URL 변경을 선언하는 HTTP 308 Permanent Redirect를 수행합니다. 검색엔진 크롤러에게 자원의 주소가 영구 변경되었음을 알려 이전 URL의 SEO 자산(PageRank)을 신규 URL로 100% 승계시킵니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 Server Action으로 장바구니 주문 결제가 성공하면 redirect(&apos;/orders/success&apos;)를 호출하여 303 See Other로 영수증 화면으로 이동시키고, 단종된 구 상품 접근 시에는 permanentRedirect(&apos;/products/new-01&apos;)로 308 영구 이동을 반환합니다.</p>
+            <p>본 데모에서는 구형 카테고리 URL(<code>/categories/pc-parts</code>) 접근 시 <code>permanentRedirect('/shop/electronics/pc')</code>를 호출하여, 브라우저와 검색엔진 크롤러가 신규 표준 경로를 영구 캐싱하도록 유도합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>결제 완료 후 중복 제출 원천 방지: Post-Redirect-Get(PRG) 패턴을 구현하여 새로고침 시 결제 폼이 재제출되는 현상을 완벽히 차단합니다.</li>
-              <li>검색엔진 영구 랭킹 승계: 308 Permanent Redirect로 단종 상품의 기존 검색 색인 가치를 신상품으로 온전히 전달합니다.</li>
-              <li>트랜잭션 중단 안정성: redirect() 호출 시점 이후의 불필요한 백엔드 코드가 실행되지 않고 즉시 안전하게 탈출합니다.</li>
+              <li><strong>검색엔진 최적화(SEO) 랭킹 보존</strong>: 구 URL에 축적된 백링크 점수와 오가닉 검색 랭킹을 손실 없이 신규 URL로 이전합니다.</li>
+              <li><strong>브라우저 영구 캐싱</strong>: 브라우저가 308 응답을 자체 캐싱하여 다음 방문부터는 서버 요청 없이 즉시 대상 URL로 접속합니다.</li>
+              <li><strong>HTTP 301 대비 메서드 보존</strong>: 레거시 301과 달리 POST/GET 메서드를 엄격히 보존하여 API 엔드포인트 마이그레이션에도 안전합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>주문서 작성 및 결제 승인 완료 후 주문 완료 페이지로 리다이렉트</li>
-              <li>세션 만료 또는 비인가 사용자의 로그인 페이지 강제 리다이렉트</li>
-              <li>쇼핑몰 도메인 개편 및 상품 카테고리 체계 변경 시 영구 리다이렉트(308)</li>
+              <li>도메인 개편 또는 쇼핑몰 전체 카테고리 URL 체계 영구 통합</li>
+              <li>단종 상품의 후속 신제품 공식 페이지로의 영구 리다이렉트</li>
+              <li>소문자/대문자 정규화 및 캐노니컬 URL 표준화</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>강력한 브라우저 캐싱 주의</strong>: 308은 브라우저에 강력하게 영구 캐싱되므로, 잘못된 목적지로 설정 시 사용자 브라우저에서 캐시를 지우기 전까지 되돌리기 어렵습니다. 신중히 검증 후 배포해야 합니다.</li>
+              <li><strong>try/catch 래핑 금지</strong>: 동일하게 내부 예외를 throw하므로 <code>try/catch</code> 블록 외부에서 호출해야 합니다.</li>
             </ul>
           </div>
         </div>

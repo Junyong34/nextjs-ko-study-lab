@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Props 직렬화(Serialization) 및 전달 경계 검증">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Props 직렬화(Serialization) 및 전달 경계 검증는 Next.js App Router의 server-client-components 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Props 직렬화(Serialization) 및 전달 경계 검증">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Server Component에서 Client Component로 데이터를 전달할 때 React Flight 프로토콜을 통과하기 위해 Props는 반드시 JSON 직렬화 가능한 타입(문자열, 숫자, 불리언, 순수 객체, 배열, <code>Date</code>, <code>Promise</code> 등)이어야 하며 함수, 클래스 인스턴스, Symbol 등은 전달할 수 없는 경계 직렬화 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Props 직렬화(Serialization) 및 전달 경계 검증)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 직렬화 가능한 복합 상품 주문 데이터(<code>Date</code> 객체, 중첩 JSON 배열)와 직렬화 불가능한 커스텀 클래스 인스턴스/함수를 각각 Client Component로 전달을 시도할 때의 런타임 직렬화 성공 및 실패(Serialization Error) 메커니즘을 대조 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>네트워크 통신 무결성</strong>: 서버와 클라이언트 간의 데이터 교환이 안전하고 예측 가능한 규격으로 표준화됩니다.</li>
+                    <li><strong>클라이언트 번들 오염 방지</strong>: 서버 비즈니스 로직 함수나 DB 커넥션 인스턴스가 실수로 브라우저 메모리에 유출되는 사고를 원천 차단합니다.</li>
+                    <li><strong>일관된 상태 복원</strong>: 서버에서 직렬화된 데이터가 클라이언트 브라우저에서 동일한 형태의 JS 객체로 정확히 하이드레이션됩니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>서버 DB에서 조회한 상품 생성일(<code>Date</code>) 및 결제 내역 배열을 클라이언트 주문 테이블로 전달</li>
+                    <li>Server Action 함수를 클라이언트 폼의 action Props로 안전하게 바인딩</li>
+                    <li>복합 필터 조건(가격 범위, 카테고리 태그 배열)을 클라이언트 필터 위젯에 초기값으로 전달</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>Date 객체 하이드레이션 주의</strong>: <code>Date</code> 객체는 직렬화되어 전달되지만 서버와 클라이언트의 타임존(Timezone) 차이로 인해 렌더링 불일치(Hydration Mismatch)가 발생할 수 있으므로 UTC 기준 문자열이나 포맷팅된 텍스트 전달을 고려해야 합니다.</li>
+                    <li><strong>함수 전달 시 'use server' 활용</strong>: 클라이언트 컴포넌트에 콜백 함수를 넘겨야 하는 경우 일반 함수가 아닌 <code>'use server'</code>가 선언된 Server Action 함수만 전달할 수 있습니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

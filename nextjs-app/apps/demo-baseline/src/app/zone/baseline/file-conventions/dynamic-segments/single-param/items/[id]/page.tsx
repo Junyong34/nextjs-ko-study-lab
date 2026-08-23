@@ -59,7 +59,7 @@ export default async function SingleParamItemPage({
           {
             step: 1,
             title: "[id] 세그먼트 파라미터 해석",
-            description: `URL 경로의 마지막 세그먼트인 '${id}' 값을 params Promise로부터 언래핑(await params)합니다.`,
+            description: `URL 경로의 마지막 세그먼트인 "${id}" 값을 params Promise로부터 언래핑(await params)합니다.`,
             actionBadge: `id: ${id}`,
           },
           {

@@ -63,33 +63,40 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="headers() 전역 보안 응답 헤더 일괄 주입 (CSP, HSTS)">
+            <DemoDeepDiveCard title="next.config.ts headers() 전역 보안 헤더 주입 (CSP, HSTS, X-Frame-Options)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>next.config.ts의 headers() 설정 함수는 모든 라우트 또는 특정 경로 매칭 패턴에 Content-Security-Policy(CSP), HSTS, X-Frame-Options 등 엔터프라이즈 보안 HTTP 헤더를 일괄 주입하는 스펙입니다.</p>
+            <p><code>next.config.ts</code>의 <code>async headers()</code> 설정은 모든 페이지와 API 라우트의 HTTP 응답에 Content-Security-Policy(CSP), Strict-Transport-Security(HSTS), X-Content-Type-Options, X-Frame-Options 등 엔터프라이즈 보안 헤더를 선언적으로 일괄 주입하는 표준 빌드 설정입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>source: &apos;/:path*&apos; 매칭을 통해 브라우저 클릭재킹을 방지하는 X-Frame-Options: DENY, XSS 스크립트 실행을 원천 차단하는 CSP 규칙, HTTPS 강제 적용 HSTS 헤더를 응답에 자동 부여합니다.</p>
+            <p>본 데모에서는 <code>source: '/:path*'</code> 패턴에 대해 클릭재킹 방어(<code>X-Frame-Options: DENY</code>), MIME 스니핑 방어(<code>X-Content-Type-Options: nosniff</code>), XSS 공격 방어 CSP 헤더를 정의하여 모든 HTTP 응답 헤더에 자동 적용되는 결과를 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>코드 변경 없는 중앙 집중식 보안 강화: 개별 페이지나 API 라우트마다 헤더를 작성할 필요 없이 전역 설정 파일에서 보안 정책을 일원화 관리합니다.</li>
-              <li>웹 취약점 원천 방어: 금융/이커머스 서비스의 필수 보안 인증(ISMS-P, PCI-DSS) 요건을 프레임워크 레벨에서 충족합니다.</li>
-              <li>CDN 및 브라우저 캐싱 보안: 보안 헤더가 CDN 엣지 레벨까지 전파되어 악의적인 중간자 공격(MITM)을 방어합니다.</li>
+              <li><strong>웹 취약점 원천 방어</strong>: XSS, 클릭재킹, MIME 스니핑, 프로토콜 다운그레이드 공격을 브라우저 보안 정책 수준에서 원천 차단합니다.</li>
+              <li><strong>ISMS/금융 보안 컴플라이언스 충족</strong>: 결제 및 전자상거래 서비스가 요구하는 엄격한 보안 감사 기준을 손쉽게 달성합니다.</li>
+              <li><strong>선언적 일괄 관리</strong>: 개별 라우트마다 헤더 코드를 작성할 필요 없이 단일 설정 파일에서 전체 서비스의 보안 정책을 중앙 집중 제어합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 결제 및 개인정보 처리 페이지 보안 규정(CSP, Strict-Transport-Security) 준수</li>
-              <li>외부 악성 사이트의 iframe 삽입을 통한 클릭재킹 공격 차단</li>
-              <li>MIME 스니핑 방지(X-Content-Type-Options: nosniff) 및 Referrer 유출 통제</li>
+              <li>전자상거래 결제 및 회원 정보 페이지의 클릭재킹 및 스크립트 인젝션 방어</li>
+              <li>금융/핀테크 서비스의 HTTPS 강제화(HSTS) 및 강력한 CSP 정책 적용</li>
+              <li>B2B SaaS 관리자 콘솔의 iframe 삽입 제한 및 외부 리소스 화이트리스트 관리</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>엄격한 CSP 설정 시 서드파티 스크립트 차단 주의</strong>: Google Analytics, 카카오 SDK 등 외부 스크립트 도메인을 CSP의 <code>script-src</code> 화이트리스트에 누락하면 스크립트 실행이 차단될 수 있으므로 정밀한 도메인 정의가 필요합니다.</li>
             </ul>
           </div>
         </div>

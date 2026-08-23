@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Route Segment revalidate 설정">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Route Segment revalidate 설정는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Route Segment revalidate 설정 및 캐시 수명 제어">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Route Segment Config의 <code>export const revalidate = 60</code> 및 <code>export const dynamic = 'auto' | 'force-dynamic'</code>는 해당 라우트 세그먼트 전체의 정적 렌더링 주기와 증분 정적 재생성(ISR) 간격을 파일 레벨에서 선언하는 App Router 표준 설정 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Route Segment revalidate 설정)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 <code>export const revalidate = 10</code>이 적용된 라우트에서 10초 이내에는 이전 빌드된 HTML/RSC 페이로드가 0ms로 즉각 응답되고, 10초 경과 후 최초 요청 시 백그라운드에서 페이지가 재검증되어 새 타임스탬프로 갱신되는 수명 주기를 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>선언적 세그먼트 수명 제어</strong>: 개별 fetch 문마다 설정을 반복하지 않고 파일 상단에 단 한 줄로 라우트 전체의 캐시 주기를 관리합니다.</li>
+                    <li><strong>CDN 에지 캐싱 효율 극대화</strong>: 설정된 revalidate 주기에 맞춰 Vercel, Cloudflare 등 글로벌 엣지 CDN에 <code>s-maxage</code> 캐시 헤더를 자동 전파합니다.</li>
+                    <li><strong>서버 부하 감소</strong>: 초당 수만 건의 트래픽이 몰려도 정해진 시간 동안은 사전 렌더링된 정적 캐시만 반환하여 DB 부하를 차단합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>주기적인 갱신이 필요한 쇼핑몰 카테고리별 베스트셀러 랭킹 화면</li>
+                    <li>뉴스, 블로그, 공지사항 등 준실시간성 콘텐츠 포털 목록</li>
+                    <li>주식/가상자산 시세 및 환율 정보 브리핑 페이지</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>최소값 우선순위 규칙</strong>: 동일 세그먼트 내에 여러 fetch가 서로 다른 revalidate 값을 가질 경우, 가장 짧은 revalidate 주기가 세그먼트 전체의 주기로 채택됩니다.</li>
+                    <li><strong>동적 함수 사용 시 bailout</strong>: 세그먼트 내에서 <code>cookies()</code>, <code>headers()</code>, <code>searchParams</code>를 사용하면 정적 revalidate가 무효화되고 동적 렌더링으로 전환될 수 있습니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

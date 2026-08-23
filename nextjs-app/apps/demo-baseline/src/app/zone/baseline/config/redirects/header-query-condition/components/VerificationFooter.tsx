@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="redirects() 요청 헤더 및 쿼리 기반 조건부 리다이렉트">
+      <DemoDeepDiveCard title="next.config.ts redirects() 헤더 및 쿼리 조건부 리다이렉트 (has/missing)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>redirect()(307/303)와 permanentRedirect()(308)는 Server Actions, Route Handlers, 서버 컴포넌트 내부에서 즉각적인 HTTP 리다이렉트를 트리거하며, 내부적으로 NEXT_REDIRECT 예외를 던져 실행을 즉시 중단하고 브라우저를 대상 URL로 이동시킵니다.</p>
+            <p>
+              <code>next.config.ts</code>의 <code>redirects()</code> 규칙 내 <code>has</code> 및 <code>missing</code> 배열은 HTTP 헤더(<code>header</code>), 쿠키(<code>cookie</code>), 쿼리 스트링(<code>query</code>), 호스트명(<code>host</code>) 조건을 정밀하게 검사하여 조건이 일치할 때만 리다이렉트를 발동시키는 표준 설정 스펙입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 Server Action으로 장바구니 주문 결제가 성공하면 redirect(&apos;/orders/success&apos;)를 호출하여 303 See Other로 영수증 화면으로 이동시키고, 단종된 구 상품 접근 시에는 permanentRedirect(&apos;/products/new-01&apos;)로 308 영구 이동을 반환합니다.</p>
+            <p>
+              본 데모에서는 요청에 <code>x-legacy-client: true</code> 헤더나 <code>?view=old</code> 쿼리가 포함된 경우(<code>has</code>), 또는 최신 인증 쿠키가 누락된 경우(<code>missing</code>)를 감지하여 적절한 레거시 호환 페이지나 로그인 안내 경로로 즉시 라우팅합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>결제 완료 후 중복 제출 원천 방지: Post-Redirect-Get(PRG) 패턴을 구현하여 새로고침 시 결제 폼이 재제출되는 현상을 완벽히 차단합니다.</li>
-              <li>검색엔진 영구 랭킹 승계: 308 Permanent Redirect로 단종 상품의 기존 검색 색인 가치를 신상품으로 온전히 전달합니다.</li>
-              <li>트랜잭션 중단 안정성: redirect() 호출 시점 이후의 불필요한 백엔드 코드가 실행되지 않고 즉시 안전하게 탈출합니다.</li>
+              <li><strong>클라이언트별 지능형 분기</strong>: 모바일 앱 버전(헤더 검사)이나 마케팅 유입 출처(쿼리 검사)에 따라 서버 렌더링 전 사전 분기합니다.</li>
+              <li><strong>미들웨어 부하 절감</strong>: 복잡한 Edge 미들웨어 코드를 작성하지 않고도 선언적 설정만으로 다수의 헤더/쿠키 라우팅 룰을 고속 처리합니다.</li>
+              <li><strong>안전한 카나리 배포</strong>: 특정 사내 테스트 쿠키를 보유한 사용자만 신규 기능 프리뷰 경로로 유도할 수 있습니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>주문서 작성 및 결제 승인 완료 후 주문 완료 페이지로 리다이렉트</li>
-              <li>세션 만료 또는 비인가 사용자의 로그인 페이지 강제 리다이렉트</li>
-              <li>쇼핑몰 도메인 개편 및 상품 카테고리 체계 변경 시 영구 리다이렉트(308)</li>
+              <li>구형 네이티브 앱(<code>User-Agent</code> 또는 커스텀 헤더) 사용자의 강제 앱 업데이트 안내 페이지 리다이렉트</li>
+              <li>마케팅 캠페인 쿼리(<code>?utm_source=partner_a</code>) 유입 고객의 전용 프로모션 랜딩 분기</li>
+              <li>지역별 서브도메인(<code>host: us.shop.com</code>) 요청의 글로벌 통화 전용 스토어로의 분기</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>has 조건의 AND 결합</strong>: <code>has</code> 배열 내에 여러 항목을 정의하면 모든 조건이 동시에 참(AND)이어야 리다이렉트가 발동하므로, OR 조건이 필요한 경우 규칙 객체를 분리해야 합니다.</li>
+              <li><strong>캡처 변수 활용</strong>: 헤더나 쿼리의 정규식 매치값을 <code>key: 'value'</code> 형태로 캡처하여 <code>destination: '/dest/:value'</code>와 같이 대상 URL에 동적으로 전달할 수 있습니다.</li>
             </ul>
           </div>
         </div>

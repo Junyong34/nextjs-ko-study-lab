@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="unstable_cache를 통한 DB 쿼리 결과 캐싱">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>unstable_cache를 통한 DB 쿼리 결과 캐싱는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="unstable_cache()를 활용한 레거시 DB 쿼리 결과 캐싱">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js 14/15의 <code>unstable_cache(fetchData, keyParts, options)</code>는 ORM(Prisma, Drizzle)이나 원시 DB 쿼리 함수의 반환값을 Next.js Data Cache에 저장하고 <code>tags</code> 및 <code>revalidate</code> 주기를 바인딩하던 레거시 데이터 캐싱 함수 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(unstable_cache를 통한 DB 쿼리 결과 캐싱)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 PostgreSQL 데이터베이스 쿼리를 <code>unstable_cache</code>로 래핑하여 <code>['products-list'], {'{'} tags: ['products'], revalidate: 60 {'}'}</code> 옵션을 부여하고, 캐시 히트 시 쿼리 실행 없이 1ms 내에 반환되는 레거시 캐싱 파이프라인을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>ORM 쿼리 캐싱 지원</strong>: fetch API가 아닌 Prisma, TypeORM, Redis 등 모든 비-fetch 비동기 데이터베이스 조회를 캐싱할 수 있습니다.</li>
+                    <li><strong>수동 캐시 키 네임스페이스</strong>: 개발자가 직접 문자열 배열(<code>keyParts</code>)을 지정하여 캐시 저장소 키를 명시적으로 통제합니다.</li>
+                    <li><strong>Next.js 16 use cache로의 이관 디딤돌</strong>: 레거시 프로젝트의 캐싱 구조를 파악하고 차세대 <code>'use cache'</code>로 안전하게 마이그레이션하기 위한 기술적 기준점을 제공합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>Next.js 14 기반 쇼핑몰의 Prisma ORM 상품 목록 쿼리 캐싱</li>
+                    <li>복잡한 SQL JOIN 연산이 포함된 통계 데이터 조회</li>
+                    <li>외부 gRPC 또는 TCP 소켓 통신 결과의 인메모리 캐싱</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>클로저 변수 참조 불가</strong>: <code>unstable_cache</code> 내부 콜백 함수는 외부 스코프의 변수를 안전하게 캡처하지 못하므로 반드시 <code>keyParts</code>에 파라미터를 명시해야 합니다.</li>
+                    <li><strong>Next.js 16 use cache 전환 권장</strong>: Next.js 16에서는 보다 안전하고 간결한 <code>'use cache'</code> 디렉티브 사용이 적극 권장됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

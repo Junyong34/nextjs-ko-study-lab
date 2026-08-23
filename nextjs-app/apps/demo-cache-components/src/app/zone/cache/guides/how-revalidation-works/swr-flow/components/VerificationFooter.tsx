@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Stale-While-Revalidate 백그라운드 재검증 수명 주기">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>SWR, TanStack Query 및 React 19 Suspense 스트리밍은 서버 사이드 초기 렌더링과 클라이언트 사이드 실시간 비동기 상태 관리를 결합하여 네트워크 지연을 극복하는 현대적 데이터 패칭 아키텍처입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Cache Components의 Stale-While-Revalidate 백그라운드 재검증 흐름">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js 16 Cache Components의 SWR(Stale-While-Revalidate) 수명 주기는 캐시 수명(staleTime)이 만료된 후 요청이 들어왔을 때, 우선 기존 Stale 캐시를 사용자에게 0ms로 즉각 서빙하고 백그라운드 워커에서 조용히 새 데이터를 패치하여 다음 요청부터 최신 캐시로 교체하는 표준 백그라운드 갱신 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 핵심 상품 정보는 서버에서 즉시 전송(0ms)하고, 무거운 추천 상품과 실시간 구매 후기는 Suspense 청크 스트리밍으로 점진적 표시하며, 배송 기사 위치는 SWR 3초 폴링으로 실시간 갱신합니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 캐시 수명 5초가 지난 시점에 첫 번째 사용자가 접근할 때 즉각 이전 캐시가 반환되는 과정과, 백그라운드에서 비동기 DB 조회가 완료된 후 두 번째 사용자가 접근했을 때 최신 데이터로 전환되는 2단계 SWR 흐름을 시각화합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>TTFB(Time To First Byte) 0ms: 무거운 서브 데이터 때문에 메인 페이지 전체가 멈추는 블로킹을 완전히 제거합니다.</li>
-              <li>실시간 데이터 자동 동기화: 배송 상태 변경이나 재고 소진 시 사용자가 새로고침하지 않아도 화면이 자동 갱신됩니다.</li>
-              <li>낙관적 업데이트(Optimistic Update): 주문 상태 변경 시 로딩 스피너 없이 UI를 즉시 갱신하고 백그라운드에서 서버와 동기화합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>사용자 체감 지연 시간 제로</strong>: 어떤 사용자도 백엔드 DB 조회 지연 시간(수백 ms ~ 수 초)을 기다리지 않고 항상 즉각적인 응답을 받습니다.</li>
+                    <li><strong>서버 부하 스파이크 흡수</strong>: 수천 명의 사용자가 동시에 만료 시점에 접속해도 단 1건의 백그라운드 재검증 작업만 실행되어 서버 과부하를 방지합니다.</li>
+                    <li><strong>탄력적인 고가용성</strong>: 백그라운드 재검증 중 일시적인 DB 네트워크 장애가 발생해도 기존 Stale 캐시가 지속 서빙되어 서비스 중단을 막습니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 실시간 배송 기사 위치 추적 및 주문 상태 자동 관제</li>
-              <li>수만 개 상품 목록의 무한 스크롤(Infinite Scroll) 피드</li>
-              <li>상품 상세 페이지의 구매 후기 및 AI 추천 상품 점진적 스트리밍</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>초당 수천 건의 조회가 발생하는 인기 상품 상세 페이지</li>
+                    <li>실시간 환율 및 암호화폐 시세 브리핑 화면</li>
+                    <li>주요 포털 사이트의 실시간 검색어 및 뉴스 랭킹</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>첫 번째 사용자의 Stale 데이터 인지</strong>: 만료 후 첫 요청자는 이전 데이터를 보게 되므로, 결제 직전 최종 금액 확인과 같이 절대적으로 최신이어야 하는 단계는 Server Action으로 직접 조회해야 합니다.</li>
+                    <li><strong>expire 시간 초과 시 동기 렌더링</strong>: 만약 <code>expire</code> 시간을 초과하면 Stale 서빙이 중단되고 동기적으로 새 데이터를 가져오므로 적절한 expire 여유 시간을 두어야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Next.js 14 레거시 fetch cache vs Route Segment revalidate">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Next.js 14 레거시 fetch cache vs Route Segment revalidate는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Next.js 14 레거시 fetch cache vs Route Segment revalidate">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js 14에서 도입되었던 <code>fetch(url, {'{'} next: {'{'} revalidate: 60 {'}'} {'}'})</code> 옵션과 Route Segment Config(<code>export const dynamic</code>, <code>export const fetchCache</code>)는 HTTP Fetch 단위의 Data Cache 제어와 세그먼트 레벨 수명 제어를 결합한 레거시 캐싱 모델입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Next.js 14 레거시 fetch cache vs Route Segment revalidate)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 개별 <code>fetch()</code> 호출마다 지정된 revalidate 시간(10초)과 페이지 세그먼트 전역 <code>revalidate = 30</code> 설정이 충돌할 때의 캐시 우선순위 판정과 백그라운드 재검증 타이밍을 대조 분석합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>요청 단위 세분화된 수명 제어</strong>: 동일 페이지 내에서도 자주 변하는 환율 정보(10초)와 고정된 회사 소개(하루)의 캐시 수명을 분리 설정 가능.</li>
+                    <li><strong>자동 중복 요청 제거(Deduping)</strong>: 동일 렌더 트리 내에서 동일 URL에 대한 다중 fetch 호출 시 1회만 실제 네트워크 I/O 실행.</li>
+                    <li><strong>점진적 마이그레이션 기준점</strong>: Next.js 15/16의 <code>use cache</code> 디렉티브로 전환하기 위한 핵심 레거시 아키텍처 이해 제공.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>레거시 Next.js 14 엔터프라이즈 프로젝트 유지보수 및 캐시 디버깅</li>
+                    <li>외부 서드파티 REST API 다중 연동 시 엔드포인트별 응답 캐시 수명 차등화</li>
+                    <li>Next.js 16 최신 <code>use cache</code> 아키텍처로의 전환 계획 수립</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>Next.js 15+ 기본값 변경 주의</strong>: Next.js 15부터는 <code>fetch</code> 기본값이 <code>no-store</code>(비캐시)로 변경되었으므로, 캐싱이 필요한 경우 명시적으로 <code>cache: 'force-cache'</code>나 <code>next: {'{'} revalidate {'}'}</code>를 지정해야 합니다.</li>
+                    <li><strong>Next.js 16 use cache로의 전환 권장</strong>: fetch 단위 캐싱의 복잡성을 해소하기 위해 차세대 함수/컴포넌트 단위 <code>'use cache'</code> 지시어 도입이 적극 권장됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

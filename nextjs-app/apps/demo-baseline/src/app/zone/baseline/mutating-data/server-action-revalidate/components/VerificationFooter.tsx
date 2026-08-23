@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Server Action 데이터 변경 및 revalidatePath 동기화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Server Action 데이터 변경 및 revalidatePath 동기화는 Next.js App Router의 mutating-data 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Server Action 데이터 변경 및 revalidatePath 동기화">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Server Action 내부에서 데이터베이스 변이(Mutation)를 수행한 후 <code>revalidatePath()</code> 또는 <code>revalidateTag()</code>를 호출하여, 연관된 서버 컴포넌트 캐시를 온디맨드로 무효화하고 최신 데이터가 반영된 RSC 페이로드를 클라이언트에 즉시 재전송하는 풀스택 데이터 동기화 표준 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Server Action 데이터 변경 및 revalidatePath 동기화)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 새 배송지 등록 폼을 제출하면 <code>'use server'</code> 함수가 백엔드 저장소에 데이터를 추가하고 <code>revalidatePath('/mutating-data/...')</code>를 호출합니다. 서버가 해당 경로의 캐시를 갱신하고 최신 배송지 목록을 클라이언트에 자동 스트리밍합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>단일 왕복(Single Roundtrip) 동기화</strong>: 데이터 변경 요청과 최신 화면 재검증이 1회의 HTTP 네트워크 통신으로 완결됩니다.</li>
+                    <li><strong>클라이언트 캐시 불일치 제거</strong>: 수동으로 클라이언트 전역 상태나 캐시 키를 일일이 무효화할 필요 없이 서버가 단일 진실 공급원(SSOT)을 유지합니다.</li>
+                    <li><strong>강력한 타입 안전성</strong>: 폼 데이터 수신부터 서버 검증, 응답 반환까지 End-to-End TypeScript 타입 추론을 보장합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 배송지 추가/수정/삭제 후 기본 배송지 목록 즉시 재렌더링</li>
+                    <li>상품 재고 수량 변경 및 옵션 수정 후 상품 상세 카탈로그 실시간 최신화</li>
+                    <li>관리자 권한 변경 후 사용자 목록 및 권한 뱃지 동기화</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>revalidatePath 범위 주의</strong>: <code>revalidatePath('/path', 'page')</code>는 해당 페이지만 무효화하며, 하위 모든 중첩 경로를 무효화하려면 <code>revalidatePath('/path', 'layout')</code>을 명시해야 합니다.</li>
+                    <li><strong>리다이렉트와의 결합</strong>: <code>revalidatePath</code> 호출 후 다른 화면으로 전환하려면 함수 마지막에 <code>redirect('/target')</code>를 호출하며, 이 때 <code>redirect</code>는 <code>try/catch</code> 블록 외부에 두어야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

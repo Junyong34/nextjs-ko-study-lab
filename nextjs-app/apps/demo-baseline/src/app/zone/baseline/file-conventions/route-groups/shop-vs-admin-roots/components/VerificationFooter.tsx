@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="상점용 vs 관리자용 다중 루트 레이아웃">
+      <DemoDeepDiveCard title="Route Groups 다중 루트 레이아웃 ((shop) vs (admin))">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>상점용 vs 관리자용 다중 루트 레이아웃는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              루트 디렉토리 직하위에 소괄호 폴더(<code>(shop)</code>, <code>(admin)</code>)를 배치하고 각각 <code>layout.tsx</code>를 정의하면, 단일 Next.js 프로젝트 내에서 서로 다른 <code>{'<'}html{'>'}</code>과 <code>{'<'}body{'>'}</code>를 갖는 복수의 독립된 루트 레이아웃(Multiple Root Layouts)을 구성할 수 있습니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(상점용 vs 관리자용 다중 루트 레이아웃)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 일반 쇼핑몰 고객 화면(<code>/(shop)/products</code> -{'>'} <code>/products</code>)과 관리자 콘솔(<code>/(admin)/dashboard</code> -{'>'} <code>/dashboard</code>)이 URL 경로에는 괄호 폴더를 노출하지 않으면서, 각각 고객용 GNB와 관리자 전용 다크 사이드바 레이아웃을 독립적으로 적용받는 구조를 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>완전한 UI 셸 격리</strong>: 쇼핑몰 프론트엔드와 관리자 백오피스가 전역 CSS, 폰트, 테마 프로바이더를 서로 간섭 없이 독립적으로 유지합니다.</li>
+              <li><strong>URL 구조의 순수성 보존</strong>: 폴더명 괄호 <code>(group)</code>는 URL에 전혀 포함되지 않아 깔끔하고 일관된 URL을 유지합니다.</li>
+              <li><strong>번들 크기 최적화</strong>: 관리자용 무거운 차트/테이블 라이브러리가 일반 사용자용 쇼핑몰 번들에 포함되지 않도록 분리합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>일반 사용자 스토어프론트와 판매자 관리자 센터의 루트 레이아웃 분리</li>
+              <li>인증 전용 페이지(로그인/회원가입)의 무(No) 헤더/푸터 레이아웃</li>
+              <li>마케팅 랜딩 페이지와 SaaS 대시보드 앱 영역의 분리</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>최상위 app/layout.tsx 삭제 필수</strong>: 다중 루트 레이아웃을 사용할 때는 <code>app/layout.tsx</code>가 존재하면 안 되며, 각 Route Group(<code>(shop)/layout.tsx</code>, <code>(admin)/layout.tsx</code>)이 자체 <code>{'<'}html{'>'}</code>과 <code>{'<'}body{'>'}</code>를 반드시 포함해야 합니다.</li>
+              <li><strong>루트 간 이동 시 Full Page Reload</strong>: 서로 다른 루트 레이아웃 간을 이동할 때는 레이아웃 셸 자체가 교체되므로 React Partial Rendering이 아닌 전체 페이지 리로드가 발생합니다.</li>
             </ul>
           </div>
         </div>

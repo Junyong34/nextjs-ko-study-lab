@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="experimental.cacheHandlers 분산 Redis 캐시 핸들러 연동">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>cacheHandlers는 Next.js 16 캐시 스토리지 엔진을 기본 로컬 메모리/파일시스템에서 분산 Redis, Cloudflare KV 등 원격 공유 저장소로 교체하는 설정입니다.</p>
-          </div>
+                                    <DemoDeepDiveCard title="Redis KV 기반 분산 Cache Handler 연동">
+                    <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                        <p>Next.js의 Custom Cache Handler(<code>cacheHandler</code>) 설정은 서버 메모리에 종속된 기본 캐시 저장소를 탈피하여, Redis, Upstash, Memcached 등 분산 Key-Value 저장소와 연동하여 다중 인스턴스 환경에서도 일관된 캐시 공유를 지원하는 인프라 스펙입니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>cacheHandlers: &#123; default: require.resolve(&apos;./cache-handler.js&apos;) &#125;를 통해 멀티 인스턴스로 배포된 모든 웹 서버 파드가 동일한 Redis 캐시 계층을 실시간 공유합니다.</p>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                        <p>본 데모에서는 인스턴스 A에서 <code>'use cache'</code>로 생성된 캐시 데이터가 Redis KV 스토리지에 동기화되고, 인스턴스 B 및 C에서 동일 키로 접근 시 DB 재조회 없이 1ms 내에 Redis 캐시에서 직접 데이터를 반환하는 분산 아키텍처를 검증합니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>멀티 파드 캐시 일관성 보장: 한 인스턴스에서 발생한 상품 데이터 갱신/태그 무효화가 모든 서버 인스턴스에 실시간으로 즉시 전파됩니다.</li>
-              <li>서버 재배포 시 캐시 보존: 신규 컨테이너 배포 시 로컬 캐시가 초기화되는 문제 없이 원격 Redis에서 웜(Warm) 상태를 즉시 유지합니다.</li>
-              <li>스토리지 수평 확장: Redis 클러스터를 통해 수백만 개 상품의 캐시 용량을 확장하고 TTL/적중률을 중앙 관제합니다.</li>
-            </ul>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>다중 서버/컨테이너 간 캐시 공유</strong>: Kubernetes 클러스터나 멀티 인스턴스 배포 환경에서 캐시 불일치 문제를 완벽히 해결합니다.</li>
+                          <li><strong>배포 시 캐시 보존(Cache Persistence)</strong>: 서버가 재시작되거나 롤링 배포가 이루어져도 외부 Redis에 캐시가 영구 보존되어 콜드 스타트 부하를 차단합니다.</li>
+                          <li><strong>초당 수십만 QPS 처리</strong>: 인메모리 NoSQL의 초고속 I/O를 활용하여 데이터베이스 핫스팟 현상을 원천 방어합니다.</li>
+                        </ul>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>대규모 트래픽 이커머스 쿠버네티스(K8s) 멀티 파드 클러스터 운영</li>
-              <li>타임세일 이벤트 시 멀티 인스턴스 간 실시간 재고 캐시 동기화</li>
-              <li>글로벌 분산 엣지 환경의 Redis KV 공유 캐시 아키텍처</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li>대규모 할인 이벤트(블랙프라이데이, 타임세일) 시 트래픽 폭증 대비</li>
+                          <li>AWS ECS / Kubernetes 기반 멀티 컨테이너 쇼핑몰 백엔드 인프라</li>
+                          <li>글로벌 멀티 리전 배포 환경에서의 중앙 캐시 클러스터링</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>cacheHandler 경로 등록</strong>: <code>next.config.ts</code>에 <code>cacheHandler: require.resolve('./cache-handler.js')</code> 형태로 모듈 경로를 정확히 지정해야 합니다.</li>
+                          <li><strong>네트워크 지연 시간 고려</strong>: Redis 서버와의 통신 레이턴시가 발생하므로 Next.js 인스턴스와 동일한 VPC/서브넷 내에 Redis를 배치해야 최적의 성능을 얻습니다.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </DemoDeepDiveCard>
     </div>
   )
 }

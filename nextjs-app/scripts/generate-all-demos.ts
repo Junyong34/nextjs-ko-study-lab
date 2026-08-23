@@ -71,7 +71,7 @@ const demos: DemoSpec[] = [
     expected: '• 경계 격리: "use client" 컴포넌트의 children으로 Server Component를 전달하여 서버 렌더링 유지\n• 번들 절감: 서버 전용 DB 쿼리 및 라이브러리가 클라이언트 번들에 포함되지 않음\n• 합성의 유연성: 인터랙티브 모달/컨테이너 안에 정적 서버 콘텐츠를 자유롭게 배치',
     actual: '• 슬롯 주입: children props 패턴 완벽 적용\n• 상태 보존: 클라이언트 래퍼 토글 시에도 서버 컴포넌트 렌더링 보존\n• 아키텍처 규칙: 클라이언트/서버 합성 원칙 100% 준수',
     deepDiveTitle: 'Server Component를 Client Component 안에 넣는 올바른 합성 패턴',
-    deepDiveBody: '<p>Client Component 안에서 Server Component를 <code>import ServerComponent from "./ServerComponent"</code>로 불러오면 클라이언트 번들로 다운그레이드됩니다. 반드시 부모 Server Component에서 <code>&lt;ClientWrapper&gt;&lt;ServerComponent /&gt;&lt;/ClientWrapper&gt;</code> 형태로 <strong>children prop을 통해 슬롯 주입</strong>해야 합니다.</p>',
+    deepDiveBody: '<p>Client Component 안에서 Server Component를 <code>import ServerComponent from "./ServerComponent"</code>로 불러오면 클라이언트 번들로 다운그레이드됩니다. 반드시 부모 Server Component에서 <code><ClientWrapper><ServerComponent /></ClientWrapper></code> 형태로 <strong>children prop을 통해 슬롯 주입</strong>해야 합니다.</p>',
     interactiveJsx: `
       <div className="space-y-3">
         <ClientSlotWrapper>
@@ -143,7 +143,7 @@ const demos: DemoSpec[] = [
     expected: '• 점진적 주입: 빠른 콘텐츠가 느린 콘텐츠를 기다리지 않고 화면에 표시\n• TTFB 단축: 서버 연산이 완전히 끝나기 전에 브라우저에 첫 바이트 전송\n• 안정적인 SEO: 스트리밍된 모든 청크가 최종 HTML 문서에 온전히 포함',
     actual: '• 다중 Suspense: 순차 청크 스트리밍 완벽 가동\n• 스켈레톤 전환: 부드러운 UI 교체 확인\n• 네트워크 최적화: 단일 HTTP 파이프라인 유지',
     deepDiveTitle: 'Next.js 스트리밍과 React Server Components 아키텍처',
-    deepDiveBody: '<p>스트리밍은 단순히 로딩 스피너를 보여주는 것이 아니라, 서버가 준비된 RSC 페이로드를 인라인 <code>&lt;script&gt;</code> 태그와 함께 브라우저 DOM에 즉시 삽입하는 강력한 메커니즘입니다.</p>',
+    deepDiveBody: '<p>스트리밍은 단순히 로딩 스피너를 보여주는 것이 아니라, 서버가 준비된 RSC 페이로드를 인라인 <code><script></code> 태그와 함께 브라우저 DOM에 즉시 삽입하는 강력한 메커니즘입니다.</p>',
     interactiveJsx: `
       <div className="space-y-3">
         <StreamingChunkClient />

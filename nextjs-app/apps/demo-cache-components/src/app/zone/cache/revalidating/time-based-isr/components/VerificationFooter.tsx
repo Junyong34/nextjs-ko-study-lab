@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="cacheLife 시간 기반 캐시 수명 및 SWR 재검증">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>cacheLife 시간 기반 캐시 수명 및 SWR 재검증는 Next.js App Router의 revalidating 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="cacheLife 시간 기반 캐시 수명 및 SWR 재검증">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js 16의 시간 기반 캐싱은 <code>'use cache'</code> 스코프 내에서 <code>cacheLife({'{'} stale, revalidate, expire {'}'})</code> 또는 표준 프리셋을 선언하여, 지정된 시간 동안 초고속 정적 응답을 제공하고 만료 후 백그라운드에서 비동기 재검증을 수행하는 현대적 시간 기반 ISR 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(cacheLife 시간 기반 캐시 수명 및 SWR 재검증)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 10초 수명이 설정된 타임세일 상품 캐시가 10초 이내에는 빌드 타임스탬프를 유지하며 0ms로 응답되고, 10초 경과 후 최초 요청 시 백그라운드 SWR 파이프라인이 발동하여 최신 가격과 시간으로 갱신되는 동작을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>트래픽 폭증 시 완벽한 서버 보호</strong>: 초당 수만 건의 요청이 유입되어도 설정된 시간 동안은 캐시에서 100% 응답하여 데이터베이스를 안전하게 보호합니다.</li>
+                    <li><strong>최적의 응답 속도(TTFB)</strong>: 사용자는 항상 사전에 계산된 캐시 데이터를 즉시 전달받아 대기 시간을 체감하지 않습니다.</li>
+                    <li><strong>자동화된 데이터 최신성 유지</strong>: 수동 무효화 요청 없이도 정해진 주기에 따라 데이터가 스스로 최신 상태로 유지됩니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 실시간 랭킹 및 인기 검색어 순위(cacheLife('minutes'))</li>
+                    <li>뉴스 포털 및 블로그 기사 목록(cacheLife('hours'))</li>
+                    <li>주기적인 환율, 날씨, 유가 정보 브리핑 위젯</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>백그라운드 재검증 중 에러 처리</strong>: 백그라운드 재생성 중 DB 연결 실패가 발생해도 이전 캐시 데이터가 안전하게 서빙되어 사용자 화면 장애를 방지합니다.</li>
+                    <li><strong>온디맨드 무효화와의 병행</strong>: 시간 기반 만료를 기본으로 두되 긴급 수정 시에는 <code>revalidateTag</code>를 병행 호출하는 2중 캐시 전략이 가장 권장됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

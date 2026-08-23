@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• &apos;use cache: private&apos; 개인화 주문 내역 캐시 격리 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• 'use cache: private' 개인화 주문 내역 캐시 격리 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,43 +57,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="&apos;use cache: private&apos; 개인화 주문 내역 캐시 격리 실증 검증"
+        title="'use cache: private' 개인화 주문 내역 캐시 격리 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="&apos;use cache: private&apos; 개인화 주문 내역 캐시 격리">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>&apos;use cache: private&apos; 개인화 주문 내역 캐시 격리는 Next.js App Router의 directives 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                                    <DemoDeepDiveCard title="사용자 세션 스코프 개인화 데이터 'use cache' 패턴">
+                    <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                        <p>개인화 데이터 캐싱은 <code>'use cache'</code> 함수에 사용자 식별자(User ID, Tenant ID)를 명시적 인자로 주입하여 캐시 키를 사용자 단위로 격리하고, 전역 캐시와 개인 캐시의 오염을 방지하는 표준 보안 캐싱 패턴입니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(&apos;use cache: private&apos; 개인화 주문 내역 캐시 격리)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                        <p>본 데모에서는 사용자 A(user_101)와 사용자 B(user_202)의 개인 장바구니 요약 데이터를 <code>getUserCart(userId)</code>로 캐싱하고, 사용자 간에 장바구니 내용이 절대 섞이지 않으면서도 각 사용자별로는 0ms 초고속 캐시가 동작함을 검증합니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>완벽한 보안 격리</strong>: 사용자 ID가 캐시 키에 자동 포함되어 다른 사용자의 개인정보나 결제 정보가 노출되는 보안 사고를 원천 차단합니다.</li>
+                          <li><strong>개인화 화면의 극단적 성능 향상</strong>: 마이페이지나 개인 대시보드처럼 사용자마다 다른 화면도 캐싱을 통해 0ms 응답을 제공합니다.</li>
+                          <li><strong>사용자별 독립 캐시 무효화</strong>: 사용자 A가 장바구니를 수정하면 <code>cacheTag('user-cart-' + userId)</code>를 통해 해당 사용자의 캐시만 정밀 타겟 무효화합니다.</li>
+                        </ul>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li>쇼핑몰 마이페이지의 회원 등급, 보유 적립금, 사용 가능 쿠폰 수 요약</li>
+                          <li>B2B SaaS 멀티테넌트 대시보드의 테넌트별 구독 플랜 및 사용량 통계</li>
+                          <li>개인 맞춤형 추천 알고리즘 결과 및 최근 본 상품 목록</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>쿠키 직접 참조 금지</strong>: <code>'use cache'</code> 내부에서 <code>cookies()</code>를 직접 호출하면 동적 렌더링으로 bailout되므로, 반드시 외부에서 세션을 검증하고 <code>userId</code>를 인자로 넘겨야 합니다.</li>
+                          <li><strong>cacheLife 짧은 수명 권장</strong>: 개인화 데이터는 변경 빈도가 높으므로 <code>cacheLife('minutes')</code> 등 적절히 짧은 수명을 설정하거나 이벤트 기반 태그 무효화를 결합해야 합니다.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </DemoDeepDiveCard>
     </div>
   )
 }

@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="revalidatePath page vs layout 레벨 일괄 무효화 대조">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>revalidatePath page vs layout 레벨 일괄 무효화 대조는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="revalidatePath의 'page' vs 'layout' 무효화 스코프 대조">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p><code>revalidatePath(path, type)</code>의 두 번째 인자인 <code>'page'</code>는 오직 해당 단일 페이지만 무효화하는 반면, <code>'layout'</code>은 해당 경로를 포함하여 그 하위에 존재하는 모든 중첩 라우트 세그먼트와 레이아웃 캐시를 트리 전체에 걸쳐 일괄 무효화하는 스코프 차이를 가집니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(revalidatePath page vs layout 레벨 일괄 무효화 대조)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 카테고리 공통 GNB 배너가 변경되었을 때 <code>type: 'layout'</code>을 실행하여 하위 모든 상품 페이지들이 일괄 갱신되는 동작과, 개별 상품 수정 시 <code>type: 'page'</code>를 실행하여 해당 페이지만 선별 갱신되는 범위를 대조 분석합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>명확한 무효화 범위 통제</strong>: 상위 레이아웃 변경과 하위 개별 페이지 변경의 영향 범위를 정밀하게 분리하여 캐시 효율을 최적화합니다.</li>
+                    <li><strong>대규모 중첩 페이지 일괄 갱신</strong>: GNB 메뉴나 사이드바 카테고리 개편 시 단 한 번의 <code>'layout'</code> 무효화로 수천 개의 하위 페이지를 일괄 최신화합니다.</li>
+                    <li><strong>서버 리소스 낭비 방지</strong>: 단일 상품 설명 수정 시 불필요하게 상위 레이아웃이나 형제 페이지들까지 다시 렌더링되는 비효율을 제거합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 글로벌 헤더(GNB) 로고 및 네비게이션 메뉴 변경(layout 무효화)</li>
+                    <li>특정 카테고리의 사이드바 배너 변경(category layout 무효화)</li>
+                    <li>단일 상품 상세 정보 및 리뷰 갱신(page 무효화)</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>기본값은 'page'</strong>: 두 번째 인자를 생략하면 기본값으로 <code>'page'</code>가 적용되므로 하위 중첩 페이지까지 갱신하려면 반드시 <code>'layout'</code>을 명시해야 합니다.</li>
+                    <li><strong>루트 레이아웃 무효화 주의</strong>: <code>revalidatePath('/', 'layout')</code>을 실행하면 전체 사이트의 모든 캐시가 무효화되므로 대규모 트래픽 환경에서는 극히 신중해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

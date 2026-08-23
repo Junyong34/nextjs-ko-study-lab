@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="CSS Modules 스코프 격리 및 해시 클래스 충돌 방지">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>CSS Modules 스코프 격리 및 해시 클래스 충돌 방지는 Next.js App Router의 css 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="CSS Modules 스코프 격리 및 해시 클래스 충돌 방지">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>CSS Modules(<code>.module.css</code>)는 빌드 시점에 컴포넌트별 고유 해시 클래스명(<code>[filename]_[classname]__[hash]</code>)을 자동 생성하여 글로벌 CSS 네임스페이스 오염을 방지하고 스타일 격리를 제공하는 표준 스타일링 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(CSS Modules 스코프 격리 및 해시 클래스 충돌 방지)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 동일한 <code>.button</code> 클래스명을 가진 두 컴포넌트가 각각 독립된 CSS Module을 import할 때 빌드 타임에 고유한 해시 클래스로 변환되어 스타일 충돌 없이 독립적인 테마와 크기를 유지하는 과정을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>스타일 스코프 완전 격리</strong>: 클래스명 중복으로 인한 의도치 않은 CSS 오버라이드 및 사이드이펙트를 원천 차단합니다.</li>
+                    <li><strong>자동 코드 스플리팅 및 최적화</strong>: 사용되지 않는 모듈 스타일은 트리 셰이킹되어 해당 컴포넌트가 렌더링되는 페이지에만 최소 크기로 번들링됩니다.</li>
+                    <li><strong>Server & Client Component 공통 지원</strong>: React Server Component와 Client Component 모두에서 추가 런타임 오버헤드 없이 제로 런타임 CSS로 동작합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>독립적인 서드파티 UI 위젯 또는 사내 디자인 시스템 컴포넌트 라이브러리 개발</li>
+                    <li>대규모 협업 프로젝트에서 여러 팀이 동시에 개발하는 쇼핑몰 마이크로 UI 모듈</li>
+                    <li>레거시 CSS와의 네임스페이스 충돌을 방지해야 하는 점진적 마이그레이션 화면</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>kebab-case vs camelCase 접근</strong>: CSS 클래스명은 JS 객체 속성 접근(<code>styles.primaryButton</code>)을 위해 camelCase 작성을 권장하며, kebab-case는 <code>styles['primary-button']</code>으로 접근해야 합니다.</li>
+                    <li><strong>:global() 가상 선택자 활용</strong>: 자식 요소나 서드파티 라이브러리 스타일에 예외적으로 전역 적용이 필요할 때는 <code>:global(.child-class)</code>를 명시적으로 선언할 수 있습니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

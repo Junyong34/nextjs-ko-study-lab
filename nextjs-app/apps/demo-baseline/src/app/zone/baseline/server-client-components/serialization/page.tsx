@@ -26,26 +26,22 @@ export default function SerializationDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Props 직렬화(Serialization) 및 전달 경계 검증"
-        concept="Server Component에서 Client Component로 전달되는 Props는 네트워크를 통해 브라우저로 전송되므로 반드시 JSON 직렬화가 가능해야 합니다. 일반 함수는 전달할 수 없지만 'use server'로 선언된 Server Action은 안전하게 전달할 수 있습니다."
+        title="RSC → RCC Props 직렬화(Serialization) 규약 & Server Action 전달"
+        concept="Server Component에서 Client Component로 전달하는 Props는 JSON 직렬화가 가능해야 하며, 함수나 클래스 인스턴스는 직접 전달할 수 없지만 'use server' Server Action은 직렬화 가능한 참조로 전달할 수 있습니다."
         steps={[
           {
             step: 1,
-            title: '직렬화 데이터 트리 검사',
-            description: '서버에서 생성된 원시값, 객체, 배열이 클라이언트로 무손실 전달된 것을 확인합니다.',
-            actionBadge: 'JSON 직렬화',
+            title: 'RSC 전달 Props 데이터 구조 확인',
+            description: '원시값(String, Number, Boolean), 평탄한 객체, 배열 데이터가 RCC로 안전하게 직렬화 전달된 구조를 확인합니다.',
+            actionBadge: '직렬화 확인',
           },
           {
             step: 2,
-            title: 'Server Action Prop 실행',
-            description: '함수 Prop으로 전달된 executeServerTask를 클릭하여 서버 통신을 테스트합니다.',
-            actionBadge: 'Server Action 호출',
-          },
-          {
-            step: 3,
-            title: '직렬화 규칙 학습',
-            description: '하단 개념 정리 카드에서 직렬화 가능 데이터와 불가능 데이터의 차이를 학습합니다.',
-            actionBadge: '규칙 숙지',
+            title: '[전달받은 Server Action Props 실행] 버튼 클릭',
+            description: "'use server'로 선언된 Server Action 함수가 Action ID 참조 형태로 Props 전달되어 정상 실행되는 것을 관찰합니다.",
+            actionBadge: 'Server Action 실행',
+            observe: "서버 통신 완료 후 응답 결과 문자열('[확인] 서버 액션 처리 완료...')이 화면에 즉시 렌더링됨",
+            observeAt: 'playground',
           },
         ]}
       />

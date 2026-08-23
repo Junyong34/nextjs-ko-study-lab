@@ -30,7 +30,7 @@ export function MetadataOgBannerDemo() {
           <div className="text-xs text-zinc-300 mt-2">프리미엄 러닝화 & 테크 웨어 전 품목 즉시 할인 적용</div>
         </div>
         <div className="text-[11px] text-zinc-400 font-mono">
-          • HTML 메타 태그: &lt;meta property="og:image" content="{OG_URL}" /&gt; 자동 주입 완료
+          • HTML 메타 태그: {'<'}meta property="og:image" content="{OG_URL}" /{'>'} 자동 주입 완료
         </div>
       </div>
     </div>

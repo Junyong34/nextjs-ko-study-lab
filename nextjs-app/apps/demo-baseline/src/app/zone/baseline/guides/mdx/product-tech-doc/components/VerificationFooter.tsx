@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• 상품 기술 문서 MDX 렌더링 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>상품 기술 문서 MDX 렌더링는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>Next.js App Router의 MDX 기술 문서 렌더링은 마크다운 문법(Heading, Tables, Code Blocks)과 디자인 시스템 컴포넌트를 결합하여, 대규모 상품 스펙 명세서와 사용자 기술 매뉴얼을 고속 서버 컴포넌트로 사전 렌더링하는 문서화 표준입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(상품 기술 문서 MDX 렌더링)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 전자제품(스마트워치 PROD-001)의 상세 사양표, 방수 등급 표, 코드 스니펫 및 부품 다이어그램이 포함된 MDX 문서를 렌더링하고, 코드 복사 버튼과 수량 변경 인터랙션을 실증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>검색엔진 최적화(SEO) 극대화</strong>: 기술 문서의 모든 목차와 텍스트가 서버사이드에서 순수 HTML로 완성되어 검색엔진 크롤러에 완벽하게 색인됩니다.</li>
+              <li><strong>일관된 디자인 시스템 적용</strong>: 마크다운의 <code>{'<'}h2{'>'}</code>, <code>{'<'}table{'>'}</code>, <code>{'<'}code{'>'}</code> 태그를 Tailwind CSS가 적용된 전사 표준 UI 컴포넌트로 자동 치환합니다.</li>
+              <li><strong>빌드 타임 문법 검증</strong>: MDX 컴파일 단계에서 잘못된 마크업 닫기 태그나 오타를 사전 감지하여 문서 무결성을 보장합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>전자제품, 기계 부품, 소프트웨어의 정밀 기술 사양 및 호환성 가이드</li>
+              <li>B2B 전자상거래 결제 연동 가이드 및 개발자 API 레퍼런스</li>
+              <li>기업 제품 보증 정책 및 A/S 규정 안내 매뉴얼</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>remark/rehype 플러그인 호환성</strong>: 코드 하이라이팅(Shiki, Prism)이나 목차 생성(TOC)을 위해 플러그인을 추가할 때는 App Router의 비동기 컴파일 파이프라인과 호환되는 버전을 선택해야 합니다.</li>
+              <li><strong>이미지 최적화 연동</strong>: MDX 내 일반 마크다운 이미지 <code>![]()</code> 태그를 Next.js의 <code>next/image</code> 컴포넌트로 매핑하여 이미지 CLS와 용량을 최적화해야 합니다.</li>
             </ul>
           </div>
         </div>

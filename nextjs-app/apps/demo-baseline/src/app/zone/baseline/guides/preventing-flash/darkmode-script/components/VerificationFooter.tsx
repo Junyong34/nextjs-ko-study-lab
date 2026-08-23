@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="다크모드 SSR 인라인 스크립트 FOUC 방지">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>다크모드 SSR 인라인 스크립트 FOUC 방지는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="다크모드 SSR 인라인 스크립트 FOUC 방지">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>다크모드 FOUC(Flash of Unstyled Content) 방지 기술은 브라우저 렌더링 엔진이 HTML 파싱을 시작하는 즉시 <code>{'<'}head{'>'}</code> 내의 초경량 블로킹 인라인 자바스크립트(<code>{'<'}script{'>'}</code>)를 실행하여 <code>localStorage</code>나 시스템 테마를 읽고 <code>{'<'}html class="dark"{'>'}</code>를 동기적으로 주입하는 표준 깜빡임 방지 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(다크모드 SSR 인라인 스크립트 FOUC 방지)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 다크모드로 설정된 사용자가 페이지를 새로고침할 때, React 하이드레이션 완료를 기다리지 않고 첫 페인팅(First Paint) 시점부터 즉각 검은색 배경 테마가 적용되어 하얀색 화면이 번쩍이는 플래시 현상이 완벽히 차단되는 파이프라인을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>시각적 눈부심(Flash) 100% 차단</strong>: 야간 환경에서 다크모드 사용자가 페이지 이동 또는 새로고침 시 겪는 하얀색 깜빡임을 원천 제거합니다.</li>
+                    <li><strong>제로 하이드레이션 불일치</strong>: <code>suppressHydrationWarning</code> 속성을 <code>{'<'}html{'>'}</code>에 선언하여 서버 렌더 HTML과 클라이언트 테마 클래스 간의 React 경고를 깔끔하게 해결합니다.</li>
+                    <li><strong>초소형 페이로드</strong>: 외부 무거운 라이브러리 없이 단 몇 줄의 순수 바닐라 인라인 스크립트로 동작합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>시스템 다크모드 및 사용자 정의 테마를 지원하는 전사 웹 서비스</li>
+                    <li>야간 개발자 문서 및 기술 블로그 플랫폼</li>
+                    <li>대시보드 및 금융 트레이딩 터미널 화면</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>suppressHydrationWarning 필수 설정</strong>: 서버 렌더링 시점에는 사용자의 <code>localStorage</code>를 알 수 없으므로 <code>app/layout.tsx</code>의 <code>{'<'}html lang="ko" suppressHydrationWarning{'>'}</code>을 반드시 설정해야 합니다.</li>
+                    <li><strong>인라인 스크립트 실행 경량화</strong>: 해당 인라인 스크립트는 렌더링을 블로킹하므로 복잡한 로직을 넣지 않고 오직 테마 클래스 토글만 최소한으로 수행해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

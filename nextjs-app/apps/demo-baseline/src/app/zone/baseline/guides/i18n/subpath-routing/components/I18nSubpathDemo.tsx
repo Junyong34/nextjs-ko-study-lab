@@ -10,7 +10,7 @@ export function I18nSubpathDemo() {
         <button type="button" onClick={() => setLang('ja')} className={`rounded px-3 py-1 font-bold ${lang === 'ja' ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'bg-zinc-100 dark:bg-zinc-800'}`}> /ja/shop</button>
       </div>
       <div className="rounded bg-zinc-50 p-3 text-xs dark:bg-zinc-900 font-mono">
-        선택된 언어 세그먼트: /{lang}/products -&gt; {lang === 'ko' ? '장바구니 담기' : lang === 'en' ? 'Add to Cart' : 'カートに入れる'}
+        선택된 언어 세그먼트: /{lang}/products -{'>'} {lang === 'ko' ? '장바구니 담기' : lang === 'en' ? 'Add to Cart' : 'カートに入れる'}
       </div>
     </div>
   )

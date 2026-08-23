@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="next/script 로딩 전략 상세 비교">
+      <DemoDeepDiveCard title="next/script 로딩 전략 (beforeInteractive / afterInteractive / lazyOnload / worker)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>next/script 로딩 전략 상세 비교는 Next.js App Router의 components 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>next/script</code> 컴포넌트는 외부 서드파티 자바스크립트(SDK, 애널리틱스, 챗봇 등)의 로딩 타이밍과 우선순위를 <code>strategy</code> 속성(<code>beforeInteractive</code>, <code>afterInteractive</code>, <code>lazyOnload</code>, <code>worker</code>)을 통해 선언적으로 제어하여 메인 스레드 블로킹을 방지하는 Next.js 최적화 스펙입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(next/script 로딩 전략 상세 비교)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 보안 봇 감지 스크립트(<code>beforeInteractive</code>), GA4 웹로그 분석기(<code>afterInteractive</code>), 고객센터 실시간 채팅 위젯(<code>lazyOnload</code>)을 서로 다른 전략으로 배치하여, 핵심 페이지 렌더링에 미치는 TBT(Total Blocking Time) 영향을 비교 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>메인 스레드 경합 최소화</strong>: 중요도가 낮은 위젯 스크립트의 실행을 브라우저 유휴 시간(Idle)으로 미루어 초기 인터랙션 지연(INP/TBT)을 줄입니다.</li>
+              <li><strong>스크립트 중복 로드 자동 방지</strong>: 여러 페이지에서 동일한 <code>{'<'}Script{'>'}</code>를 호출해도 Next.js가 한 번만 주입하도록 보장합니다.</li>
+              <li><strong>웹 워커(Web Worker) 오프로딩</strong>: <code>strategy="worker"</code>(Partytown 결합)를 통해 무거운 추적 스크립트를 백그라운드 스레드로 격리 실행합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>페이지 로드 전 필수 실행되는 봇 방지/인증 스크립트 (<code>beforeInteractive</code>)</li>
+              <li>Google Analytics / Tag Manager 등 기본 웹로그 분석기 (<code>afterInteractive</code>)</li>
+              <li>카카오톡 상담 챗봇 / 채널톡 / 설문조사 위젯 (<code>lazyOnload</code>)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>beforeInteractive 배치 위치 제약</strong>: <code>strategy="beforeInteractive"</code>는 반드시 루트 <code>app/layout.tsx</code> 내부에 배치해야 하며 중첩 세그먼트 페이지에는 사용할 수 없습니다.</li>
+              <li><strong>인라인 스크립트 실행</strong>: 인라인 코드를 작성할 때는 <code>{'<'}Script id="my-script"{'>'}{'{'}`...`{'}'}{'<'}/Script{'>'}</code>와 같이 고유 <code>id</code> 속성을 필수로 지정해야 합니다.</li>
             </ul>
           </div>
         </div>

@@ -42,7 +42,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
           <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 sm:text-4xl lg:text-5xl leading-tight sm:leading-tight dark:text-zinc-50">
             <span>Next.js App Router</span>
             <span className="block mt-2 sm:mt-3.5 text-zinc-500 dark:text-zinc-400 text-2xl sm:text-3xl lg:text-4xl font-bold">
-              공식 문서 한국어 번역 &amp; 실습 랩
+              공식 문서 한국어 번역 & 실습 랩
             </span>
           </h1>
           <p className="pt-1 text-base sm:text-lg leading-relaxed text-zinc-600 dark:text-zinc-300">

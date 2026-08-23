@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="useRouter 프로그래밍 네비게이션 및 prefetch 최적화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>useRouter 프로그래밍 네비게이션 및 prefetch 최적화는 Next.js App Router의 linking-and-navigating 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="useRouter 프로그래밍 네비게이션 및 prefetch 최적화">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p><code>next/navigation</code>의 <code>useRouter()</code> 훅은 <code>router.push()</code>, <code>router.replace()</code>, <code>router.prefetch()</code> 메서드를 통해 클라이언트 사이드에서 프로그래밍 방식으로 라우팅을 제어하고, 지정된 경로의 RSC 페이로드를 백그라운드에서 사전 캐싱하는 클라이언트 네비게이션 표준 API입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(useRouter 프로그래밍 네비게이션 및 prefetch 최적화)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 [결제 완료 후 이동]이나 [VIP 기획전 바로가기] 버튼에 마우스를 올리거나 포커스할 때 <code>router.prefetch('/zone/baseline/...')</code>를 수동 호출하여 RSC 청크를 사전 수신하고, 버튼 클릭 시 네트워크 대기 시간 없이 0ms 즉각 화면 전환을 수행합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>예측 기반 초고속 전환</strong>: 사용자 행동(호버, 결제 단계 진행 등)을 기반으로 다음 페이지 자원을 미리 캐싱하여 체감 로딩 속도를 제로화합니다.</li>
+                    <li><strong>유연한 프로그래밍 라우팅</strong>: 폼 검증 완료 후 조건부 분기 이동, 타이머 종료 후 자동 리다이렉트 등 비동기 로직 결합이 용이합니다.</li>
+                    <li><strong>네트워크 대역폭 제어</strong>: 링크 태그 자동 프리패치 외에 실무적으로 중요한 핵심 전환 경로만 선별적으로 프리패치할 수 있습니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>주문 결제 폼 유효성 검사 성공 직후 완료 페이지(<code>/order/complete</code>)로 <code>router.push()</code></li>
+                    <li>상품 장바구니 담기 후 [바로 구매하기] 버튼 호버 시 주문서 작성 페이지 사전 프리패치</li>
+                    <li>로그인 세션 만료 알림 팝업 확인 클릭 시 로그인 페이지로 히스토리 덮어쓰기(<code>router.replace()</code>)</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>Production 빌드에서만 완전 동작</strong>: <code>router.prefetch()</code>의 실제 백그라운드 프리패치 캐싱 효과는 개발(dev) 모드가 아닌 <code>next build</code> 후 프로덕션 환경에서 확인할 수 있습니다.</li>
+                    <li><strong>대량의 무분별한 prefetch 지양</strong>: 루프나 거대한 테이블의 모든 행에 대해 무차별적으로 <code>router.prefetch()</code>를 호출하면 모바일 사용자의 데이터 대역폭과 CPU 자원을 낭비할 수 있습니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

@@ -8,26 +8,28 @@ export default function ProxyRewriteAndHeadersDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Next.js 16 proxy.ts 요청 가로채기 & rewrite/헤더 주입"
-        concept="Next.js 16의 proxy.ts(구 middleware.ts)는 페이지 렌더링이 시작되기 직전에 요청을 가로채어, 브라우저 주소창 URL 변경 없는 A/B 테스트 rewrite, GeoIP 및 인증 헤더 주입, 조건부 redirect를 수행합니다."
+        title="Next.js 16 proxy.ts 요청 가로채기 & NextResponse.rewrite/헤더 주입"
+        concept="Next.js 16 proxy.ts(프록시/미들웨어)는 렌더링 전 요청을 가로채어 주소창 URL 유지 rewrite, GeoIP/인증 커스텀 헤더 주입, 세션 만료 시 307 redirect를 수행합니다."
         steps={[
           {
             step: 1,
-            title: 'A/B 테스트 버킷 변경 (대조군 vs 실험군)',
-            description: '상단 툴바에서 버킷을 변경하여 주소창 URL(/landing)은 유지된 채 렌더링 페이지만 변경되는 rewrite를 관찰합니다.',
+            title: '[실험군 (Variant B)] 버킷 선택',
+            description: 'A/B 테스트 버킷을 변경하여 주소창 URL(/landing)은 그대로 유지된 채 내부적으로 Variant B 페이지가 렌더링되는 rewrite를 확인합니다.',
             actionBadge: 'NextResponse.rewrite',
           },
           {
             step: 2,
-            title: 'GeoIP 국가 및 인증 헤더 주입 확인',
-            description: '[헤더 주입] 탭을 눌러 프록시가 downstream Server Component로 전달하는 커스텀 헤더를 확인합니다.',
-            actionBadge: 'x-forwarded-* 헤더',
+            title: '[헤더 주입] 탭 클릭',
+            description: '프록시 파이프라인에서 downstream 컴포넌트로 주입되는 x-forwarded-country 및 x-user-authenticated 커스텀 헤더를 확인합니다.',
+            actionBadge: '헤더 주입',
           },
           {
             step: 3,
-            title: '인증 실패 조건부 Redirect 테스트',
-            description: '[로그인 세션 유효] 체크를 해제하여 렌더링 전 즉각적인 307 Temporary Redirect 동작을 확인합니다.',
+            title: '[Redirect] 탭 전환 및 [로그인 세션 유효] 체크 해제 대조',
+            description: '인증 토큰 유무 체크를 해제하여 미인증 요청 시 즉각적인 307 Temporary Redirect 동작이 발생하는 것을 대조 관찰합니다.',
             actionBadge: 'NextResponse.redirect',
+            observe: 'URL 유지 rewrite(Variant B)와 커스텀 주입 헤더(x-forwarded-country), 그리고 미인증 시 /login으로의 307 Redirect가 검증됨',
+            observeAt: 'playground',
           },
         ]}
       />

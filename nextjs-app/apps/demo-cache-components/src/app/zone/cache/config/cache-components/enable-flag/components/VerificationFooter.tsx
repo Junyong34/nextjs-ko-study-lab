@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="cacheComponents: true Next.js 16 플래그 활성화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>experimental.cacheComponents: true는 Next.js 16의 차세대 Cache Components 아키텍처(&apos;use cache&apos;, cacheLife, cacheTag, custom cacheHandler)를 프로젝트 전체에 활성화하는 플래그입니다.</p>
-          </div>
+                                    <DemoDeepDiveCard title="Next.js 16 cacheComponents 플래그 활성화 및 빌드 파이프라인">
+                    <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                        <p>Next.js 16의 <code>experimental.dynamicIO</code>(또는 <code>cacheComponents</code>) 플래그는 기존의 복잡한 Data Cache 모델을 탈피하고, 컴포넌트 및 함수 단위의 <code>'use cache'</code> 지시어와 <code>cacheLife</code>/<code>cacheTag</code> 시스템을 활성화하는 컴파일러 설정 스펙입니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>next.config.ts에 플래그를 활성화하면 컴파일러가 컴포넌트/함수 레벨의 &apos;use cache&apos; 지시어를 해석하고 자동 인자 직렬화 및 정밀 캐시 라이프사이클을 가동합니다.</p>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                        <p>본 데모에서는 플래그 활성화 시 컴파일러가 비동기 I/O 함수를 감지하고 <code>'use cache'</code>가 부여된 세그먼트를 자동 식별하여 정적 캐시 아티팩트로 분리하는 빌드 파이프라인의 상태를 검증합니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>선언적 캐싱 패러다임 전환: 복잡한 fetch 옵션이나 unstable_cache 수동 키 관리 없이 코드 레벨에서 직관적으로 캐시 경계를 정의합니다.</li>
-              <li>컴포넌트 JSX 트리 직접 캐싱: 계산량이 많은 복잡한 UI 서브트리를 직렬화된 RSC 페이로드로 캐시하여 렌더링 부하를 제로화합니다.</li>
-              <li>마이크로초 단위 초고속 서빙: 빌드 타임 및 온디맨드 런타임 캐시가 완벽히 결합되어 최상의 응답 속도를 달성합니다.</li>
-            </ul>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>차세대 캐싱 모델 통합</strong>: 모호했던 fetch 옵션 대신 React 표준 지시어(<code>'use cache'</code>)로 캐싱 멘탈 모델을 단순화합니다.</li>
+                          <li><strong>빌드 타임 안전성 보장</strong>: 동적 데이터 접근과 캐시된 데이터 영역을 컴파일 단계에서 엄격히 분리하여 런타임 오류를 방지합니다.</li>
+                          <li><strong>정밀한 캐시 수명 제어</strong>: <code>cacheLife()</code> 프로파일과 연동되어 초, 분, 시 단위의 정밀한 TTL 스케줄링을 지원합니다.</li>
+                        </ul>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>Next.js 16 Cache Components 신규 프로젝트 아키텍처 도입</li>
-              <li>복잡한 카탈로그/추천 알고리즘 컴포넌트 JSX 캐싱</li>
-              <li>실시간 재고와 캐시 컴포넌트의 유연한 태그 기반 동기화</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li>Next.js 16 신규 프로젝트의 표준 엔터프라이즈 캐싱 아키텍처 수립</li>
+                          <li>대규모 이커머스 트래픽 처리를 위한 마이크로 캐싱 도입</li>
+                          <li>기존 Next.js 14/15 레거시 캐시 시스템의 현대화 리팩토링</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>Node.js 18+ 환경 요구</strong>: 최신 Cache Components 파이프라인은 최신 Node.js 런타임과 React 19 Canary 버전을 필요로 합니다.</li>
+                          <li><strong>동적 함수와의 격리</strong>: <code>cookies()</code>나 <code>headers()</code>를 직접 읽는 컴포넌트 내부에는 <code>'use cache'</code>를 직접 선언할 수 없으며 파라미터로 주입해야 합니다.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </DemoDeepDiveCard>
     </div>
   )
 }

@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• 서버 부팅 register() 실행 훅 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>서버 부팅 register() 실행 훅는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>instrumentation.ts</code>의 <code>register()</code> 함수는 Next.js 서버 인스턴스가 부팅(Cold Start)될 때 최초 1회 비동기로 실행되는 표준 라이프사이클 훅으로, OpenTelemetry 추적 에이전트 초기화, Sentry SDK 구성, 데이터베이스 커넥션 풀 사전 웜업을 수행하는 서버 계측 표준입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(서버 부팅 register() 실행 훅)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 서버 기동 시 <code>register()</code>가 실행되어 APM 모니터링 에이전트를 등록하고 환경 설정 유효성을 검증한 후, 서버 런타임(Node.js vs Edge)에 따른 초기화 성공 로그를 출력하는 과정을 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>서버 부팅 시점 단 1회 안전 실행</strong>: 요청(Request) 핸들링 단계에서 중복 초기화되지 않고 서버 프로세스 시작 시점에 필수 SDK를 신뢰성 있게 기동합니다.</li>
+              <li><strong>런타임별 분기 초기화 지원</strong>: <code>process.env.NEXT_RUNTIME === 'nodejs'</code> 조건을 통해 Node.js 전용 모니터링 SDK와 Edge 호환 로거를 안전하게 분리 실행합니다.</li>
+              <li><strong>모니터링 사각지대 제로</strong>: 첫 번째 HTTP 요청이 인입되기 전에 추적 컨텍스트가 활성화되어 서버 콜드 스타트 지연과 초기 에러를 완벽히 캡처합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>OpenTelemetry / Datadog / NewRelic APM 분산 추적 에이전트 초기화</li>
+              <li>Sentry 서버사이드 에러 모니터링 및 성능 프로파일러 구성</li>
+              <li>서버 기동 시 필수 비밀키 환경변수 누락 여부 사전 검증(Health Check)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>experimental 플래그 설정 확인</strong>: Next.js 버전에 따라 <code>next.config.ts</code>에서 <code>experimental.instrumentationHook: true</code> 옵션이 필요할 수 있습니다.</li>
+              <li><strong>클라이언트 코드 임포트 금지</strong>: <code>instrumentation.ts</code>는 오직 서버 런타임에서만 구동되므로 브라우저 전용 모듈을 임포트하면 서버 구동이 실패합니다.</li>
             </ul>
           </div>
         </div>

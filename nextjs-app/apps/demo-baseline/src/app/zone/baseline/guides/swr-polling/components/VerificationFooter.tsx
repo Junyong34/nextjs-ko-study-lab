@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• SWR 실시간 배송 조회 자동 폴링 &amp; mutate() 갱신 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• SWR 실시간 배송 조회 자동 폴링 & mutate() 갱신 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,43 +57,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="SWR 실시간 배송 조회 자동 폴링 &amp; mutate() 갱신 실증 검증"
+        title="SWR 실시간 배송 조회 자동 폴링 & mutate() 갱신 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="SWR 실시간 배송 조회 자동 폴링 &amp; mutate() 갱신">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>SWR, TanStack Query 및 React 19 Suspense 스트리밍은 서버 사이드 초기 렌더링과 클라이언트 사이드 실시간 비동기 상태 관리를 결합하여 네트워크 지연을 극복하는 현대적 데이터 패칭 아키텍처입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="SWR 실시간 배송 조회 자동 폴링 & mutate() 갱신">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>SWR(Stale-While-Revalidate)의 <code>refreshInterval</code> 옵션은 클라이언트 사이드에서 지정된 주기(e.g. 3000ms)마다 백그라운드 HTTP 폴링을 실행하여 데이터를 최신화하고, 탭 포커스(<code>revalidateOnFocus</code>) 및 네트워크 재연결 시 즉시 재검증을 수행하는 실시간 클라이언트 데이터 페칭 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 핵심 상품 정보는 서버에서 즉시 전송(0ms)하고, 무거운 추천 상품과 실시간 구매 후기는 Suspense 청크 스트리밍으로 점진적 표시하며, 배송 기사 위치는 SWR 3초 폴링으로 실시간 갱신합니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 실시간 택배 배송 트래킹 화면에서 3초 주기로 배송 기사 위치와 상태(집화완료 -{'>'} 이동중 -{'>'} 배송출발 -{'>'} 배송완료)를 자동 폴링하고, [즉시 갱신] 버튼 클릭 시 <code>mutate()</code>를 호출하여 폴링 주기와 무관하게 즉각 최신 상태를 반영하는 흐름을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>TTFB(Time To First Byte) 0ms: 무거운 서브 데이터 때문에 메인 페이지 전체가 멈추는 블로킹을 완전히 제거합니다.</li>
-              <li>실시간 데이터 자동 동기화: 배송 상태 변경이나 재고 소진 시 사용자가 새로고침하지 않아도 화면이 자동 갱신됩니다.</li>
-              <li>낙관적 업데이트(Optimistic Update): 주문 상태 변경 시 로딩 스피너 없이 UI를 즉시 갱신하고 백그라운드에서 서버와 동기화합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>자동 백그라운드 동기화</strong>: 별도의 복잡한 WebSocket 서버 인프라 구축 없이 표준 HTTP 엔드포인트만으로 실시간성 UI를 구현합니다.</li>
+                    <li><strong>지능형 자원 절약</strong>: 사용자가 다른 브라우저 탭으로 전환하거나 화면을 최소화하면 폴링을 자동으로 일시 중단하여 불필요한 배터리와 트래픽 소모를 방지합니다.</li>
+                    <li><strong>강력한 내장 캐시</strong>: 이전 요청 데이터를 로컬 메모리에 보존하여 재검증 중에도 깜빡임 없는 매끄러운 뷰를 제공합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 실시간 배송 기사 위치 추적 및 주문 상태 자동 관제</li>
-              <li>수만 개 상품 목록의 무한 스크롤(Infinite Scroll) 피드</li>
-              <li>상품 상세 페이지의 구매 후기 및 AI 추천 상품 점진적 스트리밍</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>배달 음식 주문 후 라이더 위치 및 도착 예정 시간 실시간 트래킹</li>
+                    <li>주식/가상자산 거래소의 실시간 시세 및 호가창 자동 업데이트</li>
+                    <li>고객센터 상담 대기 인원 수 및 티켓 처리 현황 모니터링</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>폴링 주기 최적화</strong>: 너무 짧은 폴링 주기(e.g. 500ms)는 서버 API 게이트웨이에 심각한 트래픽 부하를 유발하므로 실무 요구사항에 맞는 적절한 간격(3~10초)을 설정해야 합니다.</li>
+                    <li><strong>Server Actions와의 역할 분담</strong>: 초기 화면 렌더링은 Server Component로 처리하고, 이후의 주기적 실시간 갱신 영역만 SWR을 적용하는 하이브리드 구성이 권장됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

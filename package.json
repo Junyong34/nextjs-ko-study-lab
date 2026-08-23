@@ -13,6 +13,8 @@
     "gen-stubs": "pnpm --filter @study/demos gen-stubs",
     "test": "pnpm --filter @study/test-suite test",
     "test:all": "pnpm --filter @study/test-suite test:all",
+    "test:guide": "pnpm --filter @study/test-suite test:guide-consistency",
+    "test:guide-audit": "pnpm --filter @study/test-suite test:guide-audit",
     "test:manifest": "pnpm --filter @study/test-suite test:manifest",
     "test:no-static-matched": "pnpm --filter @study/test-suite test:no-static-matched",
     "test:tier1": "pnpm --filter @study/test-suite test:tier1",

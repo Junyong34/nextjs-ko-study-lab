@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="expireTime 메모리 ISR 캐시 보존 기간 튜닝">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>expireTime은 서버 메모리 및 파일 시스템 캐시에서 만료된 이전 버전의 ISR/Data Cache 항목을 가비지 컬렉션하고 파기하는 만료 시간(초 단위)을 튜닝하는 설정입니다.</p>
-          </div>
+                                    <DemoDeepDiveCard title="expireTime 튜닝을 통한 메모리 캐시 GC 최적화">
+                    <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                        <p><code>next.config.ts</code>의 <code>expireTime</code>(또는 <code>cacheLife.expire</code>) 설정은 캐시된 데이터가 더 이상 재검증되지 않고 서버 메모리/디스크에서 완전히 폐기(Garbage Collection)되는 만료 한계 시간을 튜닝하여 인스턴스 OOM(Out of Memory)을 방지하는 메모리 최적화 스펙입니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>expireTime: 3600 설정 시 재검증 주기가 지난 구버전 캐시 사본을 지정된 시간 동안 보관하여 백그라운드 재검증 중에도 안정적인 stale 응답을 보장한 뒤 안전하게 폐기합니다.</p>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                        <p>본 데모에서는 수천 개의 동적 상품 ID에 대해 캐시가 생성될 때, <code>expireTime: 300</code>(5분) 설정에 따라 접근이 없는 오래된 캐시 청크들이 메모리에서 안전하게 정리되고 활성 캐시만 유지되는 메모리 사용량 추이를 검증합니다.</p>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>서버 메모리 누수 방지: 장기간 운영되는 프로덕션 서버에서 만료된 고아 캐시 데이터가 메모리를 잠식하는 것을 방지합니다.</li>
-              <li>SWR(Stale-While-Revalidate) 복원력: 백엔드 API 장애 시 만료 유예 시간 동안 기존 캐시 사본을 서빙하여 서비스 무중단을 유지합니다.</li>
-              <li>디스크 I/O 최적화: 불필요한 오래된 캐시 파일을 정기적으로 청소하여 파일 시스템 I/O 병목을 해소합니다.</li>
-            </ul>
-          </div>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>서버 메모리 누수 및 OOM 방지</strong>: 트래픽이 급증하여 무수히 많은 캐시 엔트리가 생성되어도 만료된 데이터가 제때 폐기되어 서버 안정성을 유지합니다.</li>
+                          <li><strong>스토리지 자원 절감</strong>: 디스크 및 Redis 인메모리 저장소의 불필요한 좀비 캐시 점유율을 최소화합니다.</li>
+                          <li><strong>장기 미조회 데이터의 자동 정리</strong>: 단발성 검색어나 비인기 상품의 캐시가 메모리를 영구 점유하지 않도록 자동 정리 파이프라인을 구축합니다.</li>
+                        </ul>
+                      </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>수백만 개 상품 카탈로그를 운영하는 대형 쇼핑몰 서버 메모리 최적화</li>
-              <li>백엔드 DB 일시 지연 시 stale 캐시 서빙 유예 시간 확보</li>
-              <li>고부하 이커머스 컨테이너 환경의 메모리 사용량 안정화</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li>수백만 개의 롱테일(Long-tail) 상품 카탈로그를 운영하는 대형 마켓플레이스</li>
+                          <li>일회성 검색 쿼리 결과 및 사용자별 임시 필터 데이터 캐싱</li>
+                          <li>메모리 리소스가 제한적인 경량 서버리스 컨테이너 환경</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                          <li><strong>revalidate와 expire의 차이 이해</strong>: <code>revalidate</code>는 새 데이터를 백그라운드에서 가져오기 시작하는 시점이고, <code>expire</code>는 캐시를 완전히 버리고 동기적으로 새로 계산하는 최종 만료 시점입니다.</li>
+                          <li><strong>과도하게 짧은 expire 설정 주의</strong>: expireTime을 너무 짧게 잡으면 캐시 히트율이 급감하여 백엔드 원본 DB로 요청이 쏟아지는 캐시 스탬피드(Cache Stampede) 현상이 발생할 수 있습니다.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </DemoDeepDiveCard>
     </div>
   )
 }

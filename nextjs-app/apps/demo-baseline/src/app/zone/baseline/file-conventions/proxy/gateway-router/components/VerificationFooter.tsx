@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="내부 마이크로서비스 프록시 라우팅 (proxy.ts)">
+      <DemoDeepDiveCard title="내부 마이크로서비스 프록시 라우팅 (proxy.ts / rewrites)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>내부 마이크로서비스 프록시 라우팅 (proxy.ts)는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              프록시(Proxy) 게이트웨이 라우팅은 외부 클라이언트 요청을 가로채어 내부 마이크로서비스(주문 서비스, 재고 서비스, 검색 엔진)로 URL 변경 없이 투명하게 중계(Reverse Proxy)하고 인증 헤더를 주입하는 Next.js 백엔드 게이트웨이 아키텍처입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(내부 마이크로서비스 프록시 라우팅 (proxy.ts))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 클라이언트가 <code>/api/v1/orders</code>로 요청을 보냈을 때, 게이트웨이 라우터가 내부 주문 마이크로서비스(<code>http://order-service.internal:8080</code>)로 요청을 전달하고 내부 전용 서명 헤더(<code>X-Internal-Gateway: verified</code>)를 첨부하여 응답을 클라이언트로 되돌려주는 프록시 파이프라인을 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>마이크로서비스 엔드포인트 은닉</strong>: 내부 백엔드 서버의 실제 IP와 포트를 외부에 노출하지 않고 단일 도메인으로 통합합니다.</li>
+              <li><strong>CORS 이슈 원천 해결</strong>: 프론트엔드와 동일한 오리진(Origin)으로 API를 프록시하여 복잡한 브라우저 CORS 정책을 우회합니다.</li>
+              <li><strong>중앙 집중식 인증 및 로깅</strong>: 모든 마이크로서비스 요청의 인증 토큰 검증, 트래픽 제한(Rate Limiting), 분산 추적 헤더를 게이트웨이에서 일괄 처리합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>결제/주문/재고 분산 마이크로서비스 아키텍처의 프론트엔드 통합 게이트웨이</li>
+              <li>레거시 백엔드 API에서 신규 서버리스 API로의 점진적 마이그레이션(BFF)</li>
+              <li>외부 서드파티 API 호출 시 비공개 시크릿 키 자동 주입 프록시</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>스트리밍 본문 처리 주의</strong>: 파일 업로드나 대용량 페이로드 프록시 시 메모리에 전체 본문을 버퍼링하지 않고 Web Streams 파이프로 직접 전달해야 서버 메모리 고갈을 방지할 수 있습니다.</li>
+              <li><strong>홉 바이 홉(Hop-by-hop) 헤더 제거</strong>: 프록시 중계 시 <code>Connection</code>, <code>Keep-Alive</code>, <code>Transfer-Encoding</code> 등 HTTP 홉 바이 홉 헤더를 적절히 정리해야 비정상 연결 종료를 예방할 수 있습니다.</li>
             </ul>
           </div>
         </div>

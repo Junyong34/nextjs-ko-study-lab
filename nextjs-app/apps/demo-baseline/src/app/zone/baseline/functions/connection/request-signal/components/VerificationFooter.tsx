@@ -63,33 +63,40 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="connection() 비동기 연결 준비 대기">
+            <DemoDeepDiveCard title="connection() 요청 수명주기 접근 및 동적 렌더링 조기 신호">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>connection()은 Next.js 15+에서 도입된 비동기 함수로, 서버 컴포넌트가 정적 사전 렌더링(Prerender) 단계에서 벗어나 실제 클라이언트 요청이 들어올 때까지 동적 렌더링 진입을 명시적으로 대기시키는 신호(Signal) API입니다.</p>
+            <p><code>connection()</code> (<code>next/server</code>)은 Next.js 15+에서 도입된 비동기 함수로, 컴포넌트 렌더링이 빌드 타임 정적 생성이 아닌 실제 클라이언트 요청 수명주기에 진입했음을 명시적으로 선언하고 동적 렌더링 컨텍스트를 활성화합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 예제에서는 타임세일 실시간 재고 핫딜 페이지에서 connection()을 호출하여, 빌드 타임의 정적 스냅샷이 아닌 사용자 요청 시점의 실시간 DB 커넥션을 맺고 초 단위 실시간 재고와 가격을 동기화합니다.</p>
+            <p>본 데모에서는 <code>await connection()</code>을 호출하여 해당 컴포넌트가 사용자의 실시간 요청 시점에 동적으로 렌더링됨을 보장하고, 클라이언트 연결 상태를 확인하여 스트리밍 데이터 파이프라인을 구동합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>PPR(Partial Prerendering)과의 완벽한 결합: 정적 셸은 빌드 타임에 미리 만들어두고, 실시간 커넥션이 필요한 동적 영역만 정밀하게 런타임 지연 실행합니다.</li>
-              <li>불필요한 빌드 타임 DB 쿼리 방지: 빌드 머신이 운영 데이터베이스에 불필요하게 연결되는 문제를 원천 차단합니다.</li>
-              <li>예측 가능한 렌더링 파이프라인: 정적 생성과 동적 렌더링의 경계를 명확한 비동기 함수로 선언합니다.</li>
+              <li><strong>명시적 동적 렌더링 선언</strong>: 헤더나 쿠키를 직접 읽지 않고도 안전하게 정적 빌드 최적화에서 동적 요청 모드로 전환합니다.</li>
+              <li><strong>Partial Prerendering(PPR) 경계 최적화</strong>: 정적 셸(Shell)과 동적 데이터 영역의 경계를 명확히 분리합니다.</li>
+              <li><strong>코드 의도 명확화</strong>: 불필요한 더미 헤더 호출 안티패턴을 제거하고 공식 API로 의도를 표현합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>실시간 잔여 재고 및 초 단위 가격 변동이 심한 플래시 딜 페이지</li>
-              <li>사용자 위치(IP/Geo)에 따른 실시간 당일 배송 가능 여부 판별</li>
-              <li>실시간 주문 폭주 시 대기열 순번 발급 페이지</li>
+              <li>정적 레이아웃 내부에서 실시간 시간/요청별 동적 컴포넌트 렌더링</li>
+              <li>부분 사전 렌더링(PPR) 환경에서 동적 홀(Dynamic Hole) 스트리밍 경계 선언</li>
+              <li>요청별 고유 세션 컨텍스트 초기화</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Next.js 15+ 전용</strong>: Next.js 15 이전 버전에서는 지원되지 않으므로 레거시 환경에서는 <code>headers()</code> 또는 <code>cookies()</code>를 활용해야 합니다.</li>
             </ul>
           </div>
         </div>

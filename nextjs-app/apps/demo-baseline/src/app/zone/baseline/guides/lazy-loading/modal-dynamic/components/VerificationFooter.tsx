@@ -67,29 +67,42 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>결제 모달 next/dynamic 지연 로드는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>next/dynamic</code>(또는 React 19의 <code>React.lazy</code>)은 초기 페이지 로드 시 무거운 컴포넌트(결제 모달, 차트 라이브러리 등)를 번들에서 분리하고, 사용자가 버튼을 클릭하여 모달을 여는 등 실제 필요한 시점에 비동기 청크(Chunk)로 지연 다운로드하는 코드 스플리팅(Code Splitting) 표준 API입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(결제 모달 next/dynamic 지연 로드)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 초기 화면 진입 시 결제 모달 컴포넌트 코드를 다운로드하지 않고 대기하다가, 사용자가 [[결제] 결제 모달 열기] 버튼을 클릭하는 순간 <code>next/dynamic</code>으로 분리된 모달 청크를 로드하여 렌더링을 완료하는 지연 로딩 수명 주기를 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>초기 자바스크립트 번들 30~50% 경감</strong>: 첫 페이지 로드 시 실행하지 않는 결제 SDK나 복잡한 폼 번들을 제거하여 초기 로딩을 가속화합니다.</li>
+              <li><strong>TBT / LCP 성능 극대화</strong>: 메인 스레드 스크립트 파싱 시간을 줄여 페이지 상호작용 가능 시간(TBT)과 코어 웹 바이탈 지표를 최상으로 유지합니다.</li>
+              <li><strong>선언적 로딩 폴백</strong>: <code>loading: () ={'>'} {'<'}Spinner /{'>'}</code> 옵션을 통해 청크 다운로드 중 자연스러운 스켈레톤/스피너 UI를 제공합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>결제 승인 모달, 주소 검색 팝업, 본인 인증 팝업 등 인터랙션 시점에만 필요한 위젯</li>
+              <li>Chart.js / D3 / Three.js 기반의 무거운 데이터 시각화 컴포넌트</li>
+              <li>리치 텍스트 에디터(Quill, TinyMCE) 및 파일 드래그앤드롭 업로더</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>ssr: false 옵션의 Client Component 한정</strong>: <code>dynamic(() ={'>'} import(...), {'{'} ssr: false {'}'})</code>는 클라이언트 컴포넌트(<code>'use client'</code>) 내부에서만 사용할 수 있으며, 서버 컴포넌트에서는 <code>ssr: false</code> 옵션을 사용할 수 없습니다.</li>
+              <li><strong>Named Export 로드 시 맵핑</strong>: default export가 아닌 명명된 export(Named Export) 컴포넌트를 로드할 때는 <code>dynamic(() ={'>'} import('./Modal').then(mod ={'>'} mod.PaymentModal))</code> 형태로 Promise 체이닝을 작성해야 합니다.</li>
+              <li><strong>사용자 인터랙션 지연(INP) 완화</strong>: 모달 버튼 호버 시 <code>import('./Modal')</code>를 미리 트리거(Pre-load)해 두면 클릭 시 청크 다운로드 대기 시간을 0ms로 줄일 수 있습니다.</li>
             </ul>
           </div>
         </div>

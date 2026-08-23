@@ -15,26 +15,28 @@ export default function SoftNavigationRootLayout({
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Next.js <Link> Soft Navigation & 스크롤 위치 제어"
-        concept="Next.js의 <Link>는 전체 화면을 새로고침하지 않고 필요한 부분만 갈아 끼우는 Soft Navigation을 수행합니다. scroll={false}를 설정하면 탭을 바꿔도 스크롤 위치가 맨 위로 튀지 않고 그대로 유지됩니다."
+        title="Next.js <Link> Soft Navigation & scroll={false} 스크롤 보존"
+        concept="Next.js <Link>는 브라우저 전체 새로고침 없이 변경 세그먼트만 교체(Soft Navigation)하여 메모 상태를 보존하며, scroll={false}를 지정하면 0ms 전환 시 스크롤 위치가 최상단으로 튀지 않습니다."
         steps={[
           {
             step: 1,
-            title: '메모 입력 & 스크롤 다운',
-            description: '상단 입력창에 메모를 작성하고, 화면을 아래로 스크롤합니다.',
-            actionBadge: '상태 생성',
+            title: '상단 메모 입력창에 텍스트 입력 및 스크롤 이동',
+            description: '상단 입력창에 메모를 입력하고 페이지 하단으로 스크롤을 내려 조작 준비를 합니다.',
+            actionBadge: '상태 및 스크롤 생성',
           },
           {
             step: 2,
-            title: '<Link scroll={false}> 클릭',
-            description: '[베스트 상품] 링크를 클릭하여 스크롤 위치와 메모가 유지되는지 확인합니다.',
+            title: '[베스트 상품] <Link scroll={false}> 클릭',
+            description: '[베스트 상품] Soft Navigation 링크를 클릭하여 스크롤 위치와 메모 텍스트가 유지된 채 페이지만 교체되는 것을 확인합니다.',
             actionBadge: 'Soft Navigation',
           },
           {
             step: 3,
-            title: '<a> 하드 리로드와 대조',
-            description: '[베스트 상품 (하드 리로드)]를 눌러 브라우저가 깜빡이며 메모가 날아가는 것을 대조합니다.',
-            actionBadge: '차이 대조',
+            title: '[베스트 상품 (하드 리로드)] 클릭 대조',
+            description: '일반 <a> 링크를 클릭하여 브라우저 전체가 새로고침되며 스크롤이 맨 위로 튀고 메모가 초기화되는 동작과 대조합니다.',
+            actionBadge: 'Hard Navigation 대조',
+            observe: 'Soft Nav는 입력 메모와 스크롤이 유지되나, Hard Nav(<a>)는 전체 리로드로 메모가 소실되고 스크롤이 0px로 초기화됨',
+            observeAt: 'playground',
           },
         ]}
       />

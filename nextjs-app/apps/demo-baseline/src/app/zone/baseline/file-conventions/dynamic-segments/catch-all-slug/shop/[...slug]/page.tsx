@@ -42,7 +42,7 @@ export default async function CatchAllSlugPage({
           {
             step: 1,
             title: "[...slug] 배열 파라미터 파싱",
-            description: `현재 경로 '${slug.join('/')}'가 ${slug.length}개의 배열 요소로 분할되어 params.slug에 주입되었습니다.`,
+            description: `현재 경로 "${slug.join('/')}"가 ${slug.length}개의 배열 요소로 분할되어 params.slug에 주입되었습니다.`,
             actionBadge: `길이: ${slug.length}`,
           },
           {

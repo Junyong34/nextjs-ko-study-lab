@@ -8,26 +8,28 @@ export default function ParallelFetchingDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Promise.all 병렬 데이터 패칭 vs 직렬 Waterfall 대조"
-        concept="독립적인 여러 데이터 요청(예: 상품 기본 정보 + 연관 추천 상품)을 순차적으로 await하면 지연 시간이 누적됩니다(Waterfall). Promise.all을 적용하면 모든 요청이 동시에 시작되어 가장 느린 요청 시간 하나만큼만 소요됩니다."
+        title="Promise.all 병렬 데이터 패칭 vs 직렬 Waterfall 지연 대조"
+        concept="독립적인 데이터 요청을 직렬로 await하면 600ms + 800ms = 약 1,400ms의 Waterfall 지연이 발생하지만, Promise.all을 적용하면 동시 시작되어 가장 긴 800ms 시점에 완료됩니다."
         steps={[
           {
             step: 1,
-            title: '직렬 Waterfall 실행',
-            description: '[1. 직렬 Waterfall 실행]을 눌러 600ms + 800ms = 약 1,400ms 소요를 확인합니다.',
-            actionBadge: '순차 요청',
+            title: '[1. 직렬 Waterfall 실행 (순차 await) ~1,400ms] 클릭',
+            description: '상품 정보(600ms)와 추천 상품(800ms)이 순차 실행되어 약 1,400ms가 소요되는 과정을 확인합니다.',
+            actionBadge: '순차 패칭',
           },
           {
             step: 2,
-            title: '병렬 Promise.all 실행',
-            description: '[2. 병렬 Promise.all 실행]을 눌러 동시 시작으로 약 800ms에 완료되는 것을 확인합니다.',
-            actionBadge: '병렬 요청',
+            title: '[2. 병렬 Promise.all 실행 (동시 시작) ~800ms] 클릭',
+            description: '두 비동기 요청이 동시 발송되어 max(600ms, 800ms)인 약 800ms에 완료되는 것을 확인합니다.',
+            actionBadge: '병렬 패칭',
           },
           {
             step: 3,
-            title: '소요 시간 대조',
-            description: '하단 검증 패널에서 약 40%의 렌더링 지연 시간 단축 효과를 비교합니다.',
-            actionBadge: '성능 최적화 확인',
+            title: '지연 시간 및 타임라인 대조',
+            description: '약 40%(600ms) 단축된 총 실행 시간과 네트워크 타임라인 막대 그래프를 대조 관찰합니다.',
+            actionBadge: '성능 대조',
+            observe: '직렬(약 1,400ms) 대비 병렬(약 800ms) 모드에서 총 응답 시간이 대폭 단축되어 완료됨',
+            observeAt: 'playground',
           },
         ]}
       />

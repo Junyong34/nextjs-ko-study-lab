@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="generateMetadata 동적 SEO 타이틀 및 메타태그 생성">
+            <DemoDeepDiveCard title="generateMetadata 동적 메타데이터 & 타이틀 생성">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>generateMetadata 비동기 함수는 서버 컴포넌트가 렌더링되기 전, 동적 세그먼트 파라미터(params)와 쿼리(searchParams)를 기반으로 DB에서 상품 정보를 조회하여 HTML head의 title, description, canonical, robots 메타태그를 동적으로 구성합니다.</p>
+            <p><code>generateMetadata()</code>는 <code>page.tsx</code> 또는 <code>layout.tsx</code>에서 내보내는 비동기 함수로, 동적 라우트 파라미터(<code>params</code>)나 쿼리(<code>searchParams</code>)를 기반으로 HTML <code>{'<'}title{'>'}</code>, <code>{'<'}meta name="description"{'>'}</code>, Open Graph 태그를 동적으로 생성하는 표준 API입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 예제에서는 /products/prod-001 접근 시 DB에서 상품명(&apos;프로 무선 기계식 키보드&apos;)과 가격(&apos;189,000원&apos;)을 조회하여 브라우저 타이틀(&apos;[17% 특가] 프로 무선 기계식 키보드 - 쇼핑몰&apos;) 및 SEO 설명 태그를 완벽하게 자동 생성합니다.</p>
+            <p>본 데모에서는 상품 ID(<code>prod-101</code>) 파라미터를 받아 백엔드 상품 정보를 비동기 조회한 후, 상품명(<code>'울트라 슬림 노이즈캔슬링 헤드폰'</code>), 판매가, 썸네일 이미지를 포함한 동적 메타데이터 객체를 구성하여 반환합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>검색엔진 SEO 최적화: 수만 개의 상품마다 고유하고 정확한 SEO 타이틀과 메타태그를 동적으로 부여하여 구글/네이버 검색 노출을 극대화합니다.</li>
-              <li>부모 메타데이터 상속 및 병합: 루트 레이아웃의 공통 쇼핑몰 메타데이터를 상속받으면서 필요한 필드(title, og:image)만 깔끔하게 오버라이드합니다.</li>
-              <li>요청 중복 제거(fetch deduping): 동일 렌더링 사이클 내에서 generateMetadata와 page.tsx가 동일 상품 API를 호출해도 단 한 번만 네트워크 요청이 발생합니다.</li>
+              <li><strong>검색엔진 및 SNS 공유 최적화</strong>: 카카오톡/페이스북 링크 공유 시 동적 상품명과 가격, 대표 썸네일 카드가 풍부하게 노출됩니다.</li>
+              <li><strong>동일 렌더링 주기 내 자동 중복 제거(Deduping)</strong>: <code>generateMetadata</code>와 <code>Page</code> 컴포넌트에서 동일한 <code>fetch(url)</code>를 호출하더라도 Next.js가 요청을 1회로 자동 병합합니다.</li>
+              <li><strong>완벽한 타입 안전성</strong>: Next.js의 <code>Metadata</code> 타입을 통해 오타 없이 안전하게 메타 태그를 정의합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 상품 상세 페이지별 동적 SEO 타이틀 및 캐노니컬 URL 생성</li>
-              <li>카테고리 기획전별 맞춤 메타 디스크립션 및 키워드 태그 주입</li>
-              <li>다국어(ko/en/ja) 쇼핑몰의 hreflang 다국어 대체 링크 메타태그 구성</li>
+              <li>수백만 개 상품 상세 페이지의 상품명 및 실시간 가격 기반 동적 타이틀 생성</li>
+              <li>블로그/뉴스 기사의 제목, 작성자, 게시일 기반 소셜 미리보기 태그 주입</li>
+              <li>사용자 프로필 공유 시 닉네임과 프로필 사진 OG 카드 렌더링</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>JSON-LD 구조화 데이터와 병행</strong>: 단순 메타 태그 외에도 검색엔진 리치 스니펫을 위해 <code>JSON-LD</code> 스크립트를 페이지 본문에 함께 삽입하는 것이 권장됩니다.</li>
+              <li><strong>Next.js 15+ params Promise</strong>: Next.js 15+에서는 <code>generateMetadata({'{'} params {'}'})</code>의 <code>params</code>가 Promise이므로 반드시 <code>const {'{'} id {'}'} = await params</code>로 언래핑해야 합니다.</li>
             </ul>
           </div>
         </div>

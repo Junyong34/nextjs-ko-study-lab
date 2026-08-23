@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="부모 metadata 상속 및 canonical URL 오버라이드">
+            <DemoDeepDiveCard title="generateMetadata parent metadata 상속 및 타이틀 템플릿 합성">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>generateMetadata 비동기 함수는 서버 컴포넌트가 렌더링되기 전, 동적 세그먼트 파라미터(params)와 쿼리(searchParams)를 기반으로 DB에서 상품 정보를 조회하여 HTML head의 title, description, canonical, robots 메타태그를 동적으로 구성합니다.</p>
+            <p><code>generateMetadata(props, parent)</code>의 두 번째 인수인 <code>parent: ResolvingMetadata</code>는 상위 레이아웃에서 정의된 메타데이터를 비동기 해결(resolve)하여, 상위 타이틀 템플릿(<code>%s | Acme Shop</code>)이나 오픈그래프 이미지를 자식 페이지에서 상속·병합할 수 있도록 지원합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 예제에서는 /products/prod-001 접근 시 DB에서 상품명(&apos;프로 무선 기계식 키보드&apos;)과 가격(&apos;189,000원&apos;)을 조회하여 브라우저 타이틀(&apos;[17% 특가] 프로 무선 기계식 키보드 - 쇼핑몰&apos;) 및 SEO 설명 태그를 완벽하게 자동 생성합니다.</p>
+            <p>본 데모에서는 루트 레이아웃에 선언된 <code>title: {'{'} template: '%s | 공식 스토어', default: '공식 스토어' {'}'}</code> 설정을 하위 상품 상세 페이지가 <code>await parent</code>로 읽어와 합성하고, 상위 브랜드 로고 이미지에 상품 썸네일을 추가하는 상속 병합 결과를 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>검색엔진 SEO 최적화: 수만 개의 상품마다 고유하고 정확한 SEO 타이틀과 메타태그를 동적으로 부여하여 구글/네이버 검색 노출을 극대화합니다.</li>
-              <li>부모 메타데이터 상속 및 병합: 루트 레이아웃의 공통 쇼핑몰 메타데이터를 상속받으면서 필요한 필드(title, og:image)만 깔끔하게 오버라이드합니다.</li>
-              <li>요청 중복 제거(fetch deduping): 동일 렌더링 사이클 내에서 generateMetadata와 page.tsx가 동일 상품 API를 호출해도 단 한 번만 네트워크 요청이 발생합니다.</li>
+              <li><strong>일관된 브랜드 아이덴티티 유지</strong>: 모든 하위 페이지에 사이트 접미사(<code>| Acme Mall</code>)를 수동 작성하지 않고 상위 템플릿으로 자동 일괄 적용합니다.</li>
+              <li><strong>상위 오픈그래프 이미지 병합</strong>: 상위 레이아웃의 기본 OG 이미지 배열에 하위 페이지의 특화 이미지를 손쉽게 추가(Append)합니다.</li>
+              <li><strong>계층형 메타데이터 오버라이딩</strong>: 특정 하위 페이지만 필요한 메타 태그(예: <code>robots: noindex</code>)를 선별적으로 재정의합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 상품 상세 페이지별 동적 SEO 타이틀 및 캐노니컬 URL 생성</li>
-              <li>카테고리 기획전별 맞춤 메타 디스크립션 및 키워드 태그 주입</li>
-              <li>다국어(ko/en/ja) 쇼핑몰의 hreflang 다국어 대체 링크 메타태그 구성</li>
+              <li>카테고리별 브랜드 접두사/접미사 템플릿 상속 (예: <code>신상품 | 패션관 | 쇼핑몰</code>)</li>
+              <li>관리자 콘솔 전체의 공통 <code>robots: {'{'} index: false {'}'}</code> 보안 상속</li>
+              <li>기본 파비콘 및 사내 공통 Open Graph 로고의 전체 하위 상속</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>parent 비동기 호출 비용</strong>: <code>await parent</code> 호출은 상위 레이아웃의 메타데이터 해결을 기다려야 하므로 꼭 필요한 경우에만 호출하여 메타데이터 생성 지연을 최소화해야 합니다.</li>
+              <li><strong>배열 속성 덮어쓰기 주의</strong>: <code>openGraph.images</code> 등 배열 속성은 기본적으로 상위 배열을 완전히 덮어쓰므로, 상속을 원하면 <code>[...(parent.openGraph?.images || []), newImage]</code>로 명시적 병합을 해야 합니다.</li>
             </ul>
           </div>
         </div>

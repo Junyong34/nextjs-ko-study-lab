@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="쇼핑몰 GNB 및 사이드바 중첩 레이아웃 (Partial Rendering)">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>쇼핑몰 GNB 및 사이드바 중첩 레이아웃 (Partial Rendering)는 Next.js App Router의 layouts-and-pages 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="쇼핑몰 GNB 및 사이드바 중첩 레이아웃 (Partial Rendering)">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>App Router의 중첩 레이아웃(<code>layout.tsx</code>)은 라우트 세그먼트 계층에 따라 상위 레이아웃(GNB)과 하위 레이아웃(카테고리 사이드바)을 중첩하며, 하위 페이지 간 이동 시 공통 레이아웃의 상태와 DOM을 보존하고 변경된 세그먼트 페이지만 다시 렌더링하는 부분 렌더링(Partial Rendering) 표준 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(쇼핑몰 GNB 및 사이드바 중첩 레이아웃 (Partial Rendering))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 <code>/clothing</code>, <code>/electronics</code>, <code>/shoes</code> 카테고리 간 이동 시 상단 검색어 입력 상태와 사이드바 스크롤 위치가 완전히 유지되면서, 중앙의 <code>{'<'}ProductList{'>'}</code> 페이지만 즉각 교체되는 부분 렌더링 수명 주기를 시각화합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>불필요한 전체 리렌더링 제거</strong>: 변경되지 않은 상위 GNB와 사이드바를 유지하여 클라이언트 렌더링 연산과 서버 페치 비용을 대폭 절감합니다.</li>
+                    <li><strong>클라이언트 상태 보존</strong>: 탭 전환 중에도 장바구니 요약, 입력창 타이핑, 스크롤 위치 등 사용자 상호작용 상태가 초기화되지 않습니다.</li>
+                    <li><strong>계층적 UI 아키텍처</strong>: 레이아웃별 독립적인 에러 바운더리 및 로딩 UI를 중첩 배치하여 결함 격리성을 향상합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 카테고리별 사이드바 필터와 상품 목록 뷰어</li>
+                    <li>마이페이지 내 주문 내역, 배송지 관리, 회원 정보 수정 서브 네비게이션</li>
+                    <li>관리자 대시보드의 글로벌 헤더 + 사이드바 메뉴 + 콘텐츠 영역 분할</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>레이아웃 Props 전달 불가</strong>: 상위 <code>layout.tsx</code>에서 자식 <code>page.tsx</code>로 직접 Props를 넘길 수 없으므로, 공통 상태가 필요한 경우 React Context나 URL <code>searchParams</code>를 활용해야 합니다.</li>
+                    <li><strong>Root Layout의 필수 태그</strong>: 최상위 <code>app/layout.tsx</code>는 반드시 <code>{'<'}html{'>'}</code>과 <code>{'<'}body{'>'}</code> 태그를 직접 렌더링해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

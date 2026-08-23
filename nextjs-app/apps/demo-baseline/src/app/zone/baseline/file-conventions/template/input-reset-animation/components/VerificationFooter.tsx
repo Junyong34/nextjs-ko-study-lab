@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="진입 애니메이션 및 폼 리셋 (template.tsx)">
+      <DemoDeepDiveCard title="template.tsx 진입 애니메이션 재생 및 폼 입력 상태 자동 리셋">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>진입 애니메이션 및 폼 리셋 (template.tsx)는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>template.tsx</code>는 라우트 이동 시마다 새로운 React 컴포넌트 인스턴스를 생성하므로, 내부의 로컬 폼 상태(<code>useState</code>)를 0ms 지연으로 자동 초기화하고 CSS 진입 애니메이션(Fade-in/Slide-in)을 매번 새롭게 재생시키는 파일 컨벤션입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(진입 애니메이션 및 폼 리셋 (template.tsx))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 사용자가 [검색어 입력 폼]에 텍스트를 작성하고 다른 탭 메뉴로 이동했을 때, <code>layout.tsx</code> 영역과 달리 <code>template.tsx</code>로 감싸진 입력 폼이 즉시 초기화되며 새로운 슬라이드인 애니메이션과 함께 렌더링되는 동작을 실증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>자동 상태 격리(Zero Stale State)</strong>: 이전 탭에서 작성 중이던 미저장 폼 데이터가 다음 페이지에 오염되는 현상을 프레임워크 레벨에서 방지합니다.</li>
+              <li><strong>시각적 페이지 전환 피드백</strong>: 브라우저 히스토리 탐색 시 사용자에게 명확한 화면 갱신 인터랙션을 제공합니다.</li>
+              <li><strong>선언적 초기화 구조</strong>: 복잡한 <code>useEffect</code> 클린업 함수나 라우터 이벤트 리스너 없이 파일 분리만으로 리셋 메커니즘을 완성합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>다단계 회원가입 및 결제 주문서의 단계별 입력 폼 초기화</li>
+              <li>탭별 독립 검색창 및 필터 입력 위젯</li>
+              <li>마케팅 이벤트 배너의 탭 전환 시 시각적 진입 모션</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>스크롤 위치 유지 충돌 고려</strong>: <code>template.tsx</code>로 전체 본문을 감싸면 페이지 전환 시 스크롤 위치가 유지되지 않고 상단으로 리셋될 수 있으므로, 스크롤 유지가 중요한 경우 <code>layout.tsx</code>와 조합하여 사용해야 합니다.</li>
+              <li><strong>Key 수동 조작 불필요</strong>: Next.js가 내부적으로 라우트 세그먼트 기반 고유 키를 자동 부여하므로 개발자가 임의의 <code>key</code>를 템플릿 루트에 덮어쓰지 않도록 주의합니다.</li>
             </ul>
           </div>
         </div>

@@ -54,26 +54,28 @@ export default async function TagVsPathDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="revalidateTag(정밀 무효화) vs revalidatePath(경로 무효화)"
-        concept="revalidateTag는 특정 태그가 지정된 캐시 블록만 골라서 갱신하므로 다른 캐시에 영향을 주지 않습니다. 반면 revalidatePath는 해당 페이지에 포함된 모든 캐시 블록을 일괄 무효화합니다."
+        title="revalidateTag 정밀 태그 무효화 vs revalidatePath 경로 전체 무효화"
+        concept="revalidateTag('product-a')는 해당 태그가 부여된 특정 캐시 항목만 정밀하게 무효화하지만, revalidatePath는 해당 라우트 경로 아래의 모든 캐시 엔트리를 한 번에 일괄 무효화합니다."
         steps={[
           {
             step: 1,
-            title: '초기 캐시 ID 3종 확인',
-            description: '상단 공지 배너, A 상품, B 상품의 각기 다른 캐시 ID(#...)를 확인합니다.',
-            actionBadge: '독립 캐시',
+            title: "[1. A 상품만 무효화 revalidateTag('product-a')] 클릭",
+            description: "정밀 무효화 버튼을 클릭하여 'A 상품' 캐시만 새 시각으로 갱신되고 B 상품 캐시는 유지되는 것을 확인합니다.",
+            actionBadge: '정밀 태그 무효화',
           },
           {
             step: 2,
-            title: '1. A 상품만 무효화 클릭',
-            description: 'revalidateTag("product-a") 실행 시 A 상품의 캐시 ID만 갱신되고 나머지는 유지됨을 확인합니다.',
-            actionBadge: '정밀 무효화',
+            title: '[3. 경로 전체 일괄 무효화 revalidatePath()] 클릭',
+            description: '경로 무효화 버튼을 클릭하여 라우트에 속한 A 상품, B 상품 2개 항목이 모두 일괄 갱신되는 것을 확인합니다.',
+            actionBadge: '경로 일괄 무효화',
           },
           {
             step: 3,
-            title: '3. 경로 전체 일괄 무효화 클릭',
-            description: 'revalidatePath() 실행 시 배너, A 상품, B 상품의 모든 캐시 ID가 일괄 갱신되는 것을 확인합니다.',
-            actionBadge: '광범위 무효화',
+            title: '무효화 범위 및 캐시 로그 대조',
+            description: '태그 기반 선별 갱신과 경로 기반 전체 갱신의 영향 범위 및 타임스탬프 차이를 대조 관찰합니다.',
+            actionBadge: '무효화 범위 대조',
+            observe: 'revalidateTag는 상품 A 캐시만 갱신하나, revalidatePath는 상품 A, B 캐시 전체를 일괄 갱신함',
+            observeAt: 'playground',
           },
         ]}
       />

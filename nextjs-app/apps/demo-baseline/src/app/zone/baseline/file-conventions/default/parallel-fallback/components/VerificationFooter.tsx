@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Parallel Routes 미매칭 시 default.tsx 폴백">
+      <DemoDeepDiveCard title="default.tsx 폴백 및 Parallel Routes 미매칭 슬롯 처리">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Parallel Routes 미매칭 시 default.tsx 폴백는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              <code>default.tsx</code>는 Parallel Routes(<code>@slot</code>) 환경에서 브라우저가 특정 슬롯과 일치하지 않는 다른 하위 라우트로 소프트 내비게이션하거나 초기 로드될 때, 해당 슬롯의 렌더링 폴백(Fallback)을 제공하는 Next.js 표준 파일 컨벤션입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Parallel Routes 미매칭 시 default.tsx 폴백)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 다중 슬롯(<code>@team</code>, <code>@analytics</code>) 구조에서 사용자가 메인 탭만 변경했을 때, 일치하는 하위 세그먼트가 없는 슬롯이 404 에러를 내지 않고 <code>default.tsx</code> 컴포넌트를 통해 안전하게 기본 대시보드 상태를 유지하는 동작을 검증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>슬롯별 독립 라우팅 보호</strong>: 특정 슬롯에 해당하는 하위 경로가 없더라도 상위 레이아웃이나 전체 페이지가 404로 깨지지 않습니다.</li>
+              <li><strong>선언적 기본 뷰 제공</strong>: 사용자가 처음 진입하거나 알 수 없는 세그먼트에 도달했을 때 안정적인 디폴트 UI를 제공합니다.</li>
+              <li><strong>복합 대시보드 아키텍처 완성</strong>: 탭, 모달, 사이드 패널 등 병렬 슬롯의 라우트 불일치 예외를 프레임워크 레벨에서 완전 제어합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>대시보드 내 다중 위젯 슬롯 중 특정 서브 라우트 미매칭 위젯의 디폴트 차트 렌더링</li>
+              <li>인터셉팅 라우트 모달 닫힘 상태의 <code>@modal/default.tsx</code> (null 반환)</li>
+              <li>이커머스 상품 상세 내 옵션 선택기/리뷰 패널의 기본 안내 뷰</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>새로고침(Hard Reload) 시 default.tsx 필수</strong>: 클라이언트 소프트 내비게이션 시에는 Next.js가 이전 슬롯 상태를 유지하지만, 사용자가 F5로 새로고침하면 서버가 슬롯 상태를 모르므로 <code>default.tsx</code>가 없으면 404 에러가 발생합니다.</li>
+              <li><strong>모달 슬롯의 null 반환 패턴</strong>: <code>@modal/default.tsx</code>에서는 모달이 닫힌 상태를 표현하기 위해 <code>export default function Default() {'{'} return null; {'}'}</code>을 선언하는 것이 표준 패턴입니다.</li>
             </ul>
           </div>
         </div>

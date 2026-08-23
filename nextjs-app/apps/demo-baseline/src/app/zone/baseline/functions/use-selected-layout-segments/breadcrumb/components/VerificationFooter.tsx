@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="useSelectedLayoutSegments() 계층형 브레드크럼 생성">
+            <DemoDeepDiveCard title="useSelectedLayoutSegments() 계층형 브레드크럼 생성">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>useSelectedLayoutSegment() 및 useSelectedLayoutSegments()는 부모 레이아웃 기준에서 현재 활성화된 바로 아래 하위 세그먼트 문자열 또는 전체 하위 세그먼트 배열을 읽어와 탭 네비게이션 및 브레드크럼(Breadcrumb)을 생성하는 전용 훅입니다.</p>
+            <p><code>useSelectedLayoutSegments()</code> (<code>next/navigation</code>)는 현재 레이아웃 하위의 모든 활성화된 중첩 라우트 세그먼트들을 문자열 배열(<code>string[]</code>)로 반환하는 클라이언트 훅입니다. 계층형 브레드크럼(Breadcrumbs) 네비게이션 구현에 최적화되어 있습니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 카테고리 계층 구조(/shop/electronics/keyboards/prod-001)에서 useSelectedLayoutSegments()를 호출하여 &apos;홈 &gt; 전자기기 &gt; 키보드 &gt; 프로 무선 키보드&apos; 브레드크럼 네비게이션을 자동으로 생성합니다.</p>
+            <p>본 데모에서는 깊은 중첩 경로(<code>/shop/fashion/outer/coats</code>) 진입 시 <code>useSelectedLayoutSegments()</code>가 반환한 <code>['fashion', 'outer', 'coats']</code> 배열을 매핑하여 단계별 이동 링크와 화살표 구분자가 포함된 브레드크럼 트리를 동적으로 구성합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>자동화된 계층형 브레드크럼: URL 깊이가 달라져도 수동 설정 없이 파일 시스템 세그먼트 기반으로 정확한 네비게이션 경로를 렌더링합니다.</li>
-              <li>레이아웃 레벨 탭 바인딩: 하위 페이지가 변경되어도 부모 레이아웃이 활성 탭 인디케이터를 정확하게 표시합니다.</li>
-              <li>병렬 라우트 슬롯 지원: parallel routes 슬롯 내부의 하위 세그먼트도 개별 감지할 수 있습니다.</li>
+              <li><strong>전체 중첩 깊이 자동 수집</strong>: 하위 세그먼트가 몇 단계로 깊어지든 배열 형태로 일괄 수집하여 브레드크럼을 손쉽게 렌더링합니다.</li>
+              <li><strong>라우트 그룹 무시</strong>: 괄호로 묶인 라우트 그룹(<code>(shop)</code>)은 반환 배열에서 자동으로 제외되어 사용자 친화적인 URL 세그먼트만 남깁니다.</li>
+              <li><strong>동적 경로 라우팅 연계</strong>: 각 세그먼트를 누적(accumulate)하여 상위 단계로의 역방향 링크를 안전하게 생성합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 대분류 &gt; 중분류 &gt; 소분류 &gt; 상품 상세 계층형 브레드크럼 경로 표시</li>
-              <li>관리자 센터 복합 탭 네비게이션(매출 &gt; 일별 통계 &gt; 결제 수단별 분석)</li>
-              <li>마이페이지 계층 네비게이션 인디케이터</li>
+              <li>대규모 쇼핑몰 카테고리 계층 브레드크럼 (홈 {'>'} 여성의류 {'>'} 아우터 {'>'} 코트)</li>
+              <li>파일 탐색기 및 클라우드 드라이브 폴더 계층 내비게이션</li>
+              <li>다단계 복잡한 설정 및 엔터프라이즈 관리자 메뉴의 위치 추적 바</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>단수형과의 차이</strong>: 단일 탭 인디케이터에는 <code>useSelectedLayoutSegment()</code>(단수형)을, 전체 계층 추적에는 <code>useSelectedLayoutSegments()</code>(복수형)을 명확히 구분해 사용해야 합니다.</li>
+              <li><strong>Client Component 전용</strong>: 레이아웃 컴포넌트 자체는 Server Component로 유지하고, 브레드크럼 렌더링 영역만 <code>'use client'</code> 컴포넌트로 분리하는 아키텍처가 권장됩니다.</li>
             </ul>
           </div>
         </div>

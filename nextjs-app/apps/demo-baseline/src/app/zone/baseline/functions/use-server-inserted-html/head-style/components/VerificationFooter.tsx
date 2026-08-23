@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="useServerInsertedHTML SSR 인라인 스타일/스크립트 주입">
+            <DemoDeepDiveCard title="useServerInsertedHTML() SSR 인라인 스타일 및 CSS-in-JS 주입">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>useServerInsertedHTML SSR 인라인 스타일/스크립트 주입는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>useServerInsertedHTML()</code> (<code>next/navigation</code>)는 서버 사이드 렌더링(SSR) 스트리밍 도중 <code>{'<'}head{'>'}</code> 영역에 인라인 CSS 스타일이나 스크립트를 동적으로 주입할 수 있도록 지원하는 훅입니다. 주로 Emotion, Styled-components 등 CSS-in-JS 라이브러리의 SSR Style Registry 구현에 사용됩니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(useServerInsertedHTML SSR 인라인 스타일/스크립트 주입)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 CSS-in-JS 스타일 레지스트리 프로바이더가 컴포넌트 렌더링 중 생성된 동적 클래스 스타일시트를 수집하고, <code>useServerInsertedHTML</code>을 통해 HTML 스트림 <code>{'<'}head{'>'}</code> 내에 <code>{'<'}style{'>'}</code> 태그로 실시간 주입하여 깜빡임 없는 첫 화면을 완성합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>FOUC(스타일 미적용 깜빡임) 원천 방지</strong>: 첫 HTML 응답과 함께 필수 CSS가 인라인 주입되어 브라우저 렌더링 즉시 완벽한 스타일을 표시합니다.</li>
+              <li><strong>스트리밍 SSR 완벽 호환</strong>: React 19 스트리밍 렌더링 도중에도 서브 청크가 렌더링될 때마다 필요한 스타일을 실시간으로 헤드에 추가합니다.</li>
+              <li><strong>전역 CSS-in-JS 레지스트리 표준화</strong>: 다양한 서드파티 스타일링 도구의 App Router 서버 렌더링 연동을 표준 인터페이스로 통일합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>styled-components 및 Emotion 기반 레거시 디자인 시스템의 Next.js App Router 마이그레이션</li>
+              <li>테넌트별 런타임 동적 테마 CSS 변수의 SSR 인라인 주입</li>
+              <li>다크모드 플래시 방지용 초기 인라인 스크립트 주입</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>서버 렌더링 중에만 실행</strong>: 이 훅은 클라이언트 사이드 내비게이션 중에는 실행되지 않으며 오직 초기 서버 렌더링 시점에만 실행됩니다.</li>
+              <li><strong>순수 함수 스타일 반환</strong>: 반환하는 JSX는 부수 효과 없이 순수 <code>{'<'}style{'>'}</code> 또는 <code>{'<'}script{'>'}</code> 태그여야 합니다.</li>
             </ul>
           </div>
         </div>

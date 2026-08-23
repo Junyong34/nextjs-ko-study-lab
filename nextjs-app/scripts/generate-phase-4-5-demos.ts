@@ -262,7 +262,7 @@ export function UseSelectedSegmentsBreadcrumbDemo() {
         <span>home</span>
         {segments.map((seg, idx) => (
           <React.Fragment key={seg}>
-            <span>&gt;</span>
+            <span>></span>
             <span className={idx === segments.length - 1 ? 'text-blue-600 dark:text-blue-400 font-bold' : ''}>{seg}</span>
           </React.Fragment>
         ))}
@@ -380,7 +380,7 @@ export function UnstableCacheDbDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-white space-y-1">
       <div className="text-zinc-400">// DB 쿼리 캐싱:</div>
-      <div>const getTopSellers = unstable_cache(async () =&gt; db.sales.aggregate(), ['top-sellers'], {'{ revalidate: 3600 }'});</div>
+      <div>const getTopSellers = unstable_cache(async () => db.sales.aggregate(), ['top-sellers'], {'{ revalidate: 3600 }'});</div>
     </div>
   )
 }`
@@ -476,7 +476,7 @@ export function RevalidateTagMaxDemo() {
   return (
     <div className="rounded border border-rose-300 bg-rose-50/50 p-4 dark:border-rose-950 dark:bg-rose-950/20 font-mono text-xs space-y-1">
       <div className="font-bold text-rose-950 dark:text-rose-200">🚨 재고 0개 품절 즉시 무효화:</div>
-      <div className="text-zinc-600 dark:text-zinc-400">revalidateTag('stock-critical', 'max') -&gt; Stale 응답 차단 및 즉시 폐기</div>
+      <div className="text-zinc-600 dark:text-zinc-400">revalidateTag('stock-critical', 'max') -> Stale 응답 차단 및 즉시 폐기</div>
     </div>
   )
 }`
@@ -698,7 +698,7 @@ import React from 'react'
 export function AfterAnalyticsBatchDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-emerald-400 space-y-1">
-      <div>after(async () =&gt; {'{'}</div>
+      <div>after(async () => {'{'}</div>
       <div className="pl-4">await analytics.track('product_view', {'{ id: 101 }'});</div>
       <div>{'}'});</div>
     </div>
@@ -869,7 +869,7 @@ import React from 'react'
 export function ImageResponseOgBadgeDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-white space-y-1">
-      <div className="text-blue-400">new ImageResponse(&lt;div style={'{{ fontSize: 48, background: "#000", color: "#fff" }}'}&gt;70% 할인!&lt;/div&gt;)</div>
+      <div className="text-blue-400">new ImageResponse(<div style={'{{ fontSize: 48, background: "#000", color: "#fff" }}'}>70% 할인!</div>)</div>
       <div className="text-emerald-400">✓ 1200x630 SNS 공유 OG 이미지 실시간 생성</div>
     </div>
   )
@@ -1051,7 +1051,7 @@ export function UseServerInsertedHtmlDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-white space-y-1">
       <div className="text-zinc-400">// useServerInsertedHTML로 스트림에 주입된 CSS:</div>
-      <div className="text-purple-400">&lt;style id="styled-jsx"&gt;.hero-title {'{ color: #4f46e5; }'}&lt;/style&gt;</div>
+      <div className="text-purple-400"><style id="styled-jsx">.hero-title {'{ color: #4f46e5; }'}</style></div>
     </div>
   )
 }`
@@ -1176,7 +1176,7 @@ import React from 'react'
 export function DirectiveUseCacheComponentDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 space-y-2 text-xs">
-      <div className="font-bold text-zinc-900 dark:text-zinc-100">캐시된 &lt;ProductHero /&gt; 컴포넌트:</div>
+      <div className="font-bold text-zinc-900 dark:text-zinc-100">캐시된 <ProductHero /> 컴포넌트:</div>
       <div className="rounded bg-zinc-50 p-3 dark:bg-zinc-900 font-mono text-emerald-600">
         ✓ JSX 렌더 결과 캐시 적중 (서버 렌더 시간 0ms)
       </div>
@@ -1256,7 +1256,7 @@ export function ConfigAssetPrefixDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-emerald-400 space-y-1">
       <div>assetPrefix: 'https://cdn.shop.com'</div>
-      <div className="text-zinc-400">→ &lt;script src="https://cdn.shop.com/_next/static/chunks/main.js"&gt;</div>
+      <div className="text-zinc-400">→ <script src="https://cdn.shop.com/_next/static/chunks/main.js"></div>
     </div>
   )
 }`
@@ -1273,7 +1273,7 @@ export function ConfigRedirectsRegexDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">
       <div className="font-bold text-zinc-900 dark:text-zinc-100">next.config.ts redirects:</div>
-      <div className="text-zinc-500">• source: '/old-shop/:slug*' -&gt; destination: '/shop/:slug*' (308 영구 이동)</div>
+      <div className="text-zinc-500">• source: '/old-shop/:slug*' -> destination: '/shop/:slug*' (308 영구 이동)</div>
     </div>
   )
 }`
@@ -1323,7 +1323,7 @@ import React from 'react'
 export function ConfigRewritesQueryDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">
-      <div className="font-bold text-zinc-900 dark:text-zinc-100">URL /search/shoes -&gt; 내부 rewrite: /search?q=shoes</div>
+      <div className="font-bold text-zinc-900 dark:text-zinc-100">URL /search/shoes -> 내부 rewrite: /search?q=shoes</div>
     </div>
   )
 }`
@@ -1358,7 +1358,7 @@ export function ConfigTrailingSlashDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">
       <div className="font-bold text-zinc-900 dark:text-zinc-100">trailingSlash: true</div>
-      <div className="text-blue-600 dark:text-blue-400">/products -&gt; /products/ (308 자동 정규화)</div>
+      <div className="text-blue-600 dark:text-blue-400">/products -> /products/ (308 자동 정규화)</div>
     </div>
   )
 }`
@@ -1393,7 +1393,7 @@ export function ConfigImagesFormatsDemo() {
   return (
     <div className="rounded border border-emerald-300 bg-emerald-50/50 p-4 dark:border-emerald-950 dark:bg-emerald-950/20 font-mono text-xs space-y-1">
       <div className="font-bold text-emerald-950 dark:text-emerald-200">formats: ['image/avif', 'image/webp']</div>
-      <div className="text-emerald-600 dark:text-emerald-400">• 원본 PNG: 1.2 MB -&gt; AVIF 변환: 85 KB (93% 용량 절감)</div>
+      <div className="text-emerald-600 dark:text-emerald-400">• 원본 PNG: 1.2 MB -> AVIF 변환: 85 KB (93% 용량 절감)</div>
     </div>
   )
 }`
@@ -1459,7 +1459,7 @@ import React from 'react'
 export function ConfigCrossOriginDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">
-      <div className="font-bold text-zinc-900 dark:text-zinc-100">&lt;script src="..." crossorigin="anonymous"&gt;</div>
+      <div className="font-bold text-zinc-900 dark:text-zinc-100"><script src="..." crossorigin="anonymous"></div>
       <div className="text-emerald-600">✓ Sentry/Datadog 상세 에러 콜스택 100% 캡처</div>
     </div>
   )
@@ -1593,7 +1593,7 @@ import React from 'react'
 export function ConfigOutputExportDemo() {
   return (
     <div className="rounded border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">
-      <div className="font-bold text-zinc-900 dark:text-zinc-100">output: 'export' -&gt; out/ 디렉토리 정적 HTML 생성 완료</div>
+      <div className="font-bold text-zinc-900 dark:text-zinc-100">output: 'export' -> out/ 디렉토리 정적 HTML 생성 완료</div>
     </div>
   )
 }`

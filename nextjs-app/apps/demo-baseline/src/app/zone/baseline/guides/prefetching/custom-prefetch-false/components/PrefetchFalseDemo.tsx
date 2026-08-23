@@ -32,7 +32,7 @@ export function PrefetchFalseDemo() {
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100">
-            Next.js &lt;Link prefetch={'{'}{String(prefetchMode)}{'}'}&gt; 프리페치 제어 콘솔
+            Next.js {'<'}Link prefetch={'{'}{String(prefetchMode)}{'}'}{'>'} 프리페치 제어 콘솔
           </h4>
           <p className="text-xs text-zinc-500">
             대용량 상품 목록이나 트래픽이 집중되는 페이지에서 불필요한 RSC 데이터 사전 다운로드를 방지합니다.
@@ -96,7 +96,7 @@ export function PrefetchFalseDemo() {
               >
                 <span>상품 상세로 이동</span>
                 <span className="text-[10px] font-mono text-zinc-400">
-                  (&lt;Link prefetch={'{'}{String(prefetchMode)}{'}'}&gt;)
+                  ({'<'}Link prefetch={'{'}{String(prefetchMode)}{'}'}{'>'})
                 </span>
               </Link>
             </div>

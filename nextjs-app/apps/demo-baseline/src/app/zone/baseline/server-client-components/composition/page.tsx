@@ -39,26 +39,28 @@ export default async function CompositionDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Server & Client Components 합성 및 경계 분리"
-        concept="Next.js App Router는 기본적으로 모든 컴포넌트가 Server Component(RSC)입니다. 무거운 데이터와 정적 UI는 서버에서 렌더링하고, 클릭/상태가 필요한 말단 버튼만 Client Component('use client')로 격리하여 번들 크기를 극소화합니다."
+        title="Server & Client Components 합성 패턴 & 번들 최적화"
+        concept="Next.js Server Component(RSC)에서 무거운 상세 스펙을 0 KB 클라이언트 JS로 렌더링하고, 클릭 인터랙션이 필요한 말단 버튼만 'use client'(RCC)로 격리하여 번들 크기를 극소화합니다."
         steps={[
           {
             step: 1,
-            title: '서버 렌더링 스펙 확인',
-            description: '상세 제원 영역이 서버에서 렌더링되어 0 KB JS 번들로 내려온 것을 확인합니다.',
-            actionBadge: 'RSC 렌더링',
+            title: '서버 렌더링 스펙(RSC) 확인',
+            description: '미드솔 폼, 탄소섬유 플레이트 등 상세 제원이 서버에서 렌더링되어 클라이언트 JS 없이 표시된 것을 확인합니다.',
+            actionBadge: 'RSC 확인',
           },
           {
             step: 2,
-            title: '위시리스트 하트 클릭',
-            description: '하단의 찜하기 버튼을 눌러 클라이언트 로컬 상태(useState)가 독립 동작하는 것을 봅니다.',
+            title: '[위시리스트 담기] 버튼 클릭',
+            description: '하단의 [위시리스트 담기] 버튼을 클릭하여 클라이언트 로컬 상태(useState)가 독립 동작하는 것을 확인합니다.',
             actionBadge: 'RCC 인터랙션',
           },
           {
             step: 3,
-            title: '합성 구조 대조',
-            description: '전체 페이지를 클라이언트로 만들지 않고도 완벽한 인터랙티비티를 구현함을 대조합니다.',
-            actionBadge: '번들 최적화 달성',
+            title: '합성 경계 및 상태 동기화 관찰',
+            description: '전체 페이지를 클라이언트로 변환하지 않고도 말단 버튼의 좋아요 카운트(142 → 143)가 즉시 갱신되는 것을 관찰합니다.',
+            actionBadge: '번들 최적화',
+            observe: '위시리스트 카운트가 142에서 143으로 증가하고 [찜 완료] 뱃지로 전환되며, 상단 서버 스펙 영역은 보존됨',
+            observeAt: 'playground',
           },
         ]}
       />

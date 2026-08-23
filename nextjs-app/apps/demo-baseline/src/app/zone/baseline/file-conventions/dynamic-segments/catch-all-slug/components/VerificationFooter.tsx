@@ -22,39 +22,45 @@ export function VerificationFooter({ currentSlug }: VerificationFooterProps) {
         isMatched={currentSlug ? isMatched : undefined}
         description="Next.js App Router의 [...folderName] 컨벤션을 통해 1단계 이상의 모든 하위 경로 세그먼트를 배열 형태로 전달받는 동작을 검증합니다."
       />
-      <DemoDeepDiveCard title="[...slug] 포괄적 동적 세그먼트">
+      <DemoDeepDiveCard title="[...slug] 포괄적 동적 세그먼트 (Catch-all Segments)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              대괄호 안에 줄임표(<code>[...folderName]</code>)를 포함한 폴더는 <b>Catch-all Segments</b>로 동작하며, 해당 위치 이후의 모든 경로 세그먼트를 <code>string[]</code> 배열로 묶어 제공합니다.
-              예를 들어 <code>/shop/a/b/c</code> 요청 시 <code>params.slug</code>는 <code>['a', 'b', 'c']</code>가 됩니다.
+              대괄호 안에 줄임표(<code>[...folderName]</code>)를 포함한 폴더는 <b>Catch-all Segments</b>로 동작하며, 해당 위치 이후의 모든 하위 경로 세그먼트를 <code>string[]</code> 문자열 배열로 캡처하여 전달합니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. [id] vs [...slug] 차이점</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              단일 동적 세그먼트 <code>[id]</code>는 정확히 1개의 세그먼트(<code>/shop/123</code>)만 매칭되며 하위 경로(<code>/shop/123/reviews</code>)는 404를 반환합니다.
-              반면 <code>[...slug]</code>는 깊이에 상관없이 1개 이상의 모든 하위 경로를 하나의 페이지 파일에서 처리합니다.
+              본 데모에서는 <code>shop/[...slug]</code> 라우트에서 1단계 대분류(<code>/shop/fashion</code>), 2단계 중분류(<code>/shop/fashion/shoes</code>), 3단계 세분류(<code>/shop/fashion/shoes/sneakers</code>) 등 임의의 깊이 URL을 단일 <code>page.tsx</code>에서 수신하여 브레드크럼(Breadcrumb)과 필터 트리를 동적으로 파싱합니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>가변 깊이 카테고리: 대분류/중분류/소분류/세분류 등 N단계 카테고리 트리를 일원화된 파일로 구축</li>
-              <li>파일 탐색기 및 문서 시스템: 폴더 트리 깊이에 유연하게 대응하는 CMS 및 문서 뷰어 구현</li>
-              <li>브레드크럼 자동화: <code>slug.map()</code>으로 상위 경로 링크를 손쉽게 동적 생성</li>
+              <li><strong>가변 깊이 계층 구조 단일화</strong>: N단계의 카테고리 트리나 폴더 구조를 여러 파일 생성 없이 단 하나의 파일로 처리합니다.</li>
+              <li><strong>자동 브레드크럼 파싱</strong>: <code>slug.map()</code>을 활용하여 상위 카테고리 내비게이션 경로를 손쉽게 동적 렌더링합니다.</li>
+              <li><strong>파일 탐색기 및 위키 아키텍처 최적화</strong>: 깊이를 예측할 수 없는 문서나 스토리지 디렉토리에 유연하게 대응합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 다계층 카테고리 브라우징 (<code>/shop/category/sub/leaf</code>)</li>
-              <li>위키 및 지식 베이스 아티클 경로 (<code>/wiki/section/topic/page</code>)</li>
-              <li>클라우드 파일 스토리지 디렉토리 탐색</li>
+              <li>대규모 쇼핑몰 다계층 카테고리 브라우저 (<code>/shop/category/sub/item</code>)</li>
+              <li>사내 위키 및 지식 베이스 아티클 뷰어 (<code>/wiki/section/topic/page</code>)</li>
+              <li>클라우드 파일 스토리지 및 탐색기 UI</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>루트 경로 미매칭 (404 발생)</strong>: <code>[...slug]</code>는 최소 1개 이상의 하위 세그먼트가 있어야 매칭되므로, 파라미터가 없는 루트 경로(<code>/shop</code>) 접근 시 404 에러가 발생합니다. 루트까지 포함하려면 <code>[[...slug]]</code>(Optional Catch-all)을 사용해야 합니다.</li>
+              <li><strong>params 언래핑 타입</strong>: <code>params: Promise{'<'}{'{'} slug: string[] {'}'}{'>'}</code> 형태로 배열 타입을 명시하고 비동기 언래핑해야 합니다.</li>
             </ul>
           </div>
         </div>

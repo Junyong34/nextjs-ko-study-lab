@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="next/font 자동 셀프호스팅 및 Zero CLS 폰트 로딩">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>next/font 자동 셀프호스팅 및 Zero CLS 폰트 로딩는 Next.js App Router의 fonts 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="next/font 자동 셀프호스팅 및 Zero CLS 폰트 로딩">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p><code>next/font</code>는 구글 폰트나 로컬 폰트를 빌드 타임에 자동 다운로드하여 자체 도메인에서 셀프호스팅하고, CSS <code>size-adjust</code> 및 폴백 메트릭을 자동 계산하여 폰트 로딩 중 레이아웃 이동(CLS: Cumulative Layout Shift)을 완전히 제거하는 표준 폰트 최적화 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(next/font 자동 셀프호스팅 및 Zero CLS 폰트 로딩)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 <code>next/font/google</code>의 가변 폰트(Variable Font) 설정과 로컬 WOFF2 폰트를 로드하고, 브라우저 외부 요청 없이 호스팅 도메인 내부에서 폰트 서브셋이 주입되는 과정과 CLS 제로 렌더링을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>외부 네트워크 요청 차단</strong>: Google Fonts CDN 의존성을 제거하여 외부 DNS 조회 지연 및 개인정보보호(GDPR) 이슈를 해결합니다.</li>
+                    <li><strong>Zero CLS 달성</strong>: 시스템 기본 폰트와 웹 폰트 간 글꼴 크기/자간 차이를 CSS <code>size-adjust</code>로 자동 보정하여 깜빡임을 제거합니다.</li>
+                    <li><strong>가변 폰트 단일 파일 최적화</strong>: 단 하나의 WOFF2 파일로 다양한 weight(100~900)를 지원하여 네트워크 페이로드를 최소화합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>엔터프라이즈 브랜드 전용 커스텀 폰트(Pretendard, Spoqa Han Sans 등) 전역 적용</li>
+                    <li>다국어 글로벌 쇼핑몰의 영문/한글/일문 웹 폰트 서브셋 분기 로딩</li>
+                    <li>Core Web Vitals 점수 극대화가 필요한 대규모 커머스 랜딩 페이지</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>subsets 옵션 명시</strong>: <code>next/font/google</code> 사용 시 <code>subsets: ['latin']</code> 또는 한글 폰트의 경우 <code>preload: false</code> 및 필요한 글리프 범위를 지정하여 불필요한 바이트 다운로드를 방지해야 합니다.</li>
+                    <li><strong>CSS 변수 기반 전역 적용</strong>: <code>variable: '--font-sans'</code> 옵션으로 CSS 변수를 생성하고 <code>app/layout.tsx</code>의 <code>{'<'}html{'>'}</code> 태그 클래스에 주입하여 Tailwind CSS와 연동하는 패턴이 가장 권장됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

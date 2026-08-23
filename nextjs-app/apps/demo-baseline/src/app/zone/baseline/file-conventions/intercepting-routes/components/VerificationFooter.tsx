@@ -24,41 +24,45 @@ export function VerificationFooter({
         isMatched={isDirectPage || Boolean(currentPhotoId) ? true : undefined}
         description="Next.js App Router의 Intercepting Routes((.), (..), (..)(..), (...))와 Parallel Slots(@modal)를 조합한 컨텍스트 보존 모달 패턴을 검증합니다."
       />
-      <DemoDeepDiveCard title="Intercepting Routes ((..), (.))">
+      <DemoDeepDiveCard title="Intercepting Routes ((..), (.)) 라우트 인터셉트 & 컨텍스트 보존 모달">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 매칭 규칙</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><code>(.)</code>: 동일한 세그먼트 레벨의 경로 가로채기</li>
-              <li><code>(..)</code>: 한 단계 상위 세그먼트 레벨의 경로 가로채기</li>
-              <li><code>(..)(..)</code>: 두 단계 상위 세그먼트 레벨의 경로 가로채기</li>
-              <li><code>(...)</code>: 루트 <code>app</code> 디렉토리 레벨의 경로 가로채기</li>
-            </ul>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <p>
+              Intercepting Routes는 현재 페이지의 컨텍스트(배경 화면)를 그대로 유지한 채 다른 라우트 세그먼트를 가로채어 오버레이 모달로 표시하는 Next.js 고급 라우팅 컨벤션입니다. 매칭 규칙은 <code>(.)</code>(동일 레벨), <code>(..)</code>(상위 1단계), <code>(..)(..)</code>(상위 2단계), <code>(...)</code>(루트 app)으로 정의됩니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 모달 컨텍스트 유지 원리</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              <code>layout.tsx</code>에서 <code>{`{ children, modal }`}</code>을 동시에 렌더링하도록 구성하면,
-              사용자가 <code>&lt;Link href="/photos/1"&gt;</code>를 클릭했을 때 <code>children</code>(배경 목록)은 그대로 유지되면서 <code>modal</code> 슬롯에 <code>(.)photos/1/page.tsx</code>가 오버레이됩니다.
+              본 데모에서는 갤러리 피드에서 상품 카드를 클릭했을 때 <code>@modal/(.)photos/[id]</code>가 활성화되어 배경 상품 목록은 그대로 유지된 채 사진 상세 모달이 오버레이되고, 브라우저 주소창은 <code>/photos/[id]</code>로 즉시 변경되는 인터셉트 메커니즘을 검증합니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>공유 가능한 URL: 모달이 떠 있는 상태에서도 URL이 <code>/photos/101</code>로 변경되어 링크 공유 가능</li>
-              <li>뒤로 가기(Back Button) 지원: 브라우저 뒤로 가기를 누르면 모달만 닫히고 배경 스크롤 위치 보존</li>
-              <li>하드 리로드 복원력: 새로고침 시 404가 아닌 온전한 상세 페이지로 안전하게 폴백</li>
+              <li><strong>공유 가능한 모달 URL</strong>: 모달이 열린 상태에서도 URL이 <code>/photos/101</code>로 변경되어 복사 및 소셜 공유가 가능합니다.</li>
+              <li><strong>브라우저 뒤로 가기(Back) 완벽 지원</strong>: 뒤로 가기 클릭 시 모달만 부드럽게 닫히며 배경 목록의 스크롤 위치와 탐색 상태가 100% 보존됩니다.</li>
+              <li><strong>하드 리로드(새로고침) 복원력</strong>: 새로고침이나 직접 URL 입력 시에는 독립된 <code>photos/[id]/page.tsx</code> 전체 화면으로 안전하게 렌더링됩니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 상품 퀵뷰(Quick View) 모달</li>
+              <li>쇼핑몰 상품 목록에서의 빠른 장바구니/옵션 선택 퀵뷰(Quick View) 모달</li>
               <li>인스타그램/핀터레스트 스타일 사진 피드 오버레이</li>
-              <li>로그인/회원가입 인터셉트 모달 팝업</li>
+              <li>결제 화면 이동 중 로그인/회원가입 인터셉트 모달 팝업</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>@modal/default.tsx null 반환 필수</strong>: 모달이 닫혀 있을 때 화면에 아무것도 렌더링되지 않도록 <code>@modal/default.tsx</code>에서 <code>return null</code>을 반드시 선언해야 합니다.</li>
+              <li><strong>모달 닫기 구현</strong>: 모달을 닫을 때는 <code>router.back()</code>을 호출하여 URL 히스토리를 이전 상태로 되돌리는 것이 표준 구현 패턴입니다.</li>
             </ul>
           </div>
         </div>

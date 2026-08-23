@@ -63,33 +63,46 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="env 필드를 통한 빌드 타임 환경변수 주입">
+      <DemoDeepDiveCard title="next.config.ts env 빌드 타임 인라인 주입 & 환경변수 보안 격리 원칙">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>next.config.ts의 env 객체는 빌드 시점에 환경변수를 클라이언트 및 서버 번들에 인라인 치환하여 안전하게 주입하는 스펙입니다.</p>
+            <p>
+              <code>next.config.ts</code>의 <code>env</code> 객체는 빌드(컴파일) 시점에 코드 내 <code>process.env.KEY</code> 참조를 정적 문자열로 직접 치환(Inlining)하여 클라이언트 및 서버 번들에 주입하는 빌드 설정 스펙입니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>env: &#123; NEXT_PUBLIC_SHOP_API_HOST: &apos;https://api.shop.com&apos; &#125;와 같이 컴파일 시점에 변수값을 직접 매핑하여 런타임 환경변수 조회 오버헤드를 제거합니다.</p>
+            <p>
+              본 데모에서는 <code>env: {'{'} NEXT_PUBLIC_SHOP_API_HOST: 'https://api.shop.com' {'}'}</code>와 같이 빌드 시점에 상수를 매핑하여 런타임 <code>process.env</code> 접근 오버헤드 없이 즉시 브라우저와 서버 컴포넌트에서 동일한 API 호스트 값을 참조하도록 구성합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>빌드 최적화 및 런타임 제로 오버헤드: process.env 참조가 번들 빌드 시 정적 문자열로 치환되어 런타임 성능을 극대화합니다.</li>
-              <li>환경별(Staging/Production) 설정 분리: 배포 타겟에 따라 결제 PG 상점 ID, API 게이트웨이 엔드포인트를 유연하게 교체합니다.</li>
-              <li>보안 격리: 클라이언트 노출 변수와 서버 전용 시크릿 키(Secret Key)를 명확하게 분리 관리합니다.</li>
+              <li><strong>런타임 제로 오버헤드</strong>: 빌드 시점에 원시 문자열로 직접 치환되므로 런타임 환경변수 파싱 및 조회 비용이 발생하지 않습니다.</li>
+              <li><strong>빌드 타임 상수화</strong>: 번들러가 미사용 코드(Dead Code)를 트리쉐이킹(Tree-shaking)할 수 있도록 정적 상수 플래그를 제공합니다.</li>
+              <li><strong>배포 환경별 설정 주입</strong>: CI/CD 빌드 파이프라인에서 빌드 버전 번호, 배포 타임스탬프 등을 번들에 영구 각인합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>이커머스 결제 PG사 가맹점 코드(MID) 및 API 게이트웨이 엔드포인트 주입</li>
-              <li>글로벌 다국어 지원 기본 로케일 및 통화 코드 기본값 설정</li>
-              <li>스테이징 및 프로덕션 환경별 분석 트래커(GA4) 측정 ID 주입</li>
+              <li>앱 릴리즈 버전 번호(<code>APP_VERSION</code>) 및 빌드 해시의 정적 표시</li>
+              <li>공개 API 게이트웨이 엔드포인트 및 CDN 정적 에셋 도메인 기본값 매핑</li>
+              <li>빌드 타임 기능 플래그(Feature Flags)의 불리언 상수화</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>시크릿 키 등록 절대 금지 (보안 위험)</strong>: <code>next.config.ts</code>의 <code>env</code>에 선언된 모든 변수는 클라이언트 자바스크립트 번들에 그대로 포함되므로, DB 비밀번호나 결제 Private Key를 여기에 절대 선언해서는 안 됩니다.</li>
+              <li><strong>진정한 시크릿 분리 원칙</strong>: 비밀 키는 <code>NEXT_PUBLIC_</code> 접두사가 없는 <code>.env.local</code>에 두고 서버 컴포넌트/Route Handler에서만 접근하며, <code>import 'server-only'</code> 및 React 19 Taint API로 보호해야 합니다.</li>
+              <li><strong>Docker 이미지 승격 제약</strong>: 빌드 타임에 인라인 치환되므로, 단일 Docker 이미지를 Staging에서 Production으로 환경변수만 바꿔 승격하는 구조에서는 런타임 환경변수(Node.js process.env) 방식을 사용해야 합니다.</li>
             </ul>
           </div>
         </div>

@@ -8,7 +8,7 @@ export function Next16Highlights() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-zinc-200 pb-4 dark:border-zinc-800">
         <div>
           <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400 text-xs font-bold uppercase tracking-wider">
-            <span>What&apos;s New in Next.js 16</span>
+            <span>What's New in Next.js 16</span>
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-100 mt-1">
             ✨ Next.js 16 핵심 아키텍처 하이라이트
@@ -33,7 +33,7 @@ export function Next16Highlights() {
               Cache Components
             </h3>
             <p className="mt-1 font-mono text-xs text-zinc-500 dark:text-zinc-400">
-              &quot;use cache&quot; &amp; cacheLife()
+              "use cache" & cacheLife()
             </p>
             <p className="mt-3 text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
               함수나 컴포넌트 단위로 캐시 범위를 선언적으로 지정하며, <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-xs dark:bg-zinc-800">cacheTag</code>와 <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono text-xs dark:bg-zinc-800">updateTag</code>로 필요 시 정밀하게 무효화합니다.

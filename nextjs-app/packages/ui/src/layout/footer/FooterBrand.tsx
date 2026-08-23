@@ -11,7 +11,7 @@ export function FooterBrand() {
       <div className="flex flex-col">
         <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Next.js 학습</span>
         <span className="text-xs text-zinc-500 dark:text-zinc-400">
-          App Router 공식 문서 한국어 가이드 &amp; 실습 데모
+          App Router 공식 문서 한국어 가이드 & 실습 데모
         </span>
       </div>
     </div>

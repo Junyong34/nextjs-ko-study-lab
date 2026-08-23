@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="useSearchParams() URL 쿼리 파싱 및 필터링">
+            <DemoDeepDiveCard title="useSearchParams() URL 쿼리 파싱 및 필터링">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>useSearchParams() URL 쿼리 파싱 및 필터링는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>useSearchParams()</code> (<code>next/navigation</code>)는 현재 URL의 쿼리 스트링을 <code>ReadonlyURLSearchParams</code> 인터페이스(Web <code>URLSearchParams</code>의 읽기 전용 래퍼)로 읽어오는 클라이언트 훅입니다. <code>get()</code>, <code>getAll()</code>, <code>has()</code> 등의 메서드를 제공합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(useSearchParams() URL 쿼리 파싱 및 필터링)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 사용자가 [카테고리], [가격대], [정렬 기준] 필터 버튼을 클릭할 때 <code>useSearchParams()</code>로 현재 쿼리를 읽고, 새 파라미터를 추가/수정하여 <code>router.push()</code>로 URL을 변경하고 목록을 즉시 갱신합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>URL SSOT(Single Source of Truth) 보장</strong>: UI 상태를 별도 전역 상태 없이 URL 쿼리에 완벽히 동기화하여 북마크와 링크 공유를 지원합니다.</li>
+              <li><strong>다중 값(Multi-value) 파싱</strong>: <code>getAll('brand')</code>를 통해 복수 선택된 필터 배열을 손쉽게 추출합니다.</li>
+              <li><strong>웹 표준 호환성</strong>: 브라우저 표준 <code>URLSearchParams</code> API 규격을 준수하여 러닝 커브가 낮습니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>상품 목록 검색 결과 페이지의 다중 패싯 필터(브랜드, 가격, 색상)</li>
+              <li>테이블 뷰의 페이지네이션(<code>?page=2&limit=20</code>) 및 정렬(<code>?sort=price_desc</code>)</li>
+              <li>마케팅 캠페인 유입 추적(<code>?utm_source=meta&utm_campaign=summer</code>)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>Suspense 바운더리 필수</strong>: 정적 렌더링(SSG) 페이지에서 <code>useSearchParams()</code>를 사용하는 클라이언트 컴포넌트는 빌드 시점에 렌더링을 차단하므로 반드시 <code>{'<'}Suspense{'>'}</code>로 감싸야 합니다.</li>
+              <li><strong>불변 객체 수정 안티패턴</strong>: <code>useSearchParams()</code>가 반환한 객체는 읽기 전용이므로 <code>new URLSearchParams(searchParams.toString())</code>로 복제 후 조작해야 합니다.</li>
             </ul>
           </div>
         </div>

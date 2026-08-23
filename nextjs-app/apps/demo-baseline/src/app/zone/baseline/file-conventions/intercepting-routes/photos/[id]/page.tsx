@@ -100,7 +100,7 @@ export default async function DirectPhotoPage({
           <div className="rounded border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2">
             <div className="font-bold text-xs text-zinc-700 dark:text-zinc-300">동작 원리 해설</div>
             <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              사용자가 갤러리 목록에서 <code>&lt;Link&gt;</code>를 통해 진입하면 <code>@modal/(.)photos/[id]</code>가 인터셉트하여 기존 화면 위에 모달을 띄우지만,
+              사용자가 갤러리 목록에서 <code>{'<'}Link{'>'}</code>를 통해 진입하면 <code>@modal/(.)photos/[id]</code>가 인터셉트하여 기존 화면 위에 모달을 띄우지만,
               이 주소를 복사하여 새 탭에서 열거나 새로고침하면 본 <code>photos/[id]/page.tsx</code>가 직접 렌더링됩니다.
             </p>
           </div>

@@ -63,33 +63,41 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="useRouter push vs replace vs back 프로그래밍 네비게이션">
+            <DemoDeepDiveCard title="useRouter push vs replace vs back 프로그래밍 네비게이션">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>useRouter push vs replace vs back 프로그래밍 네비게이션는 Next.js App Router의 functions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p><code>useRouter()</code> (<code>next/navigation</code>)는 클라이언트 컴포넌트(<code>'use client'</code>)에서 라우터 인스턴스를 가져와 브라우저 히스토리 조작과 소프트 네비게이션을 프로그래밍 방식으로 실행하는 훅입니다. <code>router.push()</code>는 히스토리 스택에 새 URL을 추가하고, <code>router.replace()</code>는 현재 엔트리를 덮어쓰며, <code>router.back()</code>은 이전 기록으로 복귀합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(useRouter push vs replace vs back 프로그래밍 네비게이션)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 [주문서 이동(push)], [필터 치환(replace)], [뒤로가기(back)] 버튼을 클릭하여 브라우저 히스토리 스택의 변화와 URL 변경 시 클라이언트 상태(입력값/스크롤) 유지 여부를 실시간으로 대조 검증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>뒤로가기 루프 방지</strong>: 결제 완료 후 결제 페이지 재진입을 막기 위해 <code>replace()</code>로 히스토리를 교체하여 안전한 내비게이션 플로우를 보장합니다.</li>
+              <li><strong>SPA 소프트 네비게이션</strong>: 전체 페이지 리로드 없이 변경된 세그먼트의 RSC 페이로드만 패치하여 빠른 화면 전환을 제공합니다.</li>
+              <li><strong>프로그래밍 제어 유연성</strong>: 비동기 API 처리 완료, 인증 콜백 등 복잡한 비즈니스 분기 조건에 따라 동적 이동이 가능합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>결제 승인 완료 후 주문 완료 상세 페이지로 히스토리 교체 이동 (<code>router.replace('/orders/123')</code>)</li>
+              <li>검색 필터 다이얼로그에서 선택 완료 시 쿼리 스트링 갱신</li>
+              <li>모달 닫기 버튼 클릭 시 이전 화면으로 복귀 (<code>router.back()</code>)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>서버 컴포넌트 사용 불가</strong>: <code>useRouter</code>는 클라이언트 전용 훅이므로 서버 컴포넌트에서는 <code>redirect()</code> 함수를 사용해야 합니다.</li>
+              <li><strong>Link 컴포넌트 우선 원칙</strong>: 단순 앵커 내비게이션의 경우 SEO 크롤링 및 자동 프리페칭 이점을 위해 <code>useRouter</code> 대신 <code>{'<'}Link{'>'}</code> 컴포넌트를 사용하는 것이 권장됩니다.</li>
             </ul>
           </div>
         </div>

@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• headers().get(&apos;authorization&apos;) 커스텀 인증 토큰 검증 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• headers().get('authorization') 커스텀 인증 토큰 검증 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,39 +57,47 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="headers().get(&apos;authorization&apos;) 커스텀 인증 토큰 검증 실증 검증"
+        title="headers().get('authorization') 커스텀 인증 토큰 검증 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="headers().get(&apos;authorization&apos;) 커스텀 인증 토큰 검증">
+            <DemoDeepDiveCard title="headers() 커스텀 인증 토큰(Bearer) 파싱 및 권한 검증">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>headers() 함수는 서버 컴포넌트 및 Server Actions에서 현재 HTTP 요청의 Authorization 헤더를 읽어와 Bearer JWT 토큰을 추출하고 위변조를 검증하는 스펙입니다.</p>
+            <p><code>headers()</code> (<code>next/headers</code>)는 Server Component, Server Action, Route Handler에서 들어오는 HTTP 요청 헤더를 읽을 수 있는 비동기 함수(Next.js 15+ <code>await headers()</code>)입니다. <code>Authorization</code> 헤더의 Bearer 토큰 및 프록시 전달 헤더를 안전하게 추출합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>클라이언트가 전송한 Authorization: Bearer 토큰 헤더를 파싱하여 사용자 역할(Customer, VIP, Admin)을 식별하고 비인가 접근 시 즉시 차단합니다.</p>
+            <p>본 데모에서는 클라이언트 요청에 포함된 Bearer 토큰을 서버에서 <code>(await headers()).get('authorization')</code>으로 추출하여 토큰 유효성을 검증하고, 인증된 사용자 등급(VIP, 일반)에 따른 맞춤 할인 혜택을 렌더링합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>서버 사이드 무상태 인증: 세션 저장소 부하 없이 암호화된 서명 토큰만으로 안전하게 사용자 신원을 인증합니다.</li>
-              <li>클라이언트 탈취 방지: 서버 컴포넌트 실행 환경에서 토큰을 검증하므로 인증 로직이 브라우저 번들에 노출되지 않습니다.</li>
-              <li>세분화된 권한 제어: API 및 컴포넌트 레벨에서 일반 회원과 관리자 권한을 완벽히 분리합니다.</li>
+              <li><strong>보안 토큰 서버 검증</strong>: 클라이언트 사이드 변조 없이 서버사이드에서 직접 토큰을 검증하여 민감한 리소스 접근을 보호합니다.</li>
+              <li><strong>마이크로서비스 인증 전파</strong>: 수신된 인증 헤더를 백엔드 내부 BFF 및 마이크로서비스 호출 시 손쉽게 전달(Forwarding)합니다.</li>
+              <li><strong>읽기 전용 안정성</strong>: <code>headers()</code>는 읽기 전용이므로 실수로 요청 헤더를 오염시키는 부수 효과를 방지합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 관리자 페이지 및 정산 API 접근 권한 검증</li>
-              <li>VIP 회원 전용 할인 혜택 인가(Authorization) 처리</li>
-              <li>서드파티 마이크로서비스 간 Bearer 토큰 연동</li>
+              <li>B2B API 게이트웨이의 API 키 및 Bearer JWT 인증 검증</li>
+              <li>마이크로서비스 간 트랜잭션 추적을 위한 <code>x-correlation-id</code> / <code>traceparent</code> 추출</li>
+              <li>프록시/로드밸런서가 전달한 클라이언트 원본 IP(<code>x-real-ip</code>) 감사 로깅</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>헤더 변경 불가</strong>: <code>headers()</code>는 요청 헤더를 읽는 용도이며, 응답 헤더를 설정하려면 <code>NextResponse</code>나 <code>middleware</code>를 사용해야 합니다.</li>
+              <li><strong>시크릿 토큰 노출 방지</strong>: <code>headers()</code>에서 읽은 민감한 인증 토큰을 Client Component의 Props로 그대로 전달하지 않도록 주의해야 합니다.</li>
             </ul>
           </div>
         </div>

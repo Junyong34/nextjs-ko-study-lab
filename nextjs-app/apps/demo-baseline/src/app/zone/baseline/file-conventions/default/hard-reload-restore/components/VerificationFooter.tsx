@@ -63,33 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="새로고침(Hard Reload) 시 슬롯 복구">
+      <DemoDeepDiveCard title="default.tsx를 통한 새로고침(Hard Reload) 시 슬롯 상태 복구">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>새로고침(Hard Reload) 시 슬롯 복구는 Next.js App Router의 file-conventions 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>
+              Parallel Routes 사용 시 브라우저 새로고침(Hard Reload)이 발생하면 Next.js 서버는 이전 클라이언트 탐색 상태를 알 수 없습니다. 이 때 일치하지 않는 모든 병렬 슬롯에 대해 <code>default.tsx</code>를 검색하여 렌더링함으로써 404 에러를 방지하고 화면을 복구합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(새로고침(Hard Reload) 시 슬롯 복구)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>
+              본 데모에서는 사용자가 <code>@sidebar</code> 슬롯에서 특정 필터를 탐색하던 중 브라우저 새로고침을 실행했을 때, 서버가 해당 슬롯의 <code>default.tsx</code>를 즉각 호출하여 기본 필터 요약 UI로 안전하게 초기화 복구하는 메커니즘을 실증합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>하드 리로드 404 원천 차단</strong>: 클라이언트 메모리에만 존재하던 슬롯 상태가 새로고침으로 소실되더라도 서버 사이드 렌더링(SSR) 단계에서 404 없이 복구합니다.</li>
+              <li><strong>SSR 및 SSG 무결성 유지</strong>: 서버에서 사전 생성되는 HTML에 모든 슬롯의 디폴트 마크업이 누락 없이 채워집니다.</li>
+              <li><strong>사용자 탐색 연속성 보장</strong>: 새로고침 후에도 깨지지 않는 완전한 대시보드 레이아웃을 제공합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>쇼핑몰 다중 탭 검색/필터 패널의 새로고침 시 기본 선택 상태 복원</li>
+              <li>관리자 콘솔의 실시간 시스템 로그 및 알림 슬롯 복구</li>
+              <li>복합 결제/주문서 화면의 서브 위젯 상태 안정화</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>모든 병렬 슬롯에 default.tsx 배치 권장</strong>: Parallel Routes를 도입할 때는 예상치 못한 새로고침에 대비하여 모든 <code>@slot</code> 폴더 내에 <code>default.tsx</code>를 필수로 생성해야 프로덕션 404 장애를 예방할 수 있습니다.</li>
+              <li><strong>Root level default.tsx</strong>: 루트 슬롯뿐 아니라 하위 중첩 슬롯에서도 각 계층에 맞는 <code>default.tsx</code>를 배치해야 합니다.</li>
             </ul>
           </div>
         </div>

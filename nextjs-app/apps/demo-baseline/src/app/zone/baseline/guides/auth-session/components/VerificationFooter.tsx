@@ -42,7 +42,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• Next.js 인증 &amp; 세션 기반 역할 분기 (RBAC) 사양에 따른 정상 동작 및 상태 변화 관찰"
+  const defaultExpected = "• Next.js 인증 & 세션 기반 역할 분기 (RBAC) 사양에 따른 정상 동작 및 상태 변화 관찰"
   const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
 
   const actualContent =
@@ -57,43 +57,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Next.js 인증 &amp; 세션 기반 역할 분기 (RBAC) 실증 검증"
+        title="Next.js 인증 & 세션 기반 역할 분기 (RBAC) 실증 검증"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="Next.js 인증 &amp; 세션 기반 역할 분기 (RBAC)">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Next.js 인증 &amp; 세션 기반 역할 분기 (RBAC)는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="Next.js 인증 & 세션 기반 역할 분기 (RBAC)">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Next.js의 역할 기반 접근 제어(RBAC: Role-Based Access Control)는 HTTP 쿠키 세션 또는 암호화된 JWT 토큰을 서버 컴포넌트(<code>cookies()</code>) 및 미들웨어에서 해석하여, 사용자 권한(Guest, Member, Admin)에 따라 UI와 라우트 접근을 서버사이드에서 안전하게 제어하는 표준 보안 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(Next.js 인증 &amp; 세션 기반 역할 분기 (RBAC))을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 일반 회원과 관리자 계정 간의 세션 토글을 시뮬레이션하여, 관리자 전용 정산/통계 위젯 노출 여부와 비인가 사용자 접근 시의 즉각적인 권한 에러 처리 및 로그인 리다이렉트 흐름을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>클라이언트 보안 취약점 원천 차단</strong>: 브라우저 자바스크립트 변조로 관리자 UI를 강제 노출하는 행위가 서버 렌더링 단계에서 원천 무효화됩니다.</li>
+                    <li><strong>깜빡임 없는 무결점 초기 렌더링</strong>: 클라이언트에서 세션을 비동기 조회 후 뒤늦게 UI를 숨기는 깜빡임(Layout Shift) 현상이 전혀 발생하지 않습니다.</li>
+                    <li><strong>세분화된 권한 검증 모듈화</strong>: 서버 컴포넌트, Server Action, Route Handler 전 계층에서 공통 세션 검증 유틸리티를 재사용합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 파트너 판매자 콘솔의 정산 내역 및 주문 관리 시스템</li>
+                    <li>사내 인트라넷 임직원 직급별 인사 정보 및 결재 승인 화면</li>
+                    <li>유료 구독 멤버십 회원 전용 프리미엄 VOD 콘텐츠 뷰어</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>Server Action 내부 세션 재검증 필수</strong>: 화면에서 버튼을 숨겼더라도 Server Action의 Action ID를 직접 호출할 수 있으므로, 액션 함수 내부에서 세션 및 역할을 반드시 재검사해야 합니다.</li>
+                    <li><strong>쿠키 보안 속성(httpOnly, secure)</strong>: 세션 토큰을 담는 쿠키는 XSS 공격에 대비하여 반드시 <code>httpOnly: true</code>, <code>secure: true</code>, <code>sameSite: 'lax'</code>를 적용해야 합니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

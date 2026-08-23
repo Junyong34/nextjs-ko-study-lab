@@ -43,7 +43,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : undefined
 
   const defaultExpected = "• 상품 홍보 영상 지연 로딩 및 자동 재생 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 5단 표준 레이아웃 정상 적용"
 
   const actualContent =
     propActual !== undefined
@@ -67,29 +67,37 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>상품 홍보 영상 지연 로딩 및 자동 재생는 Next.js App Router의 guides 표준 아키텍처 스펙으로, 웹 표준 모델 위에서 서버 렌더링과 클라이언트 상태 상호작용을 최적화하도록 설계된 핵심 기능입니다.</p>
+            <p>비디오 지연 로딩 아키텍처는 Intersection Observer 및 <code>next/dynamic</code>을 활용하여, 비디오 요소가 사용자의 뷰포트에 도달하기 전까지 미디어 버퍼 다운로드를 차단(<code>preload="none"</code>)함으로써 초기 페이지 대역폭과 LCP 성능을 보호하는 미디어 최적화 스펙입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 이커머스 쇼핑몰의 데이터 흐름(상품 홍보 영상 지연 로딩 및 자동 재생)을 바탕으로, 사용자 조작에 따른 상태 변화와 서버-클라이언트 통신 결과를 검증 패널을 통해 단계별로 관찰할 수 있도록 구성되었습니다.</p>
+            <p>본 데모에서는 스크롤 전에는 가벼운 포스터 이미지만 표시하다가, 비디오 위젯이 화면에 진입하는 순간 <code>muted</code> 및 <code>autoPlay</code> 속성과 함께 비디오 스트림을 로드하여 재생을 시작하는 과정을 실증합니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 안정성 확보: 대규모 트래픽과 복잡한 비즈니스 로직 환경에서도 데이터 무결성과 빠른 반응성을 보장합니다.</li>
-              <li>프레임워크 레벨 최적화: Next.js App Router의 내장 캐시 및 비동기 렌더링 파이프라인과 완벽히 결합하여 최고의 성능을 발휘합니다.</li>
-              <li>유지보수성 및 확장성: 표준화된 코드 구조를 통해 협업과 장기적인 기능 확장에 유리한 아키텍처를 제공합니다.</li>
+              <li><strong>초기 데이터 트래픽 90% 절감</strong>: 수십 MB 용량의 비디오 파일이 페이지 첫 로딩 시 자동 다운로드되어 발생하는 불필요한 CDN 대역폭 비용을 절감합니다.</li>
+              <li><strong>Core Web Vitals(LCP/FID) 방어</strong>: 무거운 미디어 로딩으로 인한 브라우저 네트워크 병목을 해소하여 메인 상품 텍스트와 이미지가 최고 속도로 렌더링됩니다.</li>
+              <li><strong>모바일 배터리 및 메모리 절약</strong>: 보이지 않는 비디오의 디코딩 연산을 방지하여 모바일 사용자의 배터리 소모를 억제합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 서비스의 핵심 화면 및 백엔드 비즈니스 로직 연동</li>
-              <li>사용자 인터랙션 성능 및 서버 렌더링 효율 극대화가 필요한 프로덕션 환경</li>
-              <li>보안, 접근성, 검색엔진 최적화(SEO) 표준을 준수해야 하는 엔터프라이즈 애플리케이션</li>
+              <li>패션 브랜드 룩북 및 모델 착용 런웨이 영상 지연 재생</li>
+              <li>가전/IT 기기 인터랙티브 기능 시연 백그라운드 루프 비디오</li>
+              <li>사용자 후기 숏폼 비디오 무한 스크롤 피드</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>모바일 자동재생 정책(Muted 필수)</strong>: 모바일 브라우저는 사용자의 명시적 조작 없이 소리가 있는 영상의 자동 재생을 차단하므로 반드시 <code>muted playsInline autoPlay</code> 속성을 함께 선언해야 합니다.</li>
+              <li><strong>포스터 이미지 크기 최적화</strong>: 지연 로딩 중 노출되는 <code>poster</code> 이미지는 <code>next/image</code>로 사전 최적화된 WebP/AVIF 규격을 사용하여 CLS를 방지해야 합니다.</li>
             </ul>
           </div>
         </div>

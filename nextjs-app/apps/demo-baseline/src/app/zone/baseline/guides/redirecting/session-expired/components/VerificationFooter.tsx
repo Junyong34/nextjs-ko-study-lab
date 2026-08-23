@@ -63,37 +63,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
       />
-      <DemoDeepDiveCard title="세션 만료 시 returnUrl과 함께 로그인 리다이렉트">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>redirect()(307/303)와 permanentRedirect()(308)는 Server Actions, Route Handlers, 서버 컴포넌트 내부에서 즉각적인 HTTP 리다이렉트를 트리거하며, 내부적으로 NEXT_REDIRECT 예외를 던져 실행을 즉시 중단하고 브라우저를 대상 URL로 이동시킵니다.</p>
-          </div>
+                        <DemoDeepDiveCard title="세션 만료 시 로그인 화면 조건부 리다이렉트">
+              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+                  <p>Server Component, Route Handler, 또는 미들웨어에서 쿠키 인증 토큰의 유효성을 검사하여, 토큰이 만료되었거나 누락된 경우 <code>redirect('/login?returnUrl=...')</code>를 즉각 발동하여 미인증 사용자의 비공개 라우트 접근을 서버사이드에서 원천 차단하는 표준 보안 가드 스펙입니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 Server Action으로 장바구니 주문 결제가 성공하면 redirect(&apos;/orders/success&apos;)를 호출하여 303 See Other로 영수증 화면으로 이동시키고, 단종된 구 상품 접근 시에는 permanentRedirect(&apos;/products/new-01&apos;)로 308 영구 이동을 반환합니다.</p>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+                  <p>본 데모에서는 [세션 만료 시뮬레이션] 토글을 활성화하고 마이페이지 주문 내역 조회를 시도할 때, 서버 컴포넌트가 세션 만료를 감지하고 원래 접근하려던 경로를 <code>returnUrl</code> 쿼리로 인코딩하여 로그인 페이지로 즉각 리다이렉트하는 보안 방어 파이프라인을 검증합니다.</p>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>결제 완료 후 중복 제출 원천 방지: Post-Redirect-Get(PRG) 패턴을 구현하여 새로고침 시 결제 폼이 재제출되는 현상을 완벽히 차단합니다.</li>
-              <li>검색엔진 영구 랭킹 승계: 308 Permanent Redirect로 단종 상품의 기존 검색 색인 가치를 신상품으로 온전히 전달합니다.</li>
-              <li>트랜잭션 중단 안정성: redirect() 호출 시점 이후의 불필요한 백엔드 코드가 실행되지 않고 즉시 안전하게 탈출합니다.</li>
-            </ul>
-          </div>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>비인가 접근 제로 딜레이 차단</strong>: 브라우저 화면이 렌더링되기도 전에 서버 단에서 307 리다이렉트를 반환하여 민감 정보 유출을 원천 방지합니다.</li>
+                    <li><strong>자연스러운 복귀 UX 제공</strong>: <code>returnUrl</code> 매개변수를 보존하여 사용자가 로그인을 완료한 즉시 이전에 보려던 주문 내역 페이지로 자동 복귀시킵니다.</li>
+                    <li><strong>중앙 집중식 인증 가드</strong>: 개별 컴포넌트마다 <code>useEffect</code>로 로그인 여부를 체크하는 안티패턴을 제거하고 서버 레벨에서 일괄 통제합니다.</li>
+                  </ul>
+                </div>
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>주문서 작성 및 결제 승인 완료 후 주문 완료 페이지로 리다이렉트</li>
-              <li>세션 만료 또는 비인가 사용자의 로그인 페이지 강제 리다이렉트</li>
-              <li>쇼핑몰 도메인 개편 및 상품 카테고리 체계 변경 시 영구 리다이렉트(308)</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li>쇼핑몰 마이페이지, 주문 상세, 배송지 관리 화면의 세션 만료 가드</li>
+                    <li>관리자 파트너 센터 정산 페이지의 주기적 재인증 리다이렉트</li>
+                    <li>장시간 미활동 후 장바구니 결제 단계 진입 시 로그인 안내</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                    <li><strong>returnUrl 오픈 리다이렉트 취약점 방어</strong>: 로그인 성공 후 <code>returnUrl</code>로 이동시킬 때 외부 악성 도메인(e.g. <code>https://evil.com</code>)으로 탈취되지 않도록 반드시 상대 경로(Relative URL)인지 검증해야 합니다.</li>
+                    <li><strong>미들웨어(Middleware)와의 역할 분담</strong>: 전체 경로에 대한 광범위한 세션 검사는 `middleware.ts`에서, 세부 데이터 권한 검증은 Server Component의 `redirect()`에서 수행하는 2중 방어 구조가 권장됩니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </DemoDeepDiveCard>
     </div>
   )
 }

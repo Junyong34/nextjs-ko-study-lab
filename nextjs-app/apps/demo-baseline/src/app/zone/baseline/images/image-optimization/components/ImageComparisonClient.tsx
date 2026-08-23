@@ -43,7 +43,7 @@ export function ImageComparisonClient() {
         <div className="rounded-md border border-rose-200 bg-rose-50/20 p-3.5 dark:border-rose-900/40 dark:bg-rose-950/10 space-y-2.5">
           <div className="flex items-center justify-between">
             <span className="font-bold text-rose-950 dark:text-rose-200">
-              전통적인 HTML &lt;img&gt;
+              전통적인 HTML {'<'}img{'>'}
             </span>
             <span className="rounded bg-rose-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-rose-800 dark:bg-rose-950 dark:text-rose-300">
               최적화 없음
@@ -78,7 +78,7 @@ export function ImageComparisonClient() {
         <div className="rounded-md border border-emerald-200 bg-emerald-50/20 p-3.5 dark:border-emerald-900/40 dark:bg-emerald-950/10 space-y-2.5">
           <div className="flex items-center justify-between">
             <span className="font-bold text-emerald-950 dark:text-emerald-200">
-              Next.js &lt;Image&gt;
+              Next.js {'<'}Image{'>'}
             </span>
             <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
               WebP/AVIF + Zero CLS

@@ -54,26 +54,28 @@ export default async function UsePromiseStreamingDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="React 19 `use(Promise)` & Suspense 스트리밍 패칭"
-        concept="Server Component에서 오래 걸리는 데이터(리뷰 목록 등)를 await로 기다리지 않고 Promise 자체를 Client Component로 전달합니다. React 19의 use(promise)는 Suspense fallback을 띄워두고 백그라운드에서 완료되는 즉시 스트리밍 렌더링합니다."
+        title="React 19 use(Promise) & Suspense 점진적 스트리밍"
+        concept="Server Component에서 800ms 지연되는 후기 데이터를 await하지 않고 Promise 객체 그대로 Client Component에 넘기면, Suspense 스켈레톤을 띄워둔 채 백그라운드 스트리밍으로 언랩(unwrap)합니다."
         steps={[
           {
             step: 1,
-            title: '메인 상품 즉시 렌더',
-            description: '상단의 상품 제목과 가격 정보는 지연 없이 즉각 표시됩니다.',
-            actionBadge: 'Fast FCP',
+            title: '메인 상품 정보 0ms 즉시 렌더 확인',
+            description: '상단의 키보드 상품명과 가격(189,000원)이 지연 없이 즉각 표시되는 빠른 FCP를 확인합니다.',
+            actionBadge: '즉시 렌더',
           },
           {
             step: 2,
-            title: 'Suspense Skeleton 확인',
-            description: '하단 후기 영역은 Promise가 완료될 때까지 로딩 스켈레톤이 표시됩니다.',
+            title: 'Suspense 로딩 스켈레톤 표시 확인',
+            description: '후기 영역이 준비될 때까지 800ms 동안 ReviewsSkeleton이 렌더링되는 것을 확인합니다.',
             actionBadge: '스트리밍 대기',
           },
           {
             step: 3,
-            title: 'use(promise) 언랩 완료',
-            description: 'Promise가 resolve되면 use() Hook이 데이터를 풀어서 후기 목록을 즉시 렌더링합니다.',
-            actionBadge: 'React 19 unwrap',
+            title: 'React 19 use() 언랩 결과 관찰',
+            description: '800ms 후 Promise가 resolve되면서 use(reviewsPromise)가 구매 후기 3건을 화면에 매끄럽게 렌더링하는 것을 관찰합니다.',
+            actionBadge: 'use(Promise) 언랩',
+            observe: '800ms 경과 후 스켈레톤이 실제 구매 후기 3건(개발자K, 키보드매니아, 디자이너P)으로 자동 전환됨',
+            observeAt: 'playground',
           },
         ]}
       />
