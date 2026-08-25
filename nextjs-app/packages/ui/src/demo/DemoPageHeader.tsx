@@ -23,6 +23,8 @@ export interface DemoPageHeaderProps {
   backUrl?: string
   /** 뒤로가기 버튼 라벨 (기본값: "데모 목록") */
   backLabel?: string
+  /** 커스텀 뒤로가기 버튼 컴포넌트 */
+  customBackButton?: React.ReactNode
   /** 동일 문서에 속한 다른 데모 목록 */
   siblingDemos?: SiblingDemo[]
   /** 현재 실행 중인 데모 URL */
@@ -44,6 +46,7 @@ export function DemoPageHeader({
   docTitle,
   backUrl = '/demo',
   backLabel = '데모 목록',
+  customBackButton,
   siblingDemos = [],
   currentDemoUrl,
   getDemoHref,
@@ -65,13 +68,17 @@ export function DemoPageHeader({
       {/* 상단 내비게이션 바: 뒤로가기 + 문서 브레드크럼 + 이전/다음 데모 스위처 */}
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-2">
-          <Link
-            href={backUrl}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-1 font-medium text-zinc-700 shadow-2xs hover:bg-zinc-100 hover:text-zinc-950 transition dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            <span>{backLabel}</span>
-          </Link>
+          {customBackButton ? (
+            customBackButton
+          ) : (
+            <Link
+              href={backUrl}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-1 font-medium text-zinc-700 shadow-2xs hover:bg-zinc-100 hover:text-zinc-950 transition dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>{backLabel}</span>
+            </Link>
+          )}
 
           <span className="text-zinc-300 dark:text-zinc-700">/</span>
 
@@ -130,9 +137,11 @@ export function DemoPageHeader({
       {/* 헤더 본문: 상태 뱃지 + 데모 타이틀 */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <DemoStatusBadge status={status} />
-          </div>
+          {status && status !== 'done' && (
+            <div className="flex items-center gap-2 mb-1">
+              <DemoStatusBadge status={status} />
+            </div>
+          )}
           <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-2xl">
             {title}
           </h1>

@@ -11,7 +11,10 @@ export function DemoStatusIcon({ status }: { status: string }) {
   )
 }
 
-/** 아이콘까지 붙인 상태 배지. 데모 색인과 독립 열람이 쓴다. */
-export function DemoStatusBadge({ status }: { status: string }) {
+/** 아이콘까지 붙인 상태 배지. done 상태는 기본적으로 숨기고 예외 상태(wip, draft 등)만 표시합니다. */
+export function DemoStatusBadge({ status, showDone = false }: { status: string; showDone?: boolean }) {
+  if (status === 'done' && !showDone) {
+    return null
+  }
   return <StatusBadge status={status} variant="pill" icon={<DemoStatusIcon status={status} />} />
 }

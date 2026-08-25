@@ -8,54 +8,95 @@ export interface DemoIndexCardProps {
   /** 학습자 URL 조각 (예: "caching/basic") */
   url: string
   title: string
-  zone: string
   status: string
-  /** 근거 문서 경로 (예: "1-getting-started/caching.md") */
-  doc: string
+  /** 근거 문서 제목 또는 파일명 */
+  doc?: string
   /** 근거 문서의 사이트 URL */
-  docUrl: string
+  docUrl?: string
+  /** 카테고리 명칭 (선택) */
+  category?: string
+  /** 클릭/내비게이션 시 콜백 (스크롤 복원 상태 저장용) */
+  onCardClick?: (url: string) => void
+  onNavigate?: (url: string) => void
+  className?: string
 }
 
-/** 데모 색인(`/demo`)의 카드. 문서 하단 카드(`DocDemoList`)와는 구조가 다르다. */
-export function DemoIndexCard({ url, title, zone, status, doc, docUrl }: DemoIndexCardProps) {
+export function DemoIndexCard({
+  url,
+  title,
+  status,
+  doc,
+  docUrl,
+  category,
+  onCardClick,
+  onNavigate,
+  className = '',
+}: DemoIndexCardProps) {
+  const handleClick = () => {
+    onCardClick?.(url)
+    onNavigate?.(url)
+  }
+
   return (
-    <div className={cardClass({ density: 'index' })}>
+    <div
+      id={`demo-card-${url.replace(/\//g, '-')}`}
+      data-demo-url={url}
+      className={cardClass({
+        density: 'index',
+        className: `group relative flex flex-col justify-between p-4 sm:p-5 rounded-xl border border-zinc-200 bg-white hover:border-zinc-400 hover:shadow-md transition-all dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600 ${className}`,
+      })}
+    >
       <div>
-        <div className="flex flex-wrap items-start justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="rounded-md bg-zinc-100 px-2 py-0.5 font-mono text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-              {url}
+        {/* 상단 1줄: 카테고리 칩 + 상태 뱃지 */}
+        <div className="flex items-center justify-between gap-2">
+          {category && (
+            <span className="inline-flex items-center rounded-md bg-zinc-100 px-2 py-0.5 text-[11px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60 shrink-0 whitespace-nowrap">
+              {category}
             </span>
-          </div>
+          )}
           <DemoStatusBadge status={status} />
         </div>
 
-        <h3 className="mt-3 text-base font-bold text-zinc-900 transition group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300">
-          <Link href={`/demo/${url}`}>{title}</Link>
-        </h3>
-
-        <div className="mt-2 flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
-          <BookOpen className="h-3.5 w-3.5" />
-          <span>관련 문서: </span>
-          <Link
-            href={docUrl}
-            className="text-zinc-700 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100"
-          >
-            {doc}
-          </Link>
+        {/* 상단 2줄: URL 경로 (독립 줄) */}
+        <div className="mt-2">
+          <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400 break-all select-all">
+            {url}
+          </span>
         </div>
+
+        {/* 데모 타이틀 (Stretched Link 적용: 카드 전체 클릭 영역 활성화) */}
+        <h3 className="mt-2.5 text-sm sm:text-base font-bold text-zinc-900 group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300 transition-colors line-clamp-2">
+          <Link
+            href={`/demo/${url}`}
+            onClick={handleClick}
+            className="focus:outline-none after:absolute after:inset-0 after:rounded-xl"
+          >
+            {title}
+          </Link>
+        </h3>
       </div>
 
-      <div className="mt-5 flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-800">
-        <span className="text-xs text-zinc-400">독립 실행 환경 호스팅</span>
+      {/* 하단 푸터: 관련 문서 링크 (좌측) + 데모 열기 액션 (우측) */}
+      <div className="mt-4 flex items-center justify-between gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800/80 min-w-0">
+        {doc && docUrl ? (
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 min-w-0 flex-1 mr-2">
+            <BookOpen className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
+            <Link
+              href={docUrl}
+              className="relative z-10 truncate text-zinc-700 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-zinc-100 transition-colors"
+              title={doc}
+            >
+              {doc}
+            </Link>
+          </div>
+        ) : (
+          <span className="text-[11px] text-zinc-400">인터랙티브 데모</span>
+        )}
 
-        <Link
-          href={`/demo/${url}`}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-        >
+        <div className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-700 group-hover:text-zinc-950 dark:text-zinc-300 dark:group-hover:text-zinc-100 shrink-0 whitespace-nowrap transition-colors">
           <span>데모 열기</span>
-          <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
+          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+        </div>
       </div>
     </div>
   )

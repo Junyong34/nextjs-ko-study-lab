@@ -11,6 +11,7 @@ import {
   getDocBySlug,
   findDocForDemo,
 } from '@/lib/docs'
+import { DemoBackButton } from '@/components/demo/DemoBackButton'
 
 interface DemoPageProps {
   params: Promise<{
@@ -110,6 +111,7 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
           docTitle={matchedDoc?.title ?? directDemo.doc}
           backUrl={backUrl}
           backLabel={backLabel}
+          customBackButton={<DemoBackButton fallbackUrl={backUrl} fallbackLabel={backLabel} />}
           siblingDemos={siblingDemos}
           currentDemoUrl={directDemo.url}
         />
@@ -174,6 +176,7 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
           docTitle={doc.title}
           backUrl={backUrl}
           backLabel={backLabel}
+          customBackButton={<DemoBackButton fallbackUrl={backUrl} fallbackLabel={backLabel} />}
           siblingDemos={docDemos}
           currentDemoUrl={runningDemo.url}
           getDemoHref={(targetUrl) => `/demo/${docSlug}?run=${encodeURIComponent(targetUrl)}`}

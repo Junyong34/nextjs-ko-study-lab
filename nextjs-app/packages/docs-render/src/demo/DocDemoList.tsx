@@ -53,7 +53,6 @@ export function DocDemoList({
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
         {demos.map((demo) => {
           const href = `/demo/${demo.url}`
-          const isDone = demo.status === 'done'
 
           return (
             <a
@@ -66,13 +65,9 @@ export function DocDemoList({
                   <span className="text-sm font-semibold text-zinc-900 transition-colors group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300 no-underline">
                     {demo.title}
                   </span>
-                  {demo.status && (
+                  {demo.status && demo.status !== 'done' && (
                     <span
-                      className={`inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-                        isDone
-                          ? 'border border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
-                          : 'border border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
-                      }`}
+                      className="inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
                     >
                       {demo.status}
                     </span>
