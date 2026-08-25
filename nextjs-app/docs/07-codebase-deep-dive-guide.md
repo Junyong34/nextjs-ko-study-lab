@@ -179,14 +179,14 @@ graph LR
 
 | 내가 확인/수정하려는 작업 | 진입점 파일 (Entry File) | 연결된 핵심 모듈 / 패키지 |
 |---|---|---|
-| **사이트 전체 프레임/레이아웃 (헤더, 좌측 트리, 푸터)** | [`apps/shell/src/app/layout.tsx`](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/.claude/worktrees/component-directory-refactor/nextjs-app/apps/shell/src/app/layout.tsx) | `@study/ui` (`layout/header/Header.tsx`, `nav/doc-tree/DocTree.tsx`, `layout/footer/Footer.tsx`) |
-| **마크다운 문서 렌더링 및 본문 UI** | [`apps/shell/src/app/[...slug]/page.tsx`](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/.claude/worktrees/component-directory-refactor/nextjs-app/apps/shell/src/app/[...slug]/page.tsx) | `apps/shell/src/lib/manifest.ts` (데이터 로드)<br>`@study/docs-render` (`MarkdownRenderer.tsx`)<br>`@study/ui` (`nav/toc/TableOfContents.tsx`) |
-| **데모 색인 목록 화면 (`/demo`)** | [`apps/shell/src/app/demo/page.tsx`](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/.claude/worktrees/component-directory-refactor/nextjs-app/apps/shell/src/app/demo/page.tsx) | `@study/ui` (`demo/DemoIndexCard.tsx`, `demo/DemoIndexStats.tsx`) |
-| **데모 독립 열람 Chrome 및 iframe (`/demo/...`)** | [`apps/shell/src/app/demo/[...slug]/page.tsx`](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/.claude/worktrees/component-directory-refactor/nextjs-app/apps/shell/src/app/demo/[...slug]/page.tsx) | `@study/ui` (`demo/DemoPageHeader.tsx`)<br>`@study/docs-render` (`demo/DemoIframe.tsx`, `demo/useDemoResizeBridge.ts`) |
-| **데모 앱 내부 실행 코드 (Baseline Zone)** | [`apps/demo-baseline/src/app/zone/baseline/...`](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/.claude/worktrees/component-directory-refactor/nextjs-app/apps/demo-baseline/src/app/zone/baseline/server-actions/basic/page.tsx) | `@study/demo-kit` (`DemoContainer`, `ExpectedActualPanel`, `DemoResetButton`) |
-| **데모 앱 내부 실행 코드 (Cache Zone)** | [`apps/demo-cache-components/src/app/zone/cache/...`](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/.claude/worktrees/component-directory-refactor/nextjs-app/apps/demo-cache-components/src/app/zone/cache/caching/basic/page.tsx) | `@study/demo-kit` (`DemoContainer`, `ExpectedActualPanel`) |
-| **전역 데모 목록 및 메타데이터 추가** | [`packages/demos/demos.yaml`](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/.claude/worktrees/component-directory-refactor/nextjs-app/packages/demos/demos.yaml) | `packages/demos/scripts/` (`lint.mjs`, `gen-stubs.mjs`, `build-manifest.mjs`) |
-| **전역 반복 스타일/디자인 토큰 상수** | [`packages/ui/src/styles.ts`](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/.claude/worktrees/component-directory-refactor/nextjs-app/packages/ui/src/styles.ts) | `@study/ui` 내부 primitives 및 layout 컴포넌트 전반 |
+| **사이트 전체 프레임/레이아웃 (헤더, 좌측 트리, 푸터)** | [`apps/shell/src/app/layout.tsx`](../apps/shell/src/app/layout.tsx) | `@study/ui` (`layout/header/Header.tsx`, `nav/doc-tree/DocTree.tsx`, `layout/footer/Footer.tsx`) |
+| **마크다운 문서 렌더링 및 본문 UI** | [`apps/shell/src/app/[...slug]/page.tsx`](../apps/shell/src/app/[...slug]/page.tsx) | `apps/shell/src/lib/manifest.ts` (데이터 로드)<br>`@study/docs-render` (`MarkdownRenderer.tsx`)<br>`@study/ui` (`nav/toc/TableOfContents.tsx`) |
+| **데모 색인 목록 화면 (`/demo`)** | [`apps/shell/src/app/demo/page.tsx`](../apps/shell/src/app/demo/page.tsx) | `@study/ui` (`demo/DemoIndexCard.tsx`, `demo/DemoIndexStats.tsx`) |
+| **데모 독립 열람 Chrome 및 iframe (`/demo/...`)** | [`apps/shell/src/app/demo/[...slug]/page.tsx`](../apps/shell/src/app/demo/[...slug]/page.tsx) | `@study/ui` (`demo/DemoPageHeader.tsx`)<br>`@study/docs-render` (`demo/DemoIframe.tsx`, `demo/useDemoResizeBridge.ts`) |
+| **데모 앱 내부 실행 코드 (Baseline Zone)** | [`apps/demo-baseline/src/app/zone/baseline/...`](../apps/demo-baseline/src/app/zone/baseline/server-actions/basic/page.tsx) | `@study/demo-kit` (`DemoContainer`, `ExpectedActualPanel`, `DemoResetButton`) |
+| **데모 앱 내부 실행 코드 (Cache Zone)** | [`apps/demo-cache-components/src/app/zone/cache/...`](../apps/demo-cache-components/src/app/zone/cache/caching/basic/page.tsx) | `@study/demo-kit` (`DemoContainer`, `ExpectedActualPanel`) |
+| **전역 데모 목록 및 메타데이터 추가** | [`packages/demos/demos.yaml`](../packages/demos/demos.yaml) | `packages/demos/scripts/` (`lint.mjs`, `gen-stubs.mjs`, `build-manifest.mjs`) |
+| **전역 반복 스타일/디자인 토큰 상수** | [`packages/ui/src/styles.ts`](../packages/ui/src/styles.ts) | `@study/ui` 내부 primitives 및 layout 컴포넌트 전반 |
 
 ---
 

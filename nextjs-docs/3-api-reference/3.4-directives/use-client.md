@@ -17,7 +17,7 @@
 
 > **알아두면 좋은 점**:
 >
-> Client Component를 포함하는 모든 파일마다 `'use client'` 지시어를 붙일 필요는 없다. Server Component 내부에서 직접 임포트하여 렌더링하려는 모듈 파일에만 선언하면 된다. `'use client'` 지시어는 [서버와 클라이언트의 경계](../../2-guides/2.2-server-and-client-boundary.md)를 정의하며, 해당 파일에서 내보낸 컴포넌트가 클라이언트로의 진입점 역할을 한다.
+> Client Component를 포함하는 모든 파일마다 `'use client'` 지시어를 붙일 필요는 없다. Server Component 내부에서 직접 임포트하여 렌더링하려는 모듈 파일에만 선언하면 된다. `'use client'` 지시어는 [서버와 클라이언트의 경계](../../2-guides/server-and-client-boundary.md)를 정의하며, 해당 파일에서 내보낸 컴포넌트가 클라이언트로의 진입점 역할을 한다.
 
 ### 사용법 (Usage)
 

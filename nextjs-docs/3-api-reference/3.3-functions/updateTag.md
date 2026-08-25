@@ -6,20 +6,20 @@
 
 ## 학습 목표
 
-- [Server Action](../../2-guides/2.14-server-actions.md) 내부에서 특정 캐시 태그를 즉시 만료시키는 `updateTag` 함수의 역할을 이해한다.
+- [Server Action](../../2-guides/server-actions.md) 내부에서 특정 캐시 태그를 즉시 만료시키는 `updateTag` 함수의 역할을 이해한다.
 - 사용자가 데이터를 수정한 직후 변경 사항을 즉시 확인할 수 있도록 지원하는 **Read-your-own-writes** 패턴을 구현한다.
 - `updateTag`와 [`revalidateTag`](./revalidateTag.md)의 동작 차이(동기적 즉시 만료 vs 백그라운드 SWR 갱신)를 구분한다.
 - `updateTag`가 Server Action 전용 함수이며 Route Handler에서는 `revalidateTag`를 사용해야 하는 제약 조건을 파악한다.
 
 ## 핵심 개념 및 설명
 
-`updateTag`는 [Server Action](../../2-guides/2.14-server-actions.md) 내부에서 특정 캐시 태그가 지정된 데이터를 온디맨드로 업데이트할 수 있게 해주는 함수다.
+`updateTag`는 [Server Action](../../2-guides/server-actions.md) 내부에서 특정 캐시 태그가 지정된 데이터를 온디맨드로 업데이트할 수 있게 해주는 함수다.
 
 사용자가 게시물을 작성하거나 상태를 수정한 직후, 오래된(stale) 캐시가 아닌 최신 변경 결과를 즉시 확인해야 하는 **Read-your-own-writes** 시나리오를 위해 설계되었다.
 
 ### 실행 환경 및 제약 조건 (Usage)
 
-`updateTag`는 **오직 [Server Action](../../2-guides/2.14-server-actions.md) 내부에서만 호출**될 수 있다. Route Handler, Client Component, 기타 컨텍스트에서 호출할 경우 에러가 발생한다.
+`updateTag`는 **오직 [Server Action](../../2-guides/server-actions.md) 내부에서만 호출**될 수 있다. Route Handler, Client Component, 기타 컨텍스트에서 호출할 경우 에러가 발생한다.
 
 Route Handler나 웹훅 컨텍스트에서 캐시 태그를 무효화해야 하는 경우에는 [`revalidateTag`](./revalidateTag.md)를 사용해야 한다.
 

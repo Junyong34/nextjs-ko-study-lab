@@ -133,7 +133,7 @@ export async function CachedWrapper({ children }: { children: ReactNode }) {
 
 #### 1. 시간 기반 재검증 (`cacheLife`)
 
-[`cacheLife`](./cacheLife.md) 함수를 사용해 캐시 유효 시간을 명시적으로 설정한다:
+[`cacheLife`](../3.3-functions/cacheLife.md) 함수를 사용해 캐시 유효 시간을 명시적으로 설정한다:
 
 ```tsx filename="lib/data.ts"
 import { cacheLife } from 'next/cache'
@@ -147,7 +147,7 @@ export async function getData() {
 
 #### 2. 온디맨드 태그 기반 재검증 (`cacheTag`, `revalidateTag`, `updateTag`)
 
-[`cacheTag`](./cacheTag.md)로 캐시에 식별 태그를 지정하고, Server Action 등에서 [`revalidateTag`](./revalidateTag.md) 또는 [`updateTag`](./updateTag.md)로 즉시 무효화한다:
+[`cacheTag`](../3.3-functions/cacheTag.md)로 캐시에 식별 태그를 지정하고, Server Action 등에서 [`revalidateTag`](../3.3-functions/revalidateTag.md) 또는 [`updateTag`](../3.3-functions/updateTag.md)로 즉시 무효화한다:
 
 ```tsx filename="lib/data.ts"
 import { cacheTag } from 'next/cache'

@@ -34,9 +34,9 @@
 
 ## 2. Edge Runtime & Architecture (2편, 4개 데모)
 
-- **3.8 [Edge Runtime](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/3-api-reference/edge.md)** (2개):
+- **3.8 [Edge Runtime](../../../nextjs-docs/3-api-reference/edge.md)** (2개):
   1) V8 경량 실행 및 글로벌 Web APIs(fetch, Crypto, Streams) 검증
   2) Node.js 전용 모듈(fs, child_process) 접근 불가 제한점 실증
-- **5.1 [Accessibility](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/5-architecture/accessibility.md)** (2개):
+- **5.1 [Accessibility](../../../nextjs-docs/5-architecture/accessibility.md)** (2개):
   1) 결제/주문 폼 WAI-ARIA 속성 및 스크린 리더 지원 검증
   2) 모달 다이얼로그 키보드 포커스 트랩(Focus Trap) 및 Esc 닫기 검증

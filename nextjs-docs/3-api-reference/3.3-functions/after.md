@@ -48,7 +48,7 @@ export default function Layout({ children }) {
 >
 > - `after`는 요청 시점 API(Request-time API)가 아니므로 호출한다고 해서 정적 페이지가 다이나믹 라우트로 강제 전환되지 않는다. 정적 페이지에서는 빌드 시점 또는 revalidation 시점에 실행된다.
 > - 응답 도중 에러가 던져지거나 [`notFound()`](./not-found.md), [`redirect()`](./redirect.md)가 호출되더라도 `after` 콜백은 항상 실행된다.
-> - 서버리스 환경에서는 플랫폼의 `waitUntil` 프리미티브를 활용하여 응답 반환 후에도 함수 인스턴스가 유지되도록 동작한다. 최대 실행 시간은 [`maxDuration`](../3.1-file-conventions/route-segment-config/maxDuration.md) 설정에 따른다.
+> - 서버리스 환경에서는 플랫폼의 `waitUntil` 프리미티브를 활용하여 응답 반환 후에도 함수 인스턴스가 유지되도록 동작한다. 최대 실행 시간은 [`maxDuration`](../3.1-file-conventions/3.1.22-route-segment-config/maxDuration.md) 설정에 따른다.
 
 ### 실행 위치별 요청 API(`cookies`, `headers`) 접근 규칙
 

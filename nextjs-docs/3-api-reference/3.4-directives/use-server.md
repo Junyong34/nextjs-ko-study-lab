@@ -15,7 +15,7 @@
 
 `'use server'` 지시어는 함수 또는 파일 전체가 **서버 측(server side)**에서 실행되도록 지정한다. 파일 최상단에 선언하여 해당 파일의 모든 함수를 서버 함수로 만들거나, 비동기 함수 내부 최상단에 인라인으로 선언하여 개별 함수를 [Server Function](https://react.dev/reference/rsc/server-functions)으로 표시할 수 있다. 이는 React의 표준 기능이다.
 
-Next.js 특화 Server Action 동작(응답 모델, 보안, 설정, 배포 등)에 대한 자세한 내용은 [Server Actions 및 변형(Mutations) 가이드](../../2-guides/2.14-server-actions.md)를 참조한다.
+Next.js 특화 Server Action 동작(응답 모델, 보안, 설정, 배포 등)에 대한 자세한 내용은 [Server Actions 및 변형(Mutations) 가이드](../../2-guides/server-actions.md)를 참조한다.
 
 ### 1. 파일 최상단에서 `'use server'` 사용
 

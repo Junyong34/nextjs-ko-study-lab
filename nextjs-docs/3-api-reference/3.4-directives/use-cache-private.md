@@ -54,7 +54,7 @@ const nextConfig = {
 module.exports = nextConfig
 ```
 
-함수 상단에 `'use cache: private'`를 선언하고 [`cacheLife`](./cacheLife.md) 설정을 함께 지정한다:
+함수 상단에 `'use cache: private'`를 선언하고 [`cacheLife`](../3.3-functions/cacheLife.md) 설정을 함께 지정한다:
 
 ```tsx filename="app/product/[id]/page.tsx" switcher
 import { Suspense } from 'react'
@@ -152,7 +152,7 @@ async function getRecommendations(productId) {
 | `searchParams` | 허용 안 됨 ❌ | **허용됨 ⭕** |
 | `connection()` | 허용 안 됨 ❌ | 허용 안 됨 ❌ |
 
-> **주의**: [`connection()`](./connection.md)은 안전하게 캐시될 수 없는 연결별 고유 정보를 제공하므로 두 지시어 모두에서 사용이 금지된다.
+> **주의**: [`connection()`](../3.3-functions/connection.md)은 안전하게 캐시될 수 없는 연결별 고유 정보를 제공하므로 두 지시어 모두에서 사용이 금지된다.
 
 ### Version History
 

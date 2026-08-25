@@ -7,7 +7,7 @@
 ## 학습 목표
 
 - JSX와 CSS를 사용하여 동적 Open Graph(OG) 소셜 미디어 이미지를 생성하는 `ImageResponse` 생성자의 역할을 이해한다.
-- [`opengraph-image.tsx`](../3.1-file-conventions/opengraph-image.md) 및 Route Handler에서 동적 이미지를 서빙하는 방법을 습득한다.
+- [`opengraph-image.tsx`](../3.1-file-conventions/3.1.21-metadata/opengraph-image.md) 및 Route Handler에서 동적 이미지를 서빙하는 방법을 습득한다.
 - Flexbox 기반 CSS 지원 범위와 커스텀 폰트(`fonts` 옵션) 로드 방식을 익힌다.
 - 최대 번들 크기 제한(500KB)과 폰트 최적화(`ttf`/`otf`) 규칙을 준수한다.
 

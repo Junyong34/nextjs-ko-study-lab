@@ -13,7 +13,7 @@
 
 ## 핵심 개념 및 설명
 
-`generateImageMetadata`는 하나의 메타데이터 이미지 파일([`opengraph-image.tsx`](../3.1-file-conventions/opengraph-image.md), `icon.tsx` 등) 안에서 여러 개의 이미지 해상도(예: 48x48, 72x72)나 복수의 Open Graph 이미지를 동적으로 생성할 때 사용하는 함수다.
+`generateImageMetadata`는 하나의 메타데이터 이미지 파일([`opengraph-image.tsx`](../3.1-file-conventions/3.1.21-metadata/opengraph-image.md), `icon.tsx` 등) 안에서 여러 개의 이미지 해상도(예: 48x48, 72x72)나 복수의 Open Graph 이미지를 동적으로 생성할 때 사용하는 함수다.
 
 하드코딩된 단일 이미지 대신, 배열로 메타데이터 목록을 반환하면 프레임워크가 각 항목의 `id`를 기본 export 함수에 전달하여 여러 장의 이미지를 일괄 생성한다.
 

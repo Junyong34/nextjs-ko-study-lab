@@ -84,7 +84,7 @@ URL의 쿼리 문자열을 읽을 수 있는 유틸리티 메서드를 포함한
 > **알아두면 좋은 점 (Server Component와의 관계)**:
 >
 > - `useSearchParams`는 [Client Component](../../1-getting-started/server-and-client-components.md) 훅이며, [부분 렌더링](../../1-getting-started/linking-and-navigating.md#client-side-transitions) 중 오래된 값이 유지되는 것을 방지하기 위해 [Server Component](../../1-getting-started/server-and-client-components.md)에서는 지원되지 않는다.
-> - Server Component에서 쿼리 파라미터에 따라 데이터를 가져오려면 Page 컴포넌트의 [`searchParams` prop](../3.1-file-conventions/3.1.1-routing/page.md#searchparams-optional)을 읽는 것이 권장된다. 읽어온 값을 해당 Page 내의 하위 컴포넌트(Server 또는 Client)로 props로 전달할 수 있다.
+> - Server Component에서 쿼리 파라미터에 따라 데이터를 가져오려면 Page 컴포넌트의 [`searchParams` prop](../3.1-file-conventions/page.md#searchparams-optional)을 읽는 것이 권장된다. 읽어온 값을 해당 Page 내의 하위 컴포넌트(Server 또는 Client)로 props로 전달할 수 있다.
 > - 애플리케이션에 `/pages` 디렉토리가 공존하는 경우, `getServerSideProps`를 사용하지 않는 페이지의 prerender 도중에는 쿼리 파라미터를 알 수 없으므로 마이그레이션 호환성을 위해 `ReadonlyURLSearchParams | null`을 반환할 수 있다.
 
 ---
@@ -93,7 +93,7 @@ URL의 쿼리 문자열을 읽을 수 있는 유틸리티 메서드를 포함한
 
 #### 1. Prerendering 및 `Suspense` 경계
 
-라우트가 prerender될 때 `useSearchParams`를 호출하면 가장 가까운 [`Suspense` 경계](../3.1-file-conventions/3.1.1-routing/loading.md)까지의 Client Component 트리가 클라이언트 측에서 렌더링된다.
+라우트가 prerender될 때 `useSearchParams`를 호출하면 가장 가까운 [`Suspense` 경계](../3.1-file-conventions/loading.md)까지의 Client Component 트리가 클라이언트 측에서 렌더링된다.
 
 이를 통해 쿼리 파라미터를 사용하는 동적 부분만 클라이언트 렌더링으로 넘기고, 라우트의 나머지 정적 영역은 서버에서 미리 prerender하여 초기 HTML로 전송할 수 있다.
 
@@ -193,7 +193,7 @@ export default async function Page() {
 
 #### 3. Server Component에서의 쿼리 파라미터 접근
 
-- **Page (Server Component)**: [`searchParams` prop](../3.1-file-conventions/3.1.1-routing/page.md#searchparams-optional)을 통해 최신 쿼리 파라미터를 읽을 수 있다.
+- **Page (Server Component)**: [`searchParams` prop](../3.1-file-conventions/page.md#searchparams-optional)을 통해 최신 쿼리 파라미터를 읽을 수 있다.
 - **Layout (Server Component)**: `searchParams` prop을 **받지 않는다**. 레이아웃은 내비게이션 간에 재렌더링되지 않으므로 오래된(stale) 쿼리 값을 갖는 문제를 방지하기 위함이다. 레이아웃 하위에서 쿼리 파라미터를 읽으려면 Client Component로 분리하여 `useSearchParams`를 사용해야 한다.
 
 ---

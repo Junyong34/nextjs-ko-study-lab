@@ -8,7 +8,7 @@
 
 ## 목차별 데모 상세 정의
 
-### 1.3 [Layouts and Pages](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/layouts-and-pages.md) (3개 데모)
+### 1.3 [Layouts and Pages](../../../nextjs-docs/1-getting-started/layouts-and-pages.md) (3개 데모)
 1. **`/demo/layouts-and-pages/nested-layouts` (Zone: baseline)**
    - **이커머스 시나리오**: 쇼핑몰 상단 GNB와 카테고리 사이드바(중첩 레이아웃) 내에서 상품 목록 및 상세 페이지 전환
    - **체험 절차**: 1) 카테고리(신발 -> 의류) 클릭 -> 2) 사이드바는 유지되고 우측 콘텐츠 영역만 부분 렌더링 관찰
@@ -24,7 +24,7 @@
 
 ---
 
-### 1.4 [Linking and Navigating](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/linking-and-navigating.md) (2개 데모)
+### 1.4 [Linking and Navigating](../../../nextjs-docs/1-getting-started/linking-and-navigating.md) (2개 데모)
 1. **`/demo/linking-and-navigating/soft-navigation` (Zone: baseline)**
    - **이커머스 시나리오**: 카테고리 탭 간 `<Link>` 이동 시 전체 페이지 리로드 없는 소프트 네비게이션 및 스크롤 위치 보존
    - **체험 절차**: 1) 상품 목록 스크롤 다운 -> 2) 링크 클릭 -> 3) `scroll={false}` 설정에 따른 스크롤 위치 유지 대조
@@ -36,7 +36,7 @@
 
 ---
 
-### 1.5 [Server and Client Components](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/server-and-client-components.md) (2개 데모)
+### 1.5 [Server and Client Components](../../../nextjs-docs/1-getting-started/server-and-client-components.md) (2개 데모)
 1. **`/demo/server-client-components/composition` (Zone: baseline)**
    - **이커머스 시나리오**: 서버에서 렌더링된 무거운 상품 상세 스펙(RSC)에 클라이언트 인터랙션 위시리스트 하트 버튼(RCC) 합성
    - **체험 절차**: 1) 상품 스펙 로드 확인(서버 타임스탬프) -> 2) 하트 버튼 클릭 시 클라이언트 로컬 상태만 즉각 토글
@@ -48,7 +48,7 @@
 
 ---
 
-### 1.6 [Fetching Data](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/fetching-data.md) (2개 데모)
+### 1.6 [Fetching Data](../../../nextjs-docs/1-getting-started/fetching-data.md) (2개 데모)
 1. **`/demo/fetching-data/parallel-fetching` (Zone: baseline)**
    - **이커머스 시나리오**: 상품 정보(1s)와 추천 목록(1.5s)을 `Promise.all`로 병렬 패칭하여 직렬 Waterfall(2.5s -> 1.5s) 해소
    - **체험 절차**: 1) 직렬 패칭 실행 -> 2) 병렬 패칭 실행 -> 3) 소요 시간 및 타임라인 차트 비교
@@ -60,7 +60,7 @@
 
 ---
 
-### 1.7 [Mutating Data](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/mutating-data.md) (2개 데모)
+### 1.7 [Mutating Data](../../../nextjs-docs/1-getting-started/mutating-data.md) (2개 데모)
 1. **`/demo/mutating-data/server-action-revalidate` (Zone: baseline)**
    - **이커머스 시나리오**: 장바구니 수량 증가 Server Action 호출 후 `revalidatePath('/cart')`로 서버 장바구니 합계 동기화
    - **체험 절차**: 1) 수량 [+] 버튼 클릭 -> 2) 서버 액션 처리 -> 3) 총 결제 금액 자동 갱신
@@ -72,7 +72,7 @@
 
 ---
 
-### 1.8 [Caching](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/caching.md) (2개 데모)
+### 1.8 [Caching](../../../nextjs-docs/1-getting-started/caching.md) (2개 데모)
 1. **`/demo/caching/basic` (Zone: cache - 완료)**
    - **이커머스 시나리오**: `use cache` 기본 동작 및 `cacheTag('caching-basic:data')` 타임스탬프 고정
    - **체험 절차**: 1) 새로고침 -> 2) 캐시 ID 및 시각 유지 확인
@@ -84,7 +84,7 @@
 
 ---
 
-### 1.9 [Revalidating](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/revalidating.md) (2개 데모)
+### 1.9 [Revalidating](../../../nextjs-docs/1-getting-started/revalidating.md) (2개 데모)
 1. **`/demo/revalidating/time-based-isr` (Zone: cache)**
    - **이커머스 시나리오**: `cacheLife('seconds')`를 적용한 10초 주기 시간 기반 재검증 (Stale-While-Revalidate)
    - **체험 절차**: 1) 10초 이내 새로고침(캐시 유지) -> 2) 10초 후 새로고침(백그라운드 갱신 트리거) -> 3) 다음 새로고침 시 갱신 데이터 노출
@@ -96,7 +96,7 @@
 
 ---
 
-### 1.10 [Error Handling](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/error-handling.md) (2개 데모)
+### 1.10 [Error Handling](../../../nextjs-docs/1-getting-started/error-handling.md) (2개 데모)
 1. **`/demo/error-handling/segment-error` (Zone: baseline)**
    - **이커머스 시나리오**: 결제 승인 API 실패 시 전체 앱이 깨지지 않고 결제 박스만 `error.tsx` 바운더리로 격리
    - **체험 절차**: 1) [강제 결제 오류 발생] 클릭 -> 2) 결제 컴포넌트만 에러 UI로 전환 -> 3) [다시 시도(reset)] 클릭 시 정상 복구
@@ -108,7 +108,7 @@
 
 ---
 
-### 1.11 [CSS](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/css.md) (2개 데모)
+### 1.11 [CSS](../../../nextjs-docs/1-getting-started/css.md) (2개 데모)
 1. **`/demo/css/tailwind-v4` (Zone: baseline)**
    - **이커머스 시나리오**: Tailwind CSS v4 `@theme inline` oklch 토큰 기반 상품 카드 반응형 스타일 및 테마 전환
    - **체험 절차**: 1) 다크모드/라이트모드 토글 -> 2) 상품 뱃지 hover/focus 상태 전환 관찰
@@ -120,7 +120,7 @@
 
 ---
 
-### 1.12 [Image Optimization](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/images.md) (3개 데모)
+### 1.12 [Image Optimization](../../../nextjs-docs/1-getting-started/images.md) (3개 데모)
 1. **`/demo/images/responsive-sizes` (Zone: baseline)**
    - **이커머스 시나리오**: 상품 갤러리 `next/image`의 `fill` 속성과 `sizes="(max-width: 768px) 100vw, 50vw"` 반응형 로딩
    - **체험 절차**: 1) 뷰포트 너비 슬라이더 조절 -> 2) 다운로드되는 이미지 srcSet 및 실제 크기(px) 변경 관찰
@@ -136,7 +136,7 @@
 
 ---
 
-### 1.13 [Font Optimization](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/fonts.md) (2개 데모)
+### 1.13 [Font Optimization](../../../nextjs-docs/1-getting-started/fonts.md) (2개 데모)
 1. **`/demo/fonts/google-variable` (Zone: baseline)**
    - **이커머스 시나리오**: `next/font/google`을 활용한 Inter/Geist 가변 폰트 셀프 호스팅 및 CLS(0.00) 방지
    - **체험 절차**: 1) 외부 CDN 폰트 vs next/font 전환 -> 2) 폰트 로드 시 텍스트 떨림(FOUT/FOIT) 제로 확인
@@ -148,7 +148,7 @@
 
 ---
 
-### 1.14 [Metadata and OG images](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/metadata-and-og-images.md) (2개 데모)
+### 1.14 [Metadata and OG images](../../../nextjs-docs/1-getting-started/metadata-and-og-images.md) (2개 데모)
 1. **`/demo/metadata/dynamic-seo` (Zone: baseline)**
    - **이커머스 시나리오**: 상품 상세 `generateMetadata`를 통한 동적 타이틀, 설명, Canonical URL, OpenGraph 메타태그 출력
    - **체험 절차**: 1) 상품 선택 변경 -> 2) `<head>` 메타태그 실시간 변경 확인
@@ -160,7 +160,7 @@
 
 ---
 
-### 1.15 [Route Handlers](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/route-handlers.md) (2개 데모)
+### 1.15 [Route Handlers](../../../nextjs-docs/1-getting-started/route-handlers.md) (2개 데모)
 1. **`/demo/route-handlers/rest-api` (Zone: baseline)**
    - **이커머스 시나리오**: `/api/products` 엔드포인트의 GET(필터 검색) 및 POST(신규 상품 등록) REST API 인터랙티브 테스트
    - **체험 절차**: 1) GET 요청 전송 (JSON 응답 확인) -> 2) POST 요청으로 상품 추가 -> 3) 201 Created 응답 확인
@@ -172,7 +172,7 @@
 
 ---
 
-### 1.16 [Proxy](file:///Users/devpark/workspace/devpark/nextjs-ko-study-lab/nextjs-docs/1-getting-started/proxy.md) (1개 데모)
+### 1.16 [Proxy](../../../nextjs-docs/1-getting-started/proxy.md) (1개 데모)
 1. **`/demo/proxy/gateway-handler` (Zone: baseline)**
    - **이커머스 시나리오**: 레거시 PG사 결제 API를 중계하는 보안 프록시 라우트 핸들러 (CORS 우회 및 내부 API 키 마스킹)
    - **체험 절차**: 1) [프록시 결제 요청] 클릭 -> 2) 클라이언트에 노출되지 않은 서버 전용 시크릿 키가 결합되어 결제 서버 통신 완료

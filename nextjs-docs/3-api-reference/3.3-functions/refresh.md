@@ -6,14 +6,14 @@
 
 ## 학습 목표
 
-- [Server Action](../../2-guides/2.14-server-actions.md) 내부에서 클라이언트 라우터를 새로고침(Refresh)하도록 지시하는 `refresh` 함수의 역할을 이해한다.
+- [Server Action](../../2-guides/server-actions.md) 내부에서 클라이언트 라우터를 새로고침(Refresh)하도록 지시하는 `refresh` 함수의 역할을 이해한다.
 - `refresh`가 Server Action 전용 함수이며 Route Handler나 Client Component에서는 직접 호출할 수 없음을 인지한다.
 - 데이터 뮤테이션 완료 후 현재 화면의 Server Component 트리를 최신 상태로 다시 불러오는 동작 원리를 파악한다.
 - [`revalidatePath`](./revalidatePath.md) 및 [`updateTag`](./updateTag.md)와의 사용 구분점을 이해한다.
 
 ## 핵심 개념 및 설명
 
-`refresh`는 [Server Action](../../2-guides/2.14-server-actions.md) 실행 완료 후, 클라이언트 라우터(Client Router)가 현재 페이지의 데이터를 서버로부터 새로고침하도록 요청하는 함수다.
+`refresh`는 [Server Action](../../2-guides/server-actions.md) 실행 완료 후, 클라이언트 라우터(Client Router)가 현재 페이지의 데이터를 서버로부터 새로고침하도록 요청하는 함수다.
 
 ```ts filename="app/actions.ts" switcher
 'use server'
