@@ -6,27 +6,23 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"ImageResponse 동적 결제 영수증 이미지 생성"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'ImageResponse 동적 결제 영수증 이미지 생성'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="ImageResponse 동적 결제 영수증 이미지 생성"
+        concept="Satori/Resvg 엔진 기반 ImageResponse를 사용하여 주문 번호(ORD-2026-9912)와 결제액(349,000원)이 포함된 모바일 전자 영수증 PNG 바이너리를 50ms 이내에 동적 생성합니다."
         steps={[
           {
                     "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+                    "title": "디지털 결제 영수증 파라미터 명세 점검 및 ImageResponse Satori JSX 레이아웃 렌더링",
+                    "description": "주문번호(ORD-2026-9912) 및 결제금액(349,000원) 등의 영수증 데이터 페이로드를 확인합니다. Satori Flexbox CSS와 JSX 템플릿을 통해 전자 영수증 규격의 PNG 바이너리 스트림을 생성합니다.",
+                    "actionBadge": "파라미터 점검"
           },
           {
                     "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
+                    "title": "전자 결제 영수증 PNG 생성 및 다운로드 지원 관찰",
+                    "description": "클라이언트 위변조가 불가능한 서버 서명 영수증 이미지가 소셜 메신저 및 다운로드 규격으로 생성되는지 확인합니다.",
+                    "actionBadge": "영수증 검증",
+                    "observe": "주문 결제 데이터가 주입된 ImageResponse 전자 영수증 PNG 바이너리가 정상 생성됨",
+                    "observeAt": "playground"
           }
 ]}
       />

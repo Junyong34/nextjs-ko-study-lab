@@ -7,31 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"파일 최상단 'use server' 쿠폰 검증 액션"}
-        concept={"actions.ts 첫 줄에 'use server'를 선언하면 그 파일의 export 함수 전체가 Server Action이 됩니다. applyCouponAction은 클라이언트 번들에 코드가 실려 나가지 않고, 쿠폰 목록 검증은 서버에서만 수행됩니다."}
+        title={"'use server' 파일 단위 Server Action 모듈 분리"}
+        concept={"파일 최상단에 'use server'를 선언한 모듈의 모든 함수는 브라우저에 번들링되지 않는 보안 RPC 엔드포인트로 노출되어 폼 제출 및 데이터 변이를 안전하게 처리합니다."}
         steps={[
-          {
-            step: 1,
-            title: "쿠폰 코드 입력",
-            description: "[쿠폰 코드 입력 (예: WELCOME2026, VIPSPECIAL)] 칸에 유효한 코드를 넣습니다.",
-            actionBadge: "입력",
-          },
-          {
-            step: 2,
-            title: "[쿠폰 적용] 클릭",
-            description: "applyCouponAction이 서버에서 실행됩니다. 400ms 동안 버튼이 [검증 중...]으로 바뀝니다.",
-            actionBadge: "Server Action",
-          },
-          {
-            step: 3,
-            title: "할인 반영 결과 확인",
-            description: "검증에 성공하면 할인액이 차감되어 최종 결제 예정 금액이 다시 계산됩니다.",
-            actionBadge: "400ms 후",
-            observe: "유효 코드는 할인액이 붙고 없는 코드는 \"유효하지 않은 쿠폰 코드입니다\" 메시지가 뜨는지 — 판정 로직이 클라이언트가 아닌 서버에서 오는지 확인",
-            observeAt: "verification",
-          },
+        {
+        "step": 1,
+        "title": "[쿠폰 코드 입력 (예: WELCOME2026, VIPSPECIAL)] 입력",
+        "description": "할인 쿠폰 코드를 입력 필드에 작성합니다.",
+        "actionBadge": "코드 입력"
+        },
+        {
+        "step": 2,
+        "title": "[쿠폰 적용] 클릭",
+        "description": "actions.ts에 정의된 applyCoupon() Server Action을 호출하여 서버에서 할인율을 검증합니다.",
+        "actionBadge": "Server Action"
+        },
+        {
+        "step": 3,
+        "title": "쿠폰 할인율 적용 및 보안 처리 확인",
+        "description": "쿠폰 검증 로직이 서버 내부에서만 실행되고 클라이언트에 검증 비밀키가 노출되지 않는지 확인합니다.",
+        "actionBadge": "할인 적용",
+        "observe": "쿠폰 적용 후 할인된 결제 금액과 3단 검증 패널의 Server Action 응답 상태 대조",
+        "observeAt": "playground"
+        }
         ]}
-      />
+        />
       <DemoPlaygroundCard title={"파일 레벨 'use server' Server Action 모듈 분리 실습"}>
         <DirectiveUseServerDemo />
       </DemoPlaygroundCard>

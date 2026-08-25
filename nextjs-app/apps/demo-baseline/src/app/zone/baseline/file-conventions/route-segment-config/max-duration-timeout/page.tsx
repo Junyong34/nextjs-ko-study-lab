@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"주문 정산 배치 maxDuration 타임아웃 제한"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 '주문 정산 배치 maxDuration 타임아웃 제한'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"export const maxDuration 서버리스 실행 제한 시간"}
+        concept={"Vercel 서버리스 함수 실행 제한 시간을 maxDuration = 60초로 설정하여 대용량 PDF 생성이나 외부 PG사 연동 시 504 Gateway Timeout을 방지합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+        "description": "실행 시간이 긴 작업을 수행할 상품 데이터를 선택합니다.",
+        "actionBadge": "데이터 선택"
+        },
+        {
+        "step": 2,
+        "title": "[+] 수량 조절 후 [동작 실행] 클릭",
+        "description": "장시간 소요되는 서버리스 API 핸들러 호출을 트리거합니다.",
+        "actionBadge": "API 호출"
+        },
+        {
+        "step": 3,
+        "title": "maxDuration 타임아웃 방지 및 200 완료 확인",
+        "description": "maxDuration 설정으로 15초 이상의 비동기 작업이 504 에러 없이 200 OK로 완료되는지 확인합니다.",
+        "actionBadge": "200 완료",
+        "observe": "3단 검증 패널에서 maxDuration 설정값과 장기 실행 작업의 성공 상태 대조",
+        "observeAt": "verification"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"주문 정산 배치 maxDuration 타임아웃 제한 실습"}>
         <MaxDurationTimeoutDemo />
       </DemoPlaygroundCard>

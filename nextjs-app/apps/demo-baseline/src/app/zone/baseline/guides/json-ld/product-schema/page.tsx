@@ -7,26 +7,22 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Schema.org Product 구조화 데이터 (JSON-LD)"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Schema.org Product 구조화 데이터 (JSON-LD)' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"JSON-LD 구조화 데이터(Schema.org) 주입 및 SEO 최적화"}
+        concept={"상품 상세 페이지에 Schema.org 표준 Product 타입 JSON-LD 객체를 <script type=\"application/ld+json\">으로 SSR HTML에 삽입하여 검색 엔진 리치 스니펫(가격, 재고, 평점) 노출을 극대화합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "주입된 Schema.org Product 구조화 데이터 확인 및 상품 가격(129,000 KRW) 및 재고(InStock) 필드 검사",
+                    "description": "서버 렌더링 시점에 생성된 JSON-LD 스크립트 블록의 @context와 @type을 점검합니다. 검색 엔진 봇이 인식하는 통화, 가격(offers.price), 재고 상태 메타데이터를 확인합니다.",
+                    "actionBadge": "JSON-LD 점검"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
-          },
-          {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "검색 엔진 리치 스니펫 유효성 및 SEO 마크업 관찰",
+                    "description": "구글 검색 결과에 별점과 가격이 올바르게 노출될 수 있는 JSON 직렬화 구조를 검증합니다.",
+                    "actionBadge": "SEO 검증",
+                    "observe": "HTML <head> 내 application/ld+json 스크립트 태그 및 상품 스키마(129,000 KRW, InStock) 삽입 관찰",
+                    "observeAt": "playground"
           }
 ]}
       />

@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"priority 속성을 통한 LCP 이미지 사전 로드"}
-        concept={"Next.js 빌트인 컴포넌트 'priority 속성을 통한 LCP 이미지 사전 로드'을 활용하여 쇼핑몰의 성능, SEO, 폼 상호작용을 최적화하는 실무 구현입니다."}
+        title={"next/image priority 속성 LCP 프리로드"}
+        concept={"히어로 배너에 <Image priority> 속성을 부여하면 HTML <head>에 <link rel=\"preload\">가 자동 주입되어 이미지 다운로드를 앞당기고 LCP 시간을 40% 이상 단축합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "컴포넌트 렌더링 점검",
-                    "description": "빌트인 컴포넌트가 생성한 최종 HTML 마크업과 속성을 확인합니다.",
-                    "actionBadge": "마크업 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "동적 옵션 조작",
-                    "description": "옵션(속성)을 변경하며 브라우저 동작 및 네트워크 최적화 효과를 관찰합니다.",
-                    "actionBadge": "속성 변경"
-          },
-          {
-                    "step": 3,
-                    "title": "최적화 결과 대조",
-                    "description": "CLS 방지, 자동 포맷 변환, 폼 데이터 직렬화 결과를 검증합니다.",
-                    "actionBadge": "결과 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[PROD-001] 또는 [PROD-002] 상품 탭 선택",
+        "description": "LCP 대상 히어로 이미지 상품 카드를 선택합니다.",
+        "actionBadge": "상품 선택"
+        },
+        {
+            "step": 2,
+            "title": "[priority=true] 체크박스 토글",
+            "description": "priority 속성을 켜거나 꺼서 HTML head 내부 preload 링크의 생성 여부를 전환합니다.",
+            "actionBadge": "priority 토글"
+        },
+        {
+        "step": 3,
+        "title": "LCP 로딩 성능 최적화 검증",
+        "description": "lazy loading이 비활성화되고 즉시 다운로드되어 LCP 지표가 향상되는 것을 검증합니다.",
+        "actionBadge": "LCP 최적화",
+        "observe": "3단 검증 패널에서 priority 속성 유무에 따른 LCP 프리로드 및 렌더링 사양 대조",
+        "observeAt": "verification"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"priority 속성을 통한 LCP 이미지 사전 로드 실습"}>
         <ImagePriorityLcpDemo />
       </DemoPlaygroundCard>

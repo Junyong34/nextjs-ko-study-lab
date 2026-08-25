@@ -7,26 +7,34 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Route Segment revalidate 설정"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Route Segment revalidate 설정' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"라우트 세그먼트 레벨 revalidate 설정"}
+        concept={"페이지 세그먼트 상단에 export const revalidate = 30을 선언하여 해당 라우트의 모든 하위 fetch 요청의 기본 캐시 유효 시간을 30초로 일괄 지정합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "[러닝화 (#001)] 상품 선택",
+                    "description": "1번 상품 카드를 선택하여 해당 세그먼트의 캐시 상태를 확인합니다.",
+                    "actionBadge": "상품 1 선택"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+                    "title": "[윈드브레이커 (#002)] 상품 선택",
+                    "description": "2번 상품 카드를 선택하여 독립된 세그먼트 캐시 상태를 대조합니다.",
+                    "actionBadge": "상품 2 선택"
           },
           {
                     "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "[+], [-] 수량 변경 조작",
+                    "description": "수량을 변경하여 세그먼트별 데이터 갱신을 트리거합니다.",
+                    "actionBadge": "수량 변경"
+          },
+          {
+                    "step": 4,
+                    "title": "세그먼트별 독립 캐시 유효기간 및 재검증 관찰",
+                    "description": "각 상품 세그먼트가 독립적인 revalidate 주기를 유지하며 갱신되는지 관찰합니다.",
+                    "actionBadge": "세그먼트 캐시 관찰",
+                    "observe": "각 세그먼트별로 독립된 revalidate 수명 주기가 적용되어 변경된 세그먼트만 선별 갱신됨",
+                    "observeAt": "playground"
           }
 ]}
       />

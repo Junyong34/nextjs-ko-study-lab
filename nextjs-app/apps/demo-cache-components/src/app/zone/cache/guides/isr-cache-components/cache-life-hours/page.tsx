@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Next.js 16 cacheLife('hours') 프로파일 기반 수명 제어"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Next.js 16 cacheLife('hours') 프로파일 기반 수명 제어' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"Cache Components의 cacheLife 프로필 기반 정적 캐싱"}
+        concept={"Next.js 16의 'use cache' 지시어와 cacheLife('hours') 프로필을 선언하여 컴포넌트 단위로 stale(1시간), revalidate(1시간), expire(1일) 수명 주기를 정밀 제어합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[cacheLife('hours')] 프로필 설정 점검",
+            description: "컴포넌트 함수 상단에 선언된 use cache 지시어와 시간 단위 캐시 프로필 구성을 확인합니다.",
+            actionBadge: "프로필 점검",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[컴포넌트 캐시 패치 실행] 클릭",
+            description: "독립적인 캐시 수명 주기를 갖는 상품 프로모션 블록을 호출하여 캐시 생성 시점을 기록합니다.",
+            actionBadge: "캐시 패치",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "cacheLife 수명 주기에 따른 컴포넌트 캐시 HIT 관찰",
+            description: "정의된 수명 주기(hours) 동안 서버 리렌더링 없이 즉각 캐시 결과가 반환되는지 확인합니다.",
+            actionBadge: "캐시 HIT 검증",
+            observe: "cacheLife('hours') 프로필 적용에 따른 컴포넌트 수준 캐시 응답(0ms HIT) 및 만료 주기 메타데이터 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"Next.js 16 cacheLife('hours') 프로파일 기반 수명 제어 실습"}>
         <CacheLifeHoursDemo />

@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"experimental.cacheHandlers 분산 Redis 캐시 핸들러 연동"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'experimental.cacheHandlers 분산 Redis 캐시 핸들러 연동' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="experimental.cacheHandlers 분산 Redis 캐시 핸들러 연동"
+        concept="next.config.ts experimental.cacheHandlers에 분산 Redis/KV 어댑터를 등록하여 멀티 인스턴스 서버 환경에서 Data Cache를 중앙 집중형으로 동기화합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "분산 Redis 캐시 핸들러와 연동된 상품 데이터를 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "커스텀 CacheHandler의 get/set/revalidateTag 인터페이스를 호출합니다.",
+            actionBadge: "핸들러 실행",
           },
           {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
-          }
-]}
+            step: 3,
+            title: "분산 Redis 캐시 적재 및 태그 무효화 관찰",
+            description: "로컬 파일시스템이 아닌 분산 Redis 저장소에 캐시가 적재되고 실시간 동기화되는지 확인합니다.",
+            actionBadge: "로그 검증",
+            observe: "custom cacheHandlers를 통해 분산 Redis 저장소로 캐시 엔트리가 정상 동기화됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"experimental.cacheHandlers 분산 Redis 캐시 핸들러 연동 실습"}>
         <ConfigCacheHandlersDemo />

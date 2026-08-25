@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"updateTag() 즉시 캐시 메모리 패치"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'updateTag() 즉시 캐시 메모리 패치'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="updateTag() 즉시 캐시 메모리 패치"
+        concept="Next.js 16 updateTag()를 활용하여 네트워크 재요청 지연(0ms) 없이 Data Cache 메모리에 특정 태그의 새 값을 즉시 인라인 패치(Patch)합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[updateTag('cart', { count: '}) 즉시 패치] 클릭",
+            description: "장바구니 캐시 태그('cart')에 새로운 수량 데이터를 즉시 메모리 패치합니다.",
+            actionBadge: "즉시 패치",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "0ms 네트워크 지연 없는 인메모리 갱신 확인",
+            description: "별도 DB 재조회 없이 Data Cache의 엔트리 값이 즉시 새 객체로 치환되는지 확인합니다.",
+            actionBadge: "메모리 동기화",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "장바구니 수량 실시간 갱신 상태 관찰",
+            description: "화면 상단의 장바구니 뱃지와 수량 카운트가 즉각적으로 동기화되는지 확인합니다.",
+            actionBadge: "결과 검증",
+            observe: "updateTag 호출로 재요청 없이 인메모리 캐시가 즉각 패치되어 수량이 갱신됨",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"updateTag() 즉시 캐시 메모리 패치 실습"}>
         <UpdateTagInstantDemo />

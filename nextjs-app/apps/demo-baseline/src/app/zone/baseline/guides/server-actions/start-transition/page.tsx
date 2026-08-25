@@ -8,27 +8,29 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"startTransition을 통한 프로그래밍 방식 Server Action 호출"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'startTransition을 통한 프로그래밍 방식 Server Action 호출' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        concept={"<form> 태그 없이 일반 버튼 클릭 이벤트에서 React 19 startTransition을 호출하면, 600ms 비동기 Server Action 통신 중에도 메인 UI를 차단하지 않고 isPending 상태를 선언적으로 감지하여 로딩 인디케이터를 표시합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[전체] 기본 탭 선택 상태 확인",
+            description: "초기 렌더링 시 기본 카테고리가 선택되어 있고 isPending이 false 상태임을 확인합니다.",
+            actionBadge: "초기 탭 점검",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[전자기기] 또는 [의류] 카테고리 탭 버튼 클릭",
+            description: "startTransition(async () => { ... })을 호출하여 600ms 비동기 트랜지션을 시작합니다.",
+            actionBadge: "트랜지션 트리거",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "600ms 동안 서버 트랜지션 처리 중... 인디케이터 표시 관찰",
+            description: "isPending 플래그가 활성화되어 파란색 애니메이션 텍스트가 표시되고 600ms 후 활성 탭 스타일(bg-zinc-900)이 전환되는 결과를 확인합니다.",
+            actionBadge: "상태 반영 완료",
+            observe: "600ms 동안의 isPending 인디케이터 표시 및 선택된 카테고리 탭의 활성 배경 스타일(bg-zinc-900) 적용 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"startTransition을 통한 프로그래밍 방식 Server Action 호출 실습"}>
         <StartTransitionDemo />

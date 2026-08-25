@@ -7,28 +7,36 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"초정밀 온디맨드 태그 무효화 (cacheTag)"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '초정밀 온디맨드 태그 무효화 (cacheTag)' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"Cache Components 정밀 태그 기반 타겟 무효화"}
+        concept={"전체 페이지를 다시 빌드하지 않고 updateTag('product-101') 또는 updateTag('category-electronics')를 호출하여 특정 SKU 또는 카테고리 캐시만 정밀 타겟 무효화합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "최근 무효화된 태그 상태((없음)) 확인",
+            description: "현재 캐시 무효화 기록이 없는 초기 상태를 점검합니다.",
+            actionBadge: "초기 태그 확인",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[101번 상품 무효화] 버튼 클릭",
+            description: "단일 상품 태그(product-101)만 선택적으로 무효화하여 키보드 캐시를 퍼지합니다.",
+            actionBadge: "단일 상품 퍼지",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "[전자기기 카테고리 무효화] 버튼 클릭",
+            description: "상위 카테고리 태그(category-electronics)를 퍼지하여 하위 모든 전자기기 캐시를 일괄 갱신합니다.",
+            actionBadge: "카테고리 퍼지",
+          },
+          {
+            step: 4,
+            title: "무효화된 태그 식별자 및 타겟 캐시 갱신 관찰",
+            description: "화면 상단에 최근 무효화된 태그 이름이 정확히 출력되고 연관 캐시만 갱신되는지 검증합니다.",
+            actionBadge: "정밀 퍼지 검증",
+            observe: "버튼 클릭에 따른 최근 무효화 태그(product-101 / category-electronics) 출력 및 타겟 캐시 분리 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"초정밀 온디맨드 태그 무효화 (cacheTag) 실습"}>
         <PrecisionTagPurgeDemo />

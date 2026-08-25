@@ -66,26 +66,34 @@ export default function ServerActionsBasicDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Server Actions 기본 배관 & 서버-클라이언트 통신"
-        concept="별도의 API 엔드포인트(/api/*)를 만들지 않고도, 클라이언트 폼에서 'use server' 함수를 비동기 호출하여 서버 상태를 안전하게 변이(Mutation)합니다."
+        title={"Server Action 기본 폼 제출 및 서버 상태 변경"}
+        concept={"React 19 Server Action('use server')을 <form action={...}>에 직접 연결하여 브라우저에서 별도 API 엔드포인트 구축 없이 서버 장바구니 DB를 갱신하고 서버 렌더링 상태를 실시간 동기화합니다."}
         steps={[
           {
             step: 1,
-            title: '텍스트 입력',
-            description: '추가할 항목 텍스트(예: 상품 후기 등록)를 입력합니다.',
-            actionBadge: '데이터 작성',
+            title: "[추가할 텍스트 입력 (예: Next.js Server Action 테스트)] 필드에 품목명 입력",
+            description: "입력 폼에 추가할 상품 텍스트를 작성하여 폼 페이로드를 구성합니다.",
+            actionBadge: "입력값 작성",
           },
           {
             step: 2,
-            title: '항목 추가 클릭',
-            description: '[항목 추가]를 눌러 Server Action을 비동기 호출합니다.',
-            actionBadge: 'Server Action 호출',
+            title: "[항목 추가] 버튼 클릭으로 Server Action 실행",
+            description: "폼 액션을 트리거하여 서버 액션 함수를 비동기 호출하고 서버 리스트에 새 항목을 추가합니다.",
+            actionBadge: "서버 액션 트리거",
           },
           {
             step: 3,
-            title: '서버 데이터 반영 확인',
-            description: '서버에서 갱신된 최신 목록이 화면에 즉시 렌더링됩니다.',
-            actionBadge: '변이 완료',
+            title: "[목록 초기화] 버튼으로 서버 목록 리셋",
+            description: "전체 목록 초기화 서버 액션을 실행하여 상태를 원복합니다.",
+            actionBadge: "상태 초기화",
+          },
+          {
+            step: 4,
+            title: "실시간 등록된 아이템 목록 및 서버 응답 동기화 관찰",
+            description: "서버 액션 응답 완료 후 추가된 항목이 화면에 즉시 렌더링되는지 확인합니다.",
+            actionBadge: "상태 검증",
+            observe: "Server Action 제출 후 입력한 텍스트 항목이 서버 목록에 즉시 추가 동기화되는 결과 관찰",
+            observeAt: "playground",
           },
         ]}
       />

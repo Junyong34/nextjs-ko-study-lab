@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"next/script 로딩 전략 상세 비교"}
-        concept={"Next.js 빌트인 컴포넌트 'next/script 로딩 전략 상세 비교'을 활용하여 쇼핑몰의 성능, SEO, 폼 상호작용을 최적화하는 실무 구현입니다."}
+        title={"next/script 로딩 전략 (beforeInteractive vs afterInteractive vs lazyOnload)"}
+        concept={"<Script strategy=\"...\"> 옵션으로 핵심 보안 스크립트(beforeInteractive), 분석 도구(afterInteractive), 비필수 위젯(lazyOnload)의 로딩 순서를 제어하여 메인 스레드 블로킹(0ms)을 방지합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "컴포넌트 렌더링 점검",
-                    "description": "빌트인 컴포넌트가 생성한 최종 HTML 마크업과 속성을 확인합니다.",
-                    "actionBadge": "마크업 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "동적 옵션 조작",
-                    "description": "옵션(속성)을 변경하며 브라우저 동작 및 네트워크 최적화 효과를 관찰합니다.",
-                    "actionBadge": "속성 변경"
-          },
-          {
-                    "step": 3,
-                    "title": "최적화 결과 대조",
-                    "description": "CLS 방지, 자동 포맷 변환, 폼 데이터 직렬화 결과를 검증합니다.",
-                    "actionBadge": "결과 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[afterInteractive (기본값)] 전략 선택",
+        "description": "페이지 수화(Hydration) 직후 브라우저 idle 타임에 스크립트를 비동기 로드하는 기본 동작을 확인합니다.",
+        "actionBadge": "afterInteractive"
+        },
+        {
+        "step": 2,
+        "title": "[lazyOnload] 지연 로딩 전략 선택",
+        "description": "모든 리소스 로드가 완료된 후 브라우저 유휴 시간에 실행되는 비필수 위젯 스크립트 전략을 점검합니다.",
+        "actionBadge": "lazyOnload"
+        },
+        {
+        "step": 3,
+        "title": "[beforeInteractive] 최우선 전략 확인",
+        "description": "수화 전 서버 HTML 주입 시점에 실행되어야 하는 필수 보안/인증 스크립트 전략을 검증합니다.",
+        "actionBadge": "beforeInteractive",
+        "observe": "3단 검증 패널에서 next/script 로딩 전략별 실행 타이밍과 메인 스레드 영향도 대조",
+        "observeAt": "verification"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"next/script 로딩 전략 상세 비교 실습"}>
         <ScriptLoadingStrategiesDemo />
       </DemoPlaygroundCard>

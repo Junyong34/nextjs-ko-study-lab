@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"점진적 Suspense 스트리밍 및 로딩 청크 순차 주입"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '점진적 Suspense 스트리밍 및 로딩 청크 순차 주입' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"점진적 HTML 청크 스트리밍 및 Suspense 경계"}
+        concept={"서버에서 느린 백엔드 API(800ms) 대기 중에도 빠른 정적 셸을 먼저 브라우저로 전송하고, 준비된 HTML 청크를 <script> 삽입 방식으로 스트리밍 교체합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "초기 빠른 셸 청크(헤더/내비게이션) 수신 확인",
+            description: "서버 통신 지연 없이 브라우저에 첫 번째 HTML 청크가 렌더링되는 것을 확인합니다.",
+            actionBadge: "초기 셸 수신",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[다음 청크 수신] 버튼 클릭으로 후속 스트림 로딩 시뮬레이션",
+            description: "데이터 패칭 중인 상품 카탈로그 영역으로 후속 HTML 청크를 전달합니다.",
+            actionBadge: "청크 수신",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "800ms 후 인라인 스트리밍 청크 교체 마운트 관찰",
+            description: "비동기 데이터가 서버에서 완료되어 브라우저의 스켈레톤 영역이 실제 상품 카드로 즉시 치환되는 과정을 확인합니다.",
+            actionBadge: "스트리밍 완료",
+            observe: "800ms 지연 후 서버로부터 전송된 후속 HTML 청크가 클라이언트 DOM에 인라인 교체 렌더링되는 과정 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"점진적 Suspense 스트리밍 및 로딩 청크 순차 주입 실습"}>
         <ChunkLoadingDemo />

@@ -7,29 +7,25 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"nodejs vs edge 런타임 대조"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 'nodejs vs edge 런타임 대조'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"export const runtime = 'nodejs' | 'edge' 런타임 분기"}
+        concept={"라우트 세그먼트 실행 엔진을 글로벌 CDN 엣지(Edge 0ms 콜드스타트) 또는 네이티브 모듈 지원 Node.js 풀스택 환경으로 선택 분기합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
+                    "title": "Edge Runtime 특성 확인 및 Node.js Runtime 특성 확인",
+                    "description": "V8 Isolate 기반으로 전 세계 300개 이상 CDN 엣지에서 0ms 콜드스타트로 실행되는 사양을 확인합니다. fs, crypto, pg 등 모든 Node.js 네이티브 C++ 모듈과 풀스택 라이브러리를 활용하는 사양을 확인합니다.",
+                    "actionBadge": "Edge 0ms"
           },
           {
                     "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
+                    "title": "워크로드별 런타임 최적화 분기 검증",
+                    "description": "경량 인증/프록시는 Edge로, 무거운 DB 작업은 Node.js로 배포하는 최적 아키텍처를 검증합니다.",
+                    "actionBadge": "분기 검증",
+                    "observe": "3단 검증 패널에서 runtime = 'nodejs' vs 'edge' 대조 사양이 올바르게 표시되는지 확인",
+                    "observeAt": "verification"
           }
 ]}
-      />
+        />
       <DemoPlaygroundCard title={"nodejs vs edge 런타임 대조 실습"}>
         <RuntimeNodejsEdgeDemo />
       </DemoPlaygroundCard>

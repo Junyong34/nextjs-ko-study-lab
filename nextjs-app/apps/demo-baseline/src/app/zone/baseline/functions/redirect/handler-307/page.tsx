@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"Route Handler 내 redirect() (307 Temporary Redirect)"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'Route Handler 내 redirect() (307 Temporary Redirect)'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="Route Handler 내 redirect() (307 Temporary Redirect)"
+        concept="Route Handler(GET/POST) 내부에서 redirect(url, RedirectType.replace)를 호출하여 HTTP 메서드를 보존하는 임시 리다이렉트(307 Temporary)를 수행합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "Route Handler 호출 대상 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "API Route에서 redirect()를 호출하여 임시 엔드포인트로 이동시킵니다.",
+            actionBadge: "핸들러 실행",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "HTTP 307 임시 리다이렉트 상태 관찰",
+            description: "HTTP 메서드와 페이로드가 보존된 상태로 대상 URL로 분기되는지 확인합니다.",
+            actionBadge: "307 검증",
+            observe: "Route Handler 내부 redirect() 호출로 HTTP 307 Temporary Redirect가 정상 수행됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"Route Handler 내 redirect() (307 Temporary Redirect) 실습"}>
         <RedirectHandler307Demo />

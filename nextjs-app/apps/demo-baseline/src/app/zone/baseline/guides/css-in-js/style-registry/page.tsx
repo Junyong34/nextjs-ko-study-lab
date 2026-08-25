@@ -7,26 +7,22 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Style Registry를 통한 CSS-in-JS SSR 스타일 주입"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Style Registry를 통한 CSS-in-JS SSR 스타일 주입' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"CSS-in-JS 스타일 레지스트리 및 SSR 스타일 사전 주입"}
+        concept={"useServerInsertedHTML 훅을 사용하는 Style Registry를 구축하여 styled-components 또는 Emotion이 생성한 CSS 규칙을 첫 SSR HTML <head>에 사전 주입하여 스타일 깨짐을 방지합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "SSR HTML <head>에 주입된 <style> 태그 확인 및 클라이언트 하이드레이션 스타일 일치 여부 점검",
+                    "description": "useServerInsertedHTML을 통해 첫 번째 청크와 함께 전달된 CSS 규칙을 점검합니다. 클라이언트 마운트 후에도 동일한 스타일 클래스가 유지되는지 확인합니다.",
+                    "actionBadge": "주입 스타일 확인"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
-          },
-          {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "클래스 네임 충돌 없는 CSS-in-JS 사전 렌더링 관찰",
+                    "description": "브라우저에서 렌더링 시작 전 이미 스타일이 적용되어 깜빡임 없이 완성된 디자인을 검증합니다.",
+                    "actionBadge": "스타일 검증",
+                    "observe": "useServerInsertedHTML로 주입된 style data-styled 태그 및 서버-클라이언트 스타일 일치 관찰",
+                    "observeAt": "playground"
           }
 ]}
       />

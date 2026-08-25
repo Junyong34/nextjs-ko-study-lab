@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"unstable_cache를 통한 DB 쿼리 결과 캐싱"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'unstable_cache를 통한 DB 쿼리 결과 캐싱'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="unstable_cache를 통한 DB 쿼리 결과 캐싱"
+        concept="unstable_cache()를 활용하여 무거운 데이터베이스 쿼리 및 외부 API 결과를 메모리/Data Cache에 캐싱하고 revalidateTag로 수동 무효화합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[조회 (HIT/MISS)] 클릭",
+            description: "unstable_cache로 래핑된 DB 쿼리 함수를 호출하여 첫 번째 조회(MISS) 및 캐시 적재를 수행합니다.",
+            actionBadge: "캐시 조회",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "반복 조회 시 캐시 HIT 및 응답 지연 0ms 확인",
+            description: "동일 버튼을 다시 클릭하여 DB 재조회 없이 캐시 메모리에서 즉시 0ms로 반환되는지 확인합니다.",
+            actionBadge: "HIT 확인",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "[태그 무효화 (revalidateTag)] 클릭 및 캐시 MISS 관찰",
+            description: "태그 무효화 버튼을 눌러 캐시를 퍼지하고 다음 조회가 MISS로 재계산되는지 확인합니다.",
+            actionBadge: "무효화 검증",
+            observe: "캐시 무효화 전후로 HIT/MISS 상태 및 쿼리 실행 타임스탬프가 즉시 전환됨",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"unstable_cache를 통한 DB 쿼리 결과 캐싱 실습"}>
         <UnstableCacheDbDemo />

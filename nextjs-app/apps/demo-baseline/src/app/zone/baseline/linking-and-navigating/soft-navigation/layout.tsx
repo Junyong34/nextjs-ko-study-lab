@@ -19,26 +19,32 @@ export default function SoftNavigationRootLayout({
         concept="Next.js <Link>는 브라우저 전체 새로고침 없이 변경 세그먼트만 교체(Soft Navigation)하여 메모 상태를 보존하며, scroll={false}를 지정하면 0ms 전환 시 스크롤 위치가 최상단으로 튀지 않습니다."
         steps={[
           {
-            step: 1,
-            title: '상단 메모 입력창에 텍스트 입력 및 스크롤 이동',
-            description: '상단 입력창에 메모를 입력하고 페이지 하단으로 스크롤을 내려 조작 준비를 합니다.',
-            actionBadge: '상태 및 스크롤 생성',
+                    "step": 1,
+                    "title": "[메모 작성 후 아래 링크를 클릭해 보세요] 텍스트 입력",
+                    "description": "클라이언트 입력창에 메모를 입력하여 React 상태를 생성합니다.",
+                    "actionBadge": "상태 생성"
           },
           {
-            step: 2,
-            title: '[베스트 상품] <Link scroll={false}> 클릭',
-            description: '[베스트 상품] Soft Navigation 링크를 클릭하여 스크롤 위치와 메모 텍스트가 유지된 채 페이지만 교체되는 것을 확인합니다.',
-            actionBadge: 'Soft Navigation',
+                    "step": 2,
+                    "title": "[신상품 (기본 스크롤 상단)] 링크 클릭",
+                    "description": "Soft Navigation으로 신상품 카탈로그로 이동하며 스크롤 위치를 확인합니다.",
+                    "actionBadge": "링크 이동"
           },
           {
-            step: 3,
-            title: '[베스트 상품 (하드 리로드)] 클릭 대조',
-            description: '일반 <a> 링크를 클릭하여 브라우저 전체가 새로고침되며 스크롤이 맨 위로 튀고 메모가 초기화되는 동작과 대조합니다.',
-            actionBadge: 'Hard Navigation 대조',
-            observe: 'Soft Nav는 입력 메모와 스크롤이 유지되나, Hard Nav(<a>)는 전체 리로드로 메모가 소실되고 스크롤이 0px로 초기화됨',
-            observeAt: 'playground',
+                    "step": 3,
+                    "title": "[베스트 상품], [추천 상품 (홈)] 이동",
+                    "description": "다른 카테고리 링크를 연이어 클릭하여 하드 네비게이션 없이 이동하는지 확인합니다.",
+                    "actionBadge": "카테고리 전환"
           },
-        ]}
+          {
+                    "step": 4,
+                    "title": "Soft Navigation 시 클라이언트 상태 보존 관찰",
+                    "description": "페이지를 여러 번 이동해도 입력 중이던 메모 텍스트가 사라지지 않고 유지되는지 관찰합니다.",
+                    "actionBadge": "상태 보존 관찰",
+                    "observe": "Soft Navigation 이동 중 React 상태 트리가 보존되어 메모 입력값이 초기화되지 않음",
+                    "observeAt": "playground"
+          }
+]}
       />
 
       {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}

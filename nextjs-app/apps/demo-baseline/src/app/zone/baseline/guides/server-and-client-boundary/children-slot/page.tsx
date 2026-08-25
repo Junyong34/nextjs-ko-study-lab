@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Server and Client Component 합성 (children 슬롯 주입)"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Server and Client Component 합성 (children 슬롯 주입)' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"Children Slot 패턴을 통한 RSC와 RCC 합성"}
+        concept={"Client Component(RCC) 내부에 Server Component(RSC)를 직접 import하지 않고 children props 슬롯으로 전달하여 서버 컴포넌트의 0 KB 번들 속성을 유지한 채 합성합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[슬롯 접기 슬롯 펼치기] 토글 버튼 클릭",
+            description: "애니메이션 및 접힘 상태를 제어하는 클라이언트 래퍼 컴포넌트의 토글 버튼을 클릭합니다.",
+            actionBadge: "RCC 래퍼 조작",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[실시간 테마 토글] 클릭",
+            description: "서버에서 사전 렌더링되어 슬롯으로 전달된 서버 데이터 블록을 점검합니다.",
+            actionBadge: "슬롯 주입 검사",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "RCC 리렌더링 시 RSC 독립성 및 번들 격리 관찰",
+            description: "클라이언트 래퍼가 상태 변경으로 리렌더링되어도 children으로 주입된 RSC는 서버 렌더링 상태를 보존함을 확인합니다.",
+            actionBadge: "합성 검증",
+            observe: "RCC 래퍼의 인터랙션 실행 시에도 children 슬롯의 RSC가 클라이언트 번들로 번들링되지 않는 합성 구조 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"Server and Client Component 합성 (children 슬롯 주입) 실습"}>
         <ChildrenSlotDemo />

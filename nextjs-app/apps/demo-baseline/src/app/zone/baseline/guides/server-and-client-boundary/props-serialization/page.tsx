@@ -7,26 +7,22 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Props 직렬화 경계 및 안전한 전달"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Props 직렬화 경계 및 안전한 전달' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"RSC에서 RCC로의 Props 직렬화(Serialization) 경계"}
+        concept={"Server Component에서 Client Component로 전달되는 props는 JSON 직렬화 가능 객체(문자열, 숫자, Date, 순수 객체)여야 하며 함수나 클래스 인스턴스는 경계를 통과할 수 없습니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "직렬화 가능한 Props(상품명, 가격, Date) 구조 확인 및 직렬화 불가 객체(함수, 클래스 메서드) 차단 규칙 검사",
+                    "description": "서버에서 안전하게 직렬화되어 클라이언트로 전송된 데이터 페이로드를 점검합니다. RSC-RCC 경계에서 클라이언트 컴포넌트로 함수를 직접 전달할 수 없는 Next.js 런타임 제약을 확인합니다.",
+                    "actionBadge": "직렬화 데이터 점검"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
-          },
-          {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "클라이언트 컴포넌트에서의 안전한 Props 수신 및 렌더링 관찰",
+                    "description": "역직렬화된 JSON 데이터가 클라이언트 컴포넌트에서 깨짐 없이 정상 렌더링되는 과정을 확인합니다.",
+                    "actionBadge": "경계 전달 검증",
+                    "observe": "RSC에서 RCC로 전달된 직렬화 데이터(상품 스펙, ISO Date)의 클라이언트 정상 수신 및 렌더링 관찰",
+                    "observeAt": "playground"
           }
 ]}
       />

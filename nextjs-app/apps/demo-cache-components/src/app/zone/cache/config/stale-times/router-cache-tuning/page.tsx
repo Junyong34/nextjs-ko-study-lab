@@ -6,27 +6,23 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"experimental.staleTimes 클라이언트 라우터 캐시 시간 제어"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'experimental.staleTimes 클라이언트 라우터 캐시 시간 제어' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="experimental.staleTimes 클라이언트 라우터 캐시 시간 제어"
+        concept="next.config.ts experimental.staleTimes.dynamic (0초~30초) 및 static (5분) 설정을 통해 브라우저 클라이언트 Router Cache의 유효 시간을 제어합니다."
         steps={[
           {
                     "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+                    "title": "staleTimes dynamic vs static 기본 설정 점검 및 클라이언트 뒤로가기/앞으로가기 내비게이션 검증",
+                    "description": "동적 라우트(0초)와 정적 라우트(300초)의 클라이언트 라우터 캐시 유지 시간을 확인합니다. staleTime 이내 방문 시 네트워크 요청 없이 즉시 클라이언트 메모리에서 복원되는 방식을 확인합니다.",
+                    "actionBadge": "설정값 점검"
           },
           {
                     "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
-          },
-          {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
+                    "title": "staleTime 만료 후 서버 재검증 동작 관찰",
+                    "description": "staleTime이 경과한 후에는 백그라운드 서버 재요청을 통해 최신 RSC 데이터를 가져오는지 확인합니다.",
+                    "actionBadge": "재검증 검증",
+                    "observe": "experimental.staleTimes 설정에 따라 클라이언트 라우터 캐시의 재사용 주기가 제어됨",
+                    "observeAt": "playground"
           }
 ]}
       />

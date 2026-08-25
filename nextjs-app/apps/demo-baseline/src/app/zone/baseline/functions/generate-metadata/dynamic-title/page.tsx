@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"generateMetadata 동적 SEO 타이틀 및 메타태그 생성"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'generateMetadata 동적 SEO 타이틀 및 메타태그 생성'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="generateMetadata 동적 SEO 타이틀 및 메타태그 생성"
+        concept="generateMetadata() 비동기 함수에서 DB 상품 정보를 조회하여 페이지별 고유 title, description, openGraph 메타태그를 서버 렌더링 시점에 동적으로 주입합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "동적 메타데이터를 생성할 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "generateMetadata()가 상품 정보를 페칭하여 HTML head 메타태그를 생성하도록 실행합니다.",
+            actionBadge: "메타 생성",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "생성된 SEO 타이틀 및 OG 태그 관찰",
+            description: "HTML <title> 및 og:title 메타태그에 상품명과 가격이 올바르게 주입되었는지 실시간 로그에서 확인합니다.",
+            actionBadge: "태그 검증",
+            observe: "선택한 상품명과 상세 정보가 주입된 dynamic generateMetadata 결과가 실시간 로그에 반영됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"generateMetadata 동적 SEO 타이틀 및 메타태그 생성 실습"}>
         <GenerateMetadataTitleDemo />

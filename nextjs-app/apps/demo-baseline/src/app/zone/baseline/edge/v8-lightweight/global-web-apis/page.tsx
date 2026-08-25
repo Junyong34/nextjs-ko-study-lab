@@ -6,27 +6,23 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"Edge Runtime V8 글로벌 Web APIs 초고속 실행"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'Edge Runtime V8 글로벌 Web APIs 초고속 실행' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="Edge Runtime V8 글로벌 Web APIs 초고속 실행"
+        concept="V8 Isolate 기반 Edge Runtime 환경에서 Request, Response, Web Crypto(crypto.subtle), TransformStream 등의 표준 Web API를 0ms 콜드 스타트로 고속 실행합니다."
         steps={[
           {
                     "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+                    "title": "Edge V8 런타임 표준 Web APIs 지원 명세 점검 및 Web Crypto 기반 SHA-256 서명 생성 실행",
+                    "description": "Fetch, Web Streams, Web Crypto, TextEncoder 등 엣지에서 지원되는 표준 API 목록을 확인합니다. crypto.subtle.digest를 호출하여 초고속으로 결제 위변조 방지 해시 서명을 계산합니다.",
+                    "actionBadge": "API 명세 점검"
           },
           {
                     "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
-          },
-          {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
+                    "title": "0ms 콜드 스타트 및 초저지연 실행 결과 관찰",
+                    "description": "Node.js VM 구동 지연 없이 전 세계 엣지 노드에서 즉시 연산된 결과가 반환되는지 확인합니다.",
+                    "actionBadge": "결과 검증",
+                    "observe": "Edge Runtime V8 엔진에서 표준 Web Crypto 연산이 0ms 콜드 스타트로 즉시 완수됨",
+                    "observeAt": "playground"
           }
 ]}
       />

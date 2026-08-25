@@ -16,31 +16,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"SSE 실시간 재고 스트리밍 (route.ts)"}
-        concept={"route.ts가 ReadableStream을 text/event-stream으로 반환하면 연결이 끊기지 않고 서버가 재고 변동을 계속 밀어냅니다. 클라이언트는 폴링 없이 EventSource로 수신만 합니다."}
+        title={"route.ts SSE (Server-Sent Events) 실시간 재고 스트리밍"}
+        concept={"Response 객체에 text/event-stream 헤더와 ReadableStream을 반환하여 1000ms 간격으로 실시간 재고 변동 데이터를 클라이언트에 푸시합니다."}
         steps={[
-          {
-            step: 1,
-            title: "스트림 자동 연결 확인",
-            description: "페이지 진입과 동시에 EventSource가 route.ts에 연결되어 재고 이벤트가 도착하기 시작합니다.",
-            actionBadge: "SSE 연결",
-          },
-          {
-            step: 2,
-            title: "[스트림 일시중지] 클릭",
-            description: "연결을 끊습니다. 서버가 보내던 재고 갱신이 화면에서 멈춥니다.",
-            actionBadge: "연결 해제",
-          },
-          {
-            step: 3,
-            title: "[스트림 다시 연결] 클릭",
-            description: "EventSource를 다시 열어 수신을 재개합니다.",
-            actionBadge: "재연결",
-            observe: "일시중지 구간에서 재고 수치와 수신 카운트가 멈췄다가 재연결 후 다시 증가하는지 대조",
-            observeAt: "verification",
-          },
+        {
+        "step": 1,
+        "title": "SSE 연결 수립 및 실시간 수신 확인",
+        "description": "EventSource를 통해 route.ts 스트림에 연결되어 1초마다 재고 데이터가 수신되는지 확인합니다.",
+        "actionBadge": "스트림 연결"
+        },
+        {
+        "step": 2,
+        "title": "[스트림 일시중지] 클릭",
+        "description": "EventSource 연결을 close()하여 실시간 스트림 수신을 일시 중단합니다.",
+        "actionBadge": "연결 해제"
+        },
+        {
+        "step": 3,
+        "title": "[스트림 다시 연결] 클릭",
+        "description": "스트림을 재연결하여 최신 재고 이벤트 수신을 재개합니다.",
+        "actionBadge": "재연결",
+        "observe": "1000ms 주기 이벤트 카운트 증가와 3단 검증 패널의 SSE 연결 상태 동기화 확인",
+        "observeAt": "verification"
+        }
         ]}
-      />
+        />
       <DemoPlaygroundCard title="실시간 재고 스트리밍 (SSE route.ts) 실습">
         <SseStockStreamDemo onStatusChange={setStreamState} />
       </DemoPlaygroundCard>

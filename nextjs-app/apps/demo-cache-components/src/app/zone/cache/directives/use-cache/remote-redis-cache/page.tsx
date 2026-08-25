@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"'use cache: remote' 분산 원격 캐시 계층 연동"}
-        concept={"React 19 및 Next.js 16의 지시어 ''use cache: remote' 분산 원격 캐시 계층 연동'을 사용하여 쇼핑몰 컴포넌트와 비동기 함수의 실행 경계 및 캐시 영역을 명시적으로 선언합니다."}
+        title={"'use cache: remote' 분산 원격 Redis 캐시 계층 연동"}
+        concept={"Next.js 16 'use cache'에 분산 Redis CacheHandler를 연동하여 다중 서버리스 인스턴스(Seoul, Tokyo) 간에 동일한 실시간 재고(25개) 캐시를 공유하고 콜드스타트 지연을 제거합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "지시어 선언 위치 확인",
-                    "description": "파일 최상단 또는 함수 최상단에 선언된 지시어의 스코프를 점검합니다.",
-                    "actionBadge": "지시어 점검"
-          },
-          {
-                    "step": 2,
-                    "title": "경계 전환 인터랙션",
-                    "description": "서버 컴포넌트와 클라이언트 컴포넌트 간의 상호 호출을 실행합니다.",
-                    "actionBadge": "경계 호출"
-          },
-          {
-                    "step": 3,
-                    "title": "번들 및 캐시 분리 검증",
-                    "description": "클라이언트 번들 제외 여부 및 캐시 수명 분리를 검증합니다.",
-                    "actionBadge": "분리 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[재고 보충 (+25)] 클릭",
+        "description": "원격 분산 Redis 캐시의 재고 수량을 25개로 초기화 및 동기화합니다.",
+        "actionBadge": "재고 동기화"
+        },
+        {
+        "step": 2,
+        "title": "[주문 구매 (재고 -1)] 버튼 클릭",
+        "description": "특정 인스턴스(Seoul-1)에서 재고를 차감하여 원격 Redis HSET에 변경 사항을 즉시 반영합니다.",
+        "actionBadge": "재고 차감"
+        },
+        {
+        "step": 3,
+        "title": "다중 리전 인스턴스 간 원격 캐시 동기화 확인",
+        "description": "Tokyo 인스턴스에서도 동일하게 차감된 재고(24개)가 즉시 조회되는 분산 캐시 정합성을 확인합니다.",
+        "actionBadge": "분산 동기화",
+        "observe": "다중 리전 인스턴스 간 실시간 재고 수량 일치 여부와 3단 검증 패널의 Redis 원격 캐시 상태 대조",
+        "observeAt": "playground"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"'use cache: remote' 분산 원격 캐시 계층 연동 실습"}>
         <DirectiveUseCacheRemoteDemo />
       </DemoPlaygroundCard>

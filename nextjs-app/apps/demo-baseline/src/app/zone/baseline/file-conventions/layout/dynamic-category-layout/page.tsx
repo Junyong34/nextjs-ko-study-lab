@@ -8,28 +8,30 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"[category]/layout.tsx 동적 카테고리 레이아웃"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 '[category]/layout.tsx 동적 카테고리 레이아웃'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        concept={"동적 세그먼트 [category]에 배치된 layout.tsx는 params.category 변경 시 새로운 카테고리 테마로 전환되며, 동일 카테고리 내에서는 레이아웃 인스턴스를 유지합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+        "description": "카테고리별 상품을 선택하여 동적 파라미터 변경을 준비합니다.",
+        "actionBadge": "상품 선택"
+        },
+        {
+        "step": 2,
+        "title": "[+] 또는 [-] 수량 조절",
+        "description": "주문 수량을 변경하여 로컬 인터랙션 상태를 갱신합니다.",
+        "actionBadge": "수량 조절"
+        },
+        {
+        "step": 3,
+        "title": "[동작 실행] 클릭",
+        "description": "선택한 카테고리 파라미터와 수량 데이터를 레이아웃 컨텍스트에 동기화합니다.",
+        "actionBadge": "동기화 실행",
+        "observe": "선택된 카테고리 라우트 정보와 3단 검증 패널의 동적 레이아웃 파라미터 바인딩 상태 확인",
+        "observeAt": "verification"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"[category]/layout.tsx 동적 카테고리 레이아웃 실습"}>
         <DynamicCategoryLayoutDemo />
       </DemoPlaygroundCard>

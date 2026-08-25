@@ -6,29 +6,25 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"router.refresh() 서버 데이터 강제 재검증 동기화"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'router.refresh() 서버 데이터 강제 재검증 동기화'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="router.refresh() 서버 데이터 강제 재검증 동기화"
+        concept="router.refresh()를 호출하여 클라이언트 React state(입력 폼/스크롤)를 100% 보존한 채 현재 라우트의 서버 컴포넌트 페칭을 강제 재트리거하고 동기화합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[router.refresh() 실행] 버튼 클릭",
+            description: "router.refresh()를 실행하여 클라이언트 React state를 보존한 채 서버 컴포넌트 데이터를 다시 요청합니다.",
+            actionBadge: "RSC 갱신",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "RSC 서버 동기화 횟수 카운터 및 상태 보존 관찰",
+            description: "화면 깜빡임 없이 'RSC 서버 동기화 횟수'가 1회 증가하며 클라이언트 상태가 유지되는지 확인합니다.",
+            actionBadge: "동기화 검증",
+            observe: "RSC 서버 동기화 횟수가 1회씩 증가하고 클라이언트 상태 유실 없이 서버 최신 데이터가 반영됨",
+            observeAt: "playground",
           },
-          {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+        ]}
       />
       <DemoPlaygroundCard title={"router.refresh() 서버 데이터 강제 재검증 동기화 실습"}>
         <UseRouterRefreshDemo />

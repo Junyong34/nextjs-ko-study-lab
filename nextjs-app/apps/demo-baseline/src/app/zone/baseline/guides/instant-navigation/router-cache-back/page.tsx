@@ -7,28 +7,36 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Router Cache를 통한 뒤로가기 0ms 즉각 복구"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Router Cache를 통한 뒤로가기 0ms 즉각 복구' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"Client-side Router Cache를 통한 0ms 뒤로가기(router.back)"}
+        concept={"Next.js 인메모리 Router Cache에 이전 방문한 세그먼트의 RSC 페이로드가 보관되어 있어 router.back() 실행 시 서버 통신 없이 0ms 즉시 화면이 복원됩니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "상품 목록(/catalog) 및 상세 페이지 이동 이력 확인",
+            description: "기존에 탐색한 세그먼트 캐시 타임스탬프와 히스토리 스택을 확인합니다.",
+            actionBadge: "히스토리 점검",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[← router.back() (0ms 뒤로가기)] 버튼 클릭",
+            description: "Router Cache를 활용하여 이전 페이지로 즉각 뒤로가기를 실행합니다.",
+            actionBadge: "뒤로가기 실행",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "[router.forward() →] 앞으로 가기 인터랙션 대조",
+            description: "앞으로 가기를 실행하여 캐시된 상세 페이지가 동일하게 0ms로 복원되는지 테스트합니다.",
+            actionBadge: "앞으로 가기 실행",
+          },
+          {
+            step: 4,
+            title: "0ms 복원 지연 시간 및 스크롤 위치 유지 관찰",
+            description: "서버 재요청 없이 인메모리 캐시에서 이전 화면 상태가 온전히 복원되는지 검증합니다.",
+            actionBadge: "캐시 복원 검증",
+            observe: "router.back() 호출 시 0ms 지연 시간으로 이전 카탈로그 세그먼트가 즉시 복원되는 Router Cache 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"Router Cache를 통한 뒤로가기 0ms 즉각 복구 실습"}>
         <RouterCacheBackDemo />

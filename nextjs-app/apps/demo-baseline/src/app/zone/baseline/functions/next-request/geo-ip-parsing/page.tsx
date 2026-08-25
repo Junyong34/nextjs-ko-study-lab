@@ -16,27 +16,29 @@ export default function DemoPage() {
 
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title="NextRequest IP/Geo 텔레메트리 파싱 (route.ts)"
-        concept="Next.js App Router route.ts의 NextRequest 객체로부터 클라이언트 IP(request.ip) 및 지리적 위치(request.geo/헤더)를 파싱하여 이커머스 통화 및 가격을 자동 현지화하는 실습입니다."
+            <DemoGuideCard
+        title="NextRequest Geo 위치 및 클라이언트 IP 파싱"
+        concept="NextRequest 객체의 request.geo 및 request.ip 속성을 0ms 내에 읽어 접속 국가(KR/US/JP), 도시, IP를 파싱하고 국가별 맞춤 통화와 배송비를 동적으로 설정합니다."
         steps={[
           {
             step: 1,
-            title: "NextRequest 핸들러 선언",
-            description: "api/route.ts에서 NextRequest를 파라미터로 받아 ip, geo, headers를 추출합니다.",
-            actionBadge: "핸들러 수신",
+            title: "[KR 🇰🇷 한국], [US 🇺🇸 미국], [JP 🇯🇵 일본], [🇪🇺 유럽] 국가 선택",
+            description: "Geo-IP 헤더를 시뮬레이션할 접속 국가 버튼을 클릭합니다.",
+            actionBadge: "국가 선택",
           },
           {
             step: 2,
-            title: "지리 정보 기반 통화 매핑",
-            description: "감지된 국가 코드(KR/US/JP/EU)에 맞춰 통화 단위와 환율을 자동 매핑합니다.",
-            actionBadge: "통화 현지화",
+            title: "NextRequest geo 속성 파싱 확인",
+            description: "request.geo.country 및 request.ip에서 추출된 지리적 메타데이터를 확인합니다.",
+            actionBadge: "Geo 파싱",
           },
           {
             step: 3,
-            title: "텔레메트리 검증",
-            description: "클라이언트에서 실시간 수신된 IP, 국가, 포맷팅 가격 정보를 대조 검증합니다.",
-            actionBadge: "데이터 대조",
+            title: "국가별 통화(KRW/USD/JPY/EUR) 및 배송 안내 관찰",
+            description: "선택한 국가의 통화 단위와 로컬라이징 배송 정책이 화면에 즉시 동기화되는지 확인합니다.",
+            actionBadge: "결과 검증",
+            observe: "선택한 국가의 Geo-IP 정보에 따라 통화 기호 및 현지 배송비 정책이 화면에 일치함",
+            observeAt: "playground",
           },
         ]}
       />

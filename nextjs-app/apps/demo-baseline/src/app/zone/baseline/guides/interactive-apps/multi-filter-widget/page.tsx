@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"다중 필터/정렬/장바구니 복합 인터랙티브 위젯"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '다중 필터/정렬/장바구니 복합 인터랙티브 위젯' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"URL searchParams 기반 다중 필터 위젯 상태 동기화"}
+        concept={"useSearchParams와 useRouter를 결합하여 카테고리, 가격대, 정렬 필터 상태를 브라우저 URL 쿼리 스트링(?category=shoes&sort=price_asc)과 실시간 동기화하여 북마크 및 공유를 지원합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "다중 필터 위젯(카테고리/가격/정렬) 옵션 확인",
+            description: "초기 쿼리 스트링 상태와 필터 선택 체크박스/라디오 버튼을 점검합니다.",
+            actionBadge: "필터 옵션 확인",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "카테고리 및 가격 필터 조합 선택",
+            description: "필터 항목을 클릭하여 URLSearchParams 객체를 생성하고 shallow 라우팅을 실행합니다.",
+            actionBadge: "필터 선택",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "브라우저 URL 쿼리 스트링 갱신 및 필터링 결과 관찰",
+            description: "URL 주소창에 쿼리 매개변수가 즉시 반영되고 필터 조건에 부합하는 상품만 필터링되는지 검증합니다.",
+            actionBadge: "동기화 검증",
+            observe: "필터 선택에 따른 URL searchParams 쿼리 스트링 변경 및 일치하는 상품 목록 즉시 렌더링 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"다중 필터/정렬/장바구니 복합 인터랙티브 위젯 실습"}>
         <MultiFilterWidgetDemo />

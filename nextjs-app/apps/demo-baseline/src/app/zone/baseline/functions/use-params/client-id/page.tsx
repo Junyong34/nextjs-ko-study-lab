@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출"
+        concept="useParams() 훅을 사용하여 Client Component 트리 내부에서 동적 라우트 세그먼트([category], [id]) 파라미터를 0ms 동기 언랩핑하고 타입 안전하게 추출합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[/electronics/keyboard-900] 버튼 클릭",
+            description: "카테고리와 상품 ID가 포함된 첫 번째 동적 세그먼트 경로를 활성화합니다.",
+            actionBadge: "경로 선택",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "[/fashion/hoodie-102] 버튼으로 전환",
+            description: "두 번째 동적 세그먼트 경로를 선택하여 useParams() 훅의 파라미터 갱신을 트리거합니다.",
+            actionBadge: "파라미터 갱신",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "useParams() 반환 객체(category / id) 관찰",
+            description: "useParams()가 추출한 category 및 id 문자열이 화면에 올바르게 추출되는지 확인합니다.",
+            actionBadge: "파라미터 검증",
+            observe: "useParams()로 추출된 category(\"electronics\"/\"fashion\")와 id가 화면에 일치함",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출 실습"}>
         <UseParamsClientDemo />

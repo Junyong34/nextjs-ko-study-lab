@@ -19,7 +19,7 @@ export default function TemplateLifecycleRootLayout({
         steps={[
           {
             step: 1,
-            title: '[이 상품에 대한 솔직한 후기를 남겨주세요...] 작성',
+            title: '[점] 평점 선택 및 [후기 작성] 텍스트 입력',
             description: '하단 템플릿 영역에서 별점을 선택하고 후기 입력창에 텍스트를 작성합니다.',
             actionBadge: '폼 상태 입력',
           },

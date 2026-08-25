@@ -8,26 +8,28 @@ export default function ServerActionsAdvancedDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Server Action 폼 검증 & useActionState 실시간 할인"
-        concept="React 19의 useActionState 훅과 Server Action을 활용하면, 별도의 REST API 엔드포인트 없이도 서버 사이드 쿠폰 유효성 검증과 할인 계산을 1회의 서버 통신으로 우아하게 처리할 수 있습니다."
+        title={"고급 Server Action 상태 처리 및 폼 검증"}
+        concept={"Server Action에서 Zod 유효성 검사 실패 시 필드별 에러 메시지를 반환하고, 성공 시 revalidatePath()를 호출하여 클라이언트 캐시와 UI를 자동 동기화합니다."}
         steps={[
           {
             step: 1,
-            title: '쿠폰 코드 입력 (예: NEXTJS16, VIPSTUDY)',
-            description: '입력창에 프로모션 코드를 입력하고 [쿠폰 적용]을 클릭합니다.',
-            actionBadge: 'Server Action 호출',
+            title: "[쿠폰 코드를 입력하세요] 입력창에 할인 코드(DISCOUNT2026) 입력",
+            description: "쿠폰 코드 입력 필드에 유효하거나 유효하지 않은 코드를 입력합니다.",
+            actionBadge: "쿠폰 입력",
           },
           {
             step: 2,
-            title: 'useActionState pending 대기',
-            description: '400ms 동안 버튼이 비활성화되며 로딩 상태가 안전하게 제어됩니다.',
-            actionBadge: 'isPending 제어',
+            title: "[쿠폰 적용] 버튼 클릭으로 서버 검증 실행",
+            description: "Server Action을 실행하여 서버 사이드 스키마 유효성 검증 및 800ms 지연 처리를 수행합니다.",
+            actionBadge: "액션 전송",
           },
           {
             step: 3,
-            title: '최종 결제 금액 자동 반영',
-            description: '서버에서 계산된 할인 금액이 총액에서 즉시 차감되어 표시되는 것을 확인합니다.',
-            actionBadge: '단일 라운드트립 완료',
+            title: "서버 검증 결과(할인율 적용 또는 에러 메시지) 관찰",
+            description: "서버 유효성 검사 결과에 따른 할인 금액 반영 및 안내 배지를 확인합니다.",
+            actionBadge: "검증 완료",
+            observe: "서버 액션 반환값에 따른 쿠폰 할인율(20%) 적용 또는 유효성 에러 메시지 노출 관찰",
+            observeAt: "playground",
           },
         ]}
       />

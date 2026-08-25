@@ -18,31 +18,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"REST GET/POST 주문 API (route.ts)"}
-        concept={"api/route.ts 한 파일에 GET과 POST를 named export로 선언하면 같은 URL이 메서드별로 갈립니다. GET은 주문 목록을 200으로, POST는 생성 결과를 201로, 잘못된 상품 ID는 400으로 응답합니다."}
+        title={"route.ts RESTful 주문 CRUD API 핸들러"}
+        concept={"app/api/orders/route.ts에서 GET, POST Web Standard Request/Response 메서드를 선언하여 주문 목록 조회와 신규 주문 생성을 처리합니다."}
         steps={[
-          {
-            step: 1,
-            title: "[GET 목록 새로고침] 클릭",
-            description: "route.ts의 GET 핸들러가 기존 주문 ORD-2026-001을 200 OK로 반환합니다.",
-            actionBadge: "GET 200",
-          },
-          {
-            step: 2,
-            title: "[러닝화 (#001)] 선택 후 수량 [+] 조정",
-            description: "전송할 productId와 quantity를 정합니다.",
-            actionBadge: "요청 본문",
-          },
-          {
-            step: 3,
-            title: "[POST 주문 전송] 클릭",
-            description: "POST 핸들러가 PRODUCT_CATALOG를 검증하고 새 주문을 만들어 201 CREATED로 응답합니다.",
-            actionBadge: "POST 201",
-            observe: "우측 로그의 HTTP 상태 배지가 GET 200 → POST 201로 바뀌고, 총 주문 건수가 1건 증가하는지 대조",
-            observeAt: "verification",
-          },
+        {
+        "step": 1,
+        "title": "[러닝화 (#001)], [윈드브레이커 (#002)], [백팩 (#003)] 중 선택",
+        "description": "주문할 상품과 수량을 설정합니다.",
+        "actionBadge": "상품 설정"
+        },
+        {
+        "step": 2,
+        "title": "[POST 주문 전송] 클릭",
+        "description": "route.ts의 POST 핸들러로 JSON 페이로드를 전송하여 새 주문을 등록합니다.",
+        "actionBadge": "POST 전송"
+        },
+        {
+        "step": 3,
+        "title": "[GET 목록 새로고침] 클릭",
+        "description": "route.ts의 GET 핸들러를 호출하여 최신 주문 목록 200 OK 응답을 확인합니다.",
+        "actionBadge": "GET 갱신",
+        "observe": "POST 주문 성공 후 GET 주문 목록에 신규 주문 건이 즉시 추가되는지 대조",
+        "observeAt": "playground"
+        }
         ]}
-      />
+        />
       <DemoPlaygroundCard title="REST GET/POST 주문 API (route.ts) 실습">
         <RouteOrdersDemo onStatusChange={setDemoState} />
       </DemoPlaygroundCard>

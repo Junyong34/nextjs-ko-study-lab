@@ -7,26 +7,34 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"useActionState 필드 에러 표시 및 유효성 검증"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'useActionState 필드 에러 표시 및 유효성 검증' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"useActionState 폼 유효성 검사 및 필드 에러 처리"}
+        concept={"React 19 useActionState 훅을 통해 Server Action의 이전 상태와 폼 반환값(성공 여부, 필드별 에러 메시지)을 선언적으로 바인딩하고 비동기 제출 중 isPending 상태를 제어합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "[name@domain.com] 이메일 입력",
+                    "description": "주문서 양식에 기본 이메일과 고객 정보를 작성합니다.",
+                    "actionBadge": "양식 입력"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+                    "title": "[잘못된 이메일 (예: invalid-email)] 에러 유발 입력",
+                    "description": "유효하지 않은 이메일 형식을 입력하여 유효성 검사 실패 조건을 만듭니다.",
+                    "actionBadge": "에러 조건 유발"
           },
           {
                     "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "[서버 검증 중... 주문서 제출 및 검증] 클릭",
+                    "description": "useActionState로 래핑된 Server Action을 디스패치합니다.",
+                    "actionBadge": "서버 액션 제출"
+          },
+          {
+                    "step": 4,
+                    "title": "서버 유효성 검증 에러 메시지 및 필드 피드백 관찰",
+                    "description": "서버에서 반환된 validation error 메시지가 각 폼 필드 하단에 실시간 렌더링되는지 관찰합니다.",
+                    "actionBadge": "에러 피드백 관찰",
+                    "observe": "useActionState 상태가 state.errors 객체를 수신하여 각 필드별 에러 피드백을 실시간 렌더링함",
+                    "observeAt": "playground"
           }
 ]}
       />

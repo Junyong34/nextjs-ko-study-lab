@@ -18,26 +18,32 @@ export default function SegmentErrorRootLayout({
         concept="하위 결제 세그먼트(/payment)에서 504 Gateway Timeout 예외가 발생해도 error.tsx가 결제 영역만 에러 UI로 격리하며, 상위 주문서 헤더는 유지된 채 reset()으로 페이지 새로고침 없이 즉시 복구합니다."
         steps={[
           {
-            step: 1,
-            title: '[최종 결제 단계로 이동 (/payment) →] 클릭',
-            description: '주문서 화면에서 결제 세그먼트 [최종 결제 단계로 이동 (/payment) →] 링크를 클릭하여 이동합니다.',
-            actionBadge: '세그먼트 이동',
+                    "step": 1,
+                    "title": "[최종 결제 단계로 이동 (/payment) →] 클릭",
+                    "description": "결제 세그먼트로 진입하여 주문 금액을 확인합니다.",
+                    "actionBadge": "세그먼트 진입"
           },
           {
-            step: 2,
-            title: '[ 결제 통신 에러 강제 발생 (error.tsx 테스트)] 클릭',
-            description: '버튼을 클릭하여 의도적 504 Gateway Timeout 예외를 발생시키고 payment/error.tsx가 결제 영역만 격리 렌더링하는 것을 확인합니다.',
-            actionBadge: '에러 격리',
+                    "step": 2,
+                    "title": "[결제 통신 에러 강제 발생 (error.tsx 테스트)] 클릭",
+                    "description": "PG 통신 장애를 시뮬레이션하여 에러 바운더리를 트리거합니다.",
+                    "actionBadge": "에러 유발"
           },
           {
-            step: 3,
-            title: '[결제 다시 시도 (reset())] 클릭 복구',
-            description: '상단 주문 내역 헤더가 유지된 상태에서 reset() 버튼을 눌러 결제 세그먼트가 정상 화면으로 복구되는 것을 관찰합니다.',
-            actionBadge: '무중단 복구',
-            observe: '상위 주문 요약 헤더는 보존된 채 에러 UI가 사라지고 정상 결제 수단 선택 화면으로 즉시 복구됨',
-            observeAt: 'playground',
+                    "step": 3,
+                    "title": "[결제 다시 시도 (reset())] 클릭",
+                    "description": "error.tsx에서 제공하는 reset() 함수를 호출하여 에러 상태를 초기화합니다.",
+                    "actionBadge": "에러 리셋"
           },
-        ]}
+          {
+                    "step": 4,
+                    "title": "[208,000원 결제 완료하기] 정상 결제 및 상태 관찰",
+                    "description": "에러 복구 후 정상 결제 승인을 실행하여 성공 상태로 전환되는지 관찰합니다.",
+                    "actionBadge": "정상 복구 관찰",
+                    "observe": "error.tsx가 상위 레이아웃을 깨뜨리지 않고 결제 세그먼트만 격리하여 복구함",
+                    "observeAt": "playground"
+          }
+]}
       />
 
       {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}

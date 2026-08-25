@@ -8,25 +8,33 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"useFormStatus pending 스피너 및 버튼 비활성화"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'useFormStatus pending 스피너 및 버튼 비활성화' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        concept={"부모 <form>의 제출 진행 상태를 Props Drilling 없이 하위 <SubmitButton>에서 useFormStatus()로 직접 구독하여 1200ms 결제 통신 중 버튼을 disabled 처리하고 스피너를 노출합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "결제 주문자 및 배송지 정보 입력",
+                    "description": "주문 결제 폼에 결제 수단 및 주문자 정보를 입력합니다.",
+                    "actionBadge": "주문 정보 입력"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+                    "title": "[💳 189,000원 즉시 결제 승인 (useFormStatus)] 클릭",
+                    "description": "결제 버튼을 클릭하여 Server Action 결제 프로세스를 시작합니다.",
+                    "actionBadge": "결제 요청"
           },
           {
                     "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "pending 상태 동안 버튼 비활성화 및 스피너 로딩 확인",
+                    "description": "useFormStatus 훅이 pending: true를 감지하여 중복 제출을 방지하고 스피너를 표시하는지 확인합니다.",
+                    "actionBadge": "pending 감지"
+          },
+          {
+                    "step": 4,
+                    "title": "결제 승인 완료 및 주문 결과 관찰",
+                    "description": "서버 통신 완료 후 pending이 false로 전환되며 결제 완료 확인 패널이 활성화되는지 관찰합니다.",
+                    "actionBadge": "결제 완료 관찰",
+                    "observe": "useFormStatus.pending 플래그에 따라 결제 버튼 비활성화 및 로딩 스피너가 정확히 동기화됨",
+                    "observeAt": "playground"
           }
 ]}
       />

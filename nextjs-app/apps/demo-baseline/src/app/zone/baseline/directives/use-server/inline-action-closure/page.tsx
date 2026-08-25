@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"컴포넌트 내부 인라인 'use server' 클로저 액션"}
-        concept={"React 19 및 Next.js 16의 지시어 '컴포넌트 내부 인라인 'use server' 클로저 액션'을 사용하여 쇼핑몰 컴포넌트와 비동기 함수의 실행 경계 및 캐시 영역을 명시적으로 선언합니다."}
+        title={"'use server' 함수 인라인 클로저 Server Action"}
+        concept={"서버 컴포넌트 함수 내부에서 async function buyProduct() { 'use server'; ... } 형태로 선언하면 상위 스코프의 변수(productId, price)를 암호화된 클로저로 자동 캡처하여 안전하게 실행합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "지시어 선언 위치 확인",
-                    "description": "파일 최상단 또는 함수 최상단에 선언된 지시어의 스코프를 점검합니다.",
-                    "actionBadge": "지시어 점검"
-          },
-          {
-                    "step": 2,
-                    "title": "경계 전환 인터랙션",
-                    "description": "서버 컴포넌트와 클라이언트 컴포넌트 간의 상호 호출을 실행합니다.",
-                    "actionBadge": "경계 호출"
-          },
-          {
-                    "step": 3,
-                    "title": "번들 및 캐시 분리 검증",
-                    "description": "클라이언트 번들 제외 여부 및 캐시 수명 분리를 검증합니다.",
-                    "actionBadge": "분리 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "구매 대상 상품 카드 선택",
+        "description": "인라인 Server Action으로 주문할 상품 항목을 선택합니다.",
+        "actionBadge": "상품 선택"
+        },
+        {
+        "step": 2,
+        "title": "[원클릭 즉시 구매] 클릭",
+        "description": "상위 스코프 변수가 바인딩된 인라인 'use server' 함수를 비동기 호출합니다.",
+        "actionBadge": "즉시 구매"
+        },
+        {
+        "step": 3,
+        "title": "클로저 인자 암호화 및 주문 완료 확인",
+        "description": "클라이언트에서 변조할 수 없도록 서명된 클로저 인자가 서버에서 안전하게 해소되어 주문이 완료되는지 확인합니다.",
+        "actionBadge": "주문 완료",
+        "observe": "원클릭 구매 후 결제 완료 상태와 3단 검증 패널의 인라인 Server Action 응답 일치 확인",
+        "observeAt": "playground"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"컴포넌트 내부 인라인 'use server' 클로저 액션 실습"}>
         <InlineActionClosureDemo />
       </DemoPlaygroundCard>

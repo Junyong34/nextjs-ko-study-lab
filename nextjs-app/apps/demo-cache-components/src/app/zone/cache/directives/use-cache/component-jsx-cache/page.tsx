@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"'use cache' 컴포넌트 JSX 렌더링 결과 캐싱"}
-        concept={"React 19 및 Next.js 16의 지시어 ''use cache' 컴포넌트 JSX 렌더링 결과 캐싱'을 사용하여 쇼핑몰 컴포넌트와 비동기 함수의 실행 경계 및 캐시 영역을 명시적으로 선언합니다."}
+        title={"'use cache' 컴포넌트 단위 JSX 렌더링 캐시"}
+        concept={"비동기 서버 컴포넌트에 'use cache'를 선언하면 컴포넌트가 생성한 최종 JSX 가상 DOM 트리가 캐싱되어, 재방문 시 컴포넌트 내부 렌더링 연산 없이 즉각 반환됩니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "지시어 선언 위치 확인",
-                    "description": "파일 최상단 또는 함수 최상단에 선언된 지시어의 스코프를 점검합니다.",
-                    "actionBadge": "지시어 점검"
-          },
-          {
-                    "step": 2,
-                    "title": "경계 전환 인터랙션",
-                    "description": "서버 컴포넌트와 클라이언트 컴포넌트 간의 상호 호출을 실행합니다.",
-                    "actionBadge": "경계 호출"
-          },
-          {
-                    "step": 3,
-                    "title": "번들 및 캐시 분리 검증",
-                    "description": "클라이언트 번들 제외 여부 및 캐시 수명 분리를 검증합니다.",
-                    "actionBadge": "분리 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "카테고리 탭 선택 및 컴포넌트 렌더링",
+        "description": "'use cache'가 적용된 ProductList 카테고리 탭을 변경하여 컴포넌트를 렌더링합니다.",
+        "actionBadge": "컴포넌트 렌더링"
+        },
+        {
+        "step": 2,
+        "title": "JSX 가상 DOM 캐시 재사용 확인",
+        "description": "동일 카테고리 재선택 시 서버 컴포넌트 본문 재실행 없이 캐시된 JSX 페이로드가 즉시 반환되는지 확인합니다.",
+        "actionBadge": "JSX 캐시 HIT"
+        },
+        {
+        "step": 3,
+        "title": "[🔄 컴포넌트 캐시 태그 무효화] 클릭",
+        "description": "컴포넌트 레벨에 지정된 캐시 태그를 무효화하여 최신 JSX 트리를 다시 빌드하도록 트리거합니다.",
+        "actionBadge": "캐시 무효화",
+        "observe": "컴포넌트 캐시 무효화 후 새로 렌더링된 타임스탬프와 3단 검증 패널의 캐시 상태 확인",
+        "observeAt": "playground"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"'use cache' 컴포넌트 JSX 렌더링 결과 캐싱 실습"}>
         <DirectiveUseCacheComponentDemo />
       </DemoPlaygroundCard>

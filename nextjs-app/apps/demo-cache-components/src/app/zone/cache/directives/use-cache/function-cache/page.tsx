@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"'use cache' 지시어를 통한 비동기 함수 결과 캐싱"}
-        concept={"React 19 및 Next.js 16의 지시어 ''use cache' 지시어를 통한 비동기 함수 결과 캐싱'을 사용하여 쇼핑몰 컴포넌트와 비동기 함수의 실행 경계 및 캐시 영역을 명시적으로 선언합니다."}
+        title={"'use cache' 비동기 함수 단위 캐시 격리"}
+        concept={"Next.js 16 'use cache'를 개별 비동기 함수에 선언하고 cacheTag('product-detail')를 부여하면, 해당 함수의 반환값만 독립 캐시되어 DB 쿼리 부하를 0으로 줄입니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "지시어 선언 위치 확인",
-                    "description": "파일 최상단 또는 함수 최상단에 선언된 지시어의 스코프를 점검합니다.",
-                    "actionBadge": "지시어 점검"
-          },
-          {
-                    "step": 2,
-                    "title": "경계 전환 인터랙션",
-                    "description": "서버 컴포넌트와 클라이언트 컴포넌트 간의 상호 호출을 실행합니다.",
-                    "actionBadge": "경계 호출"
-          },
-          {
-                    "step": 3,
-                    "title": "번들 및 캐시 분리 검증",
-                    "description": "클라이언트 번들 제외 여부 및 캐시 수명 분리를 검증합니다.",
-                    "actionBadge": "분리 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "캐시 대상 상품 ID 버튼 선택",
+        "description": "상품 ID(PROD-01)를 선택하여 캐시된 비동기 함수 getProductDetails()를 호출합니다.",
+        "actionBadge": "함수 호출"
+        },
+        {
+        "step": 2,
+        "title": "캐시 HIT (0ms) 응답 확인",
+        "description": "두 번째 호출부터는 서버 DB 연산 없이 메모리 캐시에서 0ms로 즉각 반환(HIT)되는 것을 확인합니다.",
+        "actionBadge": "캐시 HIT"
+        },
+        {
+        "step": 3,
+        "title": "[🔄 revalidateTag('product-detail') 실행] 클릭",
+        "description": "캐시 태그를 무효화하여 다음 호출 시 새로운 데이터(MISS)를 가져오도록 캐시를 갱신합니다.",
+        "actionBadge": "태그 무효화",
+        "observe": "태그 무효화 후 다음 호출 시 MISS 상태로 새 데이터가 페칭되고 다시 HIT로 전환되는 과정 대조",
+        "observeAt": "playground"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"'use cache' 지시어를 통한 비동기 함수 결과 캐싱 실습"}>
         <DirectiveUseCacheFunctionDemo />
       </DemoPlaygroundCard>

@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"외부 PG사 결제 SDK onLoad 이벤트"}
-        concept={"Next.js 빌트인 컴포넌트 '외부 PG사 결제 SDK onLoad 이벤트'을 활용하여 쇼핑몰의 성능, SEO, 폼 상호작용을 최적화하는 실무 구현입니다."}
+        title={"next/script onLoad 이벤트 콜백 및 PG SDK 초기화"}
+        concept={"<Script src=\"...\" onLoad={...}> 콜백을 사용하여 외부 결제 PG SDK JS 파일이 완전히 로드된 후에만 [카드 결제하기] 버튼을 활성화하고 결제창(189,000원)을 안전하게 호출합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "컴포넌트 렌더링 점검",
-                    "description": "빌트인 컴포넌트가 생성한 최종 HTML 마크업과 속성을 확인합니다.",
-                    "actionBadge": "마크업 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "동적 옵션 조작",
-                    "description": "옵션(속성)을 변경하며 브라우저 동작 및 네트워크 최적화 효과를 관찰합니다.",
-                    "actionBadge": "속성 변경"
-          },
-          {
-                    "step": 3,
-                    "title": "최적화 결과 대조",
-                    "description": "CLS 방지, 자동 포맷 변환, 폼 데이터 직렬화 결과를 검증합니다.",
-                    "actionBadge": "결과 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[onLoad 강제 시뮬레이션] 클릭",
+        "description": "외부 결제 SDK JS 파일 다운로드가 완료되어 onLoad 이벤트가 트리거되는 상황을 실행합니다.",
+        "actionBadge": "onLoad 트리거"
+        },
+        {
+        "step": 2,
+        "title": "결제 버튼 활성화 상태 확인",
+        "description": "window.TossPayments 또는 SDK 인스턴스가 준비되어 결제 버튼이 활성 상태로 전환되는지 확인합니다.",
+        "actionBadge": "버튼 활성화"
+        },
+        {
+        "step": 3,
+        "title": "결제 요청 실행 및 완료 확인",
+        "description": "활성화된 결제 버튼을 클릭하여 PG 결제창 호출 및 주문 결제 완료(189,000원) 처리를 검증합니다.",
+        "actionBadge": "결제 완료",
+        "observe": "3단 검증 패널에서 next/script의 onLoad 이벤트 핸들러 실행 및 SDK 초기화 상태 대조",
+        "observeAt": "verification"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"외부 PG사 결제 SDK onLoad 이벤트 실습"}>
         <ScriptPgSdkOnloadDemo />
       </DemoPlaygroundCard>

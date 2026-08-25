@@ -7,28 +7,36 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"서버 부팅 register() 실행 훅"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '서버 부팅 register() 실행 훅' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"instrumentation.ts register() 서버 부팅 라이프사이클 훅"}
+        concept={"Next.js 서버가 최초 시작될 때 단 한 번 실행되는 instrumentation.ts의 register() 훅에서 DB 커넥션 풀 초기화, 에러 모니터링(Sentry), APM SDK를 안전하게 부트스트랩합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "인스트루멘테이션 모니터링이 활성화된 카탈로그 품목을 선택합니다.",
+            actionBadge: "품목 선택",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[+] 또는 [-] 버튼으로 인스트루멘테이션 이벤트 발생",
+            description: "서버 런타임으로 전송할 모니터링 페이로드를 생성합니다.",
+            actionBadge: "수량 조절",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "[동작 실행] 클릭으로 서버 이벤트 전송",
+            description: "register() 훅에서 초기화된 서버 인프라를 통해 요청을 처리합니다.",
+            actionBadge: "서버 이벤트 트리거",
+          },
+          {
+            step: 4,
+            title: "서버 부팅 register() 훅 초기화 상태 및 실행 로그 관찰",
+            description: "서버 인스턴스 기동 시점에 등록된 APM 훅이 정상 동작하며 로그를 남기는지 확인합니다.",
+            actionBadge: "훅 검증",
+            observe: "instrumentation.ts register() 훅을 통한 서버 라이프사이클 초기화 및 동기화 로그 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"서버 부팅 register() 실행 훅 실습"}>
         <InstrumentationDemo />

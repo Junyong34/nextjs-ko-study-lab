@@ -7,26 +7,22 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"@next/third-parties YouTube 최적화 임베드"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '@next/third-parties YouTube 최적화 임베드' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"@next/third-parties YouTube 라이트 임베드(0 KB 초기 다운로드)"}
+        concept={"<YouTubeEmbed videoid=\"...\" />를 활용하여 무거운 iframe 대신 포스터 이미지를 먼저 노출(0 KB 초기 JS)하고, 사용자가 재생 버튼을 누를 때만 YouTube 플레이어를 로드합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "YouTube 라이트 플레이어 썸네일 포스터 확인 및 재생 버튼 클릭으로 비디오 로드 트리거",
+                    "description": "무거운 500 KB+ iframe 대신 20 KB 가벼운 이미지 포스터가 렌더링된 상태를 확인합니다. 클릭 시점에 실제 YouTube iframe 청크를 온디맨드로 주입합니다.",
+                    "actionBadge": "포스터 점검"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
-          },
-          {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "온디맨드 iframe 주입 및 0 KB 초기 JS 절감 관찰",
+                    "description": "초기 페이지 로딩 속도(LCP) 저하 없이 필요 시점에만 동영상이 스트리밍되는지 검증합니다.",
+                    "actionBadge": "임베드 검증",
+                    "observe": "YouTube 라이트 플레이어의 0 KB 초기 번들 유지 및 사용자 클릭 시점 온디맨드 iframe 마운트 관찰",
+                    "observeAt": "playground"
           }
 ]}
       />

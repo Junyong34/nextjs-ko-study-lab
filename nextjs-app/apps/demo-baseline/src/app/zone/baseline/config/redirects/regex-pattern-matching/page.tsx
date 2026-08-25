@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"redirects() 정규식 패턴 및 와일드카드 리다이렉트"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'redirects() 정규식 패턴 및 와일드카드 리다이렉트' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="redirects() 정규식 패턴 및 와일드카드 리다이렉트"
+        concept="next.config.ts의 redirects() 설정을 통해 구형 카탈로그 경로(/old-catalog/:year(\d{4})/:id)를 정규식 매칭하여 신규 표준 상품 URL로 HTTP 308 영구 리다이렉트합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "정규식 리다이렉트 규칙 대상 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "next.config.ts에 정의된 와일드카드/정규식 리다이렉트 규칙 매칭을 트리거합니다.",
+            actionBadge: "규칙 매칭",
           },
           {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
-          }
-]}
+            step: 3,
+            title: "정규식 파라미터 치환 및 308 리다이렉트 로그 관찰",
+            description: "정규식 캡처 그룹이 신규 URL 파라미터로 정상 치환되어 HTTP 308로 분기되는지 확인합니다.",
+            actionBadge: "로그 검증",
+            observe: "next.config.ts 정규식 규칙에 따라 신규 경로로 HTTP 308 리다이렉트가 정상 처리됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"redirects() 정규식 패턴 및 와일드카드 리다이렉트 실습"}>
         <ConfigRedirectsRegexDemo />

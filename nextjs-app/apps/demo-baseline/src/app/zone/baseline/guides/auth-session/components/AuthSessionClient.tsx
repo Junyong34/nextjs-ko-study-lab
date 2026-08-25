@@ -97,7 +97,7 @@ export function AuthSessionClient({ initialSession }: AuthSessionClientProps) {
                 disabled={isPending}
                 className="inline-flex items-center gap-1.5 rounded bg-zinc-900 px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
               >
-                <span>일반 고객으로 로그인</span>
+                <span>사용자 로그인 (CUSTOMER)</span>
               </button>
 
               <button
@@ -106,7 +106,7 @@ export function AuthSessionClient({ initialSession }: AuthSessionClientProps) {
                 disabled={isPending}
                 className="inline-flex items-center gap-1.5 rounded bg-purple-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs hover:bg-purple-700 disabled:opacity-50 cursor-pointer"
               >
-                <span>관리자(Admin)로 로그인</span>
+                <span>관리자 로그인 (ADMIN)</span>
               </button>
             </div>
           </div>

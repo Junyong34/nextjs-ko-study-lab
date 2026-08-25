@@ -7,29 +7,25 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"ImageResponse 실시간 할인율 OG 이미지"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 'ImageResponse 실시간 할인율 OG 이미지'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"opengraph-image.tsx 동적 SNS 공유 카드"}
+        concept={"opengraph-image.tsx에서 ImageResponse를 사용하여 상품명, 할인율(30%), 가격이 합성된 1200x630 SNS 미리보기 배너를 실시간 렌더링합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
+                    "title": "ImageResponse JSX 템플릿 점검 및 동적 파라미터 기반 가격/할인율 주입",
+                    "description": "1200x630 크기의 Open Graph 배너 레이아웃과 폰트 스타일 선언을 확인합니다. 상품 ID에 따라 상품명과 30% 할인 뱃지 텍스트가 동적으로 렌더링되는 로직을 점검합니다.",
+                    "actionBadge": "OG 템플릿"
           },
           {
                     "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
+                    "title": "og:image 메타 태그 주입 검증",
+                    "description": "HTML <head> 내에 <meta property=\\\"og:image\\\"> 태그가 자동 생성되어 SNS 크롤러에 노출되는지 검증합니다.",
+                    "actionBadge": "태그 검증",
+                    "observe": "3단 검증 패널에서 opengraph-image.tsx의 1200x630 이미지 생성 사양 및 태그 확인",
+                    "observeAt": "verification"
           }
 ]}
-      />
+        />
       <DemoPlaygroundCard title={"ImageResponse 실시간 할인율 OG 이미지 실습"}>
         <MetadataOgBannerDemo />
       </DemoPlaygroundCard>

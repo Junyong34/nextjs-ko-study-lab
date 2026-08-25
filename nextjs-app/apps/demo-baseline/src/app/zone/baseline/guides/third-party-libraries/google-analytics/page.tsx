@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"@next/third-parties Google Analytics 최적화"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '@next/third-parties Google Analytics 최적화' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"@next/third-parties Google Analytics(GA4) 최적화 통합"}
+        concept={"@next/third-parties/google의 <GoogleAnalytics gaId=\"G-...\" /> 컴포넌트를 사용하여 web worker 또는 afterInteractive 방식으로 GA4 스크립트를 로드하고 페이지뷰를 0ms 지연 없이 추적합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 상품 선택",
+            description: "GA4 전자상거래 이벤트가 바인딩된 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "장바구니 담기 액션을 실행하여 gtag send_event 이벤트를 트리거합니다.",
+            actionBadge: "이벤트 트리거",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "GA4 측정 ID(G-XXXXXXXX) 및 이벤트 페이로드 전송 관찰",
+            description: "메인 스레드 차단 없이 백그라운드에서 구글 애널리틱스로 이벤트가 전송되는지 검증합니다.",
+            actionBadge: "추적 검증",
+            observe: "GoogleAnalytics 컴포넌트를 통한 GA4 스크립트 비차단 로딩 및 상품 이벤트 트리거 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"@next/third-parties Google Analytics 최적화 실습"}>
         <ThirdPartyGaDemo />

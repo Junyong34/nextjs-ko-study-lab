@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"카테고리 전환 시 장바구니 Drawer 열림 유지"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '카테고리 전환 시 장바구니 Drawer 열림 유지' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"레이아웃 유지 및 슬라이드 드로어 상태 보존"}
+        concept={"하위 페이지 간 URL 이동이 발생해도 상위 layout.tsx에 선언된 장바구니 드로어(Drawer)의 열림 상태(isOpen)와 클라이언트 상태가 초기화되지 않고 안전하게 보존됩니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "장바구니 드로어 상태(열림) 및 [토글] 버튼 확인",
+            description: "상위 레이아웃 레벨의 드로어 UI 초기 열림 상태(isOpen: true)를 확인합니다.",
+            actionBadge: "초기 드로어 점검",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[토글] 버튼 클릭으로 드로어 닫힘/열림 상태 변경",
+            description: "상위 layout.tsx의 useState(isOpen) 값을 토글합니다.",
+            actionBadge: "상태 토글",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "페이지 전환 중에도 드로어 열림 상태 유지 관찰",
+            description: "하위 페이지만 교체되고 상위 레이아웃의 드로어가 닫히지 않고 유지되는 레이아웃 보존성을 검증합니다.",
+            actionBadge: "상태 보존 검증",
+            observe: "라우트 세그먼트 전이 시에도 상위 layout.tsx의 드로어 열림 상태(isOpen: true) 보존 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"카테고리 전환 시 장바구니 Drawer 열림 유지 실습"}>
         <DrawerStateDemo />

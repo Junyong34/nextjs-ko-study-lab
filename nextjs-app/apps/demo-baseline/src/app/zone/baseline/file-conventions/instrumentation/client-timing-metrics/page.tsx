@@ -7,29 +7,25 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"클라이언트 성능 측정 훅 (instrumentation-client.ts)"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 '클라이언트 성능 측정 훅 (instrumentation-client.ts)'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"instrumentation-client 성능 메트릭 수집"}
+        concept={"클라이언트 사이드에서 페이지 로딩, FCP, LCP 메트릭을 수집하여 성능 모니터링 API 엔드포인트로 0ms 비동기 전송합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
+                    "title": "클라이언트 타이밍 메트릭 초기화 확인 및 페이지 인터랙션 및 타이밍 측정",
+                    "description": "브라우저 성능 API(PerformanceObserver)를 통해 웹 바이탈 수집기가 등록되는지 확인합니다. 사용자 인터랙션을 수행하며 FCP, LCP, TTFB 지표가 측정되는 과정을 관찰합니다.",
+                    "actionBadge": "메트릭 초기화"
           },
           {
                     "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
+                    "title": "성능 데이터 비동기 전송 검증",
+                    "description": "측정된 성능 메트릭이 분석 서버로 정상 전송되는지 확인합니다.",
+                    "actionBadge": "전송 검증",
+                    "observe": "3단 검증 패널에서 클라이언트 웹 바이탈 수집 상태와 타이밍 수치 확인",
+                    "observeAt": "verification"
           }
 ]}
-      />
+        />
       <DemoPlaygroundCard title={"클라이언트 성능 측정 훅 (instrumentation-client.ts) 실습"}>
         <InstrumentationClientTimingDemo />
       </DemoPlaygroundCard>

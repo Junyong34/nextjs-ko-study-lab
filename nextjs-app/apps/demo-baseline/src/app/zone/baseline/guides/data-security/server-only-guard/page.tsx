@@ -7,28 +7,36 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"server-only 패키지를 통한 클라이언트 번들 유출 차단"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'server-only 패키지를 통한 클라이언트 번들 유출 차단' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"import 'server-only'를 통한 서버 모듈 클라이언트 번들 누출 방지"}
+        concept={"데이터베이스 접근 및 시크릿 키를 다루는 모듈 상단에 import 'server-only'를 선언하여, 클라이언트 컴포넌트에서 실수로 import 시 빌드 타임 에러를 발생시켜 0 KB 번들 보안을 원천 방어합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 상품 선택",
+            description: "보안 가드가 적용된 서버 전용 상품 모듈의 데이터 대상을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[+] 또는 [-] 버튼으로 동기화 수량 조정",
+            description: "서버 모듈로 전달할 수량 파라미터를 설정합니다.",
+            actionBadge: "수량 설정",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "[동작 실행] 클릭으로 안전한 서버 API 호출",
+            description: "server-only로 보호된 서버 액션 함수를 실행하여 데이터를 동기화합니다.",
+            actionBadge: "서버 API 실행",
+          },
+          {
+            step: 4,
+            title: "서버 전용 모듈 보안 경계 및 동기화 성공 로그 관찰",
+            description: "클라이언트 번들에 비밀 키가 포함되지 않고 서버 측에서만 로직이 수행되는지 검증합니다.",
+            actionBadge: "보안 검증",
+            observe: "import 'server-only' 경계 내 안전한 서버 API 트리거 및 장바구니 동기화 성공 로그 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"server-only 패키지를 통한 클라이언트 번들 유출 차단 실습"}>
         <ServerOnlyGuardDemo />

@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"useSelectedLayoutSegment() 하위 탭 인디케이터"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'useSelectedLayoutSegment() 하위 탭 인디케이터'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="useSelectedLayoutSegment() 하위 탭 인디케이터"
+        concept="useSelectedLayoutSegment() 훅을 호출하여 현재 레이아웃 바로 하위의 1단계 활성 세그먼트 문자열을 판별하고 서브 내비게이션 Pill 인디케이터를 동적으로 렌더링합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[overview], [specs], [reviews], [shipping] 탭 버튼 클릭",
+            description: "서브 내비게이션 바에서 하위 라우트 탭을 클릭하여 세그먼트를 전환합니다.",
+            actionBadge: "세그먼트 전환",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "useSelectedLayoutSegment 반환값 확인",
+            description: "훅이 반환한 1단계 하위 세그먼트 문자열과 현재 탭의 일치 여부를 판별합니다.",
+            actionBadge: "문자열 판별",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "서브내비 Pill 인디케이터 렌더링 관찰",
+            description: "활성화된 세그먼트 탭 위치로 파란색 배경 강조 인디케이터가 이동하는지 확인합니다.",
+            actionBadge: "렌더 검증",
+            observe: "선택한 1단계 하위 세그먼트명에 맞춰 서브내비 Pill 인디케이터가 즉시 이동함",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"useSelectedLayoutSegment() 하위 탭 인디케이터 실습"}>
         <UseSelectedSegmentDemo />

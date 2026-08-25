@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"진입 애니메이션 및 폼 리셋 (template.tsx)"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 '진입 애니메이션 및 폼 리셋 (template.tsx)'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"template.tsx 폼 리셋 및 진입 애니메이션"}
+        concept={"template.tsx는 페이지 전환 시마다 React 트리를 언마운트 후 다시 마운트하여 CSS slide-in-from-bottom 애니메이션을 매번 재생하고 폼 입력값(훌륭한 상품입니다!)을 리셋합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[훌륭한 상품입니다!] 텍스트 입력 수정",
+        "description": "template.tsx 영역의 후기 작성 폼에 임의의 텍스트를 입력합니다.",
+        "actionBadge": "폼 입력"
+        },
+        {
+        "step": 2,
+        "title": "페이지 라우트 전환 실행",
+        "description": "다른 서브 페이지로 이동하여 template의 수명 주기 전환을 유도합니다.",
+        "actionBadge": "페이지 전환"
+        },
+        {
+        "step": 3,
+        "title": "인스턴스 리셋 및 애니메이션 재생 확인",
+        "description": "새 페이지 진입 시 이전 입력값이 깨끗이 비워지고 CSS 페이드인 애니메이션이 재실행되는지 확인합니다.",
+        "actionBadge": "리셋 확인",
+        "observe": "3단 검증 패널에서 template.tsx의 인스턴스 재생성 및 상태 리셋 사양 충족 확인",
+        "observeAt": "verification"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"진입 애니메이션 및 폼 리셋 (template.tsx) 실습"}>
         <TemplateAnimationDemo />
       </DemoPlaygroundCard>

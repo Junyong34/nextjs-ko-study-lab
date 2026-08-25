@@ -11,26 +11,34 @@ export default async function AuthSessionDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Next.js 인증 & 세션 기반 역할 분기 (RBAC)"
-        concept="Next.js는 HttpOnly 쿠키 세션을 활용하여 서버 사이드에서 안전하게 인증 상태를 검증하고, 일반 고객과 관리자(Admin)의 권한에 따라 화면을 분기 렌더링합니다."
+        title={"서버 사이드 인증 세션 및 사용자 프로필 렌더링"}
+        concept={"서버 컴포넌트에서 HTTP-only 세션 쿠키(cookies())를 검증하여 비로그인 사용자에게는 로그인 유도 배너를, 인증 사용자에게는 100% 서버 사이드 프로필 정보를 렌더링합니다."}
         steps={[
           {
             step: 1,
-            title: '일반 고객 또는 관리자로 모의 로그인',
-            description: '하단 버튼을 눌러 각 역할별 세션을 Server Action으로 발급합니다.',
-            actionBadge: '세션 발급',
+            title: "[사용자 로그인 (CUSTOMER)], [관리자 로그인 (ADMIN)] 선택",
+            description: "일반 회원 세션 쿠키를 발급받아 기본 프로필 렌더링을 확인합니다.",
+            actionBadge: "일반 세션 생성",
           },
           {
             step: 2,
-            title: '역할별(RBAC) UI 권한 분기 확인',
-            description: '로그인된 권한(customer vs admin)에 따라 서로 다른 대시보드가 표시되는 것을 확인합니다.',
-            actionBadge: '권한별 화면 분기',
+            title: "[관리자(Admin)로 로그인] 버튼 클릭으로 권한 승격",
+            description: "관리자 권한 세션으로 전환하여 관리자 전용 대시보드 권한을 부여받습니다.",
+            actionBadge: "관리자 세션 전환",
           },
           {
             step: 3,
-            title: '로그아웃 및 세션 만료',
-            description: '[로그아웃]을 눌러 서버 세션이 안전하게 초기화되는 것을 확인합니다.',
-            actionBadge: '세션 파기',
+            title: "[처리 중... 로그아웃] 버튼 클릭으로 세션 파기",
+            description: "세션 쿠키를 제거하여 비인증 상태로 원복되는지 테스트합니다.",
+            actionBadge: "세션 파기",
+          },
+          {
+            step: 4,
+            title: "인증된 사용자 프로필 및 권한 배지 관찰",
+            description: "세션 정보(관리자/일반사용자)와 회원 전용 혜택 영역이 정상 표시되는지 검증합니다.",
+            actionBadge: "프로필 렌더링",
+            observe: "세션 상태 전환에 따른 사용자 프로필 카드 및 권한별 보호 UI 활성화 관찰",
+            observeAt: "playground",
           },
         ]}
       />

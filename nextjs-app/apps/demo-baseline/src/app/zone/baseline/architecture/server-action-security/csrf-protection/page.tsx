@@ -6,27 +6,23 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"Server Actions 자동 CSRF Origin 헤더 검증"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'Server Actions 자동 CSRF Origin 헤더 검증' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="Server Actions 자동 CSRF Origin 헤더 검증"
+        concept="Next.js App Router는 Server Action HTTP POST 요청 수신 시 Origin 헤더와 Host 헤더의 일치 여부를 자동 비교 검증하여 외부 사이트로부터의 CSRF 공격을 100% 원천 차단합니다."
         steps={[
           {
                     "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+                    "title": "Server Action 자동 CSRF 방어 메커니즘 점검 및 next.config.ts allowedOrigins 도메인 허용 설정 검토",
+                    "description": "Next.js가 내부적으로 Origin 헤더와 Host 헤더를 대조하는 보안 파이프라인 명세를 확인합니다. 서브도메인이나 모바일 앱 도메인을 위한 serverActions.allowedOrigins 설정을 확인합니다.",
+                    "actionBadge": "보안 스펙 점검"
           },
           {
                     "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
-          },
-          {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
+                    "title": "불일치 Origin 요청에 대한 403 차단 동작 관찰",
+                    "description": "위조된 Origin 헤더를 가진 악성 POST 요청이 서버 컴포넌트 실행 전 즉시 거부되는지 확인합니다.",
+                    "actionBadge": "보안 검증",
+                    "observe": "Server Action 요청 시 Origin/Host 헤더 자동 검증으로 CSRF 공격이 원천 차단됨",
+                    "observeAt": "playground"
           }
 ]}
       />

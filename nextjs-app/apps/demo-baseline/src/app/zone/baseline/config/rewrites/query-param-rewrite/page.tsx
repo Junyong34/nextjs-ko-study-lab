@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"rewrites() 쿼리 파라미터 매핑 라우팅"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'rewrites() 쿼리 파라미터 매핑 라우팅' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="rewrites() 쿼리 파라미터 매핑 라우팅"
+        concept="rewrites() 규칙을 통해 깔끔한 REST URL(/shop/shoes/101)을 내부 쿼리 스트링 기반 라우트(/catalog?category=shoes&id=101)로 투명하게 매핑합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "쿼리 매핑 대상 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "패스 파라미터가 쿼리 스트링으로 치환되는 rewrite 규칙을 실행합니다.",
+            actionBadge: "쿼리 매핑",
           },
           {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
-          }
-]}
+            step: 3,
+            title: "내부 쿼리 파라미터 매핑 및 도메인 로그 관찰",
+            description: "클라이언트에 노출되는 URL과 서버 내부에서 해석된 쿼리 매핑 결과를 확인합니다.",
+            actionBadge: "로그 검증",
+            observe: "REST 경로가 next.config.ts rewrites에 의해 내부 쿼리 파라미터로 매핑되어 처리됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"rewrites() 쿼리 파라미터 매핑 라우팅 실습"}>
         <ConfigRewritesQueryDemo />

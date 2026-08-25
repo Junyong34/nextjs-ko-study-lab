@@ -15,27 +15,29 @@ export default function DemoPage() {
 
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title="NextResponse.json() 빌더 및 헤더"
-        concept="Next.js App Router route.ts에서 NextResponse.json() 유틸리티를 사용하여 상태 코드와 커스텀 응답 헤더를 조립하고 JSON 객체를 반환하는 실습입니다."
+            <DemoGuideCard
+        title="NextResponse.json() 응답 빌더 및 상태 코드 주입"
+        concept="NextResponse.json(data, { status: 200, headers }) 팩토리를 사용하여 표준 Content-Type: application/json 헤더와 커스텀 HTTP 상태 코드를 주입한 JSON 응답을 생성합니다."
         steps={[
           {
             step: 1,
-            title: "NextResponse.json() 핸들러 선언",
-            description: "api/route.ts에서 NextResponse.json(data, init)으로 응답을 구성합니다.",
-            actionBadge: "빌더 선언",
+            title: "[200 OK (성공)] 또는 [201 Created (생성)] 클릭",
+            description: "성공 상태 코드를 주입하는 NextResponse.json() 응답 생성을 요청합니다.",
+            actionBadge: "성공 응답",
           },
           {
             step: 2,
-            title: "상태 코드 및 커스텀 헤더 주입",
-            description: "200/201/400/422 상태 코드 및 x-study-response-builder 헤더를 제어합니다.",
-            actionBadge: "헤더 제어",
+            title: "[400 Bad Request (검증실패)] 또는 [422 Unprocessable (도메인오류)] 클릭",
+            description: "에러 규격화 상태 코드가 주입된 NextResponse.json() 응답을 요청합니다.",
+            actionBadge: "에러 응답",
           },
           {
             step: 3,
-            title: "JSON 직렬화 및 클라이언트 수신 검증",
-            description: "서버가 보낸 상태 코드와 헤더가 클라이언트에 정상 도달하는지 대조합니다.",
-            actionBadge: "응답 검증",
+            title: "HTTP 헤더 및 직렬화된 JSON 페이로드 관찰",
+            description: "반환된 응답의 x-study-response-builder 헤더, 상태 코드 및 JSON 본문이 일치하는지 확인합니다.",
+            actionBadge: "결과 검증",
+            observe: "NextResponse.json()으로 생성된 상태 코드와 JSON 응답 구조가 정상 반환됨",
+            observeAt: "verification",
           },
         ]}
       />

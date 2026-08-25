@@ -6,27 +6,23 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"redirects() 요청 헤더 및 쿼리 기반 조건부 리다이렉트"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'redirects() 요청 헤더 및 쿼리 기반 조건부 리다이렉트' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="redirects() 요청 헤더 및 쿼리 기반 조건부 리다이렉트"
+        concept="next.config.ts redirects() 내 has: [{ type: 'header', key: 'x-beta-tester', value: 'true' }] 조건을 구성하여 특정 헤더/쿠키 보유자만 베타 결제 라우트로 자동 307 리다이렉트합니다."
         steps={[
           {
                     "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+                    "title": "next.config.ts has/missing 조건부 리다이렉트 규칙 점검 및 클라이언트 요청 헤더 일치 시 307 리다이렉트 실행",
+                    "description": "헤더(x-beta-tester) 및 쿼리 조건에 따른 분기 명세를 확인합니다. 조건 헤더가 주입된 요청 수신 시 인프라 레벨에서 즉시 /beta-checkout으로 분기합니다.",
+                    "actionBadge": "조건 규칙 점검"
           },
           {
                     "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
-          },
-          {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
+                    "title": "조건부 리다이렉트 및 분기 경로 관찰",
+                    "description": "일치하지 않는 일반 요청은 통과하고, 베타 헤더를 가진 요청만 대상 경로로 이동하는지 확인합니다.",
+                    "actionBadge": "결과 검증",
+                    "observe": "has 조건(x-beta-tester) 일치 시 /beta-checkout으로 HTTP 307 자동 리다이렉트됨",
+                    "observeAt": "playground"
           }
 ]}
       />

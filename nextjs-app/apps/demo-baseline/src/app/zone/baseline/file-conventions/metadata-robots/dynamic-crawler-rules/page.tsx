@@ -7,29 +7,25 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"robots.ts 동적 크롤링 규칙 생성"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 'robots.ts 동적 크롤링 규칙 생성'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"robots.ts 동적 크롤러 색인 규칙"}
+        concept={"app/robots.ts에서 검색엔진 봇별(Googlebot, Yeti) Allow/Disallow 경로와 Sitemap URL을 동적으로 분기하여 SEO 크롤링을 최적화합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
+                    "title": "robots.ts rules 객체 선언 확인 및 사이트맵 URL 연동 점검",
+                    "description": "User-Agent별 허용 경로(/)와 차단 경로(/admin, /api)가 정의된 구조를 확인합니다. sitemap 속성에 정확한 사이트맵 절대 경로가 지정되어 있는지 점검합니다.",
+                    "actionBadge": "규칙 확인"
           },
           {
                     "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
+                    "title": "robots.txt 텍스트 포맷 변환 검증",
+                    "description": "Next.js가 /robots.txt 요청에 대해 표준 robots.txt 포맷 텍스트로 응답하는지 검증합니다.",
+                    "actionBadge": "포맷 검증",
+                    "observe": "3단 검증 패널에서 robots.ts의 크롤러 규칙과 사이트맵 경로 매핑 상태 확인",
+                    "observeAt": "verification"
           }
 ]}
-      />
+        />
       <DemoPlaygroundCard title={"robots.ts 동적 크롤링 규칙 생성 실습"}>
         <MetadataRobotsDemo />
       </DemoPlaygroundCard>

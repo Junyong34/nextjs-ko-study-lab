@@ -7,26 +7,22 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"정적 캐시 상품 레이아웃 + Context use(UserContext) 세션 스트리밍"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '정적 캐시 상품 레이아웃 + Context use(UserContext) 세션 스트리밍' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"정적 캐시 레이아웃과 클라이언트 세션 컨텍스트 결합"}
+        concept={"GNB와 레이아웃은 'use cache'로 100% 정적 캐싱하고, 사용자 인증 상태(로그인 이름/장바구니)는 클라이언트 Context/use()로 주입하여 정적 캐시 효율과 개인화 UI를 동시에 달성합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "정적 캐시된 GNB 헤더 셸 렌더링 확인 및 [로그인 상태 변경] 토글로 클라이언트 세션 주입",
+                    "description": "모든 사용자에게 동일하게 0ms로 서빙되는 정적 내비게이션 레이아웃을 확인합니다. 클라이언트 Context를 통해 세션 데이터를 변경하여 정적 레이아웃 내부의 사용자 영역을 동적으로 채웁니다.",
+                    "actionBadge": "정적 GNB 확인"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
-          },
-          {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "정적 셸 캐시 유지 및 개인화 프로필 슬롯 갱신 관찰",
+                    "description": "전체 페이지를 동적 렌더링으로 전환하지 않고도 사용자 프로필만 정확히 치환되는지 검증합니다.",
+                    "actionBadge": "하이브리드 검증",
+                    "observe": "정적 캐시 레이아웃 유지 상태에서 클라이언트 세션 컨텍스트를 통한 사용자 배지 및 닉네임 동적 렌더링 관찰",
+                    "observeAt": "playground"
           }
 ]}
       />

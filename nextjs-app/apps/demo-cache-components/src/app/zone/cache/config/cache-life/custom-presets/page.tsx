@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"experimental.cacheLife 커스텀 수명 프리셋 전역 정의"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'experimental.cacheLife 커스텀 수명 프리셋 전역 정의' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="experimental.cacheLife 커스텀 수명 프리셋 전역 정의"
+        concept="next.config.ts experimental.cacheLife에 전역 비즈니스 프리셋을 정의하여 stale/revalidate/expire 기간을 엔터프라이즈 전역에서 일관되게 재사용합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "전역 cacheLife 프리셋이 적용된 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "전역 설정된 cacheLife 프리셋 수명에 따라 데이터를 조회하고 캐시를 생성합니다.",
+            actionBadge: "프리셋 조회",
           },
           {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
-          }
-]}
+            step: 3,
+            title: "전역 cacheLife 프리셋 TTL 동작 로그 관찰",
+            description: "설정된 stale 및 revalidate 주기에 맞춰 캐시 신선도가 유지되는지 실시간 로그에서 확인합니다.",
+            actionBadge: "로그 검증",
+            observe: "next.config.ts에 정의된 전역 cacheLife 프리셋 규칙에 따라 캐시 수명이 제어됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"experimental.cacheLife 커스텀 수명 프리셋 전역 정의 실습"}>
         <ConfigCacheLifePresetsDemo />

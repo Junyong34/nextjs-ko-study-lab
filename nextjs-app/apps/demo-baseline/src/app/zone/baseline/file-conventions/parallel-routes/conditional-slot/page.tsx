@@ -7,25 +7,25 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"권한별 조건부 슬롯 분기 (@admin / @user)"}
-        concept={"ConditionalSlotLayout이 admin·user 두 슬롯을 props로 받아 grid에 나란히 배치합니다. 권한별 화면을 useState 분기가 아니라 @admin/page.tsx·@user/page.tsx 파일 경계로 분리한 구조입니다."}
+        title={"병렬 라우트 조건부 슬롯 분기 렌더링"}
+        concept={"사용자 권한(Role)이나 로그인 세션 상태에 따라 layout.tsx에서 @admin 또는 @user 슬롯 중 하나를 선택적으로 마운트하여 200 OK 응답을 구성합니다."}
         steps={[
           {
-            step: 1,
-            title: "[@admin] 관리자 슬롯 확인",
-            description: "@admin/page.tsx가 서버 CPU 로드와 DB 커넥션 풀 42 / 100 같은 운영 지표를 렌더링합니다.",
-            actionBadge: "@admin",
+                    "step": 1,
+                    "title": "사용자 권한 상태 확인 및 조건부 슬롯 마운트 실행",
+                    "description": "현재 세션의 권한(일반 사용자 vs 관리자)에 따른 슬롯 분기 조건을 점검합니다. layout.tsx가 props로 전달받은 슬롯 중 권한에 맞는 슬롯 컴포넌트만 렌더링합니다.",
+                    "actionBadge": "세션 점검"
           },
           {
-            step: 2,
-            title: "[@user] 사용자 슬롯 확인",
-            description: "@user/page.tsx가 보유 포인트 15,400 P (3장)와 배송 중 1건을 렌더링합니다.",
-            actionBadge: "@user",
-            observe: "두 슬롯이 동일 레이아웃의 grid 안에서 서로 다른 데이터를 동시에 표시 — 한쪽을 교체해도 다른 쪽 렌더링에 영향이 없음",
-            observeAt: "playground",
-          },
-        ]}
-      />
+                    "step": 2,
+                    "title": "권한별 슬롯 UI 노출 확인",
+                    "description": "관리자에게는 관리 대시보드 슬롯이, 일반 사용자에게는 마이페이지 슬롯이 노출되는지 확인합니다.",
+                    "actionBadge": "UI 확인",
+                    "observe": "3단 검증 패널에서 세션 역할에 따라 올바른 조건부 병렬 슬롯이 활성화되는지 대조",
+                    "observeAt": "verification"
+          }
+]}
+        />
       <DemoPlaygroundCard title={"권한별 조건부 슬롯 분기 (Parallel Routes) 실습"}>
         <ParallelConditionalDemo />
       </DemoPlaygroundCard>

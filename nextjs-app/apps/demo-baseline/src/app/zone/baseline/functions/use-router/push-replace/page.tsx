@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"useRouter push vs replace vs back 프로그래밍 네비게이션"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'useRouter push vs replace vs back 프로그래밍 네비게이션'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="useRouter push vs replace vs back 프로그래밍 네비게이션"
+        concept="useRouter() 훅의 router.push(), router.replace(), router.back() 메서드를 호출하여 히스토리 스택 조작 및 브라우저 URL 이동을 0ms 클라이언트 사이드로 제어합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[1. router.push(상세)] 클릭",
+            description: "새로운 라우트 엔트리를 브라우저 히스토리 스택에 push 방식으로 추가하며 이동합니다.",
+            actionBadge: "push 이동",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "[2. router.replace(결제완료)] 클릭",
+            description: "결제 완료 후 뒤로가기를 방지하기 위해 현재 히스토리 스택 엔트리를 replace로 즉시 교체합니다.",
+            actionBadge: "replace 교체",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "[3. router.back()] 실행 및 히스토리 스택 관찰",
+            description: "router.back() 호출 시 직전 페이지로 복귀하며 브라우저 히스토리 스택 변화를 확인합니다.",
+            actionBadge: "스택 검증",
+            observe: "이동 방식(push/replace/back)에 따라 활성 라우트 및 히스토리 스냅샷이 실시간 로그에 반영됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"useRouter push vs replace vs back 프로그래밍 네비게이션 실습"}>
         <NavigationClientDemo />

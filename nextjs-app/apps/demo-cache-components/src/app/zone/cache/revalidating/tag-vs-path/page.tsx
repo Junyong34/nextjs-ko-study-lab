@@ -58,26 +58,32 @@ export default async function TagVsPathDemoPage() {
         concept="revalidateTag('product-a')는 해당 태그가 부여된 특정 캐시 항목만 정밀하게 무효화하지만, revalidatePath는 해당 라우트 경로 아래의 모든 캐시 엔트리를 한 번에 일괄 무효화합니다."
         steps={[
           {
-            step: 1,
-            title: "[1. A 상품만 무효화 revalidateTag('product-a')] 클릭",
-            description: "정밀 무효화 버튼을 클릭하여 'A 상품' 캐시만 새 시각으로 갱신되고 B 상품 캐시는 유지되는 것을 확인합니다.",
-            actionBadge: '정밀 태그 무효화',
+                    "step": 1,
+                    "title": "[1. A 상품만 무효화 revalidateTag('product-a')] 클릭",
+                    "description": "product-a 태그가 부여된 A 상품 캐시만 선택적으로 무효화합니다.",
+                    "actionBadge": "태그 A 무효화"
           },
           {
-            step: 2,
-            title: '[3. 경로 전체 일괄 무효화 revalidatePath()] 클릭',
-            description: '경로 무효화 버튼을 클릭하여 라우트에 속한 A 상품, B 상품 2개 항목이 모두 일괄 갱신되는 것을 확인합니다.',
-            actionBadge: '경로 일괄 무효화',
+                    "step": 2,
+                    "title": "[2. B 상품만 무효화 revalidateTag('product-b')] 클릭",
+                    "description": "product-b 태그가 부여된 B 상품 캐시만 독립적으로 무효화합니다.",
+                    "actionBadge": "태그 B 무효화"
           },
           {
-            step: 3,
-            title: '무효화 범위 및 캐시 로그 대조',
-            description: '태그 기반 선별 갱신과 경로 기반 전체 갱신의 영향 범위 및 타임스탬프 차이를 대조 관찰합니다.',
-            actionBadge: '무효화 범위 대조',
-            observe: 'revalidateTag는 상품 A 캐시만 갱신하나, revalidatePath는 상품 A, B 캐시 전체를 일괄 갱신함',
-            observeAt: 'playground',
+                    "step": 3,
+                    "title": "[3. 경로 전체 일괄 무효화 revalidatePath()] 클릭",
+                    "description": "경로 하위의 모든 데이터 캐시를 일괄 무효화합니다.",
+                    "actionBadge": "경로 일괄 무효화"
           },
-        ]}
+          {
+                    "step": 4,
+                    "title": "캐시 무효화 범위 및 HIT/MISS 상태 관찰",
+                    "description": "태그 무효화와 경로 무효화의 영향 범위를 대조 관찰합니다.",
+                    "actionBadge": "결과 관찰",
+                    "observe": "revalidateTag 호출 시 지정 태그의 캐시만 MISS로 전환되고 다른 태그는 HIT 유지됨",
+                    "observeAt": "playground"
+          }
+]}
       />
 
       {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}

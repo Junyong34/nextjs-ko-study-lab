@@ -7,28 +7,36 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"React experimental_taintObjectReference 비밀키 보호"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'React experimental_taintObjectReference 비밀키 보호' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"React Taint API(taintUniqueValue) 민감 데이터 전송 차단"}
+        concept={"experimental_taintUniqueValue()를 사용하여 128비트 신용카드 번호나 패스워드 해시를 Taint로 지정하고, 실수로 클라이언트 컴포넌트 props로 전달될 경우 런타임 예외를 발생시켜 차단합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "결제 보안 로직이 연동된 상품 카탈로그 항목을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[+] 버튼으로 주문 수량 증정",
+            description: "보안 민감 데이터(결제 토큰)와 결합될 주문 수량을 변경합니다.",
+            actionBadge: "수량 변경",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "[동작 실행] 클릭으로 Taint 검증 트랜잭션 수행",
+            description: "서버 액션을 실행하여 Taint로 마킹된 데이터가 클라이언트로 유출되지 않음을 확인합니다.",
+            actionBadge: "트랜잭션 실행",
+          },
+          {
+            step: 4,
+            title: "민감 데이터 클라이언트 전달 차단 및 안전한 처리 관찰",
+            description: "클라이언트로 전달되는 응답 객체에 민감 정보가 배제되고 성공 로그만 기록되는지 검증합니다.",
+            actionBadge: "Taint 검증",
+            observe: "taintUniqueValue 규칙에 의한 민감 데이터 클라이언트 유출 차단 및 동기화 완료 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"React experimental_taintObjectReference 비밀키 보호 실습"}>
         <ReactTaintDemo />

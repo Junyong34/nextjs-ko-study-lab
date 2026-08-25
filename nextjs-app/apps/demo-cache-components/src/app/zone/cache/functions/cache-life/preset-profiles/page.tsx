@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max)"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max)'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max)"
+        concept="cacheLife() 함수에 Next.js 16 빌트인 프리셋('seconds', 'hours', 'days')을 선언하여 캐시의 stale, revalidate, expire 수명 주기를 직관적으로 지정합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[cacheLife('seconds')] 클릭",
+            description: "초 단위(stale: 1s, revalidate: 10s, expire: 60s) 초단기 캐시 수명 프로파일을 적용합니다.",
+            actionBadge: "seconds 선택",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "[cacheLife('hours')] 또는 [cacheLife('days')] 클릭",
+            description: "시간 단위 또는 일 단위의 중장기 캐시 수명 프로파일로 전환합니다.",
+            actionBadge: "hours/days 선택",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "선택된 프리셋별 수명 주기 타임라인 관찰",
+            description: "프리셋에 정의된 stale, revalidate, expire 초 단위 수치가 화면에 올바르게 반영되는지 확인합니다.",
+            actionBadge: "수명 검증",
+            observe: "선택한 cacheLife 프리셋에 따른 stale/revalidate/expire 수명 타임라인이 화면에 표시됨",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max) 실습"}>
         <CacheLifePresetsDemo />

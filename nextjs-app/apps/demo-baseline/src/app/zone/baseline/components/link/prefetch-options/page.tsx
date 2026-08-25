@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"<Link prefetch> 옵션 대조 (auto vs full vs false)"}
-        concept={"Next.js 빌트인 컴포넌트 '<Link prefetch> 옵션 대조 (auto vs full vs false)'을 활용하여 쇼핑몰의 성능, SEO, 폼 상호작용을 최적화하는 실무 구현입니다."}
+        title={"next/link prefetch (auto vs full vs false) 옵션 대조"}
+        concept={"<Link prefetch>의 3가지 모드(auto: 정적 세그먼트만, full: 전체 트리, false: 뷰포트 진입 시 페치 안함)를 통해 모바일 네트워크 대역폭과 0ms 전환 속도를 조율합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "컴포넌트 렌더링 점검",
-                    "description": "빌트인 컴포넌트가 생성한 최종 HTML 마크업과 속성을 확인합니다.",
-                    "actionBadge": "마크업 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "동적 옵션 조작",
-                    "description": "옵션(속성)을 변경하며 브라우저 동작 및 네트워크 최적화 효과를 관찰합니다.",
-                    "actionBadge": "속성 변경"
-          },
-          {
-                    "step": 3,
-                    "title": "최적화 결과 대조",
-                    "description": "CLS 방지, 자동 포맷 변환, 폼 데이터 직렬화 결과를 검증합니다.",
-                    "actionBadge": "결과 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "prefetch={null} (auto 기본값) 확인",
+        "description": "정적 세그먼트 데이터만 프리페치하고 동적 데이터는 클릭 시 가져오는 기본 동작을 점검합니다.",
+        "actionBadge": "auto 프리페치"
+        },
+        {
+        "step": 2,
+        "title": "prefetch={true} (full 프리페치) 확인",
+        "description": "정적/동적 데이터를 포함한 전체 라우트 트리를 즉시 캐싱하여 0ms 전환을 준비합니다.",
+        "actionBadge": "full 프리페치"
+        },
+        {
+        "step": 3,
+        "title": "prefetch={false} 대역폭 절약 모드 확인",
+        "description": "뷰포트에 진입해도 백그라운드 프리페치를 실행하지 않아 네트워크 비용을 절감하는지 대조합니다.",
+        "actionBadge": "false 모드",
+        "observe": "3단 검증 패널에서 prefetch 옵션별 캐시 로딩 전략과 네트워크 요청 동작 대조",
+        "observeAt": "verification"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"<Link prefetch> 옵션 대조 (auto vs full vs false) 실습"}>
         <LinkPrefetchOptionsDemo />
       </DemoPlaygroundCard>

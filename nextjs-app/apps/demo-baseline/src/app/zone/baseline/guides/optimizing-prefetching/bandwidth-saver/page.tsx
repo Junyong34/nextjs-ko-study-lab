@@ -7,26 +7,22 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"대규모 카탈로그 대역폭 절약 최적화"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '대규모 카탈로그 대역폭 절약 최적화' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"프리페칭 최적화를 통한 95% 대역폭 절감"}
+        concept={"전체 페이지 프리페칭 대신 뷰포트 가시성 필터링과 호버 트리거 조합을 적용하여 기본 120개 요청(1.8 MB)을 6개 요청(92 KB)으로 줄여 95% 대역폭을 절감합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "기본 prefetch 설정 시 트래픽(120개 요청, 1.8 MB) 분석 및 최적화 프리페칭 전략(6개 요청, 92 KB) 대조",
+                    "description": "모든 링크를 무조건 프리페치할 때 발생하는 대역폭 낭비 지표를 확인합니다. 화면 중요도에 따른 선별적 프리페치 규칙을 적용한 절감 결과를 점검합니다.",
+                    "actionBadge": "기존 트래픽 분석"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
-          },
-          {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "95% 네트워크 대역폭 절감 통계 검증",
+                    "description": "모바일 데이터 요금 절감 및 브라우저 메모리 부하 감소 효과를 대조 확인합니다.",
+                    "actionBadge": "통계 검증",
+                    "observe": "최적화 프리페칭 적용 전후 대역폭 절감 수치(1.8 MB -> 92 KB, 95% 절감) 통계 지표 관찰",
+                    "observeAt": "playground"
           }
 ]}
       />

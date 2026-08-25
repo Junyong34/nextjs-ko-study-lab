@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"'use client' 내부 브라우저 window.localStorage 접근"}
-        concept={"React 19 및 Next.js 16의 지시어 ''use client' 내부 브라우저 window.localStorage 접근'을 사용하여 쇼핑몰 컴포넌트와 비동기 함수의 실행 경계 및 캐시 영역을 명시적으로 선언합니다."}
+        title={"'use client' 브라우저 localStorage 접근 및 수화"}
+        concept={"서버 사이드에서는 window 객체가 없으므로, 'use client' 컴포넌트 내부의 useEffect 내에서 localStorage를 안전하게 조회하여 최근 본 상품 목록을 수화(Hydration) 불일치 없이 렌더링합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "지시어 선언 위치 확인",
-                    "description": "파일 최상단 또는 함수 최상단에 선언된 지시어의 스코프를 점검합니다.",
-                    "actionBadge": "지시어 점검"
-          },
-          {
-                    "step": 2,
-                    "title": "경계 전환 인터랙션",
-                    "description": "서버 컴포넌트와 클라이언트 컴포넌트 간의 상호 호출을 실행합니다.",
-                    "actionBadge": "경계 호출"
-          },
-          {
-                    "step": 3,
-                    "title": "번들 및 캐시 분리 검증",
-                    "description": "클라이언트 번들 제외 여부 및 캐시 수명 분리를 검증합니다.",
-                    "actionBadge": "분리 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "브라우저 window 스토리지 조회 확인",
+        "description": "마운트 후 useEffect 시점에 localStorage에서 최근 조회 상품 목록을 안전하게 읽어옵니다.",
+        "actionBadge": "스토리지 조회"
+        },
+        {
+        "step": 2,
+        "title": "[기록 비우기] 버튼 클릭",
+        "description": "localStorage의 저장 항목을 클리어하고 React 상태를 빈 배열로 즉시 갱신합니다.",
+        "actionBadge": "기록 비우기"
+        },
+        {
+        "step": 3,
+        "title": "수화 불일치(Hydration Mismatch) 방지 검증",
+        "description": "서버 HTML 렌더링과 클라이언트 스토리지 데이터 간의 불일치 에러 없이 안전하게 동기화되는지 확인합니다.",
+        "actionBadge": "수화 검증",
+        "observe": "스토리지 비우기 인터랙션 후 목록 상태 변화와 3단 검증 패널의 수화 동기화 결과 대조",
+        "observeAt": "playground"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"'use client' 내부 브라우저 window.localStorage 접근 실습"}>
         <StorageClientDemo />
       </DemoPlaygroundCard>

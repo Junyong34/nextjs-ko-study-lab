@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"세션 만료 시 returnUrl과 함께 로그인 리다이렉트"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '세션 만료 시 returnUrl과 함께 로그인 리다이렉트' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"세션 만료 감지 시 307 임시 리다이렉트 처리"}
+        concept={"보호된 결제 라우트에서 세션 쿠키 만료를 감지하면 Next.js redirect('/login?returnUrl=/checkout')를 실행하여 307 Temporary Redirect로 안전하게 로그인 화면으로 복귀시킵니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "현재 상태(결제 진행 중) 및 세션 유효성 확인",
+            description: "체크아웃 페이지에 접근한 초기 활성 세션 상태를 점검합니다.",
+            actionBadge: "세션 상태 점검",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[세션 만료 시뮬레이션] 버튼 클릭",
+            description: "인증 토큰을 강제 만료시키고 서버 리다이렉트 핸들러를 트리거합니다.",
+            actionBadge: "만료 시뮬레이션",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "307 Redirect 발동 및 로그인 반환 URL 파라미터 관찰",
+            description: "상태가 307 Redirect -> /login?returnUrl=/checkout 으로 즉시 전환되는 과정을 검증합니다.",
+            actionBadge: "리다이렉트 검증",
+            observe: "세션 만료 트리거 시 307 Redirect 발생 및 returnUrl 쿼리가 포함된 로그인 경로 전이 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"세션 만료 시 returnUrl과 함께 로그인 리다이렉트 실습"}>
         <RedirectSessionDemo />

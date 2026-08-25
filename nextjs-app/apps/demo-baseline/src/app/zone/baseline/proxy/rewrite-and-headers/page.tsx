@@ -12,26 +12,32 @@ export default function ProxyRewriteAndHeadersDemoPage() {
         concept="Next.js 16 proxy.ts(프록시/미들웨어)는 렌더링 전 요청을 가로채어 주소창 URL 유지 rewrite, GeoIP/인증 커스텀 헤더 주입, 세션 만료 시 307 redirect를 수행합니다."
         steps={[
           {
-            step: 1,
-            title: '[실험군 (Variant B)] 버킷 선택',
-            description: 'A/B 테스트 버킷을 변경하여 주소창 URL(/landing)은 그대로 유지된 채 내부적으로 Variant B 페이지가 렌더링되는 rewrite를 확인합니다.',
-            actionBadge: 'NextResponse.rewrite',
+                    "step": 1,
+                    "title": "[대조군 (Control)], [실험군 (Variant B)] 선택",
+                    "description": "A/B 테스트 분기 파라미터를 설정하여 요청을 전송합니다.",
+                    "actionBadge": "A/B 분기"
           },
           {
-            step: 2,
-            title: '[헤더 주입] 탭 클릭',
-            description: '프록시 파이프라인에서 downstream 컴포넌트로 주입되는 x-forwarded-country 및 x-user-authenticated 커스텀 헤더를 확인합니다.',
-            actionBadge: '헤더 주입',
+                    "step": 2,
+                    "title": "[KR 한국], [US 미국] 국가 선택",
+                    "description": "클라이언트 국가 헤더를 선택하여 지역별 분기를 요청합니다.",
+                    "actionBadge": "국가 선택"
           },
           {
-            step: 3,
-            title: '[Redirect] 탭 전환 및 [로그인 세션 유효] 체크 해제 대조',
-            description: '인증 토큰 유무 체크를 해제하여 미인증 요청 시 즉각적인 307 Temporary Redirect 동작이 발생하는 것을 대조 관찰합니다.',
-            actionBadge: 'NextResponse.redirect',
-            observe: 'URL 유지 rewrite(Variant B)와 커스텀 주입 헤더(x-forwarded-country), 그리고 미인증 시 /login으로의 307 Redirect가 검증됨',
-            observeAt: 'playground',
+                    "step": 3,
+                    "title": "x-user-country 및 x-ab-variant 헤더 주입 확인",
+                    "description": "프록시 계층에서 주입된 커스텀 헤더가 서버 컴포넌트에 정상 전달되는지 점검합니다.",
+                    "actionBadge": "헤더 점검"
           },
-        ]}
+          {
+                    "step": 4,
+                    "title": "지리적 리라이트 및 실험군 분기 결과 관찰",
+                    "description": "국가 및 실험군 조건에 따라 서로 다른 목적지로 프록시 리라이트되는 결과를 관찰합니다.",
+                    "actionBadge": "리라이트 검증",
+                    "observe": "국가 및 A/B 실험군 선택에 따라 응답 헤더와 렌더링 배너가 동적으로 리라이트됨",
+                    "observeAt": "playground"
+          }
+]}
       />
 
       {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}

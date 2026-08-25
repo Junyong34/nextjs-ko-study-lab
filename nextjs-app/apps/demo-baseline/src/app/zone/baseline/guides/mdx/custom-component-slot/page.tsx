@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"MDX 내 인터랙티브 장바구니 버튼 합성"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'MDX 내 인터랙티브 장바구니 버튼 합성' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"MDX 본문 내 커스텀 인터랙티브 리액트 컴포넌트 주입"}
+        concept={"MDX 렌더러의 컴포넌트 매핑을 통해 정적 마크다운(HTML) 본문 중간에 <BuyButton />과 같은 클라이언트 인터랙티브 컴포넌트(RCC, 149,000원)를 슬롯 형태로 자연스럽게 삽입합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "MDX 본문 내 주입된 구매 컴포넌트 (<BuyButton />) 확인",
+            description: "정적 마크다운 텍스트 사이에 삽입된 파란색 구매 버튼 UI를 확인합니다.",
+            actionBadge: "슬롯 컴포넌트 확인",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[라이브 테마 토글] 클릭",
+            description: "MDX 본문 내부의 인터랙티브 버튼을 클릭하여 장바구니 추가 상태를 트리거합니다.",
+            actionBadge: "인라인 구매 클릭",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "마크다운 내 클라이언트 상태 변경 및 장바구니 담김 관찰",
+            description: "정적 문서 안에서도 인터랙티브 React 상태(added: true)가 정상 동작함을 검증합니다.",
+            actionBadge: "컴포넌트 동작 검증",
+            observe: "MDX 본문 내 <BuyButton /> 클릭 시 즉각 장바구니 담김 상태로 전환되는 인터랙션 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"MDX 내 인터랙티브 장바구니 버튼 합성 실습"}>
         <MdxCustomSlotDemo />

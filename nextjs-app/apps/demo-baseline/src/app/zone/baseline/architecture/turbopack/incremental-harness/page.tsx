@@ -6,27 +6,23 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"Turbopack 증분 빌드 및 핫 모듈 리로딩 가속"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'Turbopack 증분 빌드 및 핫 모듈 리로딩 가속' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="Turbopack 증분 빌드 및 핫 모듈 리로딩 가속"
+        concept="Rust 기반 Turbopack 엔진(--turbo)을 활용하여 수천 개의 쇼핑몰 컴포넌트 모듈을 함수 레벨 증분 계산(Incremental Computation)으로 10ms 이내에 초고속 HMR 갱신합니다."
         steps={[
           {
                     "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+                    "title": "Turbopack Rust 엔진 증분 컴파일 아키텍처 점검 및 next.config.ts turbopack 규칙 및 로더 설정 확인",
+                    "description": "전체 번들을 다시 빌드하지 않고 변경된 함수만 증분 캐싱하는 Turbo 엔진 메커니즘을 확인합니다. Webpack 대비 10배 빠른 HMR과 커스텀 SVG/Sass 로더 바인딩 설정을 점검합니다.",
+                    "actionBadge": "엔진 구조 점검"
           },
           {
                     "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
-          },
-          {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
+                    "title": "10ms 이내 초고속 핫 모듈 리로딩(HMR) 성능 관찰",
+                    "description": "코드 수정 시 브라우저 상태를 유지한 채 변경 사항만 수 밀리초 만에 즉시 반영되는지 확인합니다.",
+                    "actionBadge": "성능 검증",
+                    "observe": "Turbopack 증분 계산을 통해 코드 변경 사항이 10ms 미만으로 즉각 HMR 반영됨",
+                    "observeAt": "playground"
           }
 ]}
       />

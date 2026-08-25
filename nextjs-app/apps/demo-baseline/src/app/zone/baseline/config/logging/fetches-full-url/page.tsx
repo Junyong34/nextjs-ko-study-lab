@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"logging.fetches.fullUrl: true 서버 fetch 콘솔 상세 로깅"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'logging.fetches.fullUrl: true 서버 fetch 콘솔 상세 로깅' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="logging.fetches.fullUrl: true 서버 fetch 콘솔 상세 로깅"
+        concept="next.config.ts의 logging: { fetches: { fullUrl: true } } 설정을 활성화하여 개발 서버 콘솔에 모든 서버 fetch 요청의 전체 URL, 캐시 HIT/MISS 상태, 응답 시간을 출력합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "서버 fetch 로깅을 발생시킬 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "서버 컴포넌트 fetch 요청을 실행하여 전체 URL 상세 로깅을 트리거합니다.",
+            actionBadge: "fetch 로깅",
           },
           {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
-          }
-]}
+            step: 3,
+            title: "터미널 상세 로그(fullUrl / 캐시 상태 / 응답 시간) 관찰",
+            description: "전체 요청 URL과 캐시 상태가 콘솔에 상세 기록되는지 실시간 로그에서 확인합니다.",
+            actionBadge: "로그 검증",
+            observe: "logging.fetches.fullUrl 설정에 따라 서버 fetch 요청의 전체 URL과 캐시 상태가 기록됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"logging.fetches.fullUrl: true 서버 fetch 콘솔 상세 로깅 실습"}>
         <ConfigLoggingFetchesDemo />

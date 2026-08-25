@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"revalidatePath를 통한 라우트 전체 즉시 동기화"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'revalidatePath를 통한 라우트 전체 즉시 동기화' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"revalidatePath('/shop')를 통한 전체 라우트 캐시 일괄 퍼지"}
+        concept={"관리자 상품 수정 후 revalidatePath('/shop')를 호출하면 상단 배너, 사이드바, 상품 그리드 등 해당 라우트 트리에 속한 모든 정적 캐시를 원자적으로 일괄 무효화합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "현재 상태(대기 중) 및 라우트 캐시 현황 점검",
+            description: "초기 /shop 경로에 보관된 정적 캐시 상태와 버튼 라벨을 확인합니다.",
+            actionBadge: "초기 상태 점검",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[revalidatePath('/shop') 실행] 버튼 클릭",
+            description: "Server Action을 실행하여 /shop 경로의 전체 세그먼트 캐시를 일괄 퍼지합니다.",
+            actionBadge: "경로 퍼지 실행",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "상태 텍스트 갱신 및 전체 캐시 일괄 무효화 관찰",
+            description: "상태 메시지가 [확인] 호출 완료로 변경되며 라우트 내 모든 컴포넌트 캐시가 갱신되는지 확인합니다.",
+            actionBadge: "동기화 검증",
+            observe: "revalidatePath('/shop') 호출 후 상태 텍스트 변경 및 전체 라우트 캐시 일괄 퍼지 결과 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"revalidatePath를 통한 라우트 전체 즉시 동기화 실습"}>
         <RevalidatePathSyncDemo />

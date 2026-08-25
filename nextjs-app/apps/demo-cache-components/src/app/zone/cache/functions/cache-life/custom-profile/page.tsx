@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"next.config.ts custom cacheLife 프로파일 정의 및 바인딩"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'next.config.ts custom cacheLife 프로파일 정의 및 바인딩'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="next.config.ts custom cacheLife 프로파일 정의 및 바인딩"
+        concept="next.config.ts의 cacheLife 객체에 커스텀 프로파일(flashSale, catalog, reviews)을 정의하고 컴포넌트 내 cacheLife(profile)로 바인딩하여 5초~604800초 TTL을 제어합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[flash-sale], [catalog], [reviews] 프리셋 버튼 선택",
+            description: "커스텀 cacheLife 프로파일 프리셋을 선택하여 비즈니스 수명 구성을 전환합니다.",
+            actionBadge: "프로파일 선택",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "next.config.ts 커스텀 수명(stale/revalidate/expire) 확인",
+            description: "선택된 프로파일의 초 단위 stale, revalidate, expire 설정값을 확인합니다.",
+            actionBadge: "설정값 점검",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "컴포넌트 내 cacheLife 호출 스니펫 및 타임라인 관찰",
+            description: "cacheLife('profile') 호출 구문과 3단계 캐시 수명 타임라인이 정상 동기화되는지 확인합니다.",
+            actionBadge: "결과 검증",
+            observe: "선택한 커스텀 cacheLife 프로파일의 stale/revalidate/expire 설정이 타임라인에 반영됨",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"next.config.ts custom cacheLife 프로파일 정의 및 바인딩 실습"}>
         <CacheLifeCustomDemo />

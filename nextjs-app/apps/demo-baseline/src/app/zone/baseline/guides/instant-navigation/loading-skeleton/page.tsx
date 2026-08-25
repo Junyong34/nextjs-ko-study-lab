@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Instant Navigation loading.tsx 스켈레톤 전환"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Instant Navigation loading.tsx 스켈레톤 전환' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"loading.tsx 스켈레톤을 활용한 즉각적인 내비게이션 피드백"}
+        concept={"느린 데이터 패칭 라우트로 이동할 때 loading.tsx가 0ms로 즉시 마운트되어 스켈레톤 UI를 제공함으로써 사용자에게 화면 멈춤(Freezing) 없는 즉각적인 내비게이션 경험을 선사합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[홈 (0ms 즉시 전환)] 버튼 클릭",
+            description: "정적 캐시된 홈 화면으로 0ms 즉각 전환되는 동작을 확인합니다.",
+            actionBadge: "홈 이동",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[쇼핑몰 (스켈레톤 즉시 표시)] 버튼 클릭",
+            description: "데이터 패칭이 필요한 쇼핑몰 라우트로 이동하여 loading.tsx 스켈레톤 마운트를 트리거합니다.",
+            actionBadge: "스켈레톤 트리거",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "0ms 스켈레톤 렌더링 후 최종 상품 목록 교체 관찰",
+            description: "내비게이션 클릭 즉시 스켈레톤이 뜨고 데이터 완료 후 실제 상품 목록으로 부드럽게 전환되는지 검증합니다.",
+            actionBadge: "즉각 피드백 검증",
+            observe: "쇼핑몰 이동 클릭 즉시 loading.tsx 스켈레톤 노출 및 데이터 패칭 완료 후 실제 콘텐츠 전환 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"Instant Navigation loading.tsx 스켈레톤 전환 실습"}>
         <InstantNavDemo />

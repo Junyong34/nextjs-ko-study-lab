@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Bypass 쿠키 검증 및 CMS 초안 렌더링"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Bypass 쿠키 검증 및 CMS 초안 렌더링' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"Draft Mode 바이패스 쿠키 발급 및 보안 검증"}
+        concept={"draftMode().enable() 실행 시 서명된 __prerender_bypass 쿠키가 브라우저에 저장되어, 이후 발생하는 모든 페이지 요청이 0ms 빌드 시점 정적 HTML 대신 실시간 초안 렌더링으로 라우팅됩니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "VIP 시크릿 특가전 상품 상세 정적 캐시 뷰 확인",
+            description: "바이패스 쿠키가 없을 때 일반 캐시 서버에서 반환된 공개 상품 스펙을 확인합니다.",
+            actionBadge: "정적 캐시 확인",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "Draft Mode 활성화 토글 클릭",
+            description: "__prerender_bypass 쿠키를 브라우저에 설정하고 실시간 초안 데이터를 요청합니다.",
+            actionBadge: "바이패스 쿠키 활성화",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "서명된 바이패스 쿠키 감지 및 CMS 미발행 데이터 로드 관찰",
+            description: "정적 캐시를 안전하게 우회하여 최신 드래프트 가격과 비공개 설명문이 렌더링되는지 검증합니다.",
+            actionBadge: "바이패스 검증",
+            observe: "Bypass 쿠키 활성화에 따른 정적 캐시 우회 및 VIP 시크릿 특가전 초안 데이터 실시간 렌더링 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"Bypass 쿠키 검증 및 CMS 초안 렌더링 실습"}>
         <DraftBypassDemo />

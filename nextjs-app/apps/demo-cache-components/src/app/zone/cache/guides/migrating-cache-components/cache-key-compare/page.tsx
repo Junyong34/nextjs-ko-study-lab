@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"캐시 키 생성 방식 비교 (수동 vs 자동)"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 '캐시 키 생성 방식 비교 (수동 vs 자동)' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"Cache Components 복합 인자 캐시 키 자동 직렬화"}
+        concept={"Next.js 16 'use cache'는 함수의 매개변수(SKU, 통화, 회원등급)를 자동 분석하여 고유 SHA 캐시 키를 생성하므로 수동 키 배열 조합으로 인한 키 충돌 버그를 방지합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "선택 SKU, 통화(KRW), 회원등급(VIP) 옵션 확인",
+            description: "복합 캐시 키를 구성하는 3가지 파라미터 조합의 초기 상태를 점검합니다.",
+            actionBadge: "파라미터 점검",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "회원등급을 VVIP로 변경하거나 통화를 USD로 전환",
+            description: "인자 값을 변경하여 새로운 조합의 캐시 키 생성을 유도합니다.",
+            actionBadge: "인자 조합 변경",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "인자 조합별 고유 캐시 키 분기 및 캐시 분리 관찰",
+            description: "동일 함수 내에서도 인자 변경에 따라 독립된 캐시 엔트리가 자동 생성·조회되는지 검증합니다.",
+            actionBadge: "캐시 키 검증",
+            observe: "SKU/통화/등급 파라미터 조합에 따른 고유 캐시 키 자동 생성 및 할인 금액 정확 계산 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"캐시 키 생성 방식 비교 (수동 vs 자동) 실습"}>
         <CacheKeyCompareDemo />

@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"비관리자 권한 차단 403 화면 (forbidden.tsx)"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 '비관리자 권한 차단 403 화면 (forbidden.tsx)'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"forbidden.tsx 403 권한 부족 접근 차단"}
+        concept={"일반 고객(CUSTOMER) 계정으로 관리자 전용 정산 라우트에 접근 시 forbidden()이 호출되어 403 상태 코드와 함께 forbidden.tsx 화면을 렌더링합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[일반 고객 (CUSTOMER)] 버튼 선택",
+        "description": "권한이 없는 일반 사용자 세션으로 전환합니다.",
+        "actionBadge": "CUSTOMER"
+        },
+        {
+        "step": 2,
+        "title": "[정산 관리자 페이지 접근 시도] 클릭",
+        "description": "관리자 전용 라우트로 진입을 시도하여 forbidden() 예외를 트리거합니다.",
+        "actionBadge": "403 트리거"
+        },
+        {
+        "step": 3,
+        "title": "[스토어 관리자 (ADMIN)] 선택 후 재시도",
+        "description": "관리자 계정으로 전환하여 정상 관리 페이지(200 OK)가 렌더링되는 차이를 대조합니다.",
+        "actionBadge": "200 ADMIN",
+        "observe": "CUSTOMER 접근 시 403 forbidden.tsx 화면 표시 및 ADMIN 접근 시 정상 렌더링 확인",
+        "observeAt": "playground"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"비관리자 권한 차단 403 화면 (forbidden.tsx) 실습"}>
         <ForbiddenRoleDemo />
       </DemoPlaygroundCard>

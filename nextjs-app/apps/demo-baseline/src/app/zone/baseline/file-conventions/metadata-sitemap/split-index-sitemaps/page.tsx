@@ -7,29 +7,25 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"generateSitemaps 대규모 인덱스 분할"}
-        concept={"쇼핑몰 라우팅 계층에서 Next.js 특수 파일 컨벤션 'generateSitemaps 대규모 인덱스 분할'을 적용하여 URL 구조와 렌더링 수명 주기를 제어하는 실습입니다."}
+        title={"sitemap.ts 대규모 분할 사이트맵 인덱스"}
+        concept={"50,000건 이상의 대규모 상품 URL을 generateSitemaps()를 통해 sitemap/0.xml, sitemap/1.xml 등 청크 단위로 분할 생성합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "라우트 파일 컨벤션 확인",
-                    "description": "해당 특수 파일이 담당하는 라우트 위치와 역할을 점검합니다.",
-                    "actionBadge": "파일 확인"
+                    "title": "generateSitemaps() 분할 ID 목록 확인 및 청크별 sitemap({ id }) URL 목록 생성",
+                    "description": "대규모 데이터셋을 50,000개 단위 청크 ID 배열로 반환하는 분할 구조를 확인합니다. 전달받은 id에 해당하는 상품 URL, lastModified, changeFrequency 객체 배열을 생성합니다.",
+                    "actionBadge": "ID 분할"
           },
           {
                     "step": 2,
-                    "title": "라우팅 및 상태 전이 실행",
-                    "description": "페이지 이동, 파라미터 변경 또는 에러 트리거를 실행합니다.",
-                    "actionBadge": "라우팅 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "파일 컨벤션 런타임 검증",
-                    "description": "Next.js 런타임이 해당 파일을 어떻게 해석하여 화면에 마운트하는지 검증합니다.",
-                    "actionBadge": "컨벤션 검증"
+                    "title": "사이트맵 인덱스 XML 응답 검증",
+                    "description": "각 분할 사이트맵이 /sitemap/0.xml 경로로 표준 XML 스키마에 맞춰 렌더링되는지 검증합니다.",
+                    "actionBadge": "XML 검증",
+                    "observe": "3단 검증 패널에서 대규모 분할 사이트맵 인덱스 사양 및 URL 매핑 상태 확인",
+                    "observeAt": "verification"
           }
 ]}
-      />
+        />
       <DemoPlaygroundCard title={"generateSitemaps 대규모 인덱스 분할 실습"}>
         <MetadataSitemapSplitDemo />
       </DemoPlaygroundCard>

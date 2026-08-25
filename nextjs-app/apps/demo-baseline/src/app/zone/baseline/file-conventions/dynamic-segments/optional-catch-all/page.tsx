@@ -7,31 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Optional Catch-all [[...slug]] 루트 인덱스 겸용"}
-        concept={"대괄호를 두 번 감싸면 세그먼트가 없는 경로까지 같은 파일이 받습니다. [...slug]는 /docs에서 404가 되지만 [[...slug]]는 slug가 undefined인 상태로 /docs 인덱스를 렌더링합니다."}
+        title={"[[...slug]] 선택적 포괄 세그먼트 (Optional Catch-all)"}
+        concept={"docs/[[...slug]]/page.tsx는 이중 대괄호를 사용하여 파라미터가 없는 루트(/docs, slug: undefined)와 다단계 경로(/docs/routing/dynamic-routes)를 단일 파일에서 모두 처리합니다."}
         steps={[
-          {
-            step: 1,
-            title: "[해당 문서로 이동 →] 클릭",
-            description: "optional catch-all 라우트로 진입합니다.",
-            actionBadge: "[[...slug]]",
-          },
-          {
-            step: 2,
-            title: "[/docs (루트 인덱스)] 이동",
-            description: "slug 없이 진입해도 404가 아니라 인덱스 화면이 뜹니다. 이것이 선택적 catch-all의 핵심 차이입니다.",
-            actionBadge: "slug 없음",
-          },
-          {
-            step: 3,
-            title: "[/docs/routing/dynamic-routes (2단계)] 이동",
-            description: "같은 파일이 2단계 경로도 그대로 처리합니다.",
-            actionBadge: "깊이 2",
-            observe: "slug가 undefined일 때와 배열일 때 모두 같은 page.tsx가 응답하는지, /docs에서 404가 뜨지 않는지 확인",
-            observeAt: "verification",
-          },
+        {
+        "step": 1,
+        "title": "[/docs (루트 인덱스)] 이동",
+        "description": "slug 파라미터 없이 진입하여 404가 아닌 기본 개발자 문서 홈(slug: undefined)이 렌더링되는 것을 확인합니다.",
+        "actionBadge": "루트 인덱스"
+        },
+        {
+        "step": 2,
+        "title": "[/docs/installation (1단계)] 이동",
+        "description": "1단계 문서로 이동하여 slug: ['installation'] 배열이 정상 전달되는지 확인합니다.",
+        "actionBadge": "1단계"
+        },
+        {
+        "step": 3,
+        "title": "[/docs/routing/dynamic-routes (2단계)] 이동",
+        "description": "2단계 경로로 이동하여 동일한 page.tsx가 다단계 문서 뷰어로 전환되는 것을 확인합니다.",
+        "actionBadge": "2단계",
+        "observe": "slug가 undefined일 때(루트)와 배열일 때(다단계) 모두 404 없이 같은 page.tsx가 응답하는지 확인",
+        "observeAt": "verification"
+        }
         ]}
-      />
+        />
       <DemoPlaygroundCard title={"[[...slug]] Optional Catch-all 동적 세그먼트 실습"}>
         <OptionalCatchAllDemo />
       </DemoPlaygroundCard>

@@ -16,27 +16,29 @@ export default function DemoPage() {
 
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title="NextResponse.rewrite() 가상 경로 라우팅"
-        concept="Next.js App Router route.ts에서 NextResponse.rewrite() 유틸리티를 사용하여 브라우저 URL 변경 없이 내부 엔드포인트(/target)로 요청을 투명하게 포워딩하는 실습입니다."
+            <DemoGuideCard
+        title="NextResponse.rewrite() 가상 라우팅 중계"
+        concept="NextResponse.rewrite()를 활용하여 브라우저 주소창의 URL은 그대로 유지한 채 서버 내부에서 다른 가상 엔드포인트나 백엔드 서비스의 컨텐츠를 프록시 서빙합니다."
         steps={[
           {
             step: 1,
-            title: "가상 엔드포인트 및 타겟 엔드포인트 선언",
-            description: "api/route.ts와 target/route.ts를 각각 작성합니다.",
-            actionBadge: "엔드포인트 준비",
+            title: "[가상 엔드포인트 호출] 클릭",
+            description: "NextResponse.rewrite()가 구성된 프록시 엔드포인트로 요청을 전송합니다.",
+            actionBadge: "리라이트 요청",
           },
           {
             step: 2,
-            title: "NextResponse.rewrite() 실행",
-            description: "api/route.ts에서 new URL('/target')로 내부 리라이트를 수행합니다.",
-            actionBadge: "리라이트 실행",
+            title: "브라우저 표시 URL 보존 확인",
+            description: "클라이언트 브라우저 주소창의 URL이 변경되지 않고 유지되는 것을 확인합니다.",
+            actionBadge: "URL 보존",
           },
           {
             step: 3,
-            title: "URL 유지 및 타겟 데이터 수신 검증",
-            description: "클라이언트가 호출한 URL은 그대로 유지되면서 타겟 데이터가 성공적으로 반환되는지 확인합니다.",
+            title: "가상 내부 서비스 응답 서빙 관찰",
+            description: "내부 마이크로서비스 또는 가상 경로의 데이터가 투명하게 프록시 서빙되는지 확인합니다.",
             actionBadge: "결과 검증",
+            observe: "브라우저 URL 변경 없이 내부 대상 엔드포인트의 리라이트 응답 데이터가 정상 수신됨",
+            observeAt: "playground",
           },
         ]}
       />

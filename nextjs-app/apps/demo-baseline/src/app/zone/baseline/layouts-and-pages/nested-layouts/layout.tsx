@@ -22,7 +22,7 @@ export default function NestedLayoutsRootLayout({
           steps={[
             {
               step: 1,
-              title: '[상품명, 카테고리 검색...] 입력',
+              title: '[실시간 검색 (예: 러닝화, 스니커즈, 맨투맨)] 입력',
               description: '상단 GNB 검색창에 "러닝화" 또는 "신발"을 입력하여 실시간 필터링 상태를 생성합니다.',
               actionBadge: '상태 생성',
             },

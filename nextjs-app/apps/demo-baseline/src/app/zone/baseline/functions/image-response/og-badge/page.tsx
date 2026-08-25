@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"ImageResponse를 활용한 실시간 할인 뱃지 OG 이미지"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'ImageResponse를 활용한 실시간 할인 뱃지 OG 이미지'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="ImageResponse를 활용한 실시간 할인 뱃지 OG 이미지"
+        concept="next/og의 ImageResponse와 Satori 엔진을 사용하여 상품명, 할인율(-30%), 실시간 가격이 렌더링된 소셜 오픈그래프(OG) PNG 이미지를 50ms 미만으로 동적 생성합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "OG 이미지를 생성할 대상 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "ImageResponse JSX 템플릿에 동적 파라미터를 주입하여 OG 이미지를 렌더링합니다.",
+            actionBadge: "OG 렌더링",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "동적 OG 이미지 생성 로그 및 메타데이터 관찰",
+            description: "Satori가 렌더링한 1200x630 규격의 실시간 할인 뱃지 이미지 생성 결과가 실시간 로그에 반영되는지 확인합니다.",
+            actionBadge: "로그 검증",
+            observe: "선택한 상품의 할인율과 가격이 합성된 ImageResponse OG 이미지가 실시간 생성됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"ImageResponse를 활용한 실시간 할인 뱃지 OG 이미지 실습"}>
         <ImageResponseOgBadgeDemo />

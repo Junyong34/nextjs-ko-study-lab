@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"cacheTag 연쇄 무효화 (Cascade Invalidation)"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'cacheTag 연쇄 무효화 (Cascade Invalidation)'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="cacheTag 연쇄 무효화 (Cascade Invalidation)"
+        concept="상위 카테고리 태그를 revalidateTag로 무효화할 때 하위 10개 상품 및 연관 뷰 캐시가 0ms 내에 일괄 퍼지(Purge)되는 연쇄 무효화(Cascade Invalidation) 메커니즘을 검증합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+            step: 1,
+            title: "[상위 카테고리 태그 연쇄 무효화] 클릭",
+            description: "상위 태그(category-fashion)를 대상으로 revalidateTag를 호출합니다.",
+            actionBadge: "연쇄 무효화",
           },
           {
-                    "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
+            step: 2,
+            title: "하위 종속 캐시 태그 일괄 퍼지 처리",
+            description: "상위 태그에 종속된 모든 하위 상품 및 필터 캐시 엔트리가 동시 만료 처리됩니다.",
+            actionBadge: "퍼지 처리",
           },
           {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
-          }
-]}
+            step: 3,
+            title: "연쇄 무효화 결과 및 캐시 재생성 관찰",
+            description: "무효화된 하위 캐시 엔트리들이 최신 데이터로 동시 갱신되는지 확인합니다.",
+            actionBadge: "상태 검증",
+            observe: "상위 태그 무효화 시 하위 종속 캐시들이 일괄 무효화되고 최신 상태로 갱신됨",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"cacheTag 연쇄 무효화 (Cascade Invalidation) 실습"}>
         <CacheTagCascadeDemo />

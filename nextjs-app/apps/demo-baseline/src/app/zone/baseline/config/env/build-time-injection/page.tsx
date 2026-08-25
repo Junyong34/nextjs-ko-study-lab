@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"env 필드를 통한 빌드 타임 환경변수 주입"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'env 필드를 통한 빌드 타임 환경변수 주입' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="env 필드를 통한 빌드 타임 환경변수 주입"
+        concept="next.config.ts의 env 객체는 빌드 시점에 process.env.KEY 참조를 정적 문자열로 직접 치환(Inlining)하여 클라이언트 및 서버 번들에 일괄 주입하므로 시크릿 키는 절대 선언해서는 안 됩니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "빌드 타임 환경변수가 주입된 컴포넌트를 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "next.config.ts env 필드를 통해 컴파일 타임에 인라인 치환된 상수를 호출합니다.",
+            actionBadge: "환경변수 호출",
           },
           {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
-          }
-]}
+            step: 3,
+            title: "빌드 타임 인라인 주입 결과 및 보안 원칙 관찰",
+            description: "클라이언트 번들에 공개 상수가 정상 주입되고 시크릿이 분리되었는지 실시간 로그에서 확인합니다.",
+            actionBadge: "로그 검증",
+            observe: "next.config.ts env 설정으로 정의된 공개 상수가 번들에 빌드 타임 인라인 주입됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"env 필드를 통한 빌드 타임 환경변수 주입 실습"}>
         <ConfigEnvInjectionDemo />

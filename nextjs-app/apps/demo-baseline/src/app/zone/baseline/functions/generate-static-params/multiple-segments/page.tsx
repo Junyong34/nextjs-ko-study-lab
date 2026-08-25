@@ -6,27 +6,23 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"generateStaticParams [category]/[id] 다중 세그먼트 조합"}
-        concept={"쇼핑몰의 주문/회원/카탈로그 비즈니스 로직에서 Next.js 내장 함수 'generateStaticParams [category]/[id] 다중 세그먼트 조합'을 활용하는 실무 개발 패턴입니다."}
+            <DemoGuideCard
+        title="generateStaticParams [category]/[id] 다중 세그먼트 조합"
+        concept="다중 동적 세그먼트 [category]/[id] 구조에서 generateStaticParams를 조합하여 10개 카테고리와 상품 ID의 데카르트 곱 전체 조합을 빌드 타임에 사전 0ms SSG로 생성합니다."
         steps={[
           {
                     "step": 1,
-                    "title": "함수 파라미터 및 컨텍스트 확인",
-                    "description": "서버 또는 클라이언트 실행 환경에서 전달되는 인자를 확인합니다.",
-                    "actionBadge": "인자 확인"
+                    "title": "다중 세그먼트 ([category]/[id]) 파라미터 행렬 점검 및 generateStaticParams 2단계 중첩 생성 실행",
+                    "description": "패션/전자기기 등의 카테고리와 하위 상품 ID 간의 조합 목록을 확인합니다. 상위 카테고리 세그먼트와 하위 상품 세그먼트 파라미터 객체 배열을 순차 반환합니다.",
+                    "actionBadge": "조합 행렬 점검"
           },
           {
                     "step": 2,
-                    "title": "함수 호출 및 비동기 처리",
-                    "description": "함수를 호출하여 반환된 값이나 상태 변경 효과를 관찰합니다.",
-                    "actionBadge": "함수 실행"
-          },
-          {
-                    "step": 3,
-                    "title": "비즈니스 규칙 반영 검증",
-                    "description": "쇼핑몰 도메인 데이터가 올바르게 갱신되거나 제어되는지 확인합니다.",
-                    "actionBadge": "결과 확인"
+                    "title": "사전 렌더링된 다중 세그먼트 라우트 맵 관찰",
+                    "description": "빌드 시점에 /shop/shoes/001, /shop/clothing/002 등 모든 조합이 정적 생성되었는지 확인합니다.",
+                    "actionBadge": "결과 검증",
+                    "observe": "다중 동적 세그먼트([category]/[id]) 전체 조합이 빌드 타임 정적 라우트로 사전 생성됨",
+                    "observeAt": "playground"
           }
 ]}
       />

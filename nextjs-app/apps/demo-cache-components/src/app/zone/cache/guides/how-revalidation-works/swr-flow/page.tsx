@@ -7,26 +7,34 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Stale-While-Revalidate 백그라운드 재검증 수명 주기"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Stale-While-Revalidate 백그라운드 재검증 수명 주기' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"Cache Components SWR 백그라운드 재검증 수명 주기"}
+        concept={"Cache Components의 stale-while-revalidate 메커니즘을 통해 staleTime(5초) 경과 후 첫 요청에 Stale 캐시를 0ms 즉시 반환하고, 백그라운드 워커에서 새 데이터를 패치하여 다음 요청에 반영합니다."}
         steps={[
           {
                     "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+                    "title": "[1단계: Stale 응답 (0ms)] 클릭",
+                    "description": "캐시된 기존 Stale 데이터를 0ms 즉시 반환받아 화면에 표시합니다.",
+                    "actionBadge": "Stale 응답"
           },
           {
                     "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+                    "title": "[2단계: 백그라운드 재검증] 클릭",
+                    "description": "백그라운드에서 비동기 fetch를 실행하여 최신 데이터를 조회합니다.",
+                    "actionBadge": "재검증 트리거"
           },
           {
                     "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
+                    "title": "[3단계: 최신 캐시 전파] 클릭",
+                    "description": "새로 수신된 데이터로 캐시 엔트리를 교체하고 UI에 반영합니다.",
+                    "actionBadge": "캐시 전파"
+          },
+          {
+                    "step": 4,
+                    "title": "SWR 라이프사이클 및 타임스탬프 동기화 관찰",
+                    "description": "Stale-While-Revalidate 수명 주기 동안 사용자 대기 시간 0ms와 최신 데이터 동기화 결과를 관찰합니다.",
+                    "actionBadge": "SWR 완료 관찰",
+                    "observe": "Stale 데이터가 0ms로 선제 반환된 후 백그라운드 재검증으로 최신 타임스탬프가 갱신됨",
+                    "observeAt": "playground"
           }
 ]}
       />

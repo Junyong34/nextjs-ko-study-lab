@@ -6,29 +6,31 @@ import { VerificationFooter } from './components/VerificationFooter'
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"rewrites() Zone 간 라우팅 및 외부 API 프록시"}
-        concept={"쇼핑몰 엔터프라이즈 환경 설정을 위한 'rewrites() Zone 간 라우팅 및 외부 API 프록시' 구성을 next.config.ts 및 아키텍처 레벨에서 실증하는 데모입니다."}
+            <DemoGuideCard
+        title="rewrites() Zone 간 라우팅 및 외부 API 프록시"
+        concept="next.config.ts의 rewrites() 설정을 활용하여 /legacy-api/:path* 경로의 요청을 외부 백엔드 서버로 투명하게 프록시 중계하고 CORS 문제를 해결합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "설정 프로파일 점검",
-                    "description": "next.config.ts 또는 런타임 환경에 주입된 설정값을 확인합니다.",
-                    "actionBadge": "설정 로드"
+            step: 1,
+            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
+            description: "크로스 존 프록시 요청 대상 상품을 선택합니다.",
+            actionBadge: "상품 선택",
           },
           {
-                    "step": 2,
-                    "title": "요청 가로채기 및 라우팅 테스트",
-                    "description": "설정에 정의된 규칙(헤더, 리다이렉트, 프록시 등)을 테스트합니다.",
-                    "actionBadge": "규칙 테스트"
+            step: 2,
+            title: "[+] 수량 조절 후 [동작 실행] 클릭",
+            description: "rewrites 규칙에 따라 외부 마이크로서비스로 중계되는 API 호출을 실행합니다.",
+            actionBadge: "프록시 실행",
           },
           {
-                    "step": 3,
-                    "title": "보안 및 인프라 효과 검증",
-                    "description": "응답 헤더, 도메인 보안, 빌드 산출물 격리를 종합 검증합니다.",
-                    "actionBadge": "인프라 검증"
-          }
-]}
+            step: 3,
+            title: "투명 프록시 응답 및 도메인 로그 관찰",
+            description: "클라이언트 URL 변경 없이 외부 존(Zone)의 백엔드 응답이 정상 수신되는지 확인합니다.",
+            actionBadge: "로그 검증",
+            observe: "next.config.ts rewrites 규칙에 따라 외부 엔드포인트 프록시 응답이 정상 수신됨",
+            observeAt: "verification",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"rewrites() Zone 간 라우팅 및 외부 API 프록시 실습"}>
         <ConfigRewritesProxyDemo />

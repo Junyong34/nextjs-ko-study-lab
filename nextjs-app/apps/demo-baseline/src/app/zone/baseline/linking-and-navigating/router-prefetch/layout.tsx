@@ -18,26 +18,32 @@ export default function RouterPrefetchRootLayout({
         concept="router.prefetch()는 백그라운드에서 대상 라우트의 RSC Payload를 사전 다운로드하여, router.push() 실행 시 네트워크 지연(0ms) 없이 대상 페이지로 즉각 전환합니다."
         steps={[
           {
-            step: 1,
-            title: '[1. 특가 상품 백그라운드 프리패치 router.prefetch()] 클릭',
-            description: '버튼을 클릭하여 백그라운드에서 /deals 라우트 데이터를 사전 로드(prefetch)합니다.',
-            actionBadge: '사전 로드',
+                    "step": 1,
+                    "title": "[1. 특가 상품 백그라운드 프리패치 router.prefetch()] 클릭",
+                    "description": "router.prefetch() API를 실행하여 타깃 라우트의 RSC 페이로드를 백그라운드 프리로드합니다.",
+                    "actionBadge": "프리패치 실행"
           },
           {
-            step: 2,
-            title: '[2. 특가 상품으로 이동] 클릭',
-            description: 'router.push("/deals")를 실행하여 사전 로드된 캐시를 통해 0ms 즉시 화면이 전환되는 것을 확인합니다.',
-            actionBadge: '즉시 전환',
+                    "step": 2,
+                    "title": "네트워크 탭에서 프리패치된 .rsc 청크 확인",
+                    "description": "브라우저 메모리 캐시에 대상 페이지 데이터가 사전 적재되었는지 확인합니다.",
+                    "actionBadge": "청크 적재 확인"
           },
           {
-            step: 3,
-            title: '[3. VIP 라운지 이동] 클릭 및 [대시보드 복귀] 대조',
-            description: '프리패치되지 않은 /vip 라우트와 대시보드 복귀 네비게이션 동작 및 로그를 대조합니다.',
-            actionBadge: '온디맨드 로드 대조',
-            observe: '프리패치된 /deals 경로는 0ms 즉각 전환되고, 제어 콘솔 로그에 router.prefetch 및 router.push 완료 상태가 기록됨',
-            observeAt: 'playground',
+                    "step": 3,
+                    "title": "[대시보드 복귀] 및 해당 특가 상품 링크 진입",
+                    "description": "프리패치된 상품 링크를 클릭하여 즉시 페이지로 전환합니다.",
+                    "actionBadge": "페이지 진입"
           },
-        ]}
+          {
+                    "step": 4,
+                    "title": "사전 로드된 라우트의 0ms 즉각 렌더링 관찰",
+                    "description": "네트워크 지연 없이 0ms 즉시 화면이 전환되는 프리패치 가속 효과를 관찰합니다.",
+                    "actionBadge": "0ms 전환 관찰",
+                    "observe": "router.prefetch()로 사전 적재된 RSC 캐시 덕분에 링크 클릭 시 0ms로 즉시 렌더링됨",
+                    "observeAt": "playground"
+          }
+]}
       />
 
       {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}

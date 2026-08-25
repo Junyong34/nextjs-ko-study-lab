@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Next.js 14 레거시 fetch cache vs Route Segment revalidate"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'Next.js 14 레거시 fetch cache vs Route Segment revalidate' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"레거시 fetch 캐시 옵션(force-cache vs no-store)"}
+        concept={"Next.js App Router의 기본 fetch 확장 옵션인 { cache: 'force-cache' }와 { cache: 'no-store' }를 비교하여 영구 Data Cache 보관과 실시간 동적 패칭의 동작 차이를 실증합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "[force-cache (영구 캐시)] 요청 실행",
+            description: "Data Cache에 응답을 영구 보관하는 fetch 요청을 실행하고 응답 시간(0ms HIT)을 확인합니다.",
+            actionBadge: "캐시 요청",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[no-store (동적 실시간 패칭)] 요청 실행",
+            description: "캐시를 우회하여 매 요청마다 원본 서버에서 최신 데이터를 가져오는 동작을 실행합니다.",
+            actionBadge: "동적 요청",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "Data Cache HIT(0ms) vs MISS(네트워크 지연) 응답 대조",
+            description: "두 요청 방식의 응답 타임스탬프와 캐시 헤더(HIT/MISS) 결과를 비교 검증합니다.",
+            actionBadge: "캐시 대조",
+            observe: "force-cache의 고정 타임스탬프(0ms HIT)와 no-store의 실시간 갱신 타임스탬프(MISS) 대조 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"Next.js 14 레거시 fetch cache vs Route Segment revalidate 실습"}>
         <LegacyFetchCacheDemo />

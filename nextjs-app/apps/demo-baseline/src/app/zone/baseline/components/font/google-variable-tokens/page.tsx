@@ -7,29 +7,31 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Google Fonts 가변 폰트 CSS 변수 연동"}
-        concept={"Next.js 빌트인 컴포넌트 'Google Fonts 가변 폰트 CSS 변수 연동'을 활용하여 쇼핑몰의 성능, SEO, 폼 상호작용을 최적화하는 실무 구현입니다."}
+        title={"next/font/google 가변 폰트 및 CSS 변수 토큰"}
+        concept={"next/font/google을 통해 구글 웹폰트를 빌드 시점에 셀프 호스팅하고 --font-inter CSS 변수로 주입하여 외부 네트워크 요청 0건과 폰트 CLS를 원천 제거합니다."}
         steps={[
-          {
-                    "step": 1,
-                    "title": "컴포넌트 렌더링 점검",
-                    "description": "빌트인 컴포넌트가 생성한 최종 HTML 마크업과 속성을 확인합니다.",
-                    "actionBadge": "마크업 확인"
-          },
-          {
-                    "step": 2,
-                    "title": "동적 옵션 조작",
-                    "description": "옵션(속성)을 변경하며 브라우저 동작 및 네트워크 최적화 효과를 관찰합니다.",
-                    "actionBadge": "속성 변경"
-          },
-          {
-                    "step": 3,
-                    "title": "최적화 결과 대조",
-                    "description": "CLS 방지, 자동 포맷 변환, 폼 데이터 직렬화 결과를 검증합니다.",
-                    "actionBadge": "결과 검증"
-          }
-]}
-      />
+        {
+        "step": 1,
+        "title": "[Inter], [Roboto], [Playfair Display] 폰트 버튼 선택",
+        "description": "Google Fonts 프리셋 중 원하는 가변 폰트를 선택하여 실시간 전환합니다.",
+        "actionBadge": "폰트 선택"
+        },
+        {
+        "step": 2,
+        "title": "빌드 타임 셀프 호스팅 점검",
+        "description": "외부 Google Fonts 서버에 런타임 요청을 보내지 않고 자체 도메인에서 WOFF2 파일을 서빙하는지 점검합니다.",
+        "actionBadge": "셀프 호스팅"
+        },
+        {
+        "step": 3,
+        "title": "무중단 폰트 렌더링 및 레이아웃 시프트 방지 확인",
+        "description": "size-adjust가 자동 적용되어 폰트 로드 시 텍스트 떨림(CLS: 0)이 없는지 확인합니다.",
+        "actionBadge": "CLS 0 검증",
+        "observe": "3단 검증 패널에서 next/font/google의 CSS 변수 토큰 및 셀프 호스팅 사양 일치 확인",
+        "observeAt": "verification"
+        }
+        ]}
+        />
       <DemoPlaygroundCard title={"Google Fonts 가변 폰트 CSS 변수 연동 실습"}>
         <FontGoogleVariableDemo />
       </DemoPlaygroundCard>

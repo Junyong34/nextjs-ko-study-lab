@@ -7,28 +7,30 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"View Transitions 이미지 확대 애니메이션"}
-        concept={"쇼핑몰 플랫폼의 실무 기능인 'View Transitions 이미지 확대 애니메이션' 구현을 위해 Next.js의 고급 가이드 아키텍처와 최적화 기법을 적용한 실습 예제입니다."}
+        title={"View Transitions API를 통한 카드 확대 모핑 애니메이션"}
+        concept={"document.startViewTransition() API를 활용하여 썸네일 그리드 뷰에서 상세 확대 뷰로 전환할 때 브라우저 네이티브 하드웨어 가속 모핑 애니메이션을 부드럽게 구현합니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "쇼핑몰 시나리오 초기화",
-                    "description": "이커머스 비즈니스 상태 및 카탈로그 데이터를 확인합니다.",
-                    "actionBadge": "상태 로드"
+            step: 1,
+            title: "썸네일 그리드 뷰 초기 상태 확인",
+            description: "전환 전 카드 썸네일 레이아웃과 View Transition 지원 상태를 확인합니다.",
+            actionBadge: "썸네일 확인",
           },
           {
-                    "step": 2,
-                    "title": "핵심 인터랙션 수행",
-                    "description": "가이드에서 다루는 주요 기능(최적화/인증/캐시/스트리밍)을 실행합니다.",
-                    "actionBadge": "실무 실습"
+            step: 2,
+            title: "[전환 애니메이션 실행] 버튼 클릭",
+            description: "View Transition을 트리거하여 썸네일 카드를 상세 확대 뷰로 전환합니다.",
+            actionBadge: "트랜지션 실행",
           },
           {
-                    "step": 3,
-                    "title": "성능 및 동작 검증",
-                    "description": "네트워크 요청, 렌더링 수명 주기 및 상태 변화를 대조합니다.",
-                    "actionBadge": "동작 검증"
-          }
-]}
+            step: 3,
+            title: "확대 상세 뷰 모핑 애니메이션 및 부드러운 전환 관찰",
+            description: "DOM 구조 변경 시 브라우저가 이전/이후 스냅샷을 교차 페이드 및 크기 모핑하는 과정을 검증합니다.",
+            actionBadge: "모핑 검증",
+            observe: "전환 애니메이션 실행 클릭 시 썸네일에서 확대 상세 뷰로의 부드러운 View Transition 모핑 관찰",
+            observeAt: "playground",
+          },
+        ]}
       />
       <DemoPlaygroundCard title={"View Transitions 이미지 확대 애니메이션 실습"}>
         <ViewTransitionsDemo />
