@@ -1,5 +1,5 @@
 import React from 'react'
-import { PlayCircle, ArrowRight, Layers } from 'lucide-react'
+import { PlayCircle, ArrowRight } from 'lucide-react'
 
 export interface DemoItem {
   /** 데모 식별 URL 경로 (예: "caching/use-cache-basic") */
@@ -58,11 +58,14 @@ export function DocDemoList({
             <a
               key={demo.url}
               href={href}
-              className="group relative flex flex-col justify-between rounded-xl border border-zinc-200 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600 no-underline text-inherit"
+              className="group relative flex h-[116px] flex-col justify-between rounded-xl border border-zinc-200 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600 no-underline text-inherit"
             >
-              <div>
-                <div className="mb-1.5 flex items-start justify-between gap-2">
-                  <span className="text-sm font-semibold text-zinc-900 transition-colors group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300 no-underline">
+              <div className="min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <span
+                    className="line-clamp-2 text-sm font-semibold leading-snug text-zinc-900 transition-colors group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300 no-underline"
+                    title={demo.title}
+                  >
                     {demo.title}
                   </span>
                   {demo.status && demo.status !== 'done' && (
@@ -75,17 +78,17 @@ export function DocDemoList({
                 </div>
 
                 {demo.description && (
-                  <p className="mb-3 text-xs text-zinc-500 line-clamp-2 dark:text-zinc-400 no-underline">
+                  <p className="mt-1 text-xs text-zinc-500 line-clamp-1 dark:text-zinc-400 no-underline">
                     {demo.description}
                   </p>
                 )}
               </div>
 
-              <div className="mt-auto flex items-center justify-between border-t border-zinc-100 pt-2.5 text-xs text-zinc-400 dark:border-zinc-800/80">
-                <span className="font-mono text-[11px] text-zinc-400">
+              <div className="mt-auto flex items-center justify-between gap-2 border-t border-zinc-100 pt-2.5 text-xs text-zinc-400 dark:border-zinc-800/80">
+                <span className="font-mono text-[11px] text-zinc-400 truncate min-w-0" title={demo.url}>
                   {demo.url}
                 </span>
-                <div className="flex items-center gap-1 font-medium text-zinc-800 transition-transform group-hover:translate-x-0.5 dark:text-zinc-200">
+                <div className="flex shrink-0 items-center gap-1 font-medium text-zinc-800 transition-transform group-hover:translate-x-0.5 dark:text-zinc-200">
                   <span>데모 열기</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </div>
