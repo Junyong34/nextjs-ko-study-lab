@@ -2,13 +2,16 @@ import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { RscUserProfileDemo } from './components/RscUserProfileDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { getServerUserProfile } from './actions'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const initialProfile = await getServerUserProfile()
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"서버 컴포넌트(RSC) 내 안전한 회원 프로필 조회"}
-        concept={"클라이언트 노출 위험이 있는 localStorage 대신 서버 컴포넌트에서 cookies()를 직접 읽어 DB에서 VIP 회원 정보(적립금 15,200 P, 쿠폰 3장)를 0 KB 클라이언트 번들로 안전하게 렌더링합니다."}
+        title="서버 컴포넌트(RSC) 내 안전한 회원 프로필 조회"
+        concept="클라이언트 노출 위험이 있는 localStorage 대신 서버 컴포넌트에서 cookies()를 직접 읽어 DB에서 VIP 회원 정보(적립금 15,200 P, 쿠폰 3장)를 0 KB 클라이언트 번들로 안전하게 렌더링합니다."
         steps={[
           {
             step: 1,
@@ -18,9 +21,9 @@ export default function DemoPage() {
           },
           {
             step: 2,
-            title: "클라이언트 JS 번들 내 민감 개인정보 배제 상태 검사",
-            description: "회원 정보 조회 로직이 클라이언트 번들에 노출되지 않는 보안성을 점검합니다.",
-            actionBadge: "보안성 점검",
+            title: "[VIP 세션] 또는 [일반 회원] 버튼 선택으로 세션 전환",
+            description: "회원 정보 조회 로직이 클라이언트 번들에 노출되지 않는 보안성을 점검하고 세션별 데이터를 전환합니다.",
+            actionBadge: "세션 전환",
           },
           {
             step: 3,
@@ -32,8 +35,8 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"Server Component 세션 프로필 렌더링 실습"}>
-        <RscUserProfileDemo />
+      <DemoPlaygroundCard title="Server Component 세션 프로필 렌더링 실습">
+        <RscUserProfileDemo initialProfile={initialProfile} />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

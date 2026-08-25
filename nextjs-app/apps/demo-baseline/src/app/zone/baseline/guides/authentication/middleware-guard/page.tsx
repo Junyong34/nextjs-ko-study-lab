@@ -2,13 +2,16 @@ import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { MiddlewareGuardDemo } from './components/MiddlewareGuardDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { getAuthCookieState } from './actions'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const initialAuthState = await getAuthCookieState()
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Next.js 미들웨어 라우트 가드 및 인증 쿠키 검증"}
-        concept={"middleware.ts에서 요청 헤더의 auth_token 쿠키 유효성을 사전에 검증하여, 비인증 사용자의 보호 경로(/admin, /mypage) 접근을 0ms 에지 레벨에서 로그인 페이지로 차단합니다."}
+        title="Next.js 미들웨어 라우트 가드 및 인증 쿠키 검증"
+        concept="middleware.ts에서 요청 헤더의 auth_token 쿠키 유효성을 사전에 검증하여, 비인증 사용자의 보호 경로(/admin, /mypage) 접근을 0ms 에지 레벨에서 로그인 페이지로 차단합니다."
         steps={[
           {
             step: 1,
@@ -32,8 +35,8 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"Proxy/Middleware 기반 라우트 보호 가드 실습"}>
-        <MiddlewareGuardDemo />
+      <DemoPlaygroundCard title="Proxy/Middleware 기반 라우트 보호 가드 실습">
+        <MiddlewareGuardDemo initialState={initialAuthState} />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

@@ -2,13 +2,16 @@ import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { OndemandSyncDemo } from './components/OndemandSyncDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { getCachedProducts } from './actions'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const initialData = await getCachedProducts()
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"revalidateTag 온디맨드 즉각 캐시 동기화"}
-        concept={"Server Action에서 revalidateTag('products')를 호출하여 특정 태그가 부여된 서버 캐시를 즉시 퍼지하고, 다음 요청 방문자에게 0ms 지연 없이 최신 데이터베이스 상태를 서빙합니다."}
+        title="revalidateTag 온디맨드 즉각 캐시 동기화"
+        concept="Server Action에서 revalidateTag('products')를 호출하여 특정 태그가 부여된 서버 캐시를 즉시 퍼지하고, 다음 요청 방문자에게 0ms 지연 없이 최신 데이터베이스 상태를 서빙합니다."
         steps={[
           {
             step: 1,
@@ -32,8 +35,8 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"온디맨드 캐시 무효화 및 즉시 동기화 실습"}>
-        <OndemandSyncDemo />
+      <DemoPlaygroundCard title="온디맨드 캐시 무효화 및 즉시 동기화 실습">
+        <OndemandSyncDemo initialResult={initialData} />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

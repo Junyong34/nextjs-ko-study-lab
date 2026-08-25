@@ -2,13 +2,16 @@ import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { StartTransitionDemo } from './components/StartTransitionDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { filterCategoryProductsAction } from './actions'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const initialResult = await filterCategoryProductsAction('전체')
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"startTransition을 통한 프로그래밍 방식 Server Action 호출"}
-        concept={"<form> 태그 없이 일반 버튼 클릭 이벤트에서 React 19 startTransition을 호출하면, 600ms 비동기 Server Action 통신 중에도 메인 UI를 차단하지 않고 isPending 상태를 선언적으로 감지하여 로딩 인디케이터를 표시합니다."}
+        title="startTransition을 통한 프로그래밍 방식 Server Action 호출"
+        concept="<form> 태그 없이 일반 버튼 클릭 이벤트에서 React 19 startTransition을 호출하면, 600ms 비동기 Server Action 통신 중에도 메인 UI를 차단하지 않고 isPending 상태를 선언적으로 감지하여 로딩 인디케이터를 표시합니다."
         steps={[
           {
             step: 1,
@@ -32,8 +35,8 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"startTransition을 통한 프로그래밍 방식 Server Action 호출 실습"}>
-        <StartTransitionDemo />
+      <DemoPlaygroundCard title="startTransition을 통한 프로그래밍 방식 Server Action 호출 실습">
+        <StartTransitionDemo initialResult={initialResult} />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>
