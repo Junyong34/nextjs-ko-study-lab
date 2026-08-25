@@ -4,8 +4,6 @@ Next.js App Router 공식 문서 194개 주제를 바탕으로 구현된 241개 
 
 - **생성 일시**: 2026-08-24T21:44:25.684Z
 - **검증 범위**: `nextjs-app` 모노레포 241개 데모 전수 (100.0%)
-- **선행 계획서**: [13. 데모 [가이드] 섹션 최신화 및 정합성 검증 계획](./13-demo-guide-section-modernization-plan.md)
-- **감사 기준**: [10. 데모 감사 보고서](./10-demo-audit-report.md), [12. DeepDive 감사 보고서](./12-demo-deepdive-audit-report.md)
 - **관련 규약**: [`AGENTS.md`](../AGENTS.md) 규칙 15·21·23·24·25
 
 ---

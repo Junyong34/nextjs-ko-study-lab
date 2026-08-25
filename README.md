@@ -6,8 +6,8 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 
 ```
 nextjs-ko-study-lab/
-├─ nextjs-docs/   # Next.js App Router 학습 문서 (Phase 1, 완료)
-├─ nextjs-app/    # Next.js 데모 사이트 (Phase 2, 진행 중)
+├─ nextjs-docs/   # Next.js App Router 학습 문서 194편 (Phase 1, 완료)
+├─ nextjs-app/    # Next.js 데모 사이트 — 데모 241건 (Phase 2, 진행 중)
 ├─ CONTEXT-MAP.md # 컨텍스트 용어집과 관계
 ├─ AGENTS.md      # 저장소 전체 작업 규칙
 ├─ CLAUDE.md
@@ -30,8 +30,11 @@ nextjs-ko-study-lab/
 - [지원 범위](./.github/SUPPORT.md)
 - [보안 정책](./.github/SECURITY.md)
 
-## 데모 사이트 설계 바로가기
+## 데모 사이트 (Phase 2)
 
+학습 문서 194편을 화면에 그리고, 각 개념의 인터랙티브 데모 **241건**을 실행하는 pnpm + Turborepo 멀티 존 모노레포입니다.
+
+- [데모 사이트 개요 및 실행 방법](./nextjs-app/README.md)
 - [설계 문서 목차](./nextjs-app/docs/README.md)
 - [모노레포 구성 방식 조사와 선택](./nextjs-app/docs/02-monorepo-options.md)
 - [결합 구조 설계](./nextjs-app/docs/03-composition-architecture.md)

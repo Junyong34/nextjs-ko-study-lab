@@ -15,11 +15,8 @@ Phase 2의 아키텍처 조사·설계 결과 및 ADR 기록입니다. 멀티 �
 | 07 | [코드베이스 심층 분석 및 데이터 흐름 가이드](./07-codebase-deep-dive-guide.md) | 모노레포 파일 토폴로지, YAML 파이프라인, 패키지 격리 정책(규칙 17), 셸/데모 뼈대 네비게이션 |
 | 08 | [전체 목차 데모 기획 및 판정 매트릭스](./08-demo-planning-matrix.md) | 264편 전체 1차 필터링, 예상 데모 수 산출, 4대 이커머스 시나리오 매핑, 대체 설명 가이드 |
 | 09 | [데모 표준 구조 및 4단 레이아웃 패턴](./09-demo-standard-and-layout-pattern.md) | 실제 Next.js 파일 컨벤션/라우팅 원칙(No-Simulation) 및 fieldset 4단 표준 템플릿 |
-| 10 | [데모 감사 보고서](./10-demo-audit-report.md) | 241건 전체 정적 코드 전수 검사 결과 및 구조적 결함 리포트 |
-| 12 | [DeepDive 카드 감사 보고서](./12-demo-deepdive-audit-report.md) | 4단 `DemoDeepDiveCard` 5섹션 규격 전수 검사 결과 |
-| 13 | [데모 가이드 섹션 최신화 계획](./13-demo-guide-section-modernization-plan.md) | 1단 `[가이드]` 실행 절차 전수 진단(템플릿 오염 197건), 트랙 분류, 마일스톤, 자동 검증 장치 |
-| 14 | [가이드 정합성 감사 보고서](./14-demo-guide-audit-report.md) | GC01~GC07 규칙별 M0 기준선 수치와 카테고리 분포 |
-| 15 | [M2 진행 보고서](./15-m2-progress-report.md) | `file-conventions`·`components`·`directives` 61건 중 15건 재작성, 46건 보류 근거, 검증기 결함 3건 수정 |
+| 14 | [가이드 정합성 감사 보고서](./14-demo-guide-audit-report.md) | GC01~GC07 규칙별 감사 수치와 카테고리 분포. `pnpm test:guide-audit`로 **자동 재생성**됨 |
+| 14-T2b | [T2-b 실습 고도화 백로그 보고서](./14-demo-t2b-backlog-report.md) | 가이드 전수 현대화(M0~M5) 완료 보고와 T2-b 대상 241건 우선순위 로드맵. `scripts/generate-t2b-report.ts`로 **자동 재생성**됨 |
 
 ## ADR
 
