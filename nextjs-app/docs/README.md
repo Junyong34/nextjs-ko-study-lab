@@ -15,6 +15,7 @@ Phase 2의 아키텍처 조사·설계 결과 및 ADR 기록입니다. 멀티 �
 | 07 | [코드베이스 심층 분석 및 데이터 흐름 가이드](./07-codebase-deep-dive-guide.md) | 모노레포 파일 토폴로지, YAML 파이프라인, 패키지 격리 정책(규칙 17), 셸/데모 뼈대 네비게이션 |
 | 08 | [전체 목차 데모 기획 및 판정 매트릭스](./08-demo-planning-matrix.md) | 264편 전체 1차 필터링, 예상 데모 수 산출, 4대 이커머스 시나리오 매핑, 대체 설명 가이드 |
 | 09 | [데모 표준 구조 및 4단 레이아웃 패턴](./09-demo-standard-and-layout-pattern.md) | 실제 Next.js 파일 컨벤션/라우팅 원칙(No-Simulation) 및 fieldset 4단 표준 템플릿 |
+| 10 | [Vercel 배포 계획](./10-vercel-deployment-plan.md) | zone당 프로젝트 분리, Related Projects로 `ZONE_*_URL`/`PUBLIC_ORIGIN` 프리뷰 문제 해결, Ignored Build Step·원격 캐시·첫 배포 검증 절차 |
 | 14 | [가이드 정합성 감사 보고서](./14-demo-guide-audit-report.md) | GC01~GC07 규칙별 감사 수치와 카테고리 분포. `pnpm test:guide-audit`로 **자동 재생성**됨 |
 | 14-T2b | [T2-b 실습 고도화 백로그 보고서](./14-demo-t2b-backlog-report.md) | 가이드 전수 현대화(M0~M5) 완료 보고와 T2-b 대상 241건 우선순위 로드맵. `scripts/generate-t2b-report.ts`로 **자동 재생성**됨 |
 
