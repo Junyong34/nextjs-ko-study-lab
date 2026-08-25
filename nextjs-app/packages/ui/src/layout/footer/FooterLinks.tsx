@@ -3,7 +3,7 @@ import { ExternalLink, Sparkles } from 'lucide-react'
 import { GitHubIcon } from '../../brand'
 
 export interface FooterLinksProps {
-  /** 화면에 표시할 기준 버전 (예: "v16.3.1") */
+  /** 화면에 표시할 기준 버전 (예: "v16.3.2") */
   version: string
   /** 해당 버전의 릴리스 노트 URL */
   releaseUrl: string

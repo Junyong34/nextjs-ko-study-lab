@@ -42,7 +42,7 @@ ADR 6건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있�
 
 ## 스택
 
-- Next.js App Router **16.3.1** + React **19.2.8** + TypeScript + Tailwind CSS v4
+- Next.js App Router **16.3.2** + React **19.2.8** + TypeScript + Tailwind CSS v4
 - pnpm workspaces + Turborepo (워크스페이스 루트는 저장소 루트)
 - 기준 버전은 루트 `pnpm-workspace.yaml`의 catalog 한 곳에서만 선언하며, `nextjs-docs/README.md`의 학습 기준 버전과 같은 값입니다
 

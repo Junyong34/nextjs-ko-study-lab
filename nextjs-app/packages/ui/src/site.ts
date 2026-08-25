@@ -9,10 +9,10 @@
  * 그 자체로 결함이며, catalog에서 읽어오도록 만드는 것은 별도 티켓입니다.
  */
 export const SITE = {
-  version: 'v16.3.1',
+  version: 'v16.3.2',
   officialDocsUrl: 'https://nextjs.org/docs/app',
   repoUrl: 'https://github.com/Junyong34/nextjs-ko-study-lab',
-  releaseUrl: 'https://github.com/vercel/next.js/releases/tag/v16.3.1',
+  releaseUrl: 'https://github.com/vercel/next.js/releases/tag/v16.3.2',
   /** 피드백 모달이 여는 mailto 목적지 */
   feedbackTo: 'wnsdyd21@gmail.com',
 } as const

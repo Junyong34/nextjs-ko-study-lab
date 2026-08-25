@@ -49,7 +49,7 @@ describe('Tier 2: Feature 3 - DeepDive Content Boundaries & Escaping', () => {
   })
 
   it('2.3.5 should handle special Korean Unicode characters and typography in card headers', () => {
-    const header = 'Next.js 16.3.1 캐시 컴포넌트 & 스트리밍 SSR'
+    const header = 'Next.js 16.3.2 캐시 컴포넌트 & 스트리밍 SSR'
     const normalized = header.normalize('NFC')
     assert.strictEqual(normalized, header)
   })

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { NextLogo } from '../../brand'
 
 export interface HeaderBrandProps {
-  /** 화면에 표시할 기준 버전 (예: "v16.3.1") */
+  /** 화면에 표시할 기준 버전 (예: "v16.3.2") */
   version: string
 }
 

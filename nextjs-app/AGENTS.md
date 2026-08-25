@@ -20,7 +20,7 @@ Next.js 학습 데모 사이트가 들어설 자리다. **착수 조건이 충�
 
 ## 스택
 
-- Next.js App Router **16.3.1** + React 19 + TypeScript + Tailwind CSS v4
+- Next.js App Router **16.3.2** + React 19 + TypeScript + Tailwind CSS v4
 - UI는 **shadcn/ui**를 소스로 복사해 쓴다. 문서 프레임워크(Nextra 등)는 쓰지 않는다 ([ADR 0006](./docs/adr/0006-shadcn-ui-as-ui-foundation.md))
 - pnpm workspaces + Turborepo ([ADR 0002](./docs/adr/0002-pnpm-turborepo-catalog-pinning.md))
 - 워크스페이스 루트는 **저장소 루트**다. 이 디렉토리가 아니다
@@ -39,14 +39,14 @@ zone 배분과 포트는 [03. 결합 구조 설계 2절](./docs/03-composition-a
 
 ## 지켜야 할 것
 
-1. **버전을 `package.json`에 직접 적지 않는다.** `next`·`react`·`react-dom`은 반드시 `"catalog:"`로 참조한다. 기준 버전이 선언되는 곳은 루트 `pnpm-workspace.yaml` 하나뿐이며, 그 값은 `nextjs-docs/README.md`의 학습 기준 버전과 **항상 같아야 한다** (현재 `16.3.1`). 올릴 때는 두 곳을 같은 커밋에서 고친다.
+1. **버전을 `package.json`에 직접 적지 않는다.** `next`·`react`·`react-dom`은 반드시 `"catalog:"`로 참조한다. 기준 버전이 선언되는 곳은 루트 `pnpm-workspace.yaml` 하나뿐이며, 그 값은 `nextjs-docs/README.md`의 학습 기준 버전과 **항상 같아야 한다** (현재 `16.3.2`). 올릴 때는 두 곳을 같은 커밋에서 고친다.
 2. **rewrites 목적지를 하드코딩하지 않는다.** 반드시 환경변수(`ZONE_*_URL`)로 둔다. 로컬↔배포 전환이 이것 하나에 달려 있다.
 3. **zone 사이 이동은 상대 경로로만 한다.** 학습자는 항상 셸 도메인에 있다. 절대 URL로 링크하면 주소창이 튀어나가 통합 환상이 깨진다.
 4. **zone 경계를 넘는 링크에 `<Link>`를 쓰지 않는다.** `<a>`를 쓴다. `<Link>`의 prefetch와 soft navigation은 zone 경계를 넘지 못한다. 다만 이 설계에서 학습자 이동은 전부 셸 안이라 그럴 일이 거의 없다.
 5. **dev 포트를 고정한다.** 셸의 rewrites 목적지가 고정 포트를 가리키므로, 포트가 밀리면 그 zone은 통째로 502가 된다.
 6. **셸에는 데모를 두지 않는다.** 셸은 문서 렌더링과 라우팅만 책임진다.
 7. **zone을 추가할 때는** [01. 구성 절차 4절](./docs/01-project-setup.md)의 체크리스트를 그대로 따른다. 항목 하나만 빠져도 그 zone은 사이트에서 보이지 않는다.
-8. **`create-next-app`에 `--turbopack`을 넘기지 않는다.** 16.3.1에는 그런 플래그가 없고, 이 CLI는 모르는 플래그를 조용히 무시한다. Turbopack은 기본값이다.
+8. **`create-next-app`에 `--turbopack`을 넘기지 않는다.** 16.3.2에는 그런 플래그가 없고, 이 CLI는 모르는 플래그를 조용히 무시한다. Turbopack은 기본값이다.
 9. **데모 앱에 `public/`을 두지 않는다.** `assetPrefix`는 `_next/static`에만 붙어서, `public/`의 파일과 `/_next/image`는 셸의 rewrites에 걸리지 않는다. 이미지는 `unoptimized`로 두거나 셸에 둔다.
 10. **데모의 존재는 `demos.yaml`이 정한다.** md의 `demo` 코드펜스는 **본문 링크 위치만** 정한다. 지시자를 데모 목록으로 쓰지 않는다 ([ADR 0004](./docs/adr/0004-demo-list-as-source-of-truth.md)).
 11. **학습자 URL에 zone을 넣지 않는다.** 학습자는 `/demo/{문서}/{데모}`, 내부는 `/zone/{슬러그}/…`. 데모가 zone을 옮겨도 주소가 깨지지 않아야 한다 ([ADR 0005](./docs/adr/0005-hide-zone-from-learner-url.md)).
@@ -59,7 +59,7 @@ zone 배분과 포트는 [03. 결합 구조 설계 2절](./docs/03-composition-a
 18. **셸의 스토리지 키에도 접두사를 붙인다.** 모든 zone이 동일 오리진이라 데모가 셸의 상태를 덮어쓸 수 있다. 셸은 `study_*`(테마는 `study_theme`), 데모 앱은 `demo_{슬러그}_*`를 쓴다 ([06. 8-2](./docs/06-ui-and-screen-design.md), [03. 6-5](./docs/03-composition-architecture.md)).
 19. **화면 라벨과 도메인 용어를 섞지 않는다.** 화면에는 `예제`라고 쓰지만 URL·파일·설계 문서의 용어는 `데모`다. 코드에서 `example`로 바꿔 쓰지 않는다 ([06. 6-2](./docs/06-ui-and-screen-design.md)).
 20. **디자인 토큰 이름을 새로 만들지 않는다.** shadcn의 Tailwind v4 규약(`@theme inline` + oklch)을 그대로 쓴다 ([06. 8-1](./docs/06-ui-and-screen-design.md)).
-21. **Next.js MCP(`next-devtools`)를 적극 활용한다.** 데모 설계 및 구현 시 `next-devtools` MCP(`nextjs_docs`, `nextjs_index`, `nextjs_call`)를 호출하여 `next@16.3.1` 공식 최신 API 스펙, 올바른 시그니처 및 주의사항을 1차 출처로 교차 검증한다.
+21. **Next.js MCP(`next-devtools`)를 적극 활용한다.** 데모 설계 및 구현 시 `next-devtools` MCP(`nextjs_docs`, `nextjs_index`, `nextjs_call`)를 호출하여 `next@16.3.2` 공식 최신 API 스펙, 올바른 시그니처 및 주의사항을 1차 출처로 교차 검증한다.
 22. **단일 파일 250줄 제한과 모듈별 분리를 엄격히 준수한다.** 한 파일에 모든 로직을 쏟아붓지 않는다. `page.tsx`(100~150줄 내외, 고수준 조립), `actions.ts`(Server Actions), `types.ts`(타입 정의), `components/*.tsx`(하위 위젯/폼 분리), `hooks/*.ts`(상태 로직)로 분할하여 유지보수성과 가독성을 극대화한다.
 23. **`@study/demo-kit`의 재사용성을 극대화한다.** `DemoContainer`, `DemoGuideCard`, `ExpectedActualPanel`, `DemoResetButton`, `DemoDeepDiveCard` 등의 공통 컴포넌트를 필수로 활용하여 보일러플레이트 중복을 방지하고, 데모 코드는 핵심 기능에만 집중하도록 컴팩트하게 작성한다.
 24. **가짜 시뮬레이션(Fake Mocking)을 엄격히 금지하고, 실제 Next.js 파일 시스템 규칙과 라우터를 사용한다.**

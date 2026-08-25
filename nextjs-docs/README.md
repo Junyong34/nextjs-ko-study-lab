@@ -38,5 +38,5 @@ flowchart TD
 ## 🌐 기준 및 환경
 
 - **Next.js 공식 문서 기준**: [Next.js App Router Documentation](https://nextjs.org/docs/app)
-- **학습 기준 버전**: **Next.js 16.3.1** (React 19.2.8 / Turbopack)
+- **학습 기준 버전**: **Next.js 16.3.2** (React 19.2.8 / Turbopack)
 - **오픈소스 커리큘럼**: 모든 문서는 오픈소스로 유지관리되며, 개선 제안이나 오류 제보는 하단 **[피드백 보내기]**를 통해 언제든 전달하실 수 있습니다.

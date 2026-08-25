@@ -11,7 +11,7 @@ const DOCS_CONTENT: Record<string, { title: string; desc: string; sections: stri
   },
   installation: {
     title: '환경 설정 및 설치 가이드 (installation)',
-    desc: 'pnpm 및 Next.js 16.3.1 프로젝트 초기화 설정 매뉴얼입니다.',
+    desc: 'pnpm 및 Next.js 16.3.2 프로젝트 초기화 설정 매뉴얼입니다.',
     sections: ['패키지 매니저 설치', '의존성 카탈로그 동기화', 'Next.js Dev Server 구동'],
   },
   'routing/dynamic-routes': {

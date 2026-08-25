@@ -66,7 +66,7 @@ graph TD
 - **루트 `pnpm-workspace.yaml` 선언부**:
   ```yaml
   catalog:
-    next: 16.3.1
+    next: 16.3.2
     react: 19.2.8
     react-dom: 19.2.8
     '@types/react': ^19.2.0

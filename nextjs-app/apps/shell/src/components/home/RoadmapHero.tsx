@@ -24,7 +24,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
         {/* Release & Environment Badges */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-semibold text-zinc-900 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
-            Next.js 16.3.1
+            Next.js 16.3.2
           </span>
           <span className="inline-flex items-center rounded-full border border-zinc-200/80 bg-zinc-100/80 px-2.5 py-0.5 text-xs text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400">
             React 19.2.8
