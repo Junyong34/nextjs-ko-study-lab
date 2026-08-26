@@ -6,7 +6,7 @@
 
 ## 1. 모노레포 전체 토폴로지 및 파일 맵
 
-저장소는 **1개의 모노레포 루트, 1개의 문서 저장소, 3개의 독립 Next.js 앱, 4개의 공유 패키지**로 구성되어 있습니다.
+저장소는 **1개의 모노레포 루트, 1개의 문서 저장소, 3개의 독립 Next.js 앱, 5개의 공유 패키지**로 구성되어 있습니다.
 
 ```
 nextjs-ko-study-lab/
@@ -23,22 +23,30 @@ nextjs-ko-study-lab/
 └── nextjs-app/
     ├── ARCHITECTURE.md               # 시스템 아키텍처 명세서 (SSOT)
     ├── CONTEXT.md                    # 데모 사이트 도메인 용어집
-    ├── AGENTS.md                     # 작업 규칙 (규칙 1~20)
+    ├── AGENTS.md                     # 작업 규칙 (규칙 1~25)
+    ├── scripts/                      # 콘텐츠 생성/마이그레이션용 1회성 스크립트 (generate-all-demos 등)
     │
     ├── packages/                     # [공유 패키지 레이어]
     │   ├── demos/                    # 데모 메타데이터 및 도구 (demos.yaml SSOT)
-    │   │   ├── demos.yaml            # 전체 데모의 고유 URL, 제목, zone, 상태 선언
+    │   │   ├── demos.yaml            # 전체 데모의 고유 URL, 제목, zone, 상태 선언 (2026-08 기준 241개, 전부 done)
     │   │   ├── scripts/              # build-manifest, lint, gen-stubs 도구
     │   │   └── src/index.ts          # Zod 스키마, 데모 조회 함수
     │   ├── demo-kit/                 # 데모 앱 전용 공통 UI 키트 (규칙 17)
     │   │   ├── DemoContainer.tsx     # 데모 루트 래퍼 (ResizeObserver 탑재)
-    │   │   ├── ExpectedActualPanel.tsx# 기대값 vs 실제값 검증 패널
+    │   │   ├── DemoGuideCard.tsx     # 4단 레이아웃 1단: 가이드 카드 (규칙 25)
+    │   │   ├── DemoPlaygroundCard.tsx# 4단 레이아웃 2단: 실습 화면 카드
+    │   │   ├── DemoDeepDiveCard.tsx  # 4단 레이아웃 4단: 개념 정리 카드
+    │   │   ├── ExpectedActualPanel.tsx# 4단 레이아웃 3단: 기대값 vs 실제값 검증 패널
     │   │   ├── DemoResetButton.tsx   # 데모 상태 초기화 버튼
+    │   │   ├── ecommerce/            # 이커머스 도메인 데모 전용 키트 (ProductCard, CartSummary 등, ADR 0007)
     │   │   └── useResizeBridge.ts    # 셸로 DEMO_RESIZE postMessage를 전송하는 훅
     │   ├── docs-render/              # 셸 전용 문서 렌더링 엔진 (Server Component)
     │   │   ├── markdown/             # MarkdownRenderer 스캐너, 파서, AST 노드
     │   │   ├── code/                 # Shiki 문법 강조, CodeBlock
     │   │   └── demo/                 # DemoLinkCard, DemoIframe, useDemoResizeBridge
+    │   ├── test-suite/                # 개발용 테스트/감사 스위트 (런타임 미배포)
+    │   │   ├── src/tier1-feature-coverage ~ tier5-adversarial-hardening/ # 5단계 테스트
+    │   │   └── src/runners/          # run-all-tests, guide-consistency-validator, route-manifest-integrity 등
     │   └── ui/                       # 셸 전용 프레임 UI 패키지 (규칙 17)
     │       ├── layout/               # Header, Footer, FooterLinks, FeedbackTrigger
     │       ├── nav/                  # DocTree (사이드바), TableOfContents (우측 목차)
@@ -95,7 +103,7 @@ flowchart TD
 ```
 
 ### 2.1 `pnpm-workspace.yaml`의 카탈로그(`catalog:`) 원리
-- **중앙 선언**: 루트 `pnpm-workspace.yaml`에 `next: 16.3.1`, `react: 19.2.8`을 정의합니다.
+- **중앙 선언**: 루트 `pnpm-workspace.yaml`에 `next: 16.3.2`, `react: 19.2.8`을 정의합니다.
 - **앱/패키지 주입**: 각 하위 `package.json`에서는 `"next": "catalog:"`로 선언합니다.
 - **효과**: 3개 Next.js 앱과 4개 패키지가 **정확히 동일한 버전**을 바라보며, 버전 파편화로 인한 React 훅 충돌이나 번들 중복이 원천 차단됩니다.
 
@@ -141,7 +149,7 @@ graph LR
     end
 
     subgraph DemoScope ["데모 존 영역 (apps/demo-*)"]
-        DemoKit["@study/demo-kit<br/>(DemoContainer, ExpectedActualPanel, useResizeBridge)"]:::demoPkg
+        DemoKit["@study/demo-kit<br/>(DemoContainer, DemoGuideCard,<br/>DemoPlaygroundCard, DemoDeepDiveCard,<br/>ExpectedActualPanel, ecommerce/)"]:::demoPkg
         DemoBaseline["apps/demo-baseline (:3001)"]:::appStyle
         DemoCache["apps/demo-cache-components (:3002)"]:::appStyle
         DemoKit --> DemoBaseline
@@ -159,7 +167,7 @@ graph LR
 * **격리 이유 (규칙 17)**: 데모 앱이 `@study/ui`를 참조하는 순간, Next.js의 `transpilePackages`를 통해 사이드바 트리, 검색 로직, 모달 등 무거운 셸 전용 코드가 데모 앱의 클라이언트 번들로 끌려 들어갑니다. 데모 앱의 빌드 크기와 CSS를 가볍게 유지하기 위해 엄격히 격리합니다.
 
 ### 3.2 `@study/demo-kit` (데모 앱 전용 UI) 정책
-* **담당 역할**: 데모 존의 표준 래퍼 및 검증 도구 (`DemoContainer`, `ExpectedActualPanel`, `DemoResetButton`, `useResizeBridge`).
+* **담당 역할**: 데모 존의 표준 래퍼 및 검증 도구 (`DemoContainer`, `ExpectedActualPanel`, `DemoResetButton`, `useResizeBridge`), 그리고 모든 데모가 따르는 4단 표준 레이아웃(가이드→실습→검증→개념 정리)을 구성하는 `DemoGuideCard`/`DemoPlaygroundCard`/`DemoDeepDiveCard` (`AGENTS.md` 규칙 25). 이커머스 도메인 데모용 `ecommerce/`(`ProductCard`, `CartSummary`, `DeliveryTracker`, mock 데이터, ADR 0007)도 포함합니다.
 * **사용처**: **`apps/demo-baseline`, `apps/demo-cache-components` 등 모든 데모 zone 앱.**
 * **특징**:
   * Tailwind 클래스만 사용하는 초경량 순수 컴포넌트입니다.
@@ -187,6 +195,7 @@ graph LR
 | **데모 앱 내부 실행 코드 (Cache Zone)** | [`apps/demo-cache-components/src/app/zone/cache/...`](../apps/demo-cache-components/src/app/zone/cache/caching/basic/page.tsx) | `@study/demo-kit` (`DemoContainer`, `ExpectedActualPanel`) |
 | **전역 데모 목록 및 메타데이터 추가** | [`packages/demos/demos.yaml`](../packages/demos/demos.yaml) | `packages/demos/scripts/` (`lint.mjs`, `gen-stubs.mjs`, `build-manifest.mjs`) |
 | **전역 반복 스타일/디자인 토큰 상수** | [`packages/ui/src/styles.ts`](../packages/ui/src/styles.ts) | `@study/ui` 내부 primitives 및 layout 컴포넌트 전반 |
+| **테스트/검증 스크립트 작성 및 실행** | [`packages/test-suite/src/runners/run-all-tests.ts`](../packages/test-suite/src/runners/run-all-tests.ts) | `src/tier1-feature-coverage` ~ `tier5-adversarial-hardening` (테스트 본문), `src/runners/guide-consistency-validator.ts` · `route-manifest-integrity.ts` (감사 스크립트) |
 
 ---
 
