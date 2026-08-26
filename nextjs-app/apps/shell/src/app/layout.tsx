@@ -25,7 +25,7 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="ko" className="h-full" suppressHydrationWarning>
+    <html lang="ko" className="h-full">
       <body className="flex min-h-full flex-col bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
         <Header />
         <div className="mx-auto flex w-full max-w-[90rem] flex-1 items-start px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">

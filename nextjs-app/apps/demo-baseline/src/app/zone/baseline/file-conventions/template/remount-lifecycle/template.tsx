@@ -14,7 +14,7 @@ export default function RemountTemplate({ children }: { children: React.ReactNod
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-200 pb-2 dark:border-indigo-900">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
-          <span className="font-bold text-xs text-indigo-950 dark:text-indigo-200">
+          <span className="font-bold text-xs text-zinc-900 dark:text-zinc-100">
             template.tsx (페이지 전환 시 매번 재마운트 & 상태 리셋)
           </span>
         </div>
