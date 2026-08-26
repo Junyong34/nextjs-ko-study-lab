@@ -18,6 +18,7 @@ Phase 2의 아키텍처 조사·설계 결과 및 ADR 기록입니다. 멀티 �
 | 10 | [Vercel 배포 계획](./10-vercel-deployment-plan.md) | zone당 프로젝트 분리, Related Projects로 `ZONE_*_URL`/`PUBLIC_ORIGIN` 프리뷰 문제 해결, Ignored Build Step·원격 캐시·첫 배포 검증 절차 |
 | 14 | [가이드 정합성 감사 보고서](./14-demo-guide-audit-report.md) | GC01~GC07 규칙별 감사 수치와 카테고리 분포. `pnpm test:guide-audit`로 **자동 재생성**됨 |
 | 14-T2b | [T2-b 실습 고도화 백로그 보고서](./14-demo-t2b-backlog-report.md) | 가이드 전수 현대화(M0~M5) 완료 보고와 T2-b 대상 241건 우선순위 로드맵. `scripts/generate-t2b-report.ts`로 **자동 재생성**됨 |
+| 16 | [학습 기록 기능 설계](./16-learning-progress-design.md) | 문서·데모의 사용자 완료 표시, 셸 소유 localStorage 상태, 기록 Drawer와 전체 기록 화면 |
 
 ## ADR
 
@@ -30,6 +31,7 @@ Phase 2의 아키텍처 조사·설계 결과 및 ADR 기록입니다. 멀티 �
 | [0005](./adr/0005-hide-zone-from-learner-url.md) | 학습자 URL에서 zone을 감추고, 데모 앱 경로는 `/zone/*`으로 분리한다 |
 | [0006](./adr/0006-shadcn-ui-as-ui-foundation.md) | UI 기반은 shadcn/ui로 하고, 문서 프레임워크는 쓰지 않는다 *(0003의 지시자 렌더 결과를 링크 카드로 바꿈)* |
 | [0007](./adr/0007-ecommerce-domain-and-demo-phasing.md) | 데모는 이커머스 통합 컨셉과 하이브리드 플레이그라운드 구조를 따르고, 4단계 판정과 3단계 체크포인트로 검증한다 |
+| [0008](./adr/0008-shell-owned-client-learning-progress.md) | 셸이 브라우저 기반 학습 기록을 소유하고 현재 원본으로 화면을 계산한다 |
 
 ## 용어
 

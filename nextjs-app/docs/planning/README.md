@@ -4,6 +4,10 @@
 - 상위 기획: [08. 전체 목차 데모 기획 및 판정 매트릭스](../08-demo-planning-matrix.md)
 - 근거 결정: [ADR 0007 이커머스 도메인 및 데모 단계화](../adr/0007-ecommerce-domain-and-demo-phasing.md)
 
+## 별도 기능 계획
+
+- [학습 기록 기능 구현 계획](./learning-progress.md) — 셸이 소유하는 문서·데모 완료 표시, localStorage 저장, Drawer·전체 기록 화면, 검증 단계
+
 ---
 
 ## 1. 개요
@@ -57,4 +61,3 @@
    - `hooks/*.ts`: 복잡한 클라이언트 상태 로직 분리.
 3. **`@study/demo-kit` 재사용 극대화**:
    - `DemoContainer`, `ExpectedActualPanel`, `DemoResetButton`을 필수로 사용하여 중복 코드를 제거하고, 간결하고 유지보수하기 쉬운 데모 코드를 작성합니다.
-
