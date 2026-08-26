@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { MarkdownRenderer, parseHeadings, isGlossaryDoc } from '@study/docs-render'
 import { TableOfContents } from '@study/ui'
 import { getManifest, getDocBySlug, getDocContent, getDemos } from '@/lib/docs'
+import { LearningCompletionControl } from '@/components/learning-progress/LearningCompletionControl'
 
 interface PageProps {
   params: Promise<{
@@ -71,6 +72,12 @@ export default async function DocPage({ params }: PageProps) {
             ))}
           </div>
         )}
+
+        <LearningCompletionControl
+          kind="document"
+          itemKey={doc.path}
+          label="이 문서를 학습 완료로 표시"
+        />
 
         {/* Main Content */}
         <div className="prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:font-medium prose-pre:bg-zinc-900 dark:prose-pre:bg-zinc-900">

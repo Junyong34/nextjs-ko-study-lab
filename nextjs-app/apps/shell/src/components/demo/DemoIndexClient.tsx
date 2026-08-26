@@ -6,6 +6,7 @@ import { DemoIndexToolbar, DemoIndexCard, DemoPagination, DemoEmptyState } from 
 import type { DemoIndexViewModel } from '@/lib/demo-index'
 import { buildDemoIndexUrl } from '@/lib/demo-index'
 import { useDemoListRestoration } from './useDemoListRestoration'
+import { useLearningProgress } from '@/components/learning-progress/LearningProgressProvider'
 
 export interface DemoIndexClientProps {
   viewModel: DemoIndexViewModel
@@ -16,6 +17,7 @@ export function DemoIndexClient({ viewModel }: DemoIndexClientProps) {
   const [isPending, startTransition] = useTransition()
   const [searchInput, setSearchInput] = useState(viewModel.query.q)
   const listRef = useRef<HTMLDivElement>(null)
+  const { isCompleted } = useLearningProgress()
 
   const currentUrl = buildDemoIndexUrl(viewModel.query)
   const { saveContextOnCardClick } = useDemoListRestoration(currentUrl)
@@ -108,6 +110,7 @@ export function DemoIndexClient({ viewModel }: DemoIndexClientProps) {
               url={item.id}
               title={item.title}
               status={item.status}
+              learningCompleted={item.status === 'done' ? isCompleted('demo', item.id) : undefined}
               doc={item.docTitle}
               docUrl={item.docUrl}
               category={item.category}

@@ -1,8 +1,7 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { DemoIframe } from '@study/docs-render'
-import { DemoPageHeader, DemoEmptyState, DocDemoHub } from '@study/ui'
+import { DemoEmptyState } from '@study/ui'
 import {
   getDemos,
   getDemoByUrl,
@@ -11,7 +10,8 @@ import {
   getDocBySlug,
   findDocForDemo,
 } from '@/lib/docs'
-import { DemoBackButton } from '@/components/demo/DemoBackButton'
+import { LearningDocDemoHub } from '@/components/demo/LearningDocDemoHub'
+import { DemoViewer } from '@/components/demo/DemoViewer'
 
 interface DemoPageProps {
   params: Promise<{
@@ -98,36 +98,15 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
     const docSlug = matchedDoc ? matchedDoc.slug.join('/') : ''
     const backUrl = docSlug ? `/demo/${docSlug}` : '/demo'
     const backLabel = matchedDoc ? `${matchedDoc.title} 데모 목록` : '전체 데모 목록'
-    const iframeSrc = `/zone/${directDemo.zone}/${directDemo.url}`
-
     return (
-      <div className="space-y-6">
-        <DemoPageHeader
-          title={directDemo.title}
-          zone={directDemo.zone}
-          status={directDemo.status}
-          url={directDemo.url}
-          docUrl={matchedDoc?.url ?? '/'}
-          docTitle={matchedDoc?.title ?? directDemo.doc}
-          backUrl={backUrl}
-          backLabel={backLabel}
-          customBackButton={<DemoBackButton fallbackUrl={backUrl} fallbackLabel={backLabel} />}
-          siblingDemos={siblingDemos}
-          currentDemoUrl={directDemo.url}
-        />
-
-        <div className="w-full">
-          <DemoIframe
-            variant="standalone"
-            src={iframeSrc}
-            label={iframeSrc}
-            title={directDemo.title}
-            externalHref={iframeSrc}
-            initialHeight={600}
-            minHeight={400}
-          />
-        </div>
-      </div>
+      <DemoViewer
+        demo={directDemo}
+        docUrl={matchedDoc?.url ?? '/'}
+        docTitle={matchedDoc?.title ?? directDemo.doc}
+        backUrl={backUrl}
+        backLabel={backLabel}
+        siblingDemos={siblingDemos}
+      />
     )
   }
 
@@ -161,45 +140,25 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
   // 2-B. 특정 데모 실행 쿼리(?run=...)가 지정된 경우 -> 데모 실행 뷰어 노출
   if (run) {
     const runningDemo = docDemos.find((d) => d.url === run) || getDemoByUrl(run) || docDemos[0]
-    const iframeSrc = `/zone/${runningDemo.zone}/${runningDemo.url}`
     const backUrl = `/demo/${docSlug}`
     const backLabel = `${doc.title} 데모 목록`
 
     return (
-      <div className="space-y-6">
-        <DemoPageHeader
-          title={runningDemo.title}
-          zone={runningDemo.zone}
-          status={runningDemo.status}
-          url={runningDemo.url}
-          docUrl={doc.url}
-          docTitle={doc.title}
-          backUrl={backUrl}
-          backLabel={backLabel}
-          customBackButton={<DemoBackButton fallbackUrl={backUrl} fallbackLabel={backLabel} />}
-          siblingDemos={docDemos}
-          currentDemoUrl={runningDemo.url}
-          getDemoHref={(targetUrl) => `/demo/${docSlug}?run=${encodeURIComponent(targetUrl)}`}
-        />
-
-        <div className="w-full">
-          <DemoIframe
-            variant="standalone"
-            src={iframeSrc}
-            label={iframeSrc}
-            title={runningDemo.title}
-            externalHref={iframeSrc}
-            initialHeight={600}
-            minHeight={400}
-          />
-        </div>
-      </div>
+      <DemoViewer
+        demo={runningDemo}
+        docUrl={doc.url}
+        docTitle={doc.title}
+        backUrl={backUrl}
+        backLabel={backLabel}
+        siblingDemos={docDemos}
+        docSlug={docSlug}
+      />
     )
   }
 
   // 2-C. 해당 문서의 데모 메인 페이지 (데모 카드 목록 허브)
   return (
-    <DocDemoHub
+    <LearningDocDemoHub
       docTitle={doc.title}
       category={category}
       docUrl={doc.url}

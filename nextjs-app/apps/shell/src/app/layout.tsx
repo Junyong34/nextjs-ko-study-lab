@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
-import { Header, DocTree, Footer, type TreeNode } from '@study/ui'
-import { getAugmentedTree } from '@/lib/docs'
+import { Header, Footer, type TreeNode } from '@study/ui'
+import { getAugmentedTree, getDemos, getManifest } from '@/lib/docs'
+import { AppFrame } from '@/components/layout/AppFrame'
+import { LearningProgressProvider } from '@/components/learning-progress/LearningProgressProvider'
+import { LearningProgressTrigger } from '@/components/learning-progress/LearningProgressTrigger'
+import { createLearningInventory } from '@/lib/learning-progress/inventory'
+import type { LearningInventory } from '@/lib/learning-progress/types'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -18,23 +23,23 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   let tree: TreeNode[] = []
+  let inventory: LearningInventory = { documents: [], demos: [] }
   try {
     tree = getAugmentedTree()
+    inventory = createLearningInventory(getManifest(), getDemos())
   } catch (err) {
-    console.error('Failed to load tree:', err)
+    console.error('Failed to load shell inventory:', err)
   }
 
   return (
     <html lang="ko" className="h-full">
       <body className="flex min-h-full flex-col bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
-        <Header />
-        <div className="mx-auto flex w-full max-w-[90rem] flex-1 items-start px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
-          <DocTree tree={tree} />
-          <main className="flex-1 min-w-0 lg:pl-8 lg:pr-4 pb-16">
-            {children}
-          </main>
-        </div>
-        <Footer />
+        <LearningProgressProvider inventory={inventory}>
+          <Header />
+          <AppFrame tree={tree}>{children}</AppFrame>
+          <Footer />
+          <LearningProgressTrigger />
+        </LearningProgressProvider>
       </body>
     </html>
   )

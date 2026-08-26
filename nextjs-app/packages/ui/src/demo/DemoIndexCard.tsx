@@ -3,12 +3,15 @@ import Link from 'next/link'
 import { BookOpen, ArrowRight } from 'lucide-react'
 import { cardClass } from '../primitives/Card'
 import { DemoStatusBadge } from './DemoStatus'
+import { LearningCompletionStatus } from '../learning'
 
 export interface DemoIndexCardProps {
   /** 학습자 URL 조각 (예: "caching/basic") */
   url: string
   title: string
   status: string
+  /** 학습 기록 완료 여부. 전달되면 카드에는 상태만 표시하고 변경은 하지 않습니다. */
+  learningCompleted?: boolean
   /** 근거 문서 제목 또는 파일명 */
   doc?: string
   /** 근거 문서의 사이트 URL */
@@ -25,6 +28,7 @@ export function DemoIndexCard({
   url,
   title,
   status,
+  learningCompleted,
   doc,
   docUrl,
   category,
@@ -56,6 +60,12 @@ export function DemoIndexCard({
           )}
           <DemoStatusBadge status={status} />
         </div>
+
+        {learningCompleted !== undefined && (
+          <div className="mt-2">
+            <LearningCompletionStatus completed={learningCompleted} />
+          </div>
+        )}
 
         {/* 상단 2줄: URL 경로 (독립 줄) */}
         <div className="mt-2">

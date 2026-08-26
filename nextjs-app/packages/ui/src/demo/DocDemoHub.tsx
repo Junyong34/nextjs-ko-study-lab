@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { PlayCircle, BookOpen, ArrowLeft, ArrowRight, ExternalLink } from 'lucide-react'
 import { cardClass } from '../primitives/Card'
 import { DemoStatusBadge } from './DemoStatus'
+import { LearningCompletionStatus } from '../learning'
 
 export interface DocDemoItem {
   url: string
@@ -23,6 +24,8 @@ export interface DocDemoHubProps {
   docSlug: string
   /** 이 문서에 속한 데모 목록 */
   demos: DocDemoItem[]
+  /** 학습 완료된 데모 URL. 카드에는 상태만 표시합니다. */
+  learningCompletedUrls?: string[]
 }
 
 /**
@@ -34,6 +37,7 @@ export function DocDemoHub({
   docUrl,
   docSlug,
   demos,
+  learningCompletedUrls,
 }: DocDemoHubProps) {
   const doneCount = demos.filter((d) => d.status === 'done').length
 
@@ -118,6 +122,14 @@ export function DocDemoHub({
                     </div>
                     <DemoStatusBadge status={demo.status} />
                   </div>
+
+                  {learningCompletedUrls && demo.status === 'done' && (
+                    <div className="mt-2">
+                      <LearningCompletionStatus
+                        completed={learningCompletedUrls.includes(demo.url)}
+                      />
+                    </div>
+                  )}
 
                   <h3 className="mt-3 text-lg font-bold text-zinc-900 transition dark:text-zinc-100">
                     <Link
