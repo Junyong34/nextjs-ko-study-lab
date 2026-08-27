@@ -56,5 +56,5 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 ## 참고
 
 - [루트 README.md](./README.md) — 저장소 구조와 Phase 개요
-- [디자인 가이드](./DESIGN.md) — 디자인 가이드
+- [디자인 가이드](./DESGIN.md) — 디자인 가이드
 
