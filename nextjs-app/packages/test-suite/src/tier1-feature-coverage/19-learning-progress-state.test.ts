@@ -2,9 +2,14 @@ import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
 import {
   createEmptyProgress,
+  getLearningProgressSummary,
+  isLearningItemCompleted,
   resetProgress,
   toggleProgress,
 } from '../../../../apps/shell/src/lib/learning-progress/state.ts'
+import type {
+  LearningDocumentItem,
+} from '../../../../apps/shell/src/lib/learning-progress/types.ts'
 import { parseStoredProgress, readStoredProgress, writeStoredProgress } from '../../../../apps/shell/src/lib/learning-progress/storage.ts'
 
 const NOW = '2026-08-26T01:02:03.000Z'
@@ -30,6 +35,37 @@ describe('학습 기록 상태', () => {
     }
 
     assert.deepEqual(resetProgress(populated, NOW), createEmptyProgress(NOW))
+  })
+
+  it('현재 탭의 학습 대상만 기준으로 완료 수와 전체 수를 계산한다', () => {
+    const documentItems: LearningDocumentItem[] = [
+      {
+        kind: 'document',
+        key: 'docs/a.md',
+        title: '문서 A',
+        url: '/docs/a',
+        category: '시작하기',
+      },
+      {
+        kind: 'document',
+        key: 'docs/b.md',
+        title: '문서 B',
+        url: '/docs/b',
+        category: '시작하기',
+      },
+    ]
+    const progress = {
+      ...createEmptyProgress(NOW),
+      documents: { 'docs/a.md': { completedAt: NOW } },
+      demos: { 'demo/unrelated': { completedAt: NOW } },
+    }
+
+    assert.deepEqual(
+      getLearningProgressSummary(documentItems, (item) =>
+        isLearningItemCompleted(progress, item.kind, item.key),
+      ),
+      { completedCount: 1, totalCount: 2 },
+    )
   })
 })
 
