@@ -19,6 +19,8 @@ Phase 2의 아키텍처 조사·설계 결과 및 ADR 기록입니다. 멀티 �
 | 14 | [가이드 정합성 감사 보고서](./14-demo-guide-audit-report.md) | GC01~GC07 규칙별 감사 수치와 카테고리 분포. `pnpm test:guide-audit`로 **자동 재생성**됨 |
 | 14-T2b | [T2-b 실습 고도화 백로그 보고서](./14-demo-t2b-backlog-report.md) | 가이드 전수 현대화(M0~M5) 완료 보고와 T2-b 대상 241건 우선순위 로드맵. `scripts/generate-t2b-report.ts`로 **자동 재생성**됨 |
 | 16 | [학습 기록 기능 설계](./16-learning-progress-design.md) | 문서·데모의 사용자 완료 표시, 셸 소유 localStorage 상태, 기록 Drawer와 전체 기록 화면 |
+| 17 | [데모 검증 유형 분석 및 개선 설계](./17-demo-verification-type-design.md) | 241개 데모의 증거·확인 방식 기반 검증 유형 후보, 수정 판정과 최종 유형 도출 기준 |
+| 18 | [241개 데모 검증 전수 점검 절차](./18-demo-verification-audit-playbook.md) | 정적 분석과 가이드 전수 실행 절차, 증거 원칙, 사유 코드와 완료 기준 |
 
 ## ADR
 
@@ -32,6 +34,7 @@ Phase 2의 아키텍처 조사·설계 결과 및 ADR 기록입니다. 멀티 �
 | [0006](./adr/0006-shadcn-ui-as-ui-foundation.md) | UI 기반은 shadcn/ui로 하고, 문서 프레임워크는 쓰지 않는다 *(0003의 지시자 렌더 결과를 링크 카드로 바꿈)* |
 | [0007](./adr/0007-ecommerce-domain-and-demo-phasing.md) | 데모는 이커머스 통합 컨셉과 하이브리드 플레이그라운드 구조를 따르고, 4단계 판정과 3단계 체크포인트로 검증한다 |
 | [0008](./adr/0008-shell-owned-client-learning-progress.md) | 셸이 브라우저 기반 학습 기록을 소유하고 현재 원본으로 화면을 계산한다 |
+| [0009](./adr/0009-classify-demo-verification-by-evidence.md) | 데모 검증은 기능군이 아니라 증거와 확인 방식으로 분류한다 *(제안)* |
 
 ## 용어
 
