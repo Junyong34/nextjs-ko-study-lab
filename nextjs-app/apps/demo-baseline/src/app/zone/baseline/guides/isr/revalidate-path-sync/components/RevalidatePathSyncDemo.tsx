@@ -1,19 +1,16 @@
 'use client'
 
-import React, { useState, useTransition } from 'react'
+import React from 'react'
 import type { RevalidatePathResult } from '../types'
-import { executeRevalidatePathAction } from '../actions'
 
-export function RevalidatePathSyncDemo() {
-  const [result, setResult] = useState<RevalidatePathResult | null>(null)
-  const [isPending, startTransition] = useTransition()
+interface RevalidatePathSyncDemoProps {
+  result: RevalidatePathResult | null
+  isPending: boolean
+  onRevalidate: () => void
+}
 
-  const handleRevalidate = () => {
-    startTransition(async () => {
-      const res = await executeRevalidatePathAction('/shop')
-      setResult(res)
-    })
-  }
+export function RevalidatePathSyncDemo({ result, isPending, onRevalidate }: RevalidatePathSyncDemoProps) {
+  const handleRevalidate = onRevalidate
 
   return (
     <div className="space-y-4">

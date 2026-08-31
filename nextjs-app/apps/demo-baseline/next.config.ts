@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: [process.env.PUBLIC_ORIGIN ?? 'localhost:3000'],
     },
+    taint: true,
   },
 }
 

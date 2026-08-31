@@ -3,45 +3,48 @@ import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-ki
 import { SegmentRevalidateDemo } from './components/SegmentRevalidateDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
+export const revalidate = 10
+
 export default function DemoPage() {
+  const renderId = Math.random().toString(36).slice(2, 8).toUpperCase()
+  const generatedAt = new Date().toLocaleTimeString()
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"라우트 세그먼트 레벨 revalidate 설정"}
-        concept={"페이지 세그먼트 상단에 export const revalidate = 30을 선언하여 해당 라우트의 모든 하위 fetch 요청의 기본 캐시 유효 시간을 30초로 일괄 지정합니다."}
+        concept={"페이지 세그먼트 상단에 export const revalidate = 10을 선언하면 이 라우트의 렌더 결과가 10초간 캐시되고, 그 이후 요청에서만 백그라운드로 재계산됩니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "[러닝화 (#001)] 상품 선택",
-                    "description": "1번 상품 카드를 선택하여 해당 세그먼트의 캐시 상태를 확인합니다.",
-                    "actionBadge": "상품 1 선택"
+            step: 1,
+            title: "현재 renderId, generatedAt 확인",
+            description: "이 페이지가 마지막으로 재계산된 시점의 식별자를 확인합니다.",
+            actionBadge: "초기 상태 확인",
           },
           {
-                    "step": 2,
-                    "title": "[윈드브레이커 (#002)] 상품 선택",
-                    "description": "2번 상품 카드를 선택하여 독립된 세그먼트 캐시 상태를 대조합니다.",
-                    "actionBadge": "상품 2 선택"
+            step: 2,
+            title: "10초 이내에 새로고침",
+            description: "revalidate 기간 안에는 renderId가 그대로 유지되는지 확인합니다.",
+            actionBadge: "캐시 유지 확인",
           },
           {
-                    "step": 3,
-                    "title": "[+], [-] 수량 변경 조작",
-                    "description": "수량을 변경하여 세그먼트별 데이터 갱신을 트리거합니다.",
-                    "actionBadge": "수량 변경"
+            step: 3,
+            title: "10초 이후 새로고침",
+            description: "revalidate 기간이 지난 뒤에는 renderId가 바뀌는지 확인합니다.",
+            actionBadge: "재계산 확인",
+            observe: "10초 전후 renderId 값의 변화를 직접 대조 관찰",
+            observeAt: "verification",
           },
-          {
-                    "step": 4,
-                    "title": "세그먼트별 독립 캐시 유효기간 및 재검증 관찰",
-                    "description": "각 상품 세그먼트가 독립적인 revalidate 주기를 유지하며 갱신되는지 관찰합니다.",
-                    "actionBadge": "세그먼트 캐시 관찰",
-                    "observe": "각 세그먼트별로 독립된 revalidate 수명 주기가 적용되어 변경된 세그먼트만 선별 갱신됨",
-                    "observeAt": "playground"
-          }
-]}
+        ]}
       />
       <DemoPlaygroundCard title={"Route Segment revalidate 설정 실습"}>
-        <SegmentRevalidateDemo />
+        <SegmentRevalidateDemo renderId={renderId} generatedAt={generatedAt} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isLoaded={Boolean(renderId)}
+        actual={`- renderId: ${renderId}\n- generatedAt: ${generatedAt}\n- revalidate: 10초`}
+        expected="10초 이내 재방문은 같은 renderId, 10초 이후 재방문은 새 renderId를 반환해야 한다."
+      />
     </DemoContainer>
   )
 }

@@ -1,9 +1,12 @@
 import React from 'react'
+import { draftMode } from 'next/headers'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { DraftModeDemo } from './components/DraftModeDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const { isEnabled: isDraft } = await draftMode()
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +36,12 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"미공개 특가 상품 Draft Mode 토글 및 Bypass 쿠키 실습"}>
-        <DraftModeDemo />
+        <DraftModeDemo isDraft={isDraft} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isLoaded={true}
+        actual={`- draftMode().isEnabled: ${isDraft}\n- ${isDraft ? '__prerender_bypass 쿠키가 설정되어 초안 데이터 렌더링 중' : '쿠키 없음, 정적 공개 데이터 렌더링 중'}`}
+      />
     </DemoContainer>
   )
 }

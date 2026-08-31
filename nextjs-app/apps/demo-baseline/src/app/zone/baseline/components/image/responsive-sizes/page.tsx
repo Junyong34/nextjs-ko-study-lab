@@ -1,9 +1,13 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { ImageResponsiveDemo } from './components/ImageResponsiveDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [device, setDevice] = useState<'mobile' | 'desktop'>('desktop')
+  const [loadInfo, setLoadInfo] = useState<{ naturalWidth: number; naturalHeight: number; sizesAttr: string | null } | null>(null)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +37,17 @@ export default function DemoPage() {
         ]}
         />
       <DemoPlaygroundCard title={"next/image responsive fill & sizes 속성 반응형 로딩 실습"}>
-        <ImageResponsiveDemo />
+        <ImageResponsiveDemo device={device} onSetDevice={setDevice} onLoadInfo={setLoadInfo} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={loadInfo ? loadInfo.sizesAttr === (device === 'mobile' ? '100vw' : '50vw') : undefined}
+        actual={
+          loadInfo
+            ? `- 실제 DOM <img sizes="${loadInfo.sizesAttr}">\n- naturalWidth x naturalHeight: ${loadInfo.naturalWidth} x ${loadInfo.naturalHeight}\n- 현재 device: ${device}`
+            : undefined
+        }
+        expected="next/image가 렌더링한 실제 <img> 태그의 sizes 속성이 선택한 device에 맞는 값(모바일 100vw / 데스크톱 50vw)과 일치해야 한다."
+      />
     </DemoContainer>
   )
 }

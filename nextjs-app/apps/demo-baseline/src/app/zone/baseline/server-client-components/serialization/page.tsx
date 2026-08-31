@@ -1,7 +1,6 @@
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { SerializationViewerClient } from './components/SerializationViewerClient'
-import { VerificationFooter } from './components/VerificationFooter'
 import { executeServerTask } from './actions'
 import type { SerializablePayload } from './types'
 
@@ -27,7 +26,7 @@ export default function SerializationDemoPage() {
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title="RSC → RCC Props 직렬화(Serialization) 규약 & Server Action 전달"
-        concept="Server Component에서 Client Component로 전달하는 Props는 JSON 직렬화가 가능해야 하며, 함수나 클래스 인스턴스는 직접 전달할 수 없지만 'use server' Server Action은 직렬화 가능한 참조로 전달할 수 있습니다."
+        concept="Server Component에서 Client Component로 전달하는 Props는 JSON 직렬화가 가능해야 하며, 일반 함수는 직접 전달할 수 없지만 'use server' Server Action은 직렬화 가능한 참조로 전달할 수 있습니다."
         steps={[
           {
             step: 1,
@@ -46,16 +45,11 @@ export default function SerializationDemoPage() {
         ]}
       />
 
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-      <DemoPlaygroundCard title="RSC Props 직렬화 인스펙터" className="space-y-4">
-        <SerializationViewerClient
-          payload={serializableData}
-          serverAction={executeServerTask}
-        />
-      </DemoPlaygroundCard>
-
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
+      {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 */}
+      <SerializationViewerClient
+        payload={serializableData}
+        serverAction={executeServerTask}
+      />
     </DemoContainer>
   )
 }

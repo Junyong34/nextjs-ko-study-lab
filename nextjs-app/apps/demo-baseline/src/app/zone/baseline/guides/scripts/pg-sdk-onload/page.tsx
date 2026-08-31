@@ -1,9 +1,13 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { PgSdkOnloadDemo } from './components/PgSdkOnloadDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [ready, setReady] = useState(false)
+  const [orderId, setOrderId] = useState<string | null>(null)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +37,13 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"외부 PG사 결제 SDK onLoad 이벤트 핸들링 실습"}>
-        <PgSdkOnloadDemo />
+        <PgSdkOnloadDemo onReady={() => setReady(true)} onOpen={setOrderId} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={orderId ? true : undefined}
+        actual={orderId ? `- SDK ready: ${ready}\n- window.__pgSdk.open() 반환 orderId: ${orderId}` : ready ? `- SDK ready: true (아직 결제창 미실행)` : undefined}
+        expected="next/script의 onLoad 콜백이 실제로 실행된 뒤에만 버튼이 활성화되고, 클릭 시 실제 SDK 함수가 호출되어 값을 반환해야 한다."
+      />
     </DemoContainer>
   )
 }

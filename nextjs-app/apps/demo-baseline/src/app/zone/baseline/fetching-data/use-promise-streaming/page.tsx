@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ReviewsStreamingClient } from './components/ReviewsStreamingClient'
+import { ReviewsStreamingClient, ReviewsStreamingFooter } from './components/ReviewsStreamingClient'
 import { ReviewsSkeleton } from './components/ReviewsSkeleton'
 import { VerificationFooter } from './components/VerificationFooter'
 import type { ProductReview } from './types'
@@ -59,9 +59,9 @@ export default async function UsePromiseStreamingDemoPage() {
         steps={[
           {
             step: 1,
-            title: '메인 상품 정보 0ms 즉시 렌더 확인',
-            description: '상단의 키보드 상품명과 가격(189,000원)이 지연 없이 즉각 표시되는 빠른 FCP를 확인합니다.',
-            actionBadge: '즉시 렌더',
+            title: '메인 상품 정보 초기 렌더 확인',
+            description: '상단의 키보드 상품명과 가격(189,000원)이 지연 없이 즉각 표시되는 빠른 초기 셸 렌더링을 확인합니다.',
+            actionBadge: '초기 셸 렌더',
           },
           {
             step: 2,
@@ -80,7 +80,7 @@ export default async function UsePromiseStreamingDemoPage() {
         ]}
       />
 
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
+      {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 (스트리밍 Suspense 연동) */}
       <DemoPlaygroundCard title="상품 상세 뷰 (즉시 렌더 본문 + 스트리밍 후기)" className="space-y-4">
         {/* 즉각 렌더링된 메인 상품 카드 */}
         <div className="rounded-md border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-1.5">
@@ -96,13 +96,20 @@ export default async function UsePromiseStreamingDemoPage() {
         </div>
 
         {/* 스트리밍 Suspense 바운더리 + React 19 use() Client Component */}
-        <Suspense fallback={<ReviewsSkeleton />}>
+        <Suspense
+          fallback={
+            <>
+              <ReviewsSkeleton />
+            </>
+          }
+        >
           <ReviewsStreamingClient reviewsPromise={reviewsPromise} />
         </Suspense>
       </DemoPlaygroundCard>
 
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
+      <Suspense fallback={<VerificationFooter />}>
+        <ReviewsStreamingFooter reviewsPromise={reviewsPromise} />
+      </Suspense>
     </DemoContainer>
   )
 }

@@ -1,47 +1,43 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
+import type { OrderSyncResult } from '../actions'
 
-export function ServerOnlyGuardDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
+interface ServerOnlyGuardDemoProps {
+  selectedProduct: string
+  orderQuantity: number
+  result: OrderSyncResult | null
+  isPending: boolean
+  onSelectProduct: (id: string) => void
+  onChangeQuantity: (delta: number) => void
+  onSync: () => void
+}
 
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
-  }
-
+export function ServerOnlyGuardDemo({
+  selectedProduct,
+  orderQuantity,
+  result,
+  isPending,
+  onSelectProduct,
+  onChangeQuantity,
+  onSync,
+}: ServerOnlyGuardDemoProps) {
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">server-only 패키지를 통한 클라이언트 번들 유출 차단 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
+          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">server-only 보호 서버 액션 실습 콘솔</h4>
+          <p className="text-xs text-zinc-500">시크릿 키는 server-only 모듈(lib/orderSyncSecret.ts) 안에서만 계산되고 Server Action 응답에는 마스킹된 값만 반환됩니다.</p>
         </div>
         <div className="flex gap-2">
           <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
+            onClick={() => onSelectProduct('PROD-001')}
+            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}
           >
             러닝화 (#001)
           </button>
           <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
+            onClick={() => onSelectProduct('PROD-002')}
+            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}
           >
             윈드브레이커 (#002)
           </button>
@@ -51,49 +47,40 @@ export function ServerOnlyGuardDemo() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
+            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">동기화 수량</span>
             <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
+            <button onClick={() => onChangeQuantity(-1)} className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer">-</button>
             <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
+            <button onClick={() => onChangeQuantity(1)} className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer">+</button>
             <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
+              onClick={onSync}
+              disabled={isPending}
+              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
             >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
+              {isPending ? '서버 액션 실행 중...' : '동작 실행'}
             </button>
           </div>
         </div>
 
         <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
+          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">Server Action 응답 (원본 시크릿 미포함):</div>
+          {result ? (
+            <div className="space-y-1 pt-1 text-[11px]">
+              <div className="text-emerald-400 font-bold">digest: {result.digest}</div>
+              <div>secretPreview: {result.secretPreview}</div>
+              <div>
+                responseContainsRawSecret:{' '}
+                <span className={result.responseContainsRawSecret ? 'text-red-400 font-bold' : 'text-emerald-400 font-bold'}>
+                  {String(result.responseContainsRawSecret)}
+                </span>
               </div>
-            ))}
-          </div>
+              <div className="text-zinc-500">[{result.timestamp}]</div>
+            </div>
+          ) : (
+            <div className="pt-1 text-[11px] text-zinc-500">동작 실행 전</div>
+          )}
         </div>
       </div>
     </div>

@@ -2,8 +2,17 @@ import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { PrivateCacheDemo } from './components/PrivateCacheDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { getUserCartCache, type UserId } from './cachedData'
 
-export default function DemoPage() {
+export default async function DemoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ user?: string }>
+}) {
+  const { user } = await searchParams
+  const userId: UserId = user === 'user_B' ? 'user_B' : 'user_A'
+  const data = await getUserCartCache(userId)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +42,21 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"개인화 사용자별 Private 캐시 격리 실습"}>
-        <PrivateCacheDemo />
+        <PrivateCacheDemo
+          userId={data.userId}
+          userName={data.userName}
+          cacheKey={`private-cart:${data.userId}`}
+          cacheId={data.cacheId}
+          generatedAt={data.generatedAt}
+          cartItems={[...data.cartItems]}
+          totalAmount={data.totalAmount}
+        />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isLoaded={Boolean(data.cacheId)}
+        actual={`- userId: ${data.userId}\n- cacheId: #${data.cacheId}\n- totalAmount: ${data.totalAmount.toLocaleString()}원`}
+        expected="사용자 A와 사용자 B는 서로 다른 cacheId를 가지며, 한쪽을 조회해도 다른 쪽 캐시에 영향을 주지 않는다."
+      />
     </DemoContainer>
   )
 }

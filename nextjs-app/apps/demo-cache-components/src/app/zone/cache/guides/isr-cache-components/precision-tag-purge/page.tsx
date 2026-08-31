@@ -2,8 +2,11 @@ import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { PrecisionTagPurgeDemo } from './components/PrecisionTagPurgeDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { getProduct101Cache, getProduct205Cache } from './cachedData'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const [product101, product205] = await Promise.all([getProduct101Cache(), getProduct205Cache()])
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -39,9 +42,13 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"초정밀 온디맨드 태그 무효화 (cacheTag) 실습"}>
-        <PrecisionTagPurgeDemo />
+        <PrecisionTagPurgeDemo product101={product101} product205={product205} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isLoaded={Boolean(product101.cacheId && product205.cacheId)}
+        actual={`- product-101 cacheId: #${product101.cacheId}\n- product-205 cacheId: #${product205.cacheId}`}
+        expected="product-101만 무효화하면 그 cacheId만 바뀌고, category-electronics를 무효화하면 두 cacheId가 모두 바뀐다."
+      />
     </DemoContainer>
   )
 }

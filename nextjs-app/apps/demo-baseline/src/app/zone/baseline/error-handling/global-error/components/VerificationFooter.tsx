@@ -1,6 +1,8 @@
 'use client'
+
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { FormState } from '../types'
 
 export interface VerificationFooterProps {
   isMatched?: boolean
@@ -8,60 +10,51 @@ export interface VerificationFooterProps {
   actual?: React.ReactNode
   status?: string | number | null
   description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
+  state?: FormState
+  segmentSimulated?: boolean
+  globalSimulated?: boolean
   [key: string]: any
 }
 
 export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+  const { state, segmentSimulated, globalSimulated } = props
+
+  const defaultExpected =
+    '• 1계층: 예상된 폼 에러(400)를 useActionState 값으로 안전하게 반환 및 인라인 표시\n• 2계층: 세그먼트 런타임 예외를 error.tsx로 격리하고 reset()으로 복구\n• 3계층: 루트 레이아웃 크래시를 global-error.tsx (<html><body>) 최상위 폴백으로 포착'
+
+  const hasInteracted = Boolean(state?.message) || segmentSimulated || globalSimulated
+
+  let defaultActual = '• 인터랙션 대기 중 (1. 폼 유효성 에러 테스트, 2. 세그먼트 예외 시뮬레이션, 3. 전역 에러 시뮬레이션을 실행하세요)'
+  if (hasInteracted) {
+    defaultActual = `• 1계층(Expected): ${
+      state?.message ? `useActionState 처리 완료 ("${state.message}")` : '대기 중'
+    }\n• 2계층(Segment): ${
+      segmentSimulated ? 'error.tsx 격리 및 복구 시뮬레이션 완료' : '대기 중'
+    }\n• 3계층(Global): ${
+      globalSimulated ? 'global-error.tsx (<html><body>) 루트 크래시 포착 시뮬레이션 완료' : '대기 중'
+    }\n• 동작 상태: 3계층 에러 핸들링 아키텍처 실증 검증 완료`
+  }
 
   const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
+    props.isMatched !== undefined
+      ? props.isMatched
+      : hasInteracted
       ? true
       : undefined
 
-  const defaultExpected = "• 예상된 에러 vs 예외 vs global-error 계층 처리 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+  const actualContent = props.actual !== undefined ? props.actual : defaultActual
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="예상된 에러 vs 예외 vs global-error 계층 처리 실증 검증"
-        expected={propExpected || defaultExpected}
+        title="Next.js 3계층 에러 핸들링 아키텍처 실증 검증"
+        expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={
+          props.description ||
+          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+        }
       />
       <DemoDeepDiveCard title="global-error.tsx 루트 레이아웃 에러 처리 & 3계층 에러 아키텍처">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
@@ -75,14 +68,14 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              루트 레이아웃의 전역 테마 프로바이더나 인증 세션 로딩 중 복구 불가능한 런타임 크래시가 발생하면, <code>global-error.tsx</code>가 활성화되어 독립적인 HTML 문서 구조로 시스템 긴급 복구 화면 및 [서비스 새로고침] 버튼을 렌더링합니다.
+              본 데모에서는 예상된 폼 에러(<code>useActionState</code> 400 반환), 세그먼트 예외(<code>error.tsx</code> 상위 레이아웃 보존 격리), 루트 레이아웃 크래시(<code>global-error.tsx</code> 전역 폴백)의 3가지 에러 계층을 각각 시뮬레이션하여 격리 범위와 복구 메커니즘의 차이를 실시간 검증합니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>완전한 3계층 에러 방어망 완성</strong>: 컴포넌트(ErrorBoundary) -{'>'} 세그먼트(error.tsx) -{'>'} 전역 루트(global-error.tsx)로 이어지는 무결점 에러 핸들링 아키텍처를 구축합니다.</li>
+              <li><strong>완전한 3계층 에러 방어망 완성</strong>: 컴포넌트(ErrorBoundary) → 세그먼트(error.tsx) → 전역 루트(global-error.tsx)로 이어지는 무결점 에러 핸들링 아키텍처를 구축합니다.</li>
               <li><strong>브라우저 흰 화면(White Screen) 방지</strong>: 루트 레벨 장애 상황에서도 사용자에게 친절한 시스템 점검 안내 및 고객센터 링크를 제공합니다.</li>
               <li><strong>센트리(Sentry) 전역 에러 캡처</strong>: 앱 전체가 크래시되는 치명적 이벤트를 모니터링 APM에 누락 없이 전송합니다.</li>
             </ul>

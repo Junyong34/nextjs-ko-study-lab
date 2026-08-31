@@ -1,9 +1,12 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { LazyModalDemo } from './components/LazyModalDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [loadedBeforeClick, setLoadedBeforeClick] = useState<boolean | null>(null)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +36,13 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"결제 모달 next/dynamic 지연 로드 실습"}>
-        <LazyModalDemo />
+        <LazyModalDemo onOpen={setLoadedBeforeClick} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={loadedBeforeClick !== null ? loadedBeforeClick === false : undefined}
+        actual={loadedBeforeClick !== null ? `- 버튼 클릭 전 청크 로드됨: ${loadedBeforeClick}\n- 기대: false (클릭 전까지 모듈이 로드되지 않아야 함)` : undefined}
+        expected="next/dynamic으로 감싼 모달 모듈은 버튼 클릭 이전에는 평가되지 않아야 한다(window.__paymentModalChunkLoaded === undefined)."
+      />
     </DemoContainer>
   )
 }

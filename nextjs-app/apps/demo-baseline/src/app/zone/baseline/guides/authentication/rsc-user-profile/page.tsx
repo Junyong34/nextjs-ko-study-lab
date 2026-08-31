@@ -5,7 +5,7 @@ import { VerificationFooter } from './components/VerificationFooter'
 import { getServerUserProfile } from './actions'
 
 export default async function DemoPage() {
-  const initialProfile = await getServerUserProfile()
+  const profile = await getServerUserProfile()
 
   return (
     <DemoContainer className="space-y-6">
@@ -36,9 +36,13 @@ export default async function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title="Server Component 세션 프로필 렌더링 실습">
-        <RscUserProfileDemo initialProfile={initialProfile} />
+        <RscUserProfileDemo profile={profile} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isLoaded={Boolean(profile.grade)}
+        actual={`- grade: ${profile.grade}\n- points: ${profile.points}\n- renderedAt: ${profile.renderedAt}`}
+        expected="세션 전환 버튼을 누르면 실제 쿠키가 바뀌고, router.refresh()로 서버 컴포넌트가 새 쿠키를 읽어 프로필을 다시 렌더링해야 한다."
+      />
     </DemoContainer>
   )
 }

@@ -1,10 +1,15 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { StyleRegistry } from './components/StyleRegistry'
 import { StyleRegistryDemo } from './components/StyleRegistryDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [style, setStyle] = useState<{ backgroundColor: string; color: string } | null>(null)
+
   return (
+    <StyleRegistry>
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"CSS-in-JS 스타일 레지스트리 및 SSR 스타일 사전 주입"}
@@ -27,9 +32,14 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"Style Registry를 통한 CSS-in-JS SSR 스타일 주입 실습"}>
-        <StyleRegistryDemo />
+        <StyleRegistryDemo onCheck={(backgroundColor, color) => setStyle({ backgroundColor, color })} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={style ? style.backgroundColor === 'rgb(0, 0, 0)' && style.color === 'rgb(255, 255, 255)' : undefined}
+        actual={style ? `- getComputedStyle().backgroundColor: ${style.backgroundColor}\n- getComputedStyle().color: ${style.color}` : undefined}
+        expected="useServerInsertedHTML로 주입된 CSS가 실제로 적용되어 배경색은 검정(rgb(0, 0, 0)), 글자색은 흰색(rgb(255, 255, 255))이어야 한다."
+      />
     </DemoContainer>
+    </StyleRegistry>
   )
 }

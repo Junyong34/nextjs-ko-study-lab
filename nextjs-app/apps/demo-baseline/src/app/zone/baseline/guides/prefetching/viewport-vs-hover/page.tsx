@@ -1,9 +1,12 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { PrefetchModesDemo } from './components/PrefetchModesDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [hoverCount, setHoverCount] = useState(0)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -27,9 +30,12 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"뷰포트 진입 자동 prefetch vs prefetch={false} 호버 시점 패칭 실습"}>
-        <PrefetchModesDemo />
+        <PrefetchModesDemo hoverCount={hoverCount} onHover={() => setHoverCount((c) => c + 1)} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={hoverCount > 0 ? true : undefined}
+        actual={hoverCount > 0 ? `- prefetch={false} 링크 호버 감지: ${hoverCount}회\n- Network 탭에서 hover 시점 요청과 기본 링크의 뷰포트 진입 시점 요청을 직접 대조하세요` : undefined}
+      />
     </DemoContainer>
   )
 }

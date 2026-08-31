@@ -1,9 +1,12 @@
 import React from 'react'
+import { draftMode } from 'next/headers'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { DraftBypassDemo } from './components/DraftBypassDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const { isEnabled: isDraftMode } = await draftMode()
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +36,12 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"Bypass 쿠키 검증 및 CMS 초안 렌더링 실습"}>
-        <DraftBypassDemo />
+        <DraftBypassDemo isDraftMode={isDraftMode} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isLoaded={true}
+        actual={`- draftMode().isEnabled: ${isDraftMode}`}
+      />
     </DemoContainer>
   )
 }

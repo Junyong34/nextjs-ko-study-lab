@@ -1,8 +1,7 @@
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { ProductSpecsServer } from './components/ProductSpecsServer'
-import { WishlistButtonClient } from './components/WishlistButtonClient'
-import { VerificationFooter } from './components/VerificationFooter'
+import { CompositionInteractiveSection } from './components/CompositionInteractiveSection'
 import type { ProductDetail } from './types'
 
 // 서버에서만 실행되는 데이터 로딩 시뮬레이션
@@ -40,12 +39,12 @@ export default async function CompositionDemoPage() {
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title="Server & Client Components 합성 패턴 & 번들 최적화"
-        concept="Next.js Server Component(RSC)에서 무거운 상세 스펙을 0 KB 클라이언트 JS로 렌더링하고, 클릭 인터랙션이 필요한 말단 버튼만 'use client'(RCC)로 격리하여 번들 크기를 극소화합니다."
+        concept="Next.js Server Component(RSC)에서 상세 스펙을 서버 렌더링하고, 클릭 인터랙션이 필요한 말단 버튼만 'use client'(RCC)로 격리하여 번들 크기를 최적화합니다."
         steps={[
           {
             step: 1,
             title: '서버 렌더링 스펙(RSC) 확인',
-            description: '미드솔 폼, 탄소섬유 플레이트 등 상세 제원이 서버에서 렌더링되어 클라이언트 JS 없이 표시된 것을 확인합니다.',
+            description: '미드솔 폼, 탄소섬유 플레이트 등 상세 제원이 서버에서 렌더링되어 표시된 것을 확인합니다.',
             actionBadge: 'RSC 확인',
           },
           {
@@ -65,31 +64,15 @@ export default async function CompositionDemoPage() {
         ]}
       />
 
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-      <DemoPlaygroundCard title="상품 상세 뷰 (RSC 본문 + RCC 찜 버튼 합성)" className="space-y-4">
-        <div className="flex items-center justify-between border-b border-zinc-200 pb-2 dark:border-zinc-800">
-          <div>
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-              {product.name}
-            </h3>
-            <div className="font-mono text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-              {product.price.toLocaleString()}원
-            </div>
-          </div>
-          <span className="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-            Server-Client Hybrid View
-          </span>
-        </div>
-
+      {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 */}
+      <CompositionInteractiveSection
+        productId={product.id}
+        productName={product.name}
+        productPrice={product.price}
+      >
         {/* 1) Server Component: 서버에서만 렌더링되는 상세 제원 */}
         <ProductSpecsServer product={product} />
-
-        {/* 2) Client Component: 클라이언트에서 Hydrate되는 위시리스트 버튼 */}
-        <WishlistButtonClient productId={product.id} />
-      </DemoPlaygroundCard>
-
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
+      </CompositionInteractiveSection>
     </DemoContainer>
   )
 }

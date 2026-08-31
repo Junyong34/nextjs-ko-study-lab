@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { MultiFilterWidgetDemo } from './components/MultiFilterWidgetDemo'
 import { VerificationFooter } from './components/VerificationFooter'
@@ -33,7 +33,9 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"다중 필터/정렬/장바구니 복합 인터랙티브 위젯 실습"}>
-        <MultiFilterWidgetDemo />
+        <Suspense fallback={<div className="text-xs text-zinc-400">로딩 중...</div>}>
+          <MultiFilterWidgetDemo />
+        </Suspense>
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

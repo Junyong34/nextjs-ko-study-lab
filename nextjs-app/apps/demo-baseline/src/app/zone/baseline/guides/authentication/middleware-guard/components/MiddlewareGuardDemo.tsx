@@ -1,25 +1,67 @@
 'use client'
 
-import React, { useState, useTransition } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import type { AuthCookieState, RouteGuardTestResult } from '../types'
-import { toggleAuthCookieAction, testMiddlewareRouteAccess } from '../actions'
+import { toggleAuthCookieAction } from '../actions'
 
 interface MiddlewareGuardDemoProps {
   initialState: AuthCookieState
+  onResult?: (state: { authState: AuthCookieState; lastResult: RouteGuardTestResult | null }) => void
 }
 
-export function MiddlewareGuardDemo({ initialState }: MiddlewareGuardDemoProps) {
+const ROUTE_META: Record<string, { label: string; protected: boolean }> = {
+  admin: { label: '/admin (관리자 전용)', protected: true },
+  mypage: { label: '/mypage/orders (주문내역)', protected: true },
+  public: { label: '/catalog (상품목록)', protected: false },
+}
+
+// proxy.ts(실제 Next.js 엣지 미들웨어)를 향해 실제 HTTP 요청을 보내
+// 이 요청이 307로 리다이렉트되는지(response.redirected)를 관찰한다. 시뮬레이션이 아니다.
+async function probeMiddlewareGuard(probe: string): Promise<RouteGuardTestResult> {
+  const meta = ROUTE_META[probe]
+  const res = await fetch(`${window.location.pathname}?probe=${probe}`, {
+    cache: 'no-store',
+  })
+
+  if (res.redirected) {
+    return {
+      path: meta.label,
+      status: 307,
+      decision: 'REDIRECTED',
+      redirectUrl: res.url,
+      reason: `proxy.ts가 auth_token 쿠키를 찾지 못해 307 Temporary Redirect로 실제 응답함 (response.redirected === true)`,
+      timestamp: new Date().toLocaleTimeString(),
+    }
+  }
+
+  return {
+    path: meta.label,
+    status: (res.status === 307 ? 307 : 200) as 200 | 307,
+    decision: 'ALLOWED',
+    reason: meta.protected
+      ? `proxy.ts가 유효한 auth_token 쿠키를 확인해 리다이렉트 없이 통과시킴`
+      : `공개 라우트: proxy.ts가 인증 여부와 무관하게 통과시킴`,
+    timestamp: new Date().toLocaleTimeString(),
+  }
+}
+
+export function MiddlewareGuardDemo({ initialState, onResult }: MiddlewareGuardDemoProps) {
   const [authState, setAuthState] = useState<AuthCookieState>(initialState)
-  const [selectedPath, setSelectedPath] = useState<string>('/admin')
+  const [selectedPath, setSelectedPath] = useState<string>('admin')
   const [lastResult, setLastResult] = useState<RouteGuardTestResult | null>(null)
   const [isPending, startTransition] = useTransition()
+
+  useEffect(() => {
+    onResult?.({ authState, lastResult })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authState, lastResult])
 
   const handleToggleCookie = () => {
     startTransition(async () => {
       const next = await toggleAuthCookieAction()
       setAuthState(next)
-      // 즉시 선택된 경로에 대한 재검사 실행
-      const result = await testMiddlewareRouteAccess(selectedPath)
+      // 즉시 선택된 경로에 대한 실제 미들웨어 재검사 실행
+      const result = await probeMiddlewareGuard(selectedPath)
       setLastResult(result)
     })
   }
@@ -27,7 +69,7 @@ export function MiddlewareGuardDemo({ initialState }: MiddlewareGuardDemoProps) 
   const handleTestPath = (path: string) => {
     setSelectedPath(path)
     startTransition(async () => {
-      const result = await testMiddlewareRouteAccess(path)
+      const result = await probeMiddlewareGuard(path)
       setLastResult(result)
     })
   }
@@ -69,22 +111,22 @@ export function MiddlewareGuardDemo({ initialState }: MiddlewareGuardDemoProps) 
         </label>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {[
-            { path: '/admin', label: '/admin (관리자 전용)', tag: '보호 라우트' },
-            { path: '/mypage/orders', label: '/mypage/orders (주문내역)', tag: '보호 라우트' },
-            { path: '/catalog', label: '/catalog (상품목록)', tag: '공개 라우트' },
+            { key: 'admin', label: '/admin (관리자 전용)', tag: '보호 라우트' },
+            { key: 'mypage', label: '/mypage/orders (주문내역)', tag: '보호 라우트' },
+            { key: 'public', label: '/catalog (상품목록)', tag: '공개 라우트' },
           ].map((item) => (
             <button
-              key={item.path}
+              key={item.key}
               type="button"
-              onClick={() => handleTestPath(item.path)}
+              onClick={() => handleTestPath(item.key)}
               disabled={isPending}
               className={`flex flex-col items-start rounded-md border p-2.5 text-left text-xs transition cursor-pointer ${
-                selectedPath === item.path
+                selectedPath === item.key
                   ? 'border-blue-500 bg-blue-50/50 dark:border-blue-400 dark:bg-blue-950/30'
                   : 'border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-950'
               }`}
             >
-              <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{item.path}</span>
+              <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{item.label}</span>
               <span className="mt-0.5 text-[11px] text-zinc-500">{item.tag}</span>
             </button>
           ))}

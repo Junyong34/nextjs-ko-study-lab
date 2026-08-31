@@ -1,30 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { MOCK_PRODUCTS } from '@study/demo-kit'
 
-export function PrefetchFalseDemo() {
-  const [prefetchMode, setPrefetchMode] = useState<boolean | 'auto'>(false)
-  const [hoverCount, setHoverCount] = useState<number>(0)
-  const [networkLogs, setNetworkLogs] = useState<string[]>([
-    '라우터 초기화: 뷰포트 진입 감지 리스너 대기 중...',
-  ])
+interface PrefetchFalseDemoProps {
+  prefetchMode: boolean
+  hoverCount: number
+  onSetPrefetchMode: (mode: boolean) => void
+  onHover: () => void
+}
 
-  const handleLinkHover = (id: string) => {
-    setHoverCount((h) => h + 1)
-    if (prefetchMode === false) {
-      setNetworkLogs((prev) => [
-        `[${new Date().toLocaleTimeString()}] prefetch={false} 설정됨: 뷰포트 자동 프리페치는 차단되었으나 마우스 호버(Hover) 시점에 필요 RSC 청크를 온디맨드로 프리페치 요청`,
-        ...prev.slice(0, 4),
-      ])
-    } else {
-      setNetworkLogs((prev) => [
-        `[${new Date().toLocaleTimeString()}] prefetch={true} 설정됨: 뷰포트 진입 즉시 백그라운드 프리페치 완료`,
-        ...prev.slice(0, 4),
-      ])
-    }
-  }
+export function PrefetchFalseDemo({ prefetchMode, hoverCount, onSetPrefetchMode, onHover }: PrefetchFalseDemoProps) {
+  const setPrefetchMode = onSetPrefetchMode
+  const handleLinkHover = onHover
 
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
@@ -71,7 +60,7 @@ export function PrefetchFalseDemo() {
         {MOCK_PRODUCTS.slice(0, 2).map((p) => (
           <div
             key={p.id}
-            onMouseEnter={() => handleLinkHover(p.id)}
+            onMouseEnter={handleLinkHover}
             className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5"
           >
             <div className="flex items-start justify-between">
@@ -111,14 +100,15 @@ export function PrefetchFalseDemo() {
           <span>마우스 호버 감지: {hoverCount}회</span>
         </div>
         <div className="space-y-1 text-[11px]">
-          {networkLogs.map((log, i) => (
-            <div
-              key={i}
-              className={i === 0 ? 'text-emerald-400 font-medium' : 'text-zinc-500'}
-            >
-              {log}
+          {hoverCount > 0 ? (
+            <div className="text-emerald-400 font-medium">
+              [이벤트 감지] 마우스 호버 발생 ({hoverCount}회) — Link prefetch={'{'}{String(prefetchMode)}{'}'} 적용 상태
             </div>
-          ))}
+          ) : (
+            <div className="text-zinc-500">
+              상단 상품 링크 위로 마우스를 올려 호버 이벤트를 발생시키세요.
+            </div>
+          )}
         </div>
       </div>
     </div>

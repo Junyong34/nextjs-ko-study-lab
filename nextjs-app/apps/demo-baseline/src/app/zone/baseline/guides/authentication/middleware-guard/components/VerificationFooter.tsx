@@ -67,12 +67,12 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Next.js Middleware(<code>middleware.ts</code> / <code>proxy.ts</code>)는 들어오는 HTTP 요청을 라우트 핸들러 및 서버 컴포넌트 렌더링 전에 가로채어, 세션 쿠키 검증, JWT 인증 여부에 따라 보호된 라우트(<code>/admin/*</code>, <code>/mypage/*</code>)로의 접근을 통제하고 리다이렉트 및 헤더를 주입하는 엣지 보안 가드입니다.</p>
+            <p>Next.js 16의 <code>proxy.ts</code>(Next.js 15 이전의 <code>middleware.ts</code>에 해당)는 들어오는 HTTP 요청을 라우트 핸들러 및 서버 컴포넌트 렌더링 전에 가로채어, 쿠키 검증에 따라 보호된 라우트로의 접근을 통제하고 리다이렉트 및 헤더를 주입하는 엣지 보안 가드입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 비로그인 사용자가 주문 내역(<code>/mypage/orders</code>)에 접근할 때 미들웨어가 <code>auth-token</code> 쿠키를 검사하고, 유효하지 않은 경우 <code>/login?redirect=/mypage/orders</code>로 즉시 307 리다이렉트하며, 인증된 요청에는 <code>x-user-id</code> 커스텀 헤더를 서버로 전달합니다.</p>
+            <p>본 데모에서는 <code>proxy.ts</code>가 <code>auth_token</code> 쿠키를 검사하고, 유효하지 않은 상태로 <code>/admin</code> 또는 <code>/mypage</code>를 요청하면 실제 307 리다이렉트를 응답한다. [테스트] 버튼은 브라우저 <code>fetch</code>로 이 경로에 실제 왕복 요청을 보내고 <code>response.redirected</code>로 리다이렉트 발생 여부를 관찰한다 — 시뮬레이션이 아닌 실제 네트워크 요청이다.</p>
           </div>
 
           <div>

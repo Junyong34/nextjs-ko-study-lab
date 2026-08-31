@@ -1,9 +1,12 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { ViewTransitionsDemo } from './components/ViewTransitionsDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [supported, setSupported] = useState<boolean | null>(null)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +36,13 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"View Transitions 이미지 확대 애니메이션 실습"}>
-        <ViewTransitionsDemo />
+        <ViewTransitionsDemo onResult={setSupported} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={supported !== null ? supported : undefined}
+        actual={supported !== null ? `- document.startViewTransition 지원 여부: ${supported}` : undefined}
+        expected="브라우저가 View Transitions API를 지원하면 document.startViewTransition()으로 실제 네이티브 전환 애니메이션이 실행되어야 한다."
+      />
     </DemoContainer>
   )
 }

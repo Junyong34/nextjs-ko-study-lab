@@ -1,9 +1,12 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { JsonLdProductDemo } from './components/JsonLdProductDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [check, setCheck] = useState<{ found: boolean; price?: string } | null>(null)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -12,7 +15,7 @@ export default function DemoPage() {
         steps={[
           {
                     "step": 1,
-                    "title": "주입된 Schema.org Product 구조화 데이터 확인 및 상품 가격(129,000 KRW) 및 재고(InStock) 필드 검사",
+                    "title": "주입된 Schema.org Product 구조화 데이터 확인 및 상품 가격(149,000 KRW) 및 재고(InStock) 필드 검사",
                     "description": "서버 렌더링 시점에 생성된 JSON-LD 스크립트 블록의 @context와 @type을 점검합니다. 검색 엔진 봇이 인식하는 통화, 가격(offers.price), 재고 상태 메타데이터를 확인합니다.",
                     "actionBadge": "JSON-LD 점검"
           },
@@ -27,9 +30,17 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"Schema.org Product 구조화 데이터 (JSON-LD) 실습"}>
-        <JsonLdProductDemo />
+        <JsonLdProductDemo
+          onCheck={(found, parsed) =>
+            setCheck({ found, price: (parsed as { offers?: { price?: string } })?.offers?.price })
+          }
+        />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={check ? check.found && check.price === '149000' : undefined}
+        actual={check ? `- document.querySelector로 script[type="application/ld+json"] 발견: ${check.found}\n- 파싱된 offers.price: ${check.price}` : undefined}
+        expected={'실제 DOM에 script[type="application/ld+json"] 태그가 렌더링되고, 파싱한 값이 표시된 상품 가격(149,000원)과 일치해야 한다.'}
+      />
     </DemoContainer>
   )
 }

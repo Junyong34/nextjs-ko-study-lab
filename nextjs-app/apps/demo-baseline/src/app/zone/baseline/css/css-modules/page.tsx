@@ -1,8 +1,6 @@
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ProductCard } from './components/ProductCard'
-import { PromotionBannerCard } from './components/PromotionBannerCard'
-import { VerificationFooter } from './components/VerificationFooter'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { CssModulesController } from './components/CssModulesController'
 
 export default function CssModulesDemoPage() {
   return (
@@ -10,12 +8,12 @@ export default function CssModulesDemoPage() {
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title="Next.js CSS Modules 컴포넌트 스코프 격리 & 고유 클래스 해시"
-        concept="동일한 클래스명(.card, .title)을 사용하더라도 Next.js App Router 빌드 엔진이 [name]_[local]__[hash] 형태의 고유 해시 클래스를 자동 생성하여 전역 오염 0건의 완벽한 스타일 격리를 보장합니다."
+        concept="동일한 클래스명(.card, .title, .badge, .action)을 사용하더라도 Next.js App Router 빌드 엔진이 [name]_[local]__[hash] 형태의 고유 해시 클래스를 자동 생성하여 전역 오염 0건의 완벽한 스타일 격리를 보장합니다."
         steps={[
           {
             step: 1,
             title: '동일 클래스명(.card) 독립 컴포넌트 렌더링 확인',
-            description: 'ProductCard와 PromotionBannerCard가 동일한 .card, .title, .action 클래스를 사용함에도 독립된 배경색과 스타일로 렌더링된 것을 확인합니다.',
+            description: 'ProductCard와 PromotionBannerCard가 동일한 .card, .title, .badge, .action 클래스를 사용함에도 독립된 배경색과 스타일로 렌더링된 것을 확인합니다.',
             actionBadge: '스코프 격리 확인',
           },
           {
@@ -35,29 +33,8 @@ export default function CssModulesDemoPage() {
         ]}
       />
 
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-      <DemoPlaygroundCard title="동일 클래스명(.card, .title, .badge, .action) 충돌 격리 실습" className="space-y-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {/* 상품 카드 컴포넌트 */}
-          <div className="space-y-2">
-            <div className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
-              컴포넌트 1: ProductCard.tsx (표준 상품 카드)
-            </div>
-            <ProductCard />
-          </div>
-
-          {/* 프로모션 배너 컴포넌트 */}
-          <div className="space-y-2">
-            <div className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
-              컴포넌트 2: PromotionBannerCard.tsx (이벤트 배너)
-            </div>
-            <PromotionBannerCard />
-          </div>
-        </div>
-      </DemoPlaygroundCard>
-
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
+      {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 */}
+      <CssModulesController />
     </DemoContainer>
   )
 }

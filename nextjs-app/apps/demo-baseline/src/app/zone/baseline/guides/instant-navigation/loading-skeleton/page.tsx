@@ -8,19 +8,19 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"loading.tsx 스켈레톤을 활용한 즉각적인 내비게이션 피드백"}
-        concept={"느린 데이터 패칭 라우트로 이동할 때 loading.tsx가 0ms로 즉시 마운트되어 스켈레톤 UI를 제공함으로써 사용자에게 화면 멈춤(Freezing) 없는 즉각적인 내비게이션 경험을 선사합니다."}
+        concept={"느린 데이터 패칭 라우트로 실제 이동하면 shop/loading.tsx가 데이터보다 먼저 즉시 마운트되어 스켈레톤 UI를 제공함으로써 사용자에게 화면 멈춤 없는 내비게이션 경험을 선사합니다."}
         steps={[
           {
             step: 1,
-            title: "[홈 (0ms 즉시 전환)] 버튼 클릭",
-            description: "정적 캐시된 홈 화면으로 0ms 즉각 전환되는 동작을 확인합니다.",
-            actionBadge: "홈 이동",
+            title: "현재 홈 화면 확인",
+            description: "아직 이동하지 않은 초기 상태를 확인합니다.",
+            actionBadge: "초기 확인",
           },
           {
             step: 2,
-            title: "[쇼핑몰 (스켈레톤 즉시 표시)] 버튼 클릭",
-            description: "데이터 패칭이 필요한 쇼핑몰 라우트로 이동하여 loading.tsx 스켈레톤 마운트를 트리거합니다.",
-            actionBadge: "스켈레톤 트리거",
+            title: "[쇼핑몰 진입 (스켈레톤 관찰) →] 실제 링크 클릭",
+            description: "실제 서브 라우트로 이동하여 loading.tsx 스켈레톤 마운트를 관찰합니다.",
+            actionBadge: "실제 이동",
           },
           {
             step: 3,

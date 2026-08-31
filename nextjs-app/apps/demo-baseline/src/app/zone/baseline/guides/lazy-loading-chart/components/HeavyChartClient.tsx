@@ -16,10 +16,10 @@ export default function HeavyChartClient() {
     <div className="space-y-3 rounded-md border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex items-center justify-between border-b border-zinc-200 pb-2 dark:border-zinc-800">
         <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-          2026 상반기 월별 매출 추이 분석 (무거운 차트 라이브러리)
+          2026 상반기 월별 매출 추이 분석 (무거운 차트 컴포넌트)
         </h4>
         <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-          next/dynamic 지연 로드 완료 (0 KB 초기 번들)
+          next/dynamic 지연 로드 완료 (클라이언트 온디맨드 마운트)
         </span>
       </div>
 

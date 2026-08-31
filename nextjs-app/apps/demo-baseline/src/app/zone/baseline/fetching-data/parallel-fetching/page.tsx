@@ -1,7 +1,6 @@
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { ParallelFetchingController } from './components/ParallelFetchingController'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function ParallelFetchingDemoPage() {
   return (
@@ -34,13 +33,8 @@ export default function ParallelFetchingDemoPage() {
         ]}
       />
 
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-      <DemoPlaygroundCard title="데이터 패칭 전략 시뮬레이터" className="space-y-4">
-        <ParallelFetchingController />
-      </DemoPlaygroundCard>
-
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
+      {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 */}
+      <ParallelFetchingController />
     </DemoContainer>
   )
 }

@@ -1,35 +1,41 @@
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { PropsSerializationDemo } from './components/PropsSerializationDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { PropsSerializationSection } from './components/PropsSerializationSection'
 
 export default function DemoPage() {
+  // 서버 컴포넌트에서 실제로 계산된 값 — Date 인스턴스가 포함된 순수 객체.
+  // 이 값이 RSC 경계를 넘어 클라이언트 컴포넌트로 전달된다.
+  const serverData = {
+    id: 'prod-101',
+    name: '스마트워치',
+    price: 350000,
+    tags: ['신상품', '인기'],
+    createdAt: new Date('2026-01-15T00:00:00Z'),
+  }
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"RSC에서 RCC로의 Props 직렬화(Serialization) 경계"}
-        concept={"Server Component에서 Client Component로 전달되는 props는 JSON 직렬화 가능 객체(문자열, 숫자, Date, 순수 객체)여야 하며 함수나 클래스 인스턴스는 경계를 통과할 수 없습니다."}
+        concept={"Server Component에서 Client Component로 전달되는 props는 문자열, 숫자, Date, 순수 객체처럼 React Flight 프로토콜이 지원하는 값이어야 하며, 함수나 클래스 인스턴스는 경계를 통과할 수 없습니다."}
         steps={[
           {
-                    "step": 1,
-                    "title": "직렬화 가능한 Props(상품명, 가격, Date) 구조 확인 및 직렬화 불가 객체(함수, 클래스 메서드) 차단 규칙 검사",
-                    "description": "서버에서 안전하게 직렬화되어 클라이언트로 전송된 데이터 페이로드를 점검합니다. RSC-RCC 경계에서 클라이언트 컴포넌트로 함수를 직접 전달할 수 없는 Next.js 런타임 제약을 확인합니다.",
-                    "actionBadge": "직렬화 데이터 점검"
+            step: 1,
+            title: "서버 컴포넌트가 생성한 Date 인스턴스가 포함된 props 확인",
+            description: "서버에서 계산된 데이터(문자열, 숫자, 배열, Date)가 클라이언트 컴포넌트로 전달됩니다.",
+            actionBadge: "직렬화 데이터 점검",
           },
           {
-                    "step": 2,
-                    "title": "클라이언트 컴포넌트에서의 안전한 Props 수신 및 렌더링 관찰",
-                    "description": "역직렬화된 JSON 데이터가 클라이언트 컴포넌트에서 깨짐 없이 정상 렌더링되는 과정을 확인합니다.",
-                    "actionBadge": "경계 전달 검증",
-                    "observe": "RSC에서 RCC로 전달된 직렬화 데이터(상품 스펙, ISO Date)의 클라이언트 정상 수신 및 렌더링 관찰",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: "클라이언트에서 data.createdAt instanceof Date 실측",
+            description: "React Flight 프로토콜이 Date 인스턴스를 경계 너머에서도 진짜 Date로 복원하는지 직접 확인합니다.",
+            actionBadge: "경계 전달 검증",
+            observe: "instanceof Date 결과와 getFullYear() 값이 실제로 정확한지 관찰",
+            observeAt: "verification",
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"Props 직렬화 경계 및 안전한 전달 실습"}>
-        <PropsSerializationDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <PropsSerializationSection data={serverData} />
     </DemoContainer>
   )
 }

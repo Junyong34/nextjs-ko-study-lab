@@ -1,18 +1,24 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useSoftNav } from './SoftNavContext'
 
 export function PersistentHeader() {
-  const [memo, setMemo] = useState('')
-  const [seconds, setSeconds] = useState(0)
-  const [mountedAt] = useState<string>(() => new Date().toLocaleTimeString())
+  const softNav = useSoftNav()
+  const [mountedAt, setMountedAt] = useState<string>('')
+
+  const memo = softNav?.memo ?? ''
+  const setMemo = softNav?.setMemo ?? (() => {})
+  const seconds = softNav?.seconds ?? 0
+  const setSeconds = softNav?.setSeconds ?? (() => {})
 
   useEffect(() => {
+    setMountedAt(new Date().toLocaleTimeString('ko-KR'))
     const timer = setInterval(() => {
       setSeconds((s) => s + 1)
     }, 1000)
     return () => clearInterval(timer)
-  }, [])
+  }, [setSeconds])
 
   return (
     <div className="rounded-lg border border-zinc-200 bg-zinc-900 p-3.5 text-white dark:border-zinc-800 dark:bg-zinc-950 space-y-2.5">
@@ -22,7 +28,7 @@ export function PersistentHeader() {
             Client Navigation Monitor
           </span>
           <span className="rounded bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300">
-            마운트: {mountedAt}
+            마운트: {mountedAt || '--:--:--'}
           </span>
           <span className="rounded bg-emerald-950 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-300 border border-emerald-800">
             유지 시간: {seconds}초

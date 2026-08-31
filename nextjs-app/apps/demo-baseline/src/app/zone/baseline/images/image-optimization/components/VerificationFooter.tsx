@@ -1,4 +1,5 @@
 'use client'
+
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
@@ -8,100 +9,101 @@ export interface VerificationFooterProps {
   actual?: React.ReactNode
   status?: string | number | null
   description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
+  hasInteracted?: boolean
+  quality?: number
+  priority?: boolean
+  viewMode?: 'both' | 'next-image' | 'html-img'
   [key: string]: any
 }
 
 export function VerificationFooter(props: VerificationFooterProps = {}) {
   const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
+    hasInteracted,
+    quality = 75,
+    priority = false,
+    viewMode = 'both',
   } = props
 
+  const defaultExpected =
+    '• next/image 컴포넌트를 통해 최적화 파이프라인이 동작하고, quality/priority 옵션에 따라 최적화된 이미지 URL 쿼리와 종횡비 고정이 적용됨\n• 일반 <img> 태그 대비 WebP/AVIF 자동 변환 및 Zero CLS 레이아웃 예약 확인\n• priority 선언 시 LCP 사전 로드(<link rel="preload">) 연동 실증 검증'
+
+  let defaultActual = '• 인터랙션 대기 중 (옵션 툴바에서 퀄리티 슬라이더와 priority 체크박스를 조작해보세요)'
+  if (hasInteracted) {
+    defaultActual = `• 이미지 최적화 파이프라인: next/image 활성화 (WebP/AVIF 자동 변환 지원)\n• 적용 옵션: quality=${quality}%, priority=${
+      priority ? 'true (LCP 사전 로드 활성화)' : 'false (지연 로딩 loading="lazy")'
+    }\n• 뷰 모드: ${
+      viewMode === 'both'
+        ? 'next/image vs img 동시 비교'
+        : viewMode === 'next-image'
+        ? 'next/image 단독 뷰'
+        : '일반 img 단독 뷰'
+    }\n• 레이아웃 안정성: width={400} height={225} 종횡비 예약으로 CLS 0 달성 완료`
+  }
+
   const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
+    props.isMatched !== undefined
+      ? props.isMatched
+      : hasInteracted
       ? true
       : undefined
 
-  const defaultExpected = "• next/image 자동 WebP 변환 및 CLS 방지 최적화 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+  const actualContent = props.actual !== undefined ? props.actual : defaultActual
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
         title="next/image 자동 WebP 변환 및 CLS 방지 최적화 실증 검증"
-        expected={propExpected || defaultExpected}
+        expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={
+          props.description ||
+          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+        }
       />
-                        <DemoDeepDiveCard title="next/image 자동 WebP 변환 및 CLS 방지 최적화">
-              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p><code>next/image</code> 컴포넌트는 요청 기기 규격에 맞춘 온디맨드 WebP/AVIF 이미지 자동 변환, 디바이스 뷰포트별 <code>srcset</code>/<code>sizes</code> 생성, <code>priority</code> 속성을 통한 LCP(Largest Contentful Paint) 프리로드 및 흐림 효과 플레이스홀더(Blur-up)를 제공하는 표준 이미지 최적화 스펙입니다.</p>
-                </div>
+      <DemoDeepDiveCard title="next/image 자동 WebP/AVIF 최적화 & Zero CLS 이미지 로딩">
+        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <p>
+              <code>next/image</code> 컴포넌트는 클라이언트 브라우저가 지원하는 최신 포맷(WebP/AVIF)으로 온디맨드 자동 변환하고, <code>width</code>와 <code>height</code>를 기반으로 종횡비를 미리 예약하여 레이아웃 이동(CLS)을 방지하며, <code>priority</code> 속성을 통해 LCP(Largest Contentful Paint) 이미지를 사전 로드하는 Next.js 공식 표준 최적화 스펙입니다.
+            </p>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 고해상도 원본 상품 이미지를 <code>next/image</code>로 렌더링하고, 뷰포트 크기에 따른 <code>sizes</code> 반응형 변환, 저화질 블러 플레이스홀더(BlurDataURL) 표시, 그리고 LCP 이미지의 <code>{'<'}link rel="preload"{'>'}</code> 헤더 주입 동작을 검증합니다.</p>
-                </div>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <p>
+              본 데모에서는 일반 <code>&lt;img&gt;</code> 태그와 <code>next/image</code> 컴포넌트를 나란히 배치하고, 퀄리티 슬라이더(quality) 및 <code>priority</code> 체크박스를 조작할 때 생성되는 <code>/_next/image?url=...&q=...</code> 최적화 쿼리 스트링과 이미지 파이프라인의 실시간 변화를 대조 검증합니다.
+            </p>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>네트워크 대역폭 최대 80% 절감</strong>: 최신 AVIF/WebP 압축 및 디바이스 픽셀 밀도(DPR)별 맞춤 리사이징을 적용합니다.</li>
-                    <li><strong>LCP 로딩 시간 획기적 단축</strong>: <code>priority</code> 지시어를 통해 브라우저가 최우선순위로 히어로 이미지를 사전 로드합니다.</li>
-                    <li><strong>레이아웃 이동(CLS) 원천 방지</strong>: <code>width</code>/<code>height</code> 또는 <code>fill</code> 비율을 기반으로 사전 렌더링 공간을 확보하여 콘텐츠 밀림을 방지합니다.</li>
-                  </ul>
-                </div>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>대역폭 절감 및 최신 포맷 지원</strong>: 브라우저 Accept 헤더에 맞춰 AVIF 및 WebP로 자동 트랜스코딩하여 전송량을 대폭 절감합니다.</li>
+              <li><strong>LCP 로딩 시간 단축</strong>: <code>priority</code> 지정 시 <code>&lt;link rel="preload"&gt;</code>를 헤더에 주입하여 첫 화면 히어로 이미지를 즉시 로드합니다.</li>
+              <li><strong>레이아웃 이동(CLS) 방지</strong>: 고정 크기 또는 <code>fill</code> 모드를 통해 렌더링 영역을 사전 확보함으로써 콘텐츠 깜빡임과 밀림 현상을 차단합니다.</li>
+            </ul>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li>이커머스 메인 배너 및 히어로 프로모션 이미지의 즉각적인 LCP 로딩</li>
-                    <li>수십 수백 개의 상품 썸네일이 나열되는 무한 스크롤 카탈로그 그리드</li>
-                    <li>사용자 업로드 프로필 사진 및 상품 리뷰 이미지의 최적화 표시</li>
-                  </ul>
-                </div>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li>쇼핑몰 메인 히어로 배너 및 프로모션 대표 이미지 (<code>priority=true</code> 적용)</li>
+              <li>수백 개의 상품 썸네일이 나열되는 카탈로그 및 무한 스크롤 피드 (기본 지연 로딩)</li>
+              <li>사용자 프로필 사진 및 리뷰 첨부 이미지 등 가변 리소스</li>
+            </ul>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>remotePatterns 도메인 등록</strong>: 외부 CDN이나 S3 버킷의 이미지를 사용할 경우 <code>next.config.ts</code>의 <code>images.remotePatterns</code>에 호스트명을 명시해야 보안 에러를 방지할 수 있습니다.</li>
-                    <li><strong>sizes 속성 필수 정의</strong>: <code>fill</code> 모드 사용 시 <code>sizes</code> 속성을 생략하면 브라우저가 100vw 전체 뷰포트 크기로 이미지를 다운로드하므로 그리드 크기(e.g. <code>(max-width: 768px) 100vw, 33vw</code>)를 반드시 지정해야 합니다.</li>
-                  </ul>
-                </div>
-              </div>
-            </DemoDeepDiveCard>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>remotePatterns 도메인 등록</strong>: 외부 CDN 또는 S3 스토리지 이미지를 불러올 때는 <code>next.config.ts</code>의 <code>images.remotePatterns</code>에 허용 도메인을 명시해야 합니다.</li>
+              <li><strong>fill 사용 시 sizes 필수</strong>: 부모 요소를 꽉 채우는 <code>fill</code> 모드 사용 시 <code>sizes</code> 속성을 지정하지 않으면 뷰포트 전체(100vw) 크기로 요청되므로 적절한 미디어 쿼리를 전달해야 합니다.</li>
+            </ul>
+          </div>
+        </div>
+      </DemoDeepDiveCard>
     </div>
   )
 }

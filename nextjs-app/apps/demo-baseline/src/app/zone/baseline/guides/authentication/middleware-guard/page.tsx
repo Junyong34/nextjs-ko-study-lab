@@ -1,7 +1,6 @@
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { MiddlewareGuardDemo } from './components/MiddlewareGuardDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { MiddlewareGuardSection } from './components/MiddlewareGuardSection'
 import { getAuthCookieState } from './actions'
 
 export default async function DemoPage() {
@@ -11,7 +10,7 @@ export default async function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title="Next.js 미들웨어 라우트 가드 및 인증 쿠키 검증"
-        concept="middleware.ts에서 요청 헤더의 auth_token 쿠키 유효성을 사전에 검증하여, 비인증 사용자의 보호 경로(/admin, /mypage) 접근을 0ms 에지 레벨에서 로그인 페이지로 차단합니다."
+        concept="Next.js 16의 proxy.ts(엣지 미들웨어)가 요청의 auth_token 쿠키 유효성을 렌더링 이전에 검증하여, 비인증 요청이 보호 경로(/admin, /mypage)에 접근하면 실제 307 리다이렉트 응답을 보냅니다. [테스트] 버튼은 브라우저 fetch로 이 프록시에 실제 왕복 요청을 보내 response.redirected 값을 관찰합니다."
         steps={[
           {
             step: 1,
@@ -35,10 +34,7 @@ export default async function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title="Proxy/Middleware 기반 라우트 보호 가드 실습">
-        <MiddlewareGuardDemo initialState={initialAuthState} />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <MiddlewareGuardSection initialState={initialAuthState} />
     </DemoContainer>
   )
 }

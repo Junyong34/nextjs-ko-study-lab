@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { ScrollRetentionDemo } from './components/ScrollRetentionDemo'
 import { VerificationFooter } from './components/VerificationFooter'
@@ -33,7 +33,9 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"searchParams 필터 스크롤 위치 보존 실습"}>
-        <ScrollRetentionDemo />
+        <Suspense fallback={<div className="text-xs text-zinc-400">로딩 중...</div>}>
+          <ScrollRetentionDemo />
+        </Suspense>
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>

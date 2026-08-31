@@ -1,9 +1,17 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { ScriptStrategyDemo } from './components/ScriptStrategyDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
+interface ScriptLoad {
+  strategy: string
+  at: number
+}
+
 export default function DemoPage() {
+  const [loads, setLoads] = useState<ScriptLoad[]>([])
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -27,9 +35,13 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"next/script strategy 로드 순서 최적화 실습"}>
-        <ScriptStrategyDemo />
+        <ScriptStrategyDemo onLoadsChange={setLoads} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={loads.length > 0 ? loads.length === 3 : undefined}
+        actual={loads.length > 0 ? `- 로드 완료된 전략(window.__scriptLoads): ${loads.map((l) => l.strategy).join(', ')} (${loads.length}/3)` : undefined}
+        expected="beforeInteractive, afterInteractive, lazyOnload 3개 실제 Route Handler 스크립트가 모두 로드되어 window.__scriptLoads에 기록되어야 한다."
+      />
     </DemoContainer>
   )
 }

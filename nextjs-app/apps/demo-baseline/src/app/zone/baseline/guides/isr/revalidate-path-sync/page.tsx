@@ -1,9 +1,22 @@
-import React from 'react'
+'use client'
+import React, { useState, useTransition } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { RevalidatePathSyncDemo } from './components/RevalidatePathSyncDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { executeRevalidatePathAction } from './actions'
+import type { RevalidatePathResult } from './types'
 
 export default function DemoPage() {
+  const [result, setResult] = useState<RevalidatePathResult | null>(null)
+  const [isPending, startTransition] = useTransition()
+
+  const handleRevalidate = () => {
+    startTransition(async () => {
+      const res = await executeRevalidatePathAction('/shop')
+      setResult(res)
+    })
+  }
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +46,19 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"revalidatePath를 통한 라우트 전체 즉시 동기화 실습"}>
-        <RevalidatePathSyncDemo />
+        <RevalidatePathSyncDemo result={result} isPending={isPending} onRevalidate={handleRevalidate} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        result={result}
+        isMatched={result ? result.status === 'PURGED' : undefined}
+        status={result?.status}
+        logs={result ? result.segments.map((s) => `${s.name} v${s.version} (${s.cachedTime})`) : undefined}
+        actual={
+          result
+            ? `- 상태: ${result.status}\n- 메시지: ${result.message}\n- 갱신 시각: ${result.timestamp}\n- 세그먼트 ${result.segments.length}개 갱신`
+            : undefined
+        }
+      />
     </DemoContainer>
   )
 }

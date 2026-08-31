@@ -6,9 +6,10 @@ import { useSearch } from './SearchContext'
 export function GnbHeader() {
   const { searchQuery, setSearchQuery } = useSearch()
   const [mountSeconds, setMountSeconds] = useState(0)
-  const [mountedAt] = useState<string>(() => new Date().toLocaleTimeString())
+  const [mountedAt, setMountedAt] = useState<string>('')
 
   useEffect(() => {
+    setMountedAt(new Date().toLocaleTimeString('ko-KR'))
     const timer = setInterval(() => {
       setMountSeconds((s) => s + 1)
     }, 1000)
@@ -25,7 +26,7 @@ export function GnbHeader() {
               RootLayout
             </span>
             <span className="rounded bg-zinc-800 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300">
-              마운트: {mountedAt}
+              마운트: {mountedAt || '--:--:--'}
             </span>
             <span className="rounded bg-emerald-950 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-300 border border-emerald-800">
               유지 시간: {mountSeconds}초 (라우팅 시 리셋 안 됨)

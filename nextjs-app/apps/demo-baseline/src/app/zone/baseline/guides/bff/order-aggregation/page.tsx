@@ -1,9 +1,19 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { BffAggregationDemo } from './components/BffAggregationDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
+interface AggregatedResult {
+  order: { orderId: string; status: string }
+  inventory: { warehouse: string; remaining: number }
+  shipping: { courier: string; status: string }
+  elapsedMs: number
+}
+
 export default function DemoPage() {
+  const [result, setResult] = useState<AggregatedResult | null>(null)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +43,13 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"Route Handler를 통한 레거시 주문/재고 API 취합 (BFF) 실습"}>
-        <BffAggregationDemo />
+        <BffAggregationDemo onResult={setResult} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={result ? result.elapsedMs < 550 : undefined}
+        actual={result ? `- orderId: ${result.order.orderId}\n- Promise.all 병렬 실행 소요 시간: ${result.elapsedMs}ms\n- (순차 호출이었다면 약 550ms 이상 소요)` : undefined}
+        expected="Route Handler가 실제 fetch 1회로 3개 서비스를 Promise.all 병렬 호출해, 순차 합산(약 550ms)보다 훨씬 짧은 시간에 응답해야 한다."
+      />
     </DemoContainer>
   )
 }

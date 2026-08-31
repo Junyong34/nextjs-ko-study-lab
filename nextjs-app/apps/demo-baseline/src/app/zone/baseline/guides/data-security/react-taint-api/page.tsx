@@ -1,9 +1,45 @@
-import React from 'react'
+'use client'
+import React, { useState, useTransition } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ReactTaintDemo } from './components/ReactTaintDemo'
+import { ReactTaintDemo, type TaintTestOutcome } from './components/ReactTaintDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { safePaymentAction, leakPaymentSecretAction } from './actions'
 
 export default function DemoPage() {
+  const [lastOutcome, setLastOutcome] = useState<TaintTestOutcome | null>(null)
+  const [isPending, startTransition] = useTransition()
+
+  const handleSafeCall = () => {
+    startTransition(async () => {
+      const res = await safePaymentAction()
+      setLastOutcome({
+        kind: 'safe',
+        message: `merchantId=${res.merchantId}, maskedKey=${res.maskedKey}`,
+        timestamp: res.timestamp,
+      })
+    })
+  }
+
+  const handleLeakAttempt = () => {
+    startTransition(async () => {
+      try {
+        const res = await leakPaymentSecretAction()
+        // 여기 도달하면 taint가 유출을 막지 못한 것이다.
+        setLastOutcome({
+          kind: 'leak-not-blocked',
+          message: `반환된 merchantId 필드에 원본 시크릿이 그대로 담겨 있음: ${res.merchantId}`,
+          timestamp: res.timestamp,
+        })
+      } catch (error) {
+        setLastOutcome({
+          kind: 'leak-blocked',
+          message: error instanceof Error ? error.message : String(error),
+          timestamp: new Date().toLocaleTimeString(),
+        })
+      }
+    })
+  }
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -39,9 +75,13 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"React experimental_taintObjectReference 비밀키 보호 실습"}>
-        <ReactTaintDemo />
+        <ReactTaintDemo lastOutcome={lastOutcome} isPending={isPending} onSafeCall={handleSafeCall} onLeakAttempt={handleLeakAttempt} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={lastOutcome ? lastOutcome.kind !== 'leak-not-blocked' : undefined}
+        actual={lastOutcome ? `[${lastOutcome.kind}] ${lastOutcome.message}` : undefined}
+        expected="안전한 호출은 마스킹된 값만 반환하고, 위험한 시도는 experimental_taintUniqueValue에 의해 실제 런타임 에러로 차단된다."
+      />
     </DemoContainer>
   )
 }

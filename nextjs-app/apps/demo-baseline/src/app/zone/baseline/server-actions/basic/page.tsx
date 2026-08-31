@@ -172,21 +172,21 @@ export default function ServerActionsBasicDemoPage() {
         description={statusMessage}
         expected={expectedText}
         actual={actualText}
-        isMatched={items.length > 0}
+        isMatched={items.length > 0 ? true : undefined}
       />
 
       {/* 4단. 최하단 개념 정리 카드 */}
-                        <DemoDeepDiveCard title="Server Actions 기본 배관 & 폼 데이터 변이 메커니즘">
-              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p>Server Actions는 <code>'use server'</code> 지시어로 선언된 서버 비동기 함수로, 클라이언트에서 별도의 API 엔드포인트(<code>/api/*</code>)를 생성하지 않고도 일반 함수처럼 직접 호출하여 서버 데이터 변이(Mutation)와 상태 갱신을 안전하게 수행하는 Next.js 표준 스펙입니다.</p>
-                </div>
+      <DemoDeepDiveCard title="Server Actions 기본 배관 & 폼 데이터 변이 메커니즘">
+        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <p>Server Actions는 <code>'use server'</code> 지시어로 선언된 서버 비동기 함수로, 클라이언트에서 별도의 API 엔드포인트(<code>/api/*</code>)를 생성하지 않고도 일반 함수처럼 직접 호출하여 서버 데이터 변이(Mutation)와 상태 갱신을 안전하게 수행하는 Next.js 표준 스펙입니다.</p>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 예제에서는 배송지 폼 또는 상품 후기 텍스트를 입력하고 [항목 추가]를 누르면, 클라이언트가 Server Action(<code>addItem</code>)을 POST 요청으로 호출합니다. 서버 함수가 실행되어 서버 메모리 목록이 갱신되고, 갱신된 최신 목록이 클라이언트에 0ms 체감 속도로 즉시 반영됩니다.</p>
-                </div>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <p>본 예제에서는 상품명 또는 후기 텍스트를 입력하고 [항목 추가]를 누르면, 클라이언트가 Server Action(<code>addItem</code>)을 비동기 POST RPC 요청으로 호출합니다. 서버 함수가 실행되어 서버 메모리 목록이 갱신되고, 변경된 최신 상태가 클라이언트 컴포넌트에 동기화되어 실시간으로 반영됩니다.</p>
+          </div>
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>

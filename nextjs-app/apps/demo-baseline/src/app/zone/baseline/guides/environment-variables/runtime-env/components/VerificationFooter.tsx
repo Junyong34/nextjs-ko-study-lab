@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 런타임 서버 환경변수(<code>REGION_CLUSTER</code>, <code>POD_IP</code>, <code>REDIS_HOST</code>)를 동적으로 조회하여, 재빌드 과정 없이 컨테이너 환경변수 주입만으로 인프라 접속 엔드포인트와 기능 플래그가 즉시 전환되는 메커니즘을 검증합니다.</p>
+            <p>본 데모에서는 실제 Route Handler(<code>api/status/route.ts</code>)가 <code>process.pid</code>, <code>process.env.NODE_ENV</code>, 현재 시각을 매 요청마다 새로 읽어 응답한다. 같은 서버 프로세스(pid 동일)에서 호출할 때마다 <code>evaluatedAt</code>이 갱신되는 것을 직접 확인해, 이 값이 빌드 타임에 번들에 굳지 않고 요청 시점에 평가됨을 실증한다.</p>
           </div>
 
           <div>

@@ -1,18 +1,34 @@
-'use client'
-
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useTemplateLifecycle } from './components/TemplateLifecycleContext'
 
 export default function ProductReviewTemplate({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const lifecycle = useTemplateLifecycle()
   const [rating, setRating] = useState(5)
   const [reviewText, setReviewText] = useState('')
-  const [mountTime] = useState<string>(() => new Date().toLocaleTimeString())
-  const [instanceId] = useState<string>(() =>
-    Math.random().toString(36).substring(2, 7).toUpperCase(),
-  )
+  const [mountTime, setMountTime] = useState<string>('')
+  const [instanceId, setInstanceId] = useState<string>('')
+
+  useEffect(() => {
+    const time = new Date().toLocaleTimeString('ko-KR')
+    const id = Math.random().toString(36).substring(2, 7).toUpperCase()
+    setMountTime(time)
+    setInstanceId(id)
+    lifecycle?.registerInstance(id, 5, 0)
+  }, [])
+
+  const handleRatingChange = (newRating: number) => {
+    setRating(newRating)
+    lifecycle?.updateFormState(newRating, reviewText.length)
+  }
+
+  const handleReviewChange = (text: string) => {
+    setReviewText(text)
+    lifecycle?.updateFormState(rating, text.length)
+  }
 
   return (
     <div className="space-y-3">
@@ -31,9 +47,9 @@ export default function ProductReviewTemplate({
             </span>
           </div>
           <div className="flex items-center gap-2 font-mono text-[11px] text-zinc-500">
-            <span>인스턴스 ID: <strong className="text-zinc-900 dark:text-zinc-100">#{instanceId}</strong></span>
+            <span>인스턴스 ID: <strong className="text-zinc-900 dark:text-zinc-100">#{instanceId || '------'}</strong></span>
             <span>·</span>
-            <span>마운트: {mountTime}</span>
+            <span>마운트: {mountTime || '--:--:--'}</span>
           </div>
         </div>
 
@@ -47,7 +63,7 @@ export default function ProductReviewTemplate({
               <button
                 key={star}
                 type="button"
-                onClick={() => setRating(star)}
+                onClick={() => handleRatingChange(star)}
                 className={`rounded px-1.5 py-0.5 text-xs font-mono font-semibold transition cursor-pointer ${
                   star <= rating
                     ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
@@ -72,7 +88,7 @@ export default function ProductReviewTemplate({
             id="review-input"
             rows={2}
             value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
+            onChange={(e) => handleReviewChange(e.target.value)}
             placeholder="후기를 작성한 뒤 상단의 다른 상품 탭을 클릭하면 template.tsx가 새 인스턴스로 재생성되어 폼이 초기화됩니다."
             className="w-full rounded border border-zinc-300 bg-white p-2 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-500 focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
           />

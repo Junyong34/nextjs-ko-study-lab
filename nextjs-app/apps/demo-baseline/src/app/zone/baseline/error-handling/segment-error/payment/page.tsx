@@ -1,13 +1,26 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { usePaymentFlow } from '../components/context'
 
 export default function PaymentPage() {
   const [shouldError, setShouldError] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'pay' | 'transfer'>('card')
+  const { stage, setStage } = usePaymentFlow()
+
+  useEffect(() => {
+    if (stage !== 'recovered' && stage !== 'completed') {
+      setStage('payment_ready')
+    }
+  }, [stage, setStage])
 
   if (shouldError) {
     throw new Error('PG사 결제 게이트웨이 연결 실패 (504 Gateway Timeout)')
+  }
+
+  const handleCompletePayment = () => {
+    setStage('completed')
+    alert('정상 결제가 완료되었습니다!')
   }
 
   return (
@@ -17,7 +30,7 @@ export default function PaymentPage() {
           결제 수단 선택 및 승인 (URL: /payment)
         </h4>
         <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-          정상 결제 세그먼트
+          {stage === 'recovered' ? '에러 복구 완료' : stage === 'completed' ? '결제 완료' : '정상 결제 세그먼트'}
         </span>
       </div>
 
@@ -43,7 +56,7 @@ export default function PaymentPage() {
       <div className="pt-2 flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={() => alert('정상 결제가 완료되었습니다!')}
+          onClick={handleCompletePayment}
           className="rounded bg-emerald-600 px-4 py-2 text-xs font-medium text-white shadow-2xs hover:bg-emerald-700 cursor-pointer"
         >
           208,000원 결제 완료하기

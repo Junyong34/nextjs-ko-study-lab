@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 interface WishlistButtonClientProps {
   productId: string
   initialLikes?: number
+  onToggle?: (liked: boolean, likes: number) => void
 }
 
 /**
@@ -14,16 +15,15 @@ interface WishlistButtonClientProps {
  */
 export function WishlistButtonClient({
   initialLikes = 142,
+  onToggle,
 }: WishlistButtonClientProps) {
   const [liked, setLiked] = useState(false)
-  const [likes, setLikes] = useState(initialLikes)
+  const likes = initialLikes + (liked ? 1 : 0)
 
   const handleToggle = () => {
-    setLiked((prev) => {
-      const next = !prev
-      setLikes((c) => (next ? c + 1 : c - 1))
-      return next
-    })
+    const nextLiked = !liked
+    setLiked(nextLiked)
+    onToggle?.(nextLiked, initialLikes + (nextLiked ? 1 : 0))
   }
 
   return (

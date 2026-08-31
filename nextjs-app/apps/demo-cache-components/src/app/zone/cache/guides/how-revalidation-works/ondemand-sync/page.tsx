@@ -2,10 +2,10 @@ import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { OndemandSyncDemo } from './components/OndemandSyncDemo'
 import { VerificationFooter } from './components/VerificationFooter'
-import { getCachedProducts } from './actions'
+import { getCachedProducts } from './cachedData'
 
 export default async function DemoPage() {
-  const initialData = await getCachedProducts()
+  const data = await getCachedProducts()
 
   return (
     <DemoContainer className="space-y-6">
@@ -36,9 +36,13 @@ export default async function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title="온디맨드 캐시 무효화 및 즉시 동기화 실습">
-        <OndemandSyncDemo initialResult={initialData} />
+        <OndemandSyncDemo cacheId={data.cacheId} generatedAt={data.generatedAt} products={data.products} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isLoaded={Boolean(data.cacheId)}
+        actual={`- 캐시 ID: #${data.cacheId}\n- 생성 시각: ${data.generatedAt}\n- 상품 ${data.products.length}건`}
+        expected="'use cache' + cacheTag('products')로 캐시된 값이 렌더링되고, revalidateTag 이후 재방문 시 캐시 ID가 바뀐다."
+      />
     </DemoContainer>
   )
 }

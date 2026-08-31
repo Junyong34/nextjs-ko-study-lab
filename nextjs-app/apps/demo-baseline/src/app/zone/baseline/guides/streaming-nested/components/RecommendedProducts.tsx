@@ -1,5 +1,6 @@
 import React from 'react'
 import type { Product } from '../types'
+import { MountNotifier } from './MountNotifier'
 
 async function getRecommendedProducts(): Promise<Product[]> {
   await new Promise((resolve) => setTimeout(resolve, 600))
@@ -10,17 +11,18 @@ async function getRecommendedProducts(): Promise<Product[]> {
   ]
 }
 
-export async function RecommendedProducts() {
+export async function RecommendedProducts({ children }: { children?: React.ReactNode }) {
   const products = await getRecommendedProducts()
 
   return (
-    <div className="space-y-3 rounded-md border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="space-y-4 rounded-md border border-zinc-200 bg-white p-4 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950">
+      <MountNotifier target="recommended" />
       <div className="flex items-center justify-between border-b border-zinc-200 pb-2 dark:border-zinc-800">
         <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-          함께 구매하면 좋은 추천 상품
+          함께 구매하면 좋은 추천 상품 (외측 스트리밍 청크)
         </h4>
         <span className="rounded bg-blue-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-blue-800 dark:bg-blue-950 dark:text-blue-300">
-          600ms Suspense 청크
+          600ms 청크 (1단계)
         </span>
       </div>
 
@@ -42,6 +44,8 @@ export async function RecommendedProducts() {
           </div>
         ))}
       </div>
+
+      {children && <div className="mt-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">{children}</div>}
     </div>
   )
 }

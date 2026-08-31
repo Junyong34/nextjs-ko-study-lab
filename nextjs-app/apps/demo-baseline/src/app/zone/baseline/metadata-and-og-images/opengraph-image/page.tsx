@@ -1,7 +1,6 @@
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { OgGeneratorClient } from './components/OgGeneratorClient'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function OgImageDemoPage() {
   return (
@@ -9,7 +8,7 @@ export default function OgImageDemoPage() {
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title="opengraph-image.tsx 동적 소셜 이미지 생성 (ImageResponse & JSX)"
-        concept="Next.js의 ImageResponse API는 JSX와 Tailwind CSS 문법을 활용하여 서버리스 Edge/Node 환경에서 1200x630 규격의 동적 소셜 OG 이미지를 실시간 PNG 바이너리로 렌더링합니다."
+        concept="Next.js의 ImageResponse API는 JSX와 CSS 문법을 활용하여 서버리스 환경에서 1200x630 규격의 동적 소셜 OG 이미지를 실시간 PNG 바이너리로 렌더링합니다."
         steps={[
           {
             step: 1,
@@ -26,21 +25,18 @@ export default function OgImageDemoPage() {
           {
             step: 3,
             title: '1200x630 ImageResponse 캔버스 실시간 갱신 관찰',
-            description: 'JSX 및 Tailwind 스타일 기반으로 실시간 렌더링되는 1200x630 Open Graph 이미지 캔버스를 확인합니다.',
+            description: 'JSX 및 스타일 기반으로 실시간 렌더링되는 1200x630 Open Graph 이미지 캔버스를 확인합니다.',
             actionBadge: 'OG 캔버스 확인',
-            observe: '실시간 상태 변경에 따라 1200x630 ImageResponse 캔버스의 타이틀과 스타일이 즉시 갱신됨',
+            observe: '입력한 뱃지/헤드라인 텍스트 및 선택 테마에 따라 1200x630 OG 캔버스와 ImageResponse 사양(image/png)이 정확히 반영됨',
             observeAt: 'playground',
           },
         ]}
       />
 
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
+      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) 및 3단/4단 */}
       <DemoPlaygroundCard title="Next.js 16 동적 OpenGraph 이미지 생성 캔버스" className="space-y-4">
         <OgGeneratorClient />
       </DemoPlaygroundCard>
-
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
     </DemoContainer>
   )
 }

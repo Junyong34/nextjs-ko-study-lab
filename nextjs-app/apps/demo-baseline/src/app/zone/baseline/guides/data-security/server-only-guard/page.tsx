@@ -1,9 +1,23 @@
-import React from 'react'
+'use client'
+import React, { useState, useTransition } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { ServerOnlyGuardDemo } from './components/ServerOnlyGuardDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { syncOrderAction, type OrderSyncResult } from './actions'
 
 export default function DemoPage() {
+  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
+  const [orderQuantity, setOrderQuantity] = useState(1)
+  const [result, setResult] = useState<OrderSyncResult | null>(null)
+  const [isPending, startTransition] = useTransition()
+
+  const handleSync = () => {
+    startTransition(async () => {
+      const next = await syncOrderAction(selectedProduct, orderQuantity)
+      setResult(next)
+    })
+  }
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -39,9 +53,26 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"server-only 패키지를 통한 클라이언트 번들 유출 차단 실습"}>
-        <ServerOnlyGuardDemo />
+        <ServerOnlyGuardDemo
+          selectedProduct={selectedProduct}
+          orderQuantity={orderQuantity}
+          result={result}
+          isPending={isPending}
+          onSelectProduct={setSelectedProduct}
+          onChangeQuantity={(delta) => setOrderQuantity((q) => Math.max(1, q + delta))}
+          onSync={handleSync}
+        />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={result ? !result.responseContainsRawSecret : undefined}
+        logs={result ? [`digest=${result.digest}`, `secretPreview=${result.secretPreview}`] : undefined}
+        actual={
+          result
+            ? `- digest: ${result.digest}\n- secretPreview: ${result.secretPreview}\n- 응답에 원본 시크릿 포함 여부: ${result.responseContainsRawSecret}`
+            : undefined
+        }
+        expected="server-only로 보호된 모듈에서 시크릿을 계산하지만, Server Action의 클라이언트 응답 JSON에는 원본 시크릿 문자열이 포함되지 않는다."
+      />
     </DemoContainer>
   )
 }

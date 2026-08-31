@@ -39,7 +39,7 @@ export function ReviewsStreamingClient({
                 {review.author}
               </span>
               <span className="font-mono text-[11px] text-amber-500 font-bold">
-                {''.repeat(review.rating)}{''.repeat(5 - review.rating)}
+                {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
               </span>
             </div>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
@@ -54,3 +54,13 @@ export function ReviewsStreamingClient({
     </div>
   )
 }
+
+import { VerificationFooter } from './VerificationFooter'
+
+export function ReviewsStreamingFooter({
+  reviewsPromise,
+}: ReviewsStreamingClientProps) {
+  const reviews = use(reviewsPromise)
+  return <VerificationFooter reviews={reviews} />
+}
+

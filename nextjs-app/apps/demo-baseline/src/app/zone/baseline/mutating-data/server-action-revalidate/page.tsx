@@ -1,7 +1,6 @@
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { CartTableClient } from './components/CartTableClient'
-import { VerificationFooter } from './components/VerificationFooter'
 import { getCartSummary } from './actions'
 
 export default async function ServerActionRevalidateDemoPage() {
@@ -33,23 +32,18 @@ export default async function ServerActionRevalidateDemoPage() {
                     "actionBadge": "초기화"
           },
           {
-                    "step": 4,
-                    "title": "서버 캐시 재검증 및 총액 갱신 관찰",
-                    "description": "revalidateTag/revalidatePath 호출로 서버 데이터 캐시가 갱신되어 최신 장바구니 합계가 렌더링되는지 관찰합니다.",
-                    "actionBadge": "캐시 재검증",
-                    "observe": "Server Action 실행 후 revalidateTag에 의해 장바구니 수량과 총 결제 금액이 즉시 동기화됨",
-                    "observeAt": "playground"
-          }
-]}
+            step: 4,
+            title: "서버 캐시 재검증 및 총액 갱신 관찰",
+            description: "revalidatePath 호출로 서버 데이터 캐시가 갱신되어 최신 장바구니 합계가 렌더링되는지 관찰합니다.",
+            actionBadge: "캐시 재검증",
+            observe: "Server Action 실행 후 revalidatePath에 의해 장바구니 수량과 총 결제 금액이 즉시 동기화됨",
+            observeAt: "playground",
+          },
+        ]}
       />
 
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-      <DemoPlaygroundCard title="이커머스 장바구니 수량 변경 및 실시간 결제액 동기화" className="space-y-4">
-        <CartTableClient cart={cart} />
-      </DemoPlaygroundCard>
-
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
+      {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 */}
+      <CartTableClient cart={cart} />
     </DemoContainer>
   )
 }

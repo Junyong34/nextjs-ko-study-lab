@@ -4,10 +4,9 @@ import {
   DemoContainer,
   DemoGuideCard,
   DemoPlaygroundCard,
-  ExpectedActualPanel,
   DemoDeepDiveCard,
 } from '@study/demo-kit'
-import { CacheActions } from './CacheActions'
+import { CacheVerificationClient } from './components/CacheVerificationClient'
 
 // 1. 'use cache' 적용 데이터 로딩 함수 (타임스탬프와 캐시 ID 반환)
 async function getCachedTimestamp() {
@@ -38,11 +37,6 @@ async function invalidateCacheAction() {
 
 export default async function DemoPage() {
   const cachedData = await getCachedTimestamp()
-
-  const expectedText =
-    '- 일반 브라우저 새로고침: 무효화 전에는 getCachedTimestamp()의 캐시 ID와 시각이 유지됨\n- revalidateTag(tag, "max") 실행: 태그가 붙은 캐시 항목이 즉시 삭제되지 않고 stale 상태로 표시됨\n- 무효화 뒤 첫 재방문: 이전 캐시 ID를 반환하면서 백그라운드 재검증을 시작함\n- 재검증 완료 뒤 다음 요청: 새로 생성된 캐시 ID와 시각이 표시됨'
-
-  const actualText = `- 현재 캐시 고유 ID: #${cachedData.cacheId}\n- 현재 캐시 생성 시각: ${cachedData.timestamp}\n- 적용 태그: cacheTag('caching-basic:data')\n- 현재 ID 하나만으로는 재검증 완료 여부를 판정할 수 없으므로, 가이드의 전후 순서를 따라 확인해야 함`
 
   return (
     <DemoContainer className="space-y-6">
@@ -128,20 +122,13 @@ export default async function DemoPage() {
           </div>
         </div>
 
-        {/* 조작 액션 버튼 */}
-        <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-          <CacheActions onRevalidate={invalidateCacheAction} />
-        </div>
+        {/* 조작 액션 버튼 및 검증 패널 */}
+        <CacheVerificationClient
+          currentCacheId={cachedData.cacheId}
+          currentTimestamp={cachedData.timestamp}
+          onRevalidate={invalidateCacheAction}
+        />
       </DemoPlaygroundCard>
-
-      {/* 3단. 기대값 vs 실제값 검증 패널 */}
-      <ExpectedActualPanel
-        title="use cache 캐시 유지 및 revalidateTag 재검증 순서 검증"
-        description="새로고침 시 캐시 유지와 revalidateTag(tag, 'max')의 stale-while-revalidate 순서를 대조"
-        expected={expectedText}
-        actual={actualText}
-        isMatched={Boolean(cachedData && cachedData.cacheId)}
-      />
 
       {/* 4단. 최하단 개념 정리 카드 */}
                         <DemoDeepDiveCard title="Next.js 16 use cache 지시어 기본 동작 및 revalidateTag 무효화">

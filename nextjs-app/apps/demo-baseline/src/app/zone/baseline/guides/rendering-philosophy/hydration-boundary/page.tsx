@@ -1,9 +1,12 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { HydrationBoundaryDemo } from './components/HydrationBoundaryDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [state, setState] = useState<{ mounted: boolean; clientOnlyValue: string | null }>({ mounted: false, clientOnlyValue: null })
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -18,24 +21,28 @@ export default function DemoPage() {
           },
           {
             step: 2,
-            title: "[하이드레이션 활성화] 버튼 클릭",
-            description: "클라이언트 마운트 상태를 활성화하여 브라우저 전용 이벤트 및 상태를 바인딩합니다.",
-            actionBadge: "하이드레이션 트리거",
+            title: "useEffect(() => setMounted(true), [])가 자동 실행됨",
+            description: "버튼 조작 없이, 하이드레이션이 끝나는 즉시 useEffect가 자동으로 실행되어 브라우저 전용 값을 채웁니다.",
+            actionBadge: "자동 하이드레이션",
           },
           {
             step: 3,
-            title: "마운트 완료 상태(Hydrated) 전환 및 인터랙션 활성화 관찰",
-            description: "클라이언트 상태가 활성화되어 동적 시간 정보 및 인터랙티브 버튼이 동작하는지 검증합니다.",
+            title: "서버 스냅샷과 다른 브라우저 전용 값(뷰포트 크기) 확인",
+            description: "서버는 window에 접근할 수 없어 렌더링하지 못했던 값이 마운트 후에만 나타나는지 검증합니다.",
             actionBadge: "생명주기 검증",
-            observe: "하이드레이션 활성화 클릭 후 클라이언트 마운트 완료(mounted: true) 및 인터랙티브 UI 활성화 관찰",
-            observeAt: "playground",
+            observe: "마운트 전(서버 HTML) vs 마운트 후(클라이언트 전용 값)의 실제 차이 관찰",
+            observeAt: "verification",
           },
         ]}
       />
       <DemoPlaygroundCard title={"하이드레이션 경계와 번들 격리 실습"}>
-        <HydrationBoundaryDemo />
+        <HydrationBoundaryDemo onMountedChange={(mounted, clientOnlyValue) => setState({ mounted, clientOnlyValue })} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={state.mounted}
+        actual={state.mounted ? `- mounted: true\n- 브라우저 전용 값(서버는 알 수 없음): ${state.clientOnlyValue}` : undefined}
+        expected="서버 HTML에는 없던 브라우저 전용 값(뷰포트 크기, 시각)이 하이드레이션 직후 자동으로 나타나야 한다."
+      />
     </DemoContainer>
   )
 }

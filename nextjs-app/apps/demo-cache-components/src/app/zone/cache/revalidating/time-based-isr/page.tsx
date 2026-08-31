@@ -8,7 +8,7 @@ import { VerificationFooter } from './components/VerificationFooter'
 async function getTimeBasedCachedData() {
   'use cache'
   cacheLife({
-    stale: 5,
+    stale: 10,
     revalidate: 10,
     expire: 60,
   })
@@ -55,7 +55,7 @@ export default function TimeBasedIsrDemoPage() {
           {
             step: 2,
             title: '10초 경과 후 [브라우저 새로고침 (SWR 테스트)] 클릭',
-            description: '10초 경과 후 요청하여 기존 캐시를 0ms 즉시 반환받고 백그라운드에서 새 캐시가 생성되는 STALE 동작을 확인합니다.',
+            description: '10초 경과 후 요청하여 기존 캐시를 즉시 반환받고 백그라운드에서 새 캐시가 생성되는 STALE 동작을 확인합니다.',
             actionBadge: 'SWR 백그라운드 갱신',
           },
           {
@@ -69,21 +69,16 @@ export default function TimeBasedIsrDemoPage() {
         ]}
       />
 
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-      <DemoPlaygroundCard title="시간 기반 캐시 수명 주기(SWR) 모니터" className="space-y-4">
-        <Suspense
-          fallback={
-            <div className="p-4 text-center text-xs text-zinc-400 font-mono animate-pulse">
-              [대기] 캐시 데이터 로딩 중...
-            </div>
-          }
-        >
-          <CachedContent />
-        </Suspense>
-      </DemoPlaygroundCard>
-
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
+      {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 */}
+      <Suspense
+        fallback={
+          <div className="p-8 text-center text-xs text-zinc-400 font-mono animate-pulse">
+            [대기] 캐시 데이터 로딩 중...
+          </div>
+        }
+      >
+        <CachedContent />
+      </Suspense>
     </DemoContainer>
   )
 }

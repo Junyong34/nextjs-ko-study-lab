@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import { usePrefetch } from './PrefetchContext'
 
 const BASE_URL = '/zone/baseline/linking-and-navigating/router-prefetch'
 const DEALS_URL = `${BASE_URL}/deals`
@@ -10,21 +11,25 @@ const VIP_URL = `${BASE_URL}/vip`
 export function PrefetchController() {
   const router = useRouter()
   const pathname = usePathname()
+  const prefetchCtx = usePrefetch()
 
-  const [isPrefetched, setIsPrefetched] = useState(false)
-  const [prefetchTime, setPrefetchTime] = useState<string | null>(null)
-  const [lastAction, setLastAction] = useState<string>('대기 중')
+  const isPrefetched = prefetchCtx?.isPrefetched ?? false
+  const setIsPrefetched = prefetchCtx?.setIsPrefetched ?? (() => {})
+  const prefetchTime = prefetchCtx?.prefetchTime ?? null
+  const setPrefetchTime = prefetchCtx?.setPrefetchTime ?? (() => {})
+  const lastAction = prefetchCtx?.lastAction ?? '대기 중'
+  const setLastAction = prefetchCtx?.setLastAction ?? (() => {})
 
   const handlePrefetchDeals = () => {
     router.prefetch(DEALS_URL)
     setIsPrefetched(true)
-    const time = new Date().toLocaleTimeString()
+    const time = new Date().toLocaleTimeString('ko-KR')
     setPrefetchTime(time)
     setLastAction(`특가 상품 페이지(/deals) 백그라운드 프리패치 완료 (${time})`)
   }
 
   const handleGoDeals = () => {
-    setLastAction('router.push(/deals) 실행 -> 즉시 렌더링')
+    setLastAction('router.push(/deals) 실행 -> 사전 로드된 페이지 전환')
     router.push(DEALS_URL)
   }
 

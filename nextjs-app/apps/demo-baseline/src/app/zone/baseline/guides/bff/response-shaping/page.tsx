@@ -1,9 +1,12 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { BffResponseShapingDemo } from './components/BffResponseShapingDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [measured, setMeasured] = useState<{ rawBytes: number; shapedBytes: number } | null>(null)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -27,9 +30,17 @@ export default function DemoPage() {
 ]}
       />
       <DemoPlaygroundCard title={"모바일 앱 최적화 응답 가공 (Response Shaping) 실습"}>
-        <BffResponseShapingDemo />
+        <BffResponseShapingDemo onMeasure={(rawBytes, shapedBytes) => setMeasured({ rawBytes, shapedBytes })} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={measured ? measured.shapedBytes < measured.rawBytes : undefined}
+        actual={
+          measured
+            ? `- 원본 실측 크기: ${measured.rawBytes} bytes\n- 정제 실측 크기: ${measured.shapedBytes} bytes\n- 실측 감축률: ${Math.round((1 - measured.shapedBytes / measured.rawBytes) * 100)}%`
+            : undefined
+        }
+        expected="TextEncoder로 실측한 정제 응답 크기가 원본보다 작아야 하며, 감축률은 사전에 고정된 수치가 아니라 실제 계산값이어야 한다."
+      />
     </DemoContainer>
   )
 }

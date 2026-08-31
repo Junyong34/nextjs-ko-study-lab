@@ -1,6 +1,8 @@
 'use client'
+
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { FlowStage } from './context'
 
 export interface VerificationFooterProps {
   isMatched?: boolean
@@ -8,60 +10,48 @@ export interface VerificationFooterProps {
   actual?: React.ReactNode
   status?: string | number | null
   description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
+  stage?: FlowStage
+  errorMsg?: string | null
   [key: string]: any
 }
 
 export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+  const { stage = 'order', errorMsg } = props
+
+  const defaultExpected =
+    '• 하위 결제 세그먼트(/payment)에서 504 에러 발생 시 상위 헤더를 유지한 채 error.tsx로 격리\n• [결제 다시 시도 (reset())] 호출 시 전체 새로고침 없이 세그먼트 정상 복구\n• 상위 레이아웃 보존 및 하위 에러 격리 복구 실증 검증'
+
+  let defaultActual = '• 인터랙션 대기 중 (최종 결제 단계로 이동하여 결제 통신 에러 및 reset() 복구를 실행하세요)'
+  if (stage === 'payment_ready') {
+    defaultActual = '• 결제 세그먼트(/payment) 진입 완료\n• 상태: [결제 통신 에러 강제 발생] 버튼을 클릭하여 error.tsx 격리를 확인하세요.'
+  } else if (stage === 'errored') {
+    defaultActual = `• 세그먼트 에러 격리: payment/error.tsx 포착 완료\n• 상위 레이아웃: OrderSummaryHeader 정상 보존\n• 에러 사유: ${errorMsg || 'PG사 결제 게이트웨이 연결 실패 (504 Gateway Timeout)'}\n• 상태: [결제 다시 시도 (reset())] 버튼을 클릭하세요.`
+  } else if (stage === 'recovered') {
+    defaultActual = '• 세그먼트 에러 격리: payment/error.tsx 정상 포착 및 상위 OrderSummaryHeader 보존\n• 클라이언트 복구: reset() 호출로 PaymentPage 재마운트 성공\n• 관찰 결과: 전체 애플리케이션 크래시 없이 하위 세그먼트 격리 복구 완료'
+  } else if (stage === 'completed') {
+    defaultActual = '• 세그먼트 결제 완료: 정상 결제 승인 완료\n• 상위 레이아웃 및 세그먼트 정상 연동 검증 완료'
+  }
 
   const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
+    props.isMatched !== undefined
+      ? props.isMatched
+      : stage === 'recovered' || stage === 'completed'
       ? true
       : undefined
 
-  const defaultExpected = "• error.tsx 세그먼트 에러 바운더리 격리 및 복구 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+  const actualContent = props.actual !== undefined ? props.actual : defaultActual
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
         title="error.tsx 세그먼트 에러 바운더리 격리 및 복구 실증 검증"
-        expected={propExpected || defaultExpected}
+        expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={
+          props.description ||
+          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+        }
       />
       <DemoDeepDiveCard title="error.tsx 세그먼트 레벨 에러 바운더리 격리 및 reset() 복구">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
@@ -75,7 +65,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 결제 처리 또는 상품 조회 중 예외가 발생했을 때, 상위 GNB 네비게이션과 사이드바 레이아웃은 완벽하게 유지한 채 본문 영역만 <code>error.tsx</code> 폴백 UI로 안전하게 격리 치환합니다. [다시 시도] 버튼 클릭 시 <code>reset()</code>을 호출하여 세그먼트 리렌더링을 실행합니다.
+              본 데모에서는 하위 결제 세그먼트(<code>/payment</code>)에서 PG사 게이트웨이 504 Timeout 예외가 발생했을 때, 상위 주문서 요약 헤더(<code>OrderSummaryHeader</code>)는 온전히 유지한 채 결제 세그먼트만 <code>payment/error.tsx</code> 폴백 UI로 격리합니다. [결제 다시 시도] 버튼 클릭 시 <code>reset()</code>을 호출하여 세그먼트를 정상 복구합니다.
             </p>
           </div>
 
@@ -83,7 +73,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>화면 전체 크래시(White-out) 원천 방지</strong>: 특정 위젯이나 하위 페이지의 장애가 사이트 전체로 번지지 않도록 세그먼트 단위로 결함을 격리합니다.</li>
-              <li><strong>사용자 이탈 방지</strong>: 에러 발생 시에도 GNB 메뉴를 통해 홈이나 고객센터 등 다른 페이지로 정상 이동할 수 있습니다.</li>
+              <li><strong>사용자 이탈 방지</strong>: 에러 발생 시에도 상위 헤더 네비게이션을 통해 다른 단계로 자유롭게 이동할 수 있습니다.</li>
               <li><strong>보안 해시 다이제스트</strong>: 프로덕션 환경에서 민감한 서버 스택 트레이스를 숨기고 <code>error.digest</code> 해시 코드만 클라이언트에 전달하여 보안을 유지합니다.</li>
             </ul>
           </div>

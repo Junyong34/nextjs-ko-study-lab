@@ -1,9 +1,13 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { PrefetchFalseDemo } from './components/PrefetchFalseDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
+  const [prefetchMode, setPrefetchMode] = useState(false)
+  const [hoverCount, setHoverCount] = useState(0)
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -33,9 +37,22 @@ export default function DemoPage() {
         ]}
       />
       <DemoPlaygroundCard title={"prefetch={false} 명시적 프리패치 차단 실습"}>
-        <PrefetchFalseDemo />
+        <PrefetchFalseDemo
+          prefetchMode={prefetchMode}
+          hoverCount={hoverCount}
+          onSetPrefetchMode={setPrefetchMode}
+          onHover={() => setHoverCount((h) => h + 1)}
+        />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter
+        isMatched={hoverCount > 0 ? true : undefined}
+        actual={
+          hoverCount > 0
+            ? `- 현재 <Link prefetch={${prefetchMode}}>\n- 호버 감지 횟수: ${hoverCount}\n- Network 탭에서 hover 시점에 RSC 요청이 발생하는지 직접 대조하세요 (prefetch={false}는 hover 시점 온디맨드 요청을 허용하는 사양이며, 이 패널은 hover 이벤트 자체만 실측합니다)`
+            : undefined
+        }
+        expected="prefetch prop 값이 Link에 그대로 전달되고, hover 이벤트가 실제로 카운트된다. 자동/온디맨드 프리페치 발생 여부는 브라우저 Network 탭에서 별도로 확인한다."
+      />
     </DemoContainer>
   )
 }
