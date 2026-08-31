@@ -2,7 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { TableOfContents } from '@study/ui'
 import { getManifest, getDemos } from '@/lib/docs'
-import { RoadmapHero, RoadmapStepCards } from '@/components/home'
+import { RoadmapHero, RoadmapStepCards, RoadmapBookshelf } from '@/components/home'
 
 export const metadata: Metadata = {
   title: 'Next.js 16 학습 로드맵 | App Router 한국어 가이드 & 실습 랩',
@@ -11,12 +11,13 @@ export const metadata: Metadata = {
 }
 
 const HOME_HEADINGS = [
-  { id: 'roadmap', text: '학습 로드맵', level: 2 },
-  { id: 'step-01', text: 'Step 01. 시작하기', level: 3 },
-  { id: 'step-02', text: 'Step 02. 실무 가이드', level: 3 },
-  { id: 'step-03', text: 'Step 03. API 레퍼런스', level: 3 },
-  { id: 'step-04', text: 'Step 04. 핵심 용어집', level: 3 },
-  { id: 'step-05', text: 'Step 05. 아키텍처', level: 3 },
+  // { id: 'roadmap', text: '학습 로드맵', level: 2 },
+  // { id: 'step-01', text: 'Step 01. 시작하기', level: 3 },
+  // { id: 'step-02', text: 'Step 02. 실무 가이드', level: 3 },
+  // { id: 'step-03', text: 'Step 03. API 레퍼런스', level: 3 },
+  // { id: 'step-04', text: 'Step 04. 핵심 용어집', level: 3 },
+  // { id: 'step-05', text: 'Step 05. 아키텍처', level: 3 },
+  { id: 'bookshelf', text: 'Nextjs 학습하기', level: 2 },
 ]
 
 export default function HomePage() {
@@ -31,7 +32,8 @@ export default function HomePage() {
       {/* Main Roadmap Hub Content */}
       <div className="min-w-0 flex-1 space-y-8 pb-10">
         <RoadmapHero totalDocs={totalDocs} totalDemos={totalDemos} />
-        <RoadmapStepCards />
+        {/* <RoadmapStepCards /> */}
+        <RoadmapBookshelf demos={allDemos} />
       </div>
 
       {/* Right Sticky Table of Contents */}

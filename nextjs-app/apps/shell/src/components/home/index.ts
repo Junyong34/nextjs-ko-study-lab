@@ -1,5 +1,6 @@
 export { RoadmapHero } from './RoadmapHero'
 export { RoadmapStepCards } from './RoadmapStepCards'
+export { RoadmapBookshelf } from './RoadmapBookshelf'
 export { LearningTracks } from './LearningTracks'
 export { DemoFeatureSection } from './DemoFeatureSection'
 export { Next16Highlights } from './Next16Highlights'

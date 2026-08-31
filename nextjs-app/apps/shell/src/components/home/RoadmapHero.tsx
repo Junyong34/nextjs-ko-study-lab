@@ -57,7 +57,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
             className="inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
           >
             <Rocket className="h-4 w-4" />
-            로드맵 시작하기
+            시작하기
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
@@ -90,21 +90,21 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
 
           <div className="rounded-xl border border-zinc-200/60 bg-white/70 p-3.5 backdrop-blur-xs dark:border-zinc-800/60 dark:bg-zinc-900/60">
             <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
-              <Layers className="h-4 w-4" />
-              <span className="text-xs font-medium">학습 카테고리</span>
-            </div>
-            <p className="mt-1.5 text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-              5단계 로드맵
-            </p>
-          </div>
-
-          <div className="rounded-xl border border-zinc-200/60 bg-white/70 p-3.5 backdrop-blur-xs dark:border-zinc-800/60 dark:bg-zinc-900/60">
-            <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
               <PlayCircle className="h-4 w-4" />
               <span className="text-xs font-medium">실습 데모</span>
             </div>
             <p className="mt-1.5 text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
               {totalDemos > 0 ? `${totalDemos}개 랩` : '인터랙티브 랩'}
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-zinc-200/60 bg-white/70 p-3.5 backdrop-blur-xs dark:border-zinc-800/60 dark:bg-zinc-900/60">
+            <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+              <Layers className="h-4 w-4" />
+              <span className="text-xs font-medium">학습 기록</span>
+            </div>
+            <p className="mt-1.5 text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              쳅터별 학습 기록
             </p>
           </div>
         </div>
