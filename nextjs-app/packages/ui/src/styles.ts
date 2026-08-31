@@ -44,6 +44,26 @@ export const STATUS_TONE = {
   },
 } as const
 
+/** PerspectiveBook 표지는 중성 zinc로 두고, 의미색은 얇은 accent에만 사용한다. */
+export const BOOK_TONES = {
+  sky: {
+    cover: 'border-zinc-300 bg-zinc-100 text-zinc-950 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50',
+    accent: 'bg-blue-500 dark:bg-blue-400',
+  },
+  grove: {
+    cover: 'border-zinc-300 bg-zinc-100 text-zinc-950 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50',
+    accent: 'bg-emerald-500 dark:bg-emerald-400',
+  },
+  violet: {
+    cover: 'border-zinc-300 bg-zinc-100 text-zinc-950 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50',
+    accent: 'bg-purple-500 dark:bg-purple-400',
+  },
+  rose: {
+    cover: 'border-zinc-300 bg-zinc-100 text-zinc-950 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50',
+    accent: 'bg-rose-500 dark:bg-rose-400',
+  },
+} as const
+
 /** 카드 표면 — 데모 색인 카드와 문서 하단 카드가 공유하는 부분. */
 export const CARD_SURFACE =
   'rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900'
