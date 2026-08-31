@@ -13,6 +13,8 @@ export interface PerspectiveBookProps {
   depth?: string
   pages?: boolean
   trigger?: BookTrigger
+  /** self trigger의 키보드 피드백이 필요한 실제 상호작용 표면에만 opt-in 한다. */
+  focusable?: boolean
   illustration?: React.ReactNode
   texture?: boolean
 }
@@ -47,6 +49,7 @@ export function PerspectiveBook({
   depth = '1rem',
   pages = true,
   trigger = 'self',
+  focusable = false,
   illustration,
   texture = true,
 }: PerspectiveBookProps) {
@@ -54,7 +57,11 @@ export function PerspectiveBook({
   const style = { '--book-w': width, '--book-d': depth } as React.CSSProperties
 
   return (
-    <div className={bookSurfaceClass({ tone, trigger, pages, className })} style={style}>
+    <div
+      className={bookSurfaceClass({ tone, trigger, pages, className })}
+      style={style}
+      tabIndex={focusable && trigger === 'self' ? 0 : undefined}
+    >
       <div className="relative w-[var(--book-w)] aspect-[49/60] [transform-style:preserve-3d]">
         <div
           className={cn(

@@ -58,6 +58,12 @@ describe('Tier 1: PerspectiveBook shared primitive contract', () => {
 
     assert.match(source, /hover:[^'"`]+focus-visible:/)
     assert.match(source, /group-hover:[^'"`]+group-focus-visible:/)
+    assert.match(source, /focusable\??:\s*boolean/, 'self trigger must have an explicit opt-in focus target')
+    assert.match(
+      source,
+      /tabIndex=\{focusable && trigger === 'self' \? 0 : undefined\}/,
+      'decorative books must not create a tab stop while opted-in self triggers remain keyboard reachable',
+    )
     assert.match(source, /'--book-w':\s*width/)
     assert.match(source, /'--book-d':\s*depth/)
     assert.match(source, /w-\[var\(--book-w\)\]/)
