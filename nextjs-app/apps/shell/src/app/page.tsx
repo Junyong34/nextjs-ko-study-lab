@@ -2,6 +2,8 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { TableOfContents } from '@study/ui'
 import { getManifest, getDemos } from '@/lib/docs'
+import { createDemoIndexCardItems } from '@/lib/demo-index'
+import { createGuideBookItems } from '@/lib/guide-books'
 import { RoadmapHero, RoadmapStepCards } from '@/components/home'
 
 export const metadata: Metadata = {
@@ -25,6 +27,9 @@ export default function HomePage() {
 
   const totalDocs = manifest.totalDocs || 0
   const totalDemos = allDemos.length || 0
+  const guideBooks = createGuideBookItems(createDemoIndexCardItems(allDemos, manifest))
+
+  void guideBooks
 
   return (
     <div className="flex items-start gap-8">

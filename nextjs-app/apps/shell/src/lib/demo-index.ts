@@ -1,33 +1,27 @@
-import type { Demo, DemoStatus } from '@study/demos'
+import type { Demo } from '@study/demos'
 import type { DocsManifest } from './manifest'
+import {
+  createDemoIndexCardItems,
+  DEMO_INDEX_CATEGORIES,
+  getDemoCategory,
+  type DemoIndexCardItem,
+  type DemoIndexCategory,
+} from './demo-index-items.ts'
+
+export {
+  createDemoIndexCardItems,
+  DEMO_INDEX_CATEGORIES,
+  getDemoCategory,
+  type DemoIndexCardItem,
+  type DemoIndexCategory,
+} from './demo-index-items.ts'
 
 export const DEMO_INDEX_PAGE_SIZE = 24
-
-export const DEMO_INDEX_CATEGORIES = [
-  'All',
-  'Getting Started',
-  'Guides',
-  'API Reference',
-  'Architecture',
-] as const
-
-export type DemoIndexCategory = (typeof DEMO_INDEX_CATEGORIES)[number]
 
 export interface DemoIndexQuery {
   q: string
   category: DemoIndexCategory
   page: number
-}
-
-export interface DemoIndexCardItem {
-  id: string
-  title: string
-  learnerUrl: string
-  docTitle: string
-  docUrl: string
-  doc?: string
-  status: DemoStatus | string
-  category: DemoIndexCategory
 }
 
 export interface DemoIndexViewModel {
@@ -40,18 +34,6 @@ export interface DemoIndexViewModel {
   categories: readonly DemoIndexCategory[]
   allCount: number
   allDoneCount: number
-}
-
-/**
- * 데모의 doc 경로를 기반으로 4대 카테고리('Getting Started' | 'Guides' | 'API Reference' | 'Architecture')를 판별합니다.
- */
-export function getDemoCategory(demo: { doc: string }): DemoIndexCategory {
-  const doc = demo.doc
-  if (doc.startsWith('1-') || doc.startsWith('1-getting-started')) return 'Getting Started'
-  if (doc.startsWith('2-') || doc.startsWith('2-guides')) return 'Guides'
-  if (doc.startsWith('3-') || doc.startsWith('3-api-reference')) return 'API Reference'
-  if (doc.startsWith('5-') || doc.startsWith('5-architecture')) return 'Architecture'
-  return 'All'
 }
 
 /**
@@ -183,25 +165,8 @@ export function createDemoIndexViewModel(
   docsManifest: DocsManifest | undefined,
   query: DemoIndexQuery
 ): DemoIndexViewModel {
-  const docMap = new Map((docsManifest?.docs || []).map((d) => [d.path, d]))
-
-  const allItems: (DemoIndexCardItem & { originalIndex: number })[] = demos.map((demo, idx) => {
-    const docEntry =
-      docMap.get(demo.doc) ||
-      (docsManifest?.docs || []).find((d) => d.path.endsWith(demo.doc))
-    const category = getDemoCategory(demo)
-    return {
-      id: demo.url,
-      title: demo.title,
-      learnerUrl: `/demo/${demo.url}`,
-      docTitle: docEntry?.title ?? demo.doc,
-      docUrl: docEntry?.url ?? '/',
-      doc: demo.doc,
-      status: demo.status,
-      category,
-      originalIndex: idx,
-    }
-  })
+  const allItems = createDemoIndexCardItems(demos, docsManifest)
+    .map((item, originalIndex) => ({ ...item, originalIndex }))
 
   const allCount = demos.length
   const allDoneCount = demos.filter((d) => d.status === 'done').length
