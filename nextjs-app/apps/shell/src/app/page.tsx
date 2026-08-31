@@ -4,7 +4,7 @@ import { TableOfContents } from '@study/ui'
 import { getManifest, getDemos } from '@/lib/docs'
 import { createDemoIndexCardItems } from '@/lib/demo-index'
 import { createGuideBookItems } from '@/lib/guide-books'
-import { RoadmapHero, RoadmapStepCards } from '@/components/home'
+import { DeepDiveGuidesSection, RoadmapHero, RoadmapStepCards } from '@/components/home'
 
 export const metadata: Metadata = {
   title: 'Next.js 16 학습 로드맵 | App Router 한국어 가이드 & 실습 랩',
@@ -19,6 +19,7 @@ const HOME_HEADINGS = [
   { id: 'step-03', text: 'Step 03. API 레퍼런스', level: 3 },
   { id: 'step-04', text: 'Step 04. 핵심 용어집', level: 3 },
   { id: 'step-05', text: 'Step 05. 아키텍처', level: 3 },
+  { id: 'deep-dive-guides', text: '더 깊이 파고들기', level: 2 },
 ]
 
 export default function HomePage() {
@@ -29,14 +30,13 @@ export default function HomePage() {
   const totalDemos = allDemos.length || 0
   const guideBooks = createGuideBookItems(createDemoIndexCardItems(allDemos, manifest))
 
-  void guideBooks
-
   return (
     <div className="flex items-start gap-8">
       {/* Main Roadmap Hub Content */}
       <div className="min-w-0 flex-1 space-y-8 pb-10">
         <RoadmapHero totalDocs={totalDocs} totalDemos={totalDemos} />
         <RoadmapStepCards />
+        <DeepDiveGuidesSection guideBooks={guideBooks} />
       </div>
 
       {/* Right Sticky Table of Contents */}
