@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useMemo, useState } from 'react'
-import { BookOpen, Layers3, RotateCcw } from 'lucide-react'
+import { BookOpen, Layers3 } from 'lucide-react'
 import { getLearningProgressSummary } from '@/lib/learning-progress/state'
 import { LearningProgressList } from './LearningProgressList'
 import { LearningProgressNotice } from './LearningProgressNotice'
@@ -14,14 +14,12 @@ export function LearningProgressChecklist({
   tab,
   onTabChange,
   compact = false,
-  showReset = false,
 }: {
   tab: LearningProgressTab
   onTabChange: (tab: LearningProgressTab) => void
   compact?: boolean
-  showReset?: boolean
 }) {
-  const { inventory, isCompleted, reset } = useLearningProgress()
+  const { inventory, isCompleted } = useLearningProgress()
   const [status, setStatus] = useState<StatusFilter>('all')
   const [category, setCategory] = useState('all')
   const [query, setQuery] = useState('')
@@ -60,30 +58,17 @@ export function LearningProgressChecklist({
     })
   }, [activeCategory, isCompleted, normalizedQuery, sourceItems, status])
 
-  const hasAnyRecord =
-    inventory.documents.some((item) => isCompleted('document', item.key)) ||
-    inventory.demos.some((item) => isCompleted('demo', item.key))
-
   const changeTab = (nextTab: LearningProgressTab) => {
     setCategory('all')
     onTabChange(nextTab)
   }
 
-  const handleReset = () => {
-    if (window.confirm('문서와 데모의 모든 학습 완료 표시를 해제할까요?')) reset()
-  }
-
   return (
     <div className={compact ? 'space-y-4' : 'space-y-6'}>
       <LearningProgressNotice />
-      {!hasAnyRecord && (
-        <p className="rounded-lg bg-zinc-100 px-4 py-3 text-sm text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
-          아직 표시한 학습 기록이 없습니다.
-        </p>
-      )}
 
       <p
-        className={`flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-100 ${
+        className={`flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-300 ${
           compact ? 'px-3 py-2 text-xs' : 'px-4 py-3 text-sm'
         }`}
         aria-live="polite"
@@ -91,7 +76,7 @@ export function LearningProgressChecklist({
         <span className="font-semibold">
           {tab === 'documents' ? '문서' : '데모'} 학습 완료
         </span>
-        <strong className="tabular-nums">
+        <strong className="tabular-nums rounded-full bg-emerald-50 px-2.5 py-0.5 font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
           {progressSummary.completedCount} / {progressSummary.totalCount}
         </strong>
       </p>
@@ -129,7 +114,7 @@ export function LearningProgressChecklist({
             진행 상태
           </legend>
           <div
-            className="flex w-full rounded-lg border border-zinc-300 bg-zinc-200 p-1 dark:border-zinc-700 dark:bg-zinc-800"
+            className="flex w-full overflow-hidden rounded-lg border border-zinc-300 bg-zinc-200 dark:border-zinc-700 dark:bg-zinc-800"
             aria-label="완료 상태 필터"
           >
             {([
@@ -142,7 +127,7 @@ export function LearningProgressChecklist({
                 type="button"
                 onClick={() => setStatus(value)}
                 aria-pressed={status === value}
-                className={`flex-1 rounded-md px-3 py-2 text-xs font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:focus-visible:outline-zinc-100 ${
+                className={`flex-1 whitespace-nowrap px-3 py-1.5 text-xs font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-900 dark:focus-visible:outline-zinc-100 ${
                   status === value
                     ? 'bg-zinc-900 text-white shadow-sm dark:bg-zinc-100 dark:text-zinc-900'
                     : 'text-zinc-600 hover:bg-white/70 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-white'
@@ -194,19 +179,6 @@ export function LearningProgressChecklist({
         compact={compact}
         isCompleted={(key) => isCompleted(tab === 'documents' ? 'document' : 'demo', key)}
       />
-
-      {showReset && (
-        <div className="border-t border-zinc-200 pt-6 dark:border-zinc-800">
-          <button
-            type="button"
-            onClick={handleReset}
-            className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950/40"
-          >
-            <RotateCcw className="h-4 w-4" aria-hidden="true" />
-            전체 학습 완료 해제
-          </button>
-        </div>
-      )}
     </div>
   )
 }

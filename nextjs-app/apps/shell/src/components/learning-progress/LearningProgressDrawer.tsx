@@ -1,12 +1,13 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { X } from 'lucide-react'
+import { RotateCcw, X } from 'lucide-react'
 import { FeedbackTrigger, SITE } from '@study/ui'
 import {
   LearningProgressChecklist,
   type LearningProgressTab,
 } from './LearningProgressChecklist'
+import { useLearningProgress } from './LearningProgressProvider'
 
 export function LearningProgressDrawer({
   open,
@@ -20,6 +21,11 @@ export function LearningProgressDrawer({
   const closeRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLElement>(null)
   const [tab, setTab] = useState<LearningProgressTab>('documents')
+  const { reset } = useLearningProgress()
+
+  const handleReset = () => {
+    if (window.confirm('문서와 데모의 모든 학습 완료 표시를 해제할까요?')) reset()
+  }
 
   useEffect(() => {
     if (!open) return
@@ -82,24 +88,29 @@ export function LearningProgressDrawer({
           <h2 id="learning-progress-drawer-title" className="text-lg font-bold">
             학습 기록
           </h2>
-          <button
-            ref={closeRef}
-            type="button"
-            onClick={closeAndRestore}
-            className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            aria-label="학습 기록 닫기"
-          >
-            <X className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-2.5 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950/40"
+            >
+              <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+              학습 기록 초기화
+            </button>
+            <button
+              ref={closeRef}
+              type="button"
+              onClick={closeAndRestore}
+              className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              aria-label="학습 기록 닫기"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-5 pr-1">
-          <LearningProgressChecklist
-            tab={tab}
-            onTabChange={setTab}
-            compact
-            showReset
-          />
+          <LearningProgressChecklist tab={tab} onTabChange={setTab} compact />
         </div>
 
         <div className="border-t border-zinc-200 pt-4 text-xs dark:border-zinc-800">
