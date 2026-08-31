@@ -20,9 +20,9 @@ export interface PerspectiveBookProps {
 }
 
 const SELF_TRIGGER =
-  'transition-transform duration-300 hover:[transform:rotateY(-8deg)_rotateX(3deg)] focus-visible:[transform:rotateY(-8deg)_rotateX(3deg)] motion-reduce:transition-none'
+  'transition-transform duration-600 ease-out hover:[transform:rotateY(-20deg)] hover:scale-[1.066] hover:-translate-x-1 focus-visible:[transform:rotateY(-20deg)] focus-visible:scale-[1.066] focus-visible:-translate-x-1 motion-reduce:transition-none'
 const GROUP_TRIGGER =
-  'transition-transform duration-300 group-hover:[transform:rotateY(-8deg)_rotateX(3deg)] group-focus-visible:[transform:rotateY(-8deg)_rotateX(3deg)] motion-reduce:transition-none'
+  'transition-transform duration-600 ease-out group-hover:[transform:rotateY(-20deg)] group-hover:scale-[1.066] group-hover:-translate-x-1 group-focus-visible:[transform:rotateY(-20deg)] group-focus-visible:scale-[1.066] group-focus-visible:-translate-x-1 motion-reduce:transition-none'
 
 /** Link, article, li 같은 기존 wrapper에 책 표면 상호작용만 붙일 때 사용한다. */
 export function bookSurfaceClass({
@@ -32,7 +32,7 @@ export function bookSurfaceClass({
   className = '',
 }: Pick<PerspectiveBookProps, 'tone' | 'trigger' | 'pages' | 'className'> = {}): string {
   return cn(
-    'relative block [perspective:900px]',
+    'relative block',
     BOOK_TONES[tone].cover,
     pages && 'rounded-r-lg',
     trigger === 'group' ? GROUP_TRIGGER : SELF_TRIGGER,
@@ -57,12 +57,14 @@ export function PerspectiveBook({
   const style = { '--book-w': width, '--book-d': depth } as React.CSSProperties
 
   return (
-    <div
-      className={bookSurfaceClass({ tone, trigger, pages, className })}
-      style={style}
-      tabIndex={focusable && trigger === 'self' ? 0 : undefined}
-    >
-      <div className="relative w-[var(--book-w)] aspect-[49/60] [transform-style:preserve-3d]">
+    <div className="relative [perspective:900px]" style={style}>
+      <div
+        className={cn(
+          bookSurfaceClass({ tone, trigger, pages, className }),
+          'w-[var(--book-w)] aspect-[49/60] [transform-style:preserve-3d]',
+        )}
+        tabIndex={focusable && trigger === 'self' ? 0 : undefined}
+      >
         <div
           className={cn(
             'absolute inset-0 overflow-hidden rounded-r-lg border shadow-lg [backface-visibility:hidden] [transform:translateZ(calc(var(--book-d)_/_2))]',

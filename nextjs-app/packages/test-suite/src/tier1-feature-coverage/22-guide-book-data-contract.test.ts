@@ -77,4 +77,31 @@ describe('Tier 1: Guide book data contract', () => {
       demoUrl: '/demo/first', demoPath: 'first', demoCount: 1, category: 'Guides',
     })
   })
+
+  it('projects only internal guide document URLs', () => {
+    const guideBooks = createGuideBookItems([
+      {
+        id: 'guide-index', title: 'Guide index demo', learnerUrl: '/demo/guide-index', docTitle: 'Guides',
+        docUrl: '/guides', doc: '2-guides/index.md', status: 'done', category: 'Guides',
+      },
+      {
+        id: 'guide-child', title: 'Guide child demo', learnerUrl: '/demo/guide-child', docTitle: 'Guide child',
+        docUrl: '/guides/child', doc: '2-guides/child.md', status: 'done', category: 'Guides',
+      },
+      {
+        id: 'zone', title: 'Zone demo', learnerUrl: '/demo/zone', docTitle: 'Zone',
+        docUrl: '/zone/guides/child', doc: '2-guides/zone.md', status: 'done', category: 'Guides',
+      },
+      {
+        id: 'other', title: 'Other demo', learnerUrl: '/demo/other', docTitle: 'Other',
+        docUrl: '/api/reference', doc: '2-guides/other.md', status: 'done', category: 'Guides',
+      },
+      {
+        id: 'protocol-relative', title: 'Protocol-relative demo', learnerUrl: '/demo/protocol-relative', docTitle: 'Protocol-relative',
+        docUrl: '//guides/example.com', doc: '2-guides/protocol-relative.md', status: 'done', category: 'Guides',
+      },
+    ])
+
+    assert.deepStrictEqual(guideBooks.map((book) => book.guideUrl), ['/guides', '/guides/child'])
+  })
 })

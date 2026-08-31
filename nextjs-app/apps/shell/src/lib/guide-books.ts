@@ -10,6 +10,10 @@ export interface GuideBookItem {
   category: DemoIndexCategory
 }
 
+function isInternalGuideUrl(url: string): boolean {
+  return url === '/guides' || url.startsWith('/guides/')
+}
+
 /** Guides 데모를 문서별 대표 책으로 축약합니다. */
 export function createGuideBookItems(
   items: DemoIndexCardItem[],
@@ -18,7 +22,7 @@ export function createGuideBookItems(
   const books = new Map<string, GuideBookItem>()
 
   for (const item of items) {
-    if (item.category !== 'Guides' || item.docUrl === '/' || !item.docUrl.startsWith('/')) continue
+    if (item.category !== 'Guides' || !isInternalGuideUrl(item.docUrl)) continue
 
     const existing = books.get(item.docUrl)
     if (existing) {

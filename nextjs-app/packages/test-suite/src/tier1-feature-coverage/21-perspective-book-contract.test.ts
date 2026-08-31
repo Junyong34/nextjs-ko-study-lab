@@ -45,6 +45,11 @@ describe('Tier 1: PerspectiveBook shared primitive contract', () => {
     const source = readSource(perspectiveBookPath)
 
     assert.match(source, /aspect-\[49\/60\]/)
+    assert.match(
+      source,
+      /<div className="relative \[perspective:900px\]" style=\{style\}>[\s\S]*?bookSurfaceClass\([\s\S]*?\[transform-style:preserve-3d\]/,
+      'a perspective container must contain the rotating preserve-3d surface',
+    )
     assert.match(source, /\[transform-style:preserve-3d\]/)
     assert.match(source, /translateZ\(calc\(var\(--book-d\)_\/_2\)\)/)
     assert.match(source, /translateZ\(calc\(var\(--book-d\)_\/_-2\)\)/)
@@ -58,6 +63,14 @@ describe('Tier 1: PerspectiveBook shared primitive contract', () => {
 
     assert.match(source, /hover:[^'"`]+focus-visible:/)
     assert.match(source, /group-hover:[^'"`]+group-focus-visible:/)
+    assert.match(
+      source,
+      /const SELF_TRIGGER\s*=\s*'[^']*duration-600[^']*hover:\[transform:rotateY\(-20deg\)\][^']*hover:scale-\[1\.066\][^']*hover:-translate-x-1[^']*focus-visible:\[transform:rotateY\(-20deg\)\][^']*focus-visible:scale-\[1\.066\][^']*focus-visible:-translate-x-1/,
+    )
+    assert.match(
+      source,
+      /const GROUP_TRIGGER\s*=\s*'[^']*duration-600[^']*group-hover:\[transform:rotateY\(-20deg\)\][^']*group-hover:scale-\[1\.066\][^']*group-hover:-translate-x-1[^']*group-focus-visible:\[transform:rotateY\(-20deg\)\][^']*group-focus-visible:scale-\[1\.066\][^']*group-focus-visible:-translate-x-1/,
+    )
     assert.match(source, /focusable\??:\s*boolean/, 'self trigger must have an explicit opt-in focus target')
     assert.match(
       source,

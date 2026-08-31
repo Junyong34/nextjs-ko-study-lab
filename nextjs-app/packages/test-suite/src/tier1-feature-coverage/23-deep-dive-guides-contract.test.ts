@@ -44,7 +44,7 @@ describe('Tier 1: Deep dive guides home contract', () => {
   it('uses the shell favicon as a decorative plain image and preserves overflow and focus feedback', () => {
     const source = readSource(sectionPath)
 
-    assert.match(source, /<img src="\/icon\.svg" alt="" aria-hidden/)
+    assert.match(source, /<img src="\/icon\.svg" alt="" aria-hidden className="h-\d+ w-\d+"/)
     assert.doesNotMatch(source, /next\/image/)
     assert.match(source, /overflow-x-auto/)
     assert.match(source, /pb-\d+/)

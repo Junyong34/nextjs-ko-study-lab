@@ -52,7 +52,7 @@ export function DeepDiveGuidesSection({ guideBooks }: DeepDiveGuidesSectionProps
                 tone={CATEGORY_BOOK_TONES[book.category]}
                 trigger="group"
                 width="11rem"
-                illustration={<img src="/icon.svg" alt="" aria-hidden />}
+                illustration={<img src="/icon.svg" alt="" aria-hidden className="h-7 w-7" />}
               >
                 <PerspectiveBookHeader>
                   <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
