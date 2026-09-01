@@ -4,7 +4,7 @@ import { getManifest, getDemos } from '@/lib/docs'
 import {
   RoadmapHero,
   RoadmapBookshelf,
-  Next16HighlightsSection,
+  // Next16HighlightsSection,
   FeaturedDemosSection,
   LearningProgressWidget,
 } from '@/components/home'
@@ -27,8 +27,8 @@ export default function HomePage() {
       {/* 1. Hero Section */}
       <RoadmapHero totalDocs={totalDocs} totalDemos={totalDemos} />
 
-      {/* 2. Next.js 16 & React 19 Key Highlights */}
-      <Next16HighlightsSection />
+      {/* 2. Next.js 16 & React 19 Key Highlights (컨텐츠 개발 후 재연결 예정) */}
+      {/* <Next16HighlightsSection /> */}
 
       {/* 3. 3D Book Bento Grid Curriculum Showcase */}
       <RoadmapBookshelf demos={allDemos} />

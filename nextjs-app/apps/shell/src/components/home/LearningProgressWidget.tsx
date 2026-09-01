@@ -29,7 +29,7 @@ export function LearningProgressWidget() {
             나의 Next.js 학습 대시보드
           </h2>
           <p className="text-xs sm:text-sm leading-relaxed text-zinc-300">
-            문서 읽기와 데모 실습을 진행하며 완료 체크를 기록하세요. 브라우저 로컬 저장소에 안전하게 유지되며 언제든지 이어할 수 있습니다.
+            문서 읽기와 데모 실습을 진행하며 완료 체크를 기록하세요.
           </p>
         </div>
 

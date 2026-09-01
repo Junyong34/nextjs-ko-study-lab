@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard, MOCK_PRODUCTS } from '@study/demo-kit'
 import { CacheKeyCompareDemo } from './components/CacheKeyCompareDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 import { getProductPrice, type Currency, type Tier } from './cachedData'
 
-export default async function DemoPage({
+async function CacheKeyCompareContent({
   searchParams,
 }: {
   searchParams: Promise<{ sku?: string; currency?: string; tier?: string }>
@@ -15,6 +15,33 @@ export default async function DemoPage({
   const userTier: Tier = sp.tier === 'VVIP' ? 'VVIP' : sp.tier === 'NORMAL' ? 'NORMAL' : 'VIP'
   const data = await getProductPrice(selectedSku, currency, userTier)
 
+  return (
+    <>
+      <DemoPlaygroundCard title={"캐시 키 생성 방식 비교 (수동 vs 자동) 실습"}>
+        <CacheKeyCompareDemo
+          selectedSku={selectedSku}
+          currency={currency}
+          userTier={userTier}
+          productName={data.productName}
+          finalPrice={data.finalPrice}
+          cacheId={data.cacheId}
+          generatedAt={data.generatedAt}
+        />
+      </DemoPlaygroundCard>
+      <VerificationFooter
+        isLoaded={Boolean(data.cacheId)}
+        actual={`- sku=${selectedSku}, currency=${currency}, tier=${userTier}\n- cacheId: #${data.cacheId}`}
+        expected="세 인자 중 하나라도 바뀌면 cacheId가 바뀌고, 동일 조합으로 돌아오면 cacheId가 재사용되어야 한다."
+      />
+    </>
+  )
+}
+
+export default function DemoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sku?: string; currency?: string; tier?: string }>
+}) {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
@@ -43,22 +70,15 @@ export default async function DemoPage({
           },
         ]}
       />
-      <DemoPlaygroundCard title={"캐시 키 생성 방식 비교 (수동 vs 자동) 실습"}>
-        <CacheKeyCompareDemo
-          selectedSku={selectedSku}
-          currency={currency}
-          userTier={userTier}
-          productName={data.productName}
-          finalPrice={data.finalPrice}
-          cacheId={data.cacheId}
-          generatedAt={data.generatedAt}
-        />
-      </DemoPlaygroundCard>
-      <VerificationFooter
-        isLoaded={Boolean(data.cacheId)}
-        actual={`- sku=${selectedSku}, currency=${currency}, tier=${userTier}\n- cacheId: #${data.cacheId}`}
-        expected="세 인자 중 하나라도 바뀌면 cacheId가 바뀌고, 동일 조합으로 돌아오면 cacheId가 재사용되어야 한다."
-      />
+      <Suspense
+        fallback={
+          <div className="p-8 text-center text-xs text-zinc-400 font-mono animate-pulse">
+            [대기] 캐시 키 데이터 로딩 중...
+          </div>
+        }
+      >
+        <CacheKeyCompareContent searchParams={searchParams} />
+      </Suspense>
     </DemoContainer>
   )
 }
