@@ -8,8 +8,7 @@ export function cleanSegment(segment: string): string {
  *
  * `../2-guides/2.14-server-actions.md` → `/guides/server-actions`
  *
- * 문서 URL이 md 경로를 미러링한다는 계약을 코드로 옮긴 것입니다
- * ([03. 3-1](../../../../docs/03-composition-architecture.md)).
+ * 문서 URL이 md 경로를 미러링한다는 계약을 코드로 옮긴 것입니다.
  */
 export function resolveDocLink(href: string, docPath?: string): string {
   if (!href) return ''

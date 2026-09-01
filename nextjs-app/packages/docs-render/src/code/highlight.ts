@@ -44,7 +44,7 @@ export function getCached(key: string): string | undefined {
  * 코드를 하이라이팅해 HTML을 돌려줍니다. 모르는 언어면 text로 물러섭니다.
  *
  * 이 호출은 지금 **런타임(브라우저)** 에서 일어납니다.
- * 빌드 타임(`@shikijs/rehype`)으로 옮기는 것은 [06. 7-3](../../../docs/06-ui-and-screen-design.md)의
+ * 빌드 타임(`@shikijs/rehype`)으로 옮기는 것은 [01. 7-3](../../../docs/01-ui-and-screen-design.md)의
  * 방향이며 별도 티켓입니다.
  */
 export async function highlight(code: string, language: string): Promise<string> {

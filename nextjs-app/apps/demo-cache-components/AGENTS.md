@@ -7,6 +7,8 @@ Next.js 16의 `cacheComponents: true` 옵션 및 `use cache`, `cacheTag`, `cache
 - **정적 자산 경로**: `/demo-static/cache/*`
 - **핵심 설정**: `cacheComponents: true`, `assetPrefix: '/demo-static/cache'`
 
+zone 공통 규칙 및 데모 작성 표준은 [`../AGENTS.md`](../AGENTS.md)를 따른다.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

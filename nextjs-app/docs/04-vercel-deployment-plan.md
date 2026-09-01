@@ -1,8 +1,8 @@
-# 10. Vercel 배포 계획
+# 04. Vercel 배포 계획
 
-Multi-Zones(셸 + zone 앱들)를 Vercel에 올리는 방법을 정합니다. [05. 남은 설계 질문 C-3](./05-open-questions.md#c-3-배포-구성)의 미해결 항목("zone당 Vercel 프로젝트를 만든다는 것 외에는 열려 있습니다")을 여기서 닫습니다. 1차 출처는 [Vercel 공식 모노레포 문서](https://vercel.com/docs/monorepos)와 [Turborepo 배포 가이드](https://vercel.com/docs/monorepos/turborepo)입니다.
+Multi-Zones(셸 + zone 앱들)를 Vercel에 올리는 방법을 정합니다. "zone당 Vercel 프로젝트를 만든다는 것 외에는 열려 있던" 미해결 항목을 여기서 닫습니다. 1차 출처는 [Vercel 공식 모노레포 문서](https://vercel.com/docs/monorepos)와 [Turborepo 배포 가이드](https://vercel.com/docs/monorepos/turborepo)입니다.
 
-**남은 것**: 이 문서는 계획이며, [01. 구성 절차 §3-7](./01-project-setup.md#3-7-첫-배포-검증-셸--데모-앱-1개가-동작하는-시점)의 실제 배포 검증을 대체하지 않습니다. 아래 §6에서 §3-7을 3-프로젝트 기준으로 확장합니다.
+**남은 것**: 이 문서는 계획이며, 실제 배포 검증을 대체하지 않습니다. 아래 §6이 그 검증 절차입니다.
 
 ## 1. 배포 구성 원칙
 
@@ -16,7 +16,7 @@ Multi-Zones(셸 + zone 앱들)를 Vercel에 올리는 방법을 정합니다. [0
 | `study-baseline` | `nextjs-app/apps/demo-baseline` | zone `baseline` |
 | `study-cache` | `nextjs-app/apps/demo-cache-components` | zone `cache` |
 
-zone을 추가하면 [01. zone 추가 체크리스트](./01-project-setup.md#4-zone-추가-체크리스트)에 "Vercel 프로젝트 생성 + Root Directory 지정 + Related Projects 갱신(§3)"을 항목으로 더합니다.
+zone을 추가하면 [05. zone 추가 체크리스트](./05-zone-onboarding-checklist.md#1-zone-추가-체크리스트)에 "Vercel 프로젝트 생성 + Root Directory 지정 + Related Projects 갱신(§3)"을 항목으로 더합니다.
 
 ## 2. 프로젝트별 빌드 설정
 
@@ -59,7 +59,7 @@ Related Projects는 프로젝트당 최대 3개까지 다른 프로젝트를 연
 
 프로젝트 ID는 각 프로젝트 생성 **후** Settings에서 확인 가능합니다 — 순서상 먼저 프로젝트 3개를 `relatedProjects` 없이 만들고, ID를 모은 뒤 이 설정을 추가하는 2단계 순서가 필요합니다(닭-달걀 문제).
 
-코드 쪽은 `@vercel/related-projects`의 `withRelatedProject`로 `zoneUrl()` 헬퍼([03. 결합 구조 설계 §3](./03-composition-architecture.md), `next.config.ts`의 기존 함수)를 감싸고, 로컬에서는 기존과 동일하게 `.env.local`의 `ZONE_BASELINE_URL`/`ZONE_CACHE_URL`/`PUBLIC_ORIGIN`을 `defaultHost`로 넘깁니다. **"목적지를 환경변수로 두는 것이 로컬↔배포 전환의 전부"라는 원칙([03. §3](./03-composition-architecture.md))은 유지되고, 배포에서만 값의 출처가 수동 설정 → Related Projects 자동 주입으로 바뀝니다.**
+코드 쪽은 `@vercel/related-projects`의 `withRelatedProject`로 `zoneUrl()` 헬퍼(`next.config.ts`의 기존 함수)를 감싸고, 로컬에서는 기존과 동일하게 `.env.local`의 `ZONE_BASELINE_URL`/`ZONE_CACHE_URL`/`PUBLIC_ORIGIN`을 `defaultHost`로 넘깁니다. **"목적지를 환경변수로 두는 것이 로컬↔배포 전환의 전부"라는 기존 원칙은 유지되고, 배포에서만 값의 출처가 수동 설정 → Related Projects 자동 주입으로 바뀝니다.**
 
 ⚠️ **미검증 항목** (§8에 재수록): `@vercel/related-projects`가 반환하는 URL이 `https://` 스킴을 포함하는지, `PUBLIC_ORIGIN`이 기대하는 스킴 없는 호스트(`localhost:3000` 형태)와 형식이 맞는지는 첫 배포에서 실측이 필요합니다.
 
@@ -92,14 +92,14 @@ Vercel의 "영향 없는 프로젝트 자동 스킵"은 조건 3가지를 요구
 
 Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel Remote Cache를 씁니다.**<sup>[8]</sup> 로컬 개발 속도를 위해 `pnpm dlx turbo login && pnpm dlx turbo link`를 저장소 루트에서 한 번 실행하면 로컬 빌드도 같은 캐시를 공유합니다 — 필수는 아니고 편의 옵션입니다.
 
-## 6. 첫 배포 검증 절차 (01 §3-7 확장)
+## 6. 첫 배포 검증 절차
 
-[01. §3-7](./01-project-setup.md#3-7-첫-배포-검증-셸--데모-앱-1개가-동작하는-시점)의 2-프로젝트 스케치를 3-프로젝트 + Related Projects 기준으로 대체합니다.
+3-프로젝트 + Related Projects 기준의 배포 검증 절차입니다.
 
 1. Vercel에서 프로젝트 3개 생성. Root Directory를 각각 `nextjs-app/apps/shell`, `nextjs-app/apps/demo-baseline`, `nextjs-app/apps/demo-cache-components`로 지정 (§2). "Include source files outside of the Root Directory" 옵션 확인
 2. 세 프로젝트 모두 최초 배포(관계 설정 없이) — Settings에서 각 프로젝트 ID 확보
 3. `vercel.json`에 `relatedProjects` 상호 설정 (§3-2 표), `turbo.json`에 `VERCEL_RELATED_PROJECTS` 추가, `next.config.ts`의 `zoneUrl`/`PUBLIC_ORIGIN` 로직을 `@vercel/related-projects`로 교체 — 재배포
-4. [03. §6-1 함정 표](./03-composition-architecture.md#6-1-배포에서만-드러나는-것-로컬에서-100-정상)의 항목별 확인: 문서 렌더링(md 산출물 포함 여부), 데모 화면 CSS/JS 로딩(`assetPrefix`), Server Action 허용(`allowedOrigins`)
+4. 배포에서만 드러나는 항목 확인: 문서 렌더링(md 산출물 포함 여부), 데모 화면 CSS/JS 로딩(`assetPrefix`), Server Action 허용(`allowedOrigins`)
 5. 셸 도메인에서 문서 → 데모 링크 이동, 독립 열람 iframe 표시까지 끝단 확인
 6. 확인이 끝나면 로컬 중심으로 복귀. zone을 추가할 때만 1~5를 반복(3번은 신규 zone과 기존 두 프로젝트의 `relatedProjects` 목록에 서로 추가하는 것으로 축소됨)
 
@@ -115,7 +115,7 @@ Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel R
 |---|---|---|
 | `VERCEL_RELATED_PROJECTS` 값 형식 | `@vercel/related-projects`가 주는 호스트에 스킴이 붙는지 불명 — `PUBLIC_ORIGIN`은 스킴 없는 호스트를 기대(`experimental.serverActions.allowedOrigins`) | 첫 배포 후 실제 값 로그 확인, 필요시 스킴 스트립 |
 | Related Projects 순환 참조 | 세 프로젝트가 서로를 참조하는 구성이 Vercel 쪽 제약(최대 3개, 같은 리포지토리 내)에 걸리는지 | 요구사항표(§3-2, 각 3개 이하·동일 리포)와 대조 완료 — 실제 대시보드 설정 시 재확인 |
-| `next.config.ts`가 빌드 타임에 이 값을 읽는 시점 | 기존 `zoneUrl()`이 모듈 최상위 `process.env` 읽기에 의존([04. §15-f](./04-feasibility-verification.md)) — `VERCEL_RELATED_PROJECTS`도 같은 시점에 존재하는지 | 첫 배포 검증에서 실측 |
+| `next.config.ts`가 빌드 타임에 이 값을 읽는 시점 | 기존 `zoneUrl()`이 모듈 최상위 `process.env` 읽기에 의존 — `VERCEL_RELATED_PROJECTS`도 같은 시점에 존재하는지 | 첫 배포 검증에서 실측 |
 | CLI 기반 배포(`vercel link --repo`) | 대시보드로 프로젝트 3개를 만드는 절차만 검증됨. CLI로 한 번에 링크하는 경로는 별도 확인 필요<sup>[9]</sup> | 필요 시에만 |
 
 ---

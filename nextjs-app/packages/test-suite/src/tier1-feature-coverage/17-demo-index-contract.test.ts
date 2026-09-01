@@ -12,10 +12,10 @@ import { DEMO_LIST_STORAGE_KEY } from '../../../../apps/shell/src/lib/demo-stora
 
 describe('Tier 1: Feature 17 - Demo Index Design Doc Alignment & Final Contract Verification', () => {
   const demos = loadDemosYaml()
-  const designDocPath = path.join(NEXTJS_APP_ROOT, 'docs/06-ui-and-screen-design.md')
+  const designDocPath = path.join(NEXTJS_APP_ROOT, 'docs/01-ui-and-screen-design.md')
 
-  it('17.1 should verify 06-ui-and-screen-design.md reflects the 241 demos discovery UX contract', () => {
-    assert.ok(fs.existsSync(designDocPath), '06-ui-and-screen-design.md must exist')
+  it('17.1 should verify 01-ui-and-screen-design.md reflects the 241 demos discovery UX contract', () => {
+    assert.ok(fs.existsSync(designDocPath), '01-ui-and-screen-design.md must exist')
     const docContent = fs.readFileSync(designDocPath, 'utf-8')
 
     assert.match(docContent, /241개/, 'Doc must mention 241 demos')

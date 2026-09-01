@@ -1,4 +1,4 @@
-# [07] 코드베이스 심층 분석 및 데이터 흐름 가이드
+# [02] 코드베이스 심층 분석 및 데이터 흐름 가이드
 
 이 문서는 `nextjs-ko-study-lab` 모노레포의 **디렉토리/파일 역할, YAML 데이터 변환·소비 파이프라인, 패키지 간 격리 정책, 셸 프레임 vs 데모 뼈대 연결 관계**를 개발자가 한눈에 꿰뚫어볼 수 있도록 정리한 심층 기술 가이드입니다.
 
@@ -23,7 +23,7 @@ nextjs-ko-study-lab/
 └── nextjs-app/
     ├── ARCHITECTURE.md               # 시스템 아키텍처 명세서 (SSOT)
     ├── CONTEXT.md                    # 데모 사이트 도메인 용어집
-    ├── AGENTS.md                     # 작업 규칙 (규칙 1~25)
+    ├── AGENTS.md                     # 저장소 전체 규칙(범용 6개) + 하위 디렉토리별 AGENTS.md 지도
     ├── scripts/                      # 콘텐츠 생성/마이그레이션용 1회성 스크립트 (generate-all-demos 등)
     │
     ├── packages/                     # [공유 패키지 레이어]
@@ -31,9 +31,9 @@ nextjs-ko-study-lab/
     │   │   ├── demos.yaml            # 전체 데모의 고유 URL, 제목, zone, 상태 선언 (2026-08 기준 241개, 전부 done)
     │   │   ├── scripts/              # build-manifest, lint, gen-stubs 도구
     │   │   └── src/index.ts          # Zod 스키마, 데모 조회 함수
-    │   ├── demo-kit/                 # 데모 앱 전용 공통 UI 키트 (규칙 17)
+    │   ├── demo-kit/                 # 데모 앱 전용 공통 UI 키트 (packages/ui/AGENTS.md 규칙 1)
     │   │   ├── DemoContainer.tsx     # 데모 루트 래퍼 (ResizeObserver 탑재)
-    │   │   ├── DemoGuideCard.tsx     # 4단 레이아웃 1단: 가이드 카드 (규칙 25)
+    │   │   ├── DemoGuideCard.tsx     # 4단 레이아웃 1단: 가이드 카드 (apps/AGENTS.md 규칙 11)
     │   │   ├── DemoPlaygroundCard.tsx# 4단 레이아웃 2단: 실습 화면 카드
     │   │   ├── DemoDeepDiveCard.tsx  # 4단 레이아웃 4단: 개념 정리 카드
     │   │   ├── ExpectedActualPanel.tsx# 4단 레이아웃 3단: 기대값 vs 실제값 검증 패널
@@ -47,7 +47,7 @@ nextjs-ko-study-lab/
     │   ├── test-suite/                # 개발용 테스트/감사 스위트 (런타임 미배포)
     │   │   ├── src/tier1-feature-coverage ~ tier5-adversarial-hardening/ # 5단계 테스트
     │   │   └── src/runners/          # run-all-tests, guide-consistency-validator, route-manifest-integrity 등
-    │   └── ui/                       # 셸 전용 프레임 UI 패키지 (규칙 17)
+    │   └── ui/                       # 셸 전용 프레임 UI 패키지 (packages/ui/AGENTS.md 규칙 1)
     │       ├── layout/               # Header, Footer, FooterLinks, FeedbackTrigger
     │       ├── nav/                  # DocTree (사이드바), TableOfContents (우측 목차)
     │       ├── demo/                 # DemoIndexCard, DemoIndexStats, DemoPageHeader
@@ -130,7 +130,7 @@ flowchart TD
 
 ---
 
-## 3. 패키지 격리 정책 및 UI 책임 분할 (규칙 17 & 16)
+## 3. 패키지 격리 정책 및 UI 책임 분할 (packages/ui/AGENTS.md 규칙 1 & apps/shell/AGENTS.md 규칙 2)
 
 모노레포에서 가장 중요한 아키텍처 규칙은 **"어느 패키지의 코드가 어느 앱으로 흘러 들어가는가"**입니다.
 
@@ -157,17 +157,17 @@ graph LR
     end
 
     %% 금지선
-    UI x-.-x|❌ 절대 의존 금지 (규칙 17)| DemoBaseline
-    UI x-.-x|❌ 절대 의존 금지 (규칙 17)| DemoCache
+    UI x-.-x|❌ 절대 의존 금지 (packages/ui/AGENTS.md 규칙 1)| DemoBaseline
+    UI x-.-x|❌ 절대 의존 금지 (packages/ui/AGENTS.md 규칙 1)| DemoCache
 ```
 
 ### 3.1 `@study/ui` (셸 전용 UI) 정책
 * **담당 역할**: 사이트 프레임워크 UI (헤더, 사이드바 트리, 우측 목차, 피드백 모달, 원자 컴포넌트, 데모 색인 카드).
 * **사용처**: **오직 `apps/shell`에서만 import합니다.**
-* **격리 이유 (규칙 17)**: 데모 앱이 `@study/ui`를 참조하는 순간, Next.js의 `transpilePackages`를 통해 사이드바 트리, 검색 로직, 모달 등 무거운 셸 전용 코드가 데모 앱의 클라이언트 번들로 끌려 들어갑니다. 데모 앱의 빌드 크기와 CSS를 가볍게 유지하기 위해 엄격히 격리합니다.
+* **격리 이유 (packages/ui/AGENTS.md 규칙 1)**: 데모 앱이 `@study/ui`를 참조하는 순간, Next.js의 `transpilePackages`를 통해 사이드바 트리, 검색 로직, 모달 등 무거운 셸 전용 코드가 데모 앱의 클라이언트 번들로 끌려 들어갑니다. 데모 앱의 빌드 크기와 CSS를 가볍게 유지하기 위해 엄격히 격리합니다.
 
 ### 3.2 `@study/demo-kit` (데모 앱 전용 UI) 정책
-* **담당 역할**: 데모 존의 표준 래퍼 및 검증 도구 (`DemoContainer`, `ExpectedActualPanel`, `DemoResetButton`, `useResizeBridge`), 그리고 모든 데모가 따르는 4단 표준 레이아웃(가이드→실습→검증→개념 정리)을 구성하는 `DemoGuideCard`/`DemoPlaygroundCard`/`DemoDeepDiveCard` (`AGENTS.md` 규칙 25). 이커머스 도메인 데모용 `ecommerce/`(`ProductCard`, `CartSummary`, `DeliveryTracker`, mock 데이터, ADR 0007)도 포함합니다.
+* **담당 역할**: 데모 존의 표준 래퍼 및 검증 도구 (`DemoContainer`, `ExpectedActualPanel`, `DemoResetButton`, `useResizeBridge`), 그리고 모든 데모가 따르는 4단 표준 레이아웃(가이드→실습→검증→개념 정리)을 구성하는 `DemoGuideCard`/`DemoPlaygroundCard`/`DemoDeepDiveCard` (`apps/AGENTS.md` 규칙 11). 이커머스 도메인 데모용 `ecommerce/`(`ProductCard`, `CartSummary`, `DeliveryTracker`, mock 데이터, ADR 0007)도 포함합니다.
 * **사용처**: **`apps/demo-baseline`, `apps/demo-cache-components` 등 모든 데모 zone 앱.**
 * **특징**:
   * Tailwind 클래스만 사용하는 초경량 순수 컴포넌트입니다.
@@ -177,7 +177,7 @@ graph LR
 ### 3.3 `@study/docs-render` (문서 렌더링 엔진) 정책
 * **담당 역할**: 마크다운 텍스트를 정적 HTML로 변환하는 렌더러.
 * **서버 컴포넌트화**: 본문 내 iframe을 걷어냄으로써 `MarkdownRenderer.tsx`에서 `'use client'`를 제거하여 **서버 컴포넌트로 동작**합니다 (클라이언트 JS는 복사 버튼과 Shiki 런타임 하이라이팅을 담은 `CodeBlock`으로 격리).
-* **규칙 16 (링크 카드 전환)**: 본문에 ` ```demo ` 블록이 발견되면 iframe을 띄우지 않고 `<DemoLinkCard />`를 렌더링하여 학습자가 클릭 시 `/demo/[...slug]` 독립 열람 페이지로 이동하도록 안내합니다.
+* **apps/shell/AGENTS.md 규칙 2 (링크 카드 전환)**: 본문에 ` ```demo ` 블록이 발견되면 iframe을 띄우지 않고 `<DemoLinkCard />`를 렌더링하여 학습자가 클릭 시 `/demo/[...slug]` 독립 열람 페이지로 이동하도록 안내합니다.
 
 ---
 

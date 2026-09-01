@@ -171,7 +171,7 @@ export function MarkdownRenderer({
       }
 
       if (codeBlockLang === 'demo') {
-        // 코드펜스는 본문에 예제를 심지 않는다. 링크 카드만 그린다 (규칙 16).
+        // 코드펜스는 본문에 예제를 심지 않는다. 링크 카드만 그린다 (apps/shell/AGENTS.md 규칙 2).
         const demoConfig = parseDemoBlock(finalCode)
         const matchedDemo = demos.find((d) => d.url === demoConfig.path)
 

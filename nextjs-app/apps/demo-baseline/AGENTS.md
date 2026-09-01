@@ -1,3 +1,13 @@
+# demo-baseline (@study/demo-baseline)
+
+표준 App Router 기능(라우팅, Server Actions, Route Handlers, 함수, 디렉티브, 인증, i18n, 접근성 등)을 검증하는 데모 zone입니다.
+
+- **포트**: 3001
+- **내부 라우트 슬러그**: `/zone/baseline/*`
+- **정적 자산 경로**: `/demo-static/baseline/*`
+
+zone 공통 규칙 및 데모 작성 표준은 [`../AGENTS.md`](../AGENTS.md)를 따른다.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

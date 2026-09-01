@@ -11,7 +11,7 @@ export interface DemoConfig {
  * 필드는 `path`(필수)와 `caption`(선택) 둘뿐입니다.
  * `mode`·`height`·`zone`은 폐기됐습니다 — 코드펜스가 그리는 것은 iframe이 아니라
  * 링크 카드라서 높이도 표시 모드도 의미가 없고, zone은 `demos.yaml`이 정합니다
- * ([06. 9](../../../../docs/06-ui-and-screen-design.md), ADR 0003 개정).
+ * ([01. 9](../../../../docs/01-ui-and-screen-design.md), ADR 0003 개정).
  *
  * 모르는 키는 조용히 무시합니다. 폐기된 필드가 남아 있는 문서가 깨지지 않도록 하기 위함입니다.
  */

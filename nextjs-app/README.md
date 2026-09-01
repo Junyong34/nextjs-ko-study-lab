@@ -1,8 +1,8 @@
 # nextjs-app (Phase 2)
 
-`nextjs-docs/`의 학습 문서를 화면에 그리고, 각 개념의 데모를 실행하는 학습 사이트가 들어설 자리입니다.
+`nextjs-docs/`의 학습 문서를 화면에 그리고, 각 개념의 데모를 실행하는 학습 사이트입니다.
 
-**설계 및 멀티 존 기본 뼈대/공통 패키지 구축과 리팩토링이 완료된 상태입니다.**
+**셸과 데모 존 2개, 241개 데모 구현이 완료됐습니다. 실제 배포(Vercel) 검증은 아직 남은 작업입니다 — 절차는 [04](./docs/04-vercel-deployment-plan.md).**
 
 ## 무엇을 만드는가
 
@@ -20,7 +20,7 @@
  cacheComponents 끔  cacheComponents 켬
 ```
 
-데모는 **언제나 독립 페이지로 열립니다.** 문서 본문에는 심지 않고 링크로 넘깁니다 ([06](./docs/06-ui-and-screen-design.md)). 학습자가 보는 주소에는 zone이 나타나지 않습니다 — 데모를 다른 zone으로 옮겨도 주소가 깨지지 않게 하기 위해서입니다.
+데모는 **언제나 독립 페이지로 열립니다.** 문서 본문에는 심지 않고 링크로 넘깁니다 ([01](./docs/01-ui-and-screen-design.md)). 학습자가 보는 주소에는 zone이 나타나지 않습니다 — 데모를 다른 zone으로 옮겨도 주소가 깨지지 않게 하기 위해서입니다.
 
 ## 설계 문서
 
@@ -28,17 +28,14 @@
 
 | # | 문서 |
 |---|---|
-| 01 | [프로젝트 구성 방법 및 절차](./docs/01-project-setup.md) |
-| 02 | [모노레포 구성 방식 조사와 선택](./docs/02-monorepo-options.md) |
-| 03 | [결합 구조 설계](./docs/03-composition-architecture.md) |
-| 04 | [설계 실현 가능성 검증](./docs/04-feasibility-verification.md) |
-| 05 | [남은 설계 질문](./docs/05-open-questions.md) |
-| 06 | [화면 구성과 UI 설계](./docs/06-ui-and-screen-design.md) |
-| 07 | [코드베이스 심층 분석 및 데이터 흐름 가이드](./docs/07-codebase-deep-dive-guide.md) |
+| 01 | [화면 구성과 UI 설계](./docs/01-ui-and-screen-design.md) |
+| 02 | [코드베이스 심층 분석 및 데이터 흐름 가이드](./docs/02-codebase-deep-dive-guide.md) |
+| 03 | [데모 표준 구조 및 4단 레이아웃 패턴](./docs/03-demo-standard-and-layout-pattern.md) |
+| 04 | [Vercel 배포 계획](./docs/04-vercel-deployment-plan.md) |
+| 05 | [Zone / 데모 추가 체크리스트](./docs/05-zone-onboarding-checklist.md) |
+| 06 | [학습 기록 기능 설계](./docs/06-learning-progress-design.md) |
 
-ADR 6건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있습니다.
-
-01~03의 사실 주장은 `next@16.3.1`의 소스와 동봉 문서에 대조해 검증했고, 지적된 12건은 모두 반영했습니다 (04). 아직 안 정한 것은 05에 모아뒀습니다.
+ADR 9건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있습니다.
 
 ## 스택
 
@@ -48,6 +45,6 @@ ADR 6건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있�
 
 ## 착수 조건 — 충족됨
 
-`nextjs-docs/PROGRESS.md`의 항목이 194건 전부 "완료"입니다 ([Phase Gate](../AGENTS.md#phase-gate) 참고). 셸과 개념 증명(PoC) 데모 2개가 구현돼 있습니다.
+`nextjs-docs/PROGRESS.md`의 항목이 전부 "완료"입니다 ([Phase Gate](../AGENTS.md#phase-gate) 참고). 셸과 데모 존 2개, 241개 데모가 구현돼 있습니다.
 
 작업 규칙은 [`AGENTS.md`](./AGENTS.md)에 있습니다.

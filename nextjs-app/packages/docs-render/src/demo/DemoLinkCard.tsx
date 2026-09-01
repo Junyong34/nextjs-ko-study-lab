@@ -15,10 +15,10 @@ export interface DemoLinkCardProps {
  * 문서 본문의 ` ```demo ` 코드펜스가 그리는 링크 카드입니다.
  *
  * **iframe이 아닙니다.** 문서 본문에는 iframe을 두지 않습니다
- * ([`AGENTS.md`](../../../../AGENTS.md) 규칙 16, [06. 3-2](../../../../docs/06-ui-and-screen-design.md)).
+ * ([`apps/shell/AGENTS.md`](../../../../apps/shell/AGENTS.md) 규칙 2, [01. 3-2](../../../../docs/01-ui-and-screen-design.md)).
  * 예제는 언제나 `/demo/…`로 이동해서 봅니다.
  *
- * 화면 라벨은 "예제"이고 코드·URL·타입 이름은 "데모"입니다 (규칙 19).
+ * 화면 라벨은 "예제"이고 코드·URL·타입 이름은 "데모"입니다 (packages/ui/AGENTS.md 규칙 2).
  */
 export function DemoLinkCard({ path, title, caption, className = '' }: DemoLinkCardProps) {
   return (

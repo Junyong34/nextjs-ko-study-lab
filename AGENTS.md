@@ -9,11 +9,11 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 | 디렉토리 | 상태 | 규칙 |
 |---|---|---|
 | [`nextjs-docs/`](./nextjs-docs/AGENTS.md) | Phase 1, 완료 | 문서 작성 규칙 |
-| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 진행 중 | 실행 코드 작업 규칙 |
+| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 구현 완료 (배포 검증 별도) | 실행 코드 작업 규칙 |
 
 ## Phase Gate
 
-**Phase 1(문서화)은 완료됐다** ([`nextjs-docs/PROGRESS.md`](./nextjs-docs/PROGRESS.md) 194건 전부 "완료"). `nextjs-app/`은 착수 조건을 충족해 **Phase 2가 진행 중**이다 — 셸과 개념 증명(PoC) 데모 2개가 구현돼 있고, 지금은 대량 확장 전 단계다. 새 코드는 [`nextjs-app/AGENTS.md`](./nextjs-app/AGENTS.md)의 규칙을 따른다.
+**Phase 1(문서화)은 완료됐다** ([`nextjs-docs/PROGRESS.md`](./nextjs-docs/PROGRESS.md) 전부 "완료"). `nextjs-app/`은 셸과 데모 존 2개, 241개 데모의 **구현이 완료**됐다 — 다만 실제 Vercel 배포·운영 검증은 아직 남은 작업이다 ([`nextjs-app/docs/04-vercel-deployment-plan.md`](./nextjs-app/docs/04-vercel-deployment-plan.md) 참고). 새 코드는 [`nextjs-app/AGENTS.md`](./nextjs-app/AGENTS.md)의 규칙을 따른다.
 
 ## 커밋 작성 규칙
 

@@ -38,6 +38,9 @@ test-results/
 *.log
 logs/
 
+# 자동 생성 감사 리포트 (pnpm test:guide-audit로 재생성됨, 저장소에 커밋하지 않음)
+nextjs-app/docs/14-demo-guide-audit-report.md
+
 # TypeScript
 *.tsbuildinfo
 

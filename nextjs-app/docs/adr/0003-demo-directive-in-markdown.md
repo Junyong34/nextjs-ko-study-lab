@@ -9,7 +9,7 @@ amended-by: 0004, 0006
 > **두 번 좁혀졌습니다.** 코드펜스 표기를 쓴다는 결정 자체와 아래 기각 사유는 그대로 유효합니다.
 >
 > 1. **[ADR 0004](./0004-demo-list-as-source-of-truth.md)** — 지시자는 더 이상 데모의 원본이 아닙니다. 데모의 존재·주소·상태는 `demos.yaml`이 선언하고, 지시자는 본문 위치만 정합니다. 아래 Consequences 세 항목은 0004가 대체했습니다.
-> 2. **[ADR 0006](./0006-shadcn-ui-as-ui-foundation.md) · [06. 3-2](../06-ui-and-screen-design.md)** — 지시자가 그리는 것이 **iframe에서 링크 카드로 바뀌었습니다.** 문서 본문에는 데모를 심지 않고 `/demo/…`로 넘깁니다. 따라서 `mode`와 `height` 필드는 삭제되고 `path`와 `caption`만 남습니다.
+> 2. **[ADR 0006](./0006-shadcn-ui-as-ui-foundation.md) · [01. 3-2](../01-ui-and-screen-design.md)** — 지시자가 그리는 것이 **iframe에서 링크 카드로 바뀌었습니다.** 문서 본문에는 데모를 심지 않고 `/demo/…`로 넘깁니다. 따라서 `mode`와 `height` 필드는 삭제되고 `path`와 `caption`만 남습니다.
 >
 > 지금 유효한 지시자 형식입니다.
 >

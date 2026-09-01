@@ -18,7 +18,7 @@ graph TD
 
     subgraph RepoRoot ["📦 nextjs-ko-study-lab (Monorepo Root)"]
         Workspace["pnpm-workspace.yaml / turbo.json"]:::rootStyle
-        DocsSource["nextjs-docs/<br/>• 194편 공식 문서 (.md)<br/>• 정적 에셋 (assets/*.webp)"]:::docStyle
+        DocsSource["nextjs-docs/<br/>• 284편 공식 문서 (.md)<br/>• 정적 에셋 (assets/*.webp)"]:::docStyle
     end
 
     subgraph Packages ["📂 packages/ (공유 도메인 & UI 레이어)"]
@@ -31,8 +31,8 @@ graph TD
 
     subgraph Apps ["🚀 apps/ (독립 실행형 Next.js 16 애플리케이션)"]
         ShellApp["@study/shell (:3000)<br/>• 셸 게이트웨이 & SSG 문서 뷰어<br/>• /demo 독립 열람 chrome<br/>• Multi-zones 프록시 Rewrites"]:::appStyle
-        DemoBaseline["@study/demo-baseline (:3001)<br/>• Baseline Zone (Server Actions 등)<br/>• assetPrefix: /demo-static/baseline"]:::appStyle
-        DemoCache["@study/demo-cache-components (:3002)<br/>• Cache Zone (use cache, revalidateTag)<br/>• cacheComponents: true"]:::appStyle
+        DemoBaseline["@study/demo-baseline (:3001)<br/>• Baseline Zone (211개 데모, Server Actions 등)<br/>• assetPrefix: /demo-static/baseline"]:::appStyle
+        DemoCache["@study/demo-cache-components (:3002)<br/>• Cache Zone (30개 데모, use cache, revalidateTag)<br/>• cacheComponents: true"]:::appStyle
     end
 
     %% 의존 관계
@@ -61,22 +61,24 @@ nextjs-ko-study-lab/
 │   ├── 3-api-reference/            # 3. Next.js 및 React API 레퍼런스
 │   ├── 4-glossary/                 # 4. 용어 사전
 │   ├── 5-architecture/             # 5. 아키텍처 심화 가이드
-│   ├── docs-manifest.json          # 194편 문서 색인 및 카테고리 계층 트리
-│   └── PROGRESS.md                 # 194편 완역 현황 트래커 (100% 완료)
+│   └── docs-manifest.json          # 284편 문서 색인 및 카테고리 계층 트리
 │
-├── 🚀 nextjs-app/                   # [Phase 2, 진행 중] Multi-zones 데모 사이트
+├── 🚀 nextjs-app/                   # [Phase 2, 구현 완료] Multi-zones 데모 사이트
 │   ├── apps/                       # 독립 실행형 Next.js 16 애플리케이션
 │   │   ├── shell/                  # :3000 - 메인 게이트웨이, SSG 문서 뷰어, Multi-zones 프록시
-│   │   ├── demo-baseline/          # :3001 - Server Actions / 기본 App Router 실습 Zone
-│   │   └── demo-cache-components/  # :3002 - Next.js 16 'use cache' / Dynamic IO 전용 Zone
-│   └── packages/                   # 모노레포 공유 도메인 & UI 패키지
-│       ├── demos/                  # @study/demos: demos.yaml (241건 데모 SSOT) & Zod 스키마
-│       ├── ui/                     # @study/ui: 셸 레이아웃 전용 네비게이션/TOC/헤더 컴포넌트
-│       ├── demo-kit/               # @study/demo-kit: 공통 플레이그라운드 & 검증 패널(Expected/Actual)
-│       ├── docs-render/            # @study/docs-render: Shiki RSC 마크다운 컴파일러 & 데모 임베드
-│       └── test-suite/             # @study/test-suite: Tier 1~5 통합 및 매니페스트 일관성 감사
+│   │   ├── demo-baseline/          # :3001 - Server Actions / 기본 App Router 실습 Zone (211개)
+│   │   └── demo-cache-components/  # :3002 - Next.js 16 'use cache' / Dynamic IO 전용 Zone (30개)
+│   ├── packages/                   # 모노레포 공유 도메인 & UI 패키지
+│   │   ├── demos/                  # @study/demos: demos.yaml (241건 데모 SSOT) & Zod 스키마
+│   │   ├── ui/                     # @study/ui: 셸 레이아웃 전용 네비게이션/TOC/헤더 컴포넌트
+│   │   ├── demo-kit/               # @study/demo-kit: 공통 플레이그라운드 & 검증 패널(Expected/Actual)
+│   │   ├── docs-render/            # @study/docs-render: Shiki RSC 마크다운 컴파일러 & 데모 임베드
+│   │   └── test-suite/             # @study/test-suite: Tier 1~5 통합 및 매니페스트 일관성 감사
+│   ├── docs/                       # 핵심 설계 문서 (UI, 코드베이스 딥다이브, 4단 데모 표준, 학습기록)
+│   └── docs/adr/                   # 아키텍처 의사결정 기록 (ADR 0001 ~ 0009)
 │
 ├── 🗺️ CONTEXT-MAP.md               # 학습 문서 ↔ 데모 사이트 간 Bounded Context 계약
+├── 🎨 DESIGN.md                    # UI/UX 디자인 시스템 및 색상 토큰 가이드
 ├── 📌 pnpm-workspace.yaml           # Catalog Pinning (Next.js 16.3.2 / React 19.2.8)
 ├── ⚙️ turbo.json                    # Turborepo 빌드·개발 파이프라인
 ├── 📋 AGENTS.md                    # 저장소 전체 작업 규칙
@@ -89,8 +91,8 @@ nextjs-ko-study-lab/
 
 | 구분 | 디렉토리 | 상태 | 핵심 역할 |
 |---|---|---|---|
-| **Phase 1** | [`nextjs-docs/`](./nextjs-docs/README.md) | **완료** (194/194) | Next.js App Router 공식 문서의 완역 및 한국어 학습 커리큘럼화 (단일 진실 공급원) |
-| **Phase 2** | [`nextjs-app/`](./nextjs-app/README.md) | **진행 중** (데모 241건) | 194편 문서를 화면에 렌더링하고, 241개 인터랙티브 데모를 실행하는 Multi-zones 포털 |
+| **Phase 1** | [`nextjs-docs/`](./nextjs-docs/README.md) | **완료** (284/284) | Next.js App Router 공식 문서의 완역 및 한국어 학습 커리큘럼화 (단일 진실 공급원) |
+| **Phase 2** | [`nextjs-app/`](./nextjs-app/README.md) | **구현 완료** (데모 241건, 배포 검증 별도) | 284편 문서를 화면에 렌더링하고, 241개 인터랙티브 데모를 실행하는 Multi-zones 포털 |
 
 ---
 
