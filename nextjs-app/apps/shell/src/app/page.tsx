@@ -11,9 +11,9 @@ import {
 } from '@/components/home'
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Next.js 16 학습 로드맵 | App Router 한국어 가이드 & 실습 랩',
+  title: 'Next.js 16 학습 | App Router 한국어 가이드 & 데모 예제',
   description:
-    'Next.js 16 공식 문서를 체계적인 한국어 커리큘럼으로 학습하고 인터랙티브 실습 데모로 직접 검증하는 학습 플랫폼',
+    'Next.js 공식 문서를 바탕으로 App Router 핵심 개념을 한국어로 배우고, 데모 예제로 기능의 동작을 직접 확인해 보세요.',
   path: '/',
 })
 
