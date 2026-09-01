@@ -3,7 +3,52 @@ import Link from 'next/link'
 import { Book, FaviconMark } from '@study/ui'
 import type { Demo } from '@study/demos'
 import { getDemoCategory, type DemoIndexCategory } from '@/lib/demo-index'
-import { ROADMAP_STEPS, type StepCard } from './roadmap-data'
+
+interface ChapterItem {
+  step: string
+  title: string
+  subtitle: string
+  summary: string
+  href: string
+}
+
+const ROADMAP_STEPS: ChapterItem[] = [
+  {
+    step: 'Step 01',
+    title: '시작하기',
+    subtitle: 'Getting Started',
+    summary: 'Next.js 설치, 기본 프로젝트 구조, 라우팅 및 데이터 페칭 기초를 다룹니다.',
+    href: '/getting-started',
+  },
+  {
+    step: 'Step 02',
+    title: '실무 가이드',
+    subtitle: 'Guides',
+    summary: '렌더링, Server Actions, 캐싱, 폼 처리, 인증/보안 등 주제별 심층 가이드입니다.',
+    href: '/guides',
+  },
+  {
+    step: 'Step 03',
+    title: 'API 레퍼런스',
+    subtitle: 'API Reference',
+    summary: '컴포넌트, 내장 함수, 지시어, next.config.js 등 공식 API 명세입니다.',
+    href: '/api-reference',
+  },
+  {
+    step: 'Step 04',
+    title: '용어집',
+    subtitle: 'Glossary',
+    summary: 'Next.js 공식 문서에서 사용되는 48가지 핵심 기술 용어 사전입니다.',
+    href: '/glossary',
+  },
+  {
+    step: 'Step 05',
+    title: '아키텍처',
+    subtitle: 'Architecture',
+    summary: 'Turbopack 번들러, SWC 컴파일러, Fast Refresh 등 내부 동작 원리를 다룹니다.',
+    href: '/architecture',
+  },
+]
 
 interface RoadmapBookshelfProps {
   demos: Demo[]
@@ -41,7 +86,7 @@ function BookCover({ tone, step, koreanTitle, title }: { tone: keyof typeof BAND
   )
 }
 
-function ChapterShelf({ chapter, demoCount, category }: { chapter: StepCard; demoCount: number; category?: DemoIndexCategory }) {
+function ChapterShelf({ chapter, demoCount, category }: { chapter: ChapterItem; demoCount: number; category?: DemoIndexCategory }) {
   return (
     <div className="space-y-3 border-b-4 border-zinc-200 pb-6 dark:border-zinc-800">
       <p className="text-xs text-zinc-500 dark:text-zinc-400">{chapter.summary}</p>

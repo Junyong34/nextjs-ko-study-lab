@@ -161,7 +161,7 @@ pnpm test:manifest
 - [컨텍스트 맵 (Context Map)](./CONTEXT-MAP.md)
 - [데모 사이트 아키텍처 명세서](./nextjs-app/ARCHITECTURE.md)
 - [설계 문서 및 ADR 목차](./nextjs-app/docs/README.md)
-- [디자인 가이드](./DESGIN.md)
+- [디자인 가이드](./DESIGN.md)
 
 ---
 
