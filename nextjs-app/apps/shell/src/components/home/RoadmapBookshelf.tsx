@@ -1,8 +1,8 @@
 import React from 'react'
-import Link from 'next/link'
 import { Book, FaviconMark } from '@study/ui'
 import type { Demo } from '@study/demos'
 import { getDemoCategory, type DemoIndexCategory } from '@/lib/demo-index'
+import { TrackedBookLink } from './TrackedBookLink'
 
 interface ChapterItem {
   step: string
@@ -152,9 +152,12 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
               {/* Books Row */}
               <div className="flex flex-wrap items-end gap-6 pt-4 border-t border-zinc-100 dark:border-zinc-800/60">
                 {/* 1. 학습 문서 책 */}
-                <Link
+                <TrackedBookLink
                   href={chapter.href}
-                  className="shrink-0 transition-transform duration-300 hover:-translate-y-1"
+                  bookType="document"
+                  chapterStep={chapter.step}
+                  chapterTitle={chapter.title}
+                  className="group shrink-0 transition-transform duration-300 hover:-translate-y-1"
                   aria-label={`${chapter.title} 학습 문서 보기`}
                 >
                   <Book coverClassName={BAND.study.fill} depth={BOOK_DEPTH} width={BOOK_WIDTH}>
@@ -165,13 +168,16 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
                       title={chapter.subtitle}
                     />
                   </Book>
-                </Link>
+                </TrackedBookLink>
 
                 {/* 2. 실습 데모 책 */}
                 {category && demoCount > 0 && (
-                  <Link
+                  <TrackedBookLink
                     href={{ pathname: '/demo', query: { category } }}
-                    className="shrink-0 transition-transform duration-300 hover:-translate-y-1"
+                    bookType="demo"
+                    chapterStep={chapter.step}
+                    chapterTitle={chapter.title}
+                    className="group shrink-0 transition-transform duration-300 hover:-translate-y-1"
                     aria-label={`${chapter.title} 실습 데모 보기`}
                   >
                     <Book coverClassName={BAND.demo.fill} depth={BOOK_DEPTH} width={BOOK_WIDTH}>
@@ -182,7 +188,7 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
                         title={chapter.subtitle}
                       />
                     </Book>
-                  </Link>
+                  </TrackedBookLink>
                 )}
               </div>
             </div>
@@ -192,4 +198,3 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
     </section>
   )
 }
-

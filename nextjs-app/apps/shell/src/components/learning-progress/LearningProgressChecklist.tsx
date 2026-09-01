@@ -13,10 +13,12 @@ type StatusFilter = 'all' | 'completed' | 'incomplete'
 export function LearningProgressChecklist({
   tab,
   onTabChange,
+  onNavigate,
   compact = false,
 }: {
   tab: LearningProgressTab
   onTabChange: (tab: LearningProgressTab) => void
+  onNavigate?: () => void
   compact?: boolean
 }) {
   const { inventory, isCompleted } = useLearningProgress()
@@ -177,6 +179,7 @@ export function LearningProgressChecklist({
       <LearningProgressList
         items={filteredItems}
         compact={compact}
+        onNavigate={onNavigate}
         isCompleted={(key) => isCompleted(tab === 'documents' ? 'document' : 'demo', key)}
       />
     </div>

@@ -54,7 +54,7 @@ export function Book({ children, coverClassName = DEFAULT_COVER, depth, width }:
         } as React.CSSProperties
       }
     >
-      <div className="contain-inline-size aspect-[49/60] w-fit relative [transform-style:preserve-3d] min-w-[calc(var(--book-width))] transition-transform duration-500 ease-out group-hover:[transform:rotateY(-20deg)_scale(1.066)translateX(-8px)]">
+      <div className="contain-inline-size aspect-[49/60] w-fit relative [transform-style:preserve-3d] min-w-[calc(var(--book-width))] transition-transform duration-500 ease-out group-hover:[transform:rotateY(-20deg)_scale(1.066)translateX(-8px)] group-active:[transform:rotateY(-20deg)_scale(1.066)translateX(-8px)]">
         <Stack
           align="stretch"
           className={cn(
