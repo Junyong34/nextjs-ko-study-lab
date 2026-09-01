@@ -2,7 +2,7 @@
 
 Multi-Zones(셸 + zone 앱들)를 Vercel에 올리는 방법을 정합니다. "zone당 Vercel 프로젝트를 만든다는 것 외에는 열려 있던" 미해결 항목을 여기서 닫습니다. 1차 출처는 [Vercel 공식 모노레포 문서](https://vercel.com/docs/monorepos)와 [Turborepo 배포 가이드](https://vercel.com/docs/monorepos/turborepo)입니다.
 
-**남은 것**: 이 문서는 계획이며, 실제 배포 검증을 대체하지 않습니다. 아래 §6이 그 검증 절차입니다.
+**첫 배포 검증 완료**: 실제로 3개 프로젝트를 배포해 확인한 결과, §3-2의 Related Projects 자동 주입은 프로덕션 빌드에서 값이 채워지지 않았고(`withRelatedProject`가 `defaultHost` 폴백으로 떨어짐 → shell이 `localhost:3001`/`3002`로 rewrite를 시도해 `DNS_HOSTNAME_RESOLVED_PRIVATE` 404 발생), 대신 **각 프로젝트 Settings → Environment Variables(Production)에 `ZONE_BASELINE_URL`/`ZONE_CACHE_URL`/`PUBLIC_ORIGIN`을 실제 배포 URL로 직접 넣고 재배포**하는 방식으로 해결했습니다. 코드의 `withRelatedProject`는 그대로 둬도 무해합니다(Related Projects 값이 없으면 이 수동 env var가 `defaultHost`로 그대로 쓰이므로) — 다만 "환경변수 없이 자동 연결"이라는 원래 기대는 이번 검증에서 깨졌으므로, §3-2는 참고용으로 남기고 §8에 실측 결과를 반영합니다.
 
 ## 1. 배포 구성 원칙
 
@@ -113,9 +113,9 @@ Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel R
 
 | 항목 | 리스크 | 확인 방법 |
 |---|---|---|
-| `VERCEL_RELATED_PROJECTS` 값 형식 | `withRelatedProject`가 반환하는 host에 스킴이 없다고 가정하고 `shell`에서 직접 `http`/`https`를 붙였음(§3-2) — 실제로 스킴이 포함돼 있으면 `https://https://...` 형태로 깨짐 | 첫 배포 후 `console.log`로 실제 반환값 확인, 틀리면 `stripScheme` 재사용 |
-| Related Projects 순환 참조 | 세 프로젝트가 서로를 참조하는 구성이 Vercel 쪽 제약(최대 3개, 같은 리포지토리 내)에 걸리는지 | 요구사항표(§3-2, 각 3개 이하·동일 리포)와 대조 완료 — 실제 대시보드 설정 시 재확인 |
-| `next.config.ts`가 빌드 타임에 이 값을 읽는 시점 | 기존 `zoneUrl()`이 모듈 최상위 `process.env` 읽기에 의존 — `VERCEL_RELATED_PROJECTS`도 같은 시점에 존재하는지 | 첫 배포 검증에서 실측 |
+| ~~`VERCEL_RELATED_PROJECTS` 값 형식~~ | **해결됨(2026-09-01 첫 배포 검증)**: 값 형식 이전에, `VERCEL_RELATED_PROJECTS`가 shell 빌드에서 아예 채워지지 않아 `withRelatedProject`가 `defaultHost`(`localhost:300x`)로 폴백 → rewrite가 사설 IP를 가리켜 `DNS_HOSTNAME_RESOLVED_PRIVATE` 404 발생 | **채택한 해결책**: Related Projects에 의존하지 않고, 각 프로젝트 Settings → Environment Variables(Production)에 `ZONE_BASELINE_URL`/`ZONE_CACHE_URL`/`PUBLIC_ORIGIN`을 실제 `*.vercel.app` URL로 직접 등록 후 재배포. 이게 Vercel 공식 [Academy 멀티존 가이드](https://vercel.com/academy/nextjs-foundations/multi-app-routing)가 안내하는 표준 방식과도 일치함 |
+| Related Projects 순환 참조 | 세 프로젝트가 서로를 참조하는 구성이 Vercel 쪽 제약(최대 3개, 같은 리포지토리 내)에 걸리는지 | 수동 env var 방식으로 전환하면서 더 이상 막는 요인 아님(참고용으로만 남김) |
+| `next.config.ts`가 빌드 타임에 이 값을 읽는 시점 | 기존 `zoneUrl()`이 모듈 최상위 `process.env` 읽기에 의존 | **확인됨**: 빌드 시점에 읽어 결과를 굳히므로, env var 저장 후 반드시 재배포(Redeploy) 필요 — 저장만으로는 반영 안 됨 |
 | CLI 기반 배포(`vercel link --repo`) | 대시보드로 프로젝트 3개를 만드는 절차만 검증됨. CLI로 한 번에 링크하는 경로는 별도 확인 필요<sup>[9]</sup> | 필요 시에만 |
 
 ---
