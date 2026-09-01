@@ -12,6 +12,7 @@ import {
 } from '@/lib/docs'
 import { LearningDocDemoHub } from '@/components/demo/LearningDocDemoHub'
 import { DemoViewer } from '@/components/demo/DemoViewer'
+import { buildPageMetadata } from '@/lib/seo/metadata'
 
 interface DemoPageProps {
   params: Promise<{
@@ -55,13 +56,16 @@ export async function generateMetadata({ params, searchParams }: DemoPageProps):
   const { slug } = await params
   const { run } = (await searchParams) || {}
   const slugStr = slug.join('/')
+  const path = `/demo/${slugStr}`
 
   const directDemo = getDemoByUrl(slugStr)
   if (directDemo) {
-    return {
+    return buildPageMetadata({
       title: `${directDemo.title} - 실습 데모`,
       description: `${directDemo.title} 실습 데모 - Next.js App Router 학습`,
-    }
+      path,
+      dynamicOgImage: { title: directDemo.title, eyebrow: '실습 데모' },
+    })
   }
 
   const doc = getDocBySlug(slug)
@@ -69,16 +73,20 @@ export async function generateMetadata({ params, searchParams }: DemoPageProps):
     if (run) {
       const runningDemo = getDemoByUrl(run)
       if (runningDemo) {
-        return {
+        return buildPageMetadata({
           title: `${runningDemo.title} - ${doc.title} 데모`,
           description: `${doc.title} - ${runningDemo.title} 실습 데모`,
-        }
+          path,
+          dynamicOgImage: { title: runningDemo.title, eyebrow: doc.title },
+        })
       }
     }
-    return {
+    return buildPageMetadata({
       title: `${doc.title} 실습 데모`,
       description: `${doc.title} 관련 인터랙티브 실습 예제 목록`,
-    }
+      path,
+      dynamicOgImage: { title: doc.title, eyebrow: '실습 데모' },
+    })
   }
 
   return { title: '데모를 찾을 수 없습니다' }

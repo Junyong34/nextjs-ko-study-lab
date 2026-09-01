@@ -5,6 +5,9 @@ import { MarkdownRenderer, parseHeadings, isGlossaryDoc } from '@study/docs-rend
 import { TableOfContents } from '@study/ui'
 import { getManifest, getDocBySlug, getDocContent, getDemos } from '@/lib/docs'
 import { LearningCompletionControl } from '@/components/learning-progress/LearningCompletionControl'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { buildBreadcrumbJsonLdFor, buildLearningResourceJsonLd } from '@/lib/seo/json-ld'
+import { buildPageMetadata } from '@/lib/seo/metadata'
 
 interface PageProps {
   params: Promise<{
@@ -30,10 +33,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
-  return {
+  return buildPageMetadata({
     title: doc.title,
     description: `${doc.title} - Next.js App Router 공식 문서 한국어 가이드`,
-  }
+    path: doc.url,
+    dynamicOgImage: { title: doc.title },
+  })
 }
 
 export default async function DocPage({ params }: PageProps) {
@@ -55,9 +60,12 @@ export default async function DocPage({ params }: PageProps) {
   const allDemos = getDemos()
   const headings = parseHeadings(content)
   const breadcrumbs = doc.slug ? doc.slug.slice(0, -1).map((s) => s.replace(/-/g, ' ')) : []
+  const description = `${doc.title} - Next.js App Router 공식 문서 한국어 가이드`
 
   return (
     <div className="flex items-start gap-8">
+      <JsonLd data={buildBreadcrumbJsonLdFor({ title: doc.title, url: doc.url })} />
+      <JsonLd data={buildLearningResourceJsonLd({ title: doc.title, description, url: doc.url })} />
       {/* Main Document Content */}
       <div className="min-w-0 flex-1 space-y-6">
         {/* Category / Breadcrumbs */}

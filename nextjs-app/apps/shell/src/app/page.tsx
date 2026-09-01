@@ -1,6 +1,7 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import { getManifest, getDemos } from '@/lib/docs'
+import { buildPageMetadata } from '@/lib/seo/metadata'
 import {
   RoadmapHero,
   RoadmapBookshelf,
@@ -9,11 +10,12 @@ import {
   LearningProgressWidget,
 } from '@/components/home'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: 'Next.js 16 학습 로드맵 | App Router 한국어 가이드 & 실습 랩',
   description:
     'Next.js 16 공식 문서를 체계적인 한국어 커리큘럼으로 학습하고 인터랙티브 실습 데모로 직접 검증하는 학습 플랫폼',
-}
+  path: '/',
+})
 
 export default function HomePage() {
   const manifest = getManifest()
