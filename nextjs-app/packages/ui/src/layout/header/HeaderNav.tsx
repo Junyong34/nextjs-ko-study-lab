@@ -15,7 +15,7 @@ export function HeaderNav({ officialDocsUrl, repoUrl }: HeaderNavProps) {
   return (
     <nav className="flex shrink-0 items-center gap-1 sm:gap-3">
       <Link
-        href="/"
+        href="/getting-started"
         className="flex items-center gap-1 sm:gap-1.5 rounded-md px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 transition dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
       >
         <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
