@@ -2,6 +2,7 @@ import { DemoIframe } from '@study/docs-render'
 import { DemoPageHeader } from '@study/ui'
 import type { Demo } from '@/lib/docs'
 import { DemoBackButton } from './DemoBackButton'
+import { DemoViewTracker } from './DemoViewTracker'
 import { LearningCompletionControl } from '@/components/learning-progress/LearningCompletionControl'
 
 export function DemoViewer({
@@ -28,6 +29,8 @@ export function DemoViewer({
 
   return (
     <div className="space-y-6">
+      <DemoViewTracker zone={demo.zone} demoUrl={demo.url} demoTitle={demo.title} />
+
       <DemoPageHeader
         title={demo.title}
         zone={demo.zone}

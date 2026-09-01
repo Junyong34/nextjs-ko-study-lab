@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { Header, Footer, type TreeNode } from '@study/ui'
 import { getAugmentedTree, getDemos, getManifest } from '@/lib/docs'
 import { AppFrame } from '@/components/layout/AppFrame'
@@ -32,6 +33,8 @@ export default function RootLayout({
     console.error('Failed to load shell inventory:', err)
   }
 
+  const gaId = process.env.NEXT_PUBLIC_GA_ID
+
   return (
     <html lang="ko" className="h-full">
       <body className="flex min-h-full flex-col bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
@@ -45,6 +48,7 @@ export default function RootLayout({
           </GithubStarProvider>
         </LearningProgressProvider>
       </body>
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   )
 }

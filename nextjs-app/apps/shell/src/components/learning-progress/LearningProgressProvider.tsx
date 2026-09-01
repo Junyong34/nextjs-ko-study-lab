@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import { trackEvent } from '@/lib/analytics'
 import { LEARNING_PROGRESS_STORAGE_KEY } from '@/lib/learning-progress/constants'
 import { isLearningItemCompleted, resetProgress, toggleProgress } from '@/lib/learning-progress/state'
 import { parseStoredProgress, readStoredProgress, writeStoredProgress } from '@/lib/learning-progress/storage'
@@ -78,9 +79,14 @@ export function LearningProgressProvider({
 
   const toggle = useCallback(
     (kind: LearningItemKind, key: string) => {
+      const wasCompleted = isLearningItemCompleted(progress, kind, key)
       const next = toggleProgress(progress, kind, key, new Date().toISOString())
       setProgress(next)
       persist(next)
+      trackEvent({
+        name: 'learning_progress_toggle',
+        params: { kind, item_key: key, completed: !wasCompleted },
+      })
     },
     [persist, progress],
   )
