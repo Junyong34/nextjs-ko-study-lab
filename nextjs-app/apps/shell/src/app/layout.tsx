@@ -8,15 +8,33 @@ import { LearningProgressTrigger } from '@/components/learning-progress/Learning
 import { GithubStarProvider, GithubStarPrompt } from '@/components/github-star'
 import { createLearningInventory } from '@/lib/learning-progress/inventory'
 import type { LearningInventory } from '@/lib/learning-progress/types'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { buildWebsiteJsonLd } from '@/lib/seo/json-ld'
+import { siteConfig } from '@/lib/seo/config'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    template: '%s | Next.js 학습',
-    default: 'Next.js 학습 (App Router)',
+    template: siteConfig.titleTemplate,
+    default: siteConfig.name,
   },
-  description:
-    'Next.js 공식 문서를 체계적인 한국어 학습 커리큘럼으로 재구성하고 인터랙티브 데모로 검증하는 실습 랩',
+  description: siteConfig.description,
+  openGraph: {
+    type: 'website',
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    siteName: siteConfig.shortName,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [{ url: siteConfig.ogImage, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+  },
 }
 
 export default function RootLayout({
@@ -38,6 +56,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full">
       <body className="flex min-h-full flex-col bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
+        <JsonLd data={buildWebsiteJsonLd()} />
         <LearningProgressProvider inventory={inventory}>
           <GithubStarProvider>
             <Header />

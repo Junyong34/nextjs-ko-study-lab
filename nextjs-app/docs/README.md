@@ -14,6 +14,7 @@ Next.js 학습 랩(`nextjs-app`)의 시스템 아키텍처, UI 설계, 코드베
 | **04** | [**Vercel 배포 계획**](./04-vercel-deployment-plan.md) | • zone당 프로젝트 분리, Related Projects로 프리뷰 URL 문제 해결<br>• Ignored Build Step·원격 캐시·첫 배포 검증 절차 (아직 미실행) |
 | **05** | [**Zone / 데모 추가 체크리스트**](./05-zone-onboarding-checklist.md) | • zone을 새로 추가할 때 손대야 하는 지점 전체<br>• 일상적인 데모 추가 절차 |
 | **06** | [**학습 기록 기능 설계**](./06-learning-progress-design.md) | • 셸 소유의 `localStorage` 기반 학습 진도 및 완료 표시 동기화 엔진<br>• `LearningProgressProvider` 및 통계 대시보드 화면 설계 |
+| **07** | [**SEO 작업 계획**](./07-seo-plan.md) | • robots/sitemap/구조화 데이터/OG 등 기술적 SEO 체크리스트<br>• Google·네이버 등록 절차와 도메인 확정 전/후 실행 순서 |
 
 ---
 

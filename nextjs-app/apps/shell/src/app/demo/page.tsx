@@ -5,11 +5,13 @@ import { DemoIndexStats } from '@study/ui'
 import { getDemos, getManifest } from '@/lib/docs'
 import { parseDemoIndexQuery, createDemoIndexViewModel } from '@/lib/demo-index'
 import { DemoIndexClient } from '@/components/demo/DemoIndexClient'
+import { buildPageMetadata } from '@/lib/seo/metadata'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: '인터랙티브 데모 색인',
   description: 'Next.js App Router 공식 문서와 연계된 데모 실습 데모 목록',
-}
+  path: '/demo',
+})
 
 interface DemoIndexPageProps {
   searchParams?: Promise<{
