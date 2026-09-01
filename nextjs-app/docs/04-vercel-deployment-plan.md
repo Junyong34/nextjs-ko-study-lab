@@ -59,9 +59,9 @@ Related Projects는 프로젝트당 최대 3개까지 다른 프로젝트를 연
 
 프로젝트 ID는 각 프로젝트 생성 **후** Settings에서 확인 가능합니다 — 순서상 먼저 프로젝트 3개를 `relatedProjects` 없이 만들고, ID를 모은 뒤 이 설정을 추가하는 2단계 순서가 필요합니다(닭-달걀 문제).
 
-코드 쪽은 `@vercel/related-projects`의 `withRelatedProject`로 `zoneUrl()` 헬퍼(`next.config.ts`의 기존 함수)를 감싸고, 로컬에서는 기존과 동일하게 `.env.local`의 `ZONE_BASELINE_URL`/`ZONE_CACHE_URL`/`PUBLIC_ORIGIN`을 `defaultHost`로 넘깁니다. **"목적지를 환경변수로 두는 것이 로컬↔배포 전환의 전부"라는 기존 원칙은 유지되고, 배포에서만 값의 출처가 수동 설정 → Related Projects 자동 주입으로 바뀝니다.**
+**완료**: 세 앱의 `next.config.ts`에 `@vercel/related-projects`의 `withRelatedProject`를 적용했습니다. `shell`은 `projectName: 'study-baseline'`/`'study-cache'`로 zone host를 조회하고, `demo-baseline`/`demo-cache-components`는 `projectName: 'study-shell'`로 `PUBLIC_ORIGIN`을 조회합니다. `defaultHost`는 기존과 동일하게 `.env.local`의 `ZONE_BASELINE_URL`/`ZONE_CACHE_URL`/`PUBLIC_ORIGIN`(스킴 제거 후)을 씁니다. **"목적지를 환경변수로 두는 것이 로컬↔배포 전환의 전부"라는 기존 원칙은 유지되고, 배포에서만 값의 출처가 수동 설정 → Related Projects 자동 주입으로 바뀝니다.**
 
-⚠️ **미검증 항목** (§8에 재수록): `@vercel/related-projects`가 반환하는 URL이 `https://` 스킴을 포함하는지, `PUBLIC_ORIGIN`이 기대하는 스킴 없는 호스트(`localhost:3000` 형태)와 형식이 맞는지는 첫 배포에서 실측이 필요합니다.
+⚠️ **미검증 항목** (§8에 재수록): README(`@vercel/related-projects`)의 예시가 스킴 없는 host를 반환/기대하는 것으로 보여 `shell` 쪽은 `process.env.VERCEL` 유무로 스킴(`http`/`https`)을 코드에서 직접 붙였습니다 — 실제 Vercel 배포에서 이 가정이 맞는지는 첫 배포에서 실측이 필요합니다.
 
 ### 3-3. Turborepo 캐시 정합성
 
@@ -98,7 +98,7 @@ Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel R
 
 1. Vercel에서 프로젝트 3개 생성. Root Directory를 각각 `nextjs-app/apps/shell`, `nextjs-app/apps/demo-baseline`, `nextjs-app/apps/demo-cache-components`로 지정 (§2). "Include source files outside of the Root Directory" 옵션 확인
 2. 세 프로젝트 모두 최초 배포(관계 설정 없이) — Settings에서 각 프로젝트 ID 확보
-3. `vercel.json`에 `relatedProjects` 상호 설정 (§3-2 표), `turbo.json`에 `VERCEL_RELATED_PROJECTS` 추가, `next.config.ts`의 `zoneUrl`/`PUBLIC_ORIGIN` 로직을 `@vercel/related-projects`로 교체 — 재배포
+3. `vercel.json`에 `relatedProjects` 상호 설정 (§3-2 표) — 재배포. (`turbo.json`의 `VERCEL_RELATED_PROJECTS` 추가와 `next.config.ts`의 `@vercel/related-projects` 적용은 코드에 이미 반영됨)
 4. 배포에서만 드러나는 항목 확인: 문서 렌더링(md 산출물 포함 여부), 데모 화면 CSS/JS 로딩(`assetPrefix`), Server Action 허용(`allowedOrigins`)
 5. 셸 도메인에서 문서 → 데모 링크 이동, 독립 열람 iframe 표시까지 끝단 확인
 6. 확인이 끝나면 로컬 중심으로 복귀. zone을 추가할 때만 1~5를 반복(3번은 신규 zone과 기존 두 프로젝트의 `relatedProjects` 목록에 서로 추가하는 것으로 축소됨)
@@ -113,7 +113,7 @@ Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel R
 
 | 항목 | 리스크 | 확인 방법 |
 |---|---|---|
-| `VERCEL_RELATED_PROJECTS` 값 형식 | `@vercel/related-projects`가 주는 호스트에 스킴이 붙는지 불명 — `PUBLIC_ORIGIN`은 스킴 없는 호스트를 기대(`experimental.serverActions.allowedOrigins`) | 첫 배포 후 실제 값 로그 확인, 필요시 스킴 스트립 |
+| `VERCEL_RELATED_PROJECTS` 값 형식 | `withRelatedProject`가 반환하는 host에 스킴이 없다고 가정하고 `shell`에서 직접 `http`/`https`를 붙였음(§3-2) — 실제로 스킴이 포함돼 있으면 `https://https://...` 형태로 깨짐 | 첫 배포 후 `console.log`로 실제 반환값 확인, 틀리면 `stripScheme` 재사용 |
 | Related Projects 순환 참조 | 세 프로젝트가 서로를 참조하는 구성이 Vercel 쪽 제약(최대 3개, 같은 리포지토리 내)에 걸리는지 | 요구사항표(§3-2, 각 3개 이하·동일 리포)와 대조 완료 — 실제 대시보드 설정 시 재확인 |
 | `next.config.ts`가 빌드 타임에 이 값을 읽는 시점 | 기존 `zoneUrl()`이 모듈 최상위 `process.env` 읽기에 의존 — `VERCEL_RELATED_PROJECTS`도 같은 시점에 존재하는지 | 첫 배포 검증에서 실측 |
 | CLI 기반 배포(`vercel link --repo`) | 대시보드로 프로젝트 3개를 만드는 절차만 검증됨. CLI로 한 번에 링크하는 경로는 별도 확인 필요<sup>[9]</sup> | 필요 시에만 |

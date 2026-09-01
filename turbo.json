@@ -4,7 +4,7 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**", "dist/**"],
-      "env": ["ZONE_*_URL", "PUBLIC_ORIGIN"]
+      "env": ["ZONE_*_URL", "PUBLIC_ORIGIN", "VERCEL_RELATED_PROJECTS"]
     },
     "dev": {
       "cache": false,

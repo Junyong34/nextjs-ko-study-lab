@@ -13,6 +13,7 @@
     "@study/docs": "workspace:*",
     "@study/docs-render": "workspace:*",
     "@study/ui": "workspace:*",
+    "@vercel/related-projects": "^1.1.1",
     "lucide-react": "^1.16.0",
     "next": "catalog:",
     "react": "catalog:",
