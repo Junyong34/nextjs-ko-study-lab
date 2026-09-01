@@ -26,7 +26,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="next/font 자동 셀프호스팅 및 Zero CLS 폰트 로딩 실증 검증"
+        title="next/font 자동 셀프호스팅 및 Zero CLS 폰트 로딩 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}

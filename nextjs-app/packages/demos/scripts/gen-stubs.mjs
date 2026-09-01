@@ -52,12 +52,12 @@ export default function DemoPage() {
     <DemoContainer className="p-4 sm:p-6 max-w-2xl mx-auto space-y-4 sm:space-y-6">
       {/* 제목·설명·zone은 셸이 그린다 (규칙 12). 여기는 데모 본체와 조작만 둔다. */}
 
-      {/* 데모 상호작용 및 실증 영역 */}
+      {/* 데모 상호작용 영역 */}
       <div className="p-4 rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 space-y-4 shadow-xs">
         <div className="p-4 bg-zinc-50 dark:bg-zinc-800/60 rounded border border-zinc-200/80 dark:border-zinc-700/60 text-sm space-y-2">
           <p className="font-medium text-zinc-900 dark:text-zinc-100">데모 실행 공간</p>
           <p className="text-zinc-600 dark:text-zinc-400">
-            이곳에 [\${demo.title}] 실증 코드를 작성하세요.
+            이곳에 [\${demo.title}] 실습 코드를 작성해 보세요.
           </p>
           {/* 캐시 태그 규칙 예시 주석: cacheTag('\${normalizedTag}') */}
         </div>
@@ -65,11 +65,10 @@ export default function DemoPage() {
 
       {/* 기대 / 실제 관찰 결과 (03. 결합 구조 설계 §4-8) */}
       <ExpectedActualPanel
-        title="\${demo.title} 실증 검증"
-        description="데모 조작 시 명시된 사양에 따른 정상 동작 및 상태 변화 관찰"
-        expected="데모 조작 시 명시된 사양에 따른 정상 동작 및 상태 변화 관찰"
-        actual={\`렌더링 완료 (\${timestamp})\`}
-        isMatched={true}
+        title="\${demo.title} 검증"
+        description="데모를 조작한 뒤 기대한 동작과 실제 결과를 확인합니다."
+        expected="데모를 조작한 뒤 기대한 동작과 실제 결과를 확인합니다."
+        actual={\`실행 대기 중 (\${timestamp})\`}
       />
     </DemoContainer>
   )

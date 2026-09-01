@@ -14,7 +14,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="[[...slug]] 선택적 포괄 세그먼트 실증 검증"
+        title="[[...slug]] 선택적 포괄 세그먼트 검증 결과"
         expected="• docs/[[...slug]] 폴더 컨벤션에 매칭되어 루트(/docs) 접근 시 undefined, 하위 경로(/docs/a/b) 접근 시 string[] 주입\n• 단일 page.tsx에서 루트 인덱스와 N단계 서브 페이지 일원화 처리"
         actual={
           isDocsRoute

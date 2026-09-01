@@ -43,7 +43,7 @@ export default function TimeBasedIsrDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Next.js 16 cacheLife 시간 기반 캐시 수명 & SWR 재검증"
+        title="Next.js 16 cacheLife 시간 기반 캐시 수명과 SWR"
         concept="'use cache' 환경에서 cacheLife({ stale: 10, revalidate: 10, expire: 60 })를 선언하면 10초간 FRESH 캐시가 유지되고, stale 이후 요청 시 기존 캐시를 즉시 반환하면서 백그라운드에서 데이터를 갱신(SWR)합니다."
         steps={[
           {

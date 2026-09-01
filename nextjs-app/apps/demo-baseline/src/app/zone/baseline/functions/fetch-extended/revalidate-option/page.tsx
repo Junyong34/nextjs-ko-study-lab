@@ -8,7 +8,7 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
             <DemoGuideCard
         title="Next.js 확장 fetch revalidate 옵션"
-        concept="Next.js 확장 fetch API의 { next: { revalidate: 60 } } 옵션을 사용하여 HTTP 요청 레벨에서 ISR 시간 기반 캐시 수명과 재검증 주기를 제어합니다."
+        concept="Next.js 확장 fetch API의 { next: { revalidate: 60 } } 옵션을 사용하여 HTTP 요청 레벨에서 ISR 시간 기반 캐시 수명과 revalidation 주기를 제어합니다."
         steps={[
           {
             step: 1,

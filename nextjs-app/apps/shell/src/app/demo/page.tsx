@@ -8,8 +8,8 @@ import { DemoIndexClient } from '@/components/demo/DemoIndexClient'
 import { buildPageMetadata } from '@/lib/seo/metadata'
 
 export const metadata: Metadata = buildPageMetadata({
-  title: '인터랙티브 데모 색인',
-  description: 'Next.js App Router 공식 문서와 연계된 데모 실습 데모 목록',
+  title: '인터랙티브 실습 예제 목록',
+  description: 'Next.js App Router 공식 문서와 연결된 실습 예제 목록',
   path: '/demo',
 })
 
@@ -37,10 +37,10 @@ export default async function DemoIndexPage({ searchParams }: DemoIndexPageProps
           <span className="text-xs font-bold uppercase tracking-wider">Interactive Demos</span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-3xl">
-          실습 데모
+          실습 예제
         </h1>
         <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-          Next.js App Router 핵심 기능과 동작 원리를 다중 존(Multi-zones) 아키텍처 기반의 인터랙티브 데모로 직접 실험하고 검증합니다.
+          Next.js App Router의 핵심 기능을 실행 가능한 예제로 직접 확인해 보세요.
         </p>
 
         <DemoIndexStats totalCount={viewModel.allCount} doneCount={viewModel.allDoneCount} />

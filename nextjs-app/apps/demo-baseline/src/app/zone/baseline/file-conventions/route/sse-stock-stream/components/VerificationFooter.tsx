@@ -16,7 +16,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="실시간 재고 스트리밍 (SSE route.ts) 실증 검증"
+        title="실시간 재고 스트리밍 (SSE route.ts) 검증 결과"
         expected="• route.ts에서 ReadableStream을 생성하고 Content-Type: text/event-stream으로 지속적인 청크 스트리밍\n• 클라이언트에서 실시간 재고 틱(tick) 데이터 수신"
         actual={
           ticksReceived > 0

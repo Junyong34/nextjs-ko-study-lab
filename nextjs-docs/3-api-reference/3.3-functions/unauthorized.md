@@ -178,7 +178,7 @@ export async function GET() {
 ## 예제 및 데모 설계
 
 - 비로그인 상태로 `/account` 라우트에 진입했을 때 `app/account/unauthorized.tsx`에 구성된 로그인 유도 컴포넌트가 즉시 노출되는지 확인한다.
-- `<Suspense>` 경계 내부의 비동기 컴포넌트에서 `unauthorized()`를 던졌을 때 상위 네비게이션 바는 유지된 채 본문만 401 UI로 교체되는 스트리밍 동작을 검증한다.
+- `<Suspense>` 경계 내부의 비동기 컴포넌트에서 `unauthorized()`를 던졌을 때 상위 내비게이션 바는 유지된 채 본문만 401 UI로 교체되는 스트리밍 동작을 검증한다.
 - Server Action에서 세션 유효성 검사 실패 시 `unauthorized()` 호출로 안전하게 차단되는지 확인한다.
 
 ## 연습 문제

@@ -39,13 +39,13 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Server Action 폼 검증 및 useActionState 실시간 할인 실증 검증"
+        title="Server Action 폼 검증과 useActionState 할인 상태 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}
-        description="React 19 useActionState와 Next.js Server Action의 서버사이드 유효성 검증 및 상태 동기화 파이프라인을 실증 검증합니다."
+        description="React 19 useActionState와 Next.js Server Action의 서버사이드 유효성 검증 및 상태 동기화 파이프라인을 검증합니다."
       />
-      <DemoDeepDiveCard title="Server Action 폼 검증 및 useActionState 실시간 할인">
+      <DemoDeepDiveCard title="Server Action 폼 검증과 useActionState 할인 상태">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>

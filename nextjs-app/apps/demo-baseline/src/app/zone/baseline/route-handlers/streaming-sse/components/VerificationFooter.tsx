@@ -52,11 +52,11 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="ReadableStream 기반 Server-Sent Events(SSE) 스트리밍 실증 검증"
+        title="ReadableStream 기반 Server-Sent Events(SSE) 스트리밍 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}
-        description="Route Handler의 Web ReadableStream과 클라이언트 EventSource 간의 실시간 스트리밍 라이프사이클을 실증 검증합니다."
+        description="Route Handler의 Web ReadableStream과 클라이언트 EventSource 간의 실시간 스트리밍 라이프사이클을 검증합니다."
       />
       <DemoDeepDiveCard title="ReadableStream 기반 Server-Sent Events(SSE) 스트리밍">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">

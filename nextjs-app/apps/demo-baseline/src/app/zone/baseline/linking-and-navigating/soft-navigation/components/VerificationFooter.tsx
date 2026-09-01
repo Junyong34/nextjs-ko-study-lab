@@ -50,16 +50,16 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Link vs a 소프트 네비게이션 및 스크롤 제어 실증 검증"
+        title="Link와 a의 소프트 내비게이션 및 스크롤 제어 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
-      <DemoDeepDiveCard title="Link vs a 소프트 네비게이션 및 스크롤 제어">
+      <DemoDeepDiveCard title="Link와 a의 소프트 내비게이션 및 스크롤 제어">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>

@@ -25,11 +25,11 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="next/dynamic 지연 로딩 & 클라이언트 번들 최적화 실증 검증"
+        title="next/dynamic 지연 로딩 & 클라이언트 번들 최적화 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}
-        description="Next.js next/dynamic의 ssr: false 옵션 및 클라이언트 온디맨드 코드 스플리팅 라이프사이클을 실증 검증합니다."
+        description="Next.js next/dynamic의 ssr: false 옵션 및 클라이언트 온디맨드 코드 스플리팅 라이프사이클을 검증합니다."
       />
       <DemoDeepDiveCard title="next/dynamic 지연 로딩 & 클라이언트 번들 최적화">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">

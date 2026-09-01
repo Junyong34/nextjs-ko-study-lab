@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• 대규모 카탈로그 대역폭 절약 최적화 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = "• 대규모 카탈로그 prefetch 최적화의 동작과 기대 결과를 확인합니다."
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,19 +51,19 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="대규모 카탈로그 대역폭 절약 최적화 실증 검증"
+        title="대규모 카탈로그 prefetch 최적화 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-      <DemoDeepDiveCard title="대규모 카탈로그 대역폭 절약 최적화">
+      <DemoDeepDiveCard title="대규모 카탈로그 prefetch 최적화">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
@@ -75,7 +75,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 대규모 상품 목록에서 기본 전체 프리패치(<code>prefetch={'{'}true{'}'}</code>) 적용 시(120개 요청, 1.8MB)와 선별적 프리패치/호버 기반 프리패치 최적화 적용 시(6개 요청, 92KB)의 네트워크 전송량을 대조하여, 95% 이상의 대역폭 절감 효과를 실증합니다.
+              본 데모에서는 대규모 상품 목록에서 기본 전체 prefetch(<code>prefetch={'{'}true{'}'}</code>) 적용 시(120개 요청, 1.8MB)와 선별적 prefetch/호버 기반 prefetch 최적화 적용 시(6개 요청, 92KB)의 네트워크 전송량을 대조하여, 95% 이상의 대역폭 절감 효과를 실증합니다.
             </p>
           </div>
 
@@ -84,7 +84,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>모바일 데이터 비용 95% 절감</strong>: 무선 모바일 네트워크 환경의 사용자 데이터 소모량을 최소화하고 브라우저 메인 스레드 파싱 부하를 경감합니다.</li>
               <li><strong>서버 트래픽 및 오리진 부하 완화</strong>: 불필요한 RSC 렌더링 요청을 사전에 차단하여 피크 타임 서버 CPU 사용량을 안정화합니다.</li>
-              <li><strong>Core Web Vitals (INP/LCP) 개선</strong>: 백그라운드 프리패치 네트워크 경합을 줄여 사용자 인터랙션 응답성을 최고 수준으로 유지합니다.</li>
+              <li><strong>Core Web Vitals (INP/LCP) 개선</strong>: 백그라운드 prefetch 네트워크 경합을 줄여 사용자 인터랙션 응답성을 최고 수준으로 유지합니다.</li>
             </ul>
           </div>
 

@@ -16,7 +16,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="NextResponse.rewrite() 가상 경로 라우팅 실증 검증"
+        title="NextResponse.rewrite() 가상 경로 라우팅 검증 결과"
         expected="• /api 요청 시 URL 변경 없이 내부 /target 엔드포인트로 포워딩되어 응답 생성\n• NextResponse.rewrite(destination) 라우팅 완료"
         actual={
           isRewritten

@@ -76,7 +76,7 @@ export function LearningProgressChecklist({
         aria-live="polite"
       >
         <span className="font-semibold">
-          {tab === 'documents' ? '문서' : '데모'} 학습 완료
+          {tab === 'documents' ? '문서' : '예제'} 학습 완료
         </span>
         <strong className="tabular-nums rounded-full bg-emerald-50 px-2.5 py-0.5 font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
           {progressSummary.completedCount} / {progressSummary.totalCount}
@@ -86,7 +86,7 @@ export function LearningProgressChecklist({
       <div className="flex gap-2" role="tablist" aria-label="학습 항목 종류">
         {([
           ['documents', '문서', BookOpen],
-          ['demos', '데모', Layers3],
+          ['demos', '예제', Layers3],
         ] as const).map(([value, label, Icon]) => (
           <button
             key={value}

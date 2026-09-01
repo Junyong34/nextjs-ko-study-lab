@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"서버 사이드 사전 JSON 번역 렌더링 실습"}>
+      <DemoPlaygroundCard title={"서버 측 JSON 사전 기반 번역 렌더링 실습"}>
         <I18nDictionaryDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

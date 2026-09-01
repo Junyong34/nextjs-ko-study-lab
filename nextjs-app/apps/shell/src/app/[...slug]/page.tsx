@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return buildPageMetadata({
     title: doc.title,
-    description: `${doc.title} - Next.js App Router 공식 문서 한국어 가이드`,
+    description: `${doc.title} - Next.js App Router 한국어 학습 가이드`,
     path: doc.url,
     dynamicOgImage: { title: doc.title },
   })
@@ -60,7 +60,7 @@ export default async function DocPage({ params }: PageProps) {
   const allDemos = getDemos()
   const headings = parseHeadings(content)
   const breadcrumbs = doc.slug ? doc.slug.slice(0, -1).map((s) => s.replace(/-/g, ' ')) : []
-  const description = `${doc.title} - Next.js App Router 공식 문서 한국어 가이드`
+  const description = `${doc.title} - Next.js App Router 한국어 학습 가이드`
 
   return (
     <div className="flex items-start gap-8">

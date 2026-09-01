@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"Next.js 16 cacheLife('hours') 프로파일 기반 수명 제어 실습"}>
+      <DemoPlaygroundCard title={"Next.js 16 cacheLife('hours') 프로필 기반 수명 제어 실습"}>
         <CacheLifeHoursDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

@@ -24,7 +24,7 @@ export function LearningProgressDrawer({
   const { reset } = useLearningProgress()
 
   const handleReset = () => {
-    if (window.confirm('문서와 데모의 모든 학습 완료 표시를 해제할까요?')) reset()
+    if (window.confirm('문서와 예제의 모든 완료 표시를 해제할까요?')) reset()
   }
 
   useEffect(() => {

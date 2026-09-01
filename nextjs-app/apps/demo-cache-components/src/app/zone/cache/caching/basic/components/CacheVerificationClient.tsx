@@ -120,7 +120,7 @@ export function CacheVerificationClient({
   }
 
   const expectedText =
-    '- 일반 브라우저 새로고침: 무효화 전에는 getCachedTimestamp()의 캐시 ID와 시각이 유지됨 (Cache Hit)\n- revalidateTag(tag, "max") 실행: 태그 항목이 stale 상태로 표시되고 첫 재방문 시 백그라운드 재검증 시작\n- 재검증 완료 뒤 다음 요청: 새로 생성된 캐시 ID와 시각이 표시됨 (Fresh Result)'
+    '- 일반 브라우저 새로고침: 무효화 전에는 getCachedTimestamp()의 캐시 ID와 시각이 유지됨 (Cache Hit)\n- revalidateTag(tag, "max") 실행: 태그 항목이 stale 상태로 표시되고 첫 재방문 시 백그라운드 revalidation 시작\n- revalidation 완료 뒤 다음 요청: 새로 생성된 캐시 ID와 시각이 표시됨 (Fresh Result)'
 
   let actualText = ''
   let isMatched: boolean | undefined = undefined
@@ -205,7 +205,7 @@ export function CacheVerificationClient({
 
       {/* 기대값 vs 실제값 검증 패널 */}
       <ExpectedActualPanel
-        title="use cache 캐시 유지 및 revalidateTag 재검증 순서 검증"
+        title="use cache 캐시 유지 및 revalidateTag revalidation 순서 검증"
         description="새로고침 시 캐시 유지와 revalidateTag(tag, 'max')의 stale-while-revalidate 순서를 대조"
         expected={expectedText}
         actual={actualText}

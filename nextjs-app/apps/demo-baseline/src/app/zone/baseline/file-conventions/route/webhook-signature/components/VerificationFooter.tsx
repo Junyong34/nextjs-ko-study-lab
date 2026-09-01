@@ -18,7 +18,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Webhook 서명 검증 핸들러 (route.ts) 실증 검증"
+        title="Webhook 서명 검증 핸들러 (route.ts) 검증 결과"
         expected="• 정상 서명 전송 시 HTTP 200 OK 및 verified: true 응답\n• 변조 서명 전송 시 HTTP 401 Unauthorized 및 verified: false 응답"
         actual={
           httpStatus

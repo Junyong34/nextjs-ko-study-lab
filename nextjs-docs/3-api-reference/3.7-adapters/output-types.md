@@ -144,7 +144,7 @@ ISR이 활성화된 route와 정적 prerender다.
   id: string           // route 식별자
   pathname: string     // URL pathname
   parentOutputId: string  // 원본 페이지/route의 ID
-  groupId: number        // 재검증 그룹 식별자 (groupId가 같은 prerender끼리 함께 재검증된다)
+  groupId: number        // revalidation 그룹 식별자 (groupId가 같은 prerender끼리 함께 revalidation된다)
   route: string           // 파일시스템 route와 정렬된 소스 route matcher로, 다이나믹 세그먼트를 유지한다 (예: /blog/[slug]는 prerender된 경로 /blog/first에 대응한다)
   routeType?: 'route' | 'fallback' | 'shell' | 'page'  // 정식 응답의 종류
   response?: 'empty' | 'initial' | 'complete'  // 요청 시점 작업 이전 응답의 완성도
@@ -159,7 +159,7 @@ ISR이 활성화된 route와 정적 prerender다.
     initialStatus?: number  // 초기 상태 코드
     initialHeaders?: Record<string, string | string[]>  // 초기 헤더
     initialExpiration?: number  // 초기 만료 시간(초)
-    initialRevalidate?: number | false  // 초기 재검증 시간(초), 완전히 정적이면 false
+    initialRevalidate?: number | false  // 초기 revalidation 시간(초), 완전히 정적이면 false
     postponedState: string | undefined  // 렌더링 재개에 사용되는 직렬화된 PPR 상태
   }
   config: {

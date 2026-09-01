@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• Next.js 인증 & 세션 기반 역할 분기 (RBAC) 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = "• Next.js 인증 & 세션 기반 역할 분기 (RBAC)의 동작과 기대 결과를 확인합니다."
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,17 +51,17 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Next.js 인증 & 세션 기반 역할 분기 (RBAC) 실증 검증"
+        title="Next.js 인증 & 세션 기반 역할 분기 (RBAC) 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
                         <DemoDeepDiveCard title="Next.js 인증 & 세션 기반 역할 분기 (RBAC)">
               <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
@@ -96,7 +96,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
                   <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>Server Action 내부 세션 재검증 필수</strong>: 화면에서 버튼을 숨겼더라도 Server Action의 Action ID를 직접 호출할 수 있으므로, 액션 함수 내부에서 세션 및 역할을 반드시 재검사해야 합니다.</li>
+                    <li><strong>Server Action 내부 세션 revalidation 필수</strong>: 화면에서 버튼을 숨겼더라도 Server Action의 Action ID를 직접 호출할 수 있으므로, 액션 함수 내부에서 세션 및 역할을 반드시 재검사해야 합니다.</li>
                     <li><strong>쿠키 보안 속성(httpOnly, secure)</strong>: 세션 토큰을 담는 쿠키는 XSS 공격에 대비하여 반드시 <code>httpOnly: true</code>, <code>secure: true</code>, <code>sameSite: 'lax'</code>를 적용해야 합니다.</li>
                   </ul>
                 </div>

@@ -31,7 +31,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="REST API Route Handler (GET, POST, PATCH, DELETE) 실증 검증"
+        title="REST API Route Handler (GET, POST, PATCH, DELETE) 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}

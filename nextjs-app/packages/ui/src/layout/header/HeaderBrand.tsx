@@ -24,7 +24,7 @@ export function HeaderBrand({ version }: HeaderBrandProps) {
           </span>
         </div>
         <span className="hidden sm:block text-[11px] text-zinc-500 dark:text-zinc-400 truncate">
-          App Router 문서 & 데모 실습
+          App Router 문서와 실습 예제
         </span>
       </div>
     </Link>

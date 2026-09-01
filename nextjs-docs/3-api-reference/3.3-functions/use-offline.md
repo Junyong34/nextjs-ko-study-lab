@@ -48,7 +48,7 @@ module.exports = nextConfig
 >
 > - `experimental.useOffline` 플래그가 비활성화되어 있으면 `useOffline()`은 항상 `false`를 반환한다.
 > - `useOffline`은 **Client Component**(`'use client'`)에서만 호출할 수 있다.
-> - 오프라인 상태에서 네트워크가 다시 연결되면, Next.js가 차단되었던 네비게이션, 프리패치, Server Action 요청을 자동으로 재시도한다.
+> - 오프라인 상태에서 네트워크가 다시 연결되면, Next.js가 차단되었던 내비게이션, prefetch, Server Action 요청을 자동으로 재시도한다.
 
 ### 시그니처 및 반환값
 
@@ -151,8 +151,8 @@ export default function Loading() {
 
 ## 예제 및 데모 설계
 
-- 개발자 도구의 Network 탭에서 `Offline` 모드로 전환했을 때 상단 오프라인 경고 배너가 즉각 노출되는지 확인한다.
-- 오프라인 상태에서 페이지 이동 시 프리패치된 정적 껍데기가 먼저 뜨고, 본문 로딩 영역에 오프라인 대기 안내 문구가 표시되는지 검증한다.
+- 개발자 도구의 Network 탭에서 `Offline` 모드로 전환했을 때 상단 오프라인 경고 배너가 바로 표시되는지 확인한다.
+- 오프라인 상태에서 페이지 이동 시 prefetch된 정적 셸이 먼저 표시되고, 본문 로딩 영역에 오프라인 대기 안내 문구가 나타나는지 확인한다.
 - 네트워크를 다시 `Online`으로 복원했을 때 배너가 사라지고 보류된 데이터가 자동으로 스트리밍되는 회복 동작을 테스트한다.
 
 ## 연습 문제
@@ -186,4 +186,4 @@ export default function Loading() {
 - `useOffline`은 기기의 오프라인 여부를 감지하는 `next/offline`의 클라이언트 훅이다.
 - `experimental.useOffline: true` 설정이 필요하다.
 - 오프라인 상태 감지 시 배너 노출 및 전용 Suspense 로딩 안내를 구현할 수 있다.
-- 네트워크가 복원되면 보류된 요청(네비게이션, Server Action)이 자동 재시도된다.
+- 네트워크가 복원되면 보류된 요청(내비게이션, Server Action)이 자동 재시도된다.

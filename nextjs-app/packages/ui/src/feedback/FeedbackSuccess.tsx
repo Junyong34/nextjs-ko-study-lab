@@ -10,7 +10,7 @@ export function FeedbackSuccess() {
         메일 프로그램이 열렸습니다
       </h4>
       <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        작성하신 내용이 관리자에게 전달됩니다. 소중한 의견 감사합니다!
+        작성한 내용을 확인한 뒤 메일 프로그램에서 전송해 주세요.
       </p>
     </div>
   )

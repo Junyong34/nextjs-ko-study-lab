@@ -18,7 +18,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="NextResponse.json() 빌더 및 헤더 실증 검증"
+        title="NextResponse.json() 빌더 및 헤더 검증 결과"
         expected="• route.ts에서 NextResponse.json(data, init)으로 커스텀 상태 코드와 헤더 주입\n• x-study-response-builder 헤더 및 JSON 본문 일치"
         actual={
           httpStatus

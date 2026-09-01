@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = "• useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출의 동작과 기대 결과를 확인합니다."
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,28 +51,28 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출 실증 검증"
+        title="useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-            <DemoDeepDiveCard title="useParams() Client Component 동적 세그먼트 파라미터 추출">
+            <DemoDeepDiveCard title="useParams() Client Component 다이나믹 세그먼트 파라미터 추출">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>useParams()</code> (<code>next/navigation</code>)는 클라이언트 컴포넌트(<code>'use client'</code>)에서 라우터 컨텍스트로부터 현재 활성화된 동적 세그먼트 파라미터(예: <code>[id]</code>, <code>[...slug]</code>)를 객체 형태로 동기 추출하는 훅입니다.</p>
+            <p><code>useParams()</code> (<code>next/navigation</code>)는 Client Component(<code>'use client'</code>)에서 라우터 컨텍스트의 현재 다이나믹 세그먼트 파라미터(예: <code>[id]</code>, <code>[...slug]</code>)를 객체로 읽는 훅입니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 동적 라우트 <code>/shop/[category]/[id]</code> 환경에서 클라이언트 위젯 컴포넌트가 <code>const params = useParams()</code>를 호출하여 <code>category</code>와 <code>id</code> 값을 직접 읽고, 상위 Page로부터의 Props 전달(Drilling) 없이 즉시 렌더링에 활용합니다.</p>
+            <p>이 예제에서는 다이나믹 라우트 <code>/shop/[category]/[id]</code>에서 위젯이 <code>const params = useParams()</code>를 호출해 <code>category</code>와 <code>id</code> 값을 읽습니다. 상위 Page에서 Props를 내려받지 않고 현재 라우트의 값을 사용합니다.</p>
           </div>
 
           <div>

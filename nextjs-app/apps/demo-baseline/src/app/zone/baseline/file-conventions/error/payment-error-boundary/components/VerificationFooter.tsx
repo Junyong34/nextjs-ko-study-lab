@@ -10,7 +10,7 @@ export function VerificationFooter({ isErrorCaught = false }: VerificationFooter
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="결제 세그먼트 error.tsx 에러 바운더리 실증 검증"
+        title="결제 세그먼트 error.tsx 에러 바운더리 검증 결과"
         expected="• checkout/error.tsx 파일이 세그먼트 에러 바운더리로 등록\n• 런타임 오류 발생 시 상위 레이아웃을 파괴하지 않고 에러 카드 및 reset() 복구 기능 제공"
         actual={
           isErrorCaught

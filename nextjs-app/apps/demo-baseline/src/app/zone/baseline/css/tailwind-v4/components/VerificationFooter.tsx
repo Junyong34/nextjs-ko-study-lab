@@ -48,13 +48,13 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Tailwind CSS v4 유틸리티 클래스 & 반응형 스타일 실증 검증"
+        title="Tailwind CSS v4 유틸리티 클래스 & 반응형 스타일 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
       <DemoDeepDiveCard title="Tailwind CSS v4 CSS-First 엔진 & 유틸리티 테마 스타일링">

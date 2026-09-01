@@ -37,13 +37,13 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Server & Client Components 합성 및 경계 분리 실증 검증"
+        title="Server & Client Components 합성 및 경계 분리 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
       <DemoDeepDiveCard title="Server & Client Components 합성 및 경계 분리">

@@ -55,11 +55,11 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Next.js 16 proxy.ts 요청 가로채기 및 rewrite/헤더 주입 실증 검증"
+        title="Next.js 16 proxy.ts 요청 가로채기 및 rewrite/헤더 주입 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}
-        description="Next.js 16 proxy.ts 파이프라인이 렌더링 전 요청을 가로채어 헤더 주입 및 rewrite 분기를 수행하는 과정을 실증 검증합니다."
+        description="Next.js 16 proxy.ts 파이프라인이 렌더링 전 요청을 가로채어 헤더 주입 및 rewrite 분기를 수행하는 과정을 검증합니다."
       />
       <DemoDeepDiveCard title="Next.js 16 proxy.ts 요청 가로채기 및 rewrite/헤더 주입">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">

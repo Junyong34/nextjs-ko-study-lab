@@ -10,7 +10,7 @@ export const siteConfig = {
   shortName: 'Next.js 학습',
   titleTemplate: '%s | Next.js 학습',
   description:
-    'Next.js 공식 문서를 체계적인 한국어 학습 커리큘럼으로 재구성하고 인터랙티브 데모로 검증하는 실습 랩',
+    'Next.js 공식 문서를 바탕으로 만든 한국어 학습 문서와 실행 가능한 실습 예제를 제공합니다.',
   url: (process.env.NEXT_PUBLIC_SITE_URL || FALLBACK_SITE_URL).replace(/\/$/, ''),
   locale: 'ko_KR',
   ogImage: '/og-image.png',

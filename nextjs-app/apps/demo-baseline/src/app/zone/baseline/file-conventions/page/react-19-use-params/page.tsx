@@ -32,7 +32,7 @@ export default function DemoPage() {
         }
         ]}
         />
-      <DemoPlaygroundCard title={"React 19 use(params) & use(searchParams) 언래핑 실습"}>
+      <DemoPlaygroundCard title={"React 19 use(params)와 use(searchParams) 값 읽기 실습"}>
         <React19UseParamsDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

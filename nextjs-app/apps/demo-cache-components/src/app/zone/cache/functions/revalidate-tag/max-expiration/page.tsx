@@ -7,8 +7,8 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="revalidateTag max 즉시 만료 제어"
-        concept="장기 보존(max TTL) 설정된 캐시 항목이라도 Server Action 내 revalidateTag() 호출을 통해 즉시 강제 만료시키고 최신 상태로 동기화합니다."
+        title="revalidateTag max 캐시 만료 제어"
+        concept="장기 보존(max TTL)으로 설정한 캐시 항목도 Server Action에서 revalidateTag()를 호출해 stale 상태로 표시할 수 있습니다. 새 캐시 값은 다음 요청에서 준비됩니다."
         steps={[
           {
             step: 1,
@@ -19,20 +19,20 @@ export default function DemoPage() {
           {
             step: 2,
             title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "Server Action에서 revalidateTag를 호출하여 max 캐시 엔트리를 즉시 만료시킵니다.",
+            description: "Server Action에서 revalidateTag를 호출하여 max 캐시 엔트리를 stale 상태로 표시합니다.",
             actionBadge: "만료 실행",
           },
           {
             step: 3,
-            title: "강제 만료 및 실시간 재검증 로그 관찰",
-            description: "max TTL 캐시가 즉시 파기되고 새로운 주문 및 재고 상태가 실시간 로그에 반영되는지 확인합니다.",
+            title: "stale 표시 및 캐시 갱신 로그 관찰",
+            description: "max TTL 캐시가 stale 상태로 표시되고 이후 요청에서 새 주문 및 재고 상태가 준비되는지 확인합니다.",
             actionBadge: "로그 검증",
-            observe: "max 수명의 캐시 엔트리가 revalidateTag 호출로 즉각 만료되고 최신값으로 갱신됨",
+            observe: "max 수명의 캐시 엔트리가 revalidateTag 호출로 stale 상태가 되고 이후 요청에서 갱신됨",
             observeAt: "verification",
           },
         ]}
       />
-      <DemoPlaygroundCard title={"revalidateTag max 즉시 만료 제어 실습"}>
+      <DemoPlaygroundCard title={"revalidateTag max 캐시 만료 제어 실습"}>
         <RevalidateTagMaxDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

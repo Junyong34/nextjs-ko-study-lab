@@ -61,10 +61,10 @@ export async function generateMetadata({ params, searchParams }: DemoPageProps):
   const directDemo = getDemoByUrl(slugStr)
   if (directDemo) {
     return buildPageMetadata({
-      title: `${directDemo.title} - 실습 데모`,
-      description: `${directDemo.title} 실습 데모 - Next.js App Router 학습`,
+      title: `${directDemo.title} - 실습 예제`,
+      description: `${directDemo.title} 실습 예제 - Next.js App Router 학습`,
       path,
-      dynamicOgImage: { title: directDemo.title, eyebrow: '실습 데모' },
+      dynamicOgImage: { title: directDemo.title, eyebrow: '실습 예제' },
     })
   }
 
@@ -74,22 +74,22 @@ export async function generateMetadata({ params, searchParams }: DemoPageProps):
       const runningDemo = getDemoByUrl(run)
       if (runningDemo) {
         return buildPageMetadata({
-          title: `${runningDemo.title} - ${doc.title} 데모`,
-          description: `${doc.title} - ${runningDemo.title} 실습 데모`,
+          title: `${runningDemo.title} - ${doc.title} 예제`,
+          description: `${doc.title} - ${runningDemo.title} 실습 예제`,
           path,
           dynamicOgImage: { title: runningDemo.title, eyebrow: doc.title },
         })
       }
     }
     return buildPageMetadata({
-      title: `${doc.title} 실습 데모`,
+      title: `${doc.title} 실습 예제`,
       description: `${doc.title} 관련 인터랙티브 실습 예제 목록`,
       path,
-      dynamicOgImage: { title: doc.title, eyebrow: '실습 데모' },
+      dynamicOgImage: { title: doc.title, eyebrow: '실습 예제' },
     })
   }
 
-  return { title: '데모를 찾을 수 없습니다' }
+  return { title: '예제를 찾을 수 없습니다' }
 }
 
 export default async function DemoPage({ params, searchParams }: DemoPageProps) {
@@ -105,7 +105,7 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
     const siblingDemos = matchedDoc ? getDemosByDoc(matchedDoc.path) : [directDemo]
     const docSlug = matchedDoc ? matchedDoc.slug.join('/') : ''
     const backUrl = docSlug ? `/demo/${docSlug}` : '/demo'
-    const backLabel = matchedDoc ? `${matchedDoc.title} 데모 목록` : '전체 데모 목록'
+    const backLabel = matchedDoc ? `${matchedDoc.title} 예제 목록` : '전체 예제 목록'
     return (
       <DemoViewer
         demo={directDemo}
@@ -149,7 +149,7 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
   if (run) {
     const runningDemo = docDemos.find((d) => d.url === run) || getDemoByUrl(run) || docDemos[0]
     const backUrl = `/demo/${docSlug}`
-    const backLabel = `${doc.title} 데모 목록`
+    const backLabel = `${doc.title} 예제 목록`
 
     return (
       <DemoViewer

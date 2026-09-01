@@ -24,7 +24,7 @@ const ROADMAP_STEPS: ChapterItem[] = [
     step: 'Step 02',
     title: '실무 가이드',
     subtitle: 'Guides',
-    summary: '렌더링, Server Actions, 캐싱, 폼 처리, 인증/보안 등 주제별 심층 가이드입니다.',
+    summary: '렌더링, Server Actions, 캐싱, 폼 처리, 인증·보안 등 주제별 학습 가이드입니다.',
     href: '/guides',
   },
   {
@@ -38,7 +38,7 @@ const ROADMAP_STEPS: ChapterItem[] = [
     step: 'Step 04',
     title: '용어집',
     subtitle: 'Glossary',
-    summary: 'Next.js 공식 문서에서 사용되는 48가지 핵심 기술 용어 사전입니다.',
+    summary: 'Next.js 공식 문서에서 사용하는 48개 핵심 기술 용어를 정리합니다.',
     href: '/glossary',
   },
   {
@@ -132,7 +132,7 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
                   </span>
                   {category && demoCount > 0 && (
                     <span className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-[11px] font-semibold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
-                      데모 {demoCount}개
+                      예제 {demoCount}개
                     </span>
                   )}
                 </div>
@@ -170,7 +170,7 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
                   </Book>
                 </TrackedBookLink>
 
-                {/* 2. 실습 데모 책 */}
+                {/* 2. 실습 예제 책 */}
                 {category && demoCount > 0 && (
                   <TrackedBookLink
                     href={{ pathname: '/demo', query: { category } }}
@@ -178,7 +178,7 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
                     chapterStep={chapter.step}
                     chapterTitle={chapter.title}
                     className="group shrink-0 transition-transform duration-300 hover:-translate-y-1"
-                    aria-label={`${chapter.title} 실습 데모 보기`}
+                    aria-label={`${chapter.title} 실습 예제 보기`}
                   >
                     <Book coverClassName={BAND.demo.fill} depth={BOOK_DEPTH} width={BOOK_WIDTH}>
                       <BookCover

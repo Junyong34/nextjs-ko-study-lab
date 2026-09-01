@@ -11,9 +11,9 @@ import {
 } from '@/components/home'
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'Next.js 16 학습 | App Router 한국어 가이드 & 데모 예제',
+  title: 'Next.js 16 학습 | App Router 한국어 가이드 & 실습 예제',
   description:
-    'Next.js 공식 문서를 바탕으로 App Router 핵심 개념을 한국어로 배우고, 데모 예제로 기능의 동작을 직접 확인해 보세요.',
+    'Next.js 공식 문서를 바탕으로 App Router 핵심 개념을 한국어로 배우고, 실습 예제로 기능의 동작을 직접 확인해 보세요.',
   path: '/',
 })
 
@@ -43,5 +43,4 @@ export default function HomePage() {
     </div>
   )
 }
-
 

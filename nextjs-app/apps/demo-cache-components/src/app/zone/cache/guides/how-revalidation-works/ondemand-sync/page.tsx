@@ -10,8 +10,8 @@ export default async function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title="revalidateTag 온디맨드 즉각 캐시 동기화"
-        concept="Server Action에서 revalidateTag('products')를 호출하여 특정 태그가 부여된 서버 캐시를 즉시 퍼지하고, 다음 요청 방문자에게 0ms 지연 없이 최신 데이터베이스 상태를 서빙합니다."
+        title="revalidateTag 온디맨드 캐시 갱신"
+        concept="Server Action에서 revalidateTag('products')를 호출해 특정 태그가 붙은 캐시를 stale 상태로 표시하고, 이후 요청에서 새 데이터를 준비합니다."
         steps={[
           {
             step: 1,
@@ -21,21 +21,21 @@ export default async function DemoPage() {
           },
           {
             step: 2,
-            title: '[revalidateTag("products") 즉시 무효화] 버튼 클릭',
-            description: "Server Action을 호출하여 태그 무효화와 데이터베이스 동기화를 동시에 수행합니다.",
+            title: '[revalidateTag("products") 캐시 갱신] 버튼 클릭',
+            description: "Server Action을 호출하여 태그가 붙은 캐시를 갱신 대상으로 표시합니다.",
             actionBadge: "태그 무효화 실행",
           },
           {
             step: 3,
-            title: "실시간 태그 상태 변경 및 즉각 재계산 관찰",
-            description: "태그 상태가 만료됨으로 즉시 전환되고 새 데이터가 계산되는 과정을 검증합니다.",
+            title: "태그 상태 변경 및 다음 요청의 데이터 갱신 관찰",
+            description: "태그가 stale 상태로 바뀌고 이후 요청에서 새 데이터가 계산되는 과정을 확인합니다.",
             actionBadge: "결과 검증",
-            observe: 'revalidateTag("products") 클릭 후 태그 만료 상태 전환 및 신규 데이터 즉각 동기화 관찰',
+            observe: 'revalidateTag("products") 클릭 후 태그의 stale 상태 전환 및 이후 데이터 갱신 관찰',
             observeAt: "playground",
           },
         ]}
       />
-      <DemoPlaygroundCard title="온디맨드 캐시 무효화 및 즉시 동기화 실습">
+      <DemoPlaygroundCard title="온디맨드 캐시 무효화와 상태 갱신 실습">
         <OndemandSyncDemo cacheId={data.cacheId} generatedAt={data.generatedAt} products={data.products} />
       </DemoPlaygroundCard>
       <VerificationFooter

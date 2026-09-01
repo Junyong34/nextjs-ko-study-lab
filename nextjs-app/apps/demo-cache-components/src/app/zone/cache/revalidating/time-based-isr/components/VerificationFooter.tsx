@@ -20,12 +20,12 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   const { elapsed = 0, isStale, generatedTimestamp, cacheId } = props
 
   const defaultExpected =
-    '• cacheLife({ stale: 10, revalidate: 10, expire: 60 }) 시간 기반 캐시 수명 관리\n• 10초 이내에는 FRESH 캐시(#ID 및 생성 시각) 유지\n• 10초 경과(Stale) 후 요청 시 백그라운드 SWR 재검증을 통해 새로운 캐시 ID 생성'
+    '• cacheLife({ stale: 10, revalidate: 10, expire: 60 }) 시간 기반 캐시 수명 관리\n• 10초 이내에는 FRESH 캐시(#ID 및 생성 시각) 유지\n• 10초 경과(Stale) 후 요청 시 백그라운드 SWR revalidation을 통해 새로운 캐시 ID 생성'
 
   let defaultActual = '• 캐시 데이터 로딩 대기 중...'
   if (generatedTimestamp && cacheId) {
     defaultActual = `• 캐시 ID: #${cacheId}\n• 생성 시각: ${generatedTimestamp}\n• 수명 주기 상태: ${
-      isStale ? 'STALE (10초 경과, SWR 재검증 대상)' : `FRESH (${elapsed}초 경과 / 10초 수명)`
+      isStale ? 'STALE (10초 경과, SWR revalidation 대상)' : `FRESH (${elapsed}초 경과 / 10초 수명)`
     }\n• 동작 모드: Next.js 16 cacheLife 시간 기반 SWR 캐시 수명주기 정상 동작`
   }
 
@@ -41,16 +41,16 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Next.js 16 cacheLife 시간 기반 캐시 수명 & SWR 재검증 실증 검증"
+        title="Next.js 16 cacheLife 시간 기반 캐시 수명과 SWR 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
-      <DemoDeepDiveCard title="Next.js 16 cacheLife 시간 기반 캐시 수명 & SWR 재검증">
+      <DemoDeepDiveCard title="Next.js 16 cacheLife 시간 기반 캐시 수명과 SWR">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
@@ -87,7 +87,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>stale vs expire 차이</strong>: <code>stale</code>은 백그라운드 재검증이 시작되는 시점이며, <code>expire</code>는 캐시가 완전히 폐기되어 동기 재생성이 강제되는 최대 수명 한계입니다.</li>
+              <li><strong>stale vs expire 차이</strong>: <code>stale</code>은 백그라운드 revalidation이 시작되는 시점이며, <code>expire</code>는 캐시가 완전히 폐기되어 동기 재생성이 강제되는 최대 수명 한계입니다.</li>
               <li><strong>온디맨드 무효화와의 병행</strong>: 시간 기반 만료를 기본으로 두되 관리자 긴급 수정 시에는 <code>revalidateTag</code>를 병행 호출하는 2중 캐시 전략이 권장됩니다.</li>
             </ul>
           </div>

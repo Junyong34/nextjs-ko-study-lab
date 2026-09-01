@@ -11,13 +11,13 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"prefetch={false} 선언을 통한 불필요한 백그라운드 프리페치 방지"}
+        title={"prefetch={false} 선언을 통한 불필요한 백그라운드 prefetch 방지"}
         concept={"<Link prefetch={false}>를 명시하여 사용자가 많은 모바일 환경에서 수십 개의 링크가 동시에 뷰포트에 들어올 때 발생하는 불필요한 RSC 페이로드 다운로드를 0건으로 차단합니다."}
         steps={[
           {
             step: 1,
             title: "[prefetch=false] 모드 확인",
-            description: "자동 프리페치가 비활성화된 링크 목록의 초기 네트워크 리스너 상태를 점검합니다.",
+            description: "자동 prefetch가 비활성화된 링크 목록의 초기 네트워크 리스너 상태를 점검합니다.",
             actionBadge: "모드 확인",
           },
           {
@@ -36,7 +36,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"prefetch={false} 명시적 프리패치 차단 실습"}>
+      <DemoPlaygroundCard title={"prefetch={false}로 prefetch 비활성화 실습"}>
         <PrefetchFalseDemo
           prefetchMode={prefetchMode}
           hoverCount={hoverCount}
@@ -51,7 +51,7 @@ export default function DemoPage() {
             ? `- 현재 <Link prefetch={${prefetchMode}}>\n- 호버 감지 횟수: ${hoverCount}\n- Network 탭에서 hover 시점에 RSC 요청이 발생하는지 직접 대조하세요 (prefetch={false}는 hover 시점 온디맨드 요청을 허용하는 사양이며, 이 패널은 hover 이벤트 자체만 실측합니다)`
             : undefined
         }
-        expected="prefetch prop 값이 Link에 그대로 전달되고, hover 이벤트가 실제로 카운트된다. 자동/온디맨드 프리페치 발생 여부는 브라우저 Network 탭에서 별도로 확인한다."
+        expected="prefetch prop 값이 Link에 그대로 전달되고, hover 이벤트가 실제로 카운트된다. 자동/온디맨드 prefetch 발생 여부는 브라우저 Network 탭에서 별도로 확인한다."
       />
     </DemoContainer>
   )

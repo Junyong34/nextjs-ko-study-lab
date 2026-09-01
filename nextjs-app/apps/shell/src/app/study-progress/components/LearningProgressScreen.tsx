@@ -17,7 +17,7 @@ export function LearningProgressScreen({ tab }: { tab: LearningProgressTab }) {
   }
 
   const handleReset = () => {
-    if (window.confirm('문서와 데모의 모든 학습 완료 표시를 해제할까요?')) reset()
+    if (window.confirm('문서와 예제의 모든 완료 표시를 해제할까요?')) reset()
   }
 
   return (
@@ -29,7 +29,7 @@ export function LearningProgressScreen({ tab }: { tab: LearningProgressTab }) {
             학습 기록
           </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            직접 완료로 표시한 문서와 데모를 한곳에서 확인하고 변경합니다.
+            완료로 표시한 문서와 예제를 한곳에서 확인하고 관리합니다.
           </p>
         </div>
         <button

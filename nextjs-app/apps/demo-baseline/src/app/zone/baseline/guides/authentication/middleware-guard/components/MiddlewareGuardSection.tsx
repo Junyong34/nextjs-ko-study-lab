@@ -33,7 +33,7 @@ export function MiddlewareGuardSection({ initialState }: MiddlewareGuardSectionP
 
   return (
     <>
-      <DemoPlaygroundCard title="Proxy/Middleware 기반 라우트 보호 가드 실습">
+      <DemoPlaygroundCard title="Proxy 기반 라우트 보호 가드 실습">
         <MiddlewareGuardDemo initialState={initialState} onResult={setShared} />
       </DemoPlaygroundCard>
       <VerificationFooter

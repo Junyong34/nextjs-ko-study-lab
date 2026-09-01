@@ -7,7 +7,7 @@ export function SwrFlowDemo() {
     <div className="space-y-3">
       <div className="flex gap-2">
         <button type="button" onClick={() => setStep(1)} className={`rounded px-2.5 py-1 text-xs font-bold ${step === 1 ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>1단계: Stale 응답 (0ms)</button>
-        <button type="button" onClick={() => setStep(2)} className={`rounded px-2.5 py-1 text-xs font-bold ${step === 2 ? 'bg-amber-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>2단계: 백그라운드 재검증</button>
+        <button type="button" onClick={() => setStep(2)} className={`rounded px-2.5 py-1 text-xs font-bold ${step === 2 ? 'bg-amber-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>2단계: 백그라운드 revalidation</button>
         <button type="button" onClick={() => setStep(3)} className={`rounded px-2.5 py-1 text-xs font-bold ${step === 3 ? 'bg-emerald-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>3단계: 최신 캐시 전파</button>
       </div>
       <div className="rounded border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">

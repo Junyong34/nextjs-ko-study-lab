@@ -32,7 +32,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       segmentSimulated ? 'error.tsx 격리 및 복구 시뮬레이션 완료' : '대기 중'
     }\n• 3계층(Global): ${
       globalSimulated ? 'global-error.tsx (<html><body>) 루트 크래시 포착 시뮬레이션 완료' : '대기 중'
-    }\n• 동작 상태: 3계층 에러 핸들링 아키텍처 실증 검증 완료`
+    }\n• 동작 상태: 3계층 에러 핸들링 아키텍처 검증 결과 완료`
   }
 
   const isMatched =
@@ -47,13 +47,13 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Next.js 3계층 에러 핸들링 아키텍처 실증 검증"
+        title="Next.js 3계층 에러 핸들링 아키텍처 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
       <DemoDeepDiveCard title="global-error.tsx 루트 레이아웃 에러 처리 & 3계층 에러 아키텍처">

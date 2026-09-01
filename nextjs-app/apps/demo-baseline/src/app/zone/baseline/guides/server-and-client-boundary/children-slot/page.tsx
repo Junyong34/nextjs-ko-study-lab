@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"Server and Client Component 합성 (children 슬롯 주입) 실습"}>
+      <DemoPlaygroundCard title={"Server and Client Component 합성과 children 슬롯 주입 실습"}>
         <ChildrenSlotDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

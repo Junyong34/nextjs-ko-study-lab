@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="output: 'export' 순수 정적 SPA 산출물 생성"
+        title="output: 'export' 정적 산출물 생성"
         concept="next.config.ts의 output: 'export' 설정을 통해 Node.js 서버 없이 S3/Nginx 정적 웹 호스팅 환경에 배포 가능한 순수 정적 HTML/CSS/JS 산출물을 빌드합니다."
         steps={[
           {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"output: 'export' 순수 정적 SPA 산출물 생성 실습"}>
+      <DemoPlaygroundCard title={"output: 'export' 정적 산출물 생성 실습"}>
         <ConfigOutputExportDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

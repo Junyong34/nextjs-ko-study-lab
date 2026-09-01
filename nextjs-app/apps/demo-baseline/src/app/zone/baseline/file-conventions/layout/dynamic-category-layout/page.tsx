@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"[category]/layout.tsx 동적 카테고리 레이아웃"}
+        title={"[category]/layout.tsx 다이나믹 카테고리 레이아웃"}
         concept={"동적 세그먼트 [category]에 배치된 layout.tsx는 params.category 변경 시 새로운 카테고리 테마로 전환되며, 동일 카테고리 내에서는 레이아웃 인스턴스를 유지합니다."}
         steps={[
         {
@@ -32,7 +32,7 @@ export default function DemoPage() {
         }
         ]}
         />
-      <DemoPlaygroundCard title={"[category]/layout.tsx 동적 카테고리 레이아웃 실습"}>
+      <DemoPlaygroundCard title={"[category]/layout.tsx 다이나믹 카테고리 레이아웃 실습"}>
         <DynamicCategoryLayoutDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

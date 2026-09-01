@@ -1,10 +1,10 @@
 # 3. API 레퍼런스 (API Reference)
 
-> Next.js App Router의 모든 컴포넌트, 함수, 설정, 파일 규칙에 대한 상세 레퍼런스입니다.
+> Next.js App Router의 주요 컴포넌트, 함수, 설정, 파일 규칙을 정리한 레퍼런스입니다.
 
 ---
 
-## 📖 API 분류별 목차
+## API 분류별 목차
 
 - 3.1 [File-system conventions](./3.1-file-conventions/README.md): `page.js`, `layout.js`, `loading.js`, `route.js` 등 파일 기반 라우팅 규칙
 - 3.2 [Components](./3.2-components/README.md): `<Image>`, `<Link>`, `<Script>`, `<Form>` 등 내장 컴포넌트

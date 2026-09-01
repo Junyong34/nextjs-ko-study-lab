@@ -45,7 +45,7 @@ export function RevalidateTagBasicDemo() {
       <div className="rounded-lg border border-zinc-200 bg-white p-4 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-950 space-y-2.5">
         <div className="flex items-center justify-between border-b border-zinc-100 pb-2 dark:border-zinc-800 font-sans">
           <span className="font-bold text-zinc-800 dark:text-zinc-200">
-            실시간 재고 캐시 슬롯 (Tag: <code>'inventory'</code>)
+            재고 캐시 슬롯 (Tag: <code>'inventory'</code>)
           </span>
           <span className="text-[11px] text-zinc-400">
             {result ? `동기화 시각: ${result.timestamp}` : '초기 캐시 유지 중'}

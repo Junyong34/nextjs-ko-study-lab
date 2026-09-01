@@ -10,7 +10,7 @@
 - 파일, 컴포넌트, 함수 3가지 수준에서 `'use cache'`를 선언하고 캐시 키 생성 방식을 설명한다.
 - 직렬화 가능한 인자 및 반환 타입 제약과 비직렬화 요소를 다루는 Pass-through 패턴을 습득한다.
 - 요청 시점 API(`cookies()`, `headers()`) 접근 제한과 외부 인자 전달 패턴을 적용한다.
-- `cacheLife`를 통한 시간 기반 재검증과 `cacheTag`/`updateTag`를 통한 온디맨드(On-demand) 무효화 전략을 구현한다.
+- `cacheLife`를 통한 시간 기반 revalidation과 `cacheTag`/`updateTag`를 통한 온디맨드(On-demand) 무효화 전략을 구현한다.
 
 ## 핵심 개념 및 설명
 
@@ -129,9 +129,9 @@ export async function CachedWrapper({ children }: { children: ReactNode }) {
 3. **`React.cache` 격리**:
    `'use cache'` 경계 내부는 독립된 `React.cache` 스코프를 갖는다. 외부에서 저장된 `React.cache` 값은 캐시 스코프 안으로 전파되지 않는다.
 
-### 재검증 전략 (Revalidation)
+### revalidation 전략
 
-#### 1. 시간 기반 재검증 (`cacheLife`)
+#### 1. 시간 기반 revalidation (`cacheLife`)
 
 [`cacheLife`](../3.3-functions/cacheLife.md) 함수를 사용해 캐시 유효 시간을 명시적으로 설정한다:
 
@@ -145,7 +145,7 @@ export async function getData() {
 }
 ```
 
-#### 2. 온디맨드 태그 기반 재검증 (`cacheTag`, `revalidateTag`, `updateTag`)
+#### 2. 온디맨드 태그 기반 revalidation (`cacheTag`, `revalidateTag`, `updateTag`)
 
 [`cacheTag`](../3.3-functions/cacheTag.md)로 캐시에 식별 태그를 지정하고, Server Action 등에서 [`revalidateTag`](../3.3-functions/revalidateTag.md) 또는 [`updateTag`](../3.3-functions/updateTag.md)로 즉시 무효화한다:
 

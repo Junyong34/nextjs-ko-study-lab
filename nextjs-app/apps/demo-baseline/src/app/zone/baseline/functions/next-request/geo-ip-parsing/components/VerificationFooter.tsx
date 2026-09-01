@@ -18,7 +18,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="NextRequest IP/Geo 텔레메트리 파싱 실증 검증"
+        title="NextRequest IP/Geo 텔레메트리 파싱 검증 결과"
         expected="• NextRequest의 ip/geo 속성 및 표준 x-forwarded-for 헤더를 파싱하여 국가/IP 확인\n• 국가 코드(KR/US/JP/EU)에 맞춰 통화 및 현지 가격 자동 현지화 완료"
         actual={
           isLoaded && country

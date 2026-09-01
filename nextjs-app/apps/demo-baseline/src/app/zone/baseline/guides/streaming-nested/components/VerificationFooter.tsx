@@ -30,11 +30,11 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="중첩 Suspense 점진적 청크 스트리밍 실증 검증"
+        title="중첩 Suspense 점진적 청크 스트리밍 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}
-        description="다중 계층 Suspense 바운더리를 통한 점진적 HTML 청크 스트리밍 라이프사이클을 실증 검증합니다."
+        description="다중 계층 Suspense 바운더리를 통한 점진적 HTML 청크 스트리밍 라이프사이클을 검증합니다."
       />
       <DemoDeepDiveCard title="중첩 Suspense 점진적 청크 스트리밍">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">

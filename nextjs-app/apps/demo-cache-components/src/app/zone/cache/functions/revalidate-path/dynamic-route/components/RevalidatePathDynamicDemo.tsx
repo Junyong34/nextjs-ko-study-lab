@@ -19,7 +19,7 @@ export function RevalidatePathDynamicDemo() {
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">동적 라우트 세그먼트 revalidatePath 동기화 실습 콘솔</h4>
+          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">다이나믹 라우트 세그먼트의 revalidatePath 동작 실습 콘솔</h4>
           <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
         </div>
         <div className="flex gap-2">

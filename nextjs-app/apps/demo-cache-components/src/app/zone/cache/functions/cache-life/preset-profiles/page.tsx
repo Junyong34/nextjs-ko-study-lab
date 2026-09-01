@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max)"
+        title="cacheLife 내장 프리셋 프로필 (seconds, hours, max)"
         concept="cacheLife() 함수에 Next.js 16 빌트인 프리셋('seconds', 'hours', 'days')을 선언하여 캐시의 stale, revalidate, expire 수명 주기를 직관적으로 지정합니다."
         steps={[
           {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max) 실습"}>
+      <DemoPlaygroundCard title={"cacheLife 내장 프리셋 프로필 (seconds, hours, max) 실습"}>
         <CacheLifePresetsDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

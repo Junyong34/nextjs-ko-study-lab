@@ -21,7 +21,7 @@ const FEATURED_DEMOS: FeaturedDemoItem[] = [
     title: 'Server Actions 기본 폼 처리',
     subtitle: 'Server Actions Basic Form & Mutations',
     category: 'Guides > Server Actions',
-    description: '서버 액션을 활용한 폼 전송, 상태 동기화 및 자바스크립트 비활성화 환경 점진적 향상 검증',
+    description: 'Server Action으로 폼을 제출하고 서버 상태가 바뀌는 흐름을 확인합니다.',
     zone: 'demo-baseline',
     demoUrl: '/demo/server-actions/basic',
     docUrl: '/guides/server-actions',
@@ -32,7 +32,7 @@ const FEATURED_DEMOS: FeaturedDemoItem[] = [
     title: 'use cache 컴포넌트 캐싱',
     subtitle: 'Cache Components & revalidateTag',
     category: 'Getting Started > Caching',
-    description: 'Next.js 16의 use cache 지시어로 컴포넌트 출력 결과와 비동기 함수 결과를 독립 캐싱',
+    description: "Next.js 16의 'use cache'로 컴포넌트 출력과 비동기 함수 결과를 각각 캐시합니다.",
     zone: 'demo-cache-components',
     demoUrl: '/demo/caching/basic',
     docUrl: '/getting-started/caching',
@@ -43,7 +43,7 @@ const FEATURED_DEMOS: FeaturedDemoItem[] = [
     title: '중첩 레이아웃 & 부분 렌더링',
     subtitle: 'Partial Rendering & Nested Layouts',
     category: 'Getting Started > Layouts',
-    description: '쇼핑몰 GNB 및 사이드바 중첩 구조에서 상태를 유지하며 본문만 다시 그리는 부분 렌더링',
+    description: '쇼핑몰의 상단 메뉴와 사이드바를 유지하면서 본문만 다시 렌더링하는 흐름을 확인합니다.',
     zone: 'demo-baseline',
     demoUrl: '/demo/layouts-and-pages/nested-layouts',
     docUrl: '/getting-started/layouts-and-pages',
@@ -54,7 +54,7 @@ const FEATURED_DEMOS: FeaturedDemoItem[] = [
     title: 'React 19 낙관적 장바구니 UI',
     subtitle: 'useOptimistic Real-world Pattern',
     category: 'Getting Started > Mutations',
-    description: '서버 응답 지연 시간 동안 즉각적으로 UI를 업데이트하고 실패 시 롤백을 안전하게 제어',
+    description: '서버 응답을 기다리는 동안 장바구니 UI를 먼저 바꾸고, 실패하면 이전 상태로 되돌립니다.',
     zone: 'demo-baseline',
     demoUrl: '/demo/mutating-data/optimistic-cart',
     docUrl: '/getting-started/mutating-data',
@@ -65,7 +65,7 @@ const FEATURED_DEMOS: FeaturedDemoItem[] = [
     title: 'React 19 use(Promise) 스트리밍',
     subtitle: 'use(Promise) & Suspense Streaming',
     category: 'Getting Started > Fetching',
-    description: 'React 19 use() 훅과 Suspense를 결합하여 비동기 프로미스를 컴포넌트 내부에서 즉시 언랩',
+    description: 'React 19의 use()와 Suspense로 늦게 도착하는 구매 후기를 스트리밍합니다.',
     zone: 'demo-baseline',
     demoUrl: '/demo/fetching-data/use-promise-streaming',
     docUrl: '/getting-started/fetching-data',
@@ -76,7 +76,7 @@ const FEATURED_DEMOS: FeaturedDemoItem[] = [
     title: 'Next.js 16 proxy.ts 요청 제어',
     subtitle: 'Proxy Rewrite & Header Injection',
     category: 'Getting Started > Proxy',
-    description: 'Next.js 16 proxy.ts를 통한 요청 가로채기, 경로 rewrite 및 커스텀 헤더 주입 동작 검증',
+    description: 'Next.js 16의 proxy.ts로 요청을 가로채고 경로와 헤더를 바꾸는 흐름을 확인합니다.',
     zone: 'demo-baseline',
     demoUrl: '/demo/proxy/rewrite-and-headers',
     docUrl: '/getting-started/proxy',
@@ -93,12 +93,12 @@ export function FeaturedDemosSection({ totalDemos }: { totalDemos: number }) {
             Interactive Labs
           </p>
           <h2 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-100">
-            핵심 실습 데모 쇼케이스
+            주요 실습 예제
           </h2>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            전체 <strong className="text-zinc-900 dark:text-zinc-100">{totalDemos}개</strong> 랩 운영 중
+            전체 <strong className="text-zinc-900 dark:text-zinc-100">{totalDemos}개</strong> 예제
           </span>
           <Link
             href="/demo"
@@ -120,7 +120,7 @@ export function FeaturedDemosSection({ totalDemos }: { totalDemos: number }) {
               <div className="flex items-center justify-between">
                 <span className="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-zinc-800/80 dark:text-zinc-300">
                   <Terminal className="h-3 w-3" />
-                  {demo.zone}
+                  실습 예제
                 </span>
                 <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
                   {demo.category.split('>')[0]}
@@ -162,7 +162,7 @@ export function FeaturedDemosSection({ totalDemos }: { totalDemos: number }) {
                 className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white shadow-2xs hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition"
               >
                 <PlayCircle className="h-3.5 w-3.5" />
-                실습 실행
+                예제 실행
               </Link>
             </div>
           </div>

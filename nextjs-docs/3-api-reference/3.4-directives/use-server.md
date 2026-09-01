@@ -13,7 +13,7 @@
 
 ## 핵심 개념 및 설명
 
-`'use server'` 지시어는 함수 또는 파일 전체가 **서버 측(server side)**에서 실행되도록 지정한다. 파일 최상단에 선언하여 해당 파일의 모든 함수를 서버 함수로 만들거나, 비동기 함수 내부 최상단에 인라인으로 선언하여 개별 함수를 [Server Function](https://react.dev/reference/rsc/server-functions)으로 표시할 수 있다. 이는 React의 표준 기능이다.
+`'use server'` 지시어는 함수 또는 파일 전체가 **서버 측(server side)**에서 실행되도록 지정한다. 파일 최상단에 선언하여 해당 파일의 모든 함수를 Server Function으로 만들거나, 비동기 함수 내부 최상단에 인라인으로 선언하여 개별 함수를 [Server Function](https://react.dev/reference/rsc/server-functions)으로 표시할 수 있다. 이는 React의 표준 기능이다.
 
 Next.js 특화 Server Action 동작(응답 모델, 보안, 설정, 배포 등)에 대한 자세한 내용은 [Server Actions 및 변형(Mutations) 가이드](../../2-guides/server-actions.md)를 참조한다.
 
@@ -147,7 +147,7 @@ Server Function은 클라이언트가 네트워크를 통해 트리거할 수 �
 
 - `app/actions/user.ts` 파일 최상단에 `'use server'`를 두고 회원가입 폼 제출 시 유효성 검증과 DB 저장을 수행하는 데모를 설계한다.
 - Server Component에서 인라인으로 정의된 Server Action이 하위 Client Component 버튼 클릭 시 실행되어 `revalidatePath`로 즉시 화면을 갱신하는 시나리오를 구성한다.
-- 클라이언트 컴포넌트 내부에서 인라인 `'use server'` 선언을 시도했을 때의 번들링 오류를 확인한다.
+- Client Component 내부에서 인라인 `'use server'` 선언을 시도했을 때의 번들링 오류를 확인한다.
 
 ## 연습 문제
 

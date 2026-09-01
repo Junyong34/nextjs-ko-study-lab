@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title="독립 탭 네비게이션 슬롯 (Parallel Routes) 실습">
+      <DemoPlaygroundCard title="독립 탭 내비게이션 슬롯 (Parallel Routes) 실습">
         <ParallelIndependentTabsDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

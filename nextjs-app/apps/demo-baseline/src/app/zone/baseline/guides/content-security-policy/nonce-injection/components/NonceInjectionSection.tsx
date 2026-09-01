@@ -24,7 +24,7 @@ export function NonceInjectionSection({ nonce }: { nonce: string | null }) {
 
   return (
     <>
-      <DemoPlaygroundCard title="Middleware Nonce 기반 CSP 헤더 주입 실습">
+      <DemoPlaygroundCard title="Proxy Nonce 기반 CSP 헤더 주입 예제">
         {nonce && (
           <script
             nonce={nonce}
@@ -40,7 +40,7 @@ export function NonceInjectionSection({ nonce }: { nonce: string | null }) {
         actual={
           nonce
             ? `- 발급된 nonce: ${nonce.slice(0, 16)}...\n- nonce 일치 스크립트 실행: ${scriptExecuted}\n- nonce 없는 스크립트 실행(차단 기대): ${noNonceScriptExecuted}`
-            : '- proxy.ts로부터 x-nonce 헤더를 받지 못함 (dynamic rendering 여부 확인 필요)'
+            : '- proxy.ts로부터 x-nonce 헤더를 받지 못함 (다이나믹 렌더링 여부 확인 필요)'
         }
         expected="nonce가 일치하는 스크립트는 실행되고(true), nonce가 없는 스크립트는 CSP에 의해 차단되어 실행되지 않아야(false) 한다."
       />

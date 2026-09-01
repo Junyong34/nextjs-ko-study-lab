@@ -49,7 +49,7 @@ export function UnstableCacheDbDemo() {
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100">
-            Next.js unstable_cache DB 쿼리 캐싱 및 태그 재검증 콘솔
+            Next.js unstable_cache DB 쿼리 캐싱 및 태그 revalidation 콘솔
           </h4>
           <p className="text-xs text-zinc-500">
             데이터베이스 호출 결과를 Data Cache에 보관하고 지정된 revalidate 주기와 태그로 무효화합니다.

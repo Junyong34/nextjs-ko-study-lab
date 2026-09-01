@@ -14,7 +14,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Intercepting Routes ((..), (.)) 모달 인터셉트 실증 검증"
+        title="Intercepting Routes ((..), (.)) 모달 인터셉트 검증 결과"
         expected="• 클라이언트 내비게이션(Link) 시 @modal/(.)photos/[id]가 현재 컨텍스트를 가로채 모달 표시\n• URL 새로고침 또는 직접 주소 입력 시 독립 photos/[id]/page.tsx 전체 화면 마운트"
         actual={
           isDirectPage

@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="useRouter push vs replace vs back 프로그래밍 네비게이션"
+        title="useRouter push, replace, back 프로그래밍 방식 내비게이션"
         concept="useRouter() 훅의 router.push(), router.replace(), router.back() 메서드를 호출하여 히스토리 스택 조작 및 브라우저 URL 이동을 0ms 클라이언트 사이드로 제어합니다."
         steps={[
           {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"useRouter push vs replace vs back 프로그래밍 네비게이션 실습"}>
+      <DemoPlaygroundCard title={"useRouter push, replace, back 프로그래밍 방식 내비게이션 실습"}>
         <NavigationClientDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

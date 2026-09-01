@@ -103,7 +103,7 @@ export function DemoGuideCard({
                       {item.actionBadge}
                     </span>
                   )}
-                  <span className="text-zinc-500 dark:text-zinc-400"> — {item.description}</span>
+                  <span className="text-zinc-500 dark:text-zinc-400">: {item.description}</span>
                 </div>
 
                 {item.observe && (

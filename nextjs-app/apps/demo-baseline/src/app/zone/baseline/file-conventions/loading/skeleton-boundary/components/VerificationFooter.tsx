@@ -14,7 +14,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="loading.tsx 스켈레톤 바운더리 실증 검증"
+        title="loading.tsx 스켈레톤 바운더리 검증 결과"
         expected="• slow-catalog/loading.tsx가 React Suspense 폴백으로 자동 등록\n• 서버 비동기 지연 시간 동안 스켈레톤 노출 후 본문 데이터 점진적 스트리밍 완료"
         actual={
           isLoaded && elapsedMs

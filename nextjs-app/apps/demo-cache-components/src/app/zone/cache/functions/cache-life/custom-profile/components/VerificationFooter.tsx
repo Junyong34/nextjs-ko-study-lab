@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• next.config.ts custom cacheLife 프로파일 정의 및 바인딩 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = "• next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩의 동작과 기대 결과를 확인합니다."
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,23 +51,23 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="next.config.ts custom cacheLife 프로파일 정의 및 바인딩 실증 검증"
+        title="next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
                         <DemoDeepDiveCard title="cacheLife() 런타임 커스텀 수명 프로파일 적용">
               <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p><code>cacheLife({'{'} stale, revalidate, expire {'}'})</code> 함수는 <code>'use cache'</code> 스코프 내부에서 호출되어, 해당 캐시 엔트리의 신선도(stale), 백그라운드 재검증 시작 시점(revalidate), 최종 메모리 폐기 시점(expire)을 런타임에 동적으로 부여하는 표준 캐시 수명 제어 함수입니다.</p>
+                  <p><code>cacheLife({'{'} stale, revalidate, expire {'}'})</code> 함수는 <code>'use cache'</code> 스코프 내부에서 호출되어, 해당 캐시 엔트리의 신선도(stale), 백그라운드 revalidation 시작 시점(revalidate), 최종 메모리 폐기 시점(expire)을 런타임에 동적으로 부여하는 표준 캐시 수명 제어 함수입니다.</p>
                 </div>
 
                 <div>

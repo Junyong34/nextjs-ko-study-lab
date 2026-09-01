@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• 세그먼트 즉시 프리패칭 (instant) 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = "• 세그먼트 prefetch 설정 (instant)의 동작과 기대 결과를 확인합니다."
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,19 +51,19 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="세그먼트 즉시 프리패칭 (instant) 실증 검증"
+        title="세그먼트 prefetch 설정 (instant) 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-      <DemoDeepDiveCard title="Next.js 프리페칭 아키텍처 & Router Cache 기반 인스턴트 내비게이션">
+      <DemoDeepDiveCard title="Next.js prefetching 아키텍처 & Router Cache 기반 인스턴트 내비게이션">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
@@ -83,7 +83,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>네이티브 앱 수준의 반응 속도</strong>: 네트워크 왕복 시간(RTT)을 사용자의 클릭 전에 미리 소비하여 전환 체감 속도를 극대화합니다.</li>
-              <li><strong>대역폭 지능형 절약</strong>: 변경되지 않은 상위 레이아웃을 제외하고 변경되는 하위 세그먼트 데이터만 선별적으로 프리페치합니다.</li>
+              <li><strong>대역폭 지능형 절약</strong>: 변경되지 않은 상위 레이아웃을 제외하고 변경되는 하위 세그먼트 데이터만 선별적으로 prefetch합니다.</li>
               <li><strong>이커머스 구매 전환율 증대</strong>: 상품 목록에서 상세 페이지 및 주문서로의 이동 이탈률을 획기적으로 낮춥니다.</li>
             </ul>
           </div>
@@ -100,7 +100,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>과도한 prefetch=true 지양</strong>: 링크가 수백 개 존재하는 대규모 리스트에서 <code>prefetch={'{'}true{'}'}</code>를 남용하면 서버 트래픽과 모바일 데이터가 낭비되므로, 기본 뷰포트 프리페치(정적 셸/loading.tsx까지만 로드)를 사용하는 것이 안전합니다.</li>
+              <li><strong>과도한 prefetch=true 지양</strong>: 링크가 수백 개 존재하는 대규모 리스트에서 <code>prefetch={'{'}true{'}'}</code>를 남용하면 서버 트래픽과 모바일 데이터가 낭비되므로, 기본 뷰포트 prefetch(정적 셸/loading.tsx까지만 로드)를 사용하는 것이 안전합니다.</li>
               <li><strong>staleTimes 튜닝</strong>: 동적 데이터의 최신성이 중요한 경우 <code>next.config.ts</code>의 <code>experimental.staleTimes.dynamic</code> 설정을 통해 Router Cache 유효 시간을 조율해야 합니다.</li>
             </ul>
           </div>

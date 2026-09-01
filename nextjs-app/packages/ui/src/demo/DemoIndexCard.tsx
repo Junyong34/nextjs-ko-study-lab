@@ -100,11 +100,11 @@ export function DemoIndexCard({
             </Link>
           </div>
         ) : (
-          <span className="text-[11px] text-zinc-400">인터랙티브 데모</span>
+          <span className="text-[11px] text-zinc-400">인터랙티브 예제</span>
         )}
 
         <div className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-700 group-hover:text-zinc-950 dark:text-zinc-300 dark:group-hover:text-zinc-100 shrink-0 whitespace-nowrap transition-colors">
-          <span>데모 열기</span>
+          <span>예제 열기</span>
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </div>
       </div>

@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• revalidateTag max 즉시 만료 제어 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = "• revalidateTag max 캐시 만료 제어의 동작과 기대 결과를 확인합니다."
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,36 +51,36 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="revalidateTag max 즉시 만료 제어 실증 검증"
+        title="revalidateTag max 캐시 만료 제어 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
                         <DemoDeepDiveCard title="revalidateTag()와 cacheLife('max') 장기 불변 캐시의 결합">
               <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p><code>cacheLife('max')</code>로 영구에 가깝게 장기 캐싱된 불변(Immutable) 데이터에 <code>cacheTag()</code>를 부여하고, 데이터가 수정되는 극히 드문 시점에만 <code>revalidateTag()</code>를 호출하여 100% 온디맨드 이벤트 기반으로만 캐시를 갱신하는 궁극의 고성능 캐싱 패턴입니다.</p>
+                  <p><code>cacheLife('max')</code>로 오래 캐시할 데이터에 <code>cacheTag()</code>를 부여하고, 데이터가 바뀔 때 <code>revalidateTag()</code>를 호출해 해당 캐시를 갱신하는 방식입니다.</p>
                 </div>
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 평소에는 100% 캐시 히트(0ms 응답)로 서빙되는 브랜드 공식 카탈로그에 <code>cacheLife('max')</code>를 적용하고, 관리자가 긴급 수정 후 <code>revalidateTag('brand-catalog')</code>를 실행했을 때만 선택적으로 새 캐시가 생성되는 수명 주기를 검증합니다.</p>
+                  <p>이 예제에서는 브랜드 카탈로그에 <code>cacheLife('max')</code>를 적용하고, 관리자가 수정 후 <code>revalidateTag('brand-catalog')</code>를 실행했을 때 해당 태그의 캐시가 갱신되는 흐름을 확인합니다.</p>
                 </div>
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
                   <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>극한의 서버 부하 제로화</strong>: 주기적인 ISR 재생성조차 발생하지 않아 트래픽이 폭증해도 원본 DB 조회가 0건에 수렴합니다.</li>
-                    <li><strong>완벽한 데이터 신선도 보장</strong>: 수정이 발생할 때만 정확히 <code>revalidateTag</code>가 발동하므로 사용자는 항상 최신 상태를 유지하면서도 캐시 혜택을 100% 누립니다.</li>
-                    <li><strong>비용 효율 극대화</strong>: 서버리스 컴퓨팅 실행 시간과 데이터베이스 읽기 비용을 99% 이상 절감합니다.</li>
+                    <li><strong>반복 조회 감소</strong>: 데이터가 바뀌지 않는 동안 캐시를 재사용해 원본 DB 조회를 줄일 수 있습니다.</li>
+                    <li><strong>변경 시점 갱신</strong>: 수정이 발생했을 때 <code>revalidateTag</code>를 호출해 관련 캐시만 갱신합니다.</li>
+                    <li><strong>비용 조정</strong>: 캐시 재사용 범위와 갱신 시점을 서비스 요구사항에 맞게 설정할 수 있습니다.</li>
                   </ul>
                 </div>
 

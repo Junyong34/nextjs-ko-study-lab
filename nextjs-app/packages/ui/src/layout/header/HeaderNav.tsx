@@ -28,7 +28,7 @@ export function HeaderNav({ officialDocsUrl, repoUrl }: HeaderNavProps) {
         className="flex items-center gap-1 sm:gap-1.5 rounded-md bg-[#14161a0f] px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-200/60 transition dark:bg-white/10 dark:text-zinc-100 dark:hover:bg-white/15"
       >
         <PlayCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-zinc-800 dark:text-zinc-200" />
-        <span>데모</span>
+        <span>예제</span>
         <span className="hidden md:inline-flex rounded bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-1.5 py-0.2 text-[10px] font-bold">
           Live
         </span>

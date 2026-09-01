@@ -7,19 +7,19 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출"
-        concept="useParams() 훅을 사용하여 Client Component 트리 내부에서 동적 라우트 세그먼트([category], [id]) 파라미터를 0ms 동기 언랩핑하고 타입 안전하게 추출합니다."
+        title="useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출"
+        concept="useParams() 훅으로 Client Component 안에서 다이나믹 라우트 세그먼트([category], [id])의 파라미터를 읽고 타입에 맞게 사용합니다."
         steps={[
           {
             step: 1,
             title: "[/electronics/keyboard-900] 버튼 클릭",
-            description: "카테고리와 상품 ID가 포함된 첫 번째 동적 세그먼트 경로를 활성화합니다.",
+            description: "카테고리와 상품 ID가 포함된 첫 번째 다이나믹 세그먼트 경로를 활성화합니다.",
             actionBadge: "경로 선택",
           },
           {
             step: 2,
             title: "[/fashion/hoodie-102] 버튼으로 전환",
-            description: "두 번째 동적 세그먼트 경로를 선택하여 useParams() 훅의 파라미터 갱신을 트리거합니다.",
+            description: "두 번째 다이나믹 세그먼트 경로를 선택하여 useParams() 훅의 파라미터를 갱신합니다.",
             actionBadge: "파라미터 갱신",
           },
           {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출 실습"}>
+      <DemoPlaygroundCard title={"useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출 실습"}>
         <UseParamsClientDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

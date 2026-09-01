@@ -12,7 +12,7 @@ export function VerificationFooter({ currentId }: VerificationFooterProps) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="[id] 단일 동적 세그먼트 실증 검증"
+        title="[id] 단일 동적 세그먼트 검증 결과"
         expected="• items/[id] 폴더 컨벤션에 매칭되어 params.id가 Promise 객체로 주입\n• URL 경로와 동적 파라미터가 정확히 일치하여 상품 상세 렌더링"
         actual={
           currentId

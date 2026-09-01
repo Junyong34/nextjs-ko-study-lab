@@ -19,7 +19,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   const { stage = 'order', errorMsg } = props
 
   const defaultExpected =
-    '• 하위 결제 세그먼트(/payment)에서 504 에러 발생 시 상위 헤더를 유지한 채 error.tsx로 격리\n• [결제 다시 시도 (reset())] 호출 시 전체 새로고침 없이 세그먼트 정상 복구\n• 상위 레이아웃 보존 및 하위 에러 격리 복구 실증 검증'
+    '• 하위 결제 세그먼트(/payment)에서 504 에러 발생 시 상위 헤더를 유지한 채 error.tsx로 격리\n• [결제 다시 시도 (reset())] 호출 시 전체 새로고침 없이 세그먼트 정상 복구\n• 상위 레이아웃 보존 및 하위 에러 격리 복구 검증 결과'
 
   let defaultActual = '• 인터랙션 대기 중 (최종 결제 단계로 이동하여 결제 통신 에러 및 reset() 복구를 실행하세요)'
   if (stage === 'payment_ready') {
@@ -44,13 +44,13 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="error.tsx 세그먼트 에러 바운더리 격리 및 복구 실증 검증"
+        title="error.tsx 세그먼트 오류 경계 격리 및 복구 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
       <DemoDeepDiveCard title="error.tsx 세그먼트 레벨 에러 바운더리 격리 및 reset() 복구">

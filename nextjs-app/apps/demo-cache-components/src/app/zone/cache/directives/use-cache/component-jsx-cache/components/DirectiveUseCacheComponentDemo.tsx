@@ -37,7 +37,7 @@ export function DirectiveUseCacheComponentDemo() {
   const handlePurgeTag = () => {
     startTransition(() => {
       setCachedRenderTimes({
-        [category]: `${new Date().toLocaleTimeString()} (태그 재검증 직렬화 갱신)`,
+        [category]: `${new Date().toLocaleTimeString()} (태그 revalidation 직렬화 갱신)`,
       })
     })
   }

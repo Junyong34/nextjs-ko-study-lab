@@ -25,16 +25,16 @@ export function PrefetchController() {
     setIsPrefetched(true)
     const time = new Date().toLocaleTimeString('ko-KR')
     setPrefetchTime(time)
-    setLastAction(`특가 상품 페이지(/deals) 백그라운드 프리패치 완료 (${time})`)
+    setLastAction(`특가 상품 페이지(/deals) 백그라운드 prefetch 완료 (${time})`)
   }
 
   const handleGoDeals = () => {
-    setLastAction('router.push(/deals) 실행 -> 사전 로드된 페이지 전환')
+    setLastAction('router.push(/deals) 실행 -> 미리 로드한 페이지로 전환')
     router.push(DEALS_URL)
   }
 
   const handleGoVip = () => {
-    setLastAction('router.push(/vip) 실행 (사전 프리패치 없음)')
+    setLastAction('router.push(/vip) 실행 (prefetch 없음)')
     router.push(VIP_URL)
   }
 
@@ -54,7 +54,7 @@ export function PrefetchController() {
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="text-zinc-500">특가 페이지(/deals) 프리패치:</span>
+          <span className="text-zinc-500">특가 페이지(/deals) prefetch:</span>
           {isPrefetched ? (
             <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
               사전 로드됨 ({prefetchTime})
@@ -76,7 +76,7 @@ export function PrefetchController() {
           disabled={isPrefetched}
           className="inline-flex items-center gap-1.5 rounded bg-amber-600 px-3 py-1.5 text-xs font-medium text-white shadow-2xs transition hover:bg-amber-700 disabled:opacity-50 cursor-pointer"
         >
-          <span>1. 특가 상품 백그라운드 프리패치</span>
+          <span>1. 특가 상품 백그라운드 prefetch</span>
           <span className="rounded bg-amber-800 px-1 py-0.2 font-mono text-[9px] text-amber-200">
             router.prefetch()
           </span>
@@ -88,7 +88,7 @@ export function PrefetchController() {
           onClick={handleGoDeals}
           className="inline-flex items-center gap-1.5 rounded bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white shadow-2xs transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
         >
-          <span>2. 특가 상품으로 이동 (즉시 전환)</span>
+          <span>2. 특가 상품으로 이동</span>
           <span className="rounded bg-zinc-700 px-1 py-0.2 font-mono text-[9px] text-zinc-300 dark:bg-zinc-300 dark:text-zinc-800">
             router.push('/deals')
           </span>
@@ -100,7 +100,7 @@ export function PrefetchController() {
           onClick={handleGoVip}
           className="inline-flex items-center gap-1.5 rounded border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-800 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 cursor-pointer"
         >
-          <span>3. VIP 라운지 이동 (프리패치 없음)</span>
+          <span>3. VIP 라운지 이동 (prefetch 없음)</span>
           <span className="rounded bg-zinc-200 px-1 py-0.2 font-mono text-[9px] text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300">
             router.push('/vip')
           </span>

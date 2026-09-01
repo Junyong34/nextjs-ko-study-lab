@@ -33,18 +33,18 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="SWR 실시간 배송 조회 자동 폴링 & mutate() 갱신 실증 검증"
+        title="SWR 실시간 배송 조회 자동 폴링 & mutate() 갱신 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}
-        description="SWR의 refreshInterval(2500ms) 백그라운드 폴링과 mutate() 온디맨드 재검증 동작을 실시간 검증합니다."
+        description="SWR의 refreshInterval(2500ms) 백그라운드 폴링과 mutate() 온디맨드 revalidation 동작을 실시간 검증합니다."
       />
       <DemoDeepDiveCard title="SWR 실시간 배송 조회 자동 폴링 & mutate() 갱신">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              SWR(Stale-While-Revalidate)의 <code>refreshInterval</code> 옵션은 클라이언트 사이드에서 지정된 주기(2500ms)마다 백그라운드 HTTP 폴링을 실행하여 데이터를 최신화하고, 탭 포커스(<code>revalidateOnFocus</code>) 및 네트워크 재연결 시 즉시 재검증을 수행하는 실시간 클라이언트 데이터 페칭 스펙입니다.
+              SWR(Stale-While-Revalidate)의 <code>refreshInterval</code> 옵션은 클라이언트 사이드에서 지정된 주기(2500ms)마다 백그라운드 HTTP 폴링을 실행하여 데이터를 최신화하고, 탭 포커스(<code>revalidateOnFocus</code>) 및 네트워크 재연결 시 즉시 revalidation을 수행하는 실시간 클라이언트 데이터 페칭 스펙입니다.
             </p>
           </div>
 
@@ -60,7 +60,7 @@ export function VerificationFooter({
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>자동 백그라운드 동기화</strong>: 별도의 복잡한 WebSocket 서버 인프라 구축 없이 표준 HTTP 엔드포인트만으로 실시간성 UI를 구현합니다.</li>
               <li><strong>지능형 자원 절약</strong>: 사용자가 다른 브라우저 탭으로 전환하거나 화면을 최소화하면 폴링을 자동으로 일시 중단하여 불필요한 배터리와 트래픽 소모를 방지합니다.</li>
-              <li><strong>강력한 내장 캐시</strong>: 이전 요청 데이터를 로컬 메모리에 보존하여 재검증 중에도 깜빡임 없는 매끄러운 뷰를 제공합니다.</li>
+              <li><strong>강력한 내장 캐시</strong>: 이전 요청 데이터를 로컬 메모리에 보존하여 revalidation 중에도 깜빡임 없는 매끄러운 뷰를 제공합니다.</li>
             </ul>
           </div>
 

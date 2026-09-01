@@ -33,9 +33,9 @@ export default async function ServerActionRevalidateDemoPage() {
           },
           {
             step: 4,
-            title: "서버 캐시 재검증 및 총액 갱신 관찰",
+            title: "서버 캐시 revalidation 및 총액 갱신 관찰",
             description: "revalidatePath 호출로 서버 데이터 캐시가 갱신되어 최신 장바구니 합계가 렌더링되는지 관찰합니다.",
-            actionBadge: "캐시 재검증",
+            actionBadge: "캐시 revalidation",
             observe: "Server Action 실행 후 revalidatePath에 의해 장바구니 수량과 총 결제 금액이 즉시 동기화됨",
             observeAt: "playground",
           },

@@ -31,7 +31,7 @@ export default function Page() {
 
 `src`에는 [로컬](#로컬-이미지) 이미지나 [리모트](#리모트-이미지) 이미지를 지정할 수 있다.
 
-> **🎥 시청**: `next/image` 사용법 더 알아보기 → [YouTube (9분)](https://youtu.be/IU_qq_c_lKA).
+> **관련 영상**: `next/image` 사용법 더 알아보기 → [YouTube (9분)](https://youtu.be/IU_qq_c_lKA).
 
 ### 로컬 이미지
 

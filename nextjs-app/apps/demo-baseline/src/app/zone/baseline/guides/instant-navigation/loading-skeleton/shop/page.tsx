@@ -25,7 +25,7 @@ export default async function ShopPage() {
         </ul>
       </div>
       <ExpectedActualPanel
-        title="loading.tsx 스켈레톤 실증 검증"
+        title="loading.tsx 스켈레톤 검증"
         expected="1200ms 서버 지연 동안 shop/loading.tsx의 스켈레톤이 즉시 표시된 뒤 실제 목록으로 교체되어야 한다."
         actual={`- 서버 지연 시간: ${elapsedMs}ms\n- 이 페이지가 렌더링됐다는 것 자체가 스켈레톤 이후 스트리밍이 완료됐다는 증거`}
         isMatched={elapsedMs >= 1200}

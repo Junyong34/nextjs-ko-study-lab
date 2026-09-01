@@ -67,11 +67,11 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
               Next.js App Router
             </span>
             <span className="block mt-2 text-2xl sm:text-3xl lg:text-4xl font-bold text-zinc-700 dark:text-zinc-300">
-              한국어 공식 가이드 & 인터랙티브 실습 랩
+              한국어 학습 가이드 & 실습 예제
             </span>
           </h1>
           <p className="text-base sm:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-3xl">
-            한국어로 번역된 공식 문서를 보고 학습하고, 241개 인터랙티브 실습을 통해 개념 및 동작 원리를 학습하세요.
+            Next.js 공식 문서를 바탕으로 만든 한국어 학습 문서를 읽고, {totalDemos}개 실습 예제에서 핵심 기능의 동작을 직접 확인해 보세요.
           </p>
         </div>
 
@@ -92,14 +92,14 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
               className="inline-flex items-center gap-2 rounded-xl border border-zinc-300 bg-white/90 px-5 py-3 text-sm font-semibold text-zinc-800 shadow-xs transition hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900/90 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:hover:text-white"
             >
               <PlayCircle className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
-              실습 데모 둘러보기
+              실습 예제 둘러보기
             </Link>
             <Link
               href="/glossary"
               className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-800 shadow-xs transition hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
             >
               <BookmarkCheck className="h-4 w-4" />
-              용어 사전 (48종)
+              용어집 (48개)
             </Link>
           </div>
 
@@ -132,23 +132,25 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
           <div className="rounded-2xl border border-zinc-200/70 bg-white/80 p-4 backdrop-blur-xs dark:border-zinc-800/70 dark:bg-zinc-900/70">
             <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
               <BookOpen className="h-4 w-4" />
-              <span className="text-xs font-medium">공식 번역 문서</span>
+              <span className="text-xs font-medium">한국어 학습 문서</span>
             </div>
             <p className="mt-2 text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
               {totalDocs > 0 ? `${totalDocs}개` : '280+개'}
             </p>
-            <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">App Router 전범위 완역</p>
+            <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">
+              {totalDocs > 0 ? `App Router 관련 문서 ${totalDocs}개` : 'App Router 학습 문서'}
+            </p>
           </div>
 
           <div className="rounded-2xl border border-zinc-200/70 bg-white/80 p-4 backdrop-blur-xs dark:border-zinc-800/70 dark:bg-zinc-900/70">
             <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
               <PlayCircle className="h-4 w-4" />
-              <span className="text-xs font-medium">실습 랩 데모</span>
+              <span className="text-xs font-medium">실습 예제</span>
             </div>
             <p className="mt-2 text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
               {totalDemos > 0 ? `${totalDemos}개` : '241개'}
             </p>
-            <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">실제 Next.js 실행 환경</p>
+            <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">Next.js 기능을 실행하며 확인</p>
           </div>
 
           <div className="rounded-2xl border border-zinc-200/70 bg-white/80 p-4 backdrop-blur-xs dark:border-zinc-800/70 dark:bg-zinc-900/70">
@@ -157,7 +159,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
               <span className="text-xs font-medium">핵심 기술 용어</span>
             </div>
             <p className="mt-2 text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
-              48종
+              48개
             </p>
             <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">알파벳 색인 & 상세 해설</p>
           </div>

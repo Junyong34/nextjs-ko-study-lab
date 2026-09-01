@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• experimental.cacheLife 커스텀 수명 프리셋 전역 정의 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = "• experimental.cacheLife 커스텀 수명 프리셋 전역 정의의 동작과 기대 결과를 확인합니다."
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,17 +51,17 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="experimental.cacheLife 커스텀 수명 프리셋 전역 정의 실증 검증"
+        title="experimental.cacheLife 커스텀 수명 프리셋 전역 정의 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
                                     <DemoDeepDiveCard title="next.config.ts custom cacheLife 프리셋 정의">
                     <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
                       <div>
                         <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                        <p>본 데모에서는 커스텀 정의된 <code>flashSale</code> 프리셋(stale: 10초, revalidate: 30초, expire: 1분)을 적용한 타임특가 위젯이 지정된 시간 주기에 맞춰 정확하게 백그라운드 재검증 및 만료 수명 주기를 수행하는 과정을 검증합니다.</p>
+                        <p>본 데모에서는 커스텀 정의된 <code>flashSale</code> 프리셋(stale: 10초, revalidate: 30초, expire: 1분)을 적용한 타임특가 위젯이 지정된 시간 주기에 맞춰 정확하게 백그라운드 revalidation 및 만료 수명 주기를 수행하는 과정을 검증합니다.</p>
                       </div>
 
                       <div>
@@ -80,7 +80,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
                         <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
                           <li><strong>전사 캐시 정책 표준화</strong>: 개발자마다 임의의 초 단위 숫자를 하드코딩하지 않고 표준화된 비즈니스 용어 프리셋으로 캐시 수명을 통일합니다.</li>
                           <li><strong>유지보수 중앙 집중화</strong>: 비즈니스 요구사항 변경 시 <code>next.config.ts</code>의 프리셋 값만 수정하면 전사 수십 개 페이지의 캐시 주기가 일괄 갱신됩니다.</li>
-                          <li><strong>정밀한 3단계 수명 제어</strong>: 클라이언트 신선도(stale), 서버 재검증 주기(revalidate), 최종 가비지 컬렉션(expire)을 세분화하여 제어합니다.</li>
+                          <li><strong>정밀한 3단계 수명 제어</strong>: 클라이언트 신선도(stale), 서버 revalidation 주기(revalidate), 최종 가비지 컬렉션(expire)을 세분화하여 제어합니다.</li>
                         </ul>
                       </div>
 

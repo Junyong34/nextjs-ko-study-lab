@@ -18,7 +18,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   const { cartAdded, couponClaimed } = props
 
   const defaultExpected =
-    '• 동일한 클래스명(.card, .title, .badge, .action)을 사용하는 두 컴포넌트 격리\n• CSS Modules 고유 해시 클래스를 통해 스타일 충돌 없이 독립 렌더링\n• 각 컴포넌트 버튼 클릭 시 독립된 로컬 상태 변화 실증 검증'
+    '• 동일한 클래스명(.card, .title, .badge, .action)을 사용하는 두 컴포넌트 격리\n• CSS Modules 고유 해시 클래스를 통해 스타일 충돌 없이 독립 렌더링\n• 각 컴포넌트 버튼 클릭 시 독립된 로컬 상태 변화 검증 결과'
 
   const hasInteracted = cartAdded || couponClaimed
 
@@ -43,13 +43,13 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="CSS Modules 스코프 격리 및 해시 클래스 충돌 방지 실증 검증"
+        title="CSS Modules 스코프 격리 및 해시 클래스 충돌 방지 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
       <DemoDeepDiveCard title="CSS Modules 스코프 격리 및 해시 클래스 충돌 방지">

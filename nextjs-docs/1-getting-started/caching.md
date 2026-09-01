@@ -415,7 +415,7 @@ Next.js는 prerendering 중에 완료될 수 없는 컴포넌트를 명시적으
 
 ![클라이언트에서 부분적으로 렌더링된 페이지가 스트리밍되는 청크에 로딩 UI를 보여주는 그림](./assets/caching-02.webp)
 
-> **🎥 시청**: Partial Prerendering이 왜, 어떻게 동작하는지 → [YouTube (10분)](https://www.youtube.com/watch?v=MTcPrTIBkpA).
+> **관련 영상**: Partial Prerendering이 왜, 어떻게 동작하는지 → [YouTube (10분)](https://www.youtube.com/watch?v=MTcPrTIBkpA).
 
 #### 정적 셸 최대화하기
 

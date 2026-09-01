@@ -16,7 +16,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Route Groups ((folder)) URL 격리 실증 검증"
+        title="Route Groups ((folder)) URL 격리 검증 결과"
         expected="• (shop) 및 (marketing) 폴더 컨벤션이 URL 경로에서 완전 제외\n• 브라우저 주소는 /products 및 /about으로 노출되며 각자 독립된 layout.tsx 적용"
         actual={
           currentGroup

@@ -35,7 +35,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="generateMetadata 동적 메타데이터 & 소셜 공유 미리보기 실증 검증"
+        title="generateMetadata 동적 메타데이터 & 소셜 공유 미리보기 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}

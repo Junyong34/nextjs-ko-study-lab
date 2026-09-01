@@ -13,7 +13,7 @@ export default function DemoPage() {
           {
             step: 1,
             title: "레거시 [unstable_cache] 방식 코드 및 호출 점검",
-            description: "키 배열과 재검증 태그를 수동으로 전달하던 레거시 캐싱 패턴을 점검합니다.",
+            description: "키 배열과 revalidation 태그를 수동으로 전달하던 레거시 캐싱 패턴을 점검합니다.",
             actionBadge: "레거시 점검",
           },
           {

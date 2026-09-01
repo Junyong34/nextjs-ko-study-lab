@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• Next.js 확장 fetch revalidate 옵션 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = "• Next.js 확장 fetch revalidate 옵션의 동작과 기대 결과를 확인합니다."
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,17 +51,17 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Next.js 확장 fetch revalidate 옵션 실증 검증"
+        title="Next.js 확장 fetch revalidate 옵션 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
             <DemoDeepDiveCard title="Next.js 확장 fetch revalidate 옵션 & 시간 기반 ISR 캐싱">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 외부 환율 API를 60초 <code>revalidate</code> 옵션으로 호출하여, 60초 이내의 요청에는 0ms 캐시 응답을 반환하고, 60초 초과 시 다음 요청에서 백그라운드 재검증을 트리거하여 최신 환율로 캐시를 갱신합니다.</p>
+            <p>본 데모에서는 외부 환율 API를 60초 <code>revalidate</code> 옵션으로 호출하여, 60초 이내의 요청에는 0ms 캐시 응답을 반환하고, 60초 초과 시 다음 요청에서 백그라운드 revalidation을 트리거하여 최신 환율로 캐시를 갱신합니다.</p>
           </div>
 
           <div>

@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• 링크 호버 시 정적 셸만 사전 패칭 (Partial Prefetching) 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = '• 호버 전후 정적 셸 표시 상태와 production Network 요청을 확인합니다.'
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,36 +51,36 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="링크 호버 시 정적 셸만 사전 패칭 (Partial Prefetching) 실증 검증"
+        title="링크 호버 시 정적 셸 표시 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-                        <DemoDeepDiveCard title="링크 호버 시 정적 셸만 사전 패칭 (Partial Prefetching)">
+                        <DemoDeepDiveCard title="Partial Prefetching과 호버 상태 표시">
               <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p>Partial Prerendering(PPR) 및 부분 프리패칭(Partial Prefetching)은 링크 마우스 호버 시점에 정적으로 사전 렌더링된 레이아웃 셸만 가볍게 사전 수신하고, 동적 데이터 청크는 실제 클릭/네비게이션 시점에 스트리밍으로 결합하는 고효율 프리패칭 스펙입니다.</p>
+                  <p>Partial Prerendering(PPR)과 Partial Prefetching은 정적 셸과 동적 콘텐츠를 나누어 준비하는 방식입니다. 이 화면은 호버 상태를 표시하며, 실제 prefetch 요청은 production 환경의 Network 탭에서 확인해야 합니다.</p>
                 </div>
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 [상품 카드 링크] 호버 시 50ms 이내에 경량 정적 셸(네비게이션 바, 탭 구조)만 백그라운드에서 프리패치하고, 클릭 시 동적 가격 및 재고 데이터가 Suspense 스트림을 통해 지연 없이 바인딩되는 과정을 시각화합니다.</p>
+                  <p>이 화면에서는 [상품 카드 링크]에 마우스를 올리면 정적 셸 표시 상태가 바뀝니다. 실제 prefetch 요청과 클릭 뒤의 데이터 요청은 production 환경의 Network 탭에서 확인합니다.</p>
                 </div>
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
                   <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>클라이언트 네트워크 대역폭 절약</strong>: 모든 동적 데이터를 미리 로드하지 않고 정적 셸만 가져와 모바일 데이터 소모량을 대폭 절감합니다.</li>
-                    <li><strong>0ms 체감 네비게이션</strong>: 사용자가 클릭하는 즉시 로컬 캐시된 셸이 화면에 표시되어 전환 지연을 체감할 수 없습니다.</li>
-                    <li><strong>서버 CPU 부하 분산</strong>: 프리패치 단계에서 무거운 동적 DB 조회가 발생하지 않아 불필요한 서버 자원 낭비를 방지합니다.</li>
+                    <li><strong>정적 셸과 동적 콘텐츠 구분</strong>: 먼저 준비할 화면과 나중에 요청할 데이터를 나누어 생각할 수 있습니다.</li>
+                    <li><strong>Network 탭으로 동작 확인</strong>: 호버와 클릭 뒤 실제 요청이 언제 발생하는지 확인할 수 있습니다.</li>
+                    <li><strong>환경별 차이 이해</strong>: 개발 모드와 production 빌드에서 prefetch 동작이 다를 수 있음을 확인합니다.</li>
                   </ul>
                 </div>
 
@@ -96,7 +96,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
                   <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>PPR(Partial Prerendering) 플래그 연동</strong>: 부분 프리패칭의 이점을 극대화하려면 <code>next.config.ts</code>에서 <code>experimental.ppr = true</code> 설정을 활성화해야 합니다.</li>
+                    <li><strong>실제 요청 확인</strong>: prefetch 동작을 판단할 때는 화면 변화만 보지 말고 production Network 탭의 요청을 확인해야 합니다.</li>
                     <li><strong>loading.tsx와의 조화</strong>: 정적 셸에 명확한 Suspense 스켈레톤 영역이 정의되어 있어야 동적 데이터 수신 시 레이아웃 흔들림이 발생하지 않습니다.</li>
                   </ul>
                 </div>

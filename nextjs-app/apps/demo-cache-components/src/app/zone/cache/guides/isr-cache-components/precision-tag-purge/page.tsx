@@ -41,7 +41,7 @@ export default async function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"초정밀 온디맨드 태그 무효화 (cacheTag) 실습"}>
+      <DemoPlaygroundCard title={"cacheTag를 이용한 태그 기반 무효화 실습"}>
         <PrecisionTagPurgeDemo product101={product101} product205={product205} />
       </DemoPlaygroundCard>
       <VerificationFooter

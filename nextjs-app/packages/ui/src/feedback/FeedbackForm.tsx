@@ -41,7 +41,7 @@ export function FeedbackForm({ to, onSent, onCancel }: FeedbackFormProps) {
         <Input
           type="text"
           required
-          placeholder="예: Server Actions 데모 관련 질문 및 오타 제보"
+          placeholder="예: Server Actions 실습 예제 관련 질문 및 오타 제보"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         />
@@ -49,11 +49,11 @@ export function FeedbackForm({ to, onSent, onCancel }: FeedbackFormProps) {
 
       <div>
         <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-          회신받으실 이메일 <span className="text-zinc-400 font-normal">(선택)</span>
+          답변받을 이메일 주소 <span className="text-zinc-400 font-normal">(선택)</span>
         </label>
         <Input
           type="email"
-          placeholder="답변을 받아보실 이메일 주소"
+          placeholder="답변받을 이메일 주소"
           value={senderEmail}
           onChange={(e) => setSenderEmail(e.target.value)}
         />
@@ -61,12 +61,12 @@ export function FeedbackForm({ to, onSent, onCancel }: FeedbackFormProps) {
 
       <div>
         <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-          문의 및 피드백 내용 <span className="text-rose-500">*</span>
+          문의 또는 피드백 내용 <span className="text-rose-500">*</span>
         </label>
         <Textarea
           required
           rows={4}
-          placeholder="개선 의견이나 건의 사항을 자세히 적어주시면 큰 도움이 됩니다."
+          placeholder="개선할 점이나 오류를 적어 주세요."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />

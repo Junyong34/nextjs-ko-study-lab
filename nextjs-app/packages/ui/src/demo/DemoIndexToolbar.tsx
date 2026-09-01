@@ -106,8 +106,8 @@ export function DemoIndexToolbar({
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder="데모 제목, URL, 관련 문서명 검색..."
-          aria-label="데모 검색"
+          placeholder="예제 제목, URL, 관련 문서명 검색…"
+          aria-label="예제 검색"
           className={`${FIELD_SURFACE} pl-10 pr-10 py-2.5 text-sm rounded-xl transition-all shadow-xs w-full`}
         />
         {isPending ? (
@@ -175,7 +175,7 @@ export function DemoIndexToolbar({
             </span>
           ) : (
             <span>
-              총 <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{count}</strong>개의 데모
+              총 <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{count}</strong>개의 예제
             </span>
           )}
           {totalPages > 1 && (
@@ -188,8 +188,8 @@ export function DemoIndexToolbar({
         {/* 스크린 리더용 안내 영역 */}
         <div className="sr-only" aria-live="polite" aria-atomic="true">
           {isFiltered
-            ? `검색 결과 ${count}개 데모가 표시되었습니다. 총 ${totalPages}페이지 중 ${currentPage}페이지입니다.`
-            : `총 ${count}개의 데모 중 ${currentPage}페이지입니다.`}
+            ? `검색 결과 ${count}개 예제가 표시되었습니다. 총 ${totalPages}페이지 중 ${currentPage}페이지입니다.`
+            : `총 ${count}개의 예제 중 ${currentPage}페이지입니다.`}
         </div>
       </div>
     </div>

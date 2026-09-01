@@ -14,7 +14,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="not-found.tsx 및 notFound() 트리거 실증 검증"
+        title="not-found.tsx 및 notFound() 트리거 검증 결과"
         expected="• DB에 없는 리소스 접근 시 notFound() 호출\n• Next.js 런타임이 세그먼트의 not-found.tsx를 포착하여 404 상태 및 전용 UI 렌더링"
         actual={
           productId

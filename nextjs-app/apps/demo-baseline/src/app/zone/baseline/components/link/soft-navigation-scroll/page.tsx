@@ -32,7 +32,7 @@ export default function DemoPage() {
         }
         ]}
         />
-      <DemoPlaygroundCard title={"<Link> 소프트 네비게이션 & scroll 제어 실습"}>
+      <DemoPlaygroundCard title={"<Link> 소프트 내비게이션 및 scroll 제어 실습"}>
         <LinkSoftNavScrollDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

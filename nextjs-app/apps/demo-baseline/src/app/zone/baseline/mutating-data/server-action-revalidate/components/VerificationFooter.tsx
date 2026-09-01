@@ -39,13 +39,13 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="Server Action 데이터 변경 및 revalidatePath 동기화 실증 검증"
+        title="Server Action 데이터 변경 및 revalidatePath 동기화 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
       <DemoDeepDiveCard title="Server Action 데이터 변경 및 revalidatePath 캐시 동기화">
@@ -67,7 +67,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>단일 왕복(Single Roundtrip) 동기화</strong>: 데이터 변경 요청과 최신 화면 재검증이 1회의 HTTP POST 네트워크 통신으로 완결됩니다.</li>
+              <li><strong>단일 왕복(Single Roundtrip) 동기화</strong>: 데이터 변경 요청과 최신 화면 revalidation이 1회의 HTTP POST 네트워크 통신으로 완결됩니다.</li>
               <li><strong>클라이언트 상태 불일치 제거</strong>: 클라이언트 전역 상태를 수동으로 갱신할 필요 없이 서버가 단일 진실 공급원(SSOT)으로 동작합니다.</li>
               <li><strong>강력한 타입 안전성</strong>: Server Action 파라미터부터 반환 데이터까지 End-to-End TypeScript 타입 추론을 보장합니다.</li>
             </ul>

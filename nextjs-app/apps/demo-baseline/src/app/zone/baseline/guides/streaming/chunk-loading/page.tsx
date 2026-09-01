@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"점진적 Suspense 스트리밍 및 로딩 청크 순차 주입 실습"}>
+      <DemoPlaygroundCard title={"Suspense 스트리밍과 로딩 청크 순차 처리 실습"}>
         <ChunkLoadingDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

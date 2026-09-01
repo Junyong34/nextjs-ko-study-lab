@@ -42,8 +42,8 @@ export default async function DemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Next.js 16 use cache 지시어 & cacheTag/revalidateTag 무효화"
-        concept="'use cache' 지시어를 선언하면 서버 함수 결과가 캐싱됩니다. cacheTag('caching-basic:data')로 태그를 부여한 뒤 revalidateTag(tag, 'max')를 호출하면 항목은 stale 상태가 되고, 첫 재방문에는 이전 값을 반환하면서 백그라운드에서 새 값을 생성합니다."
+        title="Next.js 16 use cache 지시어와 cacheTag 무효화"
+        concept="'use cache' 지시어를 선언하면 함수 결과가 캐시됩니다. cacheTag('caching-basic:data')로 태그를 붙인 뒤 revalidateTag(tag, 'max')를 호출하면 항목이 stale 상태가 되고, 첫 재방문에는 이전 값을 반환하면서 백그라운드에서 새 값을 만듭니다."
         steps={[
           {
             step: 1,
@@ -66,15 +66,15 @@ export default async function DemoPage() {
           {
             step: 4,
             title: '[브라우저 새로고침]으로 첫 재방문',
-            description: '첫 재방문에서는 이전 캐시 ID가 표시됩니다. 이 요청은 오래된 값을 즉시 반환하면서 백그라운드 재검증을 시작합니다.',
+            description: '첫 재방문에서는 이전 캐시 ID가 표시됩니다. 이 요청은 오래된 값을 반환하면서 백그라운드 갱신을 시작합니다.',
             actionBadge: 'stale 반환',
-            observe: '무효화 전 ID가 첫 재방문에서도 유지되고, 재검증은 화면 뒤에서 진행됨',
+            observe: '무효화 전 ID가 첫 재방문에서도 유지되고, 캐시 갱신은 화면 뒤에서 진행됨',
             observeAt: 'playground',
           },
           {
             step: 5,
-            title: '[브라우저 새로고침]으로 재검증 결과 확인',
-            description: '재검증이 끝난 뒤 다음 요청에서 새 캐시 ID와 생성 시각이 표시되는지 확인합니다. 환경에 따라 재생성이 끝날 때까지 한 번 더 기다리거나 재방문해야 할 수 있습니다.',
+            title: '[브라우저 새로고침]으로 갱신 결과 확인',
+            description: '갱신이 끝난 뒤 다음 요청에서 새 캐시 ID와 생성 시각이 표시되는지 확인합니다. 환경에 따라 새 값이 준비될 때까지 한 번 더 기다리거나 재방문해야 할 수 있습니다.',
             actionBadge: 'fresh 결과',
             observe: '이전 ID와 다른 새 ID 및 새 생성 시각이 표시됨',
             observeAt: 'playground',
@@ -146,9 +146,9 @@ export default async function DemoPage() {
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
                   <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>함수 단위 초정밀 캐싱</strong>: 페이지 전체를 ISR로 묶지 않고도 무거운 DB 쿼리나 외부 API 결과만 선택적으로 캐싱합니다.</li>
+                    <li><strong>함수 단위 선택적 캐싱</strong>: 페이지 전체를 ISR로 묶지 않고도 무거운 DB 쿼리나 외부 API 결과만 캐싱합니다.</li>
                     <li><strong>태그 기반 연쇄 무효화</strong>: 상품 가격 변경 시 관련 카테고리, 추천 목록, 메인 배너의 캐시를 같은 태그로 stale 처리하고 다음 요청부터 순차적으로 새 값으로 교체할 수 있습니다.</li>
-                    <li><strong>서버 인프라 부하 감소</strong>: 동일 요청에 대해 불필요한 중복 DB 조회를 원천 차단하여 서버 리소스를 극대화합니다.</li>
+                    <li><strong>서버 부하 감소</strong>: 같은 요청의 중복 DB 조회를 줄여 서버 부하를 낮춥니다.</li>
                   </ul>
                 </div>
 

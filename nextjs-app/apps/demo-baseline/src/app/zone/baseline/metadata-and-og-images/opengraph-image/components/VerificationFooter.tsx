@@ -28,7 +28,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="opengraph-image.tsx 동적 OG 이미지 생성 (ImageResponse) 실증 검증"
+        title="opengraph-image.tsx 동적 OG 이미지 생성 (ImageResponse) 검증 결과"
         expected={expected}
         actual={actual}
         isMatched={isMatched}

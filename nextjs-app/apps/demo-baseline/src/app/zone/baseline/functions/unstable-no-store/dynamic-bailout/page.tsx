@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="unstable_noStore() 동적 렌더링 명시적 선언"
+        title="unstable_noStore()로 다이나믹 렌더링 선언"
         concept="unstable_noStore()를 컴포넌트나 데이터 페칭 함수 내에 선언하여 0ms 정적 캐시 생성을 건너뛰고(Bailout) 매 요청마다 항상 최신 동적 렌더링(SSR)을 수행하도록 강제합니다."
         steps={[
           {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"unstable_noStore() 동적 렌더링 명시적 선언 실습"}>
+      <DemoPlaygroundCard title={"unstable_noStore()로 다이나믹 렌더링 선언 실습"}>
         <UnstableNoStoreDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

@@ -9,7 +9,7 @@ export default function FormComponentDemoPage() {
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title={"next/form 컴포넌트 자동 검색 쿼리 동기화"}
-        concept={"<Form action=\"...\">을 사용하면 클라이언트 JS 없이도 폼 제출 시 URL 검색 쿼리(?q=...)로 자동 변환되고 페이지 전환 시 프리페칭과 소프트 네비게이션이 적용됩니다."}
+        concept={"<Form action=\"...\">을 사용하면 클라이언트 JS 없이도 폼 제출 시 URL 검색 쿼리(?q=...)로 자동 변환되고 페이지 전환 시 prefetching과 소프트 네비게이션이 적용됩니다."}
         steps={[
         {
         "step": 1,

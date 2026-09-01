@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="next.config.ts custom cacheLife 프로파일 정의 및 바인딩"
+        title="next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩"
         concept="next.config.ts의 cacheLife 객체에 커스텀 프로파일(flashSale, catalog, reviews)을 정의하고 컴포넌트 내 cacheLife(profile)로 바인딩하여 5초~604800초 TTL을 제어합니다."
         steps={[
           {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"next.config.ts custom cacheLife 프로파일 정의 및 바인딩 실습"}>
+      <DemoPlaygroundCard title={"next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩 실습"}>
         <CacheLifeCustomDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

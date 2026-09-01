@@ -32,7 +32,7 @@ export default function DemoPage() {
         }
         ]}
         />
-      <DemoPlaygroundCard title={"정적(Static) vs 동적(Dynamic) page.tsx 렌더링 실습"}>
+      <DemoPlaygroundCard title={"정적(Static)과 다이나믹(Dynamic) page.tsx 렌더링 실습"}>
         <StaticDynamicPageDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

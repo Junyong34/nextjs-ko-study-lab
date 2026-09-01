@@ -45,7 +45,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"revalidatePath를 통한 라우트 전체 즉시 동기화 실습"}>
+      <DemoPlaygroundCard title={"revalidatePath에 따른 라우트 범위별 무효화 실습"}>
         <RevalidatePathSyncDemo result={result} isPending={isPending} onRevalidate={handleRevalidate} />
       </DemoPlaygroundCard>
       <VerificationFooter

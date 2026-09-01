@@ -41,16 +41,16 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="revalidateTag(정밀 무효화) vs revalidatePath(경로 무효화) 실증 검증"
+        title="revalidateTag와 revalidatePath의 무효화 범위 비교 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
-      <DemoDeepDiveCard title="revalidateTag(정밀 무효화) vs revalidatePath(경로 무효화)">
+      <DemoDeepDiveCard title="revalidateTag와 revalidatePath의 무효화 범위 비교">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
@@ -88,7 +88,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>태그 네임스페이스 설계</strong>: 충돌을 방지하기 위해 <code>domain:entity:id</code> (예: <code>shop:product:123</code>) 형태의 계층형 태그 네이밍 규칙을 수립해야 합니다.</li>
-              <li><strong>Next.js 16 stale-while-revalidate 동작</strong>: <code>revalidateTag</code> 호출 시 즉시 기존 캐시 반환 후 백그라운드 재검증이 수행되므로 클라이언트 화면 전환 시 적절한 트랜지션 처리를 권장합니다.</li>
+              <li><strong>Next.js 16 stale-while-revalidate 동작</strong>: <code>revalidateTag</code> 호출 시 즉시 기존 캐시 반환 후 백그라운드 revalidation이 수행되므로 클라이언트 화면 전환 시 적절한 트랜지션 처리를 권장합니다.</li>
             </ul>
           </div>
         </div>

@@ -11,7 +11,7 @@ export function DemoIndexStats({ totalCount, doneCount }: DemoIndexStatsProps) {
   return (
     <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
       <div className="rounded-xl border border-zinc-200 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
-        <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">총 데모 수</span>
+        <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">총 예제 수</span>
         <div className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
           {totalCount}개
         </div>

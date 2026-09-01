@@ -8,7 +8,7 @@ export default function SwrPollingDemoPage() {
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title="SWR 실시간 자동 폴링 및 주문 배송 추적"
-        concept="useSWR의 refreshInterval(2500ms) 옵션을 설정하여 백엔드 배송 상태를 주기적으로 자동 갱신하고 mutate() 호출 시 즉각적인 온디맨드 재검증을 수행합니다."
+        concept="useSWR의 refreshInterval(2500ms) 옵션을 설정하여 백엔드 배송 상태를 주기적으로 자동 갱신하고 mutate() 호출 시 즉각적인 온디맨드 revalidation을 수행합니다."
         steps={[
           {
             step: 1,

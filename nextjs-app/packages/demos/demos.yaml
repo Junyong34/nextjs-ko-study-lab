@@ -29,13 +29,13 @@
   status: done
 
 - url: linking-and-navigating/soft-navigation
-  title: "Link vs a 소프트 네비게이션 및 스크롤 제어"
+  title: "Link와 a의 소프트 내비게이션 및 스크롤 제어"
   doc: 1-getting-started/linking-and-navigating.md
   zone: baseline
   status: done
 
 - url: linking-and-navigating/router-prefetch
-  title: "useRouter 프로그래밍 네비게이션 및 prefetch 최적화"
+  title: "useRouter를 이용한 프로그래밍 방식 내비게이션과 prefetch 최적화"
   doc: 1-getting-started/linking-and-navigating.md
   zone: baseline
   status: done
@@ -53,13 +53,13 @@
   status: done
 
 - url: fetching-data/parallel-fetching
-  title: "Promise.all 병렬 데이터 패칭 vs 직렬 Waterfall 대조"
+  title: "Promise.all 병렬 데이터 페칭과 직렬 Waterfall 비교"
   doc: 1-getting-started/fetching-data.md
   zone: baseline
   status: done
 
 - url: fetching-data/use-promise-streaming
-  title: "React 19 use(Promise) & Suspense 스트리밍 패칭"
+  title: "React 19 use(Promise)와 Suspense 스트리밍"
   doc: 1-getting-started/fetching-data.md
   zone: baseline
   status: done
@@ -77,19 +77,19 @@
   status: done
 
 - url: revalidating/time-based-isr
-  title: "cacheLife 시간 기반 캐시 수명 및 SWR 재검증"
+  title: "cacheLife 시간 기반 캐시 수명과 SWR"
   doc: 1-getting-started/revalidating.md
   zone: cache
   status: done
 
 - url: revalidating/tag-vs-path
-  title: "revalidateTag(정밀 무효화) vs revalidatePath(경로 무효화)"
+  title: "revalidateTag와 revalidatePath의 무효화 범위 비교"
   doc: 1-getting-started/revalidating.md
   zone: cache
   status: done
 
 - url: error-handling/segment-error
-  title: "error.tsx 세그먼트 에러 바운더리 격리 및 복구"
+  title: "error.tsx 세그먼트 오류 경계 격리 및 복구"
   doc: 1-getting-started/error-handling.md
   zone: baseline
   status: done
@@ -161,7 +161,7 @@
   status: done
 
 - url: guides/server-actions-advanced
-  title: "Server Action 폼 검증 및 useActionState 실시간 할인"
+  title: "Server Action 폼 검증과 useActionState 할인 상태"
   doc: 2-guides/server-actions.md
   zone: baseline
   status: done
@@ -197,7 +197,7 @@
   status: done
 
 - url: components/form-component
-  title: "Next.js 빌트인 <Form> 컴포넌트 & GET 검색 동기화"
+  title: "Next.js 내장 <Form> 컴포넌트와 GET 검색 동기화"
   doc: 3-api-reference/3.2-components/form.md
   zone: baseline
   status: done
@@ -216,13 +216,13 @@
   status: done
 
 - url: guides/server-and-client-boundary/children-slot
-  title: "Server and Client Component 합성 (children 슬롯 주입)"
+  title: "Server and Client Component 합성과 children 슬롯 주입"
   doc: 2-guides/server-and-client-boundary.md
   zone: baseline
   status: done
 
 - url: guides/how-revalidation-works/swr-flow
-  title: "Stale-While-Revalidate 백그라운드 재검증 수명 주기"
+  title: "Stale-While-Revalidate 백그라운드 갱신 흐름"
   doc: 2-guides/how-revalidation-works.md
   zone: cache
   status: done
@@ -234,7 +234,7 @@
   status: done
 
 - url: guides/streaming/chunk-loading
-  title: "점진적 Suspense 스트리밍 및 로딩 청크 순차 주입"
+  title: "Suspense 스트리밍과 로딩 청크 순차 처리"
   doc: 2-guides/streaming.md
   zone: baseline
   status: done
@@ -246,7 +246,7 @@
   status: done
 
 - url: guides/isr-cache-components/cache-life-hours
-  title: "Next.js 16 cacheLife('hours') 프로파일 기반 수명 제어"
+  title: "Next.js 16 cacheLife('hours') 프로필 기반 수명 제어"
   doc: 2-guides/incremental-static-regeneration-cache-components.md
   zone: cache
   status: done
@@ -258,13 +258,13 @@
   status: done
 
 - url: guides/adopting-partial-prefetching/hover-shell
-  title: "링크 호버 시 정적 셸만 사전 패칭 (Partial Prefetching)"
+  title: "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시)"
   doc: 2-guides/adopting-partial-prefetching.md
   zone: baseline
   status: done
 
 - url: guides/auth-cache-components/static-layout-session-context
-  title: "정적 캐시 상품 레이아웃 + Context use(UserContext) 세션 스트리밍"
+  title: "정적 상품 레이아웃과 UserContext 기반 세션 스트리밍"
   doc: 2-guides/authentication-with-cache-components.md
   zone: cache
   status: done
@@ -312,7 +312,7 @@
   status: done
 
 - url: guides/prefetching/viewport-vs-hover
-  title: "뷰포트 진입 자동 prefetch vs prefetch={false} 호버 시점 패칭"
+  title: "뷰포트 진입 시 자동 prefetch와 prefetch={false} 비교"
   doc: 2-guides/prefetching.md
   zone: baseline
   status: done
@@ -342,7 +342,7 @@
   status: done
 
 - url: guides/rendering-philosophy/hydration-boundary
-  title: "하이드레이션 경계와 번들 격리"
+  title: "Hydration 경계와 번들 격리"
   doc: 2-guides/rendering-philosophy.md
   zone: baseline
   status: done
@@ -354,7 +354,7 @@
   status: done
 
 - url: guides/how-revalidation-works/ondemand-sync
-  title: "온디맨드 캐시 무효화 및 즉시 동기화"
+  title: "온디맨드 캐시 무효화와 상태 갱신"
   doc: 2-guides/how-revalidation-works.md
   zone: cache
   status: done
@@ -366,13 +366,13 @@
   status: done
 
 - url: guides/isr/revalidate-path-sync
-  title: "revalidatePath를 통한 라우트 전체 즉시 동기화"
+  title: "revalidatePath에 따른 라우트 범위별 무효화"
   doc: 2-guides/incremental-static-regeneration.md
   zone: baseline
   status: done
 
 - url: guides/isr-cache-components/precision-tag-purge
-  title: "초정밀 온디맨드 태그 무효화 (cacheTag)"
+  title: "cacheTag를 이용한 태그 기반 무효화"
   doc: 2-guides/incremental-static-regeneration-cache-components.md
   zone: cache
   status: done
@@ -390,7 +390,7 @@
   status: done
 
 - url: guides/tanstack-query/ssr-hydration
-  title: "TanStack Query prefetchQuery 서버 하이드레이션"
+  title: "TanStack Query prefetchQuery와 서버 Hydration"
   doc: 2-guides/2.15-client-side-data-fetching/tanstack-query.md
   zone: baseline
   status: done
@@ -408,13 +408,13 @@
   status: done
 
 - url: guides/prefetching/custom-prefetch-false
-  title: "prefetch={false} 명시적 프리패치 차단"
+  title: "prefetch={false}로 prefetch 비활성화"
   doc: 2-guides/prefetching.md
   zone: baseline
   status: done
 
 - url: guides/optimizing-prefetching/bandwidth-saver
-  title: "대규모 카탈로그 대역폭 절약 최적화"
+  title: "대규모 카탈로그 prefetch 최적화"
   doc: 2-guides/optimizing-prefetching.md
   zone: baseline
   status: done
@@ -426,7 +426,7 @@
   status: done
 
 - url: guides/instant-navigation/router-cache-back
-  title: "Router Cache를 통한 뒤로가기 0ms 즉각 복구"
+  title: "Router Cache와 뒤로 가기 시 복원"
   doc: 2-guides/instant-navigation.md
   zone: baseline
   status: done
@@ -474,7 +474,7 @@
   status: done
 
 - url: guides/authentication/middleware-guard
-  title: "Proxy/Middleware 기반 라우트 보호 가드"
+  title: "Proxy 기반 라우트 보호 가드"
   doc: 2-guides/authentication.md
   zone: baseline
   status: done
@@ -498,7 +498,7 @@
   status: done
 
 - url: guides/content-security-policy/nonce-injection
-  title: "Middleware Nonce 기반 CSP 헤더 주입"
+  title: "Proxy Nonce 기반 CSP 헤더 주입"
   doc: 2-guides/content-security-policy.md
   zone: baseline
   status: done
@@ -588,7 +588,7 @@
   status: done
 
 - url: guides/i18n/dictionary-translation
-  title: "서버 사이드 사전 JSON 번역 렌더링"
+  title: "서버 측 JSON 사전 기반 번역 렌더링"
   doc: 2-guides/internationalization.md
   zone: baseline
   status: done
@@ -756,19 +756,19 @@
   status: done
 
 - url: file-conventions/dynamic-segments/single-param
-  title: "[id] 단일 동적 세그먼트"
+  title: "[id] 단일 다이나믹 세그먼트"
   doc: 3-api-reference/3.1-file-conventions/dynamic-routes.md
   zone: baseline
   status: done
 
 - url: file-conventions/dynamic-segments/catch-all-slug
-  title: "[...slug] Catch-all 동적 세그먼트"
+  title: "[...slug] Catch-all 다이나믹 세그먼트"
   doc: 3-api-reference/3.1-file-conventions/dynamic-routes.md
   zone: baseline
   status: done
 
 - url: file-conventions/dynamic-segments/optional-catch-all
-  title: "[[...slug]] Optional Catch-all 동적 세그먼트"
+  title: "[[...slug]] Optional Catch-all 다이나믹 세그먼트"
   doc: 3-api-reference/3.1-file-conventions/dynamic-routes.md
   zone: baseline
   status: done
@@ -780,7 +780,7 @@
   status: done
 
 - url: file-conventions/parallel-routes/independent-tabs
-  title: "독립 탭 네비게이션 슬롯 (Parallel Routes)"
+  title: "독립 탭 내비게이션 슬롯 (Parallel Routes)"
   doc: 3-api-reference/3.1-file-conventions/parallel-routes.md
   zone: baseline
   status: done
@@ -864,7 +864,7 @@
   status: done
 
 - url: file-conventions/route-segment-config/instant-prefetch
-  title: "세그먼트 즉시 프리패칭 (instant)"
+  title: "세그먼트 prefetch 설정 (instant)"
   doc: 3-api-reference/3.1-file-conventions/3.1.22-route-segment-config/instant.md
   zone: baseline
   status: done
@@ -894,7 +894,7 @@
   status: done
 
 - url: components/link/soft-navigation-scroll
-  title: "<Link> 소프트 네비게이션 & scroll 제어"
+  title: "<Link> 소프트 내비게이션 및 scroll 제어"
   doc: 3-api-reference/3.2-components/link.md
   zone: baseline
   status: done
@@ -930,13 +930,13 @@
   status: done
 
 - url: functions/use-router/push-replace
-  title: "useRouter push vs replace vs back 프로그래밍 네비게이션"
+  title: "useRouter push, replace, back 프로그래밍 방식 내비게이션"
   doc: 3-api-reference/3.3-functions/use-router.md
   zone: baseline
   status: done
 
 - url: functions/use-router/refresh-server-sync
-  title: "router.refresh() 서버 데이터 강제 재검증 동기화"
+  title: "서버 데이터 갱신 상태 표시"
   doc: 3-api-reference/3.3-functions/use-router.md
   zone: baseline
   status: done
@@ -948,7 +948,7 @@
   status: done
 
 - url: functions/use-params/client-id
-  title: "useParams()를 통한 Client Component 동적 세그먼트 파라미터 추출"
+  title: "useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출"
   doc: 3-api-reference/3.3-functions/use-params.md
   zone: baseline
   status: done
@@ -978,19 +978,19 @@
   status: done
 
 - url: functions/cache-life/preset-profiles
-  title: "cacheLife 빌트인 프리셋 프로파일 (seconds vs hours vs max)"
+  title: "cacheLife 내장 프리셋 프로필 (seconds, hours, max)"
   doc: 3-api-reference/3.3-functions/cacheLife.md
   zone: cache
   status: done
 
 - url: functions/cache-life/custom-profile
-  title: "next.config.ts custom cacheLife 프로파일 정의 및 바인딩"
+  title: "next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩"
   doc: 3-api-reference/3.3-functions/cacheLife.md
   zone: cache
   status: done
 
 - url: functions/cache-tag/multi-tag-binding
-  title: "cacheTag 다중 태그 바인딩 및 정밀 연관 관계 구성"
+  title: "cacheTag 다중 태그 바인딩 및 연관 캐시 구성"
   doc: 3-api-reference/3.3-functions/cacheTag.md
   zone: cache
   status: done
@@ -1008,7 +1008,7 @@
   status: done
 
 - url: functions/unstable-no-store/dynamic-bailout
-  title: "unstable_noStore() 동적 렌더링 명시적 선언"
+  title: "unstable_noStore()로 다이나믹 렌더링 선언"
   doc: 3-api-reference/3.3-functions/unstable_noStore.md
   zone: baseline
   status: done
@@ -1020,25 +1020,25 @@
   status: done
 
 - url: functions/revalidate-path/dynamic-route
-  title: "동적 라우트 세그먼트 revalidatePath 동기화"
+  title: "다이나믹 라우트 세그먼트의 revalidatePath 동작"
   doc: 3-api-reference/3.3-functions/revalidatePath.md
   zone: cache
   status: done
 
 - url: functions/revalidate-tag/basic-tag-purge
-  title: "revalidateTag() 기본 무효화 및 SWR 재검증"
+  title: "revalidateTag() 기본 무효화와 SWR"
   doc: 3-api-reference/3.3-functions/revalidateTag.md
   zone: cache
   status: done
 
 - url: functions/revalidate-tag/max-expiration
-  title: "revalidateTag max 즉시 만료 제어"
+  title: "revalidateTag max 캐시 만료 제어"
   doc: 3-api-reference/3.3-functions/revalidateTag.md
   zone: cache
   status: done
 
 - url: functions/update-tag/instant-memory-sync
-  title: "updateTag() 즉시 캐시 메모리 패치"
+  title: "장바구니 수량 상태 변경"
   doc: 3-api-reference/3.3-functions/updateTag.md
   zone: cache
   status: done
@@ -1092,7 +1092,7 @@
   status: done
 
 - url: functions/after/background-logging
-  title: "after() 백그라운드 주문 로깅 (응답 지연 0ms)"
+  title: "after() 백그라운드 주문 로깅"
   doc: 3-api-reference/3.3-functions/after.md
   zone: baseline
   status: done
@@ -1398,13 +1398,13 @@
   status: done
 
 - url: config/output/export-static-spa
-  title: "output: 'export' 순수 정적 SPA 산출물 생성"
+  title: "output: 'export' 정적 산출물 생성"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/output.md
   zone: baseline
   status: done
 
 - url: edge/v8-lightweight/global-web-apis
-  title: "Edge Runtime V8 글로벌 Web APIs 초고속 실행"
+  title: "Edge Runtime V8 Web API 실행"
   doc: 3-api-reference/edge.md
   zone: baseline
   status: done

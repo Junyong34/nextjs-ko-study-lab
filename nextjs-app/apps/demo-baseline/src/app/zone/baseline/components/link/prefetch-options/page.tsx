@@ -13,19 +13,19 @@ export default function DemoPage() {
         {
         "step": 1,
         "title": "prefetch={null} (auto 기본값) 확인",
-        "description": "정적 세그먼트 데이터만 프리페치하고 동적 데이터는 클릭 시 가져오는 기본 동작을 점검합니다.",
-        "actionBadge": "auto 프리페치"
+        "description": "정적 세그먼트 데이터만 prefetch하고 동적 데이터는 클릭 시 가져오는 기본 동작을 점검합니다.",
+        "actionBadge": "auto prefetch"
         },
         {
         "step": 2,
-        "title": "prefetch={true} (full 프리페치) 확인",
+        "title": "prefetch={true} (full prefetch) 확인",
         "description": "정적/동적 데이터를 포함한 전체 라우트 트리를 즉시 캐싱하여 0ms 전환을 준비합니다.",
-        "actionBadge": "full 프리페치"
+        "actionBadge": "full prefetch"
         },
         {
         "step": 3,
         "title": "prefetch={false} 대역폭 절약 모드 확인",
-        "description": "뷰포트에 진입해도 백그라운드 프리페치를 실행하지 않아 네트워크 비용을 절감하는지 대조합니다.",
+        "description": "뷰포트에 진입해도 백그라운드 prefetch를 실행하지 않아 네트워크 비용을 절감하는지 대조합니다.",
         "actionBadge": "false 모드",
         "observe": "3단 검증 패널에서 prefetch 옵션별 캐시 로딩 전략과 네트워크 요청 동작 대조",
         "observeAt": "verification"

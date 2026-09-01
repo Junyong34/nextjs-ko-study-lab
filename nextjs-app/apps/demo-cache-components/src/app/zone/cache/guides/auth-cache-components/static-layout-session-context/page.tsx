@@ -26,7 +26,7 @@ export default function DemoPage() {
           }
 ]}
       />
-      <DemoPlaygroundCard title={"정적 캐시 상품 레이아웃 + Context use(UserContext) 세션 스트리밍 실습"}>
+      <DemoPlaygroundCard title={"정적 상품 레이아웃과 UserContext 기반 세션 스트리밍 실습"}>
         <AuthCacheContextDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

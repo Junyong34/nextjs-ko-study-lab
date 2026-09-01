@@ -11,8 +11,8 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"prefetch={false} 선택 적용을 통한 프리페칭 대역폭 절약"}
-        concept={"대규모 카탈로그 링크 그리드에 prefetch={false}를 적용하면 뷰포트에 다수 진입해도 자동 프리페치가 발생하지 않고, 호버 시점에만 온디맨드로 요청됩니다. 실제 절감 비율은 카탈로그 규모에 따라 다르므로 Network 탭에서 직접 측정해야 합니다."}
+        title={"prefetch={false} 선택 적용을 통한 prefetching 대역폭 절약"}
+        concept={"대규모 카탈로그 링크 그리드에 prefetch={false}를 적용하면 뷰포트에 다수 진입해도 자동 prefetch가 발생하지 않고, 호버 시점에만 온디맨드로 요청됩니다. 실제 절감 비율은 카탈로그 규모에 따라 다르므로 Network 탭에서 직접 측정해야 합니다."}
         steps={[
           {
             step: 1,
@@ -36,7 +36,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"대규모 카탈로그 대역폭 절약 최적화 실습"}>
+      <DemoPlaygroundCard title={"대규모 카탈로그 prefetch 최적화 실습"}>
         <BandwidthSaverDemo optimized={optimized} onToggle={setOptimized} hoverCount={hoverCount} onHover={() => setHoverCount((c) => c + 1)} />
       </DemoPlaygroundCard>
       <VerificationFooter

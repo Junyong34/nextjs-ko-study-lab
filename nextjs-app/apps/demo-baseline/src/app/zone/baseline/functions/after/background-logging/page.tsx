@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="after() 백그라운드 주문 로깅 (응답 지연 0ms)"
+        title="after() 백그라운드 주문 로깅"
         concept="Next.js 15+ after() 함수를 활용하여 클라이언트 HTTP 응답을 0ms 지연 없이 즉시 반환한 후, 백그라운드에서 결제 감사 로그 및 알림톡 발송을 비동기 실행합니다."
         steps={[
           {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"after() 백그라운드 주문 로깅 (응답 지연 0ms) 실습"}>
+      <DemoPlaygroundCard title={"after() 백그라운드 주문 로깅 실습"}>
         <AfterLoggingDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

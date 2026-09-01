@@ -15,40 +15,40 @@ interface FeatureHighlight {
 const HIGHLIGHTS: FeatureHighlight[] = [
   {
     title: 'Cache Components & use cache',
-    subtitle: '차세대 컴포넌트 단위 캐싱',
+    subtitle: '컴포넌트 단위 캐싱',
     badge: 'Next.js 16 New',
     description:
-      'use cache 지시어와 cacheLife, cacheTag를 통해 컴포넌트 및 비동기 함수 단위로 세밀하게 캐시 수명과 재검증을 제어합니다.',
+      "'use cache' 지시어와 cacheLife, cacheTag로 컴포넌트와 비동기 함수의 캐시 수명과 revalidation을 제어합니다.",
     topics: ['use cache', 'cacheLife', 'cacheTag', 'Dynamic I/O'],
     href: '/guides/caching',
     icon: Database,
   },
   {
     title: 'React 19 Server Actions & Hooks',
-    subtitle: '완전한 풀스택 데이터 뮤테이션',
+    subtitle: '풀스택 데이터 변경 처리',
     badge: 'React 19 Core',
     description:
-      'Server Actions와 useActionState, useOptimistic, formStatus를 결합하여 무자바스크립트 점진적 향상과 즉각적인 낙관적 UI를 구축합니다.',
+      "Server Actions와 useActionState, useOptimistic, formStatus를 결합하여 JavaScript를 끈 환경에서도 동작하는 점진적 향상과 낙관적 UI를 구현합니다.",
     topics: ['Server Actions', 'useActionState', 'useOptimistic', 'Pending UI'],
     href: '/guides/data-fetching',
     icon: Zap,
   },
   {
     title: 'Async Request APIs & Streaming',
-    subtitle: '비동기 런타임 & Suspense 스트리밍',
+    subtitle: '비동기 런타임과 Suspense 스트리밍',
     badge: 'Breaking Change in 15/16',
     description:
-      'params, searchParams, cookies(), headers()의 완전 비동기화로 서버 렌더링 블로킹을 방지하고 점진적 스트리밍 렌더링 성능을 극대화합니다.',
+      'params, searchParams, cookies(), headers()가 비동기 API로 동작하도록 바뀌어 서버 렌더링을 나누고 필요한 부분을 스트리밍합니다.',
     topics: ['Async params', 'Suspense Streaming', 'loading.tsx', 'Selective Hydration'],
     href: '/guides/routing',
     icon: Server,
   },
   {
     title: 'Turbopack Bundler & Architecture',
-    subtitle: 'Rust 기반의 초고속 번들러 기본 탑재',
+    subtitle: 'Rust 기반 번들러를 기본으로 제공',
     badge: 'Default in 16',
     description:
-      'next dev 및 next build의 공식 기본 번들러로 탑재된 Turbopack의 아키텍처와 SWC 컴파일러 동작 구조를 심층 분석합니다.',
+      'next dev와 next build에서 기본으로 사용하는 Turbopack의 구조와 SWC 컴파일러의 동작 방식을 살펴봅니다.',
     topics: ['Turbopack', 'SWC Transformer', 'Fast Refresh', 'Multi-zones'],
     href: '/architecture',
     icon: ShieldCheck,
@@ -64,7 +64,7 @@ export function Next16HighlightsSection() {
             What&apos;s New in 16
           </p>
           <h2 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-100">
-            Next.js 16 핵심 혁신 포인트
+            Next.js 16 주요 변경 사항
           </h2>
         </div>
       </div>

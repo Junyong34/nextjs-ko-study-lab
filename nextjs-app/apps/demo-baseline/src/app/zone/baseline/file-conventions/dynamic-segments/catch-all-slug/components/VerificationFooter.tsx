@@ -12,7 +12,7 @@ export function VerificationFooter({ currentSlug }: VerificationFooterProps) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="[...slug] 포괄적 동적 세그먼트 실증 검증"
+        title="[...slug] 포괄적 동적 세그먼트 검증 결과"
         expected="• shop/[...slug] 폴더 컨벤션에 매칭되어 params.slug가 문자열 배열(string[])로 주입\n• 가변 깊이 URL(1~N단계)을 단일 라우트 파일에서 완벽히 수신 및 브레드크럼 파싱"
         actual={
           currentSlug

@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="cacheTag 다중 태그 바인딩 및 정밀 연관 관계 구성"
+        title="cacheTag 다중 태그 바인딩 및 연관 캐시 구성"
         concept="cacheTag() 함수를 사용하여 단일 캐시 엔트리에 다중 태그('products', 'category-shoes', 'brand-nike')를 바인딩하고 정밀한 연관 무효화 체계를 구축합니다."
         steps={[
           {
@@ -26,7 +26,7 @@ export default function DemoPage() {
           }
 ]}
       />
-      <DemoPlaygroundCard title={"cacheTag 다중 태그 바인딩 및 정밀 연관 관계 구성 실습"}>
+      <DemoPlaygroundCard title={"cacheTag 다중 태그 바인딩 및 연관 캐시 구성 실습"}>
         <CacheTagMultiBindingDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

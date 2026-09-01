@@ -6,7 +6,7 @@ export interface DemoResetButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** 초기화 콜백 함수. 미지정 시 `window.location.reload()`가 호출됩니다. */
   onReset?: () => void | Promise<void>
-  /** 버튼 라벨 (기본값: "데모 초기화") */
+  /** 버튼 라벨 (기본값: "예제 초기화") */
   label?: string
   /** 진행 중 표시 텍스트 */
   loadingLabel?: string
@@ -17,7 +17,7 @@ export interface DemoResetButtonProps
  */
 export function DemoResetButton({
   onReset,
-  label = '데모 초기화',
+  label = '예제 초기화',
   loadingLabel = '초기화 중...',
   className = '',
   disabled,

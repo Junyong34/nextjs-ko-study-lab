@@ -7,7 +7,7 @@ export default function ParallelFetchingDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="Promise.all 병렬 데이터 패칭 vs 직렬 Waterfall 지연 대조"
+        title="Promise.all 병렬 데이터 페칭과 직렬 Waterfall 비교 지연 대조"
         concept="독립적인 데이터 요청을 직렬로 await하면 600ms + 800ms = 약 1,400ms의 Waterfall 지연이 발생하지만, Promise.all을 적용하면 동시 시작되어 가장 긴 800ms 시점에 완료됩니다."
         steps={[
           {

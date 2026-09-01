@@ -53,7 +53,7 @@ export function GithubStarPrompt() {
               학습에 도움이 되셨나요?
             </h3>
             <p className="text-[11px] leading-tight text-zinc-500 dark:text-zinc-400">
-              Next.js 학습 랩이 유용했다면 Star를 부탁드려요!
+              Next.js 학습 사이트가 유용했다면 Star를 부탁드려요!
             </p>
           </div>
         </div>

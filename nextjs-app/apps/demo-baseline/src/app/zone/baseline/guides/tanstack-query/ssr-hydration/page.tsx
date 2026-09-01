@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title={"TanStack Query prefetchQuery 서버 하이드레이션 실습"}>
+      <DemoPlaygroundCard title={"TanStack Query prefetchQuery와 서버 Hydration 실습"}>
         <TanstackSsrDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

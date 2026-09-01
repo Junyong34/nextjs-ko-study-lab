@@ -10,7 +10,7 @@ export default async function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"CSP 헤더 및 암호학적 Nonce 주입을 통한 XSS 방어"}
-        concept={"proxy.ts(엣지 미들웨어)가 매 요청마다 암호학적으로 안전한 nonce 값을 생성해 CSP 응답 헤더와 <script nonce=\"...\"> 속성에 동시 주입합니다. Next.js는 자신의 프레임워크 스크립트에도 이 nonce를 자동으로 붙이며, nonce가 없는 인라인 스크립트는 브라우저가 CSP에 의해 실제로 실행을 차단합니다."}
+        concept={"proxy.ts가 매 요청마다 nonce 값을 생성해 CSP 응답 헤더와 <script nonce=\"...\"> 속성에 주입합니다. Next.js 프레임워크 스크립트에도 이 nonce를 적용할 수 있으며, nonce가 없는 인라인 스크립트는 브라우저가 CSP에 따라 실행하지 않습니다."}
         steps={[
           {
             step: 1,

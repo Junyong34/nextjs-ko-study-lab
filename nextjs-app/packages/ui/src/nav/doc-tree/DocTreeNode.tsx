@@ -11,9 +11,9 @@ import { formatNodeTitle } from './useTreeFilter'
 
 /** '준비중' 뱃지의 툴팁을 판정 상태별로 다르게 보여줍니다. */
 function getPendingTooltip(feasibility?: TreeNode['demoFeasibility']) {
-  if (feasibility === 'possible') return '데모 제작 예정 (가능 판정, 아직 미구현)'
-  if (feasibility === 'pending') return '데모 가능 여부 검토 중'
-  return '데모 가능 여부 미판정'
+  if (feasibility === 'possible') return '예제 제작 예정 (가능 판정, 아직 미구현)'
+  if (feasibility === 'pending') return '예제 가능 여부 검토 중'
+  return '예제 가능 여부 미판정'
 }
 
 export interface DocTreeNodeProps {
@@ -108,16 +108,16 @@ export function DocTreeNode({
             hasDemos ? (
               <span
                 className="inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[9px] font-bold leading-none bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                title={`실습 데모 ${demoCount}개 보유`}
+                title={`실습 예제 ${demoCount}개 보유`}
               >
                 <Play className="h-2 w-2 fill-current shrink-0" />
-                <span className="leading-none">DEMO</span>
+                <span className="leading-none">예제</span>
                 {demoCount > 1 && <span className="opacity-80 leading-none">({demoCount})</span>}
               </span>
             ) : node.demoFeasibility === 'not-applicable' ? (
               <span
                 className="inline-flex shrink-0 items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[9px] font-bold leading-none bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300"
-                title="브라우저 시연 불가 판정 — 문서 설명으로 대체"
+                title="브라우저에서 시연할 수 없어 문서 설명으로 대체"
               >
                 <FileText className="h-2 w-2 shrink-0" />
                 <span className="leading-none">설명 대체</span>
@@ -127,7 +127,7 @@ export function DocTreeNode({
                 className="inline-flex shrink-0 items-center rounded px-1.5 py-0.5 font-mono text-[9px] font-medium leading-none bg-zinc-100 text-zinc-400 dark:bg-zinc-800/60 dark:text-zinc-500"
                 title={getPendingTooltip(node.demoFeasibility)}
               >
-                준비중
+                준비 중
               </span>
             )
           ) : (
@@ -145,7 +145,7 @@ export function DocTreeNode({
         {/* 일반 문서 모드: 우측에 실습 데모 포함 초록색 재생 아이콘 표시 */}
         {!isDemoMode && hasDemos && (
           <span
-            title={`실습 데모 ${demoCount}개 포함`}
+                title={`실습 예제 ${demoCount}개 포함`}
             className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
           >
             <Play className="h-2 w-2 fill-current" />

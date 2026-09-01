@@ -7,7 +7,7 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title="Edge Runtime V8 글로벌 Web APIs 초고속 실행"
+        title="Edge Runtime V8 Web API 실행"
         concept="V8 Isolate 기반 Edge Runtime 환경에서 Request, Response, Web Crypto(crypto.subtle), TransformStream 등의 표준 Web API를 0ms 콜드 스타트로 고속 실행합니다."
         steps={[
           {
@@ -32,7 +32,7 @@ export default function DemoPage() {
           },
         ]}
       />
-      <DemoPlaygroundCard title="Edge Runtime V8 글로벌 Web APIs 초고속 실행 실습">
+      <DemoPlaygroundCard title="Edge Runtime V8 Web API 실행 실습">
         <EdgeV8WebApisDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

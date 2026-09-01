@@ -49,7 +49,7 @@ export function DemoViewer({
       <LearningCompletionControl
         kind="demo"
         itemKey={demo.url}
-        label="이 데모를 학습 완료로 표시"
+        label="이 예제를 학습 완료로 표시"
       />
 
       <div className="w-full">

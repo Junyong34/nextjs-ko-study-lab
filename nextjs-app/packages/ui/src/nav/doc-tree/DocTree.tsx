@@ -74,7 +74,7 @@ export function DocTree({ tree }: DocTreeProps) {
             {isDemoMode ? (
               <>
                 <PlayCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">실습 데모 목차</span>
+                <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">실습 예제 목차</span>
               </>
             ) : (
               <>
@@ -97,7 +97,7 @@ export function DocTree({ tree }: DocTreeProps) {
             <>
               <PlayCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                실습 데모 목차
+                실습 예제 목차
               </span>
             </>
           ) : (
@@ -110,7 +110,7 @@ export function DocTree({ tree }: DocTreeProps) {
           )}
         </div>
 
-        <DocTreeSearch value={query} onChange={setQuery} placeholder={isDemoMode ? '데모 및 메뉴 검색...' : '문서 검색...'} />
+        <DocTreeSearch value={query} onChange={setQuery} placeholder={isDemoMode ? '예제 및 메뉴 검색…' : '문서 검색…'} />
 
         {/* 트리 본문 — 검색창과 별개로 스크롤된다 */}
         <div

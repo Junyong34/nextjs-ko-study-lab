@@ -15,7 +15,7 @@ export default async function LoginPage({
         <p className="mt-1 text-sm text-amber-700 dark:text-amber-400">로그인 후 돌아갈 경로: {returnUrl}</p>
       </div>
       <ExpectedActualPanel
-        title="Server Action redirect() 세션 만료 실증 검증"
+        title="Server Action redirect() 세션 만료 검증"
         expected="redirect('/login?returnUrl=/checkout')가 실제로 307 응답을 보내고 브라우저가 이 로그인 페이지로 이동해야 한다."
         actual={`- 현재 URL의 returnUrl 쿼리: ${returnUrl}\n- 이 페이지 렌더링 자체가 redirect() 발생의 증거`}
         isMatched={returnUrl === '/checkout'}

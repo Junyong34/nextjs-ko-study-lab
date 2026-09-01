@@ -17,7 +17,7 @@ export default async function OrderCompletePage({
         </p>
       </div>
       <ExpectedActualPanel
-        title="Server Action redirect() 실증 검증"
+        title="Server Action redirect() 검증"
         expected="Server Action이 redirect('/order-complete/complete?amount=...')를 호출하면 브라우저가 실제로 이 URL로 이동한다."
         actual={`- 현재 URL 쿼리: amount=${amount}\n- 이 페이지가 렌더링됐다는 사실 자체가 redirect()가 실제로 발생했다는 증거`}
         isMatched={Boolean(amount)}

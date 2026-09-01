@@ -21,7 +21,7 @@ export function PrefetchFalseDemo({ prefetchMode, hoverCount, onSetPrefetchMode,
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100">
-            Next.js {'<'}Link prefetch={'{'}{String(prefetchMode)}{'}'}{'>'} 프리페치 제어 콘솔
+            Next.js {'<'}Link prefetch={'{'}{String(prefetchMode)}{'}'}{'>'} prefetch 제어 콘솔
           </h4>
           <p className="text-xs text-zinc-500">
             대용량 상품 목록이나 트래픽이 집중되는 페이지에서 불필요한 RSC 데이터 사전 다운로드를 방지합니다.
@@ -96,7 +96,7 @@ export function PrefetchFalseDemo({ prefetchMode, hoverCount, onSetPrefetchMode,
       {/* 3. 네트워크 통신 인스펙터 */}
       <div className="rounded border border-zinc-200 bg-zinc-950 p-4 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-2">
         <div className="flex items-center justify-between border-b border-zinc-800 pb-1 text-zinc-400">
-          <span className="font-bold">Next.js Router 프리페치 네트워크 감시:</span>
+          <span className="font-bold">Next.js Router prefetch 네트워크 감시:</span>
           <span>마우스 호버 감지: {hoverCount}회</span>
         </div>
         <div className="space-y-1 text-[11px]">

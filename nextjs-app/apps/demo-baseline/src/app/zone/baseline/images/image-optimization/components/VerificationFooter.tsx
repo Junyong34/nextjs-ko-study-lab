@@ -25,7 +25,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   } = props
 
   const defaultExpected =
-    '• next/image 컴포넌트를 통해 최적화 파이프라인이 동작하고, quality/priority 옵션에 따라 최적화된 이미지 URL 쿼리와 종횡비 고정이 적용됨\n• 일반 <img> 태그 대비 WebP/AVIF 자동 변환 및 Zero CLS 레이아웃 예약 확인\n• priority 선언 시 LCP 사전 로드(<link rel="preload">) 연동 실증 검증'
+    '• next/image 컴포넌트를 통해 최적화 파이프라인이 동작하고, quality/priority 옵션에 따라 최적화된 이미지 URL 쿼리와 종횡비 고정이 적용됨\n• 일반 <img> 태그 대비 WebP/AVIF 자동 변환 및 Zero CLS 레이아웃 예약 확인\n• priority 선언 시 LCP 사전 로드(<link rel="preload">) 연동 검증 결과'
 
   let defaultActual = '• 인터랙션 대기 중 (옵션 툴바에서 퀄리티 슬라이더와 priority 체크박스를 조작해보세요)'
   if (hasInteracted) {
@@ -52,13 +52,13 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="next/image 자동 WebP 변환 및 CLS 방지 최적화 실증 검증"
+        title="next/image 자동 WebP 변환 및 CLS 방지 최적화 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
         description={
           props.description ||
-          'Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다.'
+          '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
       <DemoDeepDiveCard title="next/image 자동 WebP/AVIF 최적화 & Zero CLS 이미지 로딩">

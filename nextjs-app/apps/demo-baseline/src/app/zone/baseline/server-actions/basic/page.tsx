@@ -33,7 +33,7 @@ export default function ServerActionsBasicDemoPage() {
           setItems(result.items)
           setInputText('')
           setStatusMessage(
-            `Server Action 호출 성공! 서버 상태가 갱신되었습니다. (총 ${result.items.length}개)`,
+            `Server Action 호출 완료. 서버 상태가 갱신되었습니다. (총 ${result.items.length}개)`,
           )
         } else if (result.error) {
           setStatusMessage(`오류: ${result.error}`)
@@ -56,7 +56,7 @@ export default function ServerActionsBasicDemoPage() {
   }
 
   const expectedText =
-    '클라이언트 폼에서 Server Action(addItem)을 호출하면 별도 API 라우트 없이 서버 함수가 실행되고, 서버 데이터가 갱신되어 클라이언트에 즉시 반영됨'
+    '클라이언트 폼에서 Server Action(addItem)을 호출하면 서버 메모리 목록이 갱신되고, 그 결과가 화면에 표시됨'
   const actualText =
     items.length > 0
       ? `- 등록된 항목 수: ${items.length}개\n- 최신 항목: "${items[0]?.text}" (${items[0]?.createdAt})\n- 전송 상태: Server Action POST 성공`
@@ -67,39 +67,39 @@ export default function ServerActionsBasicDemoPage() {
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title={"Server Action 기본 폼 제출 및 서버 상태 변경"}
-        concept={"React 19 Server Action('use server')을 <form action={...}>에 직접 연결하여 브라우저에서 별도 API 엔드포인트 구축 없이 서버 장바구니 DB를 갱신하고 서버 렌더링 상태를 실시간 동기화합니다."}
+        concept={"React 19의 Server Action(addItem)을 클라이언트 코드에서 호출해 별도 API 엔드포인트 없이 서버 메모리 목록을 갱신하고 결과를 화면에 반영합니다."}
         steps={[
           {
             step: 1,
-            title: "[추가할 텍스트 입력 (예: Next.js Server Action 테스트)] 필드에 품목명 입력",
-            description: "입력 폼에 추가할 상품 텍스트를 작성하여 폼 페이로드를 구성합니다.",
+            title: "[추가할 텍스트 입력 (예: Next.js Server Action 테스트)] 필드에 텍스트 입력",
+            description: "입력한 텍스트로 폼 데이터를 만듭니다.",
             actionBadge: "입력값 작성",
           },
           {
             step: 2,
             title: "[항목 추가] 버튼 클릭으로 Server Action 실행",
-            description: "폼 액션을 트리거하여 서버 액션 함수를 비동기 호출하고 서버 리스트에 새 항목을 추가합니다.",
+            description: "폼 제출로 Server Action 함수를 호출하고 서버 목록에 새 항목을 추가합니다.",
             actionBadge: "서버 액션 트리거",
           },
           {
             step: 3,
-            title: "[목록 초기화] 버튼으로 서버 목록 리셋",
-            description: "전체 목록 초기화 서버 액션을 실행하여 상태를 원복합니다.",
+            title: "[목록 초기화] 버튼으로 서버 목록 초기화",
+            description: "목록을 초기 상태로 되돌리는 Server Action을 실행합니다.",
             actionBadge: "상태 초기화",
           },
           {
             step: 4,
-            title: "실시간 등록된 아이템 목록 및 서버 응답 동기화 관찰",
-            description: "서버 액션 응답 완료 후 추가된 항목이 화면에 즉시 렌더링되는지 확인합니다.",
+            title: "등록된 항목 목록과 서버 응답 확인",
+            description: "Server Action 응답이 돌아온 뒤 추가한 항목이 화면에 표시되는지 확인합니다.",
             actionBadge: "상태 검증",
-            observe: "Server Action 제출 후 입력한 텍스트 항목이 서버 목록에 즉시 추가 동기화되는 결과 관찰",
+            observe: "Server Action 제출 후 서버 메모리 목록에 항목이 추가되고 화면에 표시됨",
             observeAt: "playground",
           },
         ]}
       />
 
       {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-      <DemoPlaygroundCard title="Server Action 호출 폼 및 실시간 등록 목록" className="space-y-4">
+      <DemoPlaygroundCard title="Server Action 폼과 등록 항목 목록" className="space-y-4">
         {/* 입력 폼 */}
         <form onSubmit={handleFormSubmit} className="flex gap-2">
           <input
@@ -180,18 +180,18 @@ export default function ServerActionsBasicDemoPage() {
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Server Actions는 <code>'use server'</code> 지시어로 선언된 서버 비동기 함수로, 클라이언트에서 별도의 API 엔드포인트(<code>/api/*</code>)를 생성하지 않고도 일반 함수처럼 직접 호출하여 서버 데이터 변이(Mutation)와 상태 갱신을 안전하게 수행하는 Next.js 표준 스펙입니다.</p>
+                  <p>Server Actions는 <code>'use server'</code> 지시어로 선언한 서버 비동기 함수입니다. 별도 API 엔드포인트(<code>/api/*</code>)를 만들지 않고도 호출해 서버 데이터 변경과 상태 갱신을 처리할 수 있습니다.</p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 예제에서는 상품명 또는 후기 텍스트를 입력하고 [항목 추가]를 누르면, 클라이언트가 Server Action(<code>addItem</code>)을 비동기 POST RPC 요청으로 호출합니다. 서버 함수가 실행되어 서버 메모리 목록이 갱신되고, 변경된 최신 상태가 클라이언트 컴포넌트에 동기화되어 실시간으로 반영됩니다.</p>
+                  <p>이 예제에서는 텍스트를 입력하고 [항목 추가]를 누르면 클라이언트가 Server Action(<code>addItem</code>)을 호출합니다. 서버 메모리 목록이 갱신되고, 응답으로 받은 목록이 화면에 표시됩니다.</p>
           </div>
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
                   <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>API 보일러플레이트 제거</strong>: 별도 Route Handler와 DTO 작성 없이 매개변수와 반환값의 완벽한 TypeScript 타입 추론을 제공합니다.</li>
+                    <li><strong>API 보일러플레이트 제거</strong>: 별도 Route Handler와 DTO를 만들지 않고도 매개변수와 반환값을 TypeScript로 확인할 수 있습니다.</li>
                     <li><strong>보안 자동화</strong>: Next.js가 암호화된 Action ID 검증 및 Origin 헤더 기반 CSRF 방어를 자동으로 수행합니다.</li>
                     <li><strong>점진적 향상(Progressive Enhancement)</strong>: 자바스크립트가 비활성화되거나 로딩 중인 환경에서도 표준 HTML form action으로 기본 동작합니다.</li>
                   </ul>
@@ -209,7 +209,7 @@ export default function ServerActionsBasicDemoPage() {
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
                   <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>클라이언트 인자 신뢰 금지</strong>: 클라이언트가 전달한 숨은 input이나 인자값은 변조될 수 있으므로, Server Action 내부에서 반드시 사용자 인증 세션과 데이터 유효성을 재검증해야 합니다.</li>
+                    <li><strong>클라이언트 인자 신뢰 금지</strong>: 클라이언트가 전달한 숨은 input이나 인자값은 변조될 수 있으므로, Server Action 내부에서 반드시 사용자 인증 세션과 데이터 유효성을 revalidation해야 합니다.</li>
                     <li><strong>반환 객체 직렬화</strong>: Server Action이 반환하는 모든 데이터는 클라이언트로 직렬화되어 전송되므로, 함수나 민감한 서버 전용 모델 객체가 누출되지 않도록 가공된 DTO만 반환해야 합니다.</li>
                   </ul>
                 </div>

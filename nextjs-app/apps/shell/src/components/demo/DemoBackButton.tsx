@@ -13,7 +13,7 @@ export interface DemoBackButtonProps {
 
 export function DemoBackButton({
   fallbackUrl = '/demo',
-  fallbackLabel = '데모 목록',
+  fallbackLabel = '예제 목록',
   className = 'inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-1 font-medium text-zinc-700 shadow-2xs hover:bg-zinc-100 hover:text-zinc-950 transition dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100',
 }: DemoBackButtonProps) {
   const router = useRouter()

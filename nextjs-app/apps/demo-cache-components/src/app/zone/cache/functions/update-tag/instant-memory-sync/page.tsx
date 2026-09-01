@@ -7,32 +7,32 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
             <DemoGuideCard
-        title="updateTag() 즉시 캐시 메모리 패치"
-        concept="Next.js 16 updateTag()를 활용하여 네트워크 재요청 지연(0ms) 없이 Data Cache 메모리에 특정 태그의 새 값을 즉시 인라인 패치(Patch)합니다."
+        title="장바구니 수량 상태 변경"
+        concept="이 예제는 버튼 클릭에 따라 장바구니 수량이 바뀌는 클라이언트 상태를 보여줍니다. 실제 updateTag()를 호출하는 서버 캐시 동작과는 구분됩니다."
         steps={[
           {
             step: 1,
-            title: "[updateTag('cart', { count: '}) 즉시 패치] 클릭",
-            description: "장바구니 캐시 태그('cart')에 새로운 수량 데이터를 즉시 메모리 패치합니다.",
-            actionBadge: "즉시 패치",
+            title: "[수량 1개 늘리기] 클릭",
+            description: "클라이언트 상태의 장바구니 수량을 1 늘립니다.",
+            actionBadge: "수량 변경",
           },
           {
             step: 2,
-            title: "0ms 네트워크 지연 없는 인메모리 갱신 확인",
-            description: "별도 DB 재조회 없이 Data Cache의 엔트리 값이 즉시 새 객체로 치환되는지 확인합니다.",
-            actionBadge: "메모리 동기화",
+            title: "수량 변경 결과 확인",
+            description: "네트워크 요청 없이 화면의 수량이 바뀌는지 확인합니다.",
+            actionBadge: "상태 변경",
           },
           {
             step: 3,
-            title: "장바구니 수량 실시간 갱신 상태 관찰",
-            description: "화면 상단의 장바구니 뱃지와 수량 카운트가 즉각적으로 동기화되는지 확인합니다.",
+            title: "장바구니 수량 변경 관찰",
+            description: "버튼을 누를 때마다 수량이 1씩 늘어나는지 확인합니다.",
             actionBadge: "결과 검증",
-            observe: "updateTag 호출로 재요청 없이 인메모리 캐시가 즉각 패치되어 수량이 갱신됨",
+            observe: "버튼을 누르면 클라이언트 상태가 바뀌고 수량이 1 증가함",
             observeAt: "playground",
           },
         ]}
       />
-      <DemoPlaygroundCard title={"updateTag() 즉시 캐시 메모리 패치 실습"}>
+      <DemoPlaygroundCard title={"장바구니 수량 변경 실습"}>
         <UpdateTagInstantDemo />
       </DemoPlaygroundCard>
       <VerificationFooter />

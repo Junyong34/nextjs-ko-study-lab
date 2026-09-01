@@ -38,7 +38,7 @@ await handler(req, res, {
     relativeProjectDir: '.',
     // route handler가 절대 URL을 구성할 때 사용하는 선택적 hostname
     hostname: '127.0.0.1',
-    // 네트워크를 거치지 않고 재검증하기 위한 선택적 내부 revalidate 함수
+    // 네트워크를 거치지 않고 revalidation하기 위한 선택적 내부 revalidate 함수
     revalidate: async ({ urlPath, headers, opts }) => {
       // 플랫폼별 revalidate 구현
     },

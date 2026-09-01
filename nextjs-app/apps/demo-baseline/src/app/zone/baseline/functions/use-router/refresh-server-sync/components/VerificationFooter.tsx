@@ -42,8 +42,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       ? true
       : undefined
 
-  const defaultExpected = "• router.refresh() 서버 데이터 강제 재검증 동기화 사양에 따른 정상 동작 및 상태 변화 관찰"
-  const defaultActual = "• 실시간 인터랙션 및 상태 동기화 완료\n• 4단 표준 레이아웃 정상 적용"
+  const defaultExpected = '• 버튼 클릭에 따른 갱신 횟수와 상태 표시를 확인합니다.'
+  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
 
   const actualContent =
     propActual !== undefined
@@ -51,19 +51,19 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
       : isMatched === true
       ? defaultActual
       : isMatched === false
-      ? '• 인터랙션 실패 또는 불일치 감지 (동작 재확인이 필요합니다)'
-      : '• 인터랙션 대기 중 (상단 데모의 조작 요소를 실행하여 결과를 관찰하세요)'
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="router.refresh() 서버 데이터 강제 재검증 동기화 실증 검증"
+        title="서버 데이터 갱신 상태 표시 검증 결과"
         expected={propExpected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router 공식 표준 스펙 및 실무 이커머스 도메인 규칙을 기반으로 기술 동작을 검증했습니다."}
+        description={propDescription || '이 화면은 실제 router.refresh()가 아닌 로컬 상태 변경을 보여줍니다.'}
       />
-            <DemoDeepDiveCard title="router.refresh() 서버 데이터 강제 재검증 동기화">
+            <DemoDeepDiveCard title="router.refresh()로 서버 데이터 갱신">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 클라이언트 입력 폼에 텍스트를 작성한 상태에서 [서버 데이터 새로고침]을 실행하여, 클라이언트의 폼 상태는 그대로 유지된 채 서버의 실시간 재고/가격 데이터만 백그라운드에서 동기화되는 동작을 검증합니다.</p>
+            <p>이 화면에서는 [데이터 갱신]을 누를 때 로컬 갱신 횟수가 늘어납니다. 실제 <code>router.refresh()</code>를 호출해 서버 데이터를 다시 읽는 과정은 포함하지 않습니다.</p>
           </div>
 
           <div>

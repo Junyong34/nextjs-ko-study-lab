@@ -29,7 +29,7 @@ export function LearningProgressWidget() {
             나의 Next.js 학습 대시보드
           </h2>
           <p className="text-xs sm:text-sm leading-relaxed text-zinc-300">
-            문서 읽기와 데모 실습을 진행하며 완료 체크를 기록하세요.
+            문서를 읽고 예제를 실습한 뒤 완료 상태를 기록하세요.
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export function LearningProgressWidget() {
               </span>
               <span className="flex items-center gap-1">
                 <PlayCircle className="h-3 w-3 text-zinc-300" />
-                데모: {completedDemosCount} / {totalDemos}
+                예제: {completedDemosCount} / {totalDemos}
               </span>
             </div>
           </div>
@@ -66,7 +66,7 @@ export function LearningProgressWidget() {
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-zinc-950 shadow-sm transition hover:bg-zinc-100 hover:shadow-md shrink-0"
           >
             <Layers className="h-4 w-4" />
-            진도율 상세 보기
+            학습 기록 자세히 보기
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

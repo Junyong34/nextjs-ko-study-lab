@@ -18,7 +18,7 @@ export function VerificationFooter({
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="REST GET/POST 주문 API (route.ts) 실증 검증"
+        title="REST GET/POST 주문 API (route.ts) 검증 결과"
         expected="• Next.js App Router route.ts에서 GET(200 OK) 및 POST(201 Created) 응답 처리\n• 주문 수명 주기(Order Lifecycle) 동기화 완료"
         actual={
           httpStatus
@@ -26,7 +26,7 @@ export function VerificationFooter({
             : '• route.ts 요청 대기 중...'
         }
         isMatched={isMatched}
-        description="Next.js App Router 공식 표준 스펙에 따라 route.ts 파일 컨벤션이 생성한 엔드포인트와의 실제 HTTP 통신 결과를 대조 검증합니다."
+        description="Next.js App Router의 route.ts 파일 규칙으로 만든 엔드포인트와 실제 HTTP 통신 결과를 확인합니다."
       />
       <DemoDeepDiveCard title="REST GET/POST 주문 API (route.ts) 및 HTTP 메서드 핸들러">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
