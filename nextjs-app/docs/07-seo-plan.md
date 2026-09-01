@@ -20,7 +20,7 @@
 | PWA manifest | 없음 (선택 항목으로 남겨둠) |
 | GA4 트래킹 | 되어있음 — `@next/third-parties`, `NEXT_PUBLIC_GA_ID` 조건부 렌더링 (`layout.tsx`, `lib/analytics.ts`) |
 | `next-seo`/`next-sitemap` 등 SEO 라이브러리 | 없음 (직접 구현, §3-0 참고) |
-| 커스텀 도메인 | 미확정 — `siteConfig.url`은 `study.example.com` placeholder, `NEXT_PUBLIC_SITE_URL` 환경변수로 재정의 가능 |
+| 커스텀 도메인 | 미확정 — `siteConfig.url`의 fallback을 셸의 Vercel 배포 URL(`nextjs-ko-study-lab-shell.vercel.app`)로 설정. 커스텀 도메인이 붙으면 `NEXT_PUBLIC_SITE_URL` 환경변수로 재정의 가능 |
 
 ## 2. 범위와 원칙
 
