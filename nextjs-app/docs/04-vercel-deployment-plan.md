@@ -88,6 +88,32 @@ Vercel의 "영향 없는 프로젝트 자동 스킵"은 조건 3가지를 요구
 
 **세 조건 모두 충족 — 커스텀 Ignored Build Step 스크립트 없이 기본 자동 스킵만으로 충분합니다.** 예: `demo-cache-components`만 고친 커밋은 `study-shell`·`study-baseline` 빌드가 자동으로 스킵됩니다. 나중에 조건이 깨지면(예: 암묵적 의존 추가) `turbo query affected --base=$VERCEL_GIT_PREVIOUS_SHA --packages <프로젝트명> --exit-code`를 Ignored Build Step에 직접 넣는 대안이 있습니다.<sup>[3]</sup>
 
+### 4-1. 브랜치별 자동 배포 제어 (`git.deploymentEnabled`)
+
+위 Ignored Build Step은 "영향 없는 패키지의 빌드를 건너뛴다"는 것이고, "이 브랜치는 애초에 배포를 트리거하지 않는다"는 별개 문제입니다. 후자는 각 프로젝트의 `vercel.json`에 `git.deploymentEnabled`로 제어합니다.<sup>[10]</sup>
+
+**정책**: `main`은 프로덕션 자동 배포를 유지하고, `preview/*` 브랜치만 Preview 자동 배포를 트리거하며, 그 외 모든 브랜치(이 저장소의 작업 브랜치 명명 규칙인 `devPark/*` 포함)는 자동 배포하지 않습니다. 매 작업 브랜치 커밋마다 3개 zone을 전부 Preview 배포할 필요가 없고, 확인이 필요할 때만 `preview/*`로 병합해 트리거하는 방식입니다.
+
+```json
+{
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "preview/*": true,
+      "**": false
+    }
+  }
+}
+```
+
+세 프로젝트(`study-shell`, `study-baseline`, `study-cache`)의 `vercel.json` 전부에 동일하게 적용했습니다 (§3-2의 `relatedProjects`와 같은 파일).
+
+**매칭 규칙(minimatch) 주의점**:
+- 브랜치가 여러 규칙에 매칭되면 **하나라도 `true`면 배포됩니다.** `main`은 `main: true`와 `**: false`에 동시 매칭되지만 `true` 규칙이 있어 배포가 일어납니다.
+- 단일 `*`는 `/`를 넘어 매칭하지 않는 표준 glob 동작입니다. `devPark/seo-technical-setup`처럼 슬래시를 포함한 브랜치명까지 차단하려면 globstar(`**`)가 필요합니다 — `*`만 썼다면 이런 브랜치는 "미지정 브랜치는 기본 `true`"에 걸려 그대로 자동 배포됐을 것입니다.
+
+⚠️ **미검증**: `devPark/*`·`preview/*` 실제 브랜치에 커밋을 푸시해 각각 배포가 스킵/트리거되는지는 아직 실측하지 않았습니다. §8에 반영.
+
 ## 5. Turborepo 원격 캐시
 
 Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel Remote Cache를 씁니다.**<sup>[8]</sup> 로컬 개발 속도를 위해 `pnpm dlx turbo login && pnpm dlx turbo link`를 저장소 루트에서 한 번 실행하면 로컬 빌드도 같은 캐시를 공유합니다 — 필수는 아니고 편의 옵션입니다.
@@ -117,6 +143,7 @@ Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel R
 | Related Projects 순환 참조 | 세 프로젝트가 서로를 참조하는 구성이 Vercel 쪽 제약(최대 3개, 같은 리포지토리 내)에 걸리는지 | 수동 env var 방식으로 전환하면서 더 이상 막는 요인 아님(참고용으로만 남김) |
 | `next.config.ts`가 빌드 타임에 이 값을 읽는 시점 | 기존 `zoneUrl()`이 모듈 최상위 `process.env` 읽기에 의존 | **확인됨**: 빌드 시점에 읽어 결과를 굳히므로, env var 저장 후 반드시 재배포(Redeploy) 필요 — 저장만으로는 반영 안 됨 |
 | CLI 기반 배포(`vercel link --repo`) | 대시보드로 프로젝트 3개를 만드는 절차만 검증됨. CLI로 한 번에 링크하는 경로는 별도 확인 필요<sup>[9]</sup> | 필요 시에만 |
+| `git.deploymentEnabled`의 `main`/`preview/*`/`**` 규칙(§4-1) | `devPark/*` 작업 브랜치 커밋 시 배포가 실제로 스킵되는지, `preview/*` 브랜치 커밋 시 실제로 Preview가 트리거되는지 미실측 | 각 브랜치에 커밋 푸시 후 Vercel 대시보드 Deployments 탭에서 확인 |
 
 ---
 
@@ -131,3 +158,4 @@ Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel R
 7. [Using Monorepos — Skipping unaffected projects, Requirements](https://vercel.com/docs/monorepos#requirements)
 8. [Remote Caching — Vercel Docs](https://vercel.com/docs/monorepos/remote-caching)
 9. [Using Monorepos — Add a monorepo through Vercel CLI](https://vercel.com/docs/monorepos#add-a-monorepo-through-vercel-cli)
+10. [Git Configuration — `git.deploymentEnabled`](https://vercel.com/docs/project-configuration/git-configuration#git.deploymentenabled)
