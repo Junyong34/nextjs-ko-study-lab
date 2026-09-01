@@ -4,6 +4,7 @@ import { getAugmentedTree, getDemos, getManifest } from '@/lib/docs'
 import { AppFrame } from '@/components/layout/AppFrame'
 import { LearningProgressProvider } from '@/components/learning-progress/LearningProgressProvider'
 import { LearningProgressTrigger } from '@/components/learning-progress/LearningProgressTrigger'
+import { GithubStarProvider, GithubStarPrompt } from '@/components/github-star'
 import { createLearningInventory } from '@/lib/learning-progress/inventory'
 import type { LearningInventory } from '@/lib/learning-progress/types'
 import './globals.css'
@@ -35,10 +36,13 @@ export default function RootLayout({
     <html lang="ko" className="h-full">
       <body className="flex min-h-full flex-col bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
         <LearningProgressProvider inventory={inventory}>
-          <Header />
-          <AppFrame tree={tree}>{children}</AppFrame>
-          <Footer />
-          <LearningProgressTrigger />
+          <GithubStarProvider>
+            <Header />
+            <AppFrame tree={tree}>{children}</AppFrame>
+            <Footer />
+            <LearningProgressTrigger />
+            <GithubStarPrompt />
+          </GithubStarProvider>
         </LearningProgressProvider>
       </body>
     </html>
