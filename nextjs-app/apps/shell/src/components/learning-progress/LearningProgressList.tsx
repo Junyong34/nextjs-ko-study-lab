@@ -7,10 +7,12 @@ import type { LearningDocumentItem, LearningDemoItem } from '@/lib/learning-prog
 export function LearningProgressList({
   items,
   isCompleted,
+  onNavigate,
   compact = false,
 }: {
   items: Array<LearningDocumentItem | LearningDemoItem>
   isCompleted: (key: string) => boolean
+  onNavigate?: () => void
   compact?: boolean
 }) {
   if (items.length === 0) {
@@ -36,6 +38,7 @@ export function LearningProgressList({
               </p>
               <Link
                 href={item.url}
+                onClick={onNavigate}
                 className="font-semibold text-zinc-900 hover:underline dark:text-zinc-100"
               >
                 {item.title}

@@ -71,7 +71,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
             </span>
           </h1>
           <p className="text-base sm:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-3xl">
-            공식 문서를 체계적인 한국어 커리큘럼으로 학습하고, 241개의 독립 다중 존(Multi-zones) 인터랙티브 실습 데모로 렌더링·캐싱·서버 액션 동작 원리를 직접 실험하세요.
+            한국어로 번역된 공식 문서를 보고 학습하고, 241개 인터랙티브 실습을 통해 개념 및 동작 원리를 학습하세요.
           </p>
         </div>
 
@@ -96,7 +96,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
             </Link>
             <Link
               href="/glossary"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-zinc-100/80 px-4 py-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-200/80 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm font-medium text-zinc-800 shadow-xs transition hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
             >
               <BookmarkCheck className="h-4 w-4" />
               용어 사전 (48종)
@@ -168,7 +168,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
               <span className="text-xs font-medium">학습 진도 관리</span>
             </div>
             <p className="mt-2 text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
-              진도 트래커
+              진도율 관리
             </p>
             <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">실시간 진도율 & 체크리스트</p>
           </div>
