@@ -33,9 +33,9 @@ export default function ProductReviewTemplate({
   }
 
   return (
-    <div className="space-y-6 rounded-2xl border-2 border-indigo-500/50 bg-indigo-50/30 p-5 sm:p-6 dark:border-indigo-700/60 dark:bg-indigo-950/30 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <div className="rounded-2xl border-2 border-indigo-500/50 bg-indigo-50/30 p-5 sm:p-6 dark:border-indigo-700/60 dark:bg-indigo-950/30 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
       {/* template.tsx 영역 안내 헤더 */}
-      <div className="space-y-2 border-b border-indigo-200 pb-4 dark:border-indigo-800">
+      <div className="space-y-2 border-b border-indigo-200 pb-4 dark:border-indigo-800 mb-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             <span className="h-3 w-3 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse shrink-0" />
@@ -59,8 +59,8 @@ export default function ProductReviewTemplate({
       </div>
 
       {/* template.tsx로 래핑된 하위 page.tsx 콘텐츠 */}
-      <div className="space-y-2.5 py-1">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-800 dark:text-zinc-200">
+      <div className="mb-8">
+        <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-3">
           <span className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
           <span>template.tsx의 {'{children}'}으로 주입된 page.tsx 콘텐츠:</span>
         </div>
@@ -68,8 +68,8 @@ export default function ProductReviewTemplate({
       </div>
 
       {/* template.tsx에 정의된 후기 작성 폼 (인스턴스 재생성 실증) */}
-      <div className="space-y-4 rounded-xl border border-indigo-200/80 bg-white p-5 shadow-xs dark:border-indigo-900/60 dark:bg-zinc-950">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200/80 pb-3 dark:border-zinc-800">
+      <div className="mt-8 rounded-xl border border-indigo-200/80 bg-white p-5 shadow-xs dark:border-indigo-900/60 dark:bg-zinc-950">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200/80 pb-3 dark:border-zinc-800 mb-4">
           <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
             template.tsx 내부 상태 (React useState)
           </span>
@@ -79,7 +79,7 @@ export default function ProductReviewTemplate({
         </div>
 
         {/* 평점 선택 */}
-        <div className="flex items-center gap-3 pt-1">
+        <div className="flex items-center gap-3 mb-4">
           <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
             평점 선택:
           </span>
@@ -108,7 +108,7 @@ export default function ProductReviewTemplate({
         </div>
 
         {/* 후기 텍스트 입력창 */}
-        <div className="space-y-1.5 pt-1">
+        <div className="space-y-1.5 mb-4">
           <label
             htmlFor="review-input"
             className="block text-xs font-medium text-zinc-700 dark:text-zinc-300"

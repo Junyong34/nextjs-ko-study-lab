@@ -13,7 +13,7 @@ export default function TemplateLifecycleRootLayout({
 }) {
   return (
     <TemplateLifecycleProvider>
-      <DemoContainer className="space-y-6">
+      <DemoContainer className="space-y-8">
         {/* 1단. 상단 가이드 필드셋 */}
         <DemoGuideCard
           title="template.tsx 파일 컨벤션 & 네비게이션 시 인스턴스 재생성"
@@ -43,9 +43,9 @@ export default function TemplateLifecycleRootLayout({
         />
 
         {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-        <DemoPlaygroundCard title="상품 탭 전환 및 템플릿 생명주기 실습" className="space-y-7">
+        <DemoPlaygroundCard title="상품 탭 전환 및 템플릿 생명주기 실습" className="space-y-8">
           {/* 계층 구조 안내 바 */}
-          <div className="flex flex-wrap items-center gap-3 sm:gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 text-xs text-zinc-800 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 shadow-2xs">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 text-xs text-zinc-800 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 shadow-2xs mb-6">
             <span className="font-bold text-zinc-900 dark:text-white mr-1">
               Next.js 렌더링 계층 순서:
             </span>
@@ -63,8 +63,8 @@ export default function TemplateLifecycleRootLayout({
           </div>
 
           {/* layout.tsx 영역 표시 */}
-          <div className="space-y-3.5 rounded-2xl border-2 border-emerald-500/50 bg-emerald-50/30 p-5 sm:p-6 dark:border-emerald-700/60 dark:bg-emerald-950/30 shadow-xs">
-            <div className="flex items-center justify-between pb-1">
+          <div className="rounded-2xl border-2 border-emerald-500/50 bg-emerald-50/30 p-5 sm:p-6 dark:border-emerald-700/60 dark:bg-emerald-950/30 shadow-xs mb-8">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-emerald-200/60 dark:border-emerald-800/60">
               <div className="flex items-center gap-2.5">
                 <span className="h-3 w-3 rounded-full bg-emerald-600 dark:bg-emerald-400 shrink-0" />
                 <span className="font-mono text-sm font-extrabold text-zinc-900 dark:text-white">
@@ -81,7 +81,7 @@ export default function TemplateLifecycleRootLayout({
           </div>
 
           {/* template.tsx 래퍼를 거친 실제 page.tsx 콘텐츠 */}
-          <div className="pt-2">
+          <div className="mt-8">
             {children}
           </div>
         </DemoPlaygroundCard>
