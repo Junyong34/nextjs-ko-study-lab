@@ -3,8 +3,8 @@
 import React, { useTransition, useState } from 'react'
 import { DemoPlaygroundCard } from '@study/demo-kit'
 import {
-  revalidateProductATag,
-  revalidateProductBTag,
+  updateProductATag,
+  updateProductBTag,
   revalidateEntirePath,
 } from '../actions'
 import { VerificationFooter } from './VerificationFooter'
@@ -35,16 +35,16 @@ export function TagVsPathClient({
   const handleRevalidateA = () => {
     setLastActionType('tag-a')
     startTransition(async () => {
-      await revalidateProductATag()
-      setStatusMessage('[확인] revalidateTag("tag-vs-path:product-a") 완료: A 상품 캐시만 선택 갱신됨')
+      await updateProductATag()
+      setStatusMessage('[확인] updateTag("tag-vs-path:product-a") 완료: A 상품 캐시만 즉시 선택 갱신됨')
     })
   }
 
   const handleRevalidateB = () => {
     setLastActionType('tag-b')
     startTransition(async () => {
-      await revalidateProductBTag()
-      setStatusMessage('[확인] revalidateTag("tag-vs-path:product-b") 완료: B 상품 캐시만 선택 갱신됨')
+      await updateProductBTag()
+      setStatusMessage('[확인] updateTag("tag-vs-path:product-b") 완료: B 상품 캐시만 즉시 선택 갱신됨')
     })
   }
 
@@ -75,7 +75,7 @@ export function TagVsPathClient({
             >
               <span>1. A 상품만 무효화</span>
               <span className="rounded bg-blue-800 px-1 py-0.2 font-mono text-[9px] text-blue-200">
-                revalidateTag('product-a')
+                updateTag('product-a')
               </span>
             </button>
 
@@ -88,7 +88,7 @@ export function TagVsPathClient({
             >
               <span>2. B 상품만 무효화</span>
               <span className="rounded bg-emerald-800 px-1 py-0.2 font-mono text-[9px] text-emerald-200">
-                revalidateTag('product-b')
+                updateTag('product-b')
               </span>
             </button>
 

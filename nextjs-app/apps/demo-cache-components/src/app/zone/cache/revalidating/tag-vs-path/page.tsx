@@ -53,19 +53,19 @@ export default async function TagVsPathDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="revalidateTag 정밀 태그 무효화 vs revalidatePath 경로 전체 무효화"
-        concept="revalidateTag('product-a')는 해당 태그가 부여된 특정 캐시 항목만 정밀하게 무효화하지만, revalidatePath는 해당 라우트 경로 아래의 모든 캐시 엔트리를 한 번에 일괄 무효화합니다."
+        title="updateTag 정밀 태그 무효화 vs revalidatePath 경로 전체 무효화"
+        concept="updateTag('product-a')는 해당 태그가 부여된 특정 캐시 항목만 정밀하게, 그리고 즉시(read-your-own-writes) 무효화하지만, revalidatePath는 해당 라우트 경로 아래의 모든 캐시 엔트리를 한 번에 일괄 무효화합니다. (참고: revalidateTag(tag, 'max')는 즉시 반영이 아니라 다음 방문 시점에 백그라운드로 갱신되는 stale-while-revalidate 방식이라, Server Action에서 클릭 즉시 반영이 필요할 땐 updateTag가 공식 권장값입니다.)"
         steps={[
           {
             step: 1,
-            title: "[1. A 상품만 무효화 revalidateTag('product-a')] 클릭",
-            description: "product-a 태그가 부여된 A 상품 캐시만 선택적으로 무효화합니다.",
+            title: "[1. A 상품만 무효화 updateTag('product-a')] 클릭",
+            description: "product-a 태그가 부여된 A 상품 캐시만 선택적으로, 즉시 무효화합니다.",
             actionBadge: "태그 A 무효화",
           },
           {
             step: 2,
-            title: "[2. B 상품만 무효화 revalidateTag('product-b')] 클릭",
-            description: "product-b 태그가 부여된 B 상품 캐시만 독립적으로 무효화합니다.",
+            title: "[2. B 상품만 무효화 updateTag('product-b')] 클릭",
+            description: "product-b 태그가 부여된 B 상품 캐시만 독립적으로, 즉시 무효화합니다.",
             actionBadge: "태그 B 무효화",
           },
           {
@@ -79,7 +79,7 @@ export default async function TagVsPathDemoPage() {
             title: "캐시 무효화 범위 및 HIT/MISS 상태 관찰",
             description: "태그 무효화와 경로 무효화의 영향 범위를 대조 관찰합니다.",
             actionBadge: "결과 관찰",
-            observe: "revalidateTag 호출 시 지정 태그의 캐시만 MISS로 전환되고 다른 태그는 HIT 유지됨",
+            observe: "updateTag 호출 시 지정 태그의 캐시만 즉시 MISS로 전환되어 새 ID로 바뀌고 다른 태그는 HIT 유지됨",
             observeAt: "playground",
           },
         ]}
