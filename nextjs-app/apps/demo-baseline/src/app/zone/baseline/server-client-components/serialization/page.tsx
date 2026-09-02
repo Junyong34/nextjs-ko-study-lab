@@ -25,8 +25,8 @@ export default function SerializationDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="RSC → RCC Props 직렬화(Serialization) 규약 & 타입별 직렬화 검증"
-        concept="Server Component에서 Client Component로 전달하는 Props는 JSON 직렬화가 가능해야 하며, 일반 함수나 Class는 직접 전달할 수 없지만 'use server' Server Action은 직렬화 가능한 Action ID 참조로 안전하게 전달됩니다."
+        title="RSC → RCC Props 직렬화(Serialization) 규약 & Server Action RPC 파이프라인"
+        concept="Server Component에서 Client Component로 전달하는 Props는 JSON 직렬화가 가능해야 합니다. 일반 함수나 Class는 전달할 수 없지만, 'use server' Server Action은 고유 Action ID 참조로 직렬화되어 안전하게 전달되고 원격 실행됩니다."
         steps={[
           {
             step: 1,
@@ -42,10 +42,10 @@ export default function SerializationDemoPage() {
           },
           {
             step: 3,
-            title: '[전달받은 Server Action Props 실행] 버튼 클릭',
-            description: "'use server'로 선언된 Server Action 함수가 Action ID 참조 형태로 Props 전달되어 정상 실행되는 것을 관찰합니다.",
-            actionBadge: 'Server Action 실행',
-            observe: "서버 통신 완료 후 응답 결과 문자열('[확인] 서버 액션 처리 완료...')이 화면에 즉시 렌더링됨",
+            title: 'Server Action Props 실행 & 4단계 통신 파이프라인 관찰',
+            description: "하단 입력창에 텍스트를 입력하고 [전달받은 Server Action Props 실행]을 클릭하여 Action ID를 통한 네트워크 RPC 전송 및 서버 응답 파이프라인을 관찰합니다.",
+            actionBadge: 'RPC 실행',
+            observe: "서버 통신 완료 후 4단계 파이프라인(클라이언트 호출 ➔ 네트워크 전송 ➔ 서버 Node.js 실행 ➔ 반환값 수신)이 화면에 시각화됨",
             observeAt: 'playground',
           },
         ]}

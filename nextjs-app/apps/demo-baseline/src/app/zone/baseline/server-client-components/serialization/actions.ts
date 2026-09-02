@@ -7,9 +7,18 @@
  * Client Component의 Props로 안전하게 전달 및 실행될 수 있습니다.
  */
 export async function executeServerTask(input: string) {
+  const startTime = performance.now()
   const processedAt = new Date().toLocaleTimeString('ko-KR')
+  const serverTimestamp = new Date().toISOString()
+  const elapsedMs = Math.max(1, Math.round(performance.now() - startTime))
+
   return {
     success: true,
-    result: `서버 액션 처리 완료: "${input}" (서버 시각: ${processedAt})`,
+    inputMessage: input,
+    serverTimestamp,
+    serverTime: processedAt,
+    serverRuntime: 'Node.js (Next.js Server Action RPC Engine)',
+    actionId: '$$typeof: Symbol(react.action.id) #executeServerTask',
+    result: `[서버 처리 성공] "${input}" 요청이 서버에서 정상 처리되었습니다. (응답 시각: ${processedAt})`,
   }
 }

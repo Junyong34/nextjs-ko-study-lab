@@ -5,9 +5,19 @@ import { DemoPlaygroundCard } from '@study/demo-kit'
 import type { SerializablePayload } from '../types'
 import { VerificationFooter } from './VerificationFooter'
 
+interface ServerActionResponse {
+  success: boolean
+  inputMessage: string
+  serverTimestamp: string
+  serverTime: string
+  serverRuntime: string
+  actionId: string
+  result: string
+}
+
 interface SerializationViewerClientProps {
   payload: SerializablePayload
-  serverAction: (input: string) => Promise<{ success: boolean; result: string }>
+  serverAction: (input: string) => Promise<ServerActionResponse>
 }
 
 type SimulationType =
@@ -37,7 +47,10 @@ export function SerializationViewerClient({
 }: SerializationViewerClientProps) {
   const [activeViewTab, setActiveViewTab] = useState<'structured' | 'raw-json'>('structured')
   const [selectedSimulation, setSelectedSimulation] = useState<SimulationType>('primitive')
-  const [actionResult, setActionResult] = useState<string | null>(null)
+  const [inputMessage, setInputMessage] = useState('나이키 알파 러닝화 재고 및 쿠폰 적용 확인')
+  const [actionResponse, setActionResponse] = useState<ServerActionResponse | null>(null)
+  const [latencyMs, setLatencyMs] = useState<number | null>(null)
+  const [showErrorSim, setShowErrorSim] = useState(false)
   const [isPending, startTransition] = useTransition()
 
   // 1. 실시간 런타임 JSON 직렬화 검증 (하드코딩 방지)
@@ -213,10 +226,19 @@ a.child = b; // ❌ A가 B를 참조하고, B가 A를 참조 (순환 구조)
   const currentSim = simulationMap[selectedSimulation]
 
   const handleCallAction = () => {
+    setShowErrorSim(false)
+    const start = performance.now()
     startTransition(async () => {
-      const res = await serverAction('직렬화 경계 통과 테스트')
-      setActionResult(res.result)
+      const res = await serverAction(inputMessage || '테스트 요청')
+      const duration = Math.max(1, Math.round(performance.now() - start))
+      setLatencyMs(duration)
+      setActionResponse(res)
     })
+  }
+
+  const handleTriggerErrorSimulation = () => {
+    setActionResponse(null)
+    setShowErrorSim(true)
   }
 
   return (
@@ -413,43 +435,142 @@ a.child = b; // ❌ A가 B를 참조하고, B가 A를 참조 (순환 구조)
           </div>
         </div>
 
-        {/* 3. 'use server' Server Action 함수 Prop 전달 및 실행 테스트 */}
-        <div className="space-y-3 rounded-2xl border border-zinc-200 bg-zinc-50/90 p-5 dark:border-zinc-800 dark:bg-zinc-900/60 shadow-xs">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200/80 pb-3 dark:border-zinc-800">
-            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-              'use server' 함수 Prop 전달 및 실제 실행 테스트
-            </span>
-            <span className="rounded bg-indigo-100 px-2 py-0.5 font-mono text-[10px] font-bold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+        {/* 3. 'use server' Server Action 함수 Prop 전달 및 실시간 RPC 통신 파이프라인 */}
+        <div className="space-y-4 rounded-2xl border-2 border-indigo-500/50 bg-indigo-50/20 p-5 dark:border-indigo-700/60 dark:bg-indigo-950/20 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-200/80 pb-3 dark:border-indigo-800/80">
+            <div>
+              <span className="font-mono text-sm font-extrabold text-zinc-900 dark:text-white">
+                'use server' 함수 Prop 전달 & RPC 통신 파이프라인
+              </span>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">
+                함수는 직렬화할 수 없지만, 'use server' 함수는 Action ID(참조)로 직렬화되어 클라이언트에서 서버 원격 호출(RPC)이 가능합니다.
+              </p>
+            </div>
+            <span className="rounded bg-indigo-600 px-2.5 py-0.5 font-mono text-[11px] font-bold text-white shadow-2xs dark:bg-indigo-500">
               Action ID 참조 바인딩
             </span>
           </div>
 
-          <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
-            일반 서버 JS 함수는 RSC 경계를 넘어갈 수 없지만, <code>'use server'</code> 함수는 Action ID로 직렬화되어 Props로 정상 전달됩니다. 아래 버튼을 클릭하여 서버 통신을 테스트해 보세요.
-          </p>
+          {/* 사용자 정의 입력창 */}
+          <div className="space-y-1.5">
+            <label htmlFor="server-input" className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+              서버로 전송할 테스트 파라미터 (Input Message):
+            </label>
+            <input
+              id="server-input"
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="서버 액션으로 보낼 텍스트를 입력하세요..."
+              className="w-full rounded-xl border border-zinc-300 bg-white p-2.5 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
+            />
+          </div>
 
-          <div className="flex flex-wrap items-center gap-3 pt-1">
+          {/* 액션 실행 및 에러 대조 버튼 그룹 */}
+          <div className="flex flex-wrap items-center gap-2.5 pt-1">
             <button
               type="button"
               onClick={handleCallAction}
               disabled={isPending}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-bold text-white shadow-2xs transition hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-2xs transition hover:bg-indigo-700 disabled:opacity-50 cursor-pointer"
             >
-              {isPending ? '서버 통신 중...' : '전달받은 Server Action Props 실행'}
+              {isPending ? '서버 통신 중 (POST)...' : '✅ 전달받은 Server Action Props 실행 (RPC 요청)'}
             </button>
 
-            {actionResult && (
-              <span className="font-mono text-xs text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 rounded-lg border border-emerald-300 dark:border-emerald-800">
-                [확인] {actionResult}
-              </span>
-            )}
+            <button
+              type="button"
+              onClick={handleTriggerErrorSimulation}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-rose-300 bg-rose-50 px-3.5 py-2 text-xs font-medium text-rose-800 hover:bg-rose-100 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-300 transition cursor-pointer"
+            >
+              <span>❌ 일반 서버 함수 Props 전달 시도 (에러 시뮬레이션)</span>
+            </button>
           </div>
+
+          {/* 에러 시뮬레이션 출력 */}
+          {showErrorSim && (
+            <div className="rounded-xl border border-rose-300 bg-rose-950/90 p-4 text-xs font-mono text-rose-200 shadow-2xs space-y-2 animate-in fade-in duration-200">
+              <div className="flex items-center gap-2 text-rose-400 font-bold border-b border-rose-800 pb-1.5">
+                <span>⚠️ Next.js 빌드/런타임 직렬화 위반 에러 발생</span>
+              </div>
+              <p className="leading-relaxed">
+                Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server".<br />
+                &nbsp;&nbsp;&lt;SerializationViewerClient serverAction=&#123;function executeTask&#125;&gt;<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^^^^^^^^^^^
+              </p>
+              <p className="text-[11px] text-zinc-400 border-t border-rose-900/60 pt-1.5">
+                💡 <strong>해결 방법</strong>: 함수의 맨 첫 줄에 <code>'use server'</code>를 추가하면 Next.js가 Action ID를 생성하여 클라이언트로 안전하게 Props 전달할 수 있게 됩니다.
+              </p>
+            </div>
+          )}
+
+          {/* 성공 시 실시간 RPC 통신 파이프라인 시각화 */}
+          {actionResponse && (
+            <div className="space-y-3 rounded-xl border border-indigo-200/80 bg-white p-4 shadow-xs dark:border-indigo-900/60 dark:bg-zinc-900 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200/80 pb-2 dark:border-zinc-800">
+                <span className="text-xs font-bold text-indigo-950 dark:text-indigo-200">
+                  📡 실시간 RPC 통신 파이프라인 (Client ➔ Server ➔ Client)
+                </span>
+                <span className="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                  HTTP POST 200 OK ({latencyMs}ms 소요)
+                </span>
+              </div>
+
+              {/* 4단계 파이프라인 플로우 */}
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
+                <div className="rounded-lg bg-zinc-50 p-2.5 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700">
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400 text-[10px] block mb-1">
+                    1. 클라이언트 호출
+                  </span>
+                  <p className="text-[11px] text-zinc-600 dark:text-zinc-300">
+                    Props.serverAction("{actionResponse.inputMessage}")
+                  </p>
+                </div>
+
+                <div className="rounded-lg bg-zinc-50 p-2.5 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700">
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400 text-[10px] block mb-1">
+                    2. 네트워크 RPC 전송
+                  </span>
+                  <p className="text-[11px] text-zinc-600 dark:text-zinc-300 font-mono">
+                    Next-Action ID: #executeServerTask
+                  </p>
+                </div>
+
+                <div className="rounded-lg bg-zinc-50 p-2.5 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700">
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400 text-[10px] block mb-1">
+                    3. 서버 런타임 실행
+                  </span>
+                  <p className="text-[11px] text-zinc-600 dark:text-zinc-300">
+                    {actionResponse.serverRuntime} ({actionResponse.serverTime})
+                  </p>
+                </div>
+
+                <div className="rounded-lg bg-emerald-50 p-2.5 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800">
+                  <span className="font-bold text-emerald-700 dark:text-emerald-400 text-[10px] block mb-1">
+                    4. 반환값 수신
+                  </span>
+                  <p className="text-[11px] text-emerald-900 dark:text-emerald-200 font-medium">
+                    화면 상태 갱신 완료
+                  </p>
+                </div>
+              </div>
+
+              {/* 서버 응답 JSON 프리뷰 */}
+              <div className="space-y-1 pt-1">
+                <span className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400">
+                  서버에서 직렬화되어 반환된 JSON 데이터:
+                </span>
+                <pre className="overflow-x-auto rounded-lg border border-zinc-200 bg-zinc-950 p-3 font-mono text-[11px] text-emerald-400 dark:border-zinc-800">
+                  {JSON.stringify(actionResponse, null, 2)}
+                </pre>
+              </div>
+            </div>
+          )}
         </div>
       </DemoPlaygroundCard>
 
       {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
       <VerificationFooter
-        actionResult={actionResult}
+        actionResult={actionResponse?.result || null}
         selectedSimulation={selectedSimulation}
       />
     </div>
