@@ -11,6 +11,11 @@
       "persistent": true,
       "inputs": ["$TURBO_DEFAULT$", ".env.local", ".env"]
     },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
+    },
     "lint": {},
     "check-types": {
       "dependsOn": ["^check-types"]
