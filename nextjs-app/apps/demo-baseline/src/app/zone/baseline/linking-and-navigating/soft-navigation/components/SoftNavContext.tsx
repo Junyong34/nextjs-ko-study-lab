@@ -20,7 +20,7 @@ interface SoftNavContextState {
 const SoftNavContext = createContext<SoftNavContextState | null>(null)
 
 export function SoftNavProvider({ children }: { children: React.ReactNode }) {
-  const [memo, setMemo] = useState('장바구니 담을 상품 검토 중 (Soft Nav 메모)')
+  const [memo, setMemo] = useState('')
   const [seconds, setSeconds] = useState(0)
   const [navCount, setNavCount] = useState(0)
   const [lastNavType, setLastNavType] = useState<NavType>('initial')

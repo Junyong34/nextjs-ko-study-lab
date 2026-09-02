@@ -50,7 +50,7 @@ export function PersistentHeader() {
       {/* 클라이언트 메모 입력창 */}
       <div className="space-y-1.5 pt-1">
         <label htmlFor="softnav-memo" className="block text-xs font-semibold text-zinc-300">
-          클라이언트 상태 보존용 메모 (페이지를 여러 번 이동해도 유지됨):
+          클라이언트 상태 보존용 메모 (이곳에 테스트 메모를 직접 입력해 보세요):
         </label>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <input
@@ -58,7 +58,7 @@ export function PersistentHeader() {
             type="text"
             value={memo}
             onChange={(e) => setMemo(e.target.value)}
-            placeholder="메모를 작성한 후 아래 네비게이션 버튼들을 클릭해 보세요..."
+            placeholder="예: 장바구니 담을 상품 검토 중 (Soft Nav 메모)"
             className="flex-1 rounded-xl border border-zinc-700 bg-zinc-800/90 px-3 py-2 text-xs text-zinc-100 placeholder:text-zinc-500 focus:border-emerald-400 focus:outline-hidden"
           />
           <span className="inline-flex items-center justify-center rounded-xl bg-zinc-800 px-3 py-2 font-mono text-[11px] text-zinc-400 border border-zinc-700 shrink-0">

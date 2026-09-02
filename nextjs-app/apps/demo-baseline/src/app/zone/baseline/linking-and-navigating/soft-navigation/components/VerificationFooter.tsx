@@ -28,6 +28,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
   const hasNavigated = navCount > 1
   const isAutoMatched = true
+  const hasMemo = memo.trim().length > 0
+  const memoDisplay = hasMemo ? `"${memo}"` : '(미입력 - 텍스트를 입력해 보세요)'
 
   const routeName = pathname.endsWith('/new')
     ? '신상품 카탈로그 (/new)'
@@ -41,8 +43,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   }
 
   const defaultActual = hasNavigated
-    ? `• 소프트 내비게이션 동작: 정상 (이동 횟수: ${navCount - 1}회 감지)\n• 클라이언트 상태 보존: 메모 "${memo}" 및 타이머(${seconds}초) 언마운트 없이 100% 유지됨\n• 현재 활성 라우트: ${routeName} (${pathname})\n• 현재 스크롤 위치: ${scrollStatusText}\n• 검증 완료: Next.js <Link> 소프트 내비게이션 및 세그먼트 부분 교체 동작 확인`
-    : `• 클라이언트 모니터: 타이머 ${seconds}초 실행 중, 메모 "${memo}"\n• 현재 활성 라우트: ${routeName} (${pathname})\n• 현재 스크롤 위치: ${scrollStatusText}\n• 동작 안내: 상단 버튼([베스트 상품], [신상품], [⬇️ 스크롤 아래로 내리기])을 클릭하여 스크롤 보존과 소프트 내비게이션을 체험하세요.`
+    ? `• 소프트 내비게이션 동작: 정상 (이동 횟수: ${navCount - 1}회 감지)\n• 클라이언트 상태 보존: 메모 ${memoDisplay} 및 타이머(${seconds}초) 언마운트 없이 100% 유지됨\n• 현재 활성 라우트: ${routeName} (${pathname})\n• 현재 스크롤 위치: ${scrollStatusText}\n• 검증 완료: Next.js <Link> 소프트 내비게이션 및 세그먼트 부분 교체 동작 확인`
+    : `• 클라이언트 모니터: 타이머 ${seconds}초 실행 중, 메모 ${memoDisplay}\n• 현재 활성 라우트: ${routeName} (${pathname})\n• 현재 스크롤 위치: ${scrollStatusText}\n• 동작 안내: 상단 [메모 입력창]에 텍스트를 입력한 뒤 네비게이션 버튼([베스트 상품], [신상품])을 클릭해 보세요.`
 
   const isMatched =
     props.isMatched !== undefined
