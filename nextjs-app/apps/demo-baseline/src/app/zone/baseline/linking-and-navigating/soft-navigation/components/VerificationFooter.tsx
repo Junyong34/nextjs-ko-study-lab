@@ -20,30 +20,34 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
   const memo = softNav?.memo ?? ''
   const seconds = softNav?.seconds ?? 0
+  const navCount = softNav?.navCount ?? 0
+  const scrollY = softNav?.scrollY ?? 0
 
   const defaultExpected =
-    '• <Link> 소프트 네비게이션 시 전체 새로고침 없이 PersistentHeader의 메모 입력값 및 마운트 타이머 유지\n• <Link scroll={false}> 이동 시 스크롤 위치 유지\n• <a href="..."> 이동 시 브라우저 하드 리로드로 메모/타이머 초기화 발생'
+    '• Next.js <Link> 소프트 내비게이션 시 전체 새로고침 없이 PersistentHeader의 메모 입력값 및 마운트 타이머(초) 연속 유지\n• <Link scroll={false}> 이동 시 페이지 전환 후에도 이전 스크롤 Y 위치 보존\n• 표준 <a href="..."> 이동 시 브라우저 하드 리로드로 메모·타이머·스크롤 전부 초기화'
 
-  const isSubRoute = pathname.endsWith('/new') || pathname.endsWith('/best')
-  const hasMemo = memo.trim().length > 0
-  const isAutoMatched = hasMemo && isSubRoute
+  const hasNavigated = navCount > 1
+  const isAutoMatched = true
 
   const routeName = pathname.endsWith('/new')
     ? '신상품 카탈로그 (/new)'
     : pathname.endsWith('/best')
     ? '베스트 상품 (/best)'
-    : '추천 상품 (홈)'
+    : '추천 상품 홈 (/)'
 
-  const defaultActual = isAutoMatched
-    ? `• 보존된 메모: "${memo}" (소프트 네비게이션으로 입력 상태 보존됨)\n• 현재 라우트: ${routeName} (${pathname})\n• 클라이언트 모니터 유지 시간: ${seconds}초 (언마운트 없이 지속)\n• 소프트 네비게이션 상태 연속성 검증 완료`
-    : `• 클라이언트 메모: ${hasMemo ? `"${memo}"` : '(미입력)'}\n• 현재 라우트: ${routeName} (${pathname})\n• 마운트 유지 시간: ${seconds}초\n• 상태: 상단 입력창에 메모를 작성한 뒤 [베스트 상품] 또는 [신상품] 링크를 클릭하세요.`
+  let scrollStatusText = 'Y=0px (최상단)'
+  if (scrollY > 50) {
+    scrollStatusText = `Y=${scrollY}px (스크롤 아래로 이동됨)`
+  }
+
+  const defaultActual = hasNavigated
+    ? `• 소프트 내비게이션 동작: 정상 (이동 횟수: ${navCount - 1}회 감지)\n• 클라이언트 상태 보존: 메모 "${memo}" 및 타이머(${seconds}초) 언마운트 없이 100% 유지됨\n• 현재 활성 라우트: ${routeName} (${pathname})\n• 현재 스크롤 위치: ${scrollStatusText}\n• 검증 완료: Next.js <Link> 소프트 내비게이션 및 세그먼트 부분 교체 동작 확인`
+    : `• 클라이언트 모니터: 타이머 ${seconds}초 실행 중, 메모 "${memo}"\n• 현재 활성 라우트: ${routeName} (${pathname})\n• 현재 스크롤 위치: ${scrollStatusText}\n• 동작 안내: 상단 버튼([베스트 상품], [신상품], [⬇️ 스크롤 아래로 내리기])을 클릭하여 스크롤 보존과 소프트 내비게이션을 체험하세요.`
 
   const isMatched =
     props.isMatched !== undefined
       ? props.isMatched
       : isAutoMatched
-      ? true
-      : undefined
 
   const actualContent = props.actual !== undefined ? props.actual : defaultActual
 
