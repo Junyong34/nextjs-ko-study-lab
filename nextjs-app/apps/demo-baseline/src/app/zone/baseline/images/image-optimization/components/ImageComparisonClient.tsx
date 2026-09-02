@@ -4,8 +4,9 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { DemoPlaygroundCard } from '@study/demo-kit'
 import { VerificationFooter } from './VerificationFooter'
+import keyboardImage from '../assets/keyboard.webp'
 
-const SAMPLE_IMAGE_URL = '/images/products/keyboard.jpg'
+const SAMPLE_IMAGE_URL = keyboardImage.src
 
 export function ImageComparisonClient() {
   const [quality, setQuality] = useState<number>(75)
@@ -110,6 +111,41 @@ export function ImageComparisonClient() {
             viewMode === 'both' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'
           }`}
         >
+          {/* B. Next.js <Image> 컴포넌트 카드 */}
+          {(viewMode === 'both' || viewMode === 'next-image') && (
+              <div className="rounded-md border border-emerald-200 bg-emerald-50/20 p-3.5 dark:border-emerald-900/40 dark:bg-emerald-950/10 space-y-2.5">
+                <div className="flex items-center justify-between">
+                <span className="font-bold text-emerald-950 dark:text-emerald-200">
+                  1. Next.js &lt;Image&gt; 컴포넌트
+                </span>
+                  <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                  WebP/AVIF + Zero CLS
+                </span>
+                </div>
+
+                {/* 실제 next/image 렌더링 */}
+                <div className="relative aspect-video w-full overflow-hidden rounded border border-emerald-200 bg-zinc-900 flex items-center justify-center">
+                  <Image
+                      src={keyboardImage}
+                      alt="Next.js Image Optimized"
+                      width={400}
+                      height={225}
+                      quality={quality}
+                      priority={priority}
+                      className="rounded object-cover w-full h-full"
+                  />
+                </div>
+
+                <div className="rounded bg-emerald-50 p-2.5 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/30 font-mono text-[10px] text-zinc-600 dark:text-zinc-400 space-y-0.5">
+                  <div className="font-sans font-semibold text-amber-700 dark:text-amber-400">
+                    ⚠ 이 zone은 unoptimized 설정이라 실제 이미지는 바뀌지 않습니다. 아래는 옵션을 이렇게 설정했을 때 프로덕션(최적화 활성) 환경이라면 어떤 값으로 요청되는지 보여주는 참고용 표시입니다.
+                  </div>
+                  <div className="break-all">• 설정 시 요청될 URL: {nextImageQuery}</div>
+                  <div>• 설정값 quality={quality} | 포맷: WebP/AVIF 자동 협상 (프로덕션 기준)</div>
+                  <div>• 설정값 priority={priority ? 'true (<link rel="preload"> 주입)' : 'false (loading="lazy")'}</div>
+                </div>
+              </div>
+          )}
           {/* A. 일반 <img> 태그 카드 */}
           {(viewMode === 'both' || viewMode === 'html-img') && (
             <div className="rounded-md border border-rose-200 bg-rose-50/20 p-3.5 dark:border-rose-900/40 dark:bg-rose-950/10 space-y-2.5">
@@ -141,38 +177,7 @@ export function ImageComparisonClient() {
             </div>
           )}
 
-          {/* B. Next.js <Image> 컴포넌트 카드 */}
-          {(viewMode === 'both' || viewMode === 'next-image') && (
-            <div className="rounded-md border border-emerald-200 bg-emerald-50/20 p-3.5 dark:border-emerald-900/40 dark:bg-emerald-950/10 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-emerald-950 dark:text-emerald-200">
-                  1. Next.js &lt;Image&gt; 컴포넌트
-                </span>
-                <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                  WebP/AVIF + Zero CLS
-                </span>
-              </div>
 
-              {/* 실제 next/image 렌더링 */}
-              <div className="relative aspect-video w-full overflow-hidden rounded border border-emerald-200 bg-zinc-900 flex items-center justify-center">
-                <Image
-                  src={SAMPLE_IMAGE_URL}
-                  alt="Next.js Image Optimized"
-                  width={400}
-                  height={225}
-                  quality={quality}
-                  priority={priority}
-                  className="rounded object-cover w-full h-full"
-                />
-              </div>
-
-              <div className="rounded bg-emerald-50 p-2.5 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/30 font-mono text-[10px] text-zinc-600 dark:text-zinc-400 space-y-0.5">
-                <div className="break-all">• 파이프라인 URL: {nextImageQuery}</div>
-                <div>• 압축 퀄리티: quality={quality} | 포맷: WebP/AVIF 자동 협상</div>
-                <div>• LCP 프리로드: priority={priority ? 'true (<link rel="preload"> 주입)' : 'false (loading="lazy")'}</div>
-              </div>
-            </div>
-          )}
         </div>
       </DemoPlaygroundCard>
 
