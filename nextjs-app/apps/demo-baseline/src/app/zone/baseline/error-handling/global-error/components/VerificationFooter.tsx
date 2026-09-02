@@ -20,7 +20,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   const { state, segmentSimulated, globalSimulated } = props
 
   const defaultExpected =
-    '• 1계층: 예상된 폼 에러(400)를 useActionState 값으로 안전하게 반환 및 인라인 표시\n• 2계층: 세그먼트 런타임 예외를 error.tsx로 격리하고 reset()으로 복구\n• 3계층: 루트 레이아웃 크래시를 global-error.tsx (<html><body>) 최상위 폴백으로 포착'
+    '• 1계층: 예상된 폼 에러(400)를 useActionState 값으로 안전하게 반환 및 인라인 표시\n• 2계층: 실제 throw된 런타임 예외를 catchError() 컴포넌트 바운더리로 격리하고 retry()로 복구 (실제 동작)\n• 3계층: 루트 레이아웃 크래시 시 global-error.tsx (<html><body>) 최상위 폴백 — 이 데모에서는 개념 시각화 목업으로 재현 (실제 트리거 아님)'
 
   const hasInteracted = Boolean(state?.message) || segmentSimulated || globalSimulated
 
@@ -29,9 +29,9 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
     defaultActual = `• 1계층(Expected): ${
       state?.message ? `useActionState 처리 완료 ("${state.message}")` : '대기 중'
     }\n• 2계층(Segment): ${
-      segmentSimulated ? 'error.tsx 격리 및 복구 시뮬레이션 완료' : '대기 중'
+      segmentSimulated ? 'catchError() 바운더리가 실제 throw를 캡처 및 retry() 복구 완료' : '대기 중'
     }\n• 3계층(Global): ${
-      globalSimulated ? 'global-error.tsx (<html><body>) 루트 크래시 포착 시뮬레이션 완료' : '대기 중'
+      globalSimulated ? 'global-error.tsx (<html><body>) 루트 크래시 화면 재현 완료 (개념 시각화 목업)' : '대기 중'
     }\n• 동작 상태: 3계층 에러 핸들링 아키텍처 검증 결과 완료`
   }
 
@@ -68,7 +68,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 예상된 폼 에러(<code>useActionState</code> 400 반환), 세그먼트 예외(<code>error.tsx</code> 상위 레이아웃 보존 격리), 루트 레이아웃 크래시(<code>global-error.tsx</code> 전역 폴백)의 3가지 에러 계층을 각각 시뮬레이션하여 격리 범위와 복구 메커니즘의 차이를 실시간 검증합니다.
+              본 데모에서는 예상된 폼 에러(<code>useActionState</code> 400 반환, 실제 동작), 세그먼트 예외(<code>catchError()</code> 컴포넌트 바운더리 격리, 실제로 throw를 캡처), 루트 레이아웃 크래시(<code>global-error.tsx</code> 전역 폴백, 개념 시각화 목업)의 3가지 에러 계층을 나란히 두고 격리 범위와 복구 메커니즘의 차이를 비교합니다.
             </p>
           </div>
 
@@ -96,6 +96,13 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
               <li><strong>프로덕션 빌드에서만 동작</strong>: 개발(development) 모드에서는 Next.js 고유의 개발자 에러 오버레이가 우선 표시되며, <code>global-error.tsx</code>는 <code>next build</code> 후 프로덕션 실행 시 동작합니다.</li>
               <li><strong>루트 태그 누락 금지</strong>: <code>{'<'}html{'>'}</code>과 <code>{'<'}body{'>'}</code> 태그를 생략하면 브라우저 DOM 파싱 에러가 발생하므로 반드시 루트 마크업을 직접 포함해야 합니다.</li>
             </ul>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">6. Tier 3(global-error.tsx)를 왜 목업으로 남겼나</h5>
+            <p>
+              이 zone(<code>demo-baseline</code>)은 246개 데모가 <strong>단 하나의 공용 <code>app/layout.tsx</code></strong>를 공유합니다. Tier 3을 진짜로 재현하려면 이 공용 Root Layout에 조건부 <code>throw</code>를 심어야 하는데, 트리거 조건에 버그가 생기면 이 데모와 무관한 다른 데모까지 실수로 크래시시킬 위험이 있습니다. 그래서 이 카드는 실제 Root Layout을 건드리지 않고, 크래시했을 때의 화면만 안전하게 재현한 <strong>개념 시각화 목업</strong>입니다 — Tier 1(useActionState)과 Tier 2(catchError)는 실제로 동작합니다.
+            </p>
           </div>
         </div>
       </DemoDeepDiveCard>

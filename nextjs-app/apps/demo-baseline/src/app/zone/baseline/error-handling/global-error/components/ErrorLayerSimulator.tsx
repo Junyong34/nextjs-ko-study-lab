@@ -4,6 +4,16 @@ import React, { useActionState, useState } from 'react'
 import { submitOrderAction } from '../actions'
 import type { FormState } from '../types'
 import { VerificationFooter } from './VerificationFooter'
+import { SegmentErrorBoundary } from './SegmentErrorBoundary'
+
+/**
+ * 렌더링 중 실제로 throw하는 컴포넌트.
+ * segmentActive가 true일 때만 렌더링되어 SegmentErrorBoundary(catchError)가
+ * 진짜로 캡처하도록 만든다 — 텍스트로 흉내 낸 게 아니라 실제 예외 발생.
+ */
+function PaymentSegmentPreview(): never {
+  throw new Error('PG사 결제 게이트웨이 연결 실패 (504 Gateway Timeout)')
+}
 
 const initialFormState: FormState = {
   success: false,
@@ -131,43 +141,39 @@ export function ErrorLayerSimulator() {
         <div className="rounded border border-amber-200 bg-amber-50/30 p-3.5 dark:border-amber-900/40 dark:bg-amber-950/20 space-y-2 flex flex-col justify-between">
           <div>
             <span className="font-bold text-amber-900 dark:text-amber-200">
-              2. 세그먼트 예외 (error.tsx)
+              2. 세그먼트 예외 (catchError)
             </span>
             <p className="mt-1 text-[11px] text-zinc-600 dark:text-zinc-400">
-              하위 세그먼트 예외 발생 시 상위 레이아웃을 보존하며 <code>error.tsx</code>로 격리.
+              실제로 <code>throw</code>된 예외를 <code>catchError()</code> 바운더리가 캡처. <code>error.tsx</code>는 세그먼트(폴더) 단위로 동일하게 동작하며, <code>catchError</code>는 이를 컴포넌트 단위로 확장한 버전.
             </p>
           </div>
 
-          {segmentActive ? (
-            <div className="rounded border border-rose-300 bg-rose-50 p-2 text-rose-800 dark:bg-rose-950/50 dark:text-rose-200 space-y-1">
-              <div className="font-mono font-bold text-[11px]">
-                [포착] payment/error.tsx
-              </div>
+          <SegmentErrorBoundary onReset={handleResetSegment}>
+            {segmentActive ? (
+              <PaymentSegmentPreview />
+            ) : (
               <button
                 type="button"
-                onClick={handleResetSegment}
-                className="rounded bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-rose-700 cursor-pointer"
+                onClick={handleTriggerSegment}
+                className="rounded bg-amber-600 px-3 py-1.5 text-xs font-medium text-white shadow-2xs hover:bg-amber-700 cursor-pointer"
               >
-                결제 다시 시도 (reset())
+                2. 세그먼트 예외 던지기 시뮬레이션
               </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={handleTriggerSegment}
-              className="rounded bg-amber-600 px-3 py-1.5 text-xs font-medium text-white shadow-2xs hover:bg-amber-700 cursor-pointer"
-            >
-              2. 세그먼트 예외 던지기 시뮬레이션
-            </button>
-          )}
+            )}
+          </SegmentErrorBoundary>
         </div>
 
         {/* Tier 3 Interactive Simulator */}
         <div className="rounded border border-rose-200 bg-rose-50/30 p-3.5 dark:border-rose-900/40 dark:bg-rose-950/20 space-y-2 flex flex-col justify-between">
           <div>
-            <span className="font-bold text-rose-900 dark:text-rose-200">
-              3. 루트 크래시 (global-error)
-            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="font-bold text-rose-900 dark:text-rose-200">
+                3. 루트 크래시 (global-error)
+              </span>
+              <span className="rounded bg-zinc-200 px-1 py-0.2 font-mono text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                개념 시각화 목업
+              </span>
+            </div>
             <p className="mt-1 text-[11px] text-zinc-600 dark:text-zinc-400">
               Root Layout 크래시 시 <code>global-error.tsx</code> + <code>{'<'}html{'>'}{'<'}body{'>'}</code> 비상 화면.
             </p>
@@ -188,14 +194,22 @@ export function ErrorLayerSimulator() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
           <div className="max-w-md w-full rounded-lg border border-zinc-700 bg-zinc-950 p-6 text-white shadow-2xl space-y-4">
             <div className="space-y-1">
-              <span className="rounded bg-rose-600 px-2 py-0.5 font-mono text-[10px] font-bold uppercase">
-                global-error.tsx (Root Layout Crash)
-              </span>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="rounded bg-rose-600 px-2 py-0.5 font-mono text-[10px] font-bold uppercase">
+                  global-error.tsx (Root Layout Crash)
+                </span>
+                <span className="rounded bg-zinc-700 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-zinc-300">
+                  개념 시각화 목업 · 실제 크래시 아님
+                </span>
+              </div>
               <h3 className="text-base font-bold text-rose-400">
                 치명적 전역 에러가 발생했습니다
               </h3>
               <p className="text-xs text-zinc-400">
                 최상위 루트 레이아웃(app/layout.tsx) 크래시로 인해 global-error.tsx의 독립 &lt;html&gt;&lt;body&gt; 태그가 렌더링되었습니다.
+              </p>
+              <p className="text-[11px] text-amber-400">
+                ⚠ 이 화면은 실제 Root Layout 크래시가 아니라, 246개 데모가 공유하는 layout.tsx를 건드리지 않기 위해 재현한 모달입니다.
               </p>
             </div>
             <div className="rounded bg-zinc-900 p-3 font-mono text-[11px] text-zinc-400">
