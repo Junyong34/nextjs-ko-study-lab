@@ -33,26 +33,46 @@ export default function ProductReviewTemplate({
   }
 
   return (
-    <div className="space-y-3">
-      {/* template.tsx로 래핑된 하위 page 콘텐츠 */}
-      {children}
+    <div className="space-y-4 rounded-2xl border-2 border-indigo-500/40 bg-indigo-50/20 p-4 sm:p-5 dark:border-indigo-900/50 dark:bg-indigo-950/20 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      {/* template.tsx 영역 안내 헤더 */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-200/80 pb-3 dark:border-indigo-900/80">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-indigo-500 animate-pulse" />
+          <span className="font-mono text-xs font-bold text-indigo-950 dark:text-indigo-200">
+            template.tsx 영역
+          </span>
+          <span className="rounded bg-indigo-100 px-2 py-0.5 font-mono text-[10px] font-bold text-indigo-800 dark:bg-indigo-900/80 dark:text-indigo-200">
+            라우트 전환 시 매번 재마운트 (Re-mount)
+          </span>
+        </div>
+        <div className="flex items-center gap-2 font-mono text-[11px] text-indigo-700 dark:text-indigo-300">
+          <span>인스턴스 고유 ID: <strong className="text-zinc-900 dark:text-zinc-100">#{instanceId || '------'}</strong></span>
+          <span>·</span>
+          <span>마운트: {mountTime || '--:--:--'}</span>
+        </div>
+      </div>
+
+      <p className="text-xs text-indigo-900/80 dark:text-indigo-300/80">
+        이 보라색 테두리 영역 전체가 <code>template.tsx</code> 컴포넌트입니다. 상단 탭을 전환하면 <code>layout.tsx</code>는 유지되지만 이 영역(하위 <code>page.tsx</code> 및 내부 폼 상태)은 <strong>완전히 언마운트된 후 새 인스턴스로 재생성</strong>됩니다.
+      </p>
+
+      {/* template.tsx로 래핑된 하위 page.tsx 콘텐츠 */}
+      <div className="space-y-1.5">
+        <span className="font-mono text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+          ↓ template.tsx의 {'{children}'}으로 주입된 page.tsx 콘텐츠:
+        </span>
+        {children}
+      </div>
 
       {/* template.tsx에 정의된 후기 작성 폼 (인스턴스 재생성 실증) */}
-      <div className="space-y-3 rounded-lg border border-zinc-200 bg-white p-3.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="space-y-3 rounded-xl border border-indigo-200/70 bg-white p-4 shadow-2xs dark:border-indigo-900/50 dark:bg-zinc-950">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200/80 pb-2 dark:border-zinc-800">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">
-              template.tsx 클라이언트 폼
-            </span>
-            <span className="rounded bg-zinc-900 px-1.5 py-0.5 font-mono text-[9px] font-bold text-white dark:bg-zinc-100 dark:text-zinc-900">
-              매 라우트마다 Re-mount
-            </span>
-          </div>
-          <div className="flex items-center gap-2 font-mono text-[11px] text-zinc-500">
-            <span>인스턴스 ID: <strong className="text-zinc-900 dark:text-zinc-100">#{instanceId || '------'}</strong></span>
-            <span>·</span>
-            <span>마운트: {mountTime || '--:--:--'}</span>
-          </div>
+          <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+            template.tsx 내부 상태 (React useState)
+          </span>
+          <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
+            페이지를 전환하면 아래 입력 상태가 자동 리셋됩니다
+          </span>
         </div>
 
         {/* 평점 선택 */}
@@ -102,10 +122,10 @@ export default function ProductReviewTemplate({
           />
         </div>
 
-        <div className="flex items-center justify-between text-[11px] text-zinc-500">
-          <span>작성 글자 수: {reviewText.length}자</span>
-          <span className="font-medium text-zinc-800 dark:text-zinc-200">
-            Next.js template.tsx 규칙: 페이지 전환 시 DOM 인스턴스를 파기하고 완전히 새로 마운트합니다.
+        <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-zinc-500">
+          <span>작성 글자 수: <strong>{reviewText.length}자</strong></span>
+          <span className="font-medium text-indigo-700 dark:text-indigo-300">
+            Next.js 규격: 탭 전환 시 인스턴스를 파기하고 새로운 컴포넌트 트리를 마운트합니다.
           </span>
         </div>
       </div>
