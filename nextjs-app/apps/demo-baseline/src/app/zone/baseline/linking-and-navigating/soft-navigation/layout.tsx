@@ -22,8 +22,8 @@ export default function SoftNavigationRootLayout({
           steps={[
             {
               step: 1,
-              title: '[⬇️ 스크롤 아래로 내리기] 클릭 또는 휠 스크롤',
-              description: '상품 목록을 아래로 스크롤하여 스크롤 Y 위치(Y > 400px)를 생성합니다.',
+              title: '[⬇️ 스크롤 아래로 내리기] 클릭 또는 카탈로그 휠 스크롤',
+              description: '예제 스크롤 박스 내부를 아래로 스크롤하여 스크롤 Y 위치(Y > 200px)를 생성합니다.',
               actionBadge: '스크롤 이동',
             },
             {
@@ -57,8 +57,21 @@ export default function SoftNavigationRootLayout({
           {/* 네비게이션 제어 바 & 스크롤 도우미 버튼 */}
           <NavComparisonBar />
 
-          {/* 실제 라우트 페이지 콘텐츠 (스크롤 목록) */}
-          <div className="pt-2">{children}</div>
+          {/* 실제 라우트 페이지 콘텐츠 (높이 제한 및 전용 스크롤바 영역) */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs font-semibold text-zinc-600 dark:text-zinc-400 px-1">
+              <span>📦 카탈로그 전용 스크롤 영역 (높이 제한 컨테이너)</span>
+              <span className="font-mono text-[11px] text-emerald-600 dark:text-emerald-400">
+                스크롤바를 아래로 내려 상품을 확인해 보세요 ↓
+              </span>
+            </div>
+            <div
+              id="product-scroll-container"
+              className="h-[360px] sm:h-[400px] overflow-y-auto rounded-2xl border-2 border-zinc-200 bg-zinc-50/50 p-4 shadow-inner dark:border-zinc-800 dark:bg-zinc-950/60"
+            >
+              {children}
+            </div>
+          </div>
         </DemoPlaygroundCard>
 
         {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}

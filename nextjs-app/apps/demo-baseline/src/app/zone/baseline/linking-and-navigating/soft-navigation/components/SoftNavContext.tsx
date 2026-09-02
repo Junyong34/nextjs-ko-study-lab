@@ -34,14 +34,23 @@ export function SoftNavProvider({ children }: { children: React.ReactNode }) {
       setSeconds((s) => s + 1)
     }, 1000)
 
-    const handleScroll = () => {
-      setScrollY(Math.round(window.scrollY))
+    const updateScroll = () => {
+      const container = document.getElementById('product-scroll-container')
+      const containerTop = container ? Math.round(container.scrollTop) : 0
+      const winTop = Math.round(window.scrollY)
+      setScrollY(containerTop > 0 ? containerTop : winTop)
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    const container = document.getElementById('product-scroll-container')
+    container?.addEventListener('scroll', updateScroll, { passive: true })
+    window.addEventListener('scroll', updateScroll, { passive: true })
+    const pollTimer = setInterval(updateScroll, 250)
 
     return () => {
       clearInterval(timer)
-      window.removeEventListener('scroll', handleScroll)
+      clearInterval(pollTimer)
+      container?.removeEventListener('scroll', updateScroll)
+      window.removeEventListener('scroll', updateScroll)
     }
   }, [])
 

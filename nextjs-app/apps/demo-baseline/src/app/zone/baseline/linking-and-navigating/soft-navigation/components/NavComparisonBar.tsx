@@ -16,17 +16,19 @@ export function NavComparisonBar() {
   const isNew = pathname === `${BASE_URL}/new`
 
   const handleScrollDown = () => {
-    window.scrollTo({
-      top: 600,
-      behavior: 'smooth',
-    })
+    const container = document.getElementById('product-scroll-container')
+    if (container) {
+      container.scrollTo({ top: 350, behavior: 'smooth' })
+    }
+    window.scrollTo({ top: 450, behavior: 'smooth' })
   }
 
   const handleScrollTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
+    const container = document.getElementById('product-scroll-container')
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -43,7 +45,7 @@ export function NavComparisonBar() {
             onClick={handleScrollDown}
             className="inline-flex items-center gap-1 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-900 hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-200 transition cursor-pointer"
           >
-            <span>⬇️ 스크롤 아래로 내리기 (Y=600px)</span>
+            <span>⬇️ 스크롤 아래로 내리기 (Y=350px)</span>
           </button>
           <button
             type="button"
