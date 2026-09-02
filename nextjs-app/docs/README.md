@@ -15,6 +15,7 @@ Next.js 학습 랩(`nextjs-app`)의 시스템 아키텍처, UI 설계, 코드베
 | **05** | [**Zone / 데모 추가 체크리스트**](./05-zone-onboarding-checklist.md) | • zone을 새로 추가할 때 손대야 하는 지점 전체<br>• 일상적인 데모 추가 절차 |
 | **06** | [**학습 기록 기능 설계**](./06-learning-progress-design.md) | • 셸 소유의 `localStorage` 기반 학습 진도 및 완료 표시 동기화 엔진<br>• `LearningProgressProvider` 및 통계 대시보드 화면 설계 |
 | **07** | [**SEO 작업 계획**](./07-seo-plan.md) | • robots/sitemap/구조화 데이터/OG 등 기술적 SEO 체크리스트<br>• Google·네이버 등록 절차와 도메인 확정 전/후 실행 순서 |
+| **08** | [**향후 콘텐츠 아이디어 백로그**](./08-future-content-ideas.md) | • 문서 번역·데모 실습 이후 추가할 콘텐츠 후보 10종 목록<br>• 새 콘텐츠 기획 시 참고하는 백로그(실행 계획 아님) |
 
 ---
 
