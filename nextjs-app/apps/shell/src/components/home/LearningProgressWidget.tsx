@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Layers, CheckCircle2, PlayCircle, BookOpen, ArrowRight, Sparkles } from 'lucide-react'
+import { Layers, CheckCircle2, PlayCircle, BookOpen, ArrowRight } from 'lucide-react'
 import { useLearningProgress } from '@/components/learning-progress/LearningProgressProvider'
 
 export function LearningProgressWidget() {

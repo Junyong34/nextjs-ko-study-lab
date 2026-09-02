@@ -22,7 +22,7 @@ const ROADMAP_STEPS: ChapterItem[] = [
   },
   {
     step: 'Step 02',
-    title: '실무 가이드',
+    title: '가이드',
     subtitle: 'Guides',
     summary: '렌더링, Server Actions, 캐싱, 폼 처리, 인증·보안 등 주제별 학습 가이드입니다.',
     href: '/guides',

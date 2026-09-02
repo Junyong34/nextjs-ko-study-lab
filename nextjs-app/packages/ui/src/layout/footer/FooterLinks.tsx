@@ -1,6 +1,6 @@
 import React from 'react'
-import { ExternalLink, Sparkles } from 'lucide-react'
-import { GitHubIcon } from '../../brand'
+import { ExternalLink } from 'lucide-react'
+import { NextLogo, GitHubIcon } from '../../brand'
 
 export interface FooterLinksProps {
   /** 화면에 표시할 기준 버전 (예: "v16.3.2") */
@@ -21,7 +21,7 @@ export function FooterLinks({ version, releaseUrl, repoUrl }: FooterLinksProps) 
         rel="noreferrer"
         className="inline-flex items-center gap-1 font-mono text-zinc-600 hover:text-zinc-900 transition dark:text-zinc-400 dark:hover:text-zinc-100"
       >
-        <Sparkles className="h-3.5 w-3.5 text-zinc-400" />
+        <NextLogo className="h-3.5 w-3.5 fill-current text-zinc-400" />
         {/* 텍스트를 한 노드로 만든다. 나누면 React가 <!-- --> 마커를 끼워 DOM이 달라진다 */}
         <span>{`Next.js ${version}`}</span>
         <ExternalLink className="h-3 w-3 text-zinc-400" />

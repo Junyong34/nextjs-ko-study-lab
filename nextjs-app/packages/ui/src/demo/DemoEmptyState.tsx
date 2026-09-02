@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { FlaskConical, BookOpen, ArrowLeft, Sparkles, SearchX, RotateCcw } from 'lucide-react'
+import { FlaskConical, BookOpen, ArrowLeft, PlayCircle, SearchX, RotateCcw } from 'lucide-react'
 
 export interface DemoEmptyStateProps {
   /** 문서 제목 (문서 준비 중 모드) */
@@ -144,7 +144,7 @@ export function DemoEmptyState({
             href="/demo"
             className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-medium text-zinc-700 shadow-xs hover:bg-zinc-50 hover:text-zinc-900 transition dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
           >
-            <Sparkles className="h-4 w-4 text-amber-500" />
+            <PlayCircle className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
             <span>다른 실습 예제 둘러보기</span>
           </Link>
         </div>

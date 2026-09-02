@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Sparkles, Zap, Server, ShieldCheck, Database, ArrowUpRight } from 'lucide-react'
+import { Zap, Server, ShieldCheck, Database, ArrowUpRight } from 'lucide-react'
 
 interface FeatureHighlight {
   title: string

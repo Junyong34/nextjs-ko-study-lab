@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "generatedAt": "2026-08-25T11:14:21.808Z",
+  "generatedAt": "2026-09-02T02:18:52.588Z",
   "totalDocs": 284,
   "docs": [
     {
@@ -878,7 +878,7 @@
       "slug": [
         "guides"
       ],
-      "title": "2. 실무 가이드 (Guides)",
+      "title": "2. 가이드 (Guides)",
       "demos": []
     },
     {
@@ -3622,7 +3622,7 @@
       "slug": [
         "guides"
       ],
-      "title": "2. 실무 가이드 (Guides)",
+      "title": "2. 가이드 (Guides)",
       "demos": []
     },
     "/guides/adopting-partial-prefetching": {
@@ -6594,7 +6594,7 @@
       ]
     },
     {
-      "title": "2. 실무 가이드 (Guides)",
+      "title": "2. 가이드 (Guides)",
       "url": "/guides",
       "path": "2-guides/README.md",
       "order": "2",

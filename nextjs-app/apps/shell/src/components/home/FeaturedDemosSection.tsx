@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { PlayCircle, ArrowRight, Sparkles, Terminal, Code2, CheckCircle2 } from 'lucide-react'
+import { PlayCircle, ArrowRight, Terminal, Code2, CheckCircle2 } from 'lucide-react'
 import type { Demo } from '@study/demos'
 
 interface FeaturedDemoItem {

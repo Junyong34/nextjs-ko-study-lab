@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Rocket, BookOpen, Layers, PlayCircle, BookmarkCheck, ArrowRight, Copy, Check, Terminal, Sparkles } from 'lucide-react'
+import { Rocket, BookOpen, Layers, PlayCircle, BookmarkCheck, ArrowRight, Copy, Check, Terminal } from 'lucide-react'
 
 interface RoadmapHeroProps {
   totalDocs: number
@@ -55,8 +55,8 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
             Turbopack
           </span>
           <span className="inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-100/90 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-300">
-            <Sparkles className="h-3 w-3 text-amber-500" />
-            241 Live Demos
+            <PlayCircle className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+            {totalDemos} Live Demos
           </span>
         </div>
 
