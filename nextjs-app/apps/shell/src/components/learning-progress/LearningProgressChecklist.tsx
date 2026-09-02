@@ -34,7 +34,7 @@ export function LearningProgressChecklist({
   const categoryFilters = useMemo(
     () => [
       { value: 'all', label: '전체' },
-      ...categories.map((item) => ({ value: item, label: item })),
+      ...categories.sort().map((item) => ({ value: item, label: item })),
     ],
     [categories],
   )
