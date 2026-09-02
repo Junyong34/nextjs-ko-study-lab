@@ -89,6 +89,30 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
               <li><strong>useTransition 연동</strong>: Server Action 호출부를 <code>startTransition</code>으로 감싸 <code>isPending</code> 상태를 바인딩함으로써 사용자에게 명확한 진행 인디케이터를 제공합니다.</li>
             </ul>
           </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">6. 자주 헷갈리는 포인트 (FAQ)</h5>
+            <div className="space-y-2.5">
+              <div>
+                <p className="font-semibold text-zinc-800 dark:text-zinc-200">Q. 서버 상태만 갱신하고 다시 조회해서 리렌더링하면, revalidatePath 없어도 결과가 같은 것 아닌가요?</p>
+                <p className="text-zinc-600 dark:text-zinc-400">
+                  A. 아닙니다. 위 <code>page.tsx</code>의 서버 컴포넌트 함수는 페이지 진입 시 <strong>딱 한 번 실행되고 끝나는 함수</strong>라서, 서버 데이터가 바뀌었다고 저절로 재실행되지 않습니다. <code>revalidatePath()</code>가 바로 &quot;이 경로의 서버 컴포넌트를 다시 실행해서 최신 데이터를 재조회하라&quot;는 신호이며, 이 신호가 없으면 재조회·리렌더링 단계 자체가 아예 발생하지 않습니다.
+                </p>
+              </div>
+              <div>
+                <p className="font-semibold text-zinc-800 dark:text-zinc-200">Q. 새로고침해도 유지되는 데이터라면 revalidatePath를 꼭 써야 하나요?</p>
+                <p className="text-zinc-600 dark:text-zinc-400">
+                  A. &quot;데이터가 유지되는 것&quot;(저장)과 <code>revalidatePath</code>는 별개입니다. 데이터가 남는 건 DB/서버 메모리 같은 저장소의 역할이고, <code>revalidatePath</code>는 <strong>새로고침 없이</strong> 화면에 즉시 반영하기 위한 것입니다. 페이지가 동적 렌더링이면 새로고침(F5) 자체가 서버 컴포넌트를 재실행시켜 revalidatePath 없이도 최신값이 보이지만, 정적으로 캐시된 페이지라면 revalidatePath(또는 시간 기반 재검증) 없이는 새로고침해도 캐시된 옛 값이 계속 보일 수 있습니다.
+                </p>
+              </div>
+              <div>
+                <p className="font-semibold text-zinc-800 dark:text-zinc-200">Q. <code>&apos;use client&apos;</code> 컴포넌트는 revalidatePath와 무관한가요?</p>
+                <p className="text-zinc-600 dark:text-zinc-400">
+                  A. <code>'use client'</code> 코드 안에서 <code>revalidatePath</code>를 직접 호출할 수는 없습니다(서버 전용 API). 하지만 위 <code>CartTableClient</code>처럼, 부모 서버 컴포넌트가 <code>revalidatePath</code>로 다시 실행되면 새 props를 전달받아 화면이 갱신되는 <strong>당사자</strong>이기도 합니다. 직접 호출은 못 해도 그 효과를 받는 쪽이라는 점에서 무관하지 않습니다.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </DemoDeepDiveCard>
     </div>

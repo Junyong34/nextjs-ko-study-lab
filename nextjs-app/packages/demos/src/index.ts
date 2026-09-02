@@ -34,7 +34,7 @@ export function getDefaultYamlPath(): string {
         ? __dirname
         : path.dirname(fileURLToPath(import.meta.url))
     const candidate = path.resolve(currentDir, '../demos.yaml')
-    if (fs.existsSync(candidate)) {
+    if (fs.existsSync(/*turbopackIgnore: true*/ candidate)) {
       return candidate
     }
   } catch {
@@ -50,7 +50,7 @@ export function getDefaultYamlPath(): string {
   ]
 
   for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) {
+    if (fs.existsSync(/*turbopackIgnore: true*/ candidate)) {
       return candidate
     }
   }
@@ -65,7 +65,7 @@ export function parseDemos(yamlContent: string): Demo[] {
 
 export function loadDemos(yamlFilePath?: string): Demo[] {
   const targetPath = yamlFilePath ?? getDefaultYamlPath()
-  const content = fs.readFileSync(targetPath, 'utf-8')
+  const content = fs.readFileSync(/*turbopackIgnore: true*/ targetPath, 'utf-8')
   return parseDemos(content)
 }
 

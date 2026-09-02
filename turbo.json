@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**", "dist/**"],
+      "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**", "dist/**", "docs-manifest.json", "demos-manifest.json"],
       "env": ["ZONE_*_URL", "PUBLIC_ORIGIN", "VERCEL_RELATED_PROJECTS"]
     },
     "dev": {
