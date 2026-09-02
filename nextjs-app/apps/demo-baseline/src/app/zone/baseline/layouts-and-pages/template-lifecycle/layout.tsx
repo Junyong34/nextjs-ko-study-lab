@@ -53,7 +53,7 @@ export default function TemplateLifecycleRootLayout({
               1. layout.tsx (탭 셸)
             </span>
             <span className="text-zinc-500 dark:text-zinc-400 font-bold px-1">➔</span>
-            <span className="inline-flex items-center rounded-lg border border-indigo-400 bg-indigo-100 px-3 py-1.5 font-mono font-bold text-indigo-900 shadow-2xs dark:border-indigo-700 dark:bg-indigo-950 dark:text-indigo-200">
+            <span className="inline-flex items-center rounded-lg border border-purple-400 bg-purple-100 px-3 py-1.5 font-mono font-bold text-purple-900 shadow-2xs dark:border-purple-700 dark:bg-purple-950 dark:text-purple-200">
               2. template.tsx (재마운트 래퍼)
             </span>
             <span className="text-zinc-500 dark:text-zinc-400 font-bold px-1">➔</span>

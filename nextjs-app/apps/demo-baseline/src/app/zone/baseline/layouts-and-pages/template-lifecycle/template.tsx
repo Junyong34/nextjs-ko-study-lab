@@ -33,28 +33,28 @@ export default function ProductReviewTemplate({
   }
 
   return (
-    <div className="rounded-2xl border-2 border-indigo-500/50 bg-indigo-50/30 p-5 sm:p-6 dark:border-indigo-700/60 dark:bg-indigo-950/30 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <div className="rounded-2xl border-2 border-purple-500/60 bg-purple-50/40 p-5 sm:p-6 dark:border-purple-600/60 dark:bg-purple-950/30 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
       {/* template.tsx 영역 안내 헤더 */}
-      <div className="space-y-2 border-b border-indigo-200 pb-4 dark:border-indigo-800 mb-6">
+      <div className="space-y-2 border-b border-purple-200 pb-4 dark:border-purple-800 mb-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <span className="h-3 w-3 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse shrink-0" />
+            <span className="h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400 animate-pulse shrink-0" />
             <span className="font-mono text-sm font-extrabold text-zinc-900 dark:text-white">
               template.tsx 영역
             </span>
-            <span className="rounded-md bg-indigo-600 px-2.5 py-0.5 font-mono text-[11px] font-bold text-white shadow-2xs dark:bg-indigo-500 dark:text-white">
+            <span className="rounded-md bg-purple-600 px-2.5 py-0.5 font-mono text-[11px] font-bold text-white shadow-2xs dark:bg-purple-500 dark:text-white">
               라우트 전환 시 매번 재마운트 (Re-mount)
             </span>
           </div>
           <div className="flex items-center gap-2 font-mono text-xs text-zinc-700 dark:text-zinc-300">
-            <span>인스턴스 고유 ID: <strong className="font-bold text-indigo-600 dark:text-indigo-400">#{instanceId || '------'}</strong></span>
+            <span>인스턴스 고유 ID: <strong className="font-bold text-purple-600 dark:text-purple-400">#{instanceId || '------'}</strong></span>
             <span>·</span>
             <span>마운트 시각: <strong className="text-zinc-900 dark:text-zinc-100">{mountTime || '--:--:--'}</strong></span>
           </div>
         </div>
 
         <p className="text-xs leading-relaxed text-zinc-700 dark:text-zinc-300 pt-1">
-          이 보라색 테두리 영역 전체가 <code className="rounded bg-indigo-100 px-1 py-0.5 font-mono font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">template.tsx</code> 컴포넌트입니다. 상단 탭을 전환하면 <code className="rounded bg-emerald-100 px-1 py-0.5 font-mono font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">layout.tsx</code>는 유지되지만 이 영역(하위 <code>page.tsx</code> 및 내부 폼 상태)은 <strong className="font-bold text-zinc-900 dark:text-zinc-100">완전히 언마운트된 후 새 인스턴스로 재생성</strong>됩니다.
+          이 보라색 테두리 영역 전체가 <code className="rounded bg-purple-100 px-1 py-0.5 font-mono font-bold text-purple-700 dark:bg-purple-950 dark:text-purple-300">template.tsx</code> 컴포넌트입니다. 상단 탭을 전환하면 <code className="rounded bg-emerald-100 px-1 py-0.5 font-mono font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">layout.tsx</code>는 유지되지만 이 영역(하위 <code>page.tsx</code> 및 내부 폼 상태)은 <strong className="font-bold text-zinc-900 dark:text-zinc-100">완전히 언마운트된 후 새 인스턴스로 재생성</strong>됩니다.
         </p>
       </div>
 
@@ -68,7 +68,7 @@ export default function ProductReviewTemplate({
       </div>
 
       {/* template.tsx에 정의된 후기 작성 폼 (인스턴스 재생성 실증) */}
-      <div className="mt-8 rounded-xl border border-indigo-200/80 bg-white p-5 shadow-xs dark:border-indigo-900/60 dark:bg-zinc-950">
+      <div className="mt-8 rounded-xl border border-purple-200/90 bg-white p-5 shadow-xs dark:border-purple-900/60 dark:bg-zinc-950">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200/80 pb-3 dark:border-zinc-800 mb-4">
           <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
             template.tsx 내부 상태 (React useState)
@@ -127,7 +127,7 @@ export default function ProductReviewTemplate({
 
         <div className="flex flex-wrap items-center justify-between gap-1 border-t border-zinc-100 pt-3 text-[11px] text-zinc-500 dark:border-zinc-800">
           <span>작성 글자 수: <strong>{reviewText.length}자</strong></span>
-          <span className="font-medium text-indigo-700 dark:text-indigo-300">
+          <span className="font-medium text-purple-700 dark:text-purple-300">
             Next.js 규격: 탭 전환 시 인스턴스를 파기하고 새로운 컴포넌트 트리를 마운트합니다.
           </span>
         </div>
