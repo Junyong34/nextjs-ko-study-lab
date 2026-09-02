@@ -85,7 +85,13 @@ export function NavComparisonBar() {
         {/* 2. Link (기본값 scroll={true}) - 신상품 */}
         <Link
           href={`${BASE_URL}/new`}
-          onClick={() => softNav?.recordNav('soft-scroll-top')}
+          onClick={() => {
+            softNav?.recordNav('soft-scroll-top')
+            const container = document.getElementById('product-scroll-container')
+            if (container) {
+              container.scrollTo({ top: 0, behavior: 'smooth' })
+            }
+          }}
           className={`flex flex-col justify-between rounded-xl p-3 text-xs font-medium transition cursor-pointer border ${
             isNew
               ? 'border-emerald-600 bg-emerald-600 text-white font-bold shadow-xs'
