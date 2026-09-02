@@ -105,7 +105,7 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
             Curriculum Bookshelf
           </p>
           <h2 className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-100">
-            5대 핵심 학습 트랙
+            Step별 공식 번역 문서 & 실습 예제
           </h2>
         </div>
       </div>

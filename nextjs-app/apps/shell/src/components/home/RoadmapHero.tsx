@@ -67,11 +67,11 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
               Next.js App Router
             </span>
             <span className="block mt-2 text-2xl sm:text-3xl lg:text-4xl font-bold text-zinc-700 dark:text-zinc-300">
-              한국어 학습 가이드 & 실습 예제
+              한국어 번역 문서 & 실습 예제
             </span>
           </h1>
           <p className="text-base sm:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-3xl">
-            Next.js 공식 문서를 바탕으로 만든 한국어 학습 문서를 읽고, {totalDemos}개 실습 예제에서 핵심 기능의 동작을 직접 확인해 보세요.
+            Next.js 공식 문서를 한국어로 번역한 학습 문서를 읽고, {totalDemos}개 실습 예제에서 핵심 기능의 동작을 직접 확인해 보세요.
           </p>
         </div>
 
