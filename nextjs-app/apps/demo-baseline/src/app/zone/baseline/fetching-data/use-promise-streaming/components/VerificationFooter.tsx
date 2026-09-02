@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
-import type { ProductReview } from '../types'
 
 export interface VerificationFooterProps {
   isMatched?: boolean
@@ -10,25 +9,28 @@ export interface VerificationFooterProps {
   actual?: React.ReactNode
   status?: string | number | null
   description?: string
-  reviews?: ProductReview[]
+  isStarted?: boolean
+  hasCompleted?: boolean
+  delayMs?: number
   [key: string]: any
 }
 
 export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const { reviews } = props
+  const { isStarted = false, hasCompleted = false, delayMs = 1500 } = props
 
   const defaultExpected =
-    '• 메인 상품 정보(189,000원) 지연 없는 즉각 렌더링 (빠른 FCP)\n• React 19 use(Promise)로 800ms 지연 구매 후기 3건 스트리밍 언랩\n• Suspense Fallback 스켈레톤에서 실제 후기 UI로의 점진적 전환 관찰'
+    '• 메인 상품 정보(189,000원) 지연 없는 즉각 렌더링 (빠른 FCP)\n• 버튼 클릭 시 React 19 use(Promise)로 ' + delayMs + 'ms 지연 구매 후기 3건 스트리밍 언랩\n• Suspense Fallback 스켈레톤에서 실제 후기 UI로의 점진적 전환 관찰'
 
-  const defaultActual =
-    reviews && reviews.length > 0
-      ? `• 스트리밍 언랩: React 19 use(Promise) 완료\n• 로드된 후기 수: ${reviews.length}건 (${reviews.map((r) => r.author).join(', ')})\n• 렌더링 상태: 메인 셸 즉시 렌더 + 후기 청크 스트리밍 정상`
-      : '• Suspense Fallback 로딩 대기 중 (구매 후기 Promise 스트리밍 800ms 대기)'
+  const defaultActual = hasCompleted
+    ? `• 스트리밍 언랩: React 19 use(Promise) 완료 (${delayMs}ms 지연 후기 수신)\n• 로드된 후기 수: 3건 (개발자K, 키보드매니아, 디자이너P)\n• 렌더링 상태: 메인 셸 즉시 렌더 + use(Promise) Suspense 스트리밍 검증 완료`
+    : isStarted
+    ? `• 스트리밍 상태: <Suspense fallback> 스켈레톤 렌더링 중 (${delayMs}ms 대기 중)\n• Promise 상태: Pending ➔ use(Promise) 언랩 진행 중`
+    : `• 스트리밍 상태: 대기 중 (미실행)\n• 조작 방법: 상단 [⚡ 1. 구매 고객 후기 스트리밍 시작] 버튼을 클릭하세요.`
 
   const isMatched =
     props.isMatched !== undefined
       ? props.isMatched
-      : reviews && reviews.length > 0
+      : hasCompleted
       ? true
       : undefined
 
@@ -51,14 +53,14 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              React 19의 <code>use()</code> API는 Server Component에서 생성한 미해결(Pending) <code>Promise</code> 객체를 Client Component에 Props로 전달하고, 클라이언트 렌더 단계에서 <code>use(promise)</code>로 언래핑하여 <code>{'<'}Suspense{'>'}</code> 바운더리와 결합된 점진적 스트리밍을 구현하는 표준 스펙입니다.
+              React 19의 <code>use()</code> API는 미해결(Pending) <code>Promise</code> 객체를 Client Component에 전달하고, 클라이언트 렌더 단계에서 <code>use(promise)</code>로 언래핑하여 <code>{'<'}Suspense{'>'}</code> 바운더리와 결합된 점진적 스트리밍을 구현하는 표준 스펙입니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 서버 컴포넌트가 즉시 반환되는 메인 상품 정보(189,000원)와 800ms 지연되는 구매 후기 Promise(3건: 개발자K, 키보드매니아, 디자이너P)를 생성합니다. 상품 셸이 먼저 사용자에게 표시된 후, 800ms 시점에 <code>use(reviewsPromise)</code>가 resolve되어 후기 목록으로 부드럽게 교체됩니다.
+              본 데모에서는 메인 상품 정보(189,000원)가 즉시 렌더링된 상태에서, 사용자가 버튼을 클릭하면 지연 Promise(3건: 개발자K, 키보드매니아, 디자이너P)를 생성합니다. Promise가 resolve되기 전까지는 <code>{'<'}Suspense fallback{'={ReviewsSkeleton /}>'}</code>이 표시되고, 설정된 시간 경과 후 <code>use(promise)</code>가 resolve되어 후기 목록으로 부드럽게 교체됩니다.
             </p>
           </div>
 
@@ -83,7 +85,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Promise 인스턴스 재생성 방지</strong>: Server Component에서 매 렌더마다 새 Promise 객체를 인라인으로 생성하면 참조 불일치로 리렌더 루프가 발생할 수 있으므로 캐시된 함수나 컴포넌트 외부에서 안정적인 Promise를 전달해야 합니다.</li>
+              <li><strong>Promise 인스턴스 재생성 방지</strong>: 컴포넌트 렌더마다 새 Promise 객체를 무한 생성하면 리렌더 루프가 발생할 수 있으므로 상태나 캐시를 통해 안정적인 Promise를 전달해야 합니다.</li>
               <li><strong>에러 바운더리 결합</strong>: <code>use(promise)</code>가 reject되면 가장 가까운 Error Boundary로 예외가 전파되므로 <code>{'<'}Suspense{'>'}</code> 외부에 <code>{'<'}ErrorBoundary{'>'}</code>를 반드시 배치해야 합니다.</li>
             </ul>
           </div>

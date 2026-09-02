@@ -1,9 +1,6 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ReviewsStreamingClient, ReviewsStreamingFooter } from './components/ReviewsStreamingClient'
-import { ReviewsSkeleton } from './components/ReviewsSkeleton'
-import { VerificationFooter } from './components/VerificationFooter'
-import type { ProductReview } from './types'
+import { ReviewsStreamingClient } from './components/ReviewsStreamingClient'
 
 // 1. 메인 상품 정보: 서버에서 즉시 로드 (빠른 FCP)
 async function getProductInfo() {
@@ -15,101 +12,57 @@ async function getProductInfo() {
   }
 }
 
-// 2. 구매 후기 데이터: 의도적 지연 Promise (await하지 않고 전달)
-async function getReviewsPromise(): Promise<ProductReview[]> {
-  // 실제 프로덕션의 무거운 서드파티 리뷰 DB 조회 시뮬레이션
-  await new Promise((resolve) => setTimeout(resolve, 800))
-
-  return [
-    {
-      id: 'rev-1',
-      author: '개발자K',
-      rating: 5,
-      comment: '타건음이 조약돌 굴러가는 소리처럼 정말 도각도각 좋습니다! 대만족.',
-      createdAt: '2026-08-20',
-    },
-    {
-      id: 'rev-2',
-      author: '키보드매니아',
-      rating: 5,
-      comment: '풀 알루미늄이라 묵직해서 흔들림 없이 안정적으로 코딩할 수 있네요.',
-      createdAt: '2026-08-19',
-    },
-    {
-      id: 'rev-3',
-      author: '디자이너P',
-      rating: 4,
-      comment: '마감 퀄리티가 훌륭합니다. 블루투스 멀티페어링도 빠르고 매끄러워요.',
-      createdAt: '2026-08-18',
-    },
-  ]
-}
-
 export default async function UsePromiseStreamingDemoPage() {
   const product = await getProductInfo()
-  // await하지 않고 Promise 객체를 생성하여 전달
-  const reviewsPromise = getReviewsPromise()
 
   return (
-    <DemoContainer className="space-y-6">
+    <DemoContainer className="space-y-8">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title="React 19 use(Promise) & Suspense 점진적 스트리밍"
-        concept="Server Component에서 800ms 지연되는 후기 데이터를 await하지 않고 Promise 객체 그대로 Client Component에 넘기면, Suspense 스켈레톤을 띄워둔 채 백그라운드 스트리밍으로 언랩(unwrap)합니다."
+        concept="React 19의 use() Hook은 Promise 객체를 직접 언랩(unwrap)하며, resolve되기 전까지 상위 Suspense의 fallback 스켈레톤을 렌더링하고 완료 시 실제 UI로 자동 전환합니다."
         steps={[
           {
             step: 1,
-            title: '메인 상품 정보 초기 렌더 확인',
+            title: '메인 상품 정보 즉시 렌더 확인',
             description: '상단의 키보드 상품명과 가격(189,000원)이 지연 없이 즉각 표시되는 빠른 초기 셸 렌더링을 확인합니다.',
             actionBadge: '초기 셸 렌더',
           },
           {
             step: 2,
-            title: 'Suspense 로딩 스켈레톤 표시 확인',
-            description: '후기 영역이 준비될 때까지 800ms 동안 ReviewsSkeleton이 렌더링되는 것을 확인합니다.',
-            actionBadge: '스트리밍 대기',
+            title: '[⚡ 1. 구매 고객 후기 스트리밍 시작] 클릭',
+            description: '지연 시간을 선택하고 스트리밍 시작 버튼을 클릭하여 Promise를 생성합니다.',
+            actionBadge: '스트리밍 실행',
           },
           {
             step: 3,
-            title: 'React 19 use() 언랩 결과 관찰',
-            description: '800ms 후 Promise가 resolve되면서 use(reviewsPromise)가 구매 후기 3건을 화면에 매끄럽게 렌더링하는 것을 관찰합니다.',
-            actionBadge: 'use(Promise) 언랩',
-            observe: '800ms 경과 후 스켈레톤이 실제 구매 후기 3건(개발자K, 키보드매니아, 디자이너P)으로 자동 전환됨',
+            title: 'Suspense 스켈레톤 ➔ use(Promise) 전환 관찰',
+            description: '설정된 지연 시간 동안 노란색 스켈레톤이 표시된 후, use(reviewsPromise)가 구매 후기 3건으로 매끄럽게 교체되는 것을 관찰합니다.',
+            actionBadge: 'use() 언랩 관찰',
+            observe: '지연 시간 경과 후 Suspense 스켈레톤이 실제 구매 후기 3건(개발자K, 키보드매니아, 디자이너P)으로 자동 전환됨',
             observeAt: 'playground',
           },
         ]}
       />
 
       {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 (스트리밍 Suspense 연동) */}
-      <DemoPlaygroundCard title="상품 상세 뷰 (즉시 렌더 본문 + 스트리밍 후기)" className="space-y-4">
+      <DemoPlaygroundCard title="상품 상세 뷰 (즉시 렌더 본문 + 스트리밍 후기)" className="space-y-8">
         {/* 즉각 렌더링된 메인 상품 카드 */}
-        <div className="rounded-md border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-1.5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+        <div className="rounded-2xl border border-zinc-200 bg-zinc-50/90 p-5 sm:p-6 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2 mb-8 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100">
               {product.name}
             </h3>
-            <span className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">
+            <span className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-lg border border-zinc-300 dark:border-zinc-700">
               {product.price.toLocaleString()}원
             </span>
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">{product.desc}</p>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">{product.desc}</p>
         </div>
 
-        {/* 스트리밍 Suspense 바운더리 + React 19 use() Client Component */}
-        <Suspense
-          fallback={
-            <>
-              <ReviewsSkeleton />
-            </>
-          }
-        >
-          <ReviewsStreamingClient reviewsPromise={reviewsPromise} />
-        </Suspense>
+        {/* 스트리밍 조작 및 Suspense 바운더리 Client Component */}
+        <ReviewsStreamingClient />
       </DemoPlaygroundCard>
-
-      <Suspense fallback={<VerificationFooter />}>
-        <ReviewsStreamingFooter reviewsPromise={reviewsPromise} />
-      </Suspense>
     </DemoContainer>
   )
 }
