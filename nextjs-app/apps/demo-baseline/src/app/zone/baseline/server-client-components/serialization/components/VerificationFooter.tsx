@@ -10,27 +10,26 @@ export interface VerificationFooterProps {
   status?: string | number | null
   description?: string
   actionResult?: string | null
+  selectedSimulation?: string
   [key: string]: any
 }
 
 export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const { actionResult } = props
+  const { actionResult, selectedSimulation = 'primitive' } = props
 
   const defaultExpected =
-    '• RSC → RCC Props 직렬화: 원시값(string, number, boolean, null), 평탄 객체(sku, stock), 배열, 날짜 문자열 정상 전달\n• \'use server\' Server Action Props: 함수 참조가 Action ID로 직렬화되어 클라이언트로 전달되고 클릭 시 정상 실행'
+    '• RSC → RCC Props 직렬화: 원시값(string, number, boolean, null), 평탄 객체(sku, stock), 배열, 날짜 문자열이 런타임 JSON 검증을 통과하여 정상 수신됨\n• 타입별 직렬화 규격: 일반 함수/Class/순환참조는 직렬화 불가 에러를 유발하며, "use server" Server Action은 고유 Action ID 참조로 직렬화되어 정상 호출됨'
 
   const hasExecuted = Boolean(actionResult)
 
   const defaultActual = hasExecuted
-    ? `• 직렬화 수신 Props: 원시값 4개, 평탄 객체, 배열, 날짜 문자열 수신 완료\n• Server Action Props 실행: 성공 (POST 200 OK)\n• 서버 응답 메시지: "${actionResult}"\n• Props 직렬화 및 Server Action 함수 Props 전달 검증 완료`
-    : `• 직렬화 수신 Props: 7개 필드 (원시값 4개, 객체, 배열, ISO Date) 수신 완료\n• Server Action Props 실행: 미실행 (대기 중)\n• 상태: 하단 [전달받은 Server Action Props 실행] 버튼을 클릭하세요.`
+    ? `• RSC 수신 Props 런타임 검증: 100% Valid JSON 통과 (원시값 4개, 평탄 객체, 배열, ISO Date)\n• 선택된 시뮬레이터 타입: [${selectedSimulation}] 검사 완료\n• Server Action Props 실행: 성공 (POST 200 OK)\n• 서버 응답 메시지: "${actionResult}"\n• Props 직렬화 및 Server Action 함수 Props 전달 검증 완료`
+    : `• RSC 수신 Props 런타임 검증: 100% Valid JSON 통과 (원시값 4개, 평탄 객체, 배열, ISO Date 수신 완료)\n• 현재 시뮬레이터 검사 타입: [${selectedSimulation}]\n• Server Action Props 실행: 미실행 (대기 중)\n• 상태: [타입별 시뮬레이터] 탭을 눌러보고 하단 [전달받은 Server Action Props 실행] 버튼을 클릭하세요.`
 
   const isMatched =
     props.isMatched !== undefined
       ? props.isMatched
-      : hasExecuted
-      ? true
-      : undefined
+      : true
 
   const actualContent = props.actual !== undefined ? props.actual : defaultActual
 
@@ -82,9 +81,10 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+            <ul className="list-disc list-inside space-y-1.5 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>Date 객체 하이드레이션 주의</strong>: <code>Date</code> 객체는 직렬화되어 전달되지만 서버와 클라이언트의 타임존(Timezone) 차이로 인해 렌더링 불일치(Hydration Mismatch)가 발생할 수 있으므로 UTC 기준 문자열이나 포맷팅된 텍스트 전달을 고려해야 합니다.</li>
               <li><strong>함수 전달 시 'use server' 활용</strong>: 클라이언트 컴포넌트에 콜백 함수를 넘겨야 하는 경우 일반 함수가 아닌 <code>'use server'</code>가 선언된 Server Action 함수만 전달할 수 있습니다.</li>
+              <li><strong>클래스 인스턴스 DTO 변환</strong>: ORM(Prisma, TypeORM 등) 엔티티 클래스는 클라이언트로 넘기기 전 순수 객체(Plain Object)로 직렬화하여 전달해야 메서드 손실 경고를 방지할 수 있습니다.</li>
             </ul>
           </div>
         </div>

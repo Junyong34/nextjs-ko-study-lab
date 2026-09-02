@@ -25,17 +25,23 @@ export default function SerializationDemoPage() {
     <DemoContainer className="space-y-6">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
-        title="RSC → RCC Props 직렬화(Serialization) 규약 & Server Action 전달"
-        concept="Server Component에서 Client Component로 전달하는 Props는 JSON 직렬화가 가능해야 하며, 일반 함수는 직접 전달할 수 없지만 'use server' Server Action은 직렬화 가능한 참조로 전달할 수 있습니다."
+        title="RSC → RCC Props 직렬화(Serialization) 규약 & 타입별 직렬화 검증"
+        concept="Server Component에서 Client Component로 전달하는 Props는 JSON 직렬화가 가능해야 하며, 일반 함수나 Class는 직접 전달할 수 없지만 'use server' Server Action은 직렬화 가능한 Action ID 참조로 안전하게 전달됩니다."
         steps={[
           {
             step: 1,
-            title: 'RSC 전달 Props 데이터 구조 확인',
-            description: '원시값(String, Number, Boolean), 평탄한 객체, 배열 데이터가 RCC로 안전하게 직렬화 전달된 구조를 확인합니다.',
-            actionBadge: '직렬화 확인',
+            title: 'RSC 전달 Props 실시간 런타임 JSON 검증 확인',
+            description: '서버에서 전달된 원시값, 객체, 배열 데이터가 런타임 JSON 직렬화 검사(Valid JSON)를 통과하여 안전하게 수신된 것을 확인합니다.',
+            actionBadge: '런타임 검증',
           },
           {
             step: 2,
+            title: '[타입별 직렬화 시뮬레이터] 탭 클릭 비교',
+            description: '원시값/객체(PASS)와 일반 함수/Class 인스턴스/순환참조(FAIL) 버튼을 번갈아 클릭하여 직렬화 실패 에러 원인을 비교합니다.',
+            actionBadge: '타입 비교',
+          },
+          {
+            step: 3,
             title: '[전달받은 Server Action Props 실행] 버튼 클릭',
             description: "'use server'로 선언된 Server Action 함수가 Action ID 참조 형태로 Props 전달되어 정상 실행되는 것을 관찰합니다.",
             actionBadge: 'Server Action 실행',
