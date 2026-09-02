@@ -5,3 +5,10 @@ export interface ProductReview {
   comment: string
   createdAt: string
 }
+
+export interface RecommendationItem {
+  id: string
+  title: string
+  price: number
+  matchRate: string
+}

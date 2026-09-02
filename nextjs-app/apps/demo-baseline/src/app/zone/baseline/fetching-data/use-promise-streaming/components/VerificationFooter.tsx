@@ -10,27 +10,29 @@ export interface VerificationFooterProps {
   status?: string | number | null
   description?: string
   isStarted?: boolean
-  hasCompleted?: boolean
-  delayMs?: number
+  reviewsDone?: boolean
+  recDone?: boolean
   [key: string]: any
 }
 
 export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const { isStarted = false, hasCompleted = false, delayMs = 1500 } = props
+  const { isStarted = false, reviewsDone = false, recDone = false } = props
 
   const defaultExpected =
-    '• 메인 상품 정보(189,000원) 지연 없는 즉각 렌더링 (빠른 FCP)\n• 버튼 클릭 시 React 19 use(Promise)로 ' + delayMs + 'ms 지연 구매 후기 3건 스트리밍 언랩\n• Suspense Fallback 스켈레톤에서 실제 후기 UI로의 점진적 전환 관찰'
+    '• 메인 상품 정보(189,000원) 0초 즉시 렌더링 (빠른 FCP 최적화)\n• 스트리밍 1: React 19 use(reviewsPromise)로 1.2초 후기 3건 먼저 언랩\n• 스트리밍 2: React 19 use(recommendationsPromise)로 2.5초 추천 상품 3건 순차 언랩\n• 서로 다른 지연 시간을 가진 독립된 Suspense 바운더리의 점진적 병렬 스트리밍 검증'
 
-  const defaultActual = hasCompleted
-    ? `• 스트리밍 언랩: React 19 use(Promise) 완료 (${delayMs}ms 지연 후기 수신)\n• 로드된 후기 수: 3건 (개발자K, 키보드매니아, 디자이너P)\n• 렌더링 상태: 메인 셸 즉시 렌더 + use(Promise) Suspense 스트리밍 검증 완료`
+  const allCompleted = reviewsDone && recDone
+
+  const defaultActual = allCompleted
+    ? `• 0초 즉시 렌더: 메인 상품 정보(키보드) 즉시 표시 완료\n• 1.2초 스트리밍 1: use(reviewsPromise) 구매 후기 3건 수신 마운트 완료\n• 2.5초 스트리밍 2: use(recommendationsPromise) AI 추천 3건 수신 마운트 완료\n• React 19 use(Promise) 다중 점진적 스트리밍 검증 완료 (전체 블로킹 0%)`
     : isStarted
-    ? `• 스트리밍 상태: <Suspense fallback> 스켈레톤 렌더링 중 (${delayMs}ms 대기 중)\n• Promise 상태: Pending ➔ use(Promise) 언랩 진행 중`
-    : `• 스트리밍 상태: 대기 중 (미실행)\n• 조작 방법: 상단 [⚡ 1. 구매 고객 후기 스트리밍 시작] 버튼을 클릭하세요.`
+    ? `• 0초 즉시 렌더: 완료\n• 1.2초 스트리밍 1 (후기): ${reviewsDone ? '완료' : '스켈레톤 대기 중'}\n• 2.5초 스트리밍 2 (추천): ${recDone ? '완료' : '스켈레톤 대기 중'}`
+    : `• 스트리밍 상태: 대기 중 (미실행)\n• 조작 방법: 상단 [⚡ 1. 점진적 병렬 스트리밍 시작] 버튼을 클릭하세요.`
 
   const isMatched =
     props.isMatched !== undefined
       ? props.isMatched
-      : hasCompleted
+      : allCompleted
       ? true
       : undefined
 
@@ -39,7 +41,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="React 19 use(Promise)와 Suspense 스트리밍 검증 결과"
+        title="React 19 use(Promise)와 다중 Suspense 스트리밍 검증 결과"
         expected={props.expected || defaultExpected}
         actual={actualContent}
         isMatched={isMatched}
@@ -48,45 +50,45 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           '이 예제의 동작과 검증 결과를 표시합니다.'
         }
       />
-      <DemoDeepDiveCard title="React 19 use(Promise) & Suspense 점진적 스트리밍">
+      <DemoDeepDiveCard title="React 19 use(Promise) & 다중 Suspense 점진적 병렬 스트리밍">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              React 19의 <code>use()</code> API는 미해결(Pending) <code>Promise</code> 객체를 Client Component에 전달하고, 클라이언트 렌더 단계에서 <code>use(promise)</code>로 언래핑하여 <code>{'<'}Suspense{'>'}</code> 바운더리와 결합된 점진적 스트리밍을 구현하는 표준 스펙입니다.
+              서버 컴포넌트에서 빠른 데이터는 즉시 <code>await</code>하여 초기 HTML 셸을 전송하고, 서로 다른 지연 시간(예: 1.2초 후기, 2.5초 추천)을 갖는 느린 데이터들은 <code>await</code>하지 않고 독립된 <code>Promise</code> 객체로 자식 컴포넌트에 넘깁니다. 자식 컴포넌트는 React 19의 <code>use(promise)</code>로 언랩하며, 각 <code>{'<'}Suspense{'>'}</code> 바운더리가 준비되는 순서대로 독립적인 스트리밍 교체를 수행합니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 메인 상품 정보(189,000원)가 즉시 렌더링된 상태에서, 사용자가 버튼을 클릭하면 지연 Promise(3건: 개발자K, 키보드매니아, 디자이너P)를 생성합니다. Promise가 resolve되기 전까지는 <code>{'<'}Suspense fallback{'={ReviewsSkeleton /}>'}</code>이 표시되고, 설정된 시간 경과 후 <code>use(promise)</code>가 resolve되어 후기 목록으로 부드럽게 교체됩니다.
+              본 데모에서는 메인 상품 정보(189,000원)가 0초에 즉시 표시됩니다. 스트리밍 시작 시 1.2초 지연 후기 Promise와 2.5초 지연 추천 상품 Promise가 동시에 실행되며, 1.2초 시점에 후기 영역이 먼저 마운트되고 2.5초 시점에 추천 상품 영역이 마운트되는 <strong>다중 독립 스트리밍</strong>을 직접 관찰할 수 있습니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>지연 없는 초기 셸 렌더링</strong>: 무거운 서드파티 리뷰 DB 조회 전에도 메인 상품 정보와 레이아웃을 즉시 전송하여 First Contentful Paint(FCP)를 단축합니다.</li>
-              <li><strong>클라이언트 폭포수 요청 제거</strong>: 클라이언트가 별도의 <code>useEffect</code> + <code>fetch</code>를 재호출하지 않고 서버에서 시작된 단일 스트림을 그대로 소비합니다.</li>
-              <li><strong>선언적 로딩 상태 관리</strong>: 수동 로딩 플래그 제어 없이 Suspense 폴백 스켈레톤으로 일원화합니다.</li>
+              <li><strong>가장 느린 API에 의한 전체 블로킹 방지</strong>: 5초 걸리는 AI 추천이나 서드파티 통계 때문에 0.01초 만에 나오는 상품 상세나 결제 버튼이 멈추지 않습니다.</li>
+              <li><strong>독립적인 Suspense 격리</strong>: 각 영역이 서로를 기다리지 않고 데이터가 준비되는 즉시 점진적으로 화면을 완성합니다.</li>
+              <li><strong>클라이언트 상태 코드 단순화</strong>: 복잡한 <code>useEffect</code>와 다중 로딩 플래그(<code>isReviewLoading</code>, <code>isRecLoading</code>) 없이 선언적으로 관리합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>이커머스 상품 상세 페이지의 구매 고객 실시간 후기 및 평점 스트리밍</li>
-              <li>실시간 물류센터별 배송 도착 예정일 및 잔여 재고 수량 표시</li>
-              <li>복잡한 맞춤 추천 상품 목록 및 사용자 혜택 견적 스트리밍</li>
+              <li>상품 상세(0초 즉시) + 구매 후기(1초) + AI 개인화 추천(3초) 복합 이커머스 페이지</li>
+              <li>대시보드 메인 KPI(즉시) + 월간 매출 분석 차트(2초) + 외부 연동 결제 내역(4초)</li>
+              <li>호텔 예약 상세(즉시) + 실시간 객실 잔여 수량(1초) + 주변 관광지 날씨 API(3초)</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Promise 인스턴스 재생성 방지</strong>: 컴포넌트 렌더마다 새 Promise 객체를 무한 생성하면 리렌더 루프가 발생할 수 있으므로 상태나 캐시를 통해 안정적인 Promise를 전달해야 합니다.</li>
-              <li><strong>에러 바운더리 결합</strong>: <code>use(promise)</code>가 reject되면 가장 가까운 Error Boundary로 예외가 전파되므로 <code>{'<'}Suspense{'>'}</code> 외부에 <code>{'<'}ErrorBoundary{'>'}</code>를 반드시 배치해야 합니다.</li>
+            <ul className="list-disc list-inside space-y-1.5 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>독립된 Suspense 바운더리 배치</strong>: 여러 개의 느린 데이터를 하나의 Suspense로 묶으면 가장 느린 데이터 시간(2.5초)에 맞춰 한꺼번에 뜨므로, 점진적 스트리밍의 이점을 살리려면 반드시 영역별로 Suspense를 분리해야 합니다.</li>
+              <li><strong>Promise 참조 안정성</strong>: 렌더마다 인라인으로 <code>new Promise()</code>를 생성하면 리렌더마다 다시 스트리밍이 트리거되므로 서버 액션이나 캐시된 함수를 활용해야 합니다.</li>
             </ul>
           </div>
         </div>
