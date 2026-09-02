@@ -99,7 +99,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+            <ul className="list-disc list-inside space-y-1.5 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>window vs 내부 div 스크롤 동작 차이</strong>: Next.js의 <code>scroll={'{true}'}</code>(기본값)는 브라우저 전체 창(<code>window.scrollTo(0, 0)</code>)을 자동으로 제어합니다. 따라서 일반 웹페이지에서는 별도 스크립트 없이도 상단으로 자동 스크롤되지만, 모달이나 <code>overflow-y: auto</code>가 적용된 내부 <code>div</code> 컨테이너는 프레임워크가 감지할 수 없으므로 필요 시 직접 <code>scrollTop</code>을 제어해야 합니다.</li>
               <li><strong>외부 링크 처리</strong>: 외부 사이트(e.g. <code>https://example.com</code>)로 이동할 때는 <code>{'<'}Link{'>'}</code> 대신 표준 <code>{'<'}a{'>'}</code> 태그나 <code>window.location.href</code>를 사용하는 것이 올바른 웹 표준입니다.</li>
               <li><strong>scroll={'{'}false{'}'} 옵션</strong>: 탭 전환이나 쿼리스트링 변경 시 페이지 최상단으로 강제 스크롤되는 것을 방지하려면 <code>{'<'}Link href="..." scroll={'{'}false{'}'}{'>'}</code>를 설정합니다.</li>
             </ul>

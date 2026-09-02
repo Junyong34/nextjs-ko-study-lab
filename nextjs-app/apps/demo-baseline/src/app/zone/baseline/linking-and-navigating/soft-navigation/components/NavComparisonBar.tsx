@@ -151,6 +151,14 @@ export function NavComparisonBar() {
           </p>
         </a>
       </div>
+
+      {/* 스펙 안내 팁 (작은 글자) */}
+      <div className="flex items-start gap-2 rounded-xl bg-zinc-100/90 p-3 text-[11px] leading-relaxed text-zinc-600 dark:bg-zinc-800/70 dark:text-zinc-300 border border-zinc-200/60 dark:border-zinc-700/60">
+        <span className="font-bold text-zinc-800 dark:text-zinc-200 shrink-0">💡 스크롤 동작 안내:</span>
+        <span>
+          일반적인 Next.js 웹사이트(브라우저 전체 창)에서는 <code>scroll={'{true}'}</code>(기본값) 사용 시 별도 스크립트 없이도 <strong>자동으로 100% 최상단으로 스크롤</strong>됩니다. 본 실습 데모는 화면 내 높이가 제한된 독립 <code>div</code> 박스 UI이므로 내부 컨테이너의 <code>scrollTop</code>을 연동하여 동일한 동작을 시각화하고 있습니다.
+        </span>
+      </div>
     </div>
   )
 }
