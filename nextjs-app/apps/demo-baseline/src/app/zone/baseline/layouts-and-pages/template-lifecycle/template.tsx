@@ -33,35 +33,35 @@ export default function ProductReviewTemplate({
   }
 
   return (
-    <div className="space-y-6 rounded-2xl border-2 border-indigo-500/40 bg-indigo-50/20 p-5 sm:p-6 dark:border-indigo-900/50 dark:bg-indigo-950/20 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <div className="space-y-6 rounded-2xl border-2 border-indigo-500/50 bg-indigo-50/30 p-5 sm:p-6 dark:border-indigo-700/60 dark:bg-indigo-950/30 shadow-xs animate-in fade-in slide-in-from-bottom-2 duration-300">
       {/* template.tsx 영역 안내 헤더 */}
-      <div className="space-y-2 border-b border-indigo-200/80 pb-4 dark:border-indigo-900/80">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-indigo-500 animate-pulse" />
-            <span className="font-mono text-xs font-bold text-indigo-950 dark:text-indigo-200">
+      <div className="space-y-2 border-b border-indigo-200 pb-4 dark:border-indigo-800">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <span className="h-3 w-3 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse shrink-0" />
+            <span className="font-mono text-sm font-extrabold text-zinc-900 dark:text-white">
               template.tsx 영역
             </span>
-            <span className="rounded bg-indigo-100 px-2 py-0.5 font-mono text-[10px] font-bold text-indigo-800 dark:bg-indigo-900/80 dark:text-indigo-200">
+            <span className="rounded-md bg-indigo-600 px-2.5 py-0.5 font-mono text-[11px] font-bold text-white shadow-2xs dark:bg-indigo-500 dark:text-white">
               라우트 전환 시 매번 재마운트 (Re-mount)
             </span>
           </div>
-          <div className="flex items-center gap-2 font-mono text-[11px] text-indigo-700 dark:text-indigo-300">
-            <span>인스턴스 고유 ID: <strong className="text-zinc-900 dark:text-zinc-100">#{instanceId || '------'}</strong></span>
+          <div className="flex items-center gap-2 font-mono text-xs text-zinc-700 dark:text-zinc-300">
+            <span>인스턴스 고유 ID: <strong className="font-bold text-indigo-600 dark:text-indigo-400">#{instanceId || '------'}</strong></span>
             <span>·</span>
-            <span>마운트: {mountTime || '--:--:--'}</span>
+            <span>마운트 시각: <strong className="text-zinc-900 dark:text-zinc-100">{mountTime || '--:--:--'}</strong></span>
           </div>
         </div>
 
-        <p className="text-xs leading-relaxed text-indigo-950/80 dark:text-indigo-200/80 pt-1">
-          이 보라색 테두리 영역 전체가 <code>template.tsx</code> 컴포넌트입니다. 상단 탭을 전환하면 <code>layout.tsx</code>는 유지되지만 이 영역(하위 <code>page.tsx</code> 및 내부 폼 상태)은 <strong>완전히 언마운트된 후 새 인스턴스로 재생성</strong>됩니다.
+        <p className="text-xs leading-relaxed text-zinc-700 dark:text-zinc-300 pt-1">
+          이 보라색 테두리 영역 전체가 <code className="rounded bg-indigo-100 px-1 py-0.5 font-mono font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">template.tsx</code> 컴포넌트입니다. 상단 탭을 전환하면 <code className="rounded bg-emerald-100 px-1 py-0.5 font-mono font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">layout.tsx</code>는 유지되지만 이 영역(하위 <code>page.tsx</code> 및 내부 폼 상태)은 <strong className="font-bold text-zinc-900 dark:text-zinc-100">완전히 언마운트된 후 새 인스턴스로 재생성</strong>됩니다.
         </p>
       </div>
 
       {/* template.tsx로 래핑된 하위 page.tsx 콘텐츠 */}
       <div className="space-y-2.5 py-1">
-        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-zinc-400" />
+        <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-800 dark:text-zinc-200">
+          <span className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
           <span>template.tsx의 {'{children}'}으로 주입된 page.tsx 콘텐츠:</span>
         </div>
         {children}
@@ -73,7 +73,7 @@ export default function ProductReviewTemplate({
           <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
             template.tsx 내부 상태 (React useState)
           </span>
-          <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
+          <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
             페이지를 전환하면 아래 입력 상태가 자동 리셋됩니다
           </span>
         </div>

@@ -45,32 +45,32 @@ export default function TemplateLifecycleRootLayout({
         {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
         <DemoPlaygroundCard title="상품 탭 전환 및 템플릿 생명주기 실습" className="space-y-7">
           {/* 계층 구조 안내 바 */}
-          <div className="flex flex-wrap items-center gap-3 sm:gap-4 rounded-2xl border border-zinc-200/80 bg-zinc-50/90 p-4 sm:p-5 text-xs text-zinc-600 dark:border-zinc-800/80 dark:bg-zinc-900/70 dark:text-zinc-300 shadow-2xs">
-            <span className="font-bold text-zinc-900 dark:text-zinc-100 mr-1">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5 text-xs text-zinc-800 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 shadow-2xs">
+            <span className="font-bold text-zinc-900 dark:text-white mr-1">
               Next.js 렌더링 계층 순서:
             </span>
-            <span className="inline-flex items-center rounded-lg border border-emerald-300 bg-emerald-100/90 px-3 py-1.5 font-mono font-bold text-emerald-900 shadow-2xs dark:border-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-200">
+            <span className="inline-flex items-center rounded-lg border border-emerald-400 bg-emerald-100 px-3 py-1.5 font-mono font-bold text-emerald-900 shadow-2xs dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-200">
               1. layout.tsx (탭 셸)
             </span>
-            <span className="text-zinc-400 font-bold px-1">➔</span>
-            <span className="inline-flex items-center rounded-lg border border-indigo-300 bg-indigo-100/90 px-3 py-1.5 font-mono font-bold text-indigo-900 shadow-2xs dark:border-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-200">
+            <span className="text-zinc-500 dark:text-zinc-400 font-bold px-1">➔</span>
+            <span className="inline-flex items-center rounded-lg border border-indigo-400 bg-indigo-100 px-3 py-1.5 font-mono font-bold text-indigo-900 shadow-2xs dark:border-indigo-700 dark:bg-indigo-950 dark:text-indigo-200">
               2. template.tsx (재마운트 래퍼)
             </span>
-            <span className="text-zinc-400 font-bold px-1">➔</span>
-            <span className="inline-flex items-center rounded-lg border border-zinc-300 bg-zinc-200/80 px-3 py-1.5 font-mono font-bold text-zinc-800 shadow-2xs dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+            <span className="text-zinc-500 dark:text-zinc-400 font-bold px-1">➔</span>
+            <span className="inline-flex items-center rounded-lg border border-zinc-400 bg-zinc-200 px-3 py-1.5 font-mono font-bold text-zinc-900 shadow-2xs dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
               3. page.tsx (상품 본문)
             </span>
           </div>
 
           {/* layout.tsx 영역 표시 */}
-          <div className="space-y-3.5 rounded-2xl border-2 border-emerald-500/40 bg-emerald-50/20 p-5 sm:p-6 dark:border-emerald-900/50 dark:bg-emerald-950/20 shadow-xs">
+          <div className="space-y-3.5 rounded-2xl border-2 border-emerald-500/50 bg-emerald-50/30 p-5 sm:p-6 dark:border-emerald-700/60 dark:bg-emerald-950/30 shadow-xs">
             <div className="flex items-center justify-between pb-1">
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-                <span className="font-mono text-xs font-bold text-emerald-950 dark:text-emerald-200">
+              <div className="flex items-center gap-2.5">
+                <span className="h-3 w-3 rounded-full bg-emerald-600 dark:bg-emerald-400 shrink-0" />
+                <span className="font-mono text-sm font-extrabold text-zinc-900 dark:text-white">
                   layout.tsx 영역
                 </span>
-                <span className="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-900/80 dark:text-emerald-200">
+                <span className="rounded-md bg-emerald-600 px-2.5 py-0.5 font-mono text-[11px] font-bold text-white shadow-2xs dark:bg-emerald-500 dark:text-white">
                   라우트 전환 시에도 유지됨 (Persistent)
                 </span>
               </div>
