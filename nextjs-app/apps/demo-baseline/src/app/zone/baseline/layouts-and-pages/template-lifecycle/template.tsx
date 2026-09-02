@@ -57,19 +57,25 @@ export default function ProductReviewTemplate({
 
         {/* 평점 선택 */}
         <div className="flex items-center gap-2">
-          <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+          <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
             평점 선택:
-          </label>
-          <div className="flex gap-1">
+          </span>
+          <div
+            className="inline-flex rounded-lg bg-zinc-100 p-0.5 dark:bg-zinc-800"
+            role="radiogroup"
+            aria-label="평점 선택"
+          >
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 type="button"
+                role="radio"
+                aria-checked={rating === star}
                 onClick={() => handleRatingChange(star)}
-                className={`rounded px-1.5 py-0.5 text-xs font-mono font-semibold transition cursor-pointer ${
-                  star <= rating
-                    ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
-                    : 'bg-zinc-100 text-zinc-400 dark:bg-zinc-800'
+                className={`rounded-md px-2.5 py-1 text-xs font-mono font-semibold transition cursor-pointer ${
+                  rating === star
+                    ? 'bg-zinc-900 text-white shadow-xs dark:bg-zinc-100 dark:text-zinc-900'
+                    : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100'
                 }`}
               >
                 {star}점

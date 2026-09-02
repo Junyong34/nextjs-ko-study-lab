@@ -17,7 +17,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
   const lifecycle = useTemplateLifecycle()
 
   const defaultExpected =
-    '• 다른 상품 탭(/product-2) 클릭 시 template.tsx가 완전히 언마운트된 후 새로운 DOM 인스턴스로 Re-mount\n• 새 인스턴스 ID 발급 및 작성 중이던 후기 폼 텍스트/별점 상태 자동 초기화'
+    '• 다른 상품 탭(/product-2) 클릭 시 template.tsx가 완전히 언마운트된 후 새로운 DOM 인스턴스로 Re-mount\n• 새 인스턴스 ID 발급 및 작성 중이던 후기 폼 텍스트/평점 상태 자동 초기화'
 
   const hasRemounted = Boolean(
     lifecycle?.prevInstanceId &&
@@ -62,7 +62,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 상품 탭(에어 줌 프로 러닝화 ↔ 오버핏 기모 맨투맨)을 전환할 때 <code>layout.tsx</code>의 탭 내비게이션 셸은 유지되는 반면, <code>template.tsx</code> 내부의 별점 선택, 후기 텍스트 입력값 및 인스턴스 고유 ID가 새로운 인스턴스로 마운트되어 깨끗하게 초기화되는 생명주기 동작을 시각화합니다.
+              본 데모에서는 상품 탭(에어 줌 프로 러닝화 ↔ 오버핏 기모 맨투맨)을 전환할 때 <code>layout.tsx</code>의 탭 내비게이션 셸은 유지되는 반면, <code>template.tsx</code> 내부의 평점 선택, 후기 텍스트 입력값 및 인스턴스 고유 ID가 새로운 인스턴스로 마운트되어 깨끗하게 초기화되는 생명주기 동작을 시각화합니다.
             </p>
           </div>
 

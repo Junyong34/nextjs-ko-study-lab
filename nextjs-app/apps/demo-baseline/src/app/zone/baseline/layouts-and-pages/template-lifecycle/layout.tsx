@@ -22,7 +22,7 @@ export default function TemplateLifecycleRootLayout({
             {
               step: 1,
               title: '[5점] 평점 선택 및 [후기 작성] 텍스트 입력',
-              description: '하단 템플릿 영역에서 5점 별점을 선택하고 후기 입력창에 텍스트를 작성합니다.',
+              description: '하단 템플릿 영역에서 평점(1~5점)을 선택하고 후기 입력창에 텍스트를 작성합니다.',
               actionBadge: '폼 상태 입력',
             },
             {
@@ -36,7 +36,7 @@ export default function TemplateLifecycleRootLayout({
               title: '인스턴스 ID 재생성 & 폼 리셋 확인',
               description: 'template.tsx가 Re-mount되어 인스턴스 고유 ID(#ID)가 새로 발급되고 작성 중이던 후기 폼이 깨끗하게 리셋된 것을 관찰합니다.',
               actionBadge: '인스턴스 재생성',
-              observe: '인스턴스 고유 ID(#ID)가 새로 갱신되고 작성 중이던 후기 폼 텍스트와 별점이 초기화됨',
+              observe: '인스턴스 고유 ID(#ID)가 새로 갱신되고 작성 중이던 후기 폼 텍스트와 평점이 초기화됨',
               observeAt: 'playground',
             },
           ]}
