@@ -43,26 +43,26 @@ export default function TemplateLifecycleRootLayout({
         />
 
         {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-        <DemoPlaygroundCard title="상품 탭 전환 및 템플릿 생명주기 실습" className="space-y-4">
+        <DemoPlaygroundCard title="상품 탭 전환 및 템플릿 생명주기 실습" className="space-y-6">
           {/* 계층 구조 안내 바 */}
-          <div className="flex flex-wrap items-center gap-2 rounded-lg bg-zinc-100/80 px-3 py-2 text-[11px] text-zinc-600 dark:bg-zinc-800/80 dark:text-zinc-300">
-            <span className="font-bold text-zinc-800 dark:text-zinc-200">Next.js 컴포넌트 계층:</span>
-            <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+          <div className="flex flex-wrap items-center gap-2 rounded-xl bg-zinc-100/90 px-4 py-2.5 text-xs text-zinc-600 dark:bg-zinc-800/90 dark:text-zinc-300">
+            <span className="font-bold text-zinc-900 dark:text-zinc-100">Next.js 컴포넌트 계층:</span>
+            <span className="rounded-lg bg-emerald-100 px-2 py-1 font-mono font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
               1. layout.tsx (탭 셸)
             </span>
-            <span className="text-zinc-400">➔</span>
-            <span className="rounded bg-indigo-100 px-1.5 py-0.5 font-mono font-semibold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-800">
+            <span className="text-zinc-400 font-bold">➔</span>
+            <span className="rounded-lg bg-indigo-100 px-2 py-1 font-mono font-semibold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-800">
               2. template.tsx (재마운트 래퍼)
             </span>
-            <span className="text-zinc-400">➔</span>
-            <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono font-semibold text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200">
+            <span className="text-zinc-400 font-bold">➔</span>
+            <span className="rounded-lg bg-zinc-200 px-2 py-1 font-mono font-semibold text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-600">
               3. page.tsx (상품 본문)
             </span>
           </div>
 
           {/* layout.tsx 영역 표시 */}
-          <div className="space-y-2 rounded-xl border-2 border-emerald-500/30 bg-emerald-50/15 p-3.5 dark:border-emerald-900/40 dark:bg-emerald-950/15">
-            <div className="flex items-center justify-between">
+          <div className="space-y-3 rounded-2xl border-2 border-emerald-500/40 bg-emerald-50/20 p-5 dark:border-emerald-900/50 dark:bg-emerald-950/20 shadow-xs">
+            <div className="flex items-center justify-between pb-1">
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
                 <span className="font-mono text-xs font-bold text-emerald-950 dark:text-emerald-200">
@@ -79,7 +79,9 @@ export default function TemplateLifecycleRootLayout({
           </div>
 
           {/* template.tsx 래퍼를 거친 실제 page.tsx 콘텐츠 */}
-          {children}
+          <div className="pt-2">
+            {children}
+          </div>
         </DemoPlaygroundCard>
 
         {/* 3단 및 4단: 검증 패널 및 [개념 정리] 카드 */}
