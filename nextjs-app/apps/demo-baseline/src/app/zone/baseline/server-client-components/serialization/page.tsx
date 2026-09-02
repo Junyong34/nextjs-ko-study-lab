@@ -22,7 +22,7 @@ export default function SerializationDemoPage() {
   }
 
   return (
-    <DemoContainer className="space-y-6">
+    <DemoContainer className="space-y-8">
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title="RSC → RCC Props 직렬화(Serialization) 규약 & Server Action RPC 파이프라인"
