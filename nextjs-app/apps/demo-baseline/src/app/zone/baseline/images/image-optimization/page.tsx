@@ -8,12 +8,12 @@ export default function ImageOptimizationDemoPage() {
       {/* 1단. 상단 가이드 필드셋 */}
       <DemoGuideCard
         title="next/image 자동 WebP/AVIF 최적화 & Zero CLS 이미지 로딩"
-        concept="next/image는 원본 이미지를 브라우저 지원 포맷(WebP/AVIF)으로 자동 압축 변환하고, width/height 종횡비 예약으로 레이아웃 이동(CLS 0)을 방지하며, priority 설정을 통해 LCP 사전 로드를 지원합니다."
+        concept="next/image는 원본 이미지를 브라우저 지원 포맷(WebP/AVIF)으로 자동 압축 변환하고, width/height 종횡비 예약으로 레이아웃 이동(CLS 0)을 방지하며, preload 설정을 통해 LCP 사전 로드를 지원합니다."
         steps={[
           {
             step: 1,
             title: '[1. next/image (WebP/AVIF 자동 변환 + CLS 방지)] 선택 및 확인',
-            description: 'next/image가 생성한 최적화 이미지와 고정 종횡비 렌더링, quality 및 priority 파라미터 연동을 확인합니다.',
+            description: 'next/image가 생성한 최적화 이미지와 고정 종횡비 렌더링, quality 및 preload 파라미터 연동을 확인합니다.',
             actionBadge: 'next/image 최적화',
           },
           {
@@ -24,10 +24,10 @@ export default function ImageOptimizationDemoPage() {
           },
           {
             step: 3,
-            title: '[3. 퀄리티 슬라이더 / priority 옵션 조작 및 검증]',
-            description: '압축 퀄리티(quality)와 priority 옵션을 변경하며 최적화 파이프라인 쿼리 파라미터 변화를 관찰합니다.',
+            title: '[3. 퀄리티 슬라이더 / preload 옵션 조작 및 검증]',
+            description: '압축 퀄리티(quality)와 preload 옵션을 변경하며 최적화 파이프라인 쿼리 파라미터 변화를 관찰합니다.',
             actionBadge: '파이프라인 검증',
-            observe: 'next/image 적용 시 WebP 자동 변환, 종횡비 예약에 따른 CLS 방지, 그리고 quality/priority 쿼리가 정상 반영됨',
+            observe: 'next/image 적용 시 WebP 자동 변환, 종횡비 예약에 따른 CLS 방지, 그리고 quality/preload 쿼리가 정상 반영됨',
             observeAt: 'playground',
           },
         ]}

@@ -10,7 +10,7 @@ const SAMPLE_IMAGE_URL = keyboardImage.src
 
 export function ImageComparisonClient() {
   const [quality, setQuality] = useState<number>(75)
-  const [priority, setPriority] = useState<boolean>(false)
+  const [preload, setPreload] = useState<boolean>(false)
   const [viewMode, setViewMode] = useState<'both' | 'next-image' | 'html-img'>('both')
   const [hasInteracted, setHasInteracted] = useState<boolean>(false)
 
@@ -19,8 +19,8 @@ export function ImageComparisonClient() {
     setHasInteracted(true)
   }
 
-  const handlePriorityChange = (p: boolean) => {
-    setPriority(p)
+  const handlePreloadChange = (p: boolean) => {
+    setPreload(p)
     setHasInteracted(true)
   }
 
@@ -96,11 +96,11 @@ export function ImageComparisonClient() {
             <label className="flex items-center gap-1.5 cursor-pointer text-zinc-700 dark:text-zinc-300 font-medium">
               <input
                 type="checkbox"
-                checked={priority}
-                onChange={(e) => handlePriorityChange(e.target.checked)}
+                checked={preload}
+                onChange={(e) => handlePreloadChange(e.target.checked)}
                 className="rounded border-zinc-300"
               />
-              <span>priority (LCP 프리로드)</span>
+              <span>preload (LCP 프리로드)</span>
             </label>
           </div>
         </div>
@@ -131,7 +131,7 @@ export function ImageComparisonClient() {
                       width={400}
                       height={225}
                       quality={quality}
-                      priority={priority}
+                      preload={preload}
                       className="rounded object-cover w-full h-full"
                   />
                 </div>
@@ -142,7 +142,7 @@ export function ImageComparisonClient() {
                   </div>
                   <div className="break-all">• 설정 시 요청될 URL: {nextImageQuery}</div>
                   <div>• 설정값 quality={quality} | 포맷: WebP/AVIF 자동 협상 (프로덕션 기준)</div>
-                  <div>• 설정값 priority={priority ? 'true (<link rel="preload"> 주입)' : 'false (loading="lazy")'}</div>
+                  <div>• 설정값 preload={preload ? 'true (<link rel="preload"> 주입)' : 'false (loading="lazy")'}</div>
                 </div>
               </div>
           )}
@@ -185,7 +185,7 @@ export function ImageComparisonClient() {
       <VerificationFooter
         hasInteracted={hasInteracted}
         quality={quality}
-        priority={priority}
+        preload={preload}
         viewMode={viewMode}
       />
     </div>
