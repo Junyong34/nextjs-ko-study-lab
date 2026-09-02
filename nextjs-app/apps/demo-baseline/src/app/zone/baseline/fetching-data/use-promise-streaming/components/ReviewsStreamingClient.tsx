@@ -7,7 +7,7 @@ import { ReviewsSkeleton } from './ReviewsSkeleton'
 import { VerificationFooter } from './VerificationFooter'
 
 /**
- * React 19 use(Promise)로 언랩하는 하위 컴포넌트
+ * React 19 use(Promise)로 언랩하는 하위 컴포백 컴포넌트
  */
 function ReviewsContent({
   reviewsPromise,
@@ -22,7 +22,7 @@ function ReviewsContent({
   const reviews = use(reviewsPromise)
 
   return (
-    <div className="space-y-4 rounded-2xl border-2 border-emerald-500/60 bg-emerald-50/20 p-5 sm:p-6 dark:border-emerald-700/60 dark:bg-emerald-950/20 shadow-xs animate-in fade-in duration-300">
+    <div className="space-y-4 rounded-2xl border-2 border-emerald-500/80 bg-emerald-50/20 p-5 sm:p-6 dark:border-emerald-600/80 dark:bg-emerald-950/20 shadow-xs animate-in fade-in duration-300">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-200/80 pb-3 dark:border-emerald-800/80">
         <div className="flex items-center gap-2">
           <span className="h-3 w-3 rounded-full bg-emerald-500" />
@@ -32,7 +32,7 @@ function ReviewsContent({
         </div>
         <div className="flex items-center gap-2">
           <span className="rounded-md bg-emerald-600 px-2.5 py-1 font-mono text-[11px] font-bold text-white shadow-2xs dark:bg-emerald-500">
-            ✅ use(Promise) 언랩 완료 ({delayMs}ms 지연)
+            ✅ 스트리밍 청크 도착 & use(Promise) 언랩 완료 ({delayMs}ms)
           </span>
         </div>
       </div>
@@ -76,8 +76,7 @@ function ReviewsContent({
 }
 
 /**
- * 실습 컨트롤러 Client Component:
- * 바로 실행되지 않고 버튼을 클릭해야 Promise가 시작되도록 제어합니다.
+ * 실습 컨트롤러 Client Component
  */
 export function ReviewsStreamingClient() {
   const [delayMs, setDelayMs] = useState<number>(1500)
@@ -99,7 +98,7 @@ export function ReviewsStreamingClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* 1. 스트리밍 제어 콘솔 (지연시간 선택 및 시작 버튼) */}
       <div className="space-y-3.5 rounded-2xl border border-zinc-200 bg-zinc-50/90 p-5 sm:p-6 dark:border-zinc-800 dark:bg-zinc-900/60 shadow-xs mb-8">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200/80 pb-3 dark:border-zinc-800">
@@ -112,11 +111,11 @@ export function ReviewsStreamingClient() {
             </p>
           </div>
           <span className="rounded bg-indigo-100 px-2.5 py-0.5 font-mono text-[11px] font-bold text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-            인터랙티브 실행 모드
+            인터랙티브 제어기
           </span>
         </div>
 
-        {/* 지연 시간 선택 라디오/버튼 */}
+        {/* 지연 시간 선택 버튼 */}
         <div className="flex flex-wrap items-center gap-2 pt-1">
           <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mr-1">
             서버 지연 시간 설정:
@@ -160,29 +159,66 @@ export function ReviewsStreamingClient() {
         </div>
       </div>
 
-      {/* 2. 스트리밍 렌더링 영역 (Suspense 바운더리) */}
-      <div className="mb-8">
-        {reviewsPromise === null ? (
-          /* 대기 상태 플레이스홀더 */
-          <div className="rounded-2xl border-2 border-dashed border-zinc-300 bg-zinc-50/50 p-8 text-center dark:border-zinc-700 dark:bg-zinc-900/30 space-y-2">
-            <div className="text-2xl">📦</div>
-            <div className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
-              구매 고객 후기 스트리밍 대기 중
+      {/* ========================================================= */}
+      {/* 2. [스트리밍 영역 시각화 프레임] Suspense 바운더리 명확한 표시 */}
+      {/* ========================================================= */}
+      <div className="space-y-3 rounded-2xl border-2 border-dashed border-cyan-500/70 bg-cyan-50/15 p-5 sm:p-6 dark:border-cyan-600/70 dark:bg-cyan-950/20 mb-8 shadow-xs">
+        {/* 스트리밍 영역 명확한 헤더 표시 바 */}
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-cyan-200 pb-3 dark:border-cyan-900/80">
+          <div className="flex items-center gap-2">
+            <span className="text-base">🌊</span>
+            <div>
+              <span className="font-mono text-xs sm:text-sm font-extrabold text-cyan-950 dark:text-cyan-200">
+                React 19 &lt;Suspense&gt; 스트리밍 점진적 렌더링 영역
+              </span>
+              <span className="block text-[10px] text-cyan-700 dark:text-cyan-400">
+                (초기 HTML 렌더 이후 백그라운드 스트림으로 비동기 도착하는 청크 영역)
+              </span>
             </div>
-            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
-              상단의 <strong>[⚡ 1. 구매 고객 후기 스트리밍 시작]</strong> 버튼을 클릭하면 Promise가 생성되고, <code>{'<'}Suspense{'>'}</code> 스켈레톤이 렌더링된 후 React 19 <code>use(Promise)</code>로 데이터가 언랩되는 과정을 직접 관찰하실 수 있습니다.
-            </p>
           </div>
-        ) : (
-          /* 실제 Suspense 스트리밍 바운더리 */
-          <Suspense key={runKey} fallback={<ReviewsSkeleton delayMs={delayMs} />}>
-            <ReviewsContent
-              reviewsPromise={reviewsPromise}
-              delayMs={delayMs}
-              onReset={handleReset}
-            />
-          </Suspense>
-        )}
+
+          {/* 실시간 스트리밍 상태 라벨 */}
+          <div>
+            {hasCompleted ? (
+              <span className="rounded-md bg-emerald-600 px-2.5 py-1 font-mono text-[10px] font-bold text-white shadow-2xs dark:bg-emerald-500">
+                ● 스트리밍 완료 (UI 마운트됨)
+              </span>
+            ) : reviewsPromise !== null ? (
+              <span className="rounded-md bg-amber-500 px-2.5 py-1 font-mono text-[10px] font-bold text-white shadow-2xs animate-pulse">
+                ⏳ 스트리밍 수신 중 ({delayMs}ms 대기)
+              </span>
+            ) : (
+              <span className="rounded-md bg-zinc-200 px-2.5 py-1 font-mono text-[10px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                대기 중 (버튼 클릭 전)
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* 스트리밍 바운더리 내부 콘텐츠 */}
+        <div className="pt-2">
+          {reviewsPromise === null ? (
+            /* 대기 상태 플레이스홀더 */
+            <div className="rounded-xl border-2 border-dashed border-zinc-300 bg-white/70 p-7 text-center dark:border-zinc-700 dark:bg-zinc-900/50 space-y-2">
+              <div className="text-2xl">📦</div>
+              <div className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
+                구매 고객 후기 스트리밍 대기 중
+              </div>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
+                상단의 <strong>[⚡ 1. 구매 고객 후기 스트리밍 시작]</strong> 버튼을 클릭하면 Promise가 생성되고, 이 영역에서 <code>{'<'}Suspense{'>'}</code> 스켈레톤 ➔ React 19 <code>use(Promise)</code> 언랩 교체 과정이 점진적으로 일어납니다.
+              </p>
+            </div>
+          ) : (
+            /* 실제 Suspense 스트리밍 바운더리 */
+            <Suspense key={runKey} fallback={<ReviewsSkeleton delayMs={delayMs} />}>
+              <ReviewsContent
+                reviewsPromise={reviewsPromise}
+                delayMs={delayMs}
+                onReset={handleReset}
+              />
+            </Suspense>
+          )}
+        </div>
       </div>
 
       {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}

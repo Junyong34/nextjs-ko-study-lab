@@ -36,8 +36,8 @@ export default async function UsePromiseStreamingDemoPage() {
           },
           {
             step: 3,
-            title: 'Suspense 스켈레톤 ➔ use(Promise) 전환 관찰',
-            description: '설정된 지연 시간 동안 노란색 스켈레톤이 표시된 후, use(reviewsPromise)가 구매 후기 3건으로 매끄럽게 교체되는 것을 관찰합니다.',
+            title: 'Suspense 스트리밍 영역의 스켈레톤 ➔ use() 전환 관찰',
+            description: '하단 [🌊 React 19 <Suspense> 스트리밍 점진적 렌더링 영역]에서 노란색 스켈레톤이 표시된 후, use(reviewsPromise)가 구매 후기 3건으로 매끄럽게 교체되는 것을 관찰합니다.',
             actionBadge: 'use() 언랩 관찰',
             observe: '지연 시간 경과 후 Suspense 스켈레톤이 실제 구매 후기 3건(개발자K, 키보드매니아, 디자이너P)으로 자동 전환됨',
             observeAt: 'playground',
@@ -46,21 +46,29 @@ export default async function UsePromiseStreamingDemoPage() {
       />
 
       {/* 2단, 3단, 4단: 실습 조작 영역 및 검증/개념정리 (스트리밍 Suspense 연동) */}
-      <DemoPlaygroundCard title="상품 상세 뷰 (즉시 렌더 본문 + 스트리밍 후기)" className="space-y-8">
-        {/* 즉각 렌더링된 메인 상품 카드 */}
-        <div className="rounded-2xl border border-zinc-200 bg-zinc-50/90 p-5 sm:p-6 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2 mb-8 shadow-xs">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100">
-              {product.name}
-            </h3>
-            <span className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-lg border border-zinc-300 dark:border-zinc-700">
-              {product.price.toLocaleString()}원
-            </span>
+      <DemoPlaygroundCard title="상품 상세 뷰 (즉시 렌더 본문 + 점진적 스트리밍 후기)" className="space-y-8">
+        {/* 1. 즉각 렌더링된 메인 상품 카드 (비스트리밍 / 빠른 FCP 영역) */}
+        <div className="rounded-2xl border-2 border-zinc-300 bg-zinc-50/90 p-5 sm:p-6 dark:border-zinc-700 dark:bg-zinc-900/50 space-y-2 mb-8 shadow-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200 pb-3 dark:border-zinc-800">
+            <div className="flex items-center gap-2">
+              <span className="h-3 w-3 rounded-full bg-blue-500" />
+              <h3 className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100">
+                {product.name}
+              </h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] font-bold text-blue-800 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                ⚡ 서버 즉시 렌더링 영역 (비스트리밍 / 빠른 FCP)
+              </span>
+              <span className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-lg border border-zinc-300 dark:border-zinc-700">
+                {product.price.toLocaleString()}원
+              </span>
+            </div>
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">{product.desc}</p>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed pt-1">{product.desc}</p>
         </div>
 
-        {/* 스트리밍 조작 및 Suspense 바운더리 Client Component */}
+        {/* 2. 스트리밍 조작 및 [🌊 Suspense 스트리밍 영역] Client Component */}
         <ReviewsStreamingClient />
       </DemoPlaygroundCard>
     </DemoContainer>
