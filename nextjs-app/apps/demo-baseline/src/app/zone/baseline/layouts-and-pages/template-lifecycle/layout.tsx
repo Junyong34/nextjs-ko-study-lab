@@ -21,22 +21,22 @@ export default function TemplateLifecycleRootLayout({
           steps={[
             {
               step: 1,
-              title: 'template.tsx 영역의 평점 선택 및 후기 작성',
-              description: '보라색 테두리의 [template.tsx 영역]에서 평점(1~5점)을 선택하고 후기 입력창에 텍스트를 작성합니다.',
-              actionBadge: '폼 상태 입력',
+              title: '[평점 선택] 및 [후기 작성] 텍스트 입력',
+              description: '보라색 [template.tsx 영역] 하단의 폼에서 평점(1~5점)을 선택하고 후기 입력창에 테스트 텍스트를 작성합니다.',
+              actionBadge: '후기 입력',
             },
             {
               step: 2,
               title: '상단 layout.tsx의 [오버핏 기모 맨투맨] 탭 클릭',
-              description: '녹색 테두리의 [layout.tsx 영역]에 위치한 상단 탭에서 [오버핏 기모 맨투맨] 링크를 클릭하여 다른 상품 라우트로 이동합니다.',
-              actionBadge: '라우트 이동',
+              description: '녹색 [layout.tsx 영역] 상단 탭에서 [오버핏 기모 맨투맨] 링크를 클릭하여 다른 상품 라우트로 이동합니다.',
+              actionBadge: '탭 이동',
             },
             {
               step: 3,
-              title: 'template.tsx 인스턴스 ID 재생성 & 폼 리셋 확인',
-              description: 'layout.tsx는 유지되지만 template.tsx 영역 전체가 Re-mount되어 고유 ID(#ID)가 새로 발급되고 작성 중이던 후기 폼이 깨끗하게 리셋된 것을 관찰합니다.',
-              actionBadge: '인스턴스 재생성',
-              observe: '인스턴스 고유 ID(#ID)가 새로 갱신되고 작성 중이던 후기 폼 텍스트와 평점이 초기화됨',
+              title: '인스턴스 ID 재생성(#ID) 및 폼 리셋 확인',
+              description: '녹색 layout.tsx는 그대로 유지되지만, 보라색 template.tsx 영역 전체가 Re-mount되어 고유 ID(#ID)가 새로 발급되고 작성 중이던 후기 폼(평점·텍스트)이 깨끗하게 초기화된 것을 확인합니다.',
+              actionBadge: '재마운트 확인',
+              observe: '인스턴스 고유 ID(#ID) 갱신 및 작성 중이던 후기 텍스트와 평점 자동 초기화',
               observeAt: 'playground',
             },
           ]}
