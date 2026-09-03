@@ -3,34 +3,32 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
+interface LiveHead {
+  title: string
+  description: string
+  ogTitle: string
+  ogDescription: string
+}
+
 export interface VerificationFooterProps {
-  title?: string
-  description?: string
-  previewPlatform?: 'kakao' | 'twitter' | 'facebook'
+  activeProductId?: string
+  liveHead?: LiveHead | null
   hasInteracted?: boolean
 }
 
 export function VerificationFooter({
-  title = '',
-  description = '',
-  previewPlatform = 'kakao',
+  activeProductId,
+  liveHead,
   hasInteracted = false,
 }: VerificationFooterProps) {
-  const isMatched = hasInteracted ? true : undefined
+  const isMatched = liveHead ? true : undefined
 
   const expected =
-    '• generateMetadata()를 통한 상품별 고유 og:title 및 og:description 동적 생성\n• 선택된 소셜 플랫폼(카카오톡/Twitter/Facebook) 규격에 맞춘 미리보기 카드 렌더링\n• HTML <head> 메타 태그(og:title, og:description, og:url, twitter:card) 동적 주입'
+    '• 정적 페이지: metadata 객체 값이 <head>에 그대로 반영됨 (params 없음)\n• 동적 페이지(/[productId]): generateMetadata({ params })가 params.productId로 조회한 상품별 고유 title/description을 생성\n• 상품 프리셋 링크로 실제 이동할 때마다 <head>가 서버에서 다시 계산됨'
 
-  const platformLabel =
-    previewPlatform === 'kakao'
-      ? '카카오톡'
-      : previewPlatform === 'twitter'
-      ? 'X (Twitter)'
-      : '페이스북'
-
-  const actual = !hasInteracted
-    ? '• 메타데이터 편집 대기 중 (상단 상품 프리셋을 선택하거나 문구를 편집하고 SNS 탭을 전환하세요)'
-    : `• 활성 소셜 플랫폼: ${platformLabel}\n• 동적 og:title: "${title}"\n• 동적 og:description: "${description}"\n• <head> 메타 태그 6개 항목 정상 동기화 완료`
+  const actual = !liveHead
+    ? '• <head> 읽는 중...'
+    : `• 현재 라우트: ${activeProductId ? `/${activeProductId} (동적)` : '메인 (정적)'}\n• 실제 <title>: "${liveHead.title}"\n• 실제 og:description: "${liveHead.ogDescription}"\n• 자유 편집 시뮬레이터 사용 여부: ${hasInteracted ? '예 (실제 head에는 영향 없음)' : '아니오'}`
 
   return (
     <div className="space-y-4">
