@@ -15,6 +15,26 @@ export interface DemoMetadataOptions {
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://learn-nextjs-lab.space').replace(/\/$/, '')
 
+/** 모든 앱(shell, demo-baseline, demo-cache-components)이 공유하는 OG/Twitter 관련 상수. 값이 바뀌면 이 파일만 고치면 된다 */
+export const locale = 'ko_KR' as const
+export const ogImageSize = { width: 1200, height: 630 } as const
+export const ogImageContentType = 'image/png' as const
+
+const zoneLabels: Record<DemoMetadataZone, string> = {
+  baseline: 'Baseline 데모',
+  cache: 'Cache Components 데모',
+}
+
+/**
+ * 데모 제목을 문구로 렌더링하는 동적 OG 이미지 URL을 만든다.
+ * 실제 렌더링은 각 앱이 자기 자신의 `/og` 라우트(app/og/route.tsx)에서 담당하므로,
+ * 상대경로만 반환하면 각 앱의 metadataBase에 맞춰 자동으로 절대 URL로 완성된다.
+ */
+function buildOgImageUrl(title: string, eyebrow: string): string {
+  const params = new URLSearchParams({ title, eyebrow })
+  return `/og?${params.toString()}`
+}
+
 const demoMap = new Map<string, Demo>()
 for (const item of manifest) {
   demoMap.set(`${item.zone}:${item.url}`, item)
@@ -56,6 +76,7 @@ export function getDemoMetadata(
   const finalTitle = customTitle || baseTitle
   const finalDescription = customDescription || `${finalTitle} 실습 예제 - Next.js App Router 학습`
   const pageUrl = `${siteUrl}/zone/${zone}/${cleanPath}`
+  const ogImageUrl = buildOgImageUrl(finalTitle, zoneLabels[zone])
 
   return {
     title: finalTitle,
@@ -65,11 +86,12 @@ export function getDemoMetadata(
       description: finalDescription,
       url: pageUrl,
       type: 'website',
+      locale,
       images: [
         {
-          url: '/og-image.png',
-          width: 1200,
-          height: 630,
+          url: ogImageUrl,
+          width: ogImageSize.width,
+          height: ogImageSize.height,
           alt: finalTitle,
         },
       ],
@@ -78,7 +100,7 @@ export function getDemoMetadata(
       card: 'summary_large_image',
       title: finalTitle,
       description: finalDescription,
-      images: ['/og-image.png'],
+      images: [ogImageUrl],
     },
   }
 }

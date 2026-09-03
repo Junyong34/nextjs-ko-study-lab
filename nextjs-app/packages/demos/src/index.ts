@@ -103,5 +103,5 @@ export function getDemosByDoc(doc: string, demos: Demo[] = loadDemos()): Demo[] 
   })
 }
 
-export { getDemoMetadata, siteUrl } from './metadata'
+export { getDemoMetadata, siteUrl, locale, ogImageSize, ogImageContentType } from './metadata'
 export type { DemoMetadataOptions, DemoMetadataZone } from './metadata'

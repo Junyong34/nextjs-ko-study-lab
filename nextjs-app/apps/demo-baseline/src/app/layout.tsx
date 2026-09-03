@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
+import { siteUrl, locale, ogImageSize } from '@study/demos'
 import './globals.css'
-
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://learn-nextjs-lab.space').replace(/\/$/, '')
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -12,12 +11,12 @@ export const metadata: Metadata = {
   description: 'Next.js App Router 표준 기능 및 아키텍처 실습 예제 (Baseline Zone)',
   openGraph: {
     type: 'website',
-    locale: 'ko_KR',
+    locale,
     url: `${siteUrl}/zone/baseline`,
     siteName: 'Next.js 학습 데모',
     title: 'Next.js 학습 데모 (Baseline Zone)',
     description: 'Next.js App Router 표준 기능 및 아키텍처 실습 예제 (Baseline Zone)',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Next.js 학습 데모 (Baseline Zone)' }],
+    images: [{ url: '/og-image.png', ...ogImageSize, alt: 'Next.js 학습 데모 (Baseline Zone)' }],
   },
   twitter: {
     card: 'summary_large_image',
