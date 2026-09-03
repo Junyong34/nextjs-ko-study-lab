@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'linking-and-navigating/router-prefetch')
+
 import React from 'react'
 
 export default function RouterPrefetchHomePage() {

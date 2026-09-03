@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'file-conventions/not-found/programmatic-not-found')
+
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { ProgrammaticNotFoundDemo } from './components/ProgrammaticNotFoundDemo'

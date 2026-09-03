@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'linking-and-navigating/router-prefetch/deals')
+
 import React from 'react'
 
 const DEALS = [

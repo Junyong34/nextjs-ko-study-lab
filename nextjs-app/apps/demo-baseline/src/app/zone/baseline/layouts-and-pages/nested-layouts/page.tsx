@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'layouts-and-pages/nested-layouts')
+
 import React from 'react'
 import { ProductList } from './components/ProductList'
 

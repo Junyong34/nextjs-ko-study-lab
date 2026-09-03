@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#09090B"/>
+  <g id="book" fill="#FFFFFF">
+    <path d="M10.5 15.5c8.2 0 15.2 2.4 20.7 7v30c-5.6-4.1-12.5-6.1-20.7-6.1V15.5Z"/>
+    <path d="M53.5 15.5c-8.2 0-15.2 2.4-20.7 7v30c5.6-4.1 12.5-6.1 20.7-6.1V15.5Z"/>
+  </g>
+  <g fill="none" stroke="#09090B" stroke-linecap="round">
+    <path d="M15.5 33h10.5" stroke-width="3"/>
+    <g id="code" stroke-linejoin="round" stroke-width="3">
+      <path d="m40 29.5-3.5 3.5 3.5 3.5M46.5 29.5 50 33l-3.5 3.5M44.5 28.5l-3 9"/>
+    </g>
+  </g>
+</svg>

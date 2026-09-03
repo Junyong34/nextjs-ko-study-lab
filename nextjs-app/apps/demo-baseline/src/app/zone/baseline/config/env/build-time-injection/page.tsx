@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'config/env/build-time-injection')
+
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { ConfigEnvInjectionDemo } from './components/ConfigEnvInjectionDemo'

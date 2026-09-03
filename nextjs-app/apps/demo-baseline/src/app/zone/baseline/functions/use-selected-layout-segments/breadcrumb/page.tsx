@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'functions/use-selected-layout-segments/breadcrumb')
+
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { UseSelectedSegmentsBreadcrumbDemo } from './components/UseSelectedSegmentsBreadcrumbDemo'

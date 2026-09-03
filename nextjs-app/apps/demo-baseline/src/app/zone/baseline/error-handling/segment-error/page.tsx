@@ -1,4 +1,7 @@
-'use client'
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'error-handling/segment-error')
 
 import React from 'react'
 import Link from 'next/link'

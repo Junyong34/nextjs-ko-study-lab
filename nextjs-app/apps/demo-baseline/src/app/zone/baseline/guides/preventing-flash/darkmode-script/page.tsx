@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'guides/preventing-flash/darkmode-script')
+
 import React from 'react'
 import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { PreventFlashSection } from './components/PreventFlashSection'

@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'guides/instant-navigation/loading-skeleton/shop')
+
 import React from 'react'
 import Link from 'next/link'
 import { DemoContainer, ExpectedActualPanel } from '@study/demo-kit'

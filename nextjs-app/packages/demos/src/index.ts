@@ -102,3 +102,6 @@ export function getDemosByDoc(doc: string, demos: Demo[] = loadDemos()): Demo[] 
     return normalizeDocPath(d.doc) === normalizedTarget
   })
 }
+
+export { getDemoMetadata, siteUrl } from './metadata'
+export type { DemoMetadataOptions, DemoMetadataZone } from './metadata'

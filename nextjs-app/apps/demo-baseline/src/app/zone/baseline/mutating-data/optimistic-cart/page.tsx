@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'mutating-data/optimistic-cart')
+
 import React from 'react'
 import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { OptimisticCartClient } from './components/OptimisticCartClient'

@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'guides/streaming-nested')
+
 import React, { Suspense } from 'react'
 import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { RecommendedProducts } from './components/RecommendedProducts'

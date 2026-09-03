@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'fonts/font-optimization')
+
 import React from 'react'
 import { Noto_Sans_KR } from 'next/font/google'
 import localFont from 'next/font/local'

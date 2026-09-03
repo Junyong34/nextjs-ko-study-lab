@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@study/demo-kit": "workspace:*",
+    "@study/demos": "workspace:*",
     "@vercel/related-projects": "^1.1.1",
     "next": "catalog:",
     "react": "catalog:",

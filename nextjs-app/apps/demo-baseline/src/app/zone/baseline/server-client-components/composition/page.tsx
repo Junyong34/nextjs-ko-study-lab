@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'server-client-components/composition')
+
 import React from 'react'
 import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { ProductSpecsServer } from './components/ProductSpecsServer'

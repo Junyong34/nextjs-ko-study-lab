@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('cache', 'guides/migrating-cache-components/cache-key-compare')
+
 import React, { Suspense } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard, MOCK_PRODUCTS } from '@study/demo-kit'
 import { CacheKeyCompareDemo } from './components/CacheKeyCompareDemo'

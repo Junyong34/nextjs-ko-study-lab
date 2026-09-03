@@ -1,23 +1,12 @@
 import React from 'react'
 import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { MetadataPreviewClient } from './components/MetadataPreviewClient'
 import { PRODUCTS } from './products'
 
 // 정적 metadata 객체 — params 없이 항상 같은 값. 빌드 타임에 확정되어 초기 HTML에 바로 포함된다.
-export const metadata: Metadata = {
-  title: 'Next.js App Router 학습',
-  description: 'Next.js App Router의 모든 개념을 한국어 가이드와 인터랙티브 데모로 완벽하게 마스터하세요.',
-  openGraph: {
-    title: 'Next.js App Router 학습',
-    description: 'Next.js App Router의 모든 개념을 한국어 가이드와 인터랙티브 데모로 완벽하게 마스터하세요.',
-    type: 'website',
-    url: 'https://nextjs-ko-lab.dev/course/app-router',
-  },
-  twitter: {
-    card: 'summary_large_image',
-  },
-}
+export const metadata: Metadata = getDemoMetadata('baseline', 'metadata-and-og-images/static-and-dynamic-metadata')
 
 const STATIC_TITLE = 'Next.js App Router 학습'
 const STATIC_DESCRIPTION =

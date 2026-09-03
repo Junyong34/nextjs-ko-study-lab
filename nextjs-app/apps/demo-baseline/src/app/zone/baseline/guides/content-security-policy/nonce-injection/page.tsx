@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'guides/content-security-policy/nonce-injection')
+
 import React from 'react'
 import { headers } from 'next/headers'
 import { DemoContainer, DemoGuideCard } from '@study/demo-kit'

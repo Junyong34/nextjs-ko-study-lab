@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('cache', 'revalidating/tag-vs-path')
+
 import React from 'react'
 import { cacheTag } from 'next/cache'
 import { DemoContainer, DemoGuideCard } from '@study/demo-kit'

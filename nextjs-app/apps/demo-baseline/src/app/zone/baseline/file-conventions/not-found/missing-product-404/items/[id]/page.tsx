@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'file-conventions/not-found/missing-product-404/items/[id]')
+
 import React from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'

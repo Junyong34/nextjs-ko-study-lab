@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'guides/redirecting/session-expired/login')
+
 import React from 'react'
 import { DemoContainer, ExpectedActualPanel } from '@study/demo-kit'
 

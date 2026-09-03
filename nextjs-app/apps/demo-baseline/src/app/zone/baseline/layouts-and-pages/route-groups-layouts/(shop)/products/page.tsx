@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'layouts-and-pages/route-groups-layouts/(shop)/products')
+
 import React from 'react'
 
 export default function ShopProductsPage() {

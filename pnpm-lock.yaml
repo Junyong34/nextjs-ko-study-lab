@@ -35,6 +35,9 @@ importers:
       '@study/demo-kit':
         specifier: workspace:*
         version: link:../../packages/demo-kit
+      '@study/demos':
+        specifier: workspace:*
+        version: link:../../packages/demos
       '@vercel/related-projects':
         specifier: ^1.1.1
         version: 1.1.1
@@ -75,6 +78,9 @@ importers:
       '@study/demo-kit':
         specifier: workspace:*
         version: link:../../packages/demo-kit
+      '@study/demos':
+        specifier: workspace:*
+        version: link:../../packages/demos
       '@vercel/related-projects':
         specifier: ^1.1.1
         version: 1.1.1
@@ -201,6 +207,9 @@ importers:
       '@types/node':
         specifier: ^22.13.0
         version: 22.20.1
+      next:
+        specifier: 'catalog:'
+        version: 16.3.2(@types/node@22.20.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       typescript:
         specifier: ^5.7.3
         version: 5.9.3

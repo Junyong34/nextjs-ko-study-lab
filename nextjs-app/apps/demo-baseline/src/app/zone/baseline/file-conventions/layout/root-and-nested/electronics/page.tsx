@@ -1,3 +1,8 @@
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'file-conventions/layout/root-and-nested/electronics')
+
 import React from 'react'
 import { DemoPlaygroundCard } from '@study/demo-kit'
 
