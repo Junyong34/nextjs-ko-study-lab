@@ -3,7 +3,21 @@
 import React, { useState } from 'react'
 import { VerificationFooter } from './VerificationFooter'
 
-export function FontPreviewClient() {
+// 1. 외부 CDN <link> — 실제 fonts.googleapis.com에 요청을 보내는 나눔명조(Nanum Myeongjo).
+// display 옵션을 일부러 지정하지 않아, 흔한 "복붙 임베드 코드"의 기본 블로킹 동작을 재현한다.
+const EXTERNAL_FONT_LINK_HREF =
+  'https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800'
+const EXTERNAL_FONT_FAMILY = "'Nanum Myeongjo', serif"
+
+interface FontPreviewClientProps {
+  nextFontGoogleClassName: string
+  nextFontLocalClassName: string
+}
+
+export function FontPreviewClient({
+  nextFontGoogleClassName,
+  nextFontLocalClassName,
+}: FontPreviewClientProps) {
   const [selectedWeight, setSelectedWeight] = useState<'400' | '700' | '900'>('700')
   const [sampleText, setSampleText] = useState('Next.js 한국어 학습 랩: 고성능 웹 폰트 최적화')
   const [hasInteracted, setHasInteracted] = useState(false)
@@ -20,6 +34,8 @@ export function FontPreviewClient() {
 
   return (
     <div className="space-y-6">
+      {/* React 19가 이 <link>를 자동으로 <head>에 호이스팅한다 — 실제 외부 요청이 발생한다 */}
+      <link rel="stylesheet" href={EXTERNAL_FONT_LINK_HREF} />
       <div className="space-y-4">
         {/* 1. 폰트 제어 옵션 툴바 */}
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-zinc-200 bg-zinc-50 p-3 text-xs dark:border-zinc-800 dark:bg-zinc-900/50">
@@ -66,13 +82,13 @@ export function FontPreviewClient() {
             </div>
             <p
               className="rounded bg-white p-2.5 dark:bg-zinc-900 border border-rose-200/60 dark:border-rose-900/40"
-              style={{ fontWeight: Number(selectedWeight) }}
+              style={{ fontFamily: EXTERNAL_FONT_FAMILY, fontWeight: Number(selectedWeight) }}
             >
               {sampleText}
             </p>
             <div className="text-[11px] text-zinc-500">
-              • fonts.googleapis.com 별도 DNS 조회<br />
-              • FOIT / FOUT 렌더링 블로킹 발생
+              • 나눔명조(Nanum Myeongjo) — fonts.googleapis.com에 실제 &lt;link&gt; 요청<br />
+              • display 미지정 → 폰트 도착 전까지 렌더링 블로킹(FOIT) 가능
             </div>
           </div>
 
@@ -87,14 +103,14 @@ export function FontPreviewClient() {
               </span>
             </div>
             <p
-              className="rounded bg-white p-2.5 dark:bg-zinc-900 border border-emerald-200/60 dark:border-emerald-900/40"
+              className={`rounded bg-white p-2.5 dark:bg-zinc-900 border border-emerald-200/60 dark:border-emerald-900/40 ${nextFontGoogleClassName}`}
               style={{ fontWeight: Number(selectedWeight) }}
             >
               {sampleText}
             </p>
             <div className="text-[11px] text-zinc-500">
-              • 빌드 시 동일 도메인 정적 에셋 변환<br />
-              • <strong>Zero Layout Shift (CLS 0)</strong>
+              • Noto Sans KR — 빌드 시 자동 다운로드해 이 zone과 같은 도메인에서 서빙<br />
+              • 폴백 폰트 치수 자동 보정(adjustFontFallback)으로 레이아웃 흔들림 최소화
             </div>
           </div>
 
@@ -109,14 +125,14 @@ export function FontPreviewClient() {
               </span>
             </div>
             <p
-              className="rounded bg-white p-2.5 dark:bg-zinc-900 border border-blue-200/60 dark:border-blue-900/40 font-mono"
+              className={`rounded bg-white p-2.5 dark:bg-zinc-900 border border-blue-200/60 dark:border-blue-900/40 ${nextFontLocalClassName}`}
               style={{ fontWeight: Number(selectedWeight) }}
             >
               {sampleText}
             </p>
             <div className="text-[11px] text-zinc-500">
-              • WOFF2 로컬 파일 번들링<br />
-              • 서브셋 자동 최적화 및 사이즈 제어
+              • Gaegu(OFL 라이선스) — 저장소에 직접 번들링한 로컬 TTF 파일<br />
+              • 400/700 두 굵기만 실제 파일 존재 (900은 브라우저가 가장 가까운 굵기로 보정)
             </div>
           </div>
         </div>
