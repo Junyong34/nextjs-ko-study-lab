@@ -3,7 +3,7 @@
  * 도메인 변경, 기본 OG 이미지 교체, 크롤링 제외 경로 조정은 이 파일만 고치면
  * robots.ts / sitemap.ts / 루트 layout / 페이지별 metadata / JSON-LD 전체에 반영됩니다.
  */
-const FALLBACK_SITE_URL = 'https://nextjs-ko-study-lab-shell.vercel.app'
+const FALLBACK_SITE_URL = 'https://learn-nextjs-lab.space'
 
 export const siteConfig = {
   name: 'Next.js 학습 (App Router)',
