@@ -2,7 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { MarkdownRenderer, parseHeadings, isGlossaryDoc } from '@study/docs-render'
-import { TableOfContents } from '@study/ui'
+import { TableOfContents, ShareButton } from '@study/ui'
 import { getManifest, getDocBySlug, getDocContent, getDemos } from '@/lib/docs'
 import { LearningCompletionControl } from '@/components/learning-progress/LearningCompletionControl'
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -68,18 +68,31 @@ export default async function DocPage({ params }: PageProps) {
       <JsonLd data={buildLearningResourceJsonLd({ title: doc.title, description, url: doc.url })} />
       {/* Main Document Content */}
       <div className="min-w-0 flex-1 space-y-6">
-        {/* Category / Breadcrumbs */}
-        {breadcrumbs.length > 0 && (
-          <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-zinc-500 font-medium capitalize">
-            <span>학습 문서</span>
-            {breadcrumbs.map((b, idx) => (
-              <React.Fragment key={idx}>
-                <span>/</span>
-                <span className="text-zinc-600 dark:text-zinc-400">{b}</span>
-              </React.Fragment>
-            ))}
-          </div>
-        )}
+        {/* Category / Breadcrumbs & Top-Right Share Button */}
+        <div className="flex items-center justify-between gap-4">
+          {breadcrumbs.length > 0 ? (
+            <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-zinc-500 font-medium capitalize">
+              <span>학습 문서</span>
+              {breadcrumbs.map((b, idx) => (
+                <React.Fragment key={idx}>
+                  <span>/</span>
+                  <span className="text-zinc-600 dark:text-zinc-400">{b}</span>
+                </React.Fragment>
+              ))}
+            </div>
+          ) : (
+            <div />
+          )}
+
+          {!(doc.path === 'README.md' || doc.path.endsWith('/README.md')) && (
+            <div className="shrink-0">
+              <ShareButton
+                title={doc.title}
+                url={doc.url}
+              />
+            </div>
+          )}
+        </div>
 
         <LearningCompletionControl
           kind="document"

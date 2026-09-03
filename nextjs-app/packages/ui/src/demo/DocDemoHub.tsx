@@ -4,6 +4,7 @@ import { PlayCircle, BookOpen, ArrowLeft, ArrowRight, ExternalLink } from 'lucid
 import { cardClass } from '../primitives/Card'
 import { DemoStatusBadge } from './DemoStatus'
 import { LearningCompletionStatus } from '../learning'
+import { ShareButton } from '../share'
 
 export interface DocDemoItem {
   url: string
@@ -88,13 +89,19 @@ export function DocDemoHub({
           </p>
         </div>
 
-        <Link
-          href={docUrl}
-          className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-medium text-zinc-700 shadow-xs hover:bg-zinc-50 hover:text-zinc-900 transition dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-        >
-          <BookOpen className="h-4 w-4 text-zinc-500" />
-          <span>관련 학습 문서 보기</span>
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href={docUrl}
+            className="inline-flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-medium text-zinc-700 shadow-xs hover:bg-zinc-50 hover:text-zinc-900 transition dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+          >
+            <BookOpen className="h-4 w-4 text-zinc-500" />
+            <span>관련 학습 문서 보기</span>
+          </Link>
+          <ShareButton
+            title={`${docTitle} 실습 예제 목록`}
+            url={`/demo/${docSlug}`}
+          />
+        </div>
       </div>
 
       {/* 데모 목록 그리드 */}

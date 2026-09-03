@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react'
 import { DemoStatusBadge } from './DemoStatus'
+import { ShareButton } from '../share'
 
 export interface SiblingDemo {
   url: string
@@ -31,6 +32,8 @@ export interface DemoPageHeaderProps {
   currentDemoUrl?: string
   /** 데모 전환 링크 빌더 (예: (demoUrl) => `/demo/docSlug?run=${demoUrl}`) */
   getDemoHref?: (demoUrl: string) => string
+  /** 공유 대상 URL (완료된 데모일 때 직접 URL) */
+  shareUrl?: string
 }
 
 /**
@@ -50,6 +53,7 @@ export function DemoPageHeader({
   siblingDemos = [],
   currentDemoUrl,
   getDemoHref,
+  shareUrl,
 }: DemoPageHeaderProps) {
   const currentIndex = siblingDemos.findIndex((d) => d.url === (currentDemoUrl ?? url))
   const prevDemo = currentIndex > 0 ? siblingDemos[currentIndex - 1] : null
@@ -134,7 +138,7 @@ export function DemoPageHeader({
         )}
       </div>
 
-      {/* 헤더 본문: 상태 뱃지 + 예제 제목 */}
+      {/* 헤더 본문: 상태 뱃지 + 예제 제목 (좌측) / 공유 버튼 (우측 상단) */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200 pb-4 dark:border-zinc-800">
         <div>
           {status && status !== 'done' && (
@@ -146,6 +150,15 @@ export function DemoPageHeader({
             {title}
           </h1>
         </div>
+
+        {shareUrl && (
+          <div className="shrink-0">
+            <ShareButton
+              title={title}
+              url={shareUrl}
+            />
+          </div>
+        )}
       </div>
 
       {/* 동일 문서에 예제가 여러 개일 때 하위 예제 탭 칩 목록 */}

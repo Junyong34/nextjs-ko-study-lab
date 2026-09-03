@@ -1,7 +1,7 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import { PlayCircle } from 'lucide-react'
-import { DemoIndexStats } from '@study/ui'
+import { DemoIndexStats, ShareButton } from '@study/ui'
 import { getDemos, getManifest } from '@/lib/docs'
 import { parseDemoIndexQuery, createDemoIndexViewModel } from '@/lib/demo-index'
 import { DemoIndexClient } from '@/components/demo/DemoIndexClient'
@@ -32,16 +32,26 @@ export default async function DemoIndexPage({ searchParams }: DemoIndexPageProps
   return (
     <div className="space-y-8">
       <div className="border-b border-zinc-200 pb-6 dark:border-zinc-800">
-        <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 mb-2">
-          <PlayCircle className="h-5 w-5" />
-          <span className="text-xs font-bold uppercase tracking-wider">Interactive Demos</span>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 mb-2">
+              <PlayCircle className="h-5 w-5" />
+              <span className="text-xs font-bold uppercase tracking-wider">Interactive Demos</span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-3xl">
+              실습 예제
+            </h1>
+            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+              Next.js App Router의 핵심 기능을 실행 가능한 예제로 직접 확인해 보세요.
+            </p>
+          </div>
+          <div className="shrink-0 pt-1">
+            <ShareButton
+              title="Next.js 실습 예제 목록"
+              url="/demo"
+            />
+          </div>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-3xl">
-          실습 예제
-        </h1>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-          Next.js App Router의 핵심 기능을 실행 가능한 예제로 직접 확인해 보세요.
-        </p>
 
         <DemoIndexStats totalCount={viewModel.allCount} doneCount={viewModel.allDoneCount} />
       </div>

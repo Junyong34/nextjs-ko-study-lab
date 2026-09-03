@@ -44,6 +44,7 @@ export function DemoViewer({
         siblingDemos={siblingDemos}
         currentDemoUrl={demo.url}
         getDemoHref={getDemoHref}
+        shareUrl={demo.status === 'done' ? `/demo/${demo.url}` : undefined}
       />
 
       <LearningCompletionControl
