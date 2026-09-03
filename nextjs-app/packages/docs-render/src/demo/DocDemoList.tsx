@@ -72,7 +72,7 @@ export function DocDemoList({
                     <span
                       className="inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider border border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
                     >
-                      {demo.status}
+                      {demo.status === 'wip' || demo.status === 'stub' ? '준비 중' : demo.status}
                     </span>
                   )}
                 </div>

@@ -102,7 +102,17 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
   const directDemo = getDemoByUrl(slugStr)
   if (directDemo) {
     const matchedDoc = findDocForDemo(manifest, directDemo.doc)
-    const siblingDemos = matchedDoc ? getDemosByDoc(matchedDoc.path) : [directDemo]
+    if (directDemo.status !== 'done') {
+      return (
+        <DemoEmptyState
+          docTitle={directDemo.title}
+          category={matchedDoc?.title}
+          docUrl={matchedDoc?.url}
+        />
+      )
+    }
+
+    const siblingDemos = matchedDoc ? getDemosByDoc(matchedDoc.path).filter((d) => d.status === 'done') : [directDemo]
     const docSlug = matchedDoc ? matchedDoc.slug.join('/') : ''
     const backUrl = docSlug ? `/demo/${docSlug}` : '/demo'
     const backLabel = matchedDoc ? `${matchedDoc.title} 예제 목록` : '전체 예제 목록'
@@ -125,6 +135,7 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
   }
 
   const docDemos = getDemosByDoc(doc.path)
+  const doneDocDemos = docDemos.filter((d) => d.status === 'done')
   const docSlug = doc.slug.join('/')
   const category =
     doc.slug.length > 1
@@ -134,8 +145,8 @@ export default async function DemoPage({ params, searchParams }: DemoPageProps) 
           .join(' > ')
       : undefined
 
-  // 2-A. 등록된 데모가 없는 문서인 경우 -> Empty State 노출
-  if (docDemos.length === 0) {
+  // 2-A. 등록된 데모가 없거나 완성(done)된 데모가 없는 경우 -> Empty State (준비 중) 노출
+  if (docDemos.length === 0 || doneDocDemos.length === 0) {
     return (
       <DemoEmptyState
         docTitle={doc.title}

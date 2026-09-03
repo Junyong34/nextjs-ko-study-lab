@@ -17,15 +17,15 @@ interface FeaturedDemoItem {
 
 const FEATURED_DEMOS: FeaturedDemoItem[] = [
   {
-    id: 'server-actions-basic',
-    title: 'Server Actions 기본 폼 처리',
-    subtitle: 'Server Actions Basic Form & Mutations',
-    category: 'Guides > Server Actions',
-    description: 'Server Action으로 폼을 제출하고 서버 상태가 바뀌는 흐름을 확인합니다.',
+    id: 'route-handlers-rest-api',
+    title: 'REST API Route Handler CRUD',
+    subtitle: 'Route Handlers REST API CRUD',
+    category: 'Getting Started > Route Handlers',
+    description: 'Next.js 16의 GET, POST, PATCH, DELETE 메서드로 REST API 엔드포인트를 구현합니다.',
     zone: 'demo-baseline',
-    demoUrl: '/demo/server-actions/basic',
-    docUrl: '/guides/server-actions',
-    tags: ['Server Actions', 'Form Action', 'Pending UI'],
+    demoUrl: '/demo/route-handlers/rest-api-crud',
+    docUrl: '/getting-started/route-handlers',
+    tags: ['Route Handlers', 'REST API', 'CRUD'],
   },
   {
     id: 'caching-basic',

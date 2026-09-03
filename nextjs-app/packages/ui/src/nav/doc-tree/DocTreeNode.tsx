@@ -38,8 +38,8 @@ export function DocTreeNode({
     ? `/demo${node.url === '/' ? '' : node.url}`
     : node.url
 
-  const hasDemos = Boolean(node.hasDemo || (node.demos && node.demos.length > 0))
-  const demoCount = node.demoCount || (node.demos ? node.demos.length : 0)
+  const hasDemos = Boolean(node.hasDemo)
+  const demoCount = node.demoCount ?? 0
 
   // 현재 메뉴 선택(활성) 여부 판단
   const isSelected = useMemo(() => {

@@ -36,14 +36,15 @@ export function getAugmentedTree(): TreeNode[] {
 
     const augmentNode = (node: TreeNode): TreeNode => {
       const nodeDemos = node.path ? getDemosByDoc(node.path, allDemos) : []
-      const hasDemos = nodeDemos.length > 0
+      const doneDemos = nodeDemos.filter((d) => d.status === 'done')
+      const hasDemos = doneDemos.length > 0
       const children = node.children ? node.children.map(augmentNode) : undefined
 
       return {
         ...node,
-        demos: nodeDemos,
+        demos: doneDemos,
         hasDemo: hasDemos,
-        demoCount: nodeDemos.length,
+        demoCount: doneDemos.length,
         children,
       }
     }

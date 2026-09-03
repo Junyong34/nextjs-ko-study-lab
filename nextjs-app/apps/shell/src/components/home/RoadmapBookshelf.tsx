@@ -114,7 +114,7 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {ROADMAP_STEPS.map((chapter, idx) => {
           const category = DEMO_CATEGORY_BY_SUBTITLE[chapter.subtitle]
-          const demoCount = category ? demos.filter((demo) => getDemoCategory(demo) === category).length : 0
+          const demoCount = category ? demos.filter((demo) => getDemoCategory(demo) === category && demo.status === 'done').length : 0
           const isLastSingle = idx === 4
 
           return (

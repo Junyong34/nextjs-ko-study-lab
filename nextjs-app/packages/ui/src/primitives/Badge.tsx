@@ -28,6 +28,12 @@ export function StatusBadge({
   className = '',
 }: StatusBadgeProps) {
   const tone = status === 'done' ? STATUS_TONE.done : STATUS_TONE.pending
+  const label =
+    status === 'done'
+      ? '완료'
+      : status === 'wip' || status === 'stub'
+        ? '준비 중'
+        : status.toUpperCase()
 
   if (variant === 'tag') {
     return (
@@ -38,7 +44,7 @@ export function StatusBadge({
           className,
         )}
       >
-        {status}
+        {label}
       </span>
     )
   }
@@ -52,7 +58,7 @@ export function StatusBadge({
       )}
     >
       {icon}
-      <span>{status.toUpperCase()}</span>
+      <span>{label}</span>
     </span>
   )
 }
