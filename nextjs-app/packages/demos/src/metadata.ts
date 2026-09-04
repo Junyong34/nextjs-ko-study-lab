@@ -13,7 +13,7 @@ export interface DemoMetadataOptions {
   description?: string
 }
 
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://learn-nextjs-lab.space').replace(/\/$/, '')
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.learn-nextjs-lab.space').replace(/\/$/, '')
 
 /** 모든 앱(shell, demo-baseline, demo-cache-components)이 공유하는 OG/Twitter 관련 상수. 값이 바뀌면 이 파일만 고치면 된다 */
 export const locale = 'ko_KR' as const
@@ -27,12 +27,14 @@ const zoneLabels: Record<DemoMetadataZone, string> = {
 
 /**
  * 데모 제목을 문구로 렌더링하는 동적 OG 이미지 URL을 만든다.
- * 실제 렌더링은 각 앱이 자기 자신의 `/og` 라우트(app/og/route.tsx)에서 담당하므로,
- * 상대경로만 반환하면 각 앱의 metadataBase에 맞춰 자동으로 절대 URL로 완성된다.
+ * 실제 렌더링은 각 앱이 자기 자신의 `/zone/{zone}/og` 라우트에서 담당한다.
+ * shell의 rewrites는 `/zone/:slug/:path*`만 각 zone 앱으로 프록시하므로(prefix 없는
+ * `/og`는 shell 자신에게 떨어진다), 반드시 zone 프리픽스를 포함해야 실제로 해당 앱의
+ * 라우트에 도달한다 — metadataBase가 상대경로를 절대 URL로 완성해준다.
  */
-function buildOgImageUrl(title: string, eyebrow: string): string {
+function buildOgImageUrl(zone: DemoMetadataZone, title: string, eyebrow: string): string {
   const params = new URLSearchParams({ title, eyebrow })
-  return `/og?${params.toString()}`
+  return `/zone/${zone}/og?${params.toString()}`
 }
 
 const demoMap = new Map<string, Demo>()
@@ -76,7 +78,7 @@ export function getDemoMetadata(
   const finalTitle = customTitle || baseTitle
   const finalDescription = customDescription || `${finalTitle} 실습 예제 - Next.js App Router 학습`
   const pageUrl = `${siteUrl}/zone/${zone}/${cleanPath}`
-  const ogImageUrl = buildOgImageUrl(finalTitle, zoneLabels[zone])
+  const ogImageUrl = buildOgImageUrl(zone, finalTitle, zoneLabels[zone])
 
   return {
     title: finalTitle,
