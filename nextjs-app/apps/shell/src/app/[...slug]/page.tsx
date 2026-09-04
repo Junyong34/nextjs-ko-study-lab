@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return buildPageMetadata({
     title: doc.title,
-    description: `${doc.title} - Next.js App Router 한국어 학습 가이드`,
+    description: 'Next.js App Router 한국어 학습 가이드입니다.',
     path: doc.url,
     dynamicOgImage: { title: doc.title },
   })

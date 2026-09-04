@@ -60,11 +60,15 @@ export async function generateMetadata({ params, searchParams }: DemoPageProps):
 
   const directDemo = getDemoByUrl(slugStr)
   if (directDemo) {
+    const manifest = getManifest()
+    const matchedDoc = findDocForDemo(manifest, directDemo.doc)
     return buildPageMetadata({
-      title: `${directDemo.title} - 실습 예제`,
-      description: `${directDemo.title} 실습 예제 - Next.js App Router 학습`,
+      title: directDemo.title,
+      description: matchedDoc
+        ? `${matchedDoc.title} 문서와 함께 보는 실습 예제입니다.`
+        : 'Next.js App Router 실습 예제입니다.',
       path,
-      dynamicOgImage: { title: directDemo.title, eyebrow: '실습 예제' },
+      dynamicOgImage: { title: directDemo.title, eyebrow: matchedDoc?.title ?? '실습 예제' },
     })
   }
 
@@ -74,16 +78,16 @@ export async function generateMetadata({ params, searchParams }: DemoPageProps):
       const runningDemo = getDemoByUrl(run)
       if (runningDemo) {
         return buildPageMetadata({
-          title: `${runningDemo.title} - ${doc.title} 예제`,
-          description: `${doc.title} - ${runningDemo.title} 실습 예제`,
+          title: runningDemo.title,
+          description: `${doc.title} 학습 문서와 함께 보는 실습 예제입니다.`,
           path,
           dynamicOgImage: { title: runningDemo.title, eyebrow: doc.title },
         })
       }
     }
     return buildPageMetadata({
-      title: `${doc.title} 실습 예제`,
-      description: `${doc.title} 관련 인터랙티브 실습 예제 목록`,
+      title: doc.title,
+      description: '이 문서와 연결된 인터랙티브 실습 예제 목록입니다.',
       path,
       dynamicOgImage: { title: doc.title, eyebrow: '실습 예제' },
     })

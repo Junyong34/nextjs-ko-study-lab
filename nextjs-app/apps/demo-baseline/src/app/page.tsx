@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import manifest from '@study/demos/manifest'
-import { siteUrl, type Demo } from '@study/demos'
+import { siteUrl, categoryLabels, type Demo } from '@study/demos'
 
 const baselineDemos = (manifest as Demo[]).filter((d) => d.zone === 'baseline')
 
@@ -25,29 +25,7 @@ export const metadata: Metadata = {
   },
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  architecture: 'Architecture (아키텍처)',
-  components: 'Components (내장 컴포넌트)',
-  config: 'Configuration (환경 설정)',
-  css: 'CSS & 스타일링',
-  directives: 'Directives (지시어)',
-  edge: 'Edge Runtime',
-  'error-handling': 'Error Handling (오류 처리)',
-  'fetching-data': 'Data Fetching (데이터 조회)',
-  'file-conventions': 'File Conventions (특수 파일 규약)',
-  fonts: 'Font Optimization (폰트)',
-  functions: 'Functions & Hooks (App Router 함수)',
-  guides: 'Guides (실무 가이드)',
-  images: 'Image Optimization (이미지)',
-  'layouts-and-pages': 'Layouts & Pages (레이아웃 & 페이지)',
-  'linking-and-navigating': 'Linking & Navigating (링크 & 내비게이션)',
-  'metadata-and-og-images': 'Metadata & Open Graph',
-  'mutating-data': 'Mutating Data (데이터 변형)',
-  proxy: 'Proxy & Rewrites (프록시 & 리라이트)',
-  'route-handlers': 'Route Handlers (라우트 핸들러)',
-  'server-actions': 'Server Actions (서버 액션)',
-  'server-client-components': 'Server & Client Components',
-}
+const CATEGORY_LABELS = categoryLabels.baseline
 
 export default function BaselineRootPage() {
   const demos = baselineDemos

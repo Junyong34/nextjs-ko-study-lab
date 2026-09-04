@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import manifest from '@study/demos/manifest'
-import { siteUrl, type Demo } from '@study/demos'
+import { siteUrl, categoryLabels, type Demo } from '@study/demos'
 
 const cacheDemos = (manifest as Demo[]).filter((d) => d.zone === 'cache')
 
@@ -25,14 +25,7 @@ export const metadata: Metadata = {
   },
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
-  caching: 'Caching (캐싱 기본)',
-  config: 'Configuration (캐시 설정)',
-  directives: 'Directives (`use cache` 지시어)',
-  functions: 'Functions (캐시 함수 및 수명 주기)',
-  guides: 'Guides (인증, 마이그레이션, ISR 실무)',
-  revalidating: 'Revalidation (온디맨드 & 시간 기반 재검증)',
-}
+const CATEGORY_LABELS = categoryLabels.cache
 
 export default function CacheRootPage() {
   const demos = cacheDemos
