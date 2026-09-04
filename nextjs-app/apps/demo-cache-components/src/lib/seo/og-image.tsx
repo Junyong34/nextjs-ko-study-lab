@@ -17,7 +17,10 @@ export function renderOgImage(title: string, eyebrow: string) {
           height: '100%',
           padding: 64,
           position: 'relative',
-          background: 'linear-gradient(135deg, #0A0A0F 0%, #16141F 55%, #201A2E 100%)',
+          backgroundColor: '#1E1B18',
+          backgroundImage:
+            'linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '40px 40px, 40px 40px',
           color: '#FFFFFF',
           overflow: 'hidden',
         }}
@@ -26,12 +29,24 @@ export function renderOgImage(title: string, eyebrow: string) {
           style={{
             display: 'flex',
             position: 'absolute',
-            top: -140,
-            right: -140,
-            width: 440,
-            height: 440,
-            borderRadius: 440,
-            background: 'radial-gradient(circle, rgba(109,94,249,0.35) 0%, rgba(109,94,249,0) 70%)',
+            top: -160,
+            right: -160,
+            width: 480,
+            height: 480,
+            borderRadius: 480,
+            background: 'radial-gradient(circle, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 70%)',
+          }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            bottom: -180,
+            left: -140,
+            width: 420,
+            height: 420,
+            borderRadius: 420,
+            background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 70%)',
           }}
         />
         <div
@@ -41,8 +56,8 @@ export function renderOgImage(title: string, eyebrow: string) {
             alignSelf: 'flex-start',
             padding: '8px 20px',
             borderRadius: 999,
-            background: 'rgba(109,94,249,0.16)',
-            color: '#B4A9FF',
+            background: 'rgba(255,255,255,0.10)',
+            color: '#D4D4D8',
             fontSize: 28,
             fontWeight: 600,
             letterSpacing: 1,
@@ -68,7 +83,7 @@ export function renderOgImage(title: string, eyebrow: string) {
               width: 28,
               height: 4,
               borderRadius: 4,
-              background: 'linear-gradient(90deg, #6D5EF9, #B4A9FF)',
+              background: 'linear-gradient(90deg, #FFFFFF, #71717A)',
             }}
           />
           <div style={{ display: 'flex', fontSize: 24, color: '#8B8894', fontWeight: 500 }}>Next.js 학습</div>
