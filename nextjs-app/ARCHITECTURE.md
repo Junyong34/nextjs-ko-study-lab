@@ -9,7 +9,7 @@ Next.js App Router 공식 문서를 체계적인 한국어 커리큘럼으로 �
 | 컨텍스트 | 디렉토리 | 상태 | 책임 |
 |---|---|---|---|
 | 학습 문서 | [`nextjs-docs/`](../nextjs-docs/README.md) | 완료 (284편) | Next.js App Router 공식 문서를 바탕으로 한국어 학습 커리큘럼을 제공하는 콘텐츠 원본 |
-| 데모 사이트 | [`nextjs-app/`](./README.md) | 구현 완료 (241개 데모, 배포 검증 별도) | 학습 문서를 렌더링하고 각 개념의 실제 동작을 독립 데모로 제공하는 Multi-zones 포털 |
+| 데모 사이트 | [`nextjs-app/`](./README.md) | 구현·배포 완료 (241개 데모) | 학습 문서를 렌더링하고 각 개념의 실제 동작을 독립 데모로 제공하는 Multi-zones 포털 |
 
 학습 문서는 콘텐츠의 단일 원본이며, 데모 사이트는 문서를 읽어 화면에 표시할 뿐 복제하지 않습니다. 데모의 메타데이터와 주소는 [`packages/demos/demos.yaml`](./packages/demos)에서 관리합니다.
 

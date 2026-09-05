@@ -1,8 +1,10 @@
 # 04. Vercel 배포 계획
 
+> **상태: 배포 완료.** 셸 + zone 2개 총 3개 프로젝트가 프로덕션에 올라가 있고, 셸에는 커스텀 도메인 [www.learn-nextjs-lab.space](https://www.learn-nextjs-lab.space/)가 붙어 정상 서비스 중입니다. 이 문서는 그 과정에서 정한 구성과 실제로 부딪힌 문제·해결책의 기록이며, §8에는 배포 자체를 막지는 않지만 아직 별도로 실측하지 않은 저위험 항목만 남아 있습니다.
+
 Multi-Zones(셸 + zone 앱들)를 Vercel에 올리는 방법을 정합니다. "zone당 Vercel 프로젝트를 만든다는 것 외에는 열려 있던" 미해결 항목을 여기서 닫습니다. 1차 출처는 [Vercel 공식 모노레포 문서](https://vercel.com/docs/monorepos)와 [Turborepo 배포 가이드](https://vercel.com/docs/monorepos/turborepo)입니다.
 
-**첫 배포 검증 완료**: 실제로 3개 프로젝트를 배포해 확인한 결과, §3-2의 Related Projects 자동 주입은 프로덕션 빌드에서 값이 채워지지 않았고(`withRelatedProject`가 `defaultHost` 폴백으로 떨어짐 → shell이 `localhost:3001`/`3002`로 rewrite를 시도해 `DNS_HOSTNAME_RESOLVED_PRIVATE` 404 발생), 대신 **각 프로젝트 Settings → Environment Variables(Production)에 `ZONE_BASELINE_URL`/`ZONE_CACHE_URL`/`PUBLIC_ORIGIN`을 실제 배포 URL로 직접 넣고 재배포**하는 방식으로 해결했습니다. 코드의 `withRelatedProject`는 그대로 둬도 무해합니다(Related Projects 값이 없으면 이 수동 env var가 `defaultHost`로 그대로 쓰이므로) — 다만 "환경변수 없이 자동 연결"이라는 원래 기대는 이번 검증에서 깨졌으므로, §3-2는 참고용으로 남기고 §8에 실측 결과를 반영합니다.
+**첫 배포 검증 완료(2026-09-01)**: 실제로 3개 프로젝트를 배포해 확인한 결과, §3-2의 Related Projects 자동 주입은 프로덕션 빌드에서 값이 채워지지 않았고(`withRelatedProject`가 `defaultHost` 폴백으로 떨어짐 → shell이 `localhost:3001`/`3002`로 rewrite를 시도해 `DNS_HOSTNAME_RESOLVED_PRIVATE` 404 발생), 대신 **각 프로젝트 Settings → Environment Variables(Production)에 `ZONE_BASELINE_URL`/`ZONE_CACHE_URL`/`PUBLIC_ORIGIN`을 실제 배포 URL로 직접 넣고 재배포**하는 방식으로 해결했습니다. 코드의 `withRelatedProject`는 그대로 둬도 무해합니다(Related Projects 값이 없으면 이 수동 env var가 `defaultHost`로 그대로 쓰이므로) — 다만 "환경변수 없이 자동 연결"이라는 원래 기대는 이번 검증에서 깨졌으므로, §3-2는 참고용으로 남기고 §8에 실측 결과를 반영합니다. 이후 2026-09-03에 셸에 커스텀 도메인(`learn-nextjs-lab.space`)을 연결해 배포를 마무리했습니다(§7).
 
 ## 1. 배포 구성 원칙
 
@@ -118,24 +120,24 @@ Vercel의 "영향 없는 프로젝트 자동 스킵"은 조건 3가지를 요구
 
 Vercel에 호스팅되는 빌드는 **별도 연동 없이 자동으로 Vercel Remote Cache를 씁니다.**<sup>[8]</sup> 로컬 개발 속도를 위해 `pnpm dlx turbo login && pnpm dlx turbo link`를 저장소 루트에서 한 번 실행하면 로컬 빌드도 같은 캐시를 공유합니다 — 필수는 아니고 편의 옵션입니다.
 
-## 6. 첫 배포 검증 절차
+## 6. 첫 배포 검증 절차 (완료)
 
-3-프로젝트 + Related Projects 기준의 배포 검증 절차입니다.
+3-프로젝트 + Related Projects 기준의 배포 검증 절차이며, 아래 6단계 모두 완료했습니다.
 
-1. Vercel에서 프로젝트 3개 생성. Root Directory를 각각 `nextjs-app/apps/shell`, `nextjs-app/apps/demo-baseline`, `nextjs-app/apps/demo-cache-components`로 지정 (§2). "Include source files outside of the Root Directory" 옵션 확인
-2. 세 프로젝트 모두 최초 배포(관계 설정 없이) — Settings에서 각 프로젝트 ID 확보
-3. `vercel.json`에 `relatedProjects` 상호 설정 (§3-2 표) — 재배포. (`turbo.json`의 `VERCEL_RELATED_PROJECTS` 추가와 `next.config.ts`의 `@vercel/related-projects` 적용은 코드에 이미 반영됨)
-4. 배포에서만 드러나는 항목 확인: 문서 렌더링(md 산출물 포함 여부), 데모 화면 CSS/JS 로딩(`assetPrefix`), Server Action 허용(`allowedOrigins`)
-5. 셸 도메인에서 문서 → 데모 링크 이동, 독립 열람 iframe 표시까지 끝단 확인
-6. 확인이 끝나면 로컬 중심으로 복귀. zone을 추가할 때만 1~5를 반복(3번은 신규 zone과 기존 두 프로젝트의 `relatedProjects` 목록에 서로 추가하는 것으로 축소됨)
+1. ✅ Vercel에서 프로젝트 3개 생성. Root Directory를 각각 `nextjs-app/apps/shell`, `nextjs-app/apps/demo-baseline`, `nextjs-app/apps/demo-cache-components`로 지정 (§2). "Include source files outside of the Root Directory" 옵션 확인
+2. ✅ 세 프로젝트 모두 최초 배포(관계 설정 없이) — Settings에서 각 프로젝트 ID 확보
+3. ✅ `vercel.json`에 `relatedProjects` 상호 설정 시도 → §3-2 방식은 프로덕션에서 값이 채워지지 않아, 최종적으로는 각 프로젝트 Environment Variables에 `ZONE_*_URL`/`PUBLIC_ORIGIN`을 직접 등록하는 방식으로 전환·재배포 (§8 참고)
+4. ✅ 배포에서만 드러나는 항목 확인: 문서 렌더링(md 산출물 포함 여부), 데모 화면 CSS/JS 로딩(`assetPrefix`), Server Action 허용(`allowedOrigins`)
+5. ✅ 셸 도메인에서 문서 → 데모 링크 이동, 독립 열람 iframe 표시까지 끝단 확인
+6. ✅ 커스텀 도메인(`learn-nextjs-lab.space`) 연결까지 마치고 로컬 중심 개발로 복귀. zone을 새로 추가할 때만 1~5를 반복(3번은 신규 zone과 기존 프로젝트들의 `ZONE_*_URL`/`PUBLIC_ORIGIN` 환경변수를 서로 추가하는 것으로 축소됨)
 
-## 7. 도메인 전략
+## 7. 도메인 전략 (완료)
 
-커스텀 도메인은 **셸에만** 붙입니다. zone 프로젝트들은 Vercel이 자동 발급하는 `*.vercel.app` 도메인을 그대로 씁니다 — 학습자 URL에 zone이 노출되지 않는다는 기존 설계([ADR 0005](./adr/0005-hide-zone-from-learner-url.md))와 그대로 맞습니다. zone 도메인은 셸의 rewrites 목적지로만 쓰이고 사용자에게 보이지 않습니다.
+커스텀 도메인은 **셸에만** 붙입니다. 2026-09-03에 셸 프로젝트(`study-shell`)에 `learn-nextjs-lab.space`를 연결했고, 현재 [www.learn-nextjs-lab.space](https://www.learn-nextjs-lab.space/)로 정상 서비스 중입니다. zone 프로젝트(`study-baseline`, `study-cache`)는 Vercel이 자동 발급하는 `*.vercel.app` 도메인을 그대로 씁니다 — 학습자 URL에 zone이 노출되지 않는다는 기존 설계([ADR 0005](./adr/0005-hide-zone-from-learner-url.md))와 그대로 맞습니다. zone 도메인은 셸의 rewrites 목적지로만 쓰이고 사용자에게 보이지 않습니다.
 
 ## 8. 남은 리스크 / 다음 확인 사항
 
-이 계획에서 아직 실측하지 못한 것들입니다. §6 첫 배포 검증에서 함께 닫습니다.
+배포 자체는 완료됐고 사이트는 정상 운영 중입니다. 아래는 그 과정에서 이미 해결된 항목의 기록과, 배포를 막지는 않지만 아직 별도로 실측하지 않은 저위험 항목입니다.
 
 | 항목 | 리스크 | 확인 방법 |
 |---|---|---|
