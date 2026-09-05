@@ -5,12 +5,12 @@
 ## Contexts
 
 - [학습 문서](./nextjs-docs/CONTEXT.md) — 공식 문서를 한국어 학습 콘텐츠로 재구성한다 (Phase 1, 완료)
-- [데모 사이트](./nextjs-app/CONTEXT.md) — 학습 문서를 화면에 그리고 각 개념의 데모를 실행한다 (Phase 2, 진행 중)
+- [데모 사이트](./nextjs-app/CONTEXT.md) — 학습 문서를 화면에 그리고 각 개념의 데모를 실행한다 (Phase 2, 단계별 공개 운영)
 
 ## Relationships
 
 - **학습 문서 → 데모 사이트 (원본 관계)**: 학습 문서가 단일 원본입니다. 데모 사이트는 md를 읽어 그릴 뿐 사본을 두지 않습니다. 문서 내용을 데모 사이트 쪽에 복제하는 순간 두 곳이 어긋나기 시작합니다.
-- **학습 문서 → 데모 사이트 (임베드 계약)**: 학습 문서 본문의 **데모 지시자**가 어느 데모를 본문 어디에 심을지 지정합니다. 이것이 학습 문서가 데모 사이트에 대해 아는 전부입니다 ([ADR 0003](./nextjs-app/docs/adr/0003-demo-directive-in-markdown.md), [0004](./nextjs-app/docs/adr/0004-demo-list-as-source-of-truth.md)).
+- **학습 문서 → 데모 사이트 (본문 링크 계약)**: 학습 문서 본문의 **데모 지시자**가 어느 데모의 링크 카드를 본문 어디에 표시할지 지정합니다. 이것이 학습 문서가 데모 사이트에 대해 아는 전부입니다 ([ADR 0003](./nextjs-app/docs/adr/0003-demo-directive-in-markdown.md), [0004](./nextjs-app/docs/adr/0004-demo-list-as-source-of-truth.md)).
 - **데모 사이트 → 학습 문서 (읽기 전용)**: 데모의 존재·주소·상태는 데모 사이트 쪽 **데모 목록**(`demos.yaml`)이 선언하고, 각 항목이 근거 문서를 가리킵니다. 데모 사이트는 학습 문서를 **읽기만** 합니다 — md 본문, 카테고리 README의 학습 순서, `PROGRESS.md`의 md 상태. 어느 것도 쓰지 않습니다.
 - **공유 어휘 — 기준 버전**: 학습 문서가 근거로 삼는 Next.js 버전과 모든 zone이 설치하는 버전은 **같은 값**이어야 합니다. 이 값은 워크스페이스 catalog 한 곳에서만 선언합니다 ([ADR 0002](./nextjs-app/docs/adr/0002-pnpm-turborepo-catalog-pinning.md)).
 - **용어 중복 금지**: `데모`, `학습 문서`, `메뉴 페이지`, `학습 카테고리`는 [학습 문서 컨텍스트](./nextjs-docs/CONTEXT.md)에서 정의합니다. 데모 사이트 컨텍스트는 이 용어를 재정의하지 않고 그대로 씁니다.

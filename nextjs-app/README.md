@@ -2,7 +2,7 @@
 
 `nextjs-docs/`의 학습 문서를 화면에 그리고, 각 개념의 데모를 실행하는 학습 사이트입니다.
 
-**셸과 데모 존 2개, 241개 데모 구현이 완료됐습니다. Vercel 배포와 커스텀 도메인 연결까지 마쳐 정상 서비스 중입니다 — 구성과 절차는 [04](./docs/04-vercel-deployment-plan.md).**
+셸과 데모 존 2개가 있으며 데모는 단계적으로 공개합니다. 등록 수와 공개 상태는 [09. 공개 운영 가이드](./docs/09-demo-status-and-stepwise-release-guide.md), 첫 배포 기록과 남은 운영 검증은 [04. 배포 계획](./docs/04-vercel-deployment-plan.md)을 참조하세요.
 
 ## 무엇을 만드는가
 
@@ -26,16 +26,18 @@
 
 작업 전에 [`docs/`](./docs/README.md)를 먼저 읽어주세요.
 
-| # | 문서 |
-|---|---|
-| 01 | [화면 구성과 UI 설계](./docs/01-ui-and-screen-design.md) |
-| 02 | [코드베이스 심층 분석 및 데이터 흐름 가이드](./docs/02-codebase-deep-dive-guide.md) |
-| 03 | [데모 표준 구조 및 4단 레이아웃 패턴](./docs/03-demo-standard-and-layout-pattern.md) |
-| 04 | [Vercel 배포 계획](./docs/04-vercel-deployment-plan.md) |
-| 05 | [Zone / 데모 추가 체크리스트](./docs/05-zone-onboarding-checklist.md) |
-| 06 | [학습 기록 기능 설계](./docs/06-learning-progress-design.md) |
+[문서 색인](./docs/README.md)에서 현재 구현 설명, 운영 절차, 백로그와 ADR을 구분해 안내합니다. 시스템 경계는 [ARCHITECTURE](./ARCHITECTURE.md), 코드 탐색과 명령은 [02](./docs/02-codebase-deep-dive-guide.md)를 참조하세요.
 
-ADR 9건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있습니다.
+## 로컬 실행
+
+저장소 루트에서 실행합니다. Node.js와 pnpm 기준은 루트 `package.json`을 따릅니다.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+셸은 `http://localhost:3000`, baseline은 3001, cache는 3002를 사용합니다. 환경변수 형식은 [04](./docs/04-vercel-deployment-plan.md), 데모 추가·검증은 [05](./docs/05-zone-onboarding-checklist.md)를 따릅니다.
 
 ## 스택
 
@@ -45,6 +47,6 @@ ADR 9건과 용어집은 [`docs/README.md`](./docs/README.md)에 정리돼 있�
 
 ## 착수 조건 — 충족됨
 
-`nextjs-docs/PROGRESS.md`의 항목이 전부 "완료"입니다 ([Phase Gate](../AGENTS.md#phase-gate) 참고). 셸과 데모 존 2개, 241개 데모가 구현돼 있습니다.
+`nextjs-docs/PROGRESS.md`의 항목이 전부 "완료"입니다 ([Phase Gate](../AGENTS.md#phase-gate) 참고). 셸과 데모 존 2개가 있으며 공개 상태는 09번 가이드에서 관리합니다.
 
 작업 규칙은 [`AGENTS.md`](./AGENTS.md)에 있습니다.

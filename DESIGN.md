@@ -241,7 +241,7 @@ rounded-xl + zinc 경계 + white/zinc-900 표면 + p-4~p-5
 
 ## 13. 현재 구현에서 주의할 점
 
-- `nextjs-app/docs/01-ui-and-screen-design.md`의 일부 수치와 폰트 계획은 현재 코드와 다르다. 이 문서는 실제 코드에서 확인된 값을 기록한다.
+- 화면 구성과 미구현 설계는 `nextjs-app/docs/01-ui-and-screen-design.md`에서 구분한다. 이 문서는 실제 코드에서 확인한 시각 스타일과 디자인 방향을 기록한다.
 - 공통 색상은 `styles.ts`에 일부 모였지만, 화면별 형태와 밀도는 아직 로컬 Tailwind 클래스가 많다. 시각적 통일을 이유로 기존 변형을 한 번에 합치지 않는다.
 - 새로운 디자인 토큰 이름을 임의로 추가하기보다 기존 Tailwind zinc 팔레트와 공통 surface 상수를 재사용한다.
 - 데모 앱은 `@study/ui`에 의존하지 않고 `@study/demo-kit`만 사용한다.

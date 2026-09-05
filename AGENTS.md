@@ -9,11 +9,11 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 | 디렉토리 | 상태 | 규칙 |
 |---|---|---|
 | [`nextjs-docs/`](./nextjs-docs/AGENTS.md) | Phase 1, 완료 | 문서 작성 규칙 |
-| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 구현·배포 완료 | 실행 코드 작업 규칙 |
+| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 구현 완료 (배포 검증 별도) | 실행 코드 작업 규칙 |
 
 ## Phase Gate
 
-**Phase 1(문서화)은 완료됐다** ([`nextjs-docs/PROGRESS.md`](./nextjs-docs/PROGRESS.md) 전부 "완료"). `nextjs-app/`은 셸과 데모 존 2개, 241개 데모의 **구현이 완료**됐고, Vercel 배포와 커스텀 도메인 연결까지 마쳐 정상 서비스 중이다 ([`nextjs-app/docs/04-vercel-deployment-plan.md`](./nextjs-app/docs/04-vercel-deployment-plan.md) 참고). 새 코드는 [`nextjs-app/AGENTS.md`](./nextjs-app/AGENTS.md)의 규칙을 따른다.
+**Phase 1(문서화)은 완료됐다** ([`nextjs-docs/PROGRESS.md`](./nextjs-docs/PROGRESS.md) 전부 "완료"). `nextjs-app/`은 셸과 데모 존 2개를 운영하며 데모를 단계적으로 공개한다. 등록·공개 상태는 [공개 운영 가이드](./nextjs-app/docs/09-demo-status-and-stepwise-release-guide.md)가 관리한다. 첫 Vercel 배포 검증 기록은 있으며 Preview 등 후속 운영 검증은 남아 있다 ([`nextjs-app/docs/04-vercel-deployment-plan.md`](./nextjs-app/docs/04-vercel-deployment-plan.md) 참고). 새 코드는 [`nextjs-app/AGENTS.md`](./nextjs-app/AGENTS.md)의 규칙을 따른다.
 
 ## 커밋 작성 규칙
 

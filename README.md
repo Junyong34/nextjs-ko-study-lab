@@ -6,9 +6,17 @@
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License" /></a>
 </p>
 
-**https://www.learn-nextjs-lab.space/**
+<p align="center">
+  <strong>"읽고, 눌러보고, 확인한다"</strong><br />
+  Next.js App Router 공식 문서를 한국어로 체계화하고,<br />
+  등록된 실습 예제를 단계적으로 공개하는 온라인 학습 플랫폼
+</p>
 
-Next.js 16 App Router 공식 문서를 한국어로 옮기고, 문서마다 연습 문제를 붙이고, 직접 눌러볼 수 있는 실습 예제를 곁들인 학습 사이트입니다.
+<p align="center">
+  <a href="https://www.learn-nextjs-lab.space/"><strong>웹사이트 바로가기</strong></a> |
+  <a href="https://www.learn-nextjs-lab.space/getting-started"><strong>1장부터 학습 시작</strong></a> |
+  <a href="https://www.learn-nextjs-lab.space/demo"><strong>데모 둘러보기</strong></a>
+</p>
 
 공식 문서는 잘 쓰여 있지만 영어로 읽다 보면 한 번 읽고 넘어가게 되고, 읽은 내용이 실제로 브라우저에서 어떻게 동작하는지는 따로 프로젝트를 만들어 봐야 알 수 있습니다. 그 과정을 한 곳에서 끝내고 싶어서 만들었습니다. 문서를 읽고, 문제를 풀어 보고, 바로 옆의 예제에서 실제 동작을 눈으로 확인하는 순서로 학습하도록 구성했습니다.
 
@@ -32,34 +40,23 @@ Next.js 16 App Router 공식 문서를 한국어로 옮기고, 문서마다 연�
 
 문서를 읽기만 하면 이해했다고 착각하기 쉽습니다. 그래서 각 문서 끝에 그 문서 내용으로만 풀 수 있는 **연습 문제**를 넣었습니다. 단일 선택과 복수 선택 문제가 섞여 있고, 정답과 해설은 접혀 있어서 먼저 풀어 본 뒤 펼쳐 확인하면 됩니다. 문서에 따라 이해했는지 스스로 점검하는 **학습 확인** 체크리스트도 있습니다.
 
-### 3. 눈으로 확인하는 실습 예제
+### 3. 단계적으로 공개하는 실습 데모
+
+등록 수와 실행 가능한 공개 예제 수는 다릅니다. 준비 중 항목은 목록에서 상태를 확인할 수 있습니다. 현재 집계와 공개 기준은 [운영 가이드](./nextjs-app/docs/09-demo-status-and-stepwise-release-guide.md)를 참조하세요.
+
+- No-Simulation 원칙에 따라 화면 상태만 흉내 내지 않고 실제 파일 규칙(`layout.tsx`, `template.tsx`, `(group)`)과 브라우저 라우터(`<Link>`, `useRouter`)를 사용합니다.
+- Server Actions 데모는 실제 `'use server'` 함수를 호출합니다. 개발자 도구의 Network 탭에서 `POST` 요청과 페이로드를 확인할 수 있습니다.
+- `use cache`, `cacheLife`, `revalidateTag` 같은 Next.js 16 기능은 별도의 Cache Zone에서 실행합니다.
 
 문서에 나온 동작을 실제 Next.js 앱에서 그대로 재현한 예제입니다. 화면만 그럴듯하게 흉내 내지 않고 진짜 `layout.tsx`, `template.tsx`, 라우트 그룹, `<Link>`, Server Action을 사용합니다. 그래서 개발자 도구를 열면 RSC Payload와 `POST` 요청 본문을 그대로 볼 수 있습니다.
 
-예제 페이지는 네 부분으로 되어 있습니다.
+### 4. 데모 검색과 필터링 (`/demo`)
+- 등록된 데모를 한곳에서 살펴볼 수 있는 색인 페이지입니다.
+- 제목·URL·관련 문서명 검색과 카테고리 필터로 데모를 찾을 수 있습니다.
 
-1. **가이드**: 이 예제에서 무엇을 확인하는지, 어떤 순서로 눌러 보면 되는지
-2. **실습 화면**: 버튼을 누르고 폼을 제출하고 페이지를 이동하는 영역
-3. **검증 패널**: 공식 문서대로라면 이렇게 되어야 한다는 기대값과 지금 브라우저에서 관찰한 실제값을 나란히 표시
-4. **개념 정리**: 왜 그렇게 동작하는지 컴포넌트 트리와 함께 설명
-
-`use cache`, `cacheLife`, `revalidateTag`처럼 `cacheComponents` 설정이 필요한 Next.js 16 기능은 별도 앱으로 분리해 두어서 설정 충돌 없이 돌아갑니다.
-
-예제는 총 241개를 계획했고, 직접 검증을 마친 것부터 순서대로 공개하고 있습니다. 아직 공개하지 않은 예제는 사이트에서 "준비 중"으로 표시됩니다. 현재 상태는 [예제 목록](https://www.learn-nextjs-lab.space/demo)에서 볼 수 있고, 키워드와 카테고리로 찾을 수 있습니다.
-
-### 4. 학습 진도
-
-로그인 없이 브라우저 로컬 저장소에 읽은 문서와 완료한 예제를 기록합니다. 다시 들어오면 어디까지 봤는지 바로 확인할 수 있습니다.
-
-## 권장하는 학습 순서
-
-1. 문서를 읽습니다.
-2. 문서 끝의 연습 문제를 풀고 정답을 펼쳐 봅니다.
-3. 본문에 걸려 있는 예제 카드로 이동해 직접 눌러 봅니다.
-4. 검증 패널에서 기대값과 실제값이 같은지 확인합니다.
-5. 더 파고들고 싶으면 개발자 도구 Network 탭에서 요청과 페이로드를 봅니다.
-
-Next.js를 처음 본다면 [시작하기](https://www.learn-nextjs-lab.space/getting-started)부터 순서대로, 이미 써 봤다면 [가이드](https://www.learn-nextjs-lab.space/guides)나 [용어집](https://www.learn-nextjs-lab.space/glossary)에서 필요한 부분만 골라 봐도 됩니다.
+### 5. 학습 진도 기록
+- 로그인 없이 브라우저의 로컬 저장소에 읽은 문서와 완료한 데모를 기록합니다.
+- 같은 브라우저에서 직접 표시한 완료 기록을 다시 확인할 수 있습니다.
 
 ## 저장소 구성
 
