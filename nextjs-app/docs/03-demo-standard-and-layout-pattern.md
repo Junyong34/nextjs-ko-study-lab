@@ -1,6 +1,6 @@
 # 03. 데모 표준 구조 및 4단 레이아웃 패턴
 
-Next.js 학습 랩의 모든 데모(Phase 1 ~ Phase 5, 총 241개)가 **동일한 고품질 UI/UX와 실제 Next.js 동작 원리**를 전달하기 위한 제작 표준 지침이다.
+Next.js 학습 데모의 제작 표준이다. 2026-09-05 공통 컴포넌트 API를 대조했다. 이 문서는 제작 기준이며 모든 데모가 기준을 통과했다는 검증 보고서가 아니다. 공개 절차와 증거 기록은 [09](./09-demo-status-and-stepwise-release-guide.md)를 따른다.
 
 ---
 
@@ -80,7 +80,9 @@ apps/demo-baseline/src/app/zone/baseline/{category}/{demo-name}/
     └── VerificationCard.tsx  # 하단 검증 & 개념 정리
 ```
 
-### 표준 `layout.tsx` / `page.tsx` 템플릿
+### 표준 레이아웃 조립 예시
+
+실제 관찰값을 전달받는 조립 컴포넌트 예시다. 라우트의 기본 export에 임의의 props를 추가하지 말고, 해당 기능의 실제 상태·응답을 읽는 코드에서 호출한다. `isMatched`를 상수 `true`로 고정하지 않는다.
 
 ```tsx
 'use client'
@@ -90,11 +92,13 @@ import {
   DemoContainer,
   DemoGuideCard,
   ExpectedActualPanel,
-  DemoResetButton,
   DemoDeepDiveCard,
 } from '@study/demo-kit'
 
-export default function StandardDemoPage() {
+export function StandardDemoLayout({ expectedValue, observedValue }: {
+  expectedValue: number
+  observedValue: number
+}) {
   return (
     <DemoContainer className="space-y-4">
       {/* 1단. 가이드 카드 */}
@@ -119,9 +123,9 @@ export default function StandardDemoPage() {
       {/* 3단. 기대값 vs 실제값 검증 패널 */}
       <ExpectedActualPanel
         title="기능 동작 검증"
-        expected="공식 문서 기준 기대 결과"
-        actual="실제 런타임 측정 결과"
-        isMatched={true}
+        expected={expectedValue}
+        actual={observedValue}
+        isMatched={observedValue === expectedValue}
         description="검증 상태 요약 설명"
       />
 

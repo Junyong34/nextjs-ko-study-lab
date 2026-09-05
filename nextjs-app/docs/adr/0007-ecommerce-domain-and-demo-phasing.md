@@ -42,3 +42,7 @@ Next.js App Router의 280여 개에 달하는 학습 문서에 대해 데모 페
 - 단순 값 반환 훅의 형식적 데모를 제거하고 핵심 라우팅/캐싱/폼 메커니즘에 집중할 수 있다.
 - `demos.yaml`과 각 zone의 라우트 경로가 명확한 규칙(`zone/{slug}/{category}/{scenario}`)에 따라 일관되게 유지된다.
 - CLI/빌드 전용 주제는 무리하게 웹 데모로 만들지 않고 명확한 문서 보완 설명으로 대체하여 완성도를 높인다.
+
+## 구현 대조 메모 (2026-09-05)
+
+위 마일스톤과 문서명은 당시 계획 기록이다. 현재 제작 절차는 [05](../05-zone-onboarding-checklist.md), 공개 기준은 [09](../09-demo-status-and-stepwise-release-guide.md)를 따른다. 이후 검증 유형 제안인 [ADR 0009](./0009-classify-demo-verification-by-evidence.md)는 여전히 proposed이며 이 문서 정비에서 채택 상태를 변경하지 않았다.

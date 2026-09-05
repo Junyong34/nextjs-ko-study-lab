@@ -39,7 +39,7 @@ _Avoid_: 단독 페이지, 스탠드얼론
 _Avoid_: 시작 페이지, 랜딩
 
 **데모 상태**:
-`stub`(주소만 정해짐) · `wip`(만드는 중) · `done`(공개됨) 세 값입니다. 학습자에게 보이는 것은 `done`뿐입니다.
+`stub`(준비 중) · `wip`(작업 중) · `done`(공개 대상으로 지정) 세 값입니다. 준비 중 항목도 일부 목록에 표시됩니다. 상태 값은 런타임 검증 증거가 아니며, 화면별 실행·노출 규칙은 [09](./docs/09-demo-status-and-stepwise-release-guide.md)를 따릅니다.
 _Avoid_: 진행률, 완료 여부
 
 **기준 버전**:
@@ -47,7 +47,7 @@ _Avoid_: 진행률, 완료 여부
 _Avoid_: 최신 버전, 지원 버전, 권장 버전
 
 **대표 데모**:
-랜딩 히어로에 iframe으로 띄우는 데모 하나입니다. `demos.yaml`의 `featured`가 지정하며 전체에서 최대 1개입니다. **문서 본문에 데모를 심지 않는다는 규칙의 유일한 예외**입니다 ([01. 2-2](./docs/01-ui-and-screen-design.md)).
+초기 설계에서 랜딩 iframe으로 보여주려던 데모입니다. 현재 홈에는 iframe이 없고 `featured` 필드도 매니페스트 스키마에 없습니다. 현재 홈 추천 카드는 별도 고정 목록입니다 ([01. 2-2](./docs/01-ui-and-screen-design.md)).
 _Avoid_: 인라인 데모, 미리보기, 프리뷰
 
 **예제 (화면 라벨)**:
@@ -76,7 +76,7 @@ _Avoid_: 모든 URL, 페이지 방문 목록, 카테고리 진행률
 상품 목록, 카테고리 필터링/정렬(`searchParams`), 상품 상세(Dynamic Routes `[id]`), 이미지 최적화(`<Image>`), 상품 리뷰/추천 스트리밍(`Suspense`), ISR 및 `use cache` 기반 캐싱과 태그 무효화의 표준 시나리오입니다.
 
 **장바구니 및 주문 (Cart & Checkout)**:
-장바구니 담기/수량 변경(Server Actions, Optimistic Updates), 배송지/쿠폰 폼 검증(`useActionState`, `<Form>`), 결제 프로세스 및 완료 리다이렉트(`redirect`, `catchError`)의 표준 시나리오입니다.
+장바구니 담기/수량 변경(Server Actions, Optimistic Updates), 배송지/쿠폰 폼 검증(`useActionState`, `<Form>`), 결제 프로세스 및 완료 리다이렉트(`redirect`, 오류 처리)의 표준 시나리오입니다.
 
 **회원 및 인증 (Auth & Account)**:
 로그인/로그아웃 폼, 세션 쿠키(`cookies()`), 권한 가드(Middleware, `forbidden`, `unauthorized`), 로그인 모달(Parallel & Intercepting Routes), 마이페이지의 표준 시나리오입니다.
@@ -115,7 +115,7 @@ _Avoid_: 수동 통과, 눈대중 검증
 _Avoid_: 적용 대상 아님, 간주 통과
 
 **전수 검증**:
-241개 데모의 가이드 절차를 실제로 수행하고 증거, 결과와 네 섹션의 수정 필요 여부를 빠짐없이 기록하는 점검입니다.
+대상 전체 데모의 가이드 절차를 실제로 수행하고 증거, 결과와 네 섹션의 수정 필요 여부를 빠짐없이 기록하는 점검입니다.
 _Avoid_: 샘플링, 정적 검사
 
 ## 데모 3단계 안내 구조

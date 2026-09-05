@@ -1,6 +1,6 @@
 # nextjs-app 작업 규칙 (Phase 2)
 
-Next.js 학습 데모 사이트가 들어설 자리다. 셸(`apps/shell`)과 데모 존 2개(`demo-baseline`, `demo-cache-components`)가 구현되어 241개 데모가 `status: done`으로 공개돼 있다. 실제 배포 검증은 아직 남은 작업이며, 절차는 [04. Vercel 배포 계획](./docs/04-vercel-deployment-plan.md)을 따른다.
+Next.js 학습 데모 사이트다. 셸(`apps/shell`)과 데모 존 2개(`demo-baseline`, `demo-cache-components`)가 있으며 데모는 단계적으로 공개한다. 등록·공개 상태와 화면별 노출은 [09. 공개 운영 가이드](./docs/09-demo-status-and-stepwise-release-guide.md)를 따른다. 첫 배포 검증 기록과 남은 Preview 검증은 [04. Vercel 배포 계획](./docs/04-vercel-deployment-plan.md)에 구분한다.
 
 ## 착수 조건 — 충족됨
 
