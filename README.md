@@ -72,5 +72,7 @@ Next.js를 처음 본다면 [시작하기](https://www.learn-nextjs-lab.space/ge
 
 - 기준 버전: Next.js 16.3.2, React 19.2.8
 - 원문: [Next.js App Router Documentation](https://nextjs.org/docs/app)
-- 오타나 잘못된 설명을 발견하면 [GitHub 이슈](https://github.com/Junyong34/nextjs-ko-study-lab/issues)로 알려 주세요.
+- 오타나 잘못된 설명을 발견하면 사이트 하단의 **피드백 보내기** 버튼이나 [GitHub 이슈](https://github.com/Junyong34/nextjs-ko-study-lab/issues)로 알려 주세요.
 - 문서와 코드 모두 [MIT 라이선스](./LICENSE)입니다.
+
+<sub>번역 오류 수정이나 새 실습 예제 추가는 PR로도 받고 있습니다. 문서는 <code>nextjs-docs/</code>, 예제는 <code>nextjs-app/</code>에 있고, 예제를 추가할 때는 <a href="./nextjs-app/docs/05-zone-onboarding-checklist.md">체크리스트</a>를 한 번 훑어봐 주세요.</sub>
