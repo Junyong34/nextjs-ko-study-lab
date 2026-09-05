@@ -11,7 +11,7 @@ Next.js 학습 랩(`nextjs-app`)의 시스템 아키텍처, UI 설계, 코드베
 | **01** | [**화면 구성과 UI 설계**](./01-ui-and-screen-design.md) | • 페이지 타입 5종 (랜딩, 문서 SSG, 데모 색인, 데모 플레이어, 학습 기록)<br>• 헤더/사이드바/ToC/피드백 UI 및 shadcn 기반 디자인 토큰 체계 |
 | **02** | [**코드베이스 심층 분석 및 데이터 흐름 가이드**](./02-codebase-deep-dive-guide.md) | • 모노레포 파일 토폴로지 & YAML 파이프라인<br>• 패키지 격리 정책 (`@study/ui` vs `@study/demo-kit`)<br>• 셸/데모 뼈대 간 네비게이션 및 Seam 아키텍처 |
 | **03** | [**데모 표준 구조 및 4단 레이아웃 패턴**](./03-demo-standard-and-layout-pattern.md) | • **No-Simulation 원칙** (진짜 Next.js 파일 라우팅 및 런타임 구현)<br>• 4단 표준 레이아웃 (`DemoGuideCard` ➔ `실습 화면` ➔ `ExpectedActualPanel` ➔ `DemoDeepDiveCard`) |
-| **04** | [**Vercel 배포 계획**](./04-vercel-deployment-plan.md) | • zone당 프로젝트 분리, Related Projects로 프리뷰 URL 문제 해결<br>• Ignored Build Step·원격 캐시·첫 배포 검증 절차 (아직 미실행) |
+| **04** | [**Vercel 배포 계획**](./04-vercel-deployment-plan.md) | • zone당 프로젝트 분리, 프리뷰 URL 문제 대응(Related Projects 시도 → 환경변수 방식으로 전환)<br>• Ignored Build Step·원격 캐시·첫 배포 검증 절차 및 커스텀 도메인 연결까지 완료 |
 | **05** | [**Zone / 데모 추가 체크리스트**](./05-zone-onboarding-checklist.md) | • zone을 새로 추가할 때 손대야 하는 지점 전체<br>• 일상적인 데모 추가 절차 |
 | **06** | [**학습 기록 기능 설계**](./06-learning-progress-design.md) | • 셸 소유의 `localStorage` 기반 학습 진도 및 완료 표시 동기화 엔진<br>• `LearningProgressProvider` 및 통계 대시보드 화면 설계 |
 | **07** | [**SEO 작업 계획**](./07-seo-plan.md) | • robots/sitemap/구조화 데이터/OG 등 기술적 SEO 체크리스트<br>• Google·네이버 등록 절차와 도메인 확정 전/후 실행 순서 |
