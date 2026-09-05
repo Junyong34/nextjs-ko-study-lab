@@ -68,6 +68,8 @@ export async function generateMetadata({ params, searchParams }: DemoPageProps):
         ? `${matchedDoc.title} 문서와 함께 보는 실습 예제입니다.`
         : 'Next.js App Router 실습 예제입니다.',
       path,
+      // 미완성(status !== 'done') 데모는 실제로는 "준비 중" 빈 화면을 보여주므로 색인에서 제외한다
+      noIndex: directDemo.status !== 'done',
       dynamicOgImage: { title: directDemo.title, eyebrow: matchedDoc?.title ?? '실습 예제' },
     })
   }
@@ -81,14 +83,19 @@ export async function generateMetadata({ params, searchParams }: DemoPageProps):
           title: runningDemo.title,
           description: `${doc.title} 학습 문서와 함께 보는 실습 예제입니다.`,
           path,
+          noIndex: runningDemo.status !== 'done',
           dynamicOgImage: { title: runningDemo.title, eyebrow: doc.title },
         })
       }
     }
+    const docDemos = getDemosByDoc(doc.path)
+    const hasDoneDemo = docDemos.some((d) => d.status === 'done')
     return buildPageMetadata({
       title: doc.title,
       description: '이 문서와 연결된 인터랙티브 실습 예제 목록입니다.',
       path,
+      // 완성된 데모가 하나도 없으면 실제 화면도 "준비 중" 빈 화면이다
+      noIndex: !hasDoneDemo,
       dynamicOgImage: { title: doc.title, eyebrow: '실습 예제' },
     })
   }
