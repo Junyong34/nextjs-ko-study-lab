@@ -9,11 +9,18 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 | 디렉토리 | 상태 | 규칙 |
 |---|---|---|
 | [`nextjs-docs/`](./nextjs-docs/AGENTS.md) | Phase 1, 완료 | 문서 작성 규칙 |
-| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 구현 완료 (배포 검증 별도) | 실행 코드 작업 규칙 |
+| [`nextjs-app/`](./nextjs-app/AGENTS.md) | Phase 2, 구현 완료 | 실행 코드 작업 규칙 |
 
 ## Phase Gate
 
 **Phase 1(문서화)은 완료됐다** ([`nextjs-docs/PROGRESS.md`](./nextjs-docs/PROGRESS.md) 전부 "완료"). `nextjs-app/`은 셸과 데모 존 2개를 운영하며 데모를 단계적으로 공개한다. 등록·공개 상태는 [공개 운영 가이드](./nextjs-app/docs/09-demo-status-and-stepwise-release-guide.md)가 관리한다. 첫 Vercel 배포 검증 기록은 있으며 Preview 등 후속 운영 검증은 남아 있다 ([`nextjs-app/docs/04-vercel-deployment-plan.md`](./nextjs-app/docs/04-vercel-deployment-plan.md) 참고). 새 코드는 [`nextjs-app/AGENTS.md`](./nextjs-app/AGENTS.md)의 규칙을 따른다.
+
+## Intent 기반 작업 흐름 (intent/spec/plan)
+
+- 사소한 오타·문구 수정을 제외한 작업은 시작 전에 [intent 운영 규칙](./intent/README.md)을 반드시 읽고 따른다. 상세 절차·양식·승인·상태 규칙은 해당 문서에서 관리한다.
+- 작업 인덱스에서 기능명·대상 경로로 관련 문서를 찾는다. 후보가 없거나 불명확하면 `intent/` 본문을 검색한다.
+- 관련 폴더의 모든 문서와 승인 기록을 확인한다. 기존 작업이 없으면 운영 규칙에 따라 intent 초안부터 작성한다.
+- 구현은 plan 승인 후 시작한다. 완료된 작업의 승인을 새 요구사항의 승인으로 취급하지 않는다.
 
 ## 커밋 작성 규칙
 
@@ -57,4 +64,5 @@ Next.js App Router 공식 문서(nextjs.org/docs/app)를 한국어 학습 커리
 
 - [루트 README.md](./README.md) — 저장소 구조와 Phase 개요
 - [디자인 가이드](./DESIGN.md) — 디자인 가이드
+- [`intent/README.md`](./intent/README.md) — intent/spec/plan 폴더 규칙과 기록별 기준
 
