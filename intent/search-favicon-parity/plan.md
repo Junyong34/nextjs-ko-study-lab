@@ -1,7 +1,7 @@
 Plan: 구글 검색 결과 사이트 아이콘을 브라우저 파비콘 디자인과 일치
 Spec: ./intent.md#requirements
 Author: devpark
-Status: approved
+Status: done
 Approval: 사용자 승인 (2026-09-06 대화 메시지, 통합 intent·plan 동시 승인)
 
 ## Scope of change
