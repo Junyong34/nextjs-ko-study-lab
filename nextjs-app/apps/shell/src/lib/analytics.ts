@@ -1,9 +1,21 @@
 import { sendGAEvent } from '@next/third-parties/google'
 
-type AnalyticsEvent =
+export type AnalyticsEvent =
   | {
       name: 'learning_progress_toggle'
       params: { kind: 'document' | 'demo'; item_key: string; completed: boolean }
+    }
+  | {
+      name: 'learning_complete'
+      params: { doc_id: string; chapter: string }
+    }
+  | {
+      name: 'demo_click'
+      params: { demo_type: string; from_doc: string }
+    }
+  | {
+      name: 'github_star_click'
+      params: { action: 'open_modal' | 'go_to_repo' | 'dismiss' | 'dismiss_forever' }
     }
   | {
       name: 'demo_view'

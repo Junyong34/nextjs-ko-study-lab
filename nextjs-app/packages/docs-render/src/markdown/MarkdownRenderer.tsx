@@ -181,6 +181,8 @@ export function MarkdownRenderer({
             path={demoConfig.path}
             title={matchedDemo?.title}
             caption={demoConfig.caption}
+            zone={matchedDemo?.zone}
+            docPath={docPath}
           />,
         )
       } else {
@@ -424,7 +426,9 @@ export function MarkdownRenderer({
   return (
     <article className={`space-y-1 font-sans ${className}`}>
       {elements}
-      {showDemoList && relatedDemos.length > 0 && <DocDemoList demos={relatedDemos} />}
+      {showDemoList && relatedDemos.length > 0 && (
+        <DocDemoList demos={relatedDemos} docPath={docPath} />
+      )}
     </article>
   )
 }

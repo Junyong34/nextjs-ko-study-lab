@@ -9,6 +9,10 @@ export interface DemoLinkCardProps {
   /** 무엇을 관찰하라는 한 줄. 카드 부제로 그린다 */
   caption?: string
   className?: string
+  /** 데모 zone (baseline, cache 등) */
+  zone?: string
+  /** 현재 문서 경로 (분석 이벤트 전송용) */
+  docPath?: string
 }
 
 /**
@@ -20,10 +24,20 @@ export interface DemoLinkCardProps {
  *
  * 화면 라벨은 "예제"이고 코드·URL·타입 이름은 "데모"입니다 (packages/ui/AGENTS.md 규칙 2).
  */
-export function DemoLinkCard({ path, title, caption, className = '' }: DemoLinkCardProps) {
+export function DemoLinkCard({
+  path,
+  title,
+  caption,
+  className = '',
+  zone,
+  docPath,
+}: DemoLinkCardProps) {
   return (
     <a
       href={`/demo/${path}`}
+      data-analytics="demo_click"
+      data-demo-type={zone || 'unknown'}
+      data-from-doc={docPath || ''}
       className={`not-prose group my-6 flex items-center justify-between gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-xs transition-all hover:border-zinc-400 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600 no-underline text-inherit ${className}`}
     >
       <div className="flex min-w-0 items-start gap-3">

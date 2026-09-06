@@ -22,6 +22,8 @@ export interface DocDemoListProps {
   /** 섹션 제목 (기본값: "이 문서의 실습 데모") */
   title?: string
   className?: string
+  /** 현재 문서 경로 (분석 이벤트 전송용) */
+  docPath?: string
 }
 
 /**
@@ -34,6 +36,7 @@ export function DocDemoList({
   demos,
   title = '이 문서의 실습 데모',
   className = '',
+  docPath,
 }: DocDemoListProps) {
   if (!demos || demos.length === 0) {
     return null
@@ -58,6 +61,9 @@ export function DocDemoList({
             <a
               key={demo.url}
               href={href}
+              data-analytics="demo_click"
+              data-demo-type={demo.zone || 'unknown'}
+              data-from-doc={docPath || ''}
               className="group relative flex h-[116px] flex-col justify-between rounded-xl border border-zinc-200 bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-400 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600 no-underline text-inherit"
             >
               <div className="min-w-0">

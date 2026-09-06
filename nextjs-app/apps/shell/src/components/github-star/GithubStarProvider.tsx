@@ -8,6 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { trackEvent } from '@/lib/analytics'
 import {
   ENGAGEMENT_SAVE_INTERVAL_MS,
   ENGAGEMENT_TICK_INTERVAL_MS,
@@ -82,6 +83,10 @@ export function GithubStarProvider({
       recordRef.current = updated
       setRecord(updated)
       writeStoredStarRecord(window.localStorage, updated)
+      trackEvent({
+        name: 'github_star_click',
+        params: { action: 'open_modal' },
+      })
     }
 
     lastTickTimeRef.current = Date.now()
@@ -161,6 +166,10 @@ export function GithubStarProvider({
   // 3. 액션 핸들러
   const dismiss = useCallback(() => {
     setIsPromptVisible(false)
+    trackEvent({
+      name: 'github_star_click',
+      params: { action: 'dismiss' },
+    })
     if (!recordRef.current) return
     const next = recordDismiss(recordRef.current, new Date().toISOString())
     recordRef.current = next
@@ -170,6 +179,10 @@ export function GithubStarProvider({
 
   const dismissForever = useCallback(() => {
     setIsPromptVisible(false)
+    trackEvent({
+      name: 'github_star_click',
+      params: { action: 'dismiss_forever' },
+    })
     if (!recordRef.current) return
     const next = recordDismissForever(recordRef.current, new Date().toISOString())
     recordRef.current = next
@@ -179,6 +192,10 @@ export function GithubStarProvider({
 
   const clickThrough = useCallback(() => {
     setIsPromptVisible(false)
+    trackEvent({
+      name: 'github_star_click',
+      params: { action: 'go_to_repo' },
+    })
     if (!recordRef.current) return
     const next = recordStarClickThrough(
       recordRef.current,

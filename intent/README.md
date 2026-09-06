@@ -98,4 +98,4 @@ spec이 기존 ADR이나 작업 규칙과 충돌하면 임의로 덮어쓰지 �
 
 | 슬러그 | 관련 기능 | 관련 코드 경로 | 작업 Status | Intent | Spec | Plan | 비고 |
 |---|---|---|---|---|---|---|---|
-| _(실제 작업이 생기면 이 행을 지우고 아래에 추가)_ | | | | | | | |
+| `ga-custom-events` | GA4 커스텀 이벤트 3종 (`learning_complete`, `demo_click`, `github_star_click`) | `nextjs-app/apps/shell/src/lib/analytics.ts`, `nextjs-app/packages/docs-render` | done | [`intent.md`](./ga-custom-events/intent.md) | [`intent.md#requirements`](./ga-custom-events/intent.md#requirements) | [`plan.md`](./ga-custom-events/plan.md) | 구현 및 검증 완료 |

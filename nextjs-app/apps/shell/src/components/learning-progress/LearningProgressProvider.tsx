@@ -87,8 +87,17 @@ export function LearningProgressProvider({
         name: 'learning_progress_toggle',
         params: { kind, item_key: key, completed: !wasCompleted },
       })
+
+      if (!wasCompleted && kind === 'document') {
+        const docItem = inventory.documents.find((d) => d.key === key)
+        const chapter = docItem?.category || key.split('/')[0] || 'general'
+        trackEvent({
+          name: 'learning_complete',
+          params: { doc_id: key, chapter },
+        })
+      }
     },
-    [persist, progress],
+    [inventory.documents, persist, progress],
   )
 
   const reset = useCallback(() => {

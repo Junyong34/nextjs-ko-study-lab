@@ -5,6 +5,7 @@ import { MarkdownRenderer, parseHeadings, isGlossaryDoc } from '@study/docs-rend
 import { TableOfContents, ShareButton } from '@study/ui'
 import { getManifest, getDocBySlug, getDocContent, getDemos } from '@/lib/docs'
 import { LearningCompletionControl } from '@/components/learning-progress/LearningCompletionControl'
+import { DemoClickTracker } from '@/components/analytics/DemoClickTracker'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildBreadcrumbJsonLdFor, buildLearningResourceJsonLd } from '@/lib/seo/json-ld'
 import { buildPageMetadata } from '@/lib/seo/metadata'
@@ -112,6 +113,7 @@ export default async function DocPage({ params }: PageProps) {
 
       {/* Right Sticky Table of Contents / Index Map */}
       <TableOfContents headings={headings} isGlossary={isGlossaryDoc(content, headings, doc.path)} />
+      <DemoClickTracker />
     </div>
   )
 }
