@@ -12,7 +12,7 @@
 | sitemap | 문서 매니페스트의 비어 있지 않은 slug와 `done` 데모 직접 URL, 홈·색인 포함 |
 | JSON-LD | `WebSite`, `LearningResource`, `BreadcrumbList` 생성 코드 존재 |
 | OG 이미지 | 셸 기본 `/og-image.png`, 상세 `/og`; zone은 `/zone/{zone}/og` |
-| 아이콘 | `icon.svg`, `apple-icon.tsx` |
+| 아이콘 | `icon.svg`, `apple-icon.tsx` — 두 파일은 같은 책 + 코드 도형을 사용한다(구글 검색 결과는 apple-touch-icon을 고를 수 있음) |
 | 학습 기록 페이지 | `noindex` 설정 |
 
 구현 코드가 있다는 사실은 배포 응답, 검색 색인 또는 검색 결과 노출을 보증하지 않는다.
