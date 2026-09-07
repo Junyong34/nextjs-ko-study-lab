@@ -30,16 +30,16 @@ export default function FastRefreshBoundaryDemoPage() {
           },
           {
             step: 3,
-            title: "[⚡ HMR 핫 리로드 시뮬레이션 (상태 보존 관찰)] 클릭",
-            description: "컴포넌트 리렌더링 및 핫 리로드 상황에서 상태 보존 여부를 테스트합니다.",
-            actionBadge: "리프레시 테스트",
+            title: "[🔄 비슷한 상황 시뮬레이션 (실제 HMR 아님)] 클릭",
+            description: "Fast Refresh는 next dev 전용 기능이라 이 화면에서 실제로 재현할 수 없습니다. 코드 수정 후에도 상태가 유지되는 것과 비슷한 상황을 시뮬레이션합니다.",
+            actionBadge: "유사 상황 시뮬레이션",
           },
           {
             step: 4,
-            title: "[상태 초기화] 버튼 클릭 및 Fast Refresh 보존 관찰",
-            description: "수동 초기화 전까지 HMR 중에도 누적 수량과 텍스트가 손실 없이 유지되는지 검증합니다.",
-            actionBadge: "경계 검증",
-            observe: "HMR 시뮬레이션 후에도 누적된 수량 및 입력 텍스트가 손실 없이 유지되는 Fast Refresh 동작 관찰",
+            title: "시뮬레이션 이후에도 상태 보존 여부 관찰",
+            description: "실제 HMR이 아니라 비슷한 상황을 만든 시뮬레이션이지만, 이 상호작용 이후에도 누적 수량과 배송 메모가 손실 없이 유지되는지 관찰합니다.",
+            actionBadge: "상태 보존 관찰",
+            observe: "유사 상황 시뮬레이션 이후에도 누적된 수량 및 입력 텍스트가 손실 없이 유지되는지 관찰",
             observeAt: "playground",
           },
         ]}

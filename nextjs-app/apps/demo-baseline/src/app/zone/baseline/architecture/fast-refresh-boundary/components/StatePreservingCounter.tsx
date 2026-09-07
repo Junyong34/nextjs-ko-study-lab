@@ -1,18 +1,22 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export function CartItemStepper() {
   const [quantity, setQuantity] = useState(2)
   const unitPrice = 129000
   const [orderMemo, setOrderMemo] = useState('배송 전 경비실에 보관해 주세요.')
-  const [mountTimestamp] = useState(() => new Date().toLocaleTimeString('ko-KR'))
-  const [lastHmrSimulated, setLastHmrSimulated] = useState<string | null>(null)
+  const [mountTimestamp, setMountTimestamp] = useState<string | null>(null)
+  const [lastSimulatedAt, setLastSimulatedAt] = useState<string | null>(null)
+
+  useEffect(() => {
+    setMountTimestamp(new Date().toLocaleTimeString('ko-KR'))
+  }, [])
 
   const subtotal = quantity * unitPrice
 
-  const handleSimulateHmr = () => {
-    setLastHmrSimulated(new Date().toLocaleTimeString('ko-KR'))
+  const handleSimulateSimilarSituation = () => {
+    setLastSimulatedAt(new Date().toLocaleTimeString('ko-KR'))
   }
 
   const handleReset = () => {
@@ -30,17 +34,21 @@ export function CartItemStepper() {
               React Fast Refresh 장바구니 상태 보존 컨테이너
             </span>
             <span className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono text-[9px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-              HMR Active
+              유사 상황 시뮬레이션
             </span>
           </div>
 
           <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-500">
-            <span>초기 마운트 시각: <strong className="text-zinc-800 dark:text-zinc-200">{mountTimestamp}</strong></span>
-            {lastHmrSimulated && (
-              <span className="text-blue-600 dark:text-blue-400 font-semibold">(HMR 반영: {lastHmrSimulated})</span>
+            <span>초기 마운트 시각: <strong className="text-zinc-800 dark:text-zinc-200">{mountTimestamp ?? '마운트 중...'}</strong></span>
+            {lastSimulatedAt && (
+              <span className="text-blue-600 dark:text-blue-400 font-semibold">(시뮬레이션 반영: {lastSimulatedAt})</span>
             )}
           </div>
         </div>
+
+        <p className="text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+          실제 Fast Refresh는 <code>next dev</code> 환경에서 코드를 수정할 때만 발생하며, 배포된 이 화면에서는 재현할 수 없습니다. 아래 버튼은 "코드가 수정돼도 상태가 유지되는" 비슷한 상황을 만든 시뮬레이션입니다.
+        </p>
 
         {/* 장바구니 품목 정보 */}
         <div className="flex items-center justify-between rounded-lg bg-zinc-50 p-3 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800">
@@ -108,10 +116,10 @@ export function CartItemStepper() {
         <div className="flex items-center justify-between border-t border-zinc-200/60 pt-3 dark:border-zinc-800 text-xs">
           <button
             type="button"
-            onClick={handleSimulateHmr}
+            onClick={handleSimulateSimilarSituation}
             className="rounded bg-blue-600 px-3 py-1.5 font-semibold text-white hover:bg-blue-700 cursor-pointer"
           >
-            ⚡ HMR 핫 리로드 시뮬레이션 (상태 보존 관찰)
+            🔄 비슷한 상황 시뮬레이션 (실제 HMR 아님)
           </button>
           <button
             type="button"

@@ -77,6 +77,9 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
             <p>
               본 데모의 <code>StatePreservingCounter</code>에서는 사용자가 카운터 수량(예: 15개)을 늘리고 메모 텍스트를 입력한 상태에서, 컴포넌트 내부 렌더링 로직이나 스타일 코드를 수정해도 초기 마운트 타임스탬프와 입력 데이터가 초기화되지 않고 유지되는 Fast Refresh 바운더리 동작을 실시간으로 검증합니다.
             </p>
+            <p className="mt-1.5 text-zinc-500 dark:text-zinc-500">
+              단, Fast Refresh는 <code>next dev</code> 전용 런타임 기능이라 배포된 이 화면에서는 실제 HMR을 발생시킬 수 없습니다. "🔄 비슷한 상황 시뮬레이션" 버튼은 실제 HMR이 아니라, 코드 수정 후에도 상태가 유지되는 것과 비슷한 상황을 재현한 시뮬레이션입니다.
+            </p>
           </div>
 
           <div>
