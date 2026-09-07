@@ -4,11 +4,11 @@
 
 ## 1. 현재 등록 상태와 확인 범위
 
-2026-09-05 기준 `packages/demos/demos.yaml`과 `demos-manifest.json`을 대조했다.
+2026-09-07 기준 `packages/demos/demos.yaml`과 `demos-manifest.json`을 대조했다.
 
 | 등록 합계 | 공개 대상으로 지정 (`done`) | 준비 중 (`stub`) | 작업 중 (`wip`) |
 |---:|---:|---:|---:|
-| 241 | 25 | 216 | 0 |
+| 241 | 59 | 182 | 0 |
 
 이 수치는 메타데이터 상태다. 코드의 존재, 전체 데모의 동작 검증, 현재 배포 환경의 정상 동작을 증명하지 않는다. 검증 기록에는 대상 URL·커밋·환경·수행 절차·관찰 결과를 별도로 남긴다.
 
@@ -61,3 +61,17 @@
 - **홈 추천 목록**: 고정 목록을 공개 상태와 대조하지 않는다. 상태 변경 때 추천 카드가 준비 중 대상으로 연결될 수 있다.
 
 수정·검증 전에는 “미공개 데모 실행이 모든 경로에서 차단된다” 또는 “추천은 검증 완료된 데모로만 구성된다”고 설명하지 않는다.
+
+## 6. 2026-09-07 아키텍처 데모 공개 기록
+
+목록 하단에서 다른 작업과 겹치지 않도록 다음 5개를 선택해 `stub`에서 `done`으로 변경했다.
+
+- `architecture/accessibility/form-aria-support`
+- `architecture/accessibility/modal-focus-trap`
+- `architecture/compiler-optimization/react-compiler`
+- `architecture/server-action-security/csrf-protection`
+- `architecture/turbopack/incremental-harness`
+
+고정 성공 문구 대신 실제 DOM 속성, native modal dialog, Next.js 16.3 네이티브 React Compiler 설정, Server Action 요청 헤더, Turbopack 컴파일 환경을 관찰하도록 구현했다. 등록 lint·매니페스트 생성·일관성 검사·타입 검사·전용 계약 테스트는 통과했다.
+
+다른 세션이 baseline 개발 서버와 빌드 산출물을 사용 중이어서 독립 브라우저 상호작용 검증은 보류했다. 앱 빌드는 기존 CSS 처리 worker의 로컬 포트 바인딩 제한으로 중단됐으며, 공개 배포 전 해당 환경에서 5개 직접 URL과 폼·모달·Server Action·Fast Refresh를 다시 확인한다.

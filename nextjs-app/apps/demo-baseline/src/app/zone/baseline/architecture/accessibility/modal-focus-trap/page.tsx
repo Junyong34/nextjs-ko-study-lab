@@ -1,46 +1,40 @@
-import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import type { Metadata } from 'next'
+import { ArchA11yFocusTrapDemo } from './components/ArchA11yFocusTrapDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'architecture/accessibility/modal-focus-trap')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ArchA11yFocusTrapDemo } from './components/ArchA11yFocusTrapDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
 export default function DemoPage() {
   return (
-    <DemoContainer className="space-y-6">
+    <DemoContainer className="space-y-4">
       <DemoGuideCard
-        title={"접근성 Focus Trap 및 키보드(Tab / Esc) 내비게이션 모달"}
-        concept={"모달 다이얼로그 열림 시 role=\"dialog\" aria-modal=\"true\"를 선언하고, Tab 키 입력 시 포커스가 모달 밖으로 탈출하지 않도록 가두며(Focus Trap) Esc 키로 0ms 즉시 닫히도록 보장합니다."}
+        title="브라우저 modal dialog의 포커스 경계"
+        concept="showModal()로 연 실제 다이얼로그는 배경을 비활성화하고 키보드 포커스를 모달 안에 두며, 닫힌 뒤 호출자에게 포커스를 돌려줘야 합니다."
         steps={[
           {
             step: 1,
-            title: "[접근성 모달 열기 (Focus Trap)] 버튼 클릭",
-            description: "모달을 열어 포커스를 모달 내부 첫 번째 포커스 가능 요소로 자동 이동시킵니다.",
-            actionBadge: "모달 열기",
+            title: '[배송지 변경] 선택',
+            description: 'dialog.showModal()을 호출하고 첫 입력 요소로 포커스를 옮깁니다.',
+            actionBadge: '포커스 진입',
           },
           {
             step: 2,
-            title: "Tab 키를 통한 모달 내부 포커스 순환(Focus Trap) 테스트",
-            description: "키보드 Tab / Shift+Tab 입력 시 포커스가 모달 바깥 배경으로 빠져나가지 않음을 확인합니다.",
-            actionBadge: "포커스 트랩 테스트",
+            title: '[Tab]과 [Shift+Tab]으로 이동',
+            description: '활성 요소 id가 다이얼로그 안에서만 바뀌는지 확인합니다.',
+            actionBadge: '경계 확인',
           },
           {
             step: 3,
-            title: "[닫기 (Esc 지원)] 버튼 또는 Esc 키 입력으로 모달 닫기",
-            description: "모달 종료 시 원래 모달을 열었던 트리거 버튼으로 포커스가 복원되는지 검증합니다.",
-            actionBadge: "포커스 복원 검증",
-            observe: "모달 열림 시 포커스 가둠(aria-modal) 및 닫기 시 원래 버튼으로의 포커스 복원 동작 관찰",
-            observeAt: "playground",
+            title: '[Escape] 또는 [적용하고 닫기] 실행',
+            description: '닫힌 뒤 배송지 변경 버튼으로 포커스가 복원되는지 확인합니다.',
+            actionBadge: '복원 확인',
+            observe: '열림 방식, 마지막 활성 요소, 닫기 이유와 복원 대상',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"모달 다이얼로그 키보드 포커스 트랩(Focus Trap) 및 Esc 닫기 실습"}>
-        <ArchA11yFocusTrapDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <ArchA11yFocusTrapDemo />
     </DemoContainer>
   )
 }

@@ -1,40 +1,40 @@
-import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import type { Metadata } from 'next'
+import { ArchTurbopackHmrDemo } from './components/ArchTurbopackHmrDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'architecture/turbopack/incremental-harness')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ArchTurbopackHmrDemo } from './components/ArchTurbopackHmrDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
 export default function DemoPage() {
   return (
-    <DemoContainer className="space-y-6">
-            <DemoGuideCard
-        title="Turbopack 증분 빌드 및 핫 모듈 리로딩 가속"
-        concept="Rust 기반 Turbopack 엔진(--turbo)을 활용하여 수천 개의 쇼핑몰 컴포넌트 모듈을 함수 레벨 증분 계산(Incremental Computation)으로 10ms 이내에 초고속 HMR 갱신합니다."
+    <DemoContainer className="space-y-4">
+      <DemoGuideCard
+        title="Turbopack 컴파일 환경과 Fast Refresh 경계"
+        concept="Next.js 16에서는 next dev와 next build가 기본적으로 Turbopack을 사용합니다. 컴파일 환경은 페이지에서 확인하고, HMR은 로컬 소스 편집으로 검증합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "Turbopack Rust 엔진 증분 컴파일 아키텍처 점검 및 next.config.ts turbopack 규칙 및 로더 설정 확인",
-                    "description": "전체 번들을 다시 빌드하지 않고 변경된 함수만 증분 캐싱하는 Turbo 엔진 메커니즘을 확인합니다. Webpack 대비 10배 빠른 HMR과 커스텀 SVG/Sass 로더 바인딩 설정을 점검합니다.",
-                    "actionBadge": "엔진 구조 점검"
+            step: 1,
+            title: '[상태 카운터 증가] 실행',
+            description: 'Fast Refresh 전후에 비교할 실제 React 로컬 상태를 만듭니다.',
+            actionBadge: '상태 준비',
           },
           {
-                    "step": 2,
-                    "title": "10ms 이내 초고속 핫 모듈 리로딩(HMR) 성능 관찰",
-                    "description": "코드 수정 시 브라우저 상태를 유지한 채 변경 사항만 수 밀리초 만에 즉시 반영되는지 확인합니다.",
-                    "actionBadge": "성능 검증",
-                    "observe": "Turbopack 증분 계산을 통해 코드 변경 사항이 10ms 미만으로 즉각 HMR 반영됨",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: '[hmr-marker.ts] 문구를 로컬에서 수정·저장',
+            description: '개발 서버가 별도 모듈 변경을 반영하는지 확인합니다. 배포 화면에서는 실행할 수 없는 개발 절차입니다.',
+            actionBadge: '소스 저장',
+          },
+          {
+            step: 3,
+            title: '[검증] marker와 상태 비교',
+            description: '문구가 갱신되고 안전한 경우 카운터가 유지되는지 관찰합니다.',
+            actionBadge: 'Fast Refresh',
+            observe: 'import.meta.env 값, marker 문구, React 상태 카운터',
+            observeAt: 'verification',
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"Turbopack 증분 빌드 및 핫 모듈 리로딩 가속 실습"}>
-        <ArchTurbopackHmrDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <ArchTurbopackHmrDemo />
     </DemoContainer>
   )
 }
