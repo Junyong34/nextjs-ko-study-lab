@@ -2,7 +2,7 @@
   title: "Server Actions 기본 폼 처리 및 상태 변경"
   doc: 2-guides/server-actions.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: caching/basic
   title: "use cache 기본 동작 및 revalidateTag 무효화"
@@ -158,68 +158,68 @@
   title: "중첩 Suspense 점진적 청크 스트리밍"
   doc: 2-guides/streaming.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/server-actions-advanced
   title: "Server Action 폼 검증과 useActionState 할인 상태"
   doc: 2-guides/server-actions.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/swr-polling
   title: "SWR 실시간 배송 조회 자동 폴링 & mutate() 갱신"
   doc: 2-guides/2.15-client-side-data-fetching/swr.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/lazy-loading-chart
   title: "next/dynamic 지연 로딩 & 클라이언트 번들 최적화"
   doc: 2-guides/lazy-loading.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/auth-session
   title: "Next.js 인증 & 세션 기반 역할 분기 (RBAC)"
   doc: 2-guides/authentication.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/parallel-routes
   title: "Parallel Routes (@slots) 다중 슬롯 병렬 렌더링"
   doc: 3-api-reference/3.1-file-conventions/parallel-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/intercepting-routes
   title: "Intercepting Routes ((..)segment) 라우트 인터셉트"
   doc: 3-api-reference/3.1-file-conventions/intercepting-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/form-component
   title: "Next.js 내장 <Form> 컴포넌트와 GET 검색 동기화"
   doc: 3-api-reference/3.2-components/form.md
   zone: baseline
-  status: stub
+  status: done
 
 
 - url: architecture/fast-refresh-boundary
   title: "React Fast Refresh & 핫 모듈 리로딩 (HMR) 상태 보존"
   doc: 5-architecture/fast-refresh.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/rendering-philosophy/server-vs-client
   title: "서버 렌더링 vs 클라이언트 렌더링 수명주기 대조"
   doc: 2-guides/rendering-philosophy.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/server-and-client-boundary/children-slot
   title: "Server and Client Component 합성과 children 슬롯 주입"
   doc: 2-guides/server-and-client-boundary.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/how-revalidation-works/swr-flow
   title: "Stale-While-Revalidate 백그라운드 갱신 흐름"
@@ -237,7 +237,7 @@
   title: "Suspense 스트리밍과 로딩 청크 순차 처리"
   doc: 2-guides/streaming.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/isr/time-isr-60s
   title: "60초 주기 상품 상세 증분 정적 재생성 (ISR)"
@@ -285,7 +285,7 @@
   title: "startTransition을 통한 프로그래밍 방식 Server Action 호출"
   doc: 2-guides/server-actions.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/swr/mutation-optimistic
   title: "SWR mutate()를 활용한 낙관적 장바구니 갱신"
@@ -345,13 +345,13 @@
   title: "Hydration 경계와 번들 격리"
   doc: 2-guides/rendering-philosophy.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/server-and-client-boundary/props-serialization
   title: "Props 직렬화 경계 및 안전한 전달"
   doc: 2-guides/server-and-client-boundary.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/how-revalidation-works/ondemand-sync
   title: "온디맨드 캐시 무효화와 상태 갱신"
@@ -435,7 +435,7 @@
   title: "결제 모달 next/dynamic 지연 로드"
   doc: 2-guides/lazy-loading.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/preserving-ui-state/drawer-open
   title: "카테고리 전환 시 장바구니 Drawer 열림 유지"
@@ -477,13 +477,13 @@
   title: "Proxy 기반 라우트 보호 가드"
   doc: 2-guides/authentication.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/authentication/rsc-user-profile
   title: "Server Component 세션 프로필 렌더링"
   doc: 2-guides/authentication.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/data-security/server-only-guard
   title: "server-only 패키지를 통한 클라이언트 번들 유출 차단"
