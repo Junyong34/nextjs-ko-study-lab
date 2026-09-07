@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 상태 관리를 담당하는 <code>{'<'}ClientTabContainer{'>'}</code>의 <code>children</code>으로 무거운 서버 데이터베이스 조회를 수행하는 <code>{'<'}ServerProductList{'>'}</code>를 전달하여, 클라이언트 번들에 서버 코드가 단 1바이트도 포함되지 않은 채 완벽한 인터랙션 탭 전환이 이루어지는 구조를 검증합니다.</p>
+                  <p>본 데모에서는 상태 관리를 담당하는 <code>{'<'}ChildrenSlotDemo{'>'}</code>의 <code>children</code>으로 서버에서 <code>renderId</code>를 계산하는 <code>{'<'}ServerInjectedPanel{'>'}</code>을 전달합니다. "리렌더링 트리거" 버튼으로 클라이언트 상태를 몇 번 바꾸어도 children의 renderId와 참조 동일성이 그대로 유지되는 것으로, 서버 코드가 클라이언트 번들에 포함되지 않고 재계산도 일어나지 않음을 확인합니다.</p>
                 </div>
 
                 <div>
