@@ -18,6 +18,10 @@ export type AnalyticsEvent =
       params: { action: 'open_modal' | 'go_to_repo' | 'dismiss' | 'dismiss_forever' }
     }
   | {
+      name: 'share_click'
+      params: { share_url: string; page_path: string }
+    }
+  | {
       name: 'demo_view'
       params: { zone: string; demo_url: string; demo_title: string }
     }
