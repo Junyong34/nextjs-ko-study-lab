@@ -22,7 +22,7 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"RSC에서 RCC로의 Props 직렬화(Serialization) 경계"}
-        concept={"Server Component에서 Client Component로 전달되는 props는 문자열, 숫자, Date, 순수 객체처럼 React Flight 프로토콜이 지원하는 값이어야 하며, 함수나 클래스 인스턴스는 경계를 통과할 수 없습니다."}
+        concept={"Server Component에서 Client Component로 전달되는 props는 React Flight가 지원하는 값이어야 합니다. Date는 전달·복원되지만, 일반 함수와 사용자 정의 클래스 인스턴스는 경계를 통과할 수 없습니다."}
         steps={[
           {
             step: 1,
@@ -37,6 +37,12 @@ export default function DemoPage() {
             actionBadge: "경계 전달 검증",
             observe: "instanceof Date 결과와 getFullYear() 값이 실제로 정확한지 관찰",
             observeAt: "verification",
+          },
+          {
+            step: 3,
+            title: "일반 함수와 클래스 인스턴스의 실제 오류 경로 열기",
+            description: "아래 재현 링크를 열면 Server Component가 전달한 값이 Flight 직렬화 경계에서 거부됩니다. 확인 후 브라우저 뒤로가기로 이 정상 화면으로 돌아오세요.",
+            actionBadge: "오류 재현",
           },
         ]}
       />

@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { DemoPlaygroundCard } from '@study/demo-kit'
+import { NonSerializablePropExamples } from './NonSerializablePropExamples'
 import { PropsSerializationDemo } from './PropsSerializationDemo'
 import { VerificationFooter } from './VerificationFooter'
 
@@ -21,11 +22,12 @@ export function PropsSerializationSection({ data }: PropsSerializationSectionPro
     <>
       <DemoPlaygroundCard title="Props 직렬화 경계 및 안전한 전달 실습">
         <PropsSerializationDemo data={data} onCheck={(isRealDate, year) => setCheck({ isRealDate, year })} />
+        <NonSerializablePropExamples />
       </DemoPlaygroundCard>
       <VerificationFooter
         isMatched={check ? check.isRealDate : undefined}
-        actual={check ? `- data.createdAt instanceof Date: ${check.isRealDate}\n- getFullYear(): ${check.year}` : undefined}
-        expected="서버 컴포넌트에서 생성한 Date 인스턴스가 RSC 경계를 넘어 클라이언트에서도 진짜 Date 인스턴스로 유지되어야 한다."
+        actual={check ? `- Date 전달: data.createdAt instanceof Date = ${check.isRealDate}\n- Date 복원: getFullYear() = ${check.year}\n- 일반 함수·클래스 인스턴스: 아래 재현 경로에서 Flight가 전달을 거부함` : undefined}
+        expected="Date는 Server Component에서 Client Component로 전달된 뒤에도 Date 인스턴스로 복원된다. 일반 함수와 사용자 정의 클래스 인스턴스는 각각의 재현 경로에서 RSC 직렬화 오류가 발생해야 한다."
       />
     </>
   )
