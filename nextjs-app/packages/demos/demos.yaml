@@ -225,7 +225,7 @@
   title: "Stale-While-Revalidate 백그라운드 갱신 흐름"
   doc: 2-guides/how-revalidation-works.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/caching-legacy/fetch-cache
   title: "Next.js 14 레거시 fetch cache vs Route Segment revalidate"
@@ -243,19 +243,19 @@
   title: "60초 주기 상품 상세 증분 정적 재생성 (ISR)"
   doc: 2-guides/incremental-static-regeneration.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/isr-cache-components/cache-life-hours
   title: "Next.js 16 cacheLife('hours') 프로필 기반 수명 제어"
   doc: 2-guides/incremental-static-regeneration-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/migrating-cache-components/unstable-to-use-cache
   title: "unstable_cache에서 Next.js 16 use cache로 마이그레이션"
   doc: 2-guides/migrating-to-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/adopting-partial-prefetching/hover-shell
   title: "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시)"
@@ -309,7 +309,7 @@
   title: "미공개 특가 상품 Draft Mode 토글 및 Bypass 쿠키"
   doc: 2-guides/draft-mode.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/prefetching/viewport-vs-hover
   title: "뷰포트 진입 시 자동 prefetch와 prefetch={false} 비교"
@@ -357,7 +357,7 @@
   title: "온디맨드 캐시 무효화와 상태 갱신"
   doc: 2-guides/how-revalidation-works.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/caching-legacy/segment-revalidate
   title: "Route Segment revalidate 설정"
@@ -369,19 +369,19 @@
   title: "revalidatePath에 따른 라우트 범위별 무효화"
   doc: 2-guides/incremental-static-regeneration.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/isr-cache-components/precision-tag-purge
   title: "cacheTag를 이용한 태그 기반 무효화"
   doc: 2-guides/incremental-static-regeneration-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/migrating-cache-components/cache-key-compare
   title: "캐시 키 생성 방식 비교 (수동 vs 자동)"
   doc: 2-guides/migrating-to-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/auth-cache-components/private-cache-user
   title: "개인화 사용자별 Private 캐시 격리"
@@ -405,7 +405,7 @@
   title: "Bypass 쿠키 검증 및 CMS 초안 렌더링"
   doc: 2-guides/draft-mode.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/prefetching/custom-prefetch-false
   title: "prefetch={false}로 prefetch 비활성화"

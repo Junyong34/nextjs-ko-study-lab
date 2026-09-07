@@ -3,25 +3,22 @@
 import { revalidatePath } from 'next/cache'
 import type { RevalidatePathResult } from './types'
 
-let currentVersion = 1
+const DEMO_PATH = '/zone/baseline/guides/isr/revalidate-path-sync'
 
-export async function executeRevalidatePathAction(targetPath: string = '/shop'): Promise<RevalidatePathResult> {
-  currentVersion += 1
-  const time = new Date().toLocaleTimeString()
+export async function executeRevalidatePathAction(): Promise<RevalidatePathResult> {
+  const timestamp = new Date().toLocaleTimeString('ko-KR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    fractionalSecondDigits: 3,
+  })
 
-  // Next.js 공식 revalidatePath 호출
-  revalidatePath(targetPath)
+  // Next.js 공식 revalidatePath 호출 — 이 데모 페이지의 실제 라우트 경로를 대상으로 한다.
+  revalidatePath(DEMO_PATH)
 
   return {
-    path: targetPath,
+    path: DEMO_PATH,
     status: 'PURGED',
-    segments: [
-      { name: '상단 글로벌 배너 (ShopBanner)', type: 'component', cachedTime: time, version: currentVersion },
-      { name: '카테고리 필터 사이드바 (ShopSidebar)', type: 'component', cachedTime: time, version: currentVersion },
-      { name: '메인 상품 그리드 (ProductGrid)', type: 'page', cachedTime: time, version: currentVersion },
-      { name: '추천 알고리즘 피드 (RecommendationSlot)', type: 'component', cachedTime: time, version: currentVersion },
-    ],
-    message: `[확인] revalidatePath("${targetPath}") 호출 완료: 상단 배너, 사이드바, 상품 목록 전체 캐시 일괄 퍼지`,
-    timestamp: time,
+    timestamp,
   }
 }
