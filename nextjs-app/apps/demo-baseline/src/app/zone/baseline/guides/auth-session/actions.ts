@@ -1,13 +1,30 @@
 'use server'
 
+import { cookies } from 'next/headers'
 import type { UserSession } from './types'
 
-let currentSession: UserSession = {
-  isLoggedIn: false,
+const SESSION_COOKIE_NAME = 'demo_auth_session'
+
+interface SessionCookiePayload {
+  userId: string
+  userName: string
+  role: 'customer' | 'admin'
+  token: string
 }
 
 export async function getSession(): Promise<UserSession> {
-  return { ...currentSession }
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(SESSION_COOKIE_NAME)?.value
+  if (!raw) {
+    return { isLoggedIn: false }
+  }
+
+  try {
+    const payload = JSON.parse(raw) as SessionCookiePayload
+    return { isLoggedIn: true, ...payload }
+  } catch {
+    return { isLoggedIn: false }
+  }
 }
 
 export async function loginAction(
@@ -16,23 +33,29 @@ export async function loginAction(
 ): Promise<UserSession> {
   await new Promise((resolve) => setTimeout(resolve, 300))
 
-  currentSession = {
-    isLoggedIn: true,
+  const payload: SessionCookiePayload = {
     userId,
     userName: role === 'admin' ? '최고관리자 (Admin)' : '홍길동 고객님',
     role,
     token: `auth_jwt_${Date.now()}`,
   }
 
-  return { ...currentSession }
+  const cookieStore = await cookies()
+  cookieStore.set(SESSION_COOKIE_NAME, JSON.stringify(payload), {
+    httpOnly: true,
+    sameSite: 'lax',
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+  })
+
+  return { isLoggedIn: true, ...payload }
 }
 
 export async function logoutAction(): Promise<UserSession> {
   await new Promise((resolve) => setTimeout(resolve, 200))
 
-  currentSession = {
-    isLoggedIn: false,
-  }
+  const cookieStore = await cookies()
+  cookieStore.delete(SESSION_COOKIE_NAME)
 
-  return { ...currentSession }
+  return { isLoggedIn: false }
 }

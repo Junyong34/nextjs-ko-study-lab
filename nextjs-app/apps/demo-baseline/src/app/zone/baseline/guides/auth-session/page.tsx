@@ -21,28 +21,28 @@ export default async function AuthSessionDemoPage() {
         steps={[
           {
             step: 1,
-            title: "[사용자 로그인 (CUSTOMER)], [관리자 로그인 (ADMIN)] 선택",
-            description: "일반 회원 세션 쿠키를 발급받아 기본 프로필 렌더링을 확인합니다.",
+            title: "[사용자 로그인 (CUSTOMER)] 버튼 클릭",
+            description: "일반 회원으로 로그인해 서버 Action이 실제 httpOnly 세션 쿠키를 발급하는지 확인합니다.",
             actionBadge: "일반 세션 생성",
           },
           {
             step: 2,
-            title: "[관리자(Admin)로 로그인] 버튼 클릭으로 권한 승격",
-            description: "관리자 권한 세션으로 전환하여 관리자 전용 대시보드 권한을 부여받습니다.",
+            title: "[로그아웃] 후 [관리자 로그인 (ADMIN)] 버튼 클릭",
+            description: "쿠키를 지운 뒤 관리자로 다시 로그인해 권한이 다른 세션으로 전환되는지 확인합니다.",
             actionBadge: "관리자 세션 전환",
           },
           {
             step: 3,
-            title: "[처리 중... 로그아웃] 버튼 클릭으로 세션 파기",
-            description: "세션 쿠키를 제거하여 비인증 상태로 원복되는지 테스트합니다.",
-            actionBadge: "세션 파기",
+            title: "브라우저 새로고침으로 쿠키 지속성 확인",
+            description: "로그인 상태에서 페이지를 새로고침해도 실제 쿠키에 저장된 세션이 그대로 유지되는지 확인합니다.",
+            actionBadge: "쿠키 지속성 확인",
           },
           {
             step: 4,
-            title: "인증된 사용자 프로필 및 권한 배지 관찰",
-            description: "세션 정보(관리자/일반사용자)와 회원 전용 혜택 영역이 정상 표시되는지 검증합니다.",
-            actionBadge: "프로필 렌더링",
-            observe: "세션 상태 전환에 따른 사용자 프로필 카드 및 권한별 보호 UI 활성화 관찰",
+            title: "[로그아웃] 버튼 클릭 후 세션 파기 관찰",
+            description: "세션 쿠키가 삭제되어 비인증 상태로 복귀하고, 새로고침해도 익명 상태가 유지되는지 검증합니다.",
+            actionBadge: "세션 파기",
+            observe: "로그인/로그아웃 시 실제 쿠키(개발자 도구 Application 탭)가 설정·삭제되고, 새로고침 후에도 그 상태가 유지되는 것을 관찰",
             observeAt: "playground",
           },
         ]}
@@ -54,7 +54,15 @@ export default async function AuthSessionDemoPage() {
       </DemoPlaygroundCard>
 
       {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
+      <VerificationFooter
+        isLoaded={typeof session.isLoggedIn === 'boolean'}
+        actual={
+          session.isLoggedIn
+            ? `- isLoggedIn: true\n- role: ${session.role}\n- userId: ${session.userId}\n- 실제 httpOnly 쿠키(${session.token})가 설정되어 있어 새로고침해도 유지됩니다.`
+            : '- isLoggedIn: false\n- 세션 쿠키가 없어 익명 상태입니다.'
+        }
+        expected="로그인 버튼 클릭 시 서버 Action이 실제 httpOnly 쿠키를 설정하고, 새로고침해도 이 브라우저의 로그인 상태가 유지되어야 한다. 로그아웃하면 쿠키가 삭제되어 다시 익명 상태로 돌아가야 한다."
+      />
     </DemoContainer>
   )
 }
