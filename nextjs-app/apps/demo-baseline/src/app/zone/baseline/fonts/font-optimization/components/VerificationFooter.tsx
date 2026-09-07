@@ -44,7 +44,7 @@ export function VerificationFooter({
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모는 실제로 서로 다른 3개의 한글 폰트를 로드합니다 — 외부 CDN 카드는 <code>&lt;link&gt;</code> 태그로 나눔명조를 fonts.googleapis.com에서 직접 요청하고, <code>next/font/google</code> 카드는 Noto Sans KR을 빌드 타임에 다운로드해 셀프호스팅하며, <code>next/font/local</code> 카드는 저장소에 직접 번들링한 로컬 TTF 파일(Gaegu)을 셀프호스팅합니다. 브라우저 개발자 도구 네트워크 탭을 열어보면 외부 CDN 카드만 구글 도메인으로 요청이 나가는 걸 확인할 수 있습니다.
+              본 데모는 실제로 서로 다른 3개의 한글 폰트를 로드합니다 — 외부 CDN 카드는 <code>&lt;link&gt;</code> 태그로 나눔명조를 fonts.googleapis.com에서 직접 요청하고, <code>next/font/google</code> 카드는 Noto Sans KR을 빌드 타임에 다운로드해 셀프호스팅하며, <code>next/font/local</code> 카드는 저장소에 직접 번들링한 로컬 WOFF2 파일(Gaegu)을 셀프호스팅합니다. 브라우저 개발자 도구 네트워크 탭을 열어보면 외부 CDN 카드만 구글 도메인으로 요청이 나가는 걸 확인할 수 있습니다.
             </p>
           </div>
 

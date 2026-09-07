@@ -14,13 +14,16 @@ import { FontPreviewClient } from './components/FontPreviewClient'
 const notoSansKr = Noto_Sans_KR({
   weight: ['400', '700', '900'],
   display: 'swap',
+  // Noto Sans KR은 preload 가능한 한글 subset을 제공하지 않는다.
+  // 임의의 latin subset을 지정하지 않고, 한글 본문은 셀프호스팅 자산으로 지연 로드한다.
+  preload: false,
 })
 
-// 3. next/font/local — 저장소에 직접 번들링한 로컬 폰트 파일(Gaegu, SIL OFL 1.1 라이선스)을 셀프호스팅한다.
+// 3. next/font/local — 저장소에 직접 번들링한 로컬 WOFF2 파일(Gaegu, SIL OFL 1.1 라이선스)을 셀프호스팅한다.
 const gaegu = localFont({
   src: [
-    { path: './assets/fonts/Gaegu-Regular.ttf', weight: '400', style: 'normal' },
-    { path: './assets/fonts/Gaegu-Bold.ttf', weight: '700', style: 'normal' },
+    { path: './assets/fonts/Gaegu-Regular.woff2', weight: '400', style: 'normal' },
+    { path: './assets/fonts/Gaegu-Bold.woff2', weight: '700', style: 'normal' },
   ],
   display: 'swap',
 })

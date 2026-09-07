@@ -131,7 +131,7 @@ export function FontPreviewClient({
               {sampleText}
             </p>
             <div className="text-[11px] text-zinc-500">
-              • Gaegu(OFL 라이선스) — 저장소에 직접 번들링한 로컬 TTF 파일<br />
+              • Gaegu(OFL 라이선스) — 저장소에 직접 번들링한 로컬 WOFF2 파일<br />
               • 400/700 두 굵기만 실제 파일 존재 (900은 브라우저가 가장 가까운 굵기로 보정)
             </div>
           </div>
