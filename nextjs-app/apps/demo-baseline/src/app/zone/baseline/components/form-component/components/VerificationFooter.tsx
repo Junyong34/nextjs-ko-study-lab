@@ -1,111 +1,19 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
-
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
-
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• Next.js 내장 <Form> 컴포넌트와 GET 검색 동기화의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
-  return (
-    <div className="space-y-4">
-      <ExpectedActualPanel
-        title="Next.js 내장 <Form> 컴포넌트와 GET 검색 동기화 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
-      />
-      <DemoDeepDiveCard title="Next.js 15+ 빌트인 <Form> 컴포넌트 & GET 검색 동기화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>
-              <code>next/form</code>의 <code>{'<'}Form{'>'}</code> 컴포넌트는 HTML <code>{'<'}form{'>'}</code> 요소를 확장하여 클라이언트 사이드 소프트 내비게이션(SPA 전환), 뷰포트 프리페치(Prefetch), 폼 제출 시 기존 레이아웃/클라이언트 상태 보존을 기본 지원하는 Next.js 내장 컴포넌트입니다.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>
-              본 데모에서는 상품 검색 폼(<code>{'<'}Form action="/search"{'>'}</code>)에서 키워드(q)와 카테고리를 입력하고 전송했을 때, 전체 페이지 새로고침 없이 URL 쿼리스트링(<code>/search?q=shoes</code>)만 갱신되며 검색 결과 리스트가 즉시 부분 렌더링되는 메커니즘을 검증합니다.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>SPA 기반 고속 폼 전환</strong>: 브라우저 전체 리로드 없이 URL과 쿼리스트링만 변경하며 결과를 즉각 업데이트합니다.</li>
-              <li><strong>결과 페이지 뷰포트 prefetch</strong>: 폼이 뷰포트에 진입할 때 <code>action</code>에 지정된 대상 경로의 정적 레이아웃 셸을 백그라운드에서 사전 다운로드합니다.</li>
-              <li><strong>점진적 향상(Progressive Enhancement)</strong>: JavaScript가 비활성화되거나 로드 중인 환경에서도 표준 HTML form 제출로 완벽하게 폴백 동작합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 상품 통합 검색창 및 카테고리 필터링 폼 (GET)</li>
-              <li>관리자 대시보드 주문/회원 검색 및 날짜 범위 필터 폼</li>
-              <li>Server Actions 결합을 통한 회원가입/주문서 제출 폼 (POST)</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>GET vs POST 동작 차이</strong>: <code>action</code>에 문자열 URL(e.g., <code>action="/search"</code>)을 전달하면 GET 방식의 클라이언트 내비게이션으로 동작하며, Server Action 함수를 전달하면 POST 방식의 비동기 서버 액션으로 실행됩니다.</li>
-              <li><strong>빈 쿼리 파라미터 제어</strong>: 입력되지 않은 빈 필드가 URL에 <code>?q=&category=</code> 형태로 남지 않도록 필요 시 클라이언트 훅으로 정리할 수 있습니다.</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
-    </div>
-  )
+import { usePathname, useSearchParams } from 'next/navigation'
+import { DemoDeepDiveCard, ExpectedActualPanel } from '@study/demo-kit'
+export function VerificationFooter({ query, count, submitted }: { query: string; count: number; submitted: boolean }) {
+  const pathname = usePathname()
+  const params = useSearchParams()
+  return <>
+    <ExpectedActualPanel title="URL과 서버 검색어 비교"
+      expected={<span>URL의 q에서 앞뒤 공백을 뺀 값과 서버 검색어가 같습니다. 결과가 없어도 정상 검색입니다.</span>}
+      actual={<span className="break-all">{`실습 내부 URL: ${pathname}${params.size ? '?' + params.toString() : ''}\n서버 검색어: ${query || '(빈 값: 전체 상품)'}\n서버 검색 결과: ${count}건`}</span>}
+      isMatched={submitted ? (params.get('q') ?? '').trim() === query : undefined}
+      description={submitted ? '서버가 읽은 검색어를 현재 iframe URL과 비교합니다. 메모 유지 여부는 실습 화면에서 확인하세요.' : '검색을 제출하면 URL과 서버 검색어를 비교합니다.'} />
+    <DemoDeepDiveCard title="Form 제출과 서버 검색">
+      <p>문자열 action을 받은 next/form은 입력을 GET 쿼리로 전달합니다. 서버 페이지는 searchParams를 읽어 예시 상품을 검색합니다.</p>
+      <p>검색 결과는 서버에서 만들고 공유 layout의 메모는 브라우저 상태로 남습니다. 전체 새로고침은 메모를 초기화합니다. 외부 주소창 대신 위 실습 내부 URL을 확인하세요.</p>
+      <p>JavaScript를 사용하지 않는 환경에서는 HTML 폼 제출로 동작합니다. prefetch 여부와 JavaScript 미사용 동작은 이 검증 패널의 판정 범위에 포함하지 않습니다.</p>
+    </DemoDeepDiveCard>
+  </>
 }

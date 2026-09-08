@@ -1,53 +1,27 @@
-import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { getDemoMetadata } from '@study/demos'
-
-export const metadata: Metadata = getDemoMetadata('baseline', 'components/form-component')
-
-import React, { Suspense } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard, DemoPlaygroundCard, MOCK_PRODUCTS, ProductCard } from '@study/demo-kit'
 import { FormSearchClient } from './components/FormSearchClient'
 import { VerificationFooter } from './components/VerificationFooter'
-
-export default function FormComponentDemoPage() {
-  return (
-    <DemoContainer className="space-y-6">
-      {/* 1단. 상단 가이드 필드셋 */}
-      <DemoGuideCard
-        title={"next/form 컴포넌트 자동 검색 쿼리 동기화"}
-        concept={"<Form action=\"...\">을 사용하면 클라이언트 JS 없이도 폼 제출 시 URL 검색 쿼리(?q=...)로 자동 변환되고 페이지 전환 시 prefetching과 소프트 네비게이션이 적용됩니다."}
-        steps={[
-        {
-        "step": 1,
-        "title": "[상품명, 태그 검색 (예: 키보드, 무선, 데님)] 입력",
-        "description": "검색어 입력창에 원하는 키워드(예: 키보드)를 입력합니다.",
-        "actionBadge": "검색어 입력"
-        },
-        {
-        "step": 2,
-        "title": "[검색] 버튼 클릭",
-        "description": "next/form이 GET 요청으로 폼 데이터를 직렬화하여 URL searchParams에 ?q=키보드를 동기화합니다.",
-        "actionBadge": "URL 동기화"
-        },
-        {
-        "step": 3,
-        "title": "검색 결과 및 쿼리 파라미터 확인",
-        "description": "서버 컴포넌트가 searchParams를 수신하여 필터링된 결과 3건을 반환합니다.",
-        "actionBadge": "결과 확인",
-        "observe": "URL 쿼리스트링 변경과 3단 검증 패널의 searchParams 실제 바인딩 값 대조",
-        "observeAt": "verification"
-        }
-        ]}
-        />
-
-      {/* 2단. 실습 조작 영역 (DemoPlaygroundCard) */}
-      <DemoPlaygroundCard title="이커머스 상품 카탈로그 검색 필터 (<Form> 기반)" className="space-y-4">
-        <Suspense fallback={<div className="p-4 text-xs font-mono text-zinc-400">검색 폼 로딩 중...</div>}>
-          <FormSearchClient />
-        </Suspense>
-      </DemoPlaygroundCard>
-
-      {/* 3단 & 4단: 검증 패널 및 [개념 정리] 카드 */}
-      <VerificationFooter />
-    </DemoContainer>
-  )
+export const metadata = getDemoMetadata('baseline', 'components/form-component')
+export default async function Page({ searchParams }: { searchParams: Promise<{ q?: string | string[] }> }) {
+  const params = await searchParams
+  const query = (Array.isArray(params.q) ? params.q[0] : params.q ?? '').trim()
+  const needle = query.toLowerCase()
+  const products = MOCK_PRODUCTS.filter(p => p.name.toLowerCase().includes(needle) || p.tags.some(t => t.toLowerCase().includes(needle)))
+  return <DemoContainer className="space-y-4">
+    <DemoGuideCard title="Form으로 상품 검색하기" concept="next/form이 검색어를 URL로 전달하고 서버 페이지가 그 값으로 예시 상품을 검색합니다." steps={[
+      { step: 1, title: '메모와 검색어 입력', description: '메모를 적고 상품명 또는 태그에 키보드를 입력합니다.' },
+      { step: 2, title: '검색 후 URL과 결과 확인', description: '검색을 누르고 서버 검색어와 상품 목록을 확인합니다.', observe: '실습 내부 URL, 서버 검색어, 결과 수', observeAt: 'verification' },
+      { step: 3, title: '빈 검색과 결과 없는 검색', description: '검색어를 지워 전체 상품을 보고, 없는상품으로 검색해 0건을 확인합니다. 메모는 유지됩니다.' },
+      { step: 4, title: '실습 화면 새로고침', description: '검색어는 URL에 남지만 메모는 초기화됩니다. 예제 초기화는 검색어도 지웁니다.' },
+    ]} />
+    <DemoPlaygroundCard title="예시 상품 검색">
+      <FormSearchClient query={query} />
+      <p className="my-3 text-sm" role="status">제출한 검색어: {query || '(전체)'} / 검색 결과 {products.length}건</p>
+      <div data-testid="search-results" className="grid gap-3 sm:grid-cols-2">{products.map(p => <ProductCard key={p.id} product={p} />)}</div>
+      {!products.length && <p>일치하는 상품이 없습니다. 검색어를 바꿔보세요.</p>}
+    </DemoPlaygroundCard>
+    <Suspense fallback={<p>검색 결과 확인 중…</p>}><VerificationFooter query={query} count={products.length} submitted={params.q !== undefined} /></Suspense>
+  </DemoContainer>
 }

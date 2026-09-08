@@ -38,7 +38,7 @@ describe('Tier 1: Feature 3 - DeepDive Card Content Polish', () => {
     }
   })
 
-  it('3.4 should verify all 241 demos have non-empty DeepDive card concepts or explanations', () => {
+  it('3.4 should verify all 240 demos have non-empty DeepDive card concepts or explanations', () => {
     let deepDiveCount = 0
     for (const demo of demos) {
       const demoDir = getDemoSourceDir(demo)

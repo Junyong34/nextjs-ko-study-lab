@@ -7,15 +7,14 @@ import {
   ExpectedActualPanel,
 } from '@study/demo-kit'
 import { useEffect, useRef, useState } from 'react'
+import { inspectCardFormat } from '../card-format'
 
 const EMPTY_OBSERVATION = {
   invalid: null as string | null,
   describedBy: null as string | null,
   descriptionExists: false,
-}
-
-function normalizeCardNumber(value: string) {
-  return value.replace(/\D/g, '').slice(0, 16)
+  descriptionText: '',
+  labelConnected: false,
 }
 
 export function ArchA11yFormDemo() {
@@ -24,9 +23,11 @@ export function ArchA11yFormDemo() {
   const [wasSubmitted, setWasSubmitted] = useState(false)
   const [observation, setObservation] = useState(EMPTY_OBSERVATION)
 
-  const digitCount = normalizeCardNumber(cardNumber).length
-  const hasError = wasSubmitted && digitCount !== 16
-  const isValid = wasSubmitted && digitCount === 16
+  const { digitCount, valid } = inspectCardFormat(cardNumber)
+  const hasError = wasSubmitted && !valid
+  const isValid = wasSubmitted && valid
+  const errorText = `숫자 16자리를 입력하세요. 공백과 하이픈만 함께 쓸 수 있습니다. 현재 숫자는 ${digitCount}자리입니다.`
+  const helpText = '공백과 하이픈은 숫자 길이 계산에서 제외됩니다.'
 
   useEffect(() => {
     if (!wasSubmitted || !inputRef.current) return
@@ -36,6 +37,8 @@ export function ArchA11yFormDemo() {
       invalid: inputRef.current.getAttribute('aria-invalid'),
       describedBy,
       descriptionExists: Boolean(describedBy && document.getElementById(describedBy)),
+      descriptionText: describedBy ? document.getElementById(describedBy)?.textContent ?? '' : '',
+      labelConnected: Array.from(inputRef.current.labels ?? []).some(label => label.htmlFor === inputRef.current?.id && label.textContent?.includes('카드 번호')),
     })
   }, [cardNumber, hasError, wasSubmitted])
 
@@ -47,12 +50,17 @@ export function ArchA11yFormDemo() {
   }
 
   const actual = wasSubmitted
-    ? `aria-invalid: ${observation.invalid ?? '(없음)'}\naria-describedby: ${observation.describedBy ?? '(없음)'}\n설명 요소 연결: ${observation.descriptionExists ? '성공' : '실패'}\n숫자 길이: ${digitCount}`
+    ? `aria-invalid: ${observation.invalid ?? '(없음)'}\naria-describedby: ${observation.describedBy ?? '(없음)'}\n설명 요소 연결: ${observation.descriptionExists ? '성공' : '실패'}\n숫자 길이: ${digitCount}\n설명: ${observation.descriptionText}\nlabel 연결: ${observation.labelConnected ? '성공' : '실패'}`
     : '아직 제출하지 않았습니다.'
 
   return (
     <>
       <DemoPlaygroundCard title="카드 번호 입력과 오류 설명 연결">
+        <p className="mb-3 text-xs">Next.js 앱에서 쓰는 HTML·React 접근성 예제입니다. 실제 카드 번호를 입력하지 마세요. 카드 진위나 결제 가능 여부는 검사하지 않습니다.</p>
+        <div className="mb-3 flex flex-wrap gap-2">
+          {[['빈 값', ''], ['짧은 값', '4242'], ['16자리', '4242424242424242'], ['17자리', '42424242424242424'], ['문자 포함', '4242424242424242a'], ['구분자 포함', '4242-4242 4242-4242']].map(([label, value]) =>
+            <button key={label} type="button" className="rounded border px-2 py-1 text-xs" onClick={() => setCardNumber(value!)}>{label} 채우기</button>)}
+        </div>
         <form
           className="space-y-4"
           noValidate
@@ -72,7 +80,7 @@ export function ArchA11yFormDemo() {
               value={cardNumber}
               onChange={(event) => setCardNumber(event.target.value)}
               inputMode="numeric"
-              autoComplete="cc-number"
+              autoComplete="off"
               aria-invalid={hasError || undefined}
               aria-describedby={hasError ? 'card-number-error' : 'card-number-help'}
               className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 ${
@@ -84,11 +92,11 @@ export function ArchA11yFormDemo() {
             />
             {hasError ? (
               <p id="card-number-error" role="alert" className="text-xs font-medium text-rose-600 dark:text-rose-400">
-                카드 번호 숫자 16자리를 입력해 주세요. 현재 {digitCount}자리입니다.
+                {errorText}
               </p>
             ) : (
               <p id="card-number-help" className="text-xs text-zinc-500">
-                공백과 하이픈은 숫자 길이 계산에서 제외됩니다.
+                {helpText}
               </p>
             )}
           </div>
@@ -107,13 +115,13 @@ export function ArchA11yFormDemo() {
         title="렌더링된 ARIA 연결"
         expected={<span>{hasError ? 'aria-invalid=true, aria-describedby=card-number-error, 오류 요소 존재' : '유효한 입력은 aria-invalid가 없고 도움말과 연결'}</span>}
         actual={actual}
-        isMatched={wasSubmitted ? observation.descriptionExists && observation.invalid === (hasError ? 'true' : null) : undefined}
+        isMatched={wasSubmitted ? observation.descriptionExists && observation.labelConnected && observation.describedBy === (hasError ? 'card-number-error' : 'card-number-help') && observation.descriptionText === (hasError ? errorText : helpText) && observation.invalid === (hasError ? 'true' : null) : undefined}
         description="React 상태가 아니라 렌더링된 input의 DOM 속성을 다시 읽어 결과를 판정합니다."
       />
 
-      <DemoDeepDiveCard title="ARIA는 입력 상태를 설명하는 DOM 계약입니다">
+      <DemoDeepDiveCard title="입력과 설명을 연결하는 ARIA 속성">
         <p><code>aria-invalid</code>는 실제 오류일 때만 켜고, <code>aria-describedby</code>는 현재 사용자에게 필요한 도움말 또는 오류 요소의 id를 가리켜야 합니다.</p>
-        <p>이 패턴은 브라우저·React의 접근성 구현입니다. Next.js는 별도로 route announcer와 JSX 접근성 lint를 제공하므로, 프레임워크 기능과 위젯 수준 접근성을 구분해서 적용해야 합니다.</p>
+        <p>이 패턴은 HTML·React의 접근성 구현입니다. DOM 연결 검사가 스크린 리더의 음성 출력을 보장하지는 않습니다. 키보드 Tab으로 입력과 버튼에 이동하고 스크린 리더에서 오류 설명을 직접 확인하세요.</p>
         <p><code>role=&quot;alert&quot;</code>는 새 오류가 생긴 순간에만 렌더링합니다. 처음부터 고정 오류를 노출하면 입력 전부터 잘못된 상태를 전달합니다.</p>
       </DemoDeepDiveCard>
     </>

@@ -1,7 +1,11 @@
 Intent: 실습 5개의 실제 동작과 학습 절차 개선
 Author: Codex
-Status: approved
-Approval: 현재 대화에서 사용자 승인. https://github.com/Junyong34/nextjs-ko-study-lab/pull/3 (머지 시 단계 진입 효력 발생)
+Status: draft
+Approval: 현재 대화에서 사용자 승인. https://github.com/Junyong34/nextjs-ko-study-lab/pull/3 (머지 시 단계 진입 효력 발생) 이전 버전 승인 기록. 이후 사용자의 Turbopack 실습 제외 요청을 반영해 변경본은 draft로 기록한다.
+
+## 변경된 범위 (사용자 후속 요청)
+
+사용자가 저장소를 따로 제공해야 하는 Turbopack 로컬 실습은 불필요하다고 지시했다. 아래의 Turbopack 유지·로컬 실습 구현·T1/T2 검증 계획은 폐기한다. 해당 라우트와 등록 항목을 제거하고 문서 설명만 남긴다. 삭제 후 목록·연결·기존 URL의 미노출을 검증한다. 나머지 네 페이지의 승인 범위는 유지한다. 제거에 따른 등록 수(240개)와 테스트 기대값도 동기화한다.
 
 ## Problem
 

@@ -306,7 +306,7 @@
       ],
       "title": "App Router",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "2-guides/2.63-migrating/from-create-react-app.md",
@@ -318,7 +318,7 @@
       ],
       "title": "Create React App",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "2-guides/2.63-migrating/from-vite.md",
@@ -330,7 +330,7 @@
       ],
       "title": "Vite",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "2-guides/2.63-migrating/README.md",
@@ -352,7 +352,7 @@
       ],
       "title": "Codemods",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "2-guides/2.64-upgrading/README.md",
@@ -374,7 +374,7 @@
       ],
       "title": "Version 14",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "2-guides/2.64-upgrading/version-15.md",
@@ -386,7 +386,7 @@
       ],
       "title": "Version 15",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "2-guides/2.64-upgrading/version-16.md",
@@ -398,7 +398,7 @@
       ],
       "title": "Version 16",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "2-guides/adopting-partial-prefetching.md",
@@ -2721,7 +2721,7 @@
       ],
       "title": "turbopack",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackChunking.md",
@@ -3532,7 +3532,7 @@
       ],
       "title": "App Router",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/guides/migrating/from-create-react-app": {
       "path": "2-guides/2.63-migrating/from-create-react-app.md",
@@ -3544,7 +3544,7 @@
       ],
       "title": "Create React App",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/guides/migrating/from-vite": {
       "path": "2-guides/2.63-migrating/from-vite.md",
@@ -3556,7 +3556,7 @@
       ],
       "title": "Vite",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/guides/upgrading": {
       "path": "2-guides/2.64-upgrading/README.md",
@@ -3578,7 +3578,7 @@
       ],
       "title": "Codemods",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/guides/upgrading/version-14": {
       "path": "2-guides/2.64-upgrading/version-14.md",
@@ -3590,7 +3590,7 @@
       ],
       "title": "Version 14",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/guides/upgrading/version-15": {
       "path": "2-guides/2.64-upgrading/version-15.md",
@@ -3602,7 +3602,7 @@
       ],
       "title": "Version 15",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/guides/upgrading/version-16": {
       "path": "2-guides/2.64-upgrading/version-16.md",
@@ -3614,7 +3614,7 @@
       ],
       "title": "Version 16",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/guides": {
       "path": "2-guides/README.md",
@@ -5937,7 +5937,7 @@
       ],
       "title": "turbopack",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/turbopackChunking": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackChunking.md",
@@ -7158,7 +7158,7 @@
               "path": "2-guides/2.63-migrating/app-router-migration.md",
               "order": "2.63.1",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "Create React App",
@@ -7166,7 +7166,7 @@
               "path": "2-guides/2.63-migrating/from-create-react-app.md",
               "order": "2.63.2",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "Vite",
@@ -7174,7 +7174,7 @@
               "path": "2-guides/2.63-migrating/from-vite.md",
               "order": "2.63.3",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             }
           ],
           "section": "마이그레이션·업그레이드"
@@ -7191,7 +7191,7 @@
               "path": "2-guides/2.64-upgrading/codemods.md",
               "order": "2.64.1",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "Version 14",
@@ -7199,7 +7199,7 @@
               "path": "2-guides/2.64-upgrading/version-14.md",
               "order": "2.64.2",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "Version 15",
@@ -7207,7 +7207,7 @@
               "path": "2-guides/2.64-upgrading/version-15.md",
               "order": "2.64.3",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "Version 16",
@@ -7215,7 +7215,7 @@
               "path": "2-guides/2.64-upgrading/version-16.md",
               "order": "2.64.4",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             }
           ],
           "section": "마이그레이션·업그레이드"
@@ -8365,7 +8365,7 @@
                   "url": "/api-reference/config/next-config-js/turbopack",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopack.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "turbopackChunking",
@@ -9094,7 +9094,7 @@
               "url": "/api-reference/config/next-config-js/turbopack",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopack.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "turbopackChunking",

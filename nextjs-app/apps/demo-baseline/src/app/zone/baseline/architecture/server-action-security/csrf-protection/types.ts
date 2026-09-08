@@ -4,7 +4,7 @@ export interface CsrfProbeState {
   origin: string | null
   host: string | null
   forwardedHost: string | null
-  reachedAction: boolean
+  reachedAction: boolean | null
 }
 
 export const INITIAL_CSRF_PROBE_STATE: CsrfProbeState = {
