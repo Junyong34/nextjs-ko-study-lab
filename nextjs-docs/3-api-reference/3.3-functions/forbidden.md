@@ -4,6 +4,8 @@
 - 상위 메뉴: [Functions](./README.md)
 - 전체 목차: [Next.js 학습 문서](../../README.md)
 
+> **Experimental**: 이 기능은 현재 experimental 상태이며 변경될 수 있다. production 환경에는 권장하지 않는다. 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 피드백을 남길 수 있다.
+
 ## 학습 목표
 
 - 권한이 없는 사용자에게 Next.js의 403 Forbidden 화면을 렌더링하도록 예외를 발생시키는 `forbidden` 함수의 역할을 이해한다.

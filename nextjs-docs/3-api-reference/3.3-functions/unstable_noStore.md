@@ -4,6 +4,8 @@
 - 상위 메뉴: [Functions](./README.md)
 - 전체 목차: [Next.js 학습 문서](../../README.md)
 
+> **Legacy**: 이 API는 legacy이며 더 이상 권장하지 않는다. 하위 호환성을 위해 계속 지원된다.
+
 ## 학습 목표
 
 - 특정 컴포넌트의 prerender를 선언적으로 옵트아웃(opt-out)하고 캐싱을 건너뛰게 만드는 `unstable_noStore` 함수의 역할을 이해한다.
