@@ -44,7 +44,9 @@ export function ArchServerActionCsrfDemo() {
             <DemoResetButton disabled={isPending} />
           </div>
         </form>
-        <LocalCsrfGuide />
+        <div className="mt-5 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+          <LocalCsrfGuide />
+        </div>
       </DemoPlaygroundCard>
 
       <ExpectedActualPanel
