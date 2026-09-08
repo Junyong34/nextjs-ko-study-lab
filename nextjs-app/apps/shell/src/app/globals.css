@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
-@source "../../../../packages/ui";
-@source "../../../../packages/ui/src/reference-visualize/toolkit";
-@source "../../../../packages/docs-render";
+@source "../../node_modules/@study/ui";
+@source "../../node_modules/@study/ui/src/reference-visualize/toolkit";
+@source "../../node_modules/@study/docs-render";
 
 ::selection {
   background-color: #2563eb;
