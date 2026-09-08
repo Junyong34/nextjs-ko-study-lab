@@ -2,7 +2,7 @@ Plan: 실습 5개의 실제 동작과 학습 절차 개선
 Spec: ./spec.md
 Author: Codex
 Status: draft
-Approval: 현재 대화에서 사용자 승인 완료. 단계별 PR 기록 작성 중이며 머지 전까지 draft 유지.
+Approval: 현재 대화에서 사용자 “승인” 확인. intent PR 3과 spec PR 4 머지 완료. plan PR 기록 작성 중.
 
 ## Scope of change
 
