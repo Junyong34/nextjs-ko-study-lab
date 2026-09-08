@@ -278,12 +278,12 @@ describe('Tier 5 Adversarial Hardening — 06: Guide Consistency Validator Stres
       assert.ok(!PLACEHOLDER_REGEX.test('모든 작업이 완료되었습니다.'))
     })
 
-    it('7.4 should verify 100% clean GC05 status across all 241 demos in codebase', () => {
+    it('7.4 should verify 100% clean GC05 status across all 240 demos in codebase', () => {
       const result = validateGuideConsistency({ log: false })
       assert.strictEqual(
         result.ruleStats.GC05.violations,
         0,
-        `All 241 demos must have 0 GC05 violations (found ${result.ruleStats.GC05.violations})`
+        `All 240 demos must have 0 GC05 violations (found ${result.ruleStats.GC05.violations})`
       )
       assert.strictEqual(result.ruleStats.GC05.passRate, 100)
     })

@@ -1,8 +1,12 @@
 Plan: 실습 5개의 실제 동작과 학습 절차 개선
 Spec: ./spec.md
 Author: Codex
-Status: approved
-Approval: 현재 대화에서 사용자 승인. https://github.com/Junyong34/nextjs-ko-study-lab/pull/5 (머지 시 구현 진입 효력 발생)
+Status: draft
+Approval: 현재 대화에서 사용자 승인. https://github.com/Junyong34/nextjs-ko-study-lab/pull/5 (머지 시 구현 진입 효력 발생) 이전 버전 승인 기록. 이후 사용자의 Turbopack 실습 제외 요청을 반영해 변경본은 draft로 기록한다.
+
+## 변경된 범위 (사용자 후속 요청)
+
+사용자가 저장소를 따로 제공해야 하는 Turbopack 로컬 실습은 불필요하다고 지시했다. 아래의 Turbopack 유지·로컬 실습 구현·T1/T2 검증 계획은 폐기한다. 해당 라우트와 등록 항목을 제거하고 문서 설명만 남긴다. 삭제 후 목록·연결·기존 URL의 미노출을 검증한다. 나머지 네 페이지의 승인 범위는 유지한다. 제거에 따른 등록 수(240개)와 테스트 기대값도 동기화한다.
 
 ## Scope of change
 
@@ -14,7 +18,6 @@ Approval: 현재 대화에서 사용자 승인. https://github.com/Junyong34/nex
 | 병렬 라우트 | `nextjs-app/apps/demo-baseline/src/app/zone/baseline/file-conventions/parallel-routes/layout.tsx`, `page.tsx`, `default.tsx`(추가), `@analytics/details/page.tsx`(추가), `@analytics/page.tsx`, `@analytics/default.tsx`, `@team/page.tsx`, `@team/default.tsx`, `components/VerificationFooter.tsx`, `components/TeamNote.tsx`(추가), `components/ParallelPracticeFrame.tsx`(추가) | 실제 슬롯 이동, 상태 유지, 기본 화면, 하위 예제와 실습 프레임 분리 |
 | 접근성 | `nextjs-app/apps/demo-baseline/src/app/zone/baseline/architecture/accessibility/form-aria-support/page.tsx`, `components/ArchA11yFormDemo.tsx`, `card-format.ts`(추가) | 입력 형식과 DOM 연결 검증, 사례·초기화 |
 | CSRF | `nextjs-app/apps/demo-baseline/src/app/zone/baseline/architecture/server-action-security/csrf-protection/page.tsx`, `actions.ts`, `types.ts`, `components/ArchServerActionCsrfDemo.tsx`, `components/LocalCsrfGuide.tsx`(추가) | 정상 요청 관측, 액션 도달 기록, 실제 차단 실습 안내 |
-| Turbopack | `nextjs-app/apps/demo-baseline/src/app/zone/baseline/architecture/turbopack/incremental-harness/page.tsx`, `components/ArchTurbopackHmrDemo.tsx`, `components/LocalRefreshGuide.tsx`(추가) | hydration 수정, 비교 시작·관측·초기화, 프로덕션 안내 |
 | 운영 | `nextjs-app/apps/AGENTS.md`, `nextjs-app/docs/09-demo-status-and-stepwise-release-guide.md`, `nextjs-app/packages/demos/demos.yaml`, `nextjs-app/packages/demos/demos-manifest.json`(생성) | iframe 내부 URL 예외, 실행 환경·검증 기록, 등록 설명 동기화 |
 | 검사 | `nextjs-app/packages/test-suite/src/tier1-feature-coverage/23-architecture-demo-authenticity.test.ts`, `24-demo-learning-fidelity.test.ts`(추가) | 기존 소스 계약 갱신, 초과·문자 입력 회귀 검사 |
 | 작업 기록 | `intent/demo-learning-fidelity/intent.md`, `spec.md`, `plan.md`, `verification.md`(추가), `intent/README.md` | 승인·범위·실제 검증 결과 기록 |

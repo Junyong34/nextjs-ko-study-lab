@@ -218,7 +218,7 @@
   },
   {
     "url": "file-conventions/parallel-routes",
-    "title": "Parallel Routes (@slots) 다중 슬롯 병렬 렌더링",
+    "title": "병렬 라우트의 이동과 새로고침 비교",
     "doc": "3-api-reference/3.1-file-conventions/parallel-routes.md",
     "zone": "baseline",
     "status": "done"
@@ -232,7 +232,7 @@
   },
   {
     "url": "components/form-component",
-    "title": "Next.js 내장 <Form> 컴포넌트와 GET 검색 동기화",
+    "title": "Form으로 검색하고 서버 결과 확인하기",
     "doc": "3-api-reference/3.2-components/form.md",
     "zone": "baseline",
     "status": "done"
@@ -1653,7 +1653,7 @@
   },
   {
     "url": "architecture/accessibility/form-aria-support",
-    "title": "결제/주문 폼 WAI-ARIA 속성 및 스크린 리더 지원",
+    "title": "입력 오류와 ARIA 설명 연결하기",
     "doc": "5-architecture/accessibility.md",
     "zone": "baseline",
     "status": "done"
@@ -1674,15 +1674,8 @@
   },
   {
     "url": "architecture/server-action-security/csrf-protection",
-    "title": "Server Actions 자동 CSRF Origin 헤더 검증",
+    "title": "Server Action 정상 요청과 로컬 CSRF 차단 확인",
     "doc": "3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md",
-    "zone": "baseline",
-    "status": "done"
-  },
-  {
-    "url": "architecture/turbopack/incremental-harness",
-    "title": "Turbopack 증분 빌드 및 핫 모듈 리로딩 가속",
-    "doc": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopack.md",
     "zone": "baseline",
     "status": "done"
   }

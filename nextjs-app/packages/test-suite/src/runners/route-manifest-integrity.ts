@@ -171,7 +171,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exit(1)
   }
 
-  console.log(`\n✅ All 241 demo routes and manifest entries verified successfully!`)
+  console.log(`\n✅ All 240 demo routes and manifest entries verified successfully!`)
   console.log(`============================================================\n`)
   process.exit(0)
 }

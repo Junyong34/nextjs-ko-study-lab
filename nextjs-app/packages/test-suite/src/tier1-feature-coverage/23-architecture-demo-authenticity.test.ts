@@ -18,7 +18,6 @@ const targets = [
   'architecture/accessibility/modal-focus-trap',
   'architecture/compiler-optimization/react-compiler',
   'architecture/server-action-security/csrf-protection',
-  'architecture/turbopack/incremental-harness',
 ]
 
 function read(relativePath: string) {
@@ -32,7 +31,7 @@ function readDemo(relativePath: string) {
 }
 
 describe('Tier 1: architecture demos use authentic mechanisms', () => {
-  it('publishes exactly the selected five entries in YAML and generated manifest', () => {
+  it('publishes the remaining selected entries in YAML and generated manifest', () => {
     for (const demos of [loadDemosYaml(), loadDemosManifest()]) {
       for (const url of targets) {
         assert.equal(demos.find((demo) => demo.url === url)?.status, 'done', url)
@@ -80,11 +79,10 @@ describe('Tier 1: architecture demos use authentic mechanisms', () => {
     assert.doesNotMatch(source, /100% 원천 차단/)
   })
 
-  it('reads Turbopack compile-time metadata without invented timing claims', () => {
-    const source = readDemo('turbopack/incremental-harness')
-    assert.match(source, /import\.meta\.env\.MODE/)
-    assert.match(source, /import\.meta\.env\.SSR/)
-    assert.match(source, /HMR_MARKER/)
-    assert.doesNotMatch(source, /(?:8|10)ms|100% 보존|10배/)
+  it('excludes the repository-dependent Turbopack exercise from public demos', () => {
+    for (const demos of [loadDemosYaml(), loadDemosManifest()]) {
+      assert.equal(demos.some(demo => demo.url === 'architecture/turbopack/incremental-harness'), false)
+    }
+    assert.equal(fs.existsSync(path.join(demoRoot, 'turbopack/incremental-harness/page.tsx')), false)
   })
 })

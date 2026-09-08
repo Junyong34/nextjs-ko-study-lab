@@ -8,7 +8,7 @@
 
 | 등록 합계 | 공개 대상으로 지정 (`done`) | 준비 중 (`stub`) | 작업 중 (`wip`) |
 |---:|---:|---:|---:|
-| 241 | 59 | 182 | 0 |
+| 240 | 58 | 182 | 0 |
 
 이 수치는 메타데이터 상태다. 코드의 존재, 전체 데모의 동작 검증, 현재 배포 환경의 정상 동작을 증명하지 않는다. 검증 기록에는 대상 URL·커밋·환경·수행 절차·관찰 결과를 별도로 남긴다.
 
@@ -70,8 +70,7 @@
 - `architecture/accessibility/modal-focus-trap`
 - `architecture/compiler-optimization/react-compiler`
 - `architecture/server-action-security/csrf-protection`
-- `architecture/turbopack/incremental-harness`
 
-고정 성공 문구 대신 실제 DOM 속성, native modal dialog, Next.js 16.3 네이티브 React Compiler 설정, Server Action 요청 헤더, Turbopack 컴파일 환경을 관찰하도록 구현했다. 등록 lint·매니페스트 생성·일관성 검사·타입 검사·전용 계약 테스트는 통과했다.
+고정 성공 문구 대신 실제 DOM 속성, native modal dialog, Next.js 16.3 네이티브 React Compiler 설정, Server Action 요청 헤더를 관찰하도록 구현했다. 등록 lint·매니페스트 생성·일관성 검사·타입 검사·전용 계약 테스트는 통과했다. Turbopack 항목은 저장소를 별도로 제공해야 하는 로컬 실습이라 공개 데모에서 제외했다.
 
-다른 세션이 baseline 개발 서버와 빌드 산출물을 사용 중이어서 독립 브라우저 상호작용 검증은 보류했다. 앱 빌드는 기존 CSS 처리 worker의 로컬 포트 바인딩 제한으로 중단됐으며, 공개 배포 전 해당 환경에서 5개 직접 URL과 폼·모달·Server Action·Fast Refresh를 다시 확인한다.
+다른 세션이 baseline 개발 서버와 빌드 산출물을 사용 중이어서 독립 브라우저 상호작용 검증은 보류했다. 앱 빌드는 기존 CSS 처리 worker의 로컬 포트 바인딩 제한으로 중단됐으며, 공개 배포 전 남은 4개 직접 URL과 폼·병렬 라우트·ARIA·Server Action을 다시 확인한다.

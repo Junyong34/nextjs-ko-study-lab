@@ -19,6 +19,7 @@ export async function inspectSameOriginAction(
   }
 
   const requestHeaders = await headers()
+  console.info('[csrf-demo] action reached')
 
   return {
     status: 'success',

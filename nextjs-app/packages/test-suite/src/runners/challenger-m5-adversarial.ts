@@ -64,12 +64,12 @@ async function runAdversarialSuite() {
   const yamlDemos = yaml.load(yamlContent) as Array<any>
   const jsonDemos = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) as Array<any>
 
-  await test('1.1 Exact 241 demo count parity across demos.yaml and demos-manifest.json', () => {
-    assert.strictEqual(yamlDemos.length, 241, 'demos.yaml must have exactly 241 demos')
-    assert.strictEqual(jsonDemos.length, 241, 'demos-manifest.json must have exactly 241 demos')
+  await test('1.1 Exact 240 demo count parity across demos.yaml and demos-manifest.json', () => {
+    assert.strictEqual(yamlDemos.length, 240, 'demos.yaml must have exactly 240 demos')
+    assert.strictEqual(jsonDemos.length, 240, 'demos-manifest.json must have exactly 240 demos')
   })
 
-  await test('1.2 100% on-disk page.tsx existence and export validation for all 241 demos', () => {
+  await test('1.2 100% on-disk page.tsx existence and export validation for all 240 demos', () => {
     const missingPages: string[] = []
     for (const demo of yamlDemos) {
       const appFolder = demo.zone === 'baseline' ? 'apps/demo-baseline' : 'apps/demo-cache-components'
@@ -87,7 +87,7 @@ async function runAdversarialSuite() {
     assert.strictEqual(missingPages.length, 0, `Missing on-disk page.tsx files:\n${missingPages.join('\n')}`)
   })
 
-  await test('1.3 100% doc mapping integrity: all 241 demos point to existing non-empty docs', () => {
+  await test('1.3 100% doc mapping integrity: all 240 demos point to existing non-empty docs', () => {
     const missingDocs: string[] = []
     for (const demo of yamlDemos) {
       const docPath = path.join(DOCS_ROOT, demo.doc)

@@ -231,11 +231,11 @@ describe('Tier 5 Adversarial Hardening — 08: Milestone M4 Empirical Verificati
     )
   })
 
-  it('8.6 Global Repository Health: 241/241 demos in repository have 0 GC01/02/04/05/06/07 errors', () => {
+  it('8.6 Global Repository Health: 240/240 demos in repository have 0 GC01/02/04/05/06/07 errors', () => {
     const globalResult = validateGuideConsistency({ strict: false, log: false })
 
-    assert.strictEqual(globalResult.totalDemos, 241, 'Must have 241 total demos')
-    assert.strictEqual(globalResult.validDemos, 241, 'All 241 demos must be valid with 0 errors')
+    assert.strictEqual(globalResult.totalDemos, 240, 'Must have 240 total demos')
+    assert.strictEqual(globalResult.validDemos, 240, 'All 240 demos must be valid with 0 errors')
     assert.strictEqual(globalResult.ruleStats.GC01.violations, 0, '0 GC01 errors')
     assert.strictEqual(globalResult.ruleStats.GC02.violations, 0, '0 GC02 errors')
     assert.strictEqual(globalResult.ruleStats.GC04.violations, 0, '0 GC04 errors')
