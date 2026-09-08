@@ -1,8 +1,8 @@
 Spec: 실습 5개의 실제 동작과 학습 절차 개선
 Intent: ./intent.md
 Author: Codex
-Status: draft
-Approval: 현재 대화에서 사용자 spec 승인 완료. intent PR 3 머지 확인. 이 단계의 승인 PR 기록 작성 중.
+Status: approved
+Approval: 현재 대화에서 사용자 승인. https://github.com/Junyong34/nextjs-ko-study-lab/pull/4 (머지 시 단계 진입 효력 발생)
 
 ## Requirements
 
