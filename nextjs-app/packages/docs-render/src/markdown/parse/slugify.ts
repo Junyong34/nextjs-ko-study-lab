@@ -12,7 +12,6 @@ export interface SlugResult {
  */
 export function slugify(text: string): SlugResult {
   const clean = text
-    .replace(/<[^>]*>/g, '')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/\*([^*]+)\*/g, '$1')
@@ -52,7 +51,6 @@ export function slugify(text: string): SlugResult {
 /** 헤딩 텍스트에서 마크다운 표기를 걷어낸 순수 텍스트. 목차 라벨에 쓴다. */
 export function stripInlineMarkup(text: string): string {
   return text
-    .replace(/<[^>]*>/g, '')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/\*([^*]+)\*/g, '$1')

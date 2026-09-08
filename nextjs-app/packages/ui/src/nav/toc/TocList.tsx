@@ -14,7 +14,7 @@ export interface TocListProps {
   onTop: () => void
 }
 
-/** 일반 문서의 목차. h2·h3만 보여준다. */
+/** 일반 문서의 목차. h2~h4까지 보여준다. */
 export function TocList({ headings, activeId, onJump, onTop }: TocListProps) {
   return (
     <div className="space-y-3">
@@ -27,9 +27,9 @@ export function TocList({ headings, activeId, onJump, onTop }: TocListProps) {
 
       <ul className="space-y-1 text-xs">
         {headings
-          .filter((h) => h.level === 2 || h.level === 3)
+          .filter((h) => h.level >= 2 && h.level <= 4)
           .map((h) => (
-            <li key={h.id} style={{ paddingLeft: h.level === 3 ? '12px' : '0px' }}>
+            <li key={h.id} style={{ paddingLeft: `${(h.level - 2) * 12}px` }}>
               <a
                 href={`#${h.id}`}
                 title={h.text}
