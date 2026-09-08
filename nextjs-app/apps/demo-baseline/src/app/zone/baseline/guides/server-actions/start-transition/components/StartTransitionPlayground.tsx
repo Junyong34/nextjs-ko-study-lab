@@ -1,34 +1,40 @@
 'use client'
 
-import React, { useState, useTransition } from 'react'
+import React from 'react'
+import { DemoResetButton } from '@study/demo-kit'
 import type { ServerFilterResult } from '../types'
-import { filterCategoryProductsAction } from '../actions'
 
-interface StartTransitionDemoProps {
-  initialResult: ServerFilterResult
+const CATEGORIES = ['전체', '전자기기', '의류', '도서']
+
+interface StartTransitionPlaygroundProps {
+  isPending: boolean
+  selected: string
+  result: ServerFilterResult
+  searchKeyword: string
+  onCategoryChange: (category: string) => void
+  onSearchChange: (keyword: string) => void
+  onReset: () => void
 }
 
-export function StartTransitionDemo({ initialResult }: StartTransitionDemoProps) {
-  const [isPending, startTransition] = useTransition()
-  const [selected, setSelected] = useState(initialResult.category)
-  const [result, setResult] = useState<ServerFilterResult>(initialResult)
-  const [searchKeyword, setSearchKeyword] = useState('')
-
-  const handleChange = (cat: string) => {
-    setSelected(cat)
-    startTransition(async () => {
-      const res = await filterCategoryProductsAction(cat)
-      setResult(res)
-    })
-  }
-
-  // 클라이언트 즉시 검색 필터 (논블로킹 타이핑 입증)
+export function StartTransitionPlayground({
+  isPending,
+  selected,
+  result,
+  searchKeyword,
+  onCategoryChange,
+  onSearchChange,
+  onReset,
+}: StartTransitionPlaygroundProps) {
   const displayedProducts = result.products.filter((p) =>
     p.name.toLowerCase().includes(searchKeyword.toLowerCase()),
   )
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <DemoResetButton onReset={onReset} />
+      </div>
+
       {/* 1. 카테고리 탭 및 논블로킹 검색 입력 */}
       <div className="space-y-3 rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
@@ -45,11 +51,11 @@ export function StartTransitionDemo({ initialResult }: StartTransitionDemoProps)
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {['전체', '전자기기', '의류', '도서'].map((cat) => (
+          {CATEGORIES.map((cat) => (
             <button
               key={cat}
               type="button"
-              onClick={() => handleChange(cat)}
+              onClick={() => onCategoryChange(cat)}
               className={`rounded px-3 py-1.5 text-xs font-bold transition cursor-pointer ${
                 selected === cat
                   ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-2xs'
@@ -61,14 +67,14 @@ export function StartTransitionDemo({ initialResult }: StartTransitionDemoProps)
           ))}
         </div>
 
-        {/* 논블로킹 UI 실증 입력창 */}
+        {/* 논블로킹 UI 실증 입력창 — isPending 동안에도 타이핑이 끊기지 않는지 확인 */}
         <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-zinc-500">논블로킹 입력 테스트:</span>
             <input
               type="text"
               value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
+              onChange={(e) => onSearchChange(e.target.value)}
               placeholder="트랜지션 진행 중에도 끊김 없이 타이핑 가능..."
               className="flex-1 rounded border border-zinc-300 bg-zinc-50 px-2.5 py-1 text-xs text-zinc-900 focus:bg-white focus:outline-hidden dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             />
