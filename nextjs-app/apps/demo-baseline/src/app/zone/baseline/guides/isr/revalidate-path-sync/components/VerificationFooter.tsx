@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 상품 관리자가 상품 가격이나 재고를 수정한 후 <code>revalidatePath('/zone/baseline/guides/isr/revalidate-path-sync')</code>를 호출했을 때, 기존 60초 주기 타이머와 무관하게 서버 캐시가 즉시 무효화되고 최신 가격이 즉시 렌더링되는 과정을 검증합니다.</p>
+                  <p>본 데모 페이지는 <code>export const revalidate = 3600</code>으로 1시간 캐시됩니다. <code>revalidatePath('/zone/baseline/guides/isr/revalidate-path-sync')</code>를 호출하면 1시간 주기와 무관하게 서버 캐시가 즉시 무효화되고, 같은 화면을 보고 있는 상태에서 곧바로 새 renderId로 재계산되는 과정을 실제 값으로 검증합니다.</p>
                 </div>
 
                 <div>

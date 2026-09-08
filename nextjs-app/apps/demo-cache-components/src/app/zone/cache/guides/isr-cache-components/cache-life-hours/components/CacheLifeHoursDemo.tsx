@@ -1,44 +1,59 @@
 'use client'
 
-import React, { useState, useTransition } from 'react'
+import React, { useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import type { CachedHeroBanner } from '../types'
-import { fetchComponentCacheAction } from '../actions'
+import { purgeHeroBannerCacheAction } from '../actions'
 
-export function CacheLifeHoursDemo() {
-  const [banner, setBanner] = useState<CachedHeroBanner | null>(null)
+interface CacheLifeHoursDemoProps {
+  banner: CachedHeroBanner
+}
+
+export function CacheLifeHoursDemo({ banner }: CacheLifeHoursDemoProps) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
-  const handleFetch = (forceFresh: boolean = false) => {
+  const handleRefresh = () => {
+    window.location.reload()
+  }
+
+  const handlePurge = () => {
     startTransition(async () => {
-      const res = await fetchComponentCacheAction(forceFresh)
-      setBanner(res)
+      await purgeHeroBannerCacheAction()
+      router.refresh()
     })
   }
 
   return (
     <div className="space-y-4">
-      {/* 1. 상단 프로필 명세 및 패치 실행 버튼 */}
+      {/* 1. 상단 프로필 명세 및 조작 버튼 */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/60">
         <div className="flex items-center gap-2 text-xs">
           <span className="font-semibold text-zinc-700 dark:text-zinc-300">프로필:</span>
           <code className="rounded bg-emerald-100 px-2 py-0.5 font-mono text-xs font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
             cacheLife('hours')
           </code>
-          {banner && (
-            <span className="rounded bg-blue-100 px-2 py-0.5 font-mono text-[11px] font-bold text-blue-800 dark:bg-blue-950 dark:text-blue-300">
-              {banner.hitType} ({banner.fetchLatencyMs}ms)
-            </span>
-          )}
+          <span className="rounded bg-blue-100 px-2 py-0.5 font-mono text-[11px] font-bold text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+            캐시 ID #{banner.cacheId}
+          </span>
         </div>
 
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => handleFetch(false)}
+            onClick={handleRefresh}
             disabled={isPending}
             className="rounded bg-zinc-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 cursor-pointer"
           >
-            {isPending ? '캐시 패치 중...' : '컴포넌트 캐시 패치 실행'}
+            새로고침
+          </button>
+          <button
+            type="button"
+            onClick={handlePurge}
+            disabled={isPending}
+            className="rounded bg-rose-600 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-rose-700 disabled:opacity-50 cursor-pointer"
+          >
+            {isPending ? '무효화 중...' : '강제 무효화 (revalidateTag)'}
           </button>
         </div>
       </div>
@@ -62,20 +77,22 @@ export function CacheLifeHoursDemo() {
       </div>
 
       {/* 3. 캐시된 프로모션 배너 카드 */}
-      {banner && (
-        <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 space-y-2">
-          <div className="flex items-center justify-between border-b border-zinc-100 pb-2 dark:border-zinc-800">
-            <span className="rounded bg-rose-100 px-2 py-0.5 text-xs font-bold text-rose-800 dark:bg-rose-950 dark:text-rose-300">
-              {banner.discountRate}
-            </span>
-            <span className="font-mono text-[11px] text-zinc-400">
-              캐시 생성: {banner.cachedAt} (ID: {banner.bannerId})
-            </span>
-          </div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">{banner.title}</h4>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">{banner.subtitle}</p>
+      <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 space-y-2">
+        <div className="flex items-center justify-between border-b border-zinc-100 pb-2 dark:border-zinc-800">
+          <span className="rounded bg-rose-100 px-2 py-0.5 text-xs font-bold text-rose-800 dark:bg-rose-950 dark:text-rose-300">
+            {banner.discountRate}
+          </span>
+          <span className="font-mono text-[11px] text-zinc-400">
+            캐시 생성: {banner.cachedAt} (ID: {banner.bannerId})
+          </span>
         </div>
-      )}
+        <h4 className="font-bold text-zinc-900 dark:text-zinc-100">{banner.title}</h4>
+        <p className="text-xs text-zinc-600 dark:text-zinc-400">{banner.subtitle}</p>
+      </div>
+
+      <p className="text-[11px] text-zinc-500">
+        새로고침을 반복해도 캐시 ID(#{banner.cacheId})는 그대로 유지됩니다 — cacheLife('hours')로 캐시된 실제 함수가 재계산 없이 캐시를 재사용하고 있다는 증거입니다. [강제 무효화] 후 첫 새로고침에서는 stale-while-revalidate로 이전 캐시 ID가 그대로 보일 수 있고, 다음 새로고침에서 새 캐시 ID로 바뀝니다.
+      </p>
     </div>
   )
 }

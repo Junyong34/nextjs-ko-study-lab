@@ -1,20 +1,87 @@
 'use client'
-import React, { useState } from 'react'
 
-export function SwrFlowDemo() {
-  const [step, setStep] = useState(1)
+import React, { useState, useEffect } from 'react'
+import { DemoPlaygroundCard } from '@study/demo-kit'
+import { VerificationFooter } from './VerificationFooter'
+
+interface SwrFlowDemoProps {
+  cacheId: string
+  generatedAt: string
+}
+
+export function SwrFlowDemo({ cacheId, generatedAt }: SwrFlowDemoProps) {
+  const [elapsed, setElapsed] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => setElapsed((prev) => prev + 1), 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const isStale = elapsed >= 8
+
+  const handleRefresh = () => {
+    window.location.reload()
+  }
+
   return (
-    <div className="space-y-3">
-      <div className="flex gap-2">
-        <button type="button" onClick={() => setStep(1)} className={`rounded px-2.5 py-1 text-xs font-bold ${step === 1 ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>1단계: Stale 응답 (0ms)</button>
-        <button type="button" onClick={() => setStep(2)} className={`rounded px-2.5 py-1 text-xs font-bold ${step === 2 ? 'bg-amber-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>2단계: 백그라운드 revalidation</button>
-        <button type="button" onClick={() => setStep(3)} className={`rounded px-2.5 py-1 text-xs font-bold ${step === 3 ? 'bg-emerald-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'}`}>3단계: 최신 캐시 전파</button>
-      </div>
-      <div className="rounded border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 font-mono text-xs space-y-1">
-        {step === 1 && <div className="text-blue-600 dark:text-blue-400">[확인] [Client 1] 만료된 캐시(Stale)를 0ms 만에 즉시 수신하여 화면을 렌더링함</div>}
-        {step === 2 && <div className="text-amber-600 dark:text-amber-400">[즉시] [Server Background] 비동기 데이터 패칭 및 새 캐시 스냅샷 생성 중...</div>}
-        {step === 3 && <div className="text-emerald-600 dark:text-emerald-400">[확인] [Client 2+] 새로 생성된 Fresh 캐시를 즉시 서빙함 (수명 주기 리셋)</div>}
-      </div>
+    <div className="space-y-6">
+      <DemoPlaygroundCard title="Stale-While-Revalidate 캐시 모니터" className="space-y-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 text-xs">
+          <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-1">
+            <div className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+              캐시 생성 시각
+            </div>
+            <div className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              {generatedAt}
+            </div>
+          </div>
+
+          <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-1">
+            <div className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+              캐시 ID
+            </div>
+            <div className="font-mono text-sm font-bold text-amber-600 dark:text-amber-400">
+              #{cacheId}
+            </div>
+          </div>
+
+          <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-1">
+            <div className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+              클라이언트 경과 시간 (Stale 감지)
+            </div>
+            <div className="flex items-center justify-between font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <span>{elapsed}초 경과</span>
+              <span
+                className={`rounded px-1.5 py-0.2 text-[10px] ${
+                  isStale
+                    ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                }`}
+              >
+                {isStale ? 'Stale 상태 (8초 경과)' : 'Fresh 상태'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-zinc-200 bg-white p-3.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="text-xs text-zinc-600 dark:text-zinc-400">
+            {isStale
+              ? '8초가 지났으므로 새로고침하면 기존 캐시 ID가 먼저 보이고, 그 사이 백그라운드에서 새 캐시가 만들어집니다.'
+              : '8초 이내에는 새로고침해도 같은 캐시 ID가 그대로 유지됩니다.'}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleRefresh}
+            className="inline-flex items-center gap-1.5 rounded bg-zinc-900 px-3.5 py-1.5 text-xs font-medium text-white shadow-2xs transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
+          >
+            새로고침 (SWR 테스트)
+          </button>
+        </div>
+      </DemoPlaygroundCard>
+
+      <VerificationFooter elapsed={elapsed} isStale={isStale} generatedAt={generatedAt} cacheId={cacheId} />
     </div>
   )
 }

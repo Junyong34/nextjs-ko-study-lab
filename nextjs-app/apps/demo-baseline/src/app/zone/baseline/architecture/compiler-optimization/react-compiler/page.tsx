@@ -1,52 +1,57 @@
-import type { Metadata } from 'next'
+import {
+  REACT_COMPILER_SETTINGS,
+  USE_TURBOPACK_RUST_REACT_COMPILER,
+} from '@/config/react-compiler-settings'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import type { Metadata } from 'next'
+import { ArchReactCompilerDemo } from './components/ArchReactCompilerDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'architecture/compiler-optimization/react-compiler')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ArchReactCompilerDemo } from './components/ArchReactCompilerDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
 export default function DemoPage() {
   return (
-    <DemoContainer className="space-y-6">
+    <DemoContainer className="space-y-4">
       <DemoGuideCard
-        title={"React Compiler 자동 메모이제이션 및 렌더링 최적화"}
-        concept={"Next.js에 내장된 React Compiler(실험적 활성화)가 컴포넌트의 JSX와 연산 결과를 빌드 타임에 자동 메모이제이션하여, 수동 useMemo / useCallback 작성 없이도 불필요한 리렌더링을 0건으로 최적화합니다."}
+        title="React Compiler를 명시적으로 적용한 컴포넌트"
+        concept="Next.js 16.3의 네이티브 Rust React Compiler를 Turbopack 안에서 실행하고, annotation 모드에서는 use memo를 선언한 컴포넌트만 최적화 후보로 만듭니다."
         steps={[
           {
             step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 상품 선택",
-            description: "컴파일러 최적화가 적용된 카탈로그 컴포넌트에서 품목을 선택합니다.",
-            actionBadge: "상품 선택",
+            title: '[수량 증가]를 여러 번 실행',
+            description: '수동 useMemo/useCallback 없이 일반적인 상태 업데이트가 동작하는지 확인합니다.',
+            actionBadge: '상태 변경',
           },
           {
             step: 2,
-            title: "[+] 또는 [-] 버튼으로 수량 변경 인터랙션 실행",
-            description: "상태 변경 시 하위 컴포넌트 리렌더링 차단 여부를 테스트합니다.",
-            actionBadge: "수량 변경",
+            title: '브라우저 콘솔을 연 뒤 [상품 목록과 무관한 상태 변경]을 여러 번 클릭',
+            description: '상품 목록의 props(products, quantity)와 무관한 상태만 바꿔, 컴파일러가 메모이즈한 하위 트리가 재렌더링을 건너뛰는지 관찰합니다.',
+            actionBadge: '메모이제이션 관찰',
+            observe: 'MemoizedProductGrid 렌더 횟수 로그가 클릭 횟수만큼 늘지 않고 그대로 유지됨',
+            observeAt: 'console',
           },
           {
             step: 3,
-            title: "[동작 실행] 클릭으로 비즈니스 로직 동기화",
-            description: "자동 메모이제이션된 핸들러를 통해 로그를 기록합니다.",
-            actionBadge: "동작 실행",
+            title: '[상품 필터] 변경',
+            description: 'products가 실제로 바뀌므로 이번에는 렌더 횟수 로그가 증가하는지 확인합니다.',
+            actionBadge: '실제 재계산 확인',
+            observe: '필터 변경 시에만 MemoizedProductGrid 렌더 횟수 로그 증가',
+            observeAt: 'console',
           },
           {
             step: 4,
-            title: "수동 useMemo 없는 자동 세분화 메모이제이션(Fine-grained Memo) 관찰",
-            description: "컴파일러가 의존성 배열을 자동 분석하여 값이 변경되지 않은 형제 UI 영역의 렌더링이 건너뛰어지는지 검증합니다.",
-            actionBadge: "컴파일러 최적화 검증",
-            observe: "React Compiler 자동 메모이제이션에 따른 불필요한 컴포넌트 리렌더링 건너뜀 및 상태 동기화 관찰",
-            observeAt: "playground",
+            title: '[검증] 설정 근거 확인',
+            description: '페이지가 next.config와 공유하는 annotation 설정 및 opt-in 지시어를 확인합니다.',
+            actionBadge: '빌드 검증',
+            observe: '설정 모드, use memo 적용 범위, 수동 메모 훅 사용 여부',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"React Compiler 자동 메모이제이션 최적화 실습"}>
-        <ArchReactCompilerDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <ArchReactCompilerDemo
+        compilerMode={REACT_COMPILER_SETTINGS.compilationMode}
+        usesNativeCompiler={USE_TURBOPACK_RUST_REACT_COMPILER}
+      />
     </DemoContainer>
   )
 }

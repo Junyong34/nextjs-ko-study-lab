@@ -75,7 +75,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 [Draft Mode 켜기/끄기] 토글 버튼을 통해 일반 고객용 정적 캐시 모드(Live 모드)와 마케팅 담당자용 미공개 특가 초안 모드(Draft Preview) 간의 전환을 시뮬레이션합니다. Draft Mode 활성화 시 정적 캐시가 우회되어 미공개 특가 상품 데이터가 즉시 화면에 노출됩니다.
+              본 데모에서는 [Draft Mode 켜기/끄기] 토글 버튼을 클릭하면 실제 <code>draftMode().enable()</code>/<code>disable()</code>이 호출되어 일반 고객용 정적 캐시 모드(Live 모드)와 마케팅 담당자용 미공개 특가 초안 모드(Draft Preview) 사이를 실제로 전환합니다. Draft Mode 활성화 시 정적 캐시가 우회되어 미공개 특가 상품 데이터가 즉시 화면에 노출됩니다.
             </p>
           </div>
 

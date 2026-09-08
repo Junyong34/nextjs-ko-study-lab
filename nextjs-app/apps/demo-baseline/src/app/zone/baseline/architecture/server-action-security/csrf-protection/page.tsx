@@ -1,40 +1,42 @@
-import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import type { Metadata } from 'next'
+import { ArchServerActionCsrfDemo } from './components/ArchServerActionCsrfDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'architecture/server-action-security/csrf-protection')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ArchServerActionCsrfDemo } from './components/ArchServerActionCsrfDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
 export default function DemoPage() {
   return (
-    <DemoContainer className="space-y-6">
-            <DemoGuideCard
-        title="Server Actions 자동 CSRF Origin 헤더 검증"
-        concept="Next.js App Router는 Server Action HTTP POST 요청 수신 시 Origin 헤더와 Host 헤더의 일치 여부를 자동 비교 검증하여 외부 사이트로부터의 CSRF 공격을 100% 원천 차단합니다."
+    <DemoContainer className="space-y-4">
+      <DemoGuideCard
+        title="Server Action 요청이 실행 경계에 도달하는 과정"
+        concept="Next.js는 Server Action POST의 Origin과 Host 계열 헤더를 액션 실행 전에 비교합니다. 같은 출처 호출은 액션에 도달하고 불일치는 도달 전에 중단됩니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "Server Action 자동 CSRF 방어 메커니즘 점검 및 next.config.ts allowedOrigins 도메인 허용 설정 검토",
-                    "description": "Next.js가 내부적으로 Origin 헤더와 Host 헤더를 대조하는 보안 파이프라인 명세를 확인합니다. 서브도메인이나 모바일 앱 도메인을 위한 serverActions.allowedOrigins 설정을 확인합니다.",
-                    "actionBadge": "보안 스펙 점검"
+            step: 1,
+            title: '[같은 출처 Server Action 실행] 선택',
+            description: '브라우저가 실제 Server Action POST 요청을 전송합니다.',
+            actionBadge: 'POST 실행',
           },
           {
-                    "step": 2,
-                    "title": "불일치 Origin 요청에 대한 403 차단 동작 관찰",
-                    "description": "위조된 Origin 헤더를 가진 악성 POST 요청이 서버 컴포넌트 실행 전 즉시 거부되는지 확인합니다.",
-                    "actionBadge": "보안 검증",
-                    "observe": "Server Action 요청 시 Origin/Host 헤더 자동 검증으로 CSRF 공격이 원천 차단됨",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: '[검증] 요청 헤더 확인',
+            description: '액션 내부의 headers()로 Origin, Host, X-Forwarded-Host를 읽습니다.',
+            actionBadge: '서버 관찰',
+            observe: '요청이 액션에 도달했는지와 서버가 받은 헤더',
+            observeAt: 'verification',
+          },
+          {
+            step: 3,
+            title: '[Network] POST 요청 확인',
+            description: '개발자 도구에서 프레임워크가 생성한 실제 액션 요청을 확인합니다.',
+            actionBadge: '네트워크 확인',
+            observe: 'POST 메서드와 Server Action 응답',
+            observeAt: 'network',
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"Server Actions 자동 CSRF Origin 헤더 검증 실습"}>
-        <ArchServerActionCsrfDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <ArchServerActionCsrfDemo />
     </DemoContainer>
   )
 }

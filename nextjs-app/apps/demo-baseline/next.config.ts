@@ -1,5 +1,9 @@
 import type { NextConfig } from 'next'
 import { withRelatedProject } from '@vercel/related-projects'
+import {
+  REACT_COMPILER_SETTINGS,
+  USE_TURBOPACK_RUST_REACT_COMPILER,
+} from './src/config/react-compiler-settings'
 
 // 로컬: PUBLIC_ORIGIN(.env.local) 기본값. Vercel: Related Projects가 셸의 배포 host를 자동 주입.
 const publicOrigin = withRelatedProject({
@@ -10,7 +14,9 @@ const publicOrigin = withRelatedProject({
 const nextConfig: NextConfig = {
   assetPrefix: '/demo-static/baseline',
   images: { unoptimized: true },
+  reactCompiler: REACT_COMPILER_SETTINGS,
   experimental: {
+    turbopackRustReactCompiler: USE_TURBOPACK_RUST_REACT_COMPILER,
     serverActions: {
       allowedOrigins: [publicOrigin],
     },

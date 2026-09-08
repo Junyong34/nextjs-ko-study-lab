@@ -98,5 +98,6 @@ spec이 기존 ADR이나 작업 규칙과 충돌하면 임의로 덮어쓰지 �
 
 | 슬러그 | 관련 기능 | 관련 코드 경로 | 작업 Status | Intent | Spec | Plan | 비고 |
 |---|---|---|---|---|---|---|---|
+| `demo-learning-fidelity` | Form, 병렬 라우트, ARIA 폼, CSRF, Turbopack 실습의 실제 동작과 검증 개선 | `nextjs-app/apps/demo-baseline/src/app/zone/baseline/` 아래 대상 5개 라우트 | draft | [`intent.md`](./demo-learning-fidelity/intent.md) | [`spec.md`](./demo-learning-fidelity/spec.md) | [`plan.md`](./demo-learning-fidelity/plan.md) | 대화상 intent·spec 방향 승인, plan 검토안 작성. 승인 PR·머지 및 plan 승인 대기 |
 | `ga-custom-events` | GA4 커스텀 이벤트 3종 (`learning_complete`, `demo_click`, `github_star_click`) | `nextjs-app/apps/shell/src/lib/analytics.ts`, `nextjs-app/packages/docs-render` | done | [`intent.md`](./ga-custom-events/intent.md) | [`intent.md#requirements`](./ga-custom-events/intent.md#requirements) | [`plan.md`](./ga-custom-events/plan.md) | 구현 및 검증 완료 |
 | `search-favicon-parity` | 구글 검색 결과 사이트 아이콘, 파비콘, apple-touch-icon | `nextjs-app/apps/shell/src/app/apple-icon.tsx`, `nextjs-app/apps/shell/src/app/icon.svg` | done | [`intent.md`](./search-favicon-parity/intent.md) | [`intent.md#requirements`](./search-favicon-parity/intent.md#requirements) | [`plan.md`](./search-favicon-parity/plan.md) | 로컬 검증 후 main 병합. 배포 후 프로덕션 아이콘·구글 검색 결과 반영은 사후 관찰 |
