@@ -1,7 +1,13 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @source "../../../../packages/ui";
+@source "../../../../packages/ui/src/reference-visualize/toolkit";
 @source "../../../../packages/docs-render";
+
+::selection {
+  background-color: #2563eb;
+  color: #ffffff;
+}
 
 @theme {
   --color-indigo-50: #14161a0f;
@@ -46,3 +52,19 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* 3D 책 표지 인터랙션: 마우스 호버 및 클릭(Active) 애니메이션 */
+.book-interactive-cover {
+  transform-style: preserve-3d;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.group:hover .book-interactive-cover,
+.group:active .book-interactive-cover,
+.group:focus-visible .book-interactive-cover,
+.book-interactive-cover:hover,
+.book-interactive-cover:active {
+  transform: rotateY(-20deg) scale(1.066) translateX(-8px);
+}
+

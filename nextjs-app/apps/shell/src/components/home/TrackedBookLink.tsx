@@ -5,7 +5,7 @@ import type { ComponentProps } from 'react'
 import { trackEvent } from '@/lib/analytics'
 
 interface TrackedBookLinkProps extends ComponentProps<typeof Link> {
-  bookType: 'document' | 'demo'
+  bookType: 'document' | 'demo' | 'visualize'
   chapterStep: string
   chapterTitle: string
 }

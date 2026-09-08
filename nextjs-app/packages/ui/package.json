@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
+    "./reference-visualize/toolkit": "./src/reference-visualize/toolkit/index.ts",
+    "./reference-visualize/toolkit/*": "./src/reference-visualize/toolkit/*",
     "./*": "./src/*.tsx",
     ".": "./src/index.ts"
   },

@@ -23,7 +23,7 @@ export type AnalyticsEvent =
     }
   | {
       name: 'book_click'
-      params: { book_type: 'document' | 'demo'; chapter_step: string; chapter_title: string }
+      params: { book_type: 'document' | 'demo' | 'visualize'; chapter_step: string; chapter_title: string }
     }
 
 export function trackEvent(event: AnalyticsEvent) {

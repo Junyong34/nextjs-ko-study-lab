@@ -48,6 +48,13 @@ const ROADMAP_STEPS: ChapterItem[] = [
     summary: 'Turbopack 번들러, SWC 컴파일러, Fast Refresh 등 내부 동작 원리를 다룹니다.',
     href: '/architecture',
   },
+  {
+    step: 'Interactive',
+    title: '인터랙티브 시각화',
+    subtitle: 'Visualizer',
+    summary: 'Next.js & React 핵심 런타임 동작 원리와 렌더링 흐름 시각화',
+    href: '/visualize',
+  },
 ]
 
 interface RoadmapBookshelfProps {
@@ -61,10 +68,16 @@ const DEMO_CATEGORY_BY_SUBTITLE: Partial<Record<string, DemoIndexCategory>> = {
   Architecture: 'Architecture',
 }
 
-/** 표지 색 — 학습/데모 2가지 그레이 톤(원톤)으로만 구분한다 (순검정 회피: 다크 차콜 vs 라이트 그레이). */
+/** 표지 색 — 웹사이트 Zinc 베이스 테마(문서: 다크 차콜 / 실습: 라이트 그레이 / 시각화: 블랙 톤 그라디언트) */
 const BAND = {
   study: { fill: 'bg-zinc-700', text: 'text-white', tagText: 'text-white/70', label: '문서' },
   demo: { fill: 'bg-zinc-300', text: 'text-zinc-900', tagText: 'text-zinc-900/60', label: '실습' },
+  visualize: {
+    fill: 'bg-[#05012f] [background-image:radial-gradient(ellipse_at_50%_0%,#105265_0%,#0c2f59_40%,transparent_70%),radial-gradient(ellipse_at_100%_100%,#2c0192_0%,#2200a2_30%,#170265_55%,transparent_80%)] border-indigo-500/40',
+    text: 'text-white',
+    tagText: 'text-zinc-200',
+    label: '시각화',
+  },
 } as const
 
 const BOOK_WIDTH = 168
@@ -83,14 +96,16 @@ function BookCover({
 }) {
   const t = BAND[tone]
   return (
-    <div className={`flex h-full flex-col items-start p-4 ${t.fill}`}>
-      <span className={`text-[10px] font-bold uppercase tracking-wider ${t.tagText}`}>{t.label}</span>
-      <div className="flex flex-1 flex-col justify-center space-y-1.5">
+    <div className={`relative flex h-full flex-col items-start overflow-hidden p-4 ${t.fill}`}>
+      <span className={`relative z-10 text-[10px] font-bold uppercase tracking-wider ${t.tagText}`}>{t.label}</span>
+      <div className="relative z-10 flex flex-1 flex-col justify-center space-y-1.5">
         <p className={`font-mono text-[10px] uppercase ${t.tagText}`}>{step}</p>
         <p className={`text-base font-bold leading-snug ${t.text}`}>{title}</p>
         <p className={`text-xs ${t.tagText}`}>{koreanTitle}</p>
       </div>
-      <FaviconMark className="h-4 w-4" />
+      <div className="relative z-10">
+        <FaviconMark className="h-4 w-4" />
+      </div>
     </div>
   )
 }
@@ -112,17 +127,15 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
 
       {/* Modern Bookshelf Deck Layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {ROADMAP_STEPS.map((chapter, idx) => {
+        {ROADMAP_STEPS.map((chapter) => {
+          const isVisualize = chapter.href === '/visualize'
           const category = DEMO_CATEGORY_BY_SUBTITLE[chapter.subtitle]
           const demoCount = category ? demos.filter((demo) => getDemoCategory(demo) === category && demo.status === 'done').length : 0
-          const isLastSingle = idx === 4
 
           return (
             <div
               key={chapter.step}
-              className={`flex flex-col justify-between rounded-3xl border border-zinc-200/80 bg-white/70 p-6 sm:p-7 shadow-xs transition hover:border-zinc-300 hover:bg-white hover:shadow-md dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/90 ${
-                isLastSingle ? 'md:col-span-2' : ''
-              }`}
+              className="flex flex-col justify-between rounded-3xl border border-zinc-200/80 bg-white/70 p-6 sm:p-7 shadow-xs transition hover:border-zinc-300 hover:bg-white hover:shadow-md dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/90"
             >
               {/* Chapter Info */}
               <div className="space-y-2 mb-6">
@@ -151,44 +164,67 @@ export function RoadmapBookshelf({ demos }: RoadmapBookshelfProps) {
 
               {/* Books Row */}
               <div className="flex flex-wrap items-end gap-6 pt-4 border-t border-zinc-100 dark:border-zinc-800/60">
-                {/* 1. 학습 문서 책 */}
-                <TrackedBookLink
-                  href={chapter.href}
-                  bookType="document"
-                  chapterStep={chapter.step}
-                  chapterTitle={chapter.title}
-                  className="group shrink-0 transition-transform duration-300 hover:-translate-y-1"
-                  aria-label={`${chapter.title} 학습 문서 보기`}
-                >
-                  <Book coverClassName={BAND.study.fill} depth={BOOK_DEPTH} width={BOOK_WIDTH}>
-                    <BookCover
-                      tone="study"
-                      step={chapter.step}
-                      koreanTitle={chapter.title}
-                      title={chapter.subtitle}
-                    />
-                  </Book>
-                </TrackedBookLink>
-
-                {/* 2. 실습 예제 책 */}
-                {category && demoCount > 0 && (
+                {isVisualize ? (
+                  /* 시각화 전용 컬러풀 3D 책 */
                   <TrackedBookLink
-                    href={{ pathname: '/demo', query: { category } }}
-                    bookType="demo"
+                    href="/visualize"
+                    bookType="visualize"
                     chapterStep={chapter.step}
                     chapterTitle={chapter.title}
-                    className="group shrink-0 transition-transform duration-300 hover:-translate-y-1"
-                    aria-label={`${chapter.title} 실습 예제 보기`}
+                    className="group shrink-0 transition-transform duration-300 hover:-translate-y-1 active:-translate-y-1"
+                    aria-label="Next.js & React 인터랙티브 시각화 보기"
                   >
-                    <Book coverClassName={BAND.demo.fill} depth={BOOK_DEPTH} width={BOOK_WIDTH}>
+                    <Book coverClassName={BAND.visualize.fill} depth={BOOK_DEPTH} width={BOOK_WIDTH}>
                       <BookCover
-                        tone="demo"
-                        step={chapter.step}
-                        koreanTitle={chapter.title}
-                        title={chapter.subtitle}
+                        tone="visualize"
+                        step="Interactive"
+                        koreanTitle="인터랙티브 시각화"
+                        title="Visualizer"
                       />
                     </Book>
                   </TrackedBookLink>
+                ) : (
+                  <>
+                    {/* 1. 학습 문서 책 */}
+                    <TrackedBookLink
+                      href={chapter.href}
+                      bookType="document"
+                      chapterStep={chapter.step}
+                      chapterTitle={chapter.title}
+                      className="group shrink-0 transition-transform duration-300 hover:-translate-y-1 active:-translate-y-1"
+                      aria-label={`${chapter.title} 학습 문서 보기`}
+                    >
+                      <Book coverClassName={BAND.study.fill} depth={BOOK_DEPTH} width={BOOK_WIDTH}>
+                        <BookCover
+                          tone="study"
+                          step={chapter.step}
+                          koreanTitle={chapter.title}
+                          title={chapter.subtitle}
+                        />
+                      </Book>
+                    </TrackedBookLink>
+
+                    {/* 2. 실습 예제 책 */}
+                    {category && demoCount > 0 && (
+                      <TrackedBookLink
+                        href={{ pathname: '/demo', query: { category } }}
+                        bookType="demo"
+                        chapterStep={chapter.step}
+                        chapterTitle={chapter.title}
+                        className="group shrink-0 transition-transform duration-300 hover:-translate-y-1 active:-translate-y-1"
+                        aria-label={`${chapter.title} 실습 예제 보기`}
+                      >
+                        <Book coverClassName={BAND.demo.fill} depth={BOOK_DEPTH} width={BOOK_WIDTH}>
+                          <BookCover
+                            tone="demo"
+                            step={chapter.step}
+                            koreanTitle={chapter.title}
+                            title={chapter.subtitle}
+                          />
+                        </Book>
+                      </TrackedBookLink>
+                    )}
+                  </>
                 )}
               </div>
             </div>
