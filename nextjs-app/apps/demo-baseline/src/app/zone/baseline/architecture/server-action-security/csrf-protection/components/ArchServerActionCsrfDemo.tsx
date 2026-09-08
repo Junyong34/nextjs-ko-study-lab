@@ -7,7 +7,7 @@ import {
   ExpectedActualPanel,
 } from '@study/demo-kit'
 import { useActionState } from 'react'
-import { LocalCsrfGuide } from './LocalCsrfGuide'
+import { CsrfBoundaryGuide } from './CsrfBoundaryGuide'
 import { inspectSameOriginAction } from '../actions'
 import { INITIAL_CSRF_PROBE_STATE, type CsrfProbeState } from '../types'
 
@@ -45,7 +45,7 @@ export function ArchServerActionCsrfDemo() {
           </div>
         </form>
         <div className="mt-5 border-t border-zinc-200 pt-4 dark:border-zinc-800">
-          <LocalCsrfGuide />
+          <CsrfBoundaryGuide />
         </div>
       </DemoPlaygroundCard>
 
@@ -58,7 +58,7 @@ export function ArchServerActionCsrfDemo() {
       />
 
       <DemoDeepDiveCard title="Origin 검사는 보안의 한 계층입니다">
-        <p>Next.js 16은 Server Action 요청의 <code>Origin</code>과 <code>Host</code> 또는 <code>X-Forwarded-Host</code>를 비교합니다. 불일치 요청은 액션 함수 실행 전에 중단됩니다. 로컬 절차에서는 같은 요청의 Origin만 바꾸고 프레임워크 로그를 확인합니다.</p>
+        <p>Next.js 16은 Server Action 요청의 <code>Origin</code>과 <code>Host</code> 또는 <code>X-Forwarded-Host</code>를 비교합니다. 불일치 요청은 액션 함수 실행 전에 중단됩니다.</p>
         <p><code>serverActions.allowedOrigins</code>는 프록시나 별도 공개 도메인처럼 추가로 신뢰할 출처만 등록합니다. 와일드카드는 필요한 범위로 제한해야 합니다.</p>
         <p>이 데모의 셸 프록시도 allowedOrigins 예외를 사용합니다. Origin이 없다는 것과 불일치한다는 것은 다릅니다. 이 검사는 인증·인가·입력 검증을 대신하지 않습니다. 실제 데이터 변경 액션은 함수 본문에서도 사용자 권한과 입력을 다시 검증해야 합니다.</p>
       </DemoDeepDiveCard>

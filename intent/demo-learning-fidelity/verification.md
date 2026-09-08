@@ -14,8 +14,8 @@
 - Form: 실제 `next/form` GET 제출, 일치·빈 검색·0건·공백 검색, 메모 유지, 새로고침 초기화를 확인했다.
 - 병렬 라우트: 실제 `@analytics/details` 이동에서 team 메모가 유지되고, 새로고침에서 team·children의 `default.tsx`가 표시되는 것을 확인했다. 기존 `independent-tabs`, `conditional-slot` 진입에도 404와 부모 가이드 중복이 없었다.
 - 접근성 폼: 빈 값, 15자리, 16자리, 17자리, 문자 포함, 구분자 입력과 초기화를 확인했다. `aria-invalid`, `aria-describedby`, label 연결이 결과에 맞게 바뀌었다.
-- CSRF: 정상 Server Action은 200으로 실행됐고, Origin만 `https://csrf-demo.invalid`로 바꾼 요청은 Next.js에서 500과 `Invalid Server Actions request`로 차단됐다. 원래 Origin으로 복구한 요청은 다시 200이었다. 차단 요청에는 액션 도달 로그가 없었다.
-- Turbopack: 저장소가 필요한 로컬 실습이라는 사용자 요청에 따라 페이지·등록 항목을 제거했다. 관련 문서에는 브라우저 데모 불가로 기록했다.
+- CSRF: 페이지에서 정상 Server Action은 200으로 실행됐고, 실제 Origin·Host 헤더와 액션 도달 여부를 확인했다. 다른 출처 요청은 페이지 안에서 가짜 성공으로 표시하지 않고, Next.js가 액션 실행 전에 중단하는 경계를 설명한다.
+- Turbopack: 저장소가 필요한 실습이라는 사용자 요청에 따라 페이지·등록 항목을 제거했다. 관련 문서에는 브라우저 데모 불가로 기록했다.
 - Playwright 콘솔 오류: 네 페이지의 새로고침·조작 시 예상 밖 오류가 없었다. 의도적으로 Origin을 바꾼 CSRF 요청은 프레임워크 오류 로그를 남긴다.
 
 ## 미통과 또는 미실행

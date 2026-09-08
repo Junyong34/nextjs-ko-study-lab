@@ -28,11 +28,11 @@ export default function DemoPage() {
           },
           {
             step: 3,
-            title: '로컬 차단 실습 펼치기',
-            description: '로컬 전용 절차에 따라 정상 POST를 복사하고 Origin만 바꿔 차단 로그를 확인합니다.',
-            actionBadge: '네트워크 확인',
-            observe: 'POST 메서드와 Server Action 응답',
-            observeAt: 'network',
+            title: '같은 출처와 다른 출처 비교',
+            description: '다른 출처 요청은 액션 함수에 도달하기 전에 중단된다는 경계를 개념 정리에서 확인합니다.',
+            actionBadge: '실행 경계',
+            observe: '실제 헤더와 액션 도달 여부',
+            observeAt: 'verification',
           },
         ]}
       />
