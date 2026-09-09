@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "generatedAt": "2026-09-07T04:30:22.695Z",
+  "generatedAt": "2026-09-08T14:08:22.488Z",
   "totalDocs": 284,
   "docs": [
     {
@@ -2008,7 +2008,7 @@
       ],
       "title": "adapterPath",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/allowedDevOrigins.md",
@@ -2021,7 +2021,7 @@
       ],
       "title": "allowedDevOrigins",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/appDir.md",
@@ -2047,7 +2047,7 @@
       ],
       "title": "assetPrefix",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/authInterrupts.md",
@@ -2060,7 +2060,7 @@
       ],
       "title": "authInterrupts",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/basePath.md",
@@ -2073,7 +2073,7 @@
       ],
       "title": "basePath",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheComponents.md",
@@ -2086,7 +2086,7 @@
       ],
       "title": "cacheComponents",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md",
@@ -2099,7 +2099,7 @@
       ],
       "title": "cacheHandlers",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheLife.md",
@@ -2112,7 +2112,7 @@
       ],
       "title": "cacheLife",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/compress.md",
@@ -2125,7 +2125,7 @@
       ],
       "title": "compress",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/crossOrigin.md",
@@ -2138,7 +2138,7 @@
       ],
       "title": "crossOrigin",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cssChunking.md",
@@ -2151,7 +2151,7 @@
       ],
       "title": "cssChunking",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/deploymentId.md",
@@ -2164,7 +2164,7 @@
       ],
       "title": "deploymentId",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/devIndicators.md",
@@ -2177,7 +2177,7 @@
       ],
       "title": "devIndicators",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/distDir.md",
@@ -2190,7 +2190,7 @@
       ],
       "title": "distDir",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/env.md",
@@ -2203,7 +2203,7 @@
       ],
       "title": "env",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/expireTime.md",
@@ -2216,7 +2216,7 @@
       ],
       "title": "expireTime",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/exportPathMap.md",
@@ -2229,7 +2229,7 @@
       ],
       "title": "exportPathMap",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/generateBuildId.md",
@@ -2242,7 +2242,7 @@
       ],
       "title": "generateBuildId",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/generateEtags.md",
@@ -2255,7 +2255,7 @@
       ],
       "title": "generateEtags",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/headers.md",
@@ -2268,7 +2268,7 @@
       ],
       "title": "headers",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/htmlLimitedBots.md",
@@ -2281,7 +2281,7 @@
       ],
       "title": "htmlLimitedBots",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/httpAgentOptions.md",
@@ -2294,7 +2294,7 @@
       ],
       "title": "httpAgentOptions",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/images.md",
@@ -2307,7 +2307,7 @@
       ],
       "title": "images",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/incrementalCacheHandlerPath.md",
@@ -2320,7 +2320,7 @@
       ],
       "title": "cacheHandler",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/inlineCss.md",
@@ -2333,7 +2333,7 @@
       ],
       "title": "inlineCss",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/instrumentationClientInject.md",
@@ -2346,7 +2346,7 @@
       ],
       "title": "instrumentationClientInject",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/logging.md",
@@ -2359,7 +2359,7 @@
       ],
       "title": "logging",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/mdxRs.md",
@@ -2372,7 +2372,7 @@
       ],
       "title": "mdxRs",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/onDemandEntries.md",
@@ -2385,7 +2385,7 @@
       ],
       "title": "onDemandEntries",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/optimizePackageImports.md",
@@ -2398,7 +2398,7 @@
       ],
       "title": "optimizePackageImports",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/output.md",
@@ -2411,7 +2411,7 @@
       ],
       "title": "output",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/outputHashSalt.md",
@@ -2424,7 +2424,7 @@
       ],
       "title": "outputHashSalt",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/pageExtensions.md",
@@ -2437,7 +2437,7 @@
       ],
       "title": "pageExtensions",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/partialPrefetching.md",
@@ -2450,7 +2450,7 @@
       ],
       "title": "partialPrefetching",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/poweredByHeader.md",
@@ -2463,7 +2463,7 @@
       ],
       "title": "poweredByHeader",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/prefetchInlining.md",
@@ -2476,7 +2476,7 @@
       ],
       "title": "prefetchInlining",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/productionBrowserSourceMaps.md",
@@ -2489,7 +2489,7 @@
       ],
       "title": "productionBrowserSourceMaps",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/proxyClientMaxBodySize.md",
@@ -2502,7 +2502,7 @@
       ],
       "title": "proxyClientMaxBodySize",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/reactCompiler.md",
@@ -2528,7 +2528,7 @@
       ],
       "title": "reactMaxHeadersLength",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/reactStrictMode.md",
@@ -2541,7 +2541,7 @@
       ],
       "title": "reactStrictMode",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/README.md",
@@ -2565,7 +2565,7 @@
       ],
       "title": "redirects",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md",
@@ -2578,7 +2578,7 @@
       ],
       "title": "rewrites",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/sassOptions.md",
@@ -2591,7 +2591,7 @@
       ],
       "title": "sassOptions",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md",
@@ -2604,7 +2604,7 @@
       ],
       "title": "serverActions",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverComponentsHmrCache.md",
@@ -2617,7 +2617,7 @@
       ],
       "title": "serverComponentsHmrCache",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverExternalPackages.md",
@@ -2630,7 +2630,7 @@
       ],
       "title": "serverExternalPackages",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/staleTimes.md",
@@ -2643,7 +2643,7 @@
       ],
       "title": "staleTimes",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/staticGeneration.md",
@@ -2656,7 +2656,7 @@
       ],
       "title": "staticGeneration*",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/supportsImmutableAssets.md",
@@ -2669,7 +2669,7 @@
       ],
       "title": "supportsImmutableAssets",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/taint.md",
@@ -2682,7 +2682,7 @@
       ],
       "title": "taint",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/trailingSlash.md",
@@ -2695,7 +2695,7 @@
       ],
       "title": "trailingSlash",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/transpilePackages.md",
@@ -2734,7 +2734,7 @@
       ],
       "title": "turbopackChunking",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackFileSystemCache.md",
@@ -2745,9 +2745,9 @@
         "next-config-js",
         "turbopackFileSystemCache"
       ],
-      "title": "turbopackFileSystemCache",
+      "title": "Turbopack FileSystem Caching",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackIgnoreIssue.md",
@@ -2760,7 +2760,7 @@
       ],
       "title": "turbopack.ignoreIssue",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackLocalPostcssConfig.md",
@@ -2773,7 +2773,7 @@
       ],
       "title": "turbopackLocalPostcssConfig",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackMemoryEviction.md",
@@ -2786,7 +2786,7 @@
       ],
       "title": "turbopackMemoryEviction",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackRustReactCompiler.md",
@@ -2799,7 +2799,7 @@
       ],
       "title": "turbopackRustReactCompiler",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/typedRoutes.md",
@@ -2812,7 +2812,7 @@
       ],
       "title": "typedRoutes",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/typescript.md",
@@ -2825,7 +2825,7 @@
       ],
       "title": "typescript",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/urlImports.md",
@@ -2838,7 +2838,7 @@
       ],
       "title": "urlImports",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useLightningcss.md",
@@ -2851,7 +2851,7 @@
       ],
       "title": "useLightningcss",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useOffline.md",
@@ -2864,7 +2864,7 @@
       ],
       "title": "useOffline",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useTypeScriptCli.md",
@@ -2877,7 +2877,7 @@
       ],
       "title": "useTypeScriptCli",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/webpack.md",
@@ -2890,7 +2890,7 @@
       ],
       "title": "webpack",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/webVitalsAttribution.md",
@@ -2903,7 +2903,7 @@
       ],
       "title": "webVitalsAttribution",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     {
       "path": "3-api-reference/3.5-config/eslint.md",
@@ -5235,7 +5235,7 @@
       ],
       "title": "adapterPath",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/allowedDevOrigins": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/allowedDevOrigins.md",
@@ -5248,7 +5248,7 @@
       ],
       "title": "allowedDevOrigins",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/appDir": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/appDir.md",
@@ -5274,7 +5274,7 @@
       ],
       "title": "assetPrefix",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/authInterrupts": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/authInterrupts.md",
@@ -5287,7 +5287,7 @@
       ],
       "title": "authInterrupts",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/basePath": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/basePath.md",
@@ -5300,7 +5300,7 @@
       ],
       "title": "basePath",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/cacheComponents": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheComponents.md",
@@ -5313,7 +5313,7 @@
       ],
       "title": "cacheComponents",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/cacheHandlers": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md",
@@ -5326,7 +5326,7 @@
       ],
       "title": "cacheHandlers",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/cacheLife": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheLife.md",
@@ -5339,7 +5339,7 @@
       ],
       "title": "cacheLife",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/compress": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/compress.md",
@@ -5352,7 +5352,7 @@
       ],
       "title": "compress",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/crossOrigin": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/crossOrigin.md",
@@ -5365,7 +5365,7 @@
       ],
       "title": "crossOrigin",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/cssChunking": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cssChunking.md",
@@ -5378,7 +5378,7 @@
       ],
       "title": "cssChunking",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/deploymentId": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/deploymentId.md",
@@ -5391,7 +5391,7 @@
       ],
       "title": "deploymentId",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/devIndicators": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/devIndicators.md",
@@ -5404,7 +5404,7 @@
       ],
       "title": "devIndicators",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/distDir": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/distDir.md",
@@ -5417,7 +5417,7 @@
       ],
       "title": "distDir",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/env": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/env.md",
@@ -5430,7 +5430,7 @@
       ],
       "title": "env",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/expireTime": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/expireTime.md",
@@ -5443,7 +5443,7 @@
       ],
       "title": "expireTime",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/exportPathMap": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/exportPathMap.md",
@@ -5456,7 +5456,7 @@
       ],
       "title": "exportPathMap",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/generateBuildId": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/generateBuildId.md",
@@ -5469,7 +5469,7 @@
       ],
       "title": "generateBuildId",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/generateEtags": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/generateEtags.md",
@@ -5482,7 +5482,7 @@
       ],
       "title": "generateEtags",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/headers": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/headers.md",
@@ -5495,7 +5495,7 @@
       ],
       "title": "headers",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/htmlLimitedBots": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/htmlLimitedBots.md",
@@ -5508,7 +5508,7 @@
       ],
       "title": "htmlLimitedBots",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/httpAgentOptions": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/httpAgentOptions.md",
@@ -5521,7 +5521,7 @@
       ],
       "title": "httpAgentOptions",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/images": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/images.md",
@@ -5534,7 +5534,7 @@
       ],
       "title": "images",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/incrementalCacheHandlerPath": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/incrementalCacheHandlerPath.md",
@@ -5547,7 +5547,7 @@
       ],
       "title": "cacheHandler",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/inlineCss": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/inlineCss.md",
@@ -5560,7 +5560,7 @@
       ],
       "title": "inlineCss",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/instrumentationClientInject": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/instrumentationClientInject.md",
@@ -5573,7 +5573,7 @@
       ],
       "title": "instrumentationClientInject",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/logging": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/logging.md",
@@ -5586,7 +5586,7 @@
       ],
       "title": "logging",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/mdxRs": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/mdxRs.md",
@@ -5599,7 +5599,7 @@
       ],
       "title": "mdxRs",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/onDemandEntries": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/onDemandEntries.md",
@@ -5612,7 +5612,7 @@
       ],
       "title": "onDemandEntries",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/optimizePackageImports": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/optimizePackageImports.md",
@@ -5625,7 +5625,7 @@
       ],
       "title": "optimizePackageImports",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/output": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/output.md",
@@ -5638,7 +5638,7 @@
       ],
       "title": "output",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/outputHashSalt": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/outputHashSalt.md",
@@ -5651,7 +5651,7 @@
       ],
       "title": "outputHashSalt",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/pageExtensions": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/pageExtensions.md",
@@ -5664,7 +5664,7 @@
       ],
       "title": "pageExtensions",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/partialPrefetching": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/partialPrefetching.md",
@@ -5677,7 +5677,7 @@
       ],
       "title": "partialPrefetching",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/poweredByHeader": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/poweredByHeader.md",
@@ -5690,7 +5690,7 @@
       ],
       "title": "poweredByHeader",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/prefetchInlining": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/prefetchInlining.md",
@@ -5703,7 +5703,7 @@
       ],
       "title": "prefetchInlining",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/productionBrowserSourceMaps": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/productionBrowserSourceMaps.md",
@@ -5716,7 +5716,7 @@
       ],
       "title": "productionBrowserSourceMaps",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/proxyClientMaxBodySize": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/proxyClientMaxBodySize.md",
@@ -5729,7 +5729,7 @@
       ],
       "title": "proxyClientMaxBodySize",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/reactCompiler": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/reactCompiler.md",
@@ -5755,7 +5755,7 @@
       ],
       "title": "reactMaxHeadersLength",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/reactStrictMode": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/reactStrictMode.md",
@@ -5768,7 +5768,7 @@
       ],
       "title": "reactStrictMode",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/redirects": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/redirects.md",
@@ -5781,7 +5781,7 @@
       ],
       "title": "redirects",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/rewrites": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md",
@@ -5794,7 +5794,7 @@
       ],
       "title": "rewrites",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/sassOptions": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/sassOptions.md",
@@ -5807,7 +5807,7 @@
       ],
       "title": "sassOptions",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/serverActions": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md",
@@ -5820,7 +5820,7 @@
       ],
       "title": "serverActions",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/serverComponentsHmrCache": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverComponentsHmrCache.md",
@@ -5833,7 +5833,7 @@
       ],
       "title": "serverComponentsHmrCache",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/serverExternalPackages": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverExternalPackages.md",
@@ -5846,7 +5846,7 @@
       ],
       "title": "serverExternalPackages",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/staleTimes": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/staleTimes.md",
@@ -5859,7 +5859,7 @@
       ],
       "title": "staleTimes",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/staticGeneration": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/staticGeneration.md",
@@ -5872,7 +5872,7 @@
       ],
       "title": "staticGeneration*",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/supportsImmutableAssets": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/supportsImmutableAssets.md",
@@ -5885,7 +5885,7 @@
       ],
       "title": "supportsImmutableAssets",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/taint": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/taint.md",
@@ -5898,7 +5898,7 @@
       ],
       "title": "taint",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/trailingSlash": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/trailingSlash.md",
@@ -5911,7 +5911,7 @@
       ],
       "title": "trailingSlash",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/transpilePackages": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/transpilePackages.md",
@@ -5950,7 +5950,7 @@
       ],
       "title": "turbopackChunking",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/turbopackFileSystemCache": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackFileSystemCache.md",
@@ -5961,9 +5961,9 @@
         "next-config-js",
         "turbopackFileSystemCache"
       ],
-      "title": "turbopackFileSystemCache",
+      "title": "Turbopack FileSystem Caching",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/turbopackIgnoreIssue": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackIgnoreIssue.md",
@@ -5976,7 +5976,7 @@
       ],
       "title": "turbopack.ignoreIssue",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/turbopackLocalPostcssConfig": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackLocalPostcssConfig.md",
@@ -5989,7 +5989,7 @@
       ],
       "title": "turbopackLocalPostcssConfig",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/turbopackMemoryEviction": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackMemoryEviction.md",
@@ -6002,7 +6002,7 @@
       ],
       "title": "turbopackMemoryEviction",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/turbopackRustReactCompiler": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackRustReactCompiler.md",
@@ -6015,7 +6015,7 @@
       ],
       "title": "turbopackRustReactCompiler",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/typedRoutes": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/typedRoutes.md",
@@ -6028,7 +6028,7 @@
       ],
       "title": "typedRoutes",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/typescript": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/typescript.md",
@@ -6041,7 +6041,7 @@
       ],
       "title": "typescript",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/urlImports": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/urlImports.md",
@@ -6054,7 +6054,7 @@
       ],
       "title": "urlImports",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/useLightningcss": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useLightningcss.md",
@@ -6067,7 +6067,7 @@
       ],
       "title": "useLightningcss",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/useOffline": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useOffline.md",
@@ -6080,7 +6080,7 @@
       ],
       "title": "useOffline",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/useTypeScriptCli": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useTypeScriptCli.md",
@@ -6093,7 +6093,7 @@
       ],
       "title": "useTypeScriptCli",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "not-applicable"
     },
     "/api-reference/config/next-config-js/webVitalsAttribution": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/webVitalsAttribution.md",
@@ -6106,7 +6106,7 @@
       ],
       "title": "webVitalsAttribution",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config/next-config-js/webpack": {
       "path": "3-api-reference/3.5-config/3.5.1-next-config-js/webpack.md",
@@ -6119,7 +6119,7 @@
       ],
       "title": "webpack",
       "demos": [],
-      "demoFeasibility": "pending"
+      "demoFeasibility": "possible"
     },
     "/api-reference/config": {
       "path": "3-api-reference/3.5-config/README.md",
@@ -7987,14 +7987,14 @@
                   "url": "/api-reference/config/next-config-js/adapterPath",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/adapterPath.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "allowedDevOrigins",
                   "url": "/api-reference/config/next-config-js/allowedDevOrigins",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/allowedDevOrigins.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "appDir",
@@ -8008,252 +8008,252 @@
                   "url": "/api-reference/config/next-config-js/assetPrefix",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/assetPrefix.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "authInterrupts",
                   "url": "/api-reference/config/next-config-js/authInterrupts",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/authInterrupts.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "basePath",
                   "url": "/api-reference/config/next-config-js/basePath",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/basePath.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "cacheComponents",
                   "url": "/api-reference/config/next-config-js/cacheComponents",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheComponents.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "cacheHandlers",
                   "url": "/api-reference/config/next-config-js/cacheHandlers",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "cacheLife",
                   "url": "/api-reference/config/next-config-js/cacheLife",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheLife.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "compress",
                   "url": "/api-reference/config/next-config-js/compress",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/compress.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "crossOrigin",
                   "url": "/api-reference/config/next-config-js/crossOrigin",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/crossOrigin.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "cssChunking",
                   "url": "/api-reference/config/next-config-js/cssChunking",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cssChunking.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "deploymentId",
                   "url": "/api-reference/config/next-config-js/deploymentId",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/deploymentId.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "devIndicators",
                   "url": "/api-reference/config/next-config-js/devIndicators",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/devIndicators.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "distDir",
                   "url": "/api-reference/config/next-config-js/distDir",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/distDir.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "env",
                   "url": "/api-reference/config/next-config-js/env",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/env.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "expireTime",
                   "url": "/api-reference/config/next-config-js/expireTime",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/expireTime.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "exportPathMap",
                   "url": "/api-reference/config/next-config-js/exportPathMap",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/exportPathMap.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "generateBuildId",
                   "url": "/api-reference/config/next-config-js/generateBuildId",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/generateBuildId.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "generateEtags",
                   "url": "/api-reference/config/next-config-js/generateEtags",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/generateEtags.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "headers",
                   "url": "/api-reference/config/next-config-js/headers",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/headers.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "htmlLimitedBots",
                   "url": "/api-reference/config/next-config-js/htmlLimitedBots",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/htmlLimitedBots.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "httpAgentOptions",
                   "url": "/api-reference/config/next-config-js/httpAgentOptions",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/httpAgentOptions.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "images",
                   "url": "/api-reference/config/next-config-js/images",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/images.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "cacheHandler",
                   "url": "/api-reference/config/next-config-js/incrementalCacheHandlerPath",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/incrementalCacheHandlerPath.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "inlineCss",
                   "url": "/api-reference/config/next-config-js/inlineCss",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/inlineCss.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "instrumentationClientInject",
                   "url": "/api-reference/config/next-config-js/instrumentationClientInject",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/instrumentationClientInject.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "logging",
                   "url": "/api-reference/config/next-config-js/logging",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/logging.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "mdxRs",
                   "url": "/api-reference/config/next-config-js/mdxRs",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/mdxRs.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "onDemandEntries",
                   "url": "/api-reference/config/next-config-js/onDemandEntries",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/onDemandEntries.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "optimizePackageImports",
                   "url": "/api-reference/config/next-config-js/optimizePackageImports",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/optimizePackageImports.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "output",
                   "url": "/api-reference/config/next-config-js/output",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/output.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "outputHashSalt",
                   "url": "/api-reference/config/next-config-js/outputHashSalt",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/outputHashSalt.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "pageExtensions",
                   "url": "/api-reference/config/next-config-js/pageExtensions",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/pageExtensions.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "partialPrefetching",
                   "url": "/api-reference/config/next-config-js/partialPrefetching",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/partialPrefetching.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "poweredByHeader",
                   "url": "/api-reference/config/next-config-js/poweredByHeader",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/poweredByHeader.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "prefetchInlining",
                   "url": "/api-reference/config/next-config-js/prefetchInlining",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/prefetchInlining.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "productionBrowserSourceMaps",
                   "url": "/api-reference/config/next-config-js/productionBrowserSourceMaps",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/productionBrowserSourceMaps.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "proxyClientMaxBodySize",
                   "url": "/api-reference/config/next-config-js/proxyClientMaxBodySize",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/proxyClientMaxBodySize.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "reactCompiler",
@@ -8267,91 +8267,91 @@
                   "url": "/api-reference/config/next-config-js/reactMaxHeadersLength",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/reactMaxHeadersLength.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "reactStrictMode",
                   "url": "/api-reference/config/next-config-js/reactStrictMode",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/reactStrictMode.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "redirects",
                   "url": "/api-reference/config/next-config-js/redirects",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/redirects.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "rewrites",
                   "url": "/api-reference/config/next-config-js/rewrites",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "sassOptions",
                   "url": "/api-reference/config/next-config-js/sassOptions",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/sassOptions.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "serverActions",
                   "url": "/api-reference/config/next-config-js/serverActions",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "serverComponentsHmrCache",
                   "url": "/api-reference/config/next-config-js/serverComponentsHmrCache",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverComponentsHmrCache.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "serverExternalPackages",
                   "url": "/api-reference/config/next-config-js/serverExternalPackages",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverExternalPackages.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "staleTimes",
                   "url": "/api-reference/config/next-config-js/staleTimes",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/staleTimes.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "staticGeneration*",
                   "url": "/api-reference/config/next-config-js/staticGeneration",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/staticGeneration.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "supportsImmutableAssets",
                   "url": "/api-reference/config/next-config-js/supportsImmutableAssets",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/supportsImmutableAssets.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "taint",
                   "url": "/api-reference/config/next-config-js/taint",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/taint.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "trailingSlash",
                   "url": "/api-reference/config/next-config-js/trailingSlash",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/trailingSlash.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "transpilePackages",
@@ -8372,98 +8372,98 @@
                   "url": "/api-reference/config/next-config-js/turbopackChunking",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackChunking.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
-                  "title": "turbopackFileSystemCache",
+                  "title": "Turbopack FileSystem Caching",
                   "url": "/api-reference/config/next-config-js/turbopackFileSystemCache",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackFileSystemCache.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "turbopack.ignoreIssue",
                   "url": "/api-reference/config/next-config-js/turbopackIgnoreIssue",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackIgnoreIssue.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "turbopackLocalPostcssConfig",
                   "url": "/api-reference/config/next-config-js/turbopackLocalPostcssConfig",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackLocalPostcssConfig.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "turbopackMemoryEviction",
                   "url": "/api-reference/config/next-config-js/turbopackMemoryEviction",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackMemoryEviction.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "turbopackRustReactCompiler",
                   "url": "/api-reference/config/next-config-js/turbopackRustReactCompiler",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackRustReactCompiler.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "typedRoutes",
                   "url": "/api-reference/config/next-config-js/typedRoutes",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/typedRoutes.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "typescript",
                   "url": "/api-reference/config/next-config-js/typescript",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/typescript.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "urlImports",
                   "url": "/api-reference/config/next-config-js/urlImports",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/urlImports.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "useLightningcss",
                   "url": "/api-reference/config/next-config-js/useLightningcss",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useLightningcss.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "useOffline",
                   "url": "/api-reference/config/next-config-js/useOffline",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useOffline.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "useTypeScriptCli",
                   "url": "/api-reference/config/next-config-js/useTypeScriptCli",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useTypeScriptCli.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "not-applicable"
                 },
                 {
                   "title": "webpack",
                   "url": "/api-reference/config/next-config-js/webpack",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/webpack.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 },
                 {
                   "title": "webVitalsAttribution",
                   "url": "/api-reference/config/next-config-js/webVitalsAttribution",
                   "path": "3-api-reference/3.5-config/3.5.1-next-config-js/webVitalsAttribution.md",
                   "demos": [],
-                  "demoFeasibility": "pending"
+                  "demoFeasibility": "possible"
                 }
               ]
             },
@@ -8716,14 +8716,14 @@
               "url": "/api-reference/config/next-config-js/adapterPath",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/adapterPath.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "allowedDevOrigins",
               "url": "/api-reference/config/next-config-js/allowedDevOrigins",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/allowedDevOrigins.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "appDir",
@@ -8737,252 +8737,252 @@
               "url": "/api-reference/config/next-config-js/assetPrefix",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/assetPrefix.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "authInterrupts",
               "url": "/api-reference/config/next-config-js/authInterrupts",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/authInterrupts.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "basePath",
               "url": "/api-reference/config/next-config-js/basePath",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/basePath.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "cacheComponents",
               "url": "/api-reference/config/next-config-js/cacheComponents",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheComponents.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "cacheHandlers",
               "url": "/api-reference/config/next-config-js/cacheHandlers",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "cacheLife",
               "url": "/api-reference/config/next-config-js/cacheLife",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheLife.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "compress",
               "url": "/api-reference/config/next-config-js/compress",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/compress.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "crossOrigin",
               "url": "/api-reference/config/next-config-js/crossOrigin",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/crossOrigin.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "cssChunking",
               "url": "/api-reference/config/next-config-js/cssChunking",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/cssChunking.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "deploymentId",
               "url": "/api-reference/config/next-config-js/deploymentId",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/deploymentId.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "devIndicators",
               "url": "/api-reference/config/next-config-js/devIndicators",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/devIndicators.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "distDir",
               "url": "/api-reference/config/next-config-js/distDir",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/distDir.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "env",
               "url": "/api-reference/config/next-config-js/env",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/env.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "expireTime",
               "url": "/api-reference/config/next-config-js/expireTime",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/expireTime.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "exportPathMap",
               "url": "/api-reference/config/next-config-js/exportPathMap",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/exportPathMap.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "generateBuildId",
               "url": "/api-reference/config/next-config-js/generateBuildId",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/generateBuildId.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "generateEtags",
               "url": "/api-reference/config/next-config-js/generateEtags",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/generateEtags.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "headers",
               "url": "/api-reference/config/next-config-js/headers",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/headers.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "htmlLimitedBots",
               "url": "/api-reference/config/next-config-js/htmlLimitedBots",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/htmlLimitedBots.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "httpAgentOptions",
               "url": "/api-reference/config/next-config-js/httpAgentOptions",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/httpAgentOptions.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "images",
               "url": "/api-reference/config/next-config-js/images",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/images.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "cacheHandler",
               "url": "/api-reference/config/next-config-js/incrementalCacheHandlerPath",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/incrementalCacheHandlerPath.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "inlineCss",
               "url": "/api-reference/config/next-config-js/inlineCss",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/inlineCss.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "instrumentationClientInject",
               "url": "/api-reference/config/next-config-js/instrumentationClientInject",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/instrumentationClientInject.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "logging",
               "url": "/api-reference/config/next-config-js/logging",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/logging.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "mdxRs",
               "url": "/api-reference/config/next-config-js/mdxRs",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/mdxRs.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "onDemandEntries",
               "url": "/api-reference/config/next-config-js/onDemandEntries",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/onDemandEntries.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "optimizePackageImports",
               "url": "/api-reference/config/next-config-js/optimizePackageImports",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/optimizePackageImports.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "output",
               "url": "/api-reference/config/next-config-js/output",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/output.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "outputHashSalt",
               "url": "/api-reference/config/next-config-js/outputHashSalt",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/outputHashSalt.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "pageExtensions",
               "url": "/api-reference/config/next-config-js/pageExtensions",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/pageExtensions.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "partialPrefetching",
               "url": "/api-reference/config/next-config-js/partialPrefetching",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/partialPrefetching.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "poweredByHeader",
               "url": "/api-reference/config/next-config-js/poweredByHeader",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/poweredByHeader.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "prefetchInlining",
               "url": "/api-reference/config/next-config-js/prefetchInlining",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/prefetchInlining.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "productionBrowserSourceMaps",
               "url": "/api-reference/config/next-config-js/productionBrowserSourceMaps",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/productionBrowserSourceMaps.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "proxyClientMaxBodySize",
               "url": "/api-reference/config/next-config-js/proxyClientMaxBodySize",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/proxyClientMaxBodySize.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "reactCompiler",
@@ -8996,91 +8996,91 @@
               "url": "/api-reference/config/next-config-js/reactMaxHeadersLength",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/reactMaxHeadersLength.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "reactStrictMode",
               "url": "/api-reference/config/next-config-js/reactStrictMode",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/reactStrictMode.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "redirects",
               "url": "/api-reference/config/next-config-js/redirects",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/redirects.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "rewrites",
               "url": "/api-reference/config/next-config-js/rewrites",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "sassOptions",
               "url": "/api-reference/config/next-config-js/sassOptions",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/sassOptions.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "serverActions",
               "url": "/api-reference/config/next-config-js/serverActions",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "serverComponentsHmrCache",
               "url": "/api-reference/config/next-config-js/serverComponentsHmrCache",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverComponentsHmrCache.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "serverExternalPackages",
               "url": "/api-reference/config/next-config-js/serverExternalPackages",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/serverExternalPackages.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "staleTimes",
               "url": "/api-reference/config/next-config-js/staleTimes",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/staleTimes.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "staticGeneration*",
               "url": "/api-reference/config/next-config-js/staticGeneration",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/staticGeneration.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "supportsImmutableAssets",
               "url": "/api-reference/config/next-config-js/supportsImmutableAssets",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/supportsImmutableAssets.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "taint",
               "url": "/api-reference/config/next-config-js/taint",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/taint.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "trailingSlash",
               "url": "/api-reference/config/next-config-js/trailingSlash",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/trailingSlash.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "transpilePackages",
@@ -9101,98 +9101,98 @@
               "url": "/api-reference/config/next-config-js/turbopackChunking",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackChunking.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
-              "title": "turbopackFileSystemCache",
+              "title": "Turbopack FileSystem Caching",
               "url": "/api-reference/config/next-config-js/turbopackFileSystemCache",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackFileSystemCache.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "turbopack.ignoreIssue",
               "url": "/api-reference/config/next-config-js/turbopackIgnoreIssue",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackIgnoreIssue.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "turbopackLocalPostcssConfig",
               "url": "/api-reference/config/next-config-js/turbopackLocalPostcssConfig",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackLocalPostcssConfig.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "turbopackMemoryEviction",
               "url": "/api-reference/config/next-config-js/turbopackMemoryEviction",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackMemoryEviction.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "turbopackRustReactCompiler",
               "url": "/api-reference/config/next-config-js/turbopackRustReactCompiler",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/turbopackRustReactCompiler.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "typedRoutes",
               "url": "/api-reference/config/next-config-js/typedRoutes",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/typedRoutes.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "typescript",
               "url": "/api-reference/config/next-config-js/typescript",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/typescript.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "urlImports",
               "url": "/api-reference/config/next-config-js/urlImports",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/urlImports.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "useLightningcss",
               "url": "/api-reference/config/next-config-js/useLightningcss",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useLightningcss.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "useOffline",
               "url": "/api-reference/config/next-config-js/useOffline",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useOffline.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "useTypeScriptCli",
               "url": "/api-reference/config/next-config-js/useTypeScriptCli",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/useTypeScriptCli.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "not-applicable"
             },
             {
               "title": "webpack",
               "url": "/api-reference/config/next-config-js/webpack",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/webpack.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             },
             {
               "title": "webVitalsAttribution",
               "url": "/api-reference/config/next-config-js/webVitalsAttribution",
               "path": "3-api-reference/3.5-config/3.5.1-next-config-js/webVitalsAttribution.md",
               "demos": [],
-              "demoFeasibility": "pending"
+              "demoFeasibility": "possible"
             }
           ]
         }

@@ -290,7 +290,34 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 |
 |---|---|---|---|
-| 3.5.1 | next.config.js (69개 옵션, 알파벳순 유지) | [공식](https://nextjs.org/docs/app/api-reference/config/next-config-js) | 미작성 |
+| 3.5.1 | next.config.js (69개 작성, 잔여 0개) | [공식](https://nextjs.org/docs/app/api-reference/config/next-config-js) | 완료 |
+
+#### 3.5.1 개별 번역 현황
+
+> `next.config.js` 옵션 69개를 모두 작성했습니다.
+
+| 파일 | md 상태 |
+|---|---|
+| [sassOptions.md](./3-api-reference/3.5-config/3.5.1-next-config-js/sassOptions.md) | 완료 |
+| [serverComponentsHmrCache.md](./3-api-reference/3.5-config/3.5.1-next-config-js/serverComponentsHmrCache.md) | 완료 |
+| [staleTimes.md](./3-api-reference/3.5-config/3.5.1-next-config-js/staleTimes.md) | 완료 |
+| [staticGeneration.md](./3-api-reference/3.5-config/3.5.1-next-config-js/staticGeneration.md) | 완료 |
+| [supportsImmutableAssets.md](./3-api-reference/3.5-config/3.5.1-next-config-js/supportsImmutableAssets.md) | 완료 |
+| [taint.md](./3-api-reference/3.5-config/3.5.1-next-config-js/taint.md) | 완료 |
+| [turbopackChunking.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackChunking.md) | 완료 |
+| [turbopackFileSystemCache.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackFileSystemCache.md) | 완료 |
+| [turbopackIgnoreIssue.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackIgnoreIssue.md) | 완료 |
+| [turbopackLocalPostcssConfig.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackLocalPostcssConfig.md) | 완료 |
+| [turbopackMemoryEviction.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackMemoryEviction.md) | 완료 |
+| [turbopackRustReactCompiler.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackRustReactCompiler.md) | 완료 |
+| [typescript.md](./3-api-reference/3.5-config/3.5.1-next-config-js/typescript.md) | 완료 |
+| [urlImports.md](./3-api-reference/3.5-config/3.5.1-next-config-js/urlImports.md) | 완료 |
+| [useLightningcss.md](./3-api-reference/3.5-config/3.5.1-next-config-js/useLightningcss.md) | 완료 |
+| [useOffline.md](./3-api-reference/3.5-config/3.5.1-next-config-js/useOffline.md) | 완료 |
+| [useTypeScriptCli.md](./3-api-reference/3.5-config/3.5.1-next-config-js/useTypeScriptCli.md) | 완료 |
+| [webVitalsAttribution.md](./3-api-reference/3.5-config/3.5.1-next-config-js/webVitalsAttribution.md) | 완료 |
+| [webpack.md](./3-api-reference/3.5-config/3.5.1-next-config-js/webpack.md) | 완료 |
+
 | 3.5.2 | TypeScript | [공식](https://nextjs.org/docs/app/api-reference/config/typescript) | 완료 |
 | 3.5.3 | ESLint | [공식](https://nextjs.org/docs/app/api-reference/config/eslint) | 완료 |
 
