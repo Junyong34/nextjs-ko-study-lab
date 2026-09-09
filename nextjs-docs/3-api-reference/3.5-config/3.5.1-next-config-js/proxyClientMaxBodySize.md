@@ -4,6 +4,8 @@
 - 상위 메뉴: [next.config.js](./README.md)
 - 전체 목차: [Next.js 학습 문서](../../../README.md)
 
+> **Experimental**: 이 기능은 현재 experimental 상태이며 변경될 수 있다. production 환경에는 권장하지 않는다. 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 피드백을 남길 수 있다.
+
 ## 학습 목표
 
 - `proxy`와 그 아래에서 실행되는 `Route Handler`가 같은 요청 본문을 읽을 수 있도록 Next.js가 본문을 복제하고 메모리에 버퍼링하는 방식을 이해한다.

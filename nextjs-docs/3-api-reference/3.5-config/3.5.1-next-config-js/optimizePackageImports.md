@@ -4,6 +4,8 @@
 - 상위 메뉴: [next.config.js](./README.md)
 - 전체 목차: [Next.js 학습 문서](../../../README.md)
 
+> **Experimental**: 이 기능은 현재 experimental 상태이며 변경될 수 있다. production 환경에는 권장하지 않는다. 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 피드백을 남길 수 있다.
+
 ## 학습 목표
 
 - 모듈을 많이 export하는 패키지에서 실제로 사용하는 모듈만 로드하도록 `experimental.optimizePackageImports`를 구성하는 방법을 이해한다.

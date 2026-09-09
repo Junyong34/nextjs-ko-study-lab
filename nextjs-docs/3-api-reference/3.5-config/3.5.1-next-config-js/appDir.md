@@ -4,6 +4,8 @@
 - 상위 메뉴: [next.config.js](./README.md)
 - 전체 목차: [Next.js 학습 문서](../../../README.md)
 
+> **Legacy**: 이 API는 legacy이며 더 이상 권장하지 않는다. 하위 호환성을 위해 계속 지원된다.
+
 ## 학습 목표
 
 - `appDir`가 legacy API라는 사실과 현재 Next.js에서 지원하는 범위를 이해한다.

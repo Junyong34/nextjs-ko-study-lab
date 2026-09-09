@@ -4,6 +4,8 @@
 - 상위 메뉴: [next.config.js](./README.md)
 - 전체 목차: [Next.js 학습 문서](../../../README.md)
 
+> **Canary**: 이 기능은 현재 canary 채널에서 제공되며 변경될 수 있다. [Next.js를 canary 버전으로 업그레이드](https://nextjs.org/docs/app/getting-started/upgrading#canary-version)하여 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 피드백을 남길 수 있다.
+
 ## 학습 목표
 
 - `authInterrupts`가 `forbidden`과 `unauthorized` API를 활성화하는 설정임을 이해한다.
@@ -11,8 +13,6 @@
 - `forbidden`, `unauthorized`, `forbidden.js`, `unauthorized.js` 문서가 각각 어떤 API와 file convention을 다루는지 구분한다.
 
 ## 핵심 개념 및 설명
-
-> **Canary**: 이 기능은 현재 canary channel에서만 사용할 수 있으며 변경될 수 있다. [Next.js 업그레이드](https://nextjs.org/docs/app/getting-started/upgrading#canary-version)로 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 의견을 남긴다.
 
 `authInterrupts` 설정은 애플리케이션에서 [`forbidden`](../../3.3-functions/forbidden.md)과 [`unauthorized`](../../3.3-functions/unauthorized.md) API를 사용할 수 있게 한다. 두 함수는 experimental 기능이므로 사용하려면 `next.config.js`에 `authInterrupts` 옵션을 활성화해야 한다.
 
