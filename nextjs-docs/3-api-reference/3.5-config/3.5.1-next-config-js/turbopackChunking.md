@@ -15,13 +15,11 @@
 
 ## 핵심 개념 및 설명
 
-현재 이 기능은 `experimental`이며 변경될 수 있고 production 사용은 권장하지 않는다. 사용해 본 뒤 [GitHub](https://github.com/vercel/next.js/issues)에서 의견을 공유할 수 있다.
-
 `experimental.turbopackChunking`은 Turbopack의 production JavaScript chunker를 설정한다. chunker가 사용자 행동을 어떻게 가정할지 바꾸고, 원본 크기 임계값을 조정하며, `experimental` component chunks 기능을 활성화할 수 있다.
 
 Turbopack의 기본 chunking 설정은 다음과 같다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig = {
@@ -37,23 +35,6 @@ const nextConfig = {
 } satisfies NextConfig
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    turbopackChunking: {
-      minChunkSize: 50000,
-      maxChunkCountPerGroup: 40,
-      maxMergeChunkSize: 200000,
-      minComponentChunkSize: 20000,
-      generateComponentChunks: false,
-    },
-  },
-}
-
-module.exports = nextConfig
 ```
 
 ### 크기 임계값 (Size Thresholds)

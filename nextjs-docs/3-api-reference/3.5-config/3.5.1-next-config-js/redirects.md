@@ -18,32 +18,10 @@
 
 `redirects` 함수는 리다이렉트 규칙 객체 배열을 반환한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  async redirects() {
-    return [
-      {
-        source: '/about',
-        destination: '/',
-        permanent: true,
-      },
-      {
-        source: '/old-blog/:slug',
-        destination: '/news/:slug',
-        permanent: false,
-      },
-    ]
-  },
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   async redirects() {
     return [
       {

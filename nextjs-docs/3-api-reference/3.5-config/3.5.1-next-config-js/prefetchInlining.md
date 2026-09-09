@@ -14,8 +14,6 @@
 
 ## 핵심 개념 및 설명
 
-현재 이 기능은 실험적이며 변경될 수 있으므로 프로덕션 사용을 권장하지 않는다. 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에서 피드백을 공유할 수 있다.
-
 App Router가 라우트를 `prefetch`할 때 작은 세그먼트 응답을 각각 요청하지 않고 하나의 응답으로 묶을 수 있다. 이렇게 하면 `prefetch` 요청 수가 줄어든다. 대신 여러 라우트에서 공유하는 세그먼트 데이터가 중복될 수 있다. 이 동작은 기본적으로 켜져 있으며 애플리케이션 대부분은 기본값을 유지하는 편이 낫다.
 
 `experimental.prefetchInlining` 옵션을 사용하면 이 동작을 덮어쓰거나 인라이닝을 끌 수 있다. 내비게이션 문제를 디버깅하거나 요청량을 측정할 때 활용할 수 있다. 대부분의 애플리케이션에서는 기본 동작을 바꿀 필요가 없다.
@@ -28,7 +26,7 @@ App Router가 라우트를 `prefetch`할 때 작은 세그먼트 응답을 각�
 
 인라이닝을 끄려면 `experimental.prefetchInlining`을 `false`로 설정한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -38,22 +36,11 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    prefetchInlining: false,
-  },
-}
-
-module.exports = nextConfig
 ```
 
 인라이닝을 끄지 않고 임계값을 덮어쓰려면 객체를 전달한다. 객체에서 생략한 값은 기본값을 유지한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -66,20 +53,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    prefetchInlining: {
-      maxSize: 2048,
-      maxBundleSize: 10240,
-    },
-  },
-}
-
-module.exports = nextConfig
 ```
 
 ### Reference (레퍼런스)

@@ -19,7 +19,7 @@ Turbopack FileSystem Cache는 `next dev`나 `next build`를 여러 번 실행할
 
 cache를 제어하는 옵션은 `next dev`용과 `next build`용으로 하나씩 있다. 두 옵션은 모두 기본으로 활성화되어 있다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -30,18 +30,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    turbopackFileSystemCacheForDev: true,
-    turbopackFileSystemCacheForBuild: true,
-  },
-}
-
-module.exports = nextConfig
 ```
 
 ### 옵션 (Options)

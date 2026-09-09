@@ -26,7 +26,7 @@
 >
 > 이 옵션은 [FileSystem Cache](./turbopackFileSystemCache.md)를 활성화한 `next dev` 세션에서만 효과가 있다. 이미 디스크에 저장된 데이터가 있어야 회수할 수 있기 때문이다. 이 기능은 `experimental` 상태이며 활발히 개발 중이다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {

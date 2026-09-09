@@ -15,8 +15,6 @@
 
 ## 핵심 개념 및 설명
 
-> **실험적 기능**: `experimental.useOffline`은 현재 experimental이며 변경될 수 있다. production에는 권장하지 않는다. 기능을 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에서 피드백을 공유한다.
-
 `useOffline` 설정 옵션은 오프라인 연결 상태를 감지해 실패한 navigation, `prefetch`, Server Action 요청을 자동으로 재시도한다. 옵션을 켜면 Client Component에서 현재 오프라인 상태를 읽는 [`useOffline`](../../3.3-functions/use-offline.md) 훅도 사용할 수 있다.
 
 ```ts filename="next.config.ts"

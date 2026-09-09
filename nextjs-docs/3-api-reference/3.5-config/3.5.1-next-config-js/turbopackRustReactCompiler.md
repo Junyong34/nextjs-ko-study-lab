@@ -14,13 +14,11 @@
 
 ## 핵심 개념 및 설명
 
-이 기능은 현재 `experimental` 상태이며 변경될 수 있다. production 환경에는 권장하지 않는다. 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 의견을 남길 수 있다.
-
 `experimental.turbopackRustReactCompiler` 옵션은 native Rust 버전의 [React Compiler](./reactCompiler.md)를 활성화한다. 표준 Babel 버전은 Node.js에서 실행되지만 이 옵션은 React Compiler를 Turbopack 내부에서 native code로 직접 실행한다. 대체로 성능이 눈에 띄게 좋아진다.
 
 이 옵션은 기본값이 되기 전에 피드백을 수집하려고 `experimental` 기능으로 공개됐다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {

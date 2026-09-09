@@ -15,8 +15,6 @@
 
 ## 핵심 개념 및 설명
 
-> **실험적 기능**: `experimental.useTypeScriptCli`는 현재 experimental이며 변경될 수 있다. production에는 권장하지 않는다. 기능을 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에서 피드백을 공유한다.
-
 기본적으로 `next build`는 TypeScript JavaScript compiler API를 불러오는 대신 project-local `tsc` 명령을 실행한다. 이렇게 하면 TypeScript 6을 지원하고, TypeScript 7의 JavaScript API를 사용할 수 없는 동안에도 TypeScript 7을 쓸 수 있다.
 
 프로젝트에 TypeScript 7을 설치하려면 다음 명령을 실행한다.

@@ -10,11 +10,9 @@
 
 - `serverComponentsHmrCache`가 로컬 개발에서 HMR로 새로고침할 때 `Server Component` 응답을 캐시하는 방식을 이해한다.
 - `cache: 'no-store'`를 지정한 `fetch` 요청에도 HMR 캐시가 적용되는 기본 동작과 캐시가 지워지는 시점을 설명할 수 있다.
-- TypeScript와 JavaScript 설정에서 `experimental.serverComponentsHmrCache`를 비활성화하고 `logging.fetches`로 관찰하는 방법을 익힌다.
+- TypeScript 설정에서 `experimental.serverComponentsHmrCache`를 비활성화하고 `logging.fetches`로 관찰하는 방법을 익힌다.
 
 ## 핵심 개념 및 설명
-
-> **실험적 기능**: 이 기능은 현재 `experimental` 상태이며 변경될 수 있다. production에는 권장하지 않는다. 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에서 피드백을 공유한다.
 
 `serverComponentsHmrCache`는 로컬 개발에서 Hot Module Replacement(HMR)로 새로고침할 때 `Server Component`의 `fetch` 응답을 캐시하는 `experimental` 옵션이다. 응답 속도를 높이고 과금되는 API 호출 비용을 줄인다.
 
@@ -28,7 +26,7 @@
 
 `next.config.ts` 또는 `next.config.js`에서 `serverComponentsHmrCache`를 `false`로 설정하면 HMR 캐시를 비활성화할 수 있다. 주석에 적힌 대로 기본값은 `true`다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -38,17 +36,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    serverComponentsHmrCache: false, // 기본값은 true
-  },
-}
-
-module.exports = nextConfig
 ```
 
 > **알아두면 좋은 점**: 동작을 더 잘 관찰하려면 [`logging.fetches`](./logging.md) 옵션을 쓰기를 권장한다. 이 옵션은 개발 중 콘솔에 fetch 캐시 적중과 누락을 기록한다.

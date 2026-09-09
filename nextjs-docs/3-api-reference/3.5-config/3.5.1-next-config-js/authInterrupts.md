@@ -16,7 +16,7 @@
 
 `authInterrupts` 설정은 애플리케이션에서 [`forbidden`](../../3.3-functions/forbidden.md)과 [`unauthorized`](../../3.3-functions/unauthorized.md) API를 사용할 수 있게 한다. 두 함수는 experimental 기능이므로 사용하려면 `next.config.js`에 `authInterrupts` 옵션을 활성화해야 한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -26,14 +26,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-module.exports = {
-  experimental: {
-    authInterrupts: true,
-  },
-}
 ```
 
 ### forbidden
@@ -89,6 +81,5 @@ module.exports = {
 
 - `authInterrupts`는 `forbidden`과 `unauthorized` API를 사용할 수 있게 한다.
 - 두 함수가 experimental 기능이므로 `experimental.authInterrupts: true`를 설정해야 한다.
-- 공식 예제는 `next.config.ts`와 `next.config.js` 두 형태로 제공한다.
 - `forbidden`과 `unauthorized`는 함수 API이고 `forbidden.js`와 `unauthorized.js`는 special file이다.
 - 이 기능은 현재 canary channel에서 제공되며 변경될 수 있다.

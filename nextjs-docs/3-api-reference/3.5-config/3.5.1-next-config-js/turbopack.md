@@ -18,37 +18,11 @@ Turbopack은 Next.js를 위해 Rust 언어로 개발한 초고속 차세대 증�
 
 ### 기본 설정 구조
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 import path from 'path'
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: path.join(__dirname, '..'),
-    rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
-    resolveAlias: {
-      underscore: 'lodash',
-    },
-  },
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-import path from 'path'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   turbopack: {
     root: path.join(__dirname, '..'),
     rules: {

@@ -20,19 +20,10 @@ SEO 정책이나 특정 웹 서버 환경의 요구에 따라 이 동작을 정�
 
 `next.config.js`에 `trailingSlash` 설정을 추가한다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  trailingSlash: true,
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   trailingSlash: true,
 }
 

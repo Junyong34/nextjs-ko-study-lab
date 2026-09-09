@@ -17,7 +17,7 @@
 `next.config.js`의 `env` 속성을 사용하면 빌드 시점에 특정 환경 변수 값을 애플리케이션의 JavaScript 번들에 직접 주입할 수 있다.
 
 > **레거시 API 안내**:
-> 이 방식은 하위 호환성을 위해 계속 지원되는 레거시 API이며 최신 Next.js에서는 사용을 권장하지 않는다. Next.js 9.4 이후부터는 더욱 직관적이고 표준적인 [.env 환경 변수 가이드](../../../2-guides/environment-variables.md) 방식을 제공하므로 해당 방식을 먼저 고려한다.
+> Next.js 9.4 이후부터는 더욱 직관적이고 표준적인 [.env 환경 변수 가이드](../../../2-guides/environment-variables.md) 방식을 제공하므로 해당 방식을 먼저 고려한다.
 
 > **알아두면 좋은 점**:
 >
@@ -30,7 +30,7 @@
 
 환경 변수를 JavaScript 번들에 등록하려면 `next.config.js`에 `env` 설정을 추가한다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -42,26 +42,9 @@ const nextConfig: NextConfig = {
 export default nextConfig
 ```
 
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  env: {
-    customKey: 'my-value',
-  },
-}
-
-export default nextConfig
-```
-
 설정 후 애플리케이션 코드 내부에서 일반적인 Node.js 환경 변수 문법(`process.env.customKey`)으로 값에 접근할 수 있다:
 
-```tsx filename="app/page.tsx" switcher
-export default function Page() {
-  return <h1>customKey의 값: {process.env.customKey}</h1>
-}
-```
-
-```jsx filename="app/page.js" switcher
+```tsx filename="app/page.tsx"
 export default function Page() {
   return <h1>customKey의 값: {process.env.customKey}</h1>
 }

@@ -16,8 +16,6 @@
 
 `staleTimes`는 [Client Cache](../../../4-glossary/README.md#client-cache)에서 페이지 세그먼트를 캐시하는 실험적 기능이다.
 
-> **experimental**: 이 기능은 현재 실험적이며 변경될 수 있다. 프로덕션 사용은 권장하지 않는다. 테스트해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 의견을 남길 수 있다.
-
 다음처럼 `experimental.staleTimes`에 사용자 지정 `revalidation` 시간을 초 단위로 지정한다.
 
 ```js filename="next.config.js"

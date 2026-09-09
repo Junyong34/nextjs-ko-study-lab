@@ -7,7 +7,7 @@
 ## 학습 목표
 
 - `sassOptions`가 Sass 컴파일러 설정을 담당하는 방식을 이해한다.
-- `next.config.ts`와 `next.config.js`에서 `sassOptions`, `additionalData`, `implementation`을 설정하는 방법을 익힌다.
+- `next.config.ts`에서 `sassOptions`, `additionalData`, `implementation`을 설정하는 방법을 익힌다.
 - `implementation` 이외 속성의 타입 지원 범위와 `functions`의 webpack과 Turbopack 제약을 구분한다.
 
 ## 핵심 개념 및 설명
@@ -18,7 +18,7 @@
 
 공식 예제는 `sassOptions` 객체에 `additionalData`를 작성하고 `implementation`을 추가해 `nextConfig`에 전달한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const sassOptions = {
@@ -35,24 +35,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const sassOptions = {
-  additionalData: `
-    $var: red;
-  `,
-}
-
-const nextConfig = {
-  sassOptions: {
-    ...sassOptions,
-    implementation: 'sass-embedded',
-  },
-}
-
-module.exports = nextConfig
 ```
 
 > **알아두면 좋은 점**:
@@ -95,6 +77,6 @@ module.exports = nextConfig
 ## 챕터 요약
 
 - `sassOptions`는 Sass 컴파일러를 구성하는 `next.config` 옵션이다.
-- 공식 예제는 TypeScript와 JavaScript 설정에서 `additionalData`와 `implementation: 'sass-embedded'`를 사용한다.
+- 공식 예제는 TypeScript 설정에서 `additionalData`와 `implementation: 'sass-embedded'`를 사용한다.
 - `implementation` 이외의 `sassOptions` 속성은 Next.js가 타입을 관리하지 않는다.
 - 사용자 지정 Sass 함수를 정의하는 `functions` 속성은 webpack에서만 지원하며 Turbopack에서는 사용할 수 없다.

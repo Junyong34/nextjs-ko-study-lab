@@ -18,29 +18,10 @@
 
 ### 기본 설정 구조
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  logging: {
-    fetches: {
-      fullUrl: true,
-      hmrRefreshes: true,
-    },
-    serverFunctions: true,
-    incomingRequests: {
-      ignore: [/\api\/v1\/health/],
-    },
-    browserToTerminal: 'warn',
-  },
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   logging: {
     fetches: {
       fullUrl: true,

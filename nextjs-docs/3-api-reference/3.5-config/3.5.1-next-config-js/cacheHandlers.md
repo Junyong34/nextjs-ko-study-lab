@@ -38,7 +38,7 @@ cacheHandlers 설정은 [use cache](../../3.4-directives/use-cache.md)와 [use c
 1. 별도 파일에 cache handler를 정의한다. 구현 세부 사항은 아래 [예제](#examples)에서 확인한다.
 2. Next config 파일에서 해당 파일 경로를 참조한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -49,15 +49,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-module.exports = {
-  cacheHandlers: {
-    default: require.resolve('./cache-handlers/default-handler.js'),
-    remote: require.resolve('./cache-handlers/remote-handler.js'),
-  },
-}
 ```
 
 #### Handler 타입 (Handler types)

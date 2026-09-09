@@ -19,7 +19,7 @@
 
 profile을 정의하려면 [`cacheComponents`](./cacheComponents.md) 플래그를 활성화하고 `next.config.js` 파일의 `cacheLife` 객체에 profile을 추가한다. 다음 예시에서는 `blog` profile을 정의한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -36,37 +36,9 @@ const nextConfig: NextConfig = {
 export default nextConfig
 ```
 
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  cacheComponents: true,
-  cacheLife: {
-    blog: {
-      stale: 3600, // 1시간
-      revalidate: 900, // 15분
-      expire: 86400, // 1일
-    },
-  },
-}
-
-module.exports = nextConfig
-```
-
 이제 컴포넌트나 함수에서 다음과 같이 사용자 지정 `blog` 설정을 사용한다.
 
-```tsx filename="app/actions.ts" highlight={4,5} switcher
-import { cacheLife } from 'next/cache'
-
-export async function getCachedData() {
-  'use cache'
-  cacheLife('blog')
-  const res = await fetch('https://api.example.com/data')
-  const data = await res.json()
-  return data
-}
-```
-
-```jsx filename="app/actions.js" highlight={4,5} switcher
+```tsx filename="app/actions.ts" highlight={4,5}
 import { cacheLife } from 'next/cache'
 
 export async function getCachedData() {

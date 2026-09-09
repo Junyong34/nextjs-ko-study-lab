@@ -15,8 +15,6 @@
 
 ## 핵심 개념 및 설명
 
-`exportPathMap`은 레거시 API이며 더 이상 권장하지 않는다. 하위 호환성을 위해 계속 지원한다.
-
 이 기능은 `next export` 전용이며 현재는 `deprecated` 상태다. `pages`에서는 `getStaticPaths`, `app`에서는 `generateStaticParams`를 사용하는 방식을 권장한다.
 
 `exportPathMap`으로 export할 요청 경로와 렌더링할 페이지의 매핑을 지정할 수 있다. 여기에 정의한 경로는 [`next dev`](../../3.6-cli/next.md#next-dev-options)를 실행할 때에도 사용할 수 있다.

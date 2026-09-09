@@ -14,8 +14,6 @@
 
 ## 핵심 개념 및 설명
 
-이 기능은 현재 experimental 상태이며 변경될 수 있다. production 환경에는 권장하지 않는다. 직접 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 피드백을 공유할 수 있다.
-
 `mdxRs`는 `@next/mdx`와 함께 experimental 용도로 쓰며, MDX 파일을 새로운 Rust compiler로 컴파일한다.
 
 `next.config.js`에서 `@next/mdx` wrapper를 만들고 `experimental.mdxRs`를 `true`로 설정한다. MDX 파일을 페이지로 사용하려면 `pageExtensions`에 `'mdx'`를 포함한다.

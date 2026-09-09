@@ -14,8 +14,6 @@
 
 ## 핵심 개념 및 설명
 
-현재 이 기능은 실험적이며 변경될 수 있으므로 프로덕션 사용을 권장하지 않는다. 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에서 피드백을 공유할 수 있다.
-
 `proxy`를 사용하면 Next.js가 요청 본문을 자동으로 복제하고 메모리에 버퍼링한다. 이렇게 해야 `proxy`와 그 아래에서 실행되는 `Route Handler`가 본문을 여러 번 읽을 수 있다. 과도한 메모리 사용을 막기 위해 이 옵션으로 버퍼링한 본문의 크기 제한을 정한다.
 
 기본 최대 본문 크기는 **10MB**다. 요청 본문이 이 제한을 넘으면 제한된 크기까지만 버퍼링하고 제한을 넘긴 라우트를 알려 주는 경고를 기록한다.
@@ -26,7 +24,7 @@
 
 사람이 읽기 쉬운 문자열 형식으로 크기를 지정한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -36,17 +34,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    proxyClientMaxBodySize: '1mb',
-  },
-}
-
-module.exports = nextConfig
 ```
 
 지원 단위는 `b`, `kb`, `mb`, `gb`다.
@@ -55,7 +42,7 @@ module.exports = nextConfig
 
 바이트 단위 숫자로 크기를 지정할 수도 있다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -65,17 +52,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    proxyClientMaxBodySize: 1048576, // 바이트 단위로 표현한 1MB
-  },
-}
-
-module.exports = nextConfig
 ```
 
 ### Behavior (동작)

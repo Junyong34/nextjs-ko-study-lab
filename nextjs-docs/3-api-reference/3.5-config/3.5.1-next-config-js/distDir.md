@@ -20,19 +20,10 @@ Next.js는 `next build`를 실행할 때 컴파일된 애플리케이션 산출�
 
 `next.config.js`에 `distDir` 설정을 추가한다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  distDir: 'build',
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   distDir: 'build',
 }
 

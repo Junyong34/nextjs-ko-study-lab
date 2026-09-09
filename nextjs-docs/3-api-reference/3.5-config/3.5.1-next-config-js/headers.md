@@ -18,35 +18,10 @@
 
 `headers` 함수는 라우트 매칭 규칙과 적용할 헤더 목록을 담은 객체 배열을 반환한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/about',
-        headers: [
-          {
-            key: 'x-custom-header',
-            value: 'my custom header value',
-          },
-          {
-            key: 'x-another-custom-header',
-            value: 'my other custom header value',
-          },
-        ],
-      },
-    ]
-  },
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   async headers() {
     return [
       {

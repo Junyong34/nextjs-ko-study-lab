@@ -21,7 +21,7 @@ Next.js 내장 Image Optimization API 대신 외부 클라우드 이미지 프�
 
 클라우드 이미지 프로바이더를 전역 로더로 쓰려면 `loader`를 `'custom'`으로 지정하고 `loaderFile` 경로를 설정한다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -34,21 +34,9 @@ const nextConfig: NextConfig = {
 export default nextConfig
 ```
 
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  images: {
-    loader: 'custom',
-    loaderFile: './my/image/loader.js',
-  },
-}
-
-export default nextConfig
-```
-
 `loaderFile`은 Next.js 애플리케이션 루트를 기준으로 한 상대 파일 경로를 가리켜야 한다. 이 파일은 URL 문자열을 반환하는 기본 함수(default function)를 export해야 한다:
 
-```ts filename="my/image/loader.ts" switcher
+```ts filename="my/image/loader.ts"
 'use client'
 
 interface ImageLoaderProps {
@@ -58,14 +46,6 @@ interface ImageLoaderProps {
 }
 
 export default function myImageLoader({ src, width, quality }: ImageLoaderProps): string {
-  return `https://example.com/${src}?w=${width}&q=${quality || 75}`
-}
-```
-
-```js filename="my/image/loader.js" switcher
-'use client'
-
-export default function myImageLoader({ src, width, quality }) {
   return `https://example.com/${src}?w=${width}&q=${quality || 75}`
 }
 ```
@@ -109,7 +89,7 @@ Next.js 내장 Image Optimization API와 `<Image>` 컴포넌트의 동작 방식
 
 Next.js는 악의적인 사용자가 임의의 외부 URL을 이미지 최적화 엔드포인트로 요청해 서버 자원을 고갈시키는 공격(SSRF)을 방지하려고 엄격한 패턴 매칭을 요구한다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {

@@ -16,9 +16,7 @@
 
 `staticGeneration*` 옵션은 고급 사용 사례에서 Static Generation 프로세스를 구성하는 데 쓴다.
 
-> **experimental**: 이 기능은 현재 실험적이며 변경될 수 있다. 프로덕션 사용은 권장하지 않는다. 테스트해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 의견을 남길 수 있다.
-
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -30,18 +28,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-const nextConfig = {
-  experimental: {
-    staticGenerationRetryCount: 1,
-    staticGenerationMaxConcurrency: 8,
-    staticGenerationMinPagesPerWorker: 25,
-  },
-}
-
-module.exports = nextConfig
 ```
 
 ## Config Options

@@ -14,8 +14,6 @@
 
 ## 핵심 개념 및 설명
 
-> **Legacy API**: 이 API는 더 이상 권장하지 않는다. backward compatibility를 위해 계속 지원한다.
-
 > **알아두면 좋은 점**: Next.js 13.4에서 App Router가 stable이 되면서 이 옵션은 더 이상 필요하지 않다.
 
 App Router의 [`app` directory](https://nextjs.org/docs/app)는 [layouts](../../3.1-file-conventions/layout.md), [Server Components](../../../1-getting-started/server-and-client-components.md), [streaming](../../3.1-file-conventions/loading.md), [colocated data fetching](../../../1-getting-started/fetching-data.md)을 지원한다.

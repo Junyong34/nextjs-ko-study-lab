@@ -14,8 +14,6 @@
 
 ## 핵심 개념 및 설명
 
-이 기능은 현재 `experimental` 상태이며 변경될 수 있다. production 환경에는 권장하지 않는다. 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 피드백을 남길 수 있다.
-
 일부 패키지는 수백 개 또는 수천 개의 모듈을 export하므로 개발 환경과 프로덕션 환경에서 성능 문제를 일으킬 수 있다. `experimental.optimizePackageImports`에 패키지를 추가하면 named export가 많은 import 문을 쓰는 편리함을 유지하면서 실제로 사용하는 모듈만 로드한다.
 
 ### 설정 예시

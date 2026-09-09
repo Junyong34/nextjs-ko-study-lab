@@ -35,19 +35,10 @@ Next.js는 프로덕션 서버 자체도 함께 추적해 `.next/next-server.js.
 
 Next.js는 프로덕션 배포에 필요한 최소 파일만 모아 `standalone` 폴더를 자동으로 생성할 수 있다. 선택된 `node_modules`도 여기에 함께 들어간다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   output: 'standalone',
 }
 

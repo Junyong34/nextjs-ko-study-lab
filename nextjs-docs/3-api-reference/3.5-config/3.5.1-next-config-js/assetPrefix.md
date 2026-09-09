@@ -20,7 +20,7 @@
 
 일반적으로 로컬 개발 서버(`next dev`)에서는 로컬 파일 시스템에서 정적 파일을 서빙하고, 프로덕션 빌드에서만 CDN 주소를 적용하도록 환경을 분기한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 
@@ -28,21 +28,6 @@ export default (phase: string) => {
   const isDev = phase === PHASE_DEVELOPMENT_SERVER
 
   const nextConfig: NextConfig = {
-    assetPrefix: isDev ? undefined : 'https://cdn.example.com',
-  }
-
-  return nextConfig
-}
-```
-
-```js filename="next.config.mjs" switcher
-import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
-
-export default (phase) => {
-  const isDev = phase === PHASE_DEVELOPMENT_SERVER
-
-  /** @type {import('next').NextConfig} */
-  const nextConfig = {
     assetPrefix: isDev ? undefined : 'https://cdn.example.com',
   }
 

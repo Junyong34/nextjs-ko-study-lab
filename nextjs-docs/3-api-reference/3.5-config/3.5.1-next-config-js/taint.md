@@ -15,8 +15,6 @@
 
 ## 핵심 개념 및 설명
 
-이 기능은 현재 `experimental`이며 변경될 수 있다. production에서는 사용을 권장하지 않는다. 사용해 본 뒤 [GitHub](https://github.com/vercel/next.js/issues)에서 의견을 공유한다.
-
 ### 사용법 (Usage)
 
 `taint` 옵션은 객체와 값에 taint를 적용하는 React `experimental` API를 활성화한다. 이 기능은 민감한 데이터가 실수로 클라이언트에 전달되는 일을 막는 데 도움이 된다. 활성화하면 다음 API를 사용할 수 있다.
@@ -26,7 +24,7 @@
 
 > **알아두면 좋은 점**: 이 flag를 활성화하면 `app` 디렉토리에서 React `experimental` 채널도 활성화한다. `process.env`에도 taint를 적용하므로 `process.env` 전체를 `Client Component`에 전달할 수 없다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -36,17 +34,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    taint: true,
-  },
-}
-
-module.exports = nextConfig
 ```
 
 > **경고**: 클라이언트에 민감한 데이터가 노출되는 것을 막는 수단으로 taint API에만 의존하지 않는다. [보안 권장 사항](https://nextjs.org/blog/security-nextjs-server-components-actions)을 확인한다.
@@ -74,7 +61,7 @@ taint API를 쓰면 클라이언트로 전달해서는 안 되는 데이터를 �
 
 `getUserDetails` 함수는 특정 사용자의 데이터를 반환한다. 사용자 객체 참조에 taint를 적용하면 해당 객체는 `Server Component`와 `Client Component` 사이의 경계를 넘어가지 못한다. 여기서는 `UserCard`가 `Client Component`라고 가정한다.
 
-```ts switcher
+```ts
 import { experimental_taintObjectReference } from 'react'
 
 async function getUserDetails(id: string): Promise<UserDetails> {
@@ -89,43 +76,14 @@ async function getUserDetails(id: string): Promise<UserDetails> {
 }
 ```
 
-```js switcher
-import { experimental_taintObjectReference } from 'react'
-
-async function getUserDetails(id) {
-  const user = await db.queryUserById(id)
-
-  experimental_taintObjectReference(
-    'Do not use the entire user info object. Instead, select only the fields you need.',
-    user
-  )
-
-  return user
-}
-```
-
 taint된 `userDetails` 객체의 개별 필드는 계속 읽을 수 있다.
 
-```tsx filename="app/contact/page.tsx" switcher
+```tsx filename="app/contact/page.tsx"
 export async function ContactPage({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
-  const { id } = await params
-  const userDetails = await getUserDetails(id)
-
-  return (
-    <UserCard
-      firstName={userDetails.firstName}
-      lastName={userDetails.lastName}
-    />
-  )
-}
-```
-
-```jsx filename="app/contact/page.js" switcher
-export async function ContactPage({ params }) {
   const { id } = await params
   const userDetails = await getUserDetails(id)
 
@@ -140,22 +98,12 @@ export async function ContactPage({ params }) {
 
 객체 전체를 `Client Component`에 전달하면 오류가 발생한다.
 
-```tsx switcher
+```tsx
 export async function ContactPage({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
-  const userDetails = await getUserDetails(id)
-
-  // 오류가 발생한다
-  return <UserCard user={userDetails} />
-}
-```
-
-```jsx switcher
-export async function ContactPage({ params }) {
-  const { id } = await params
   const userDetails = await getUserDetails(id)
 
   // 오류가 발생한다
@@ -169,26 +117,10 @@ export async function ContactPage({ params }) {
 
 `config.SERVICE_API_KEY` 값에 taint를 적용할 수 있다.
 
-```ts switcher
+```ts
 import { experimental_taintUniqueValue } from 'react'
 
 async function getSystemConfig(): Promise<SystemConfig> {
-  const config = await configService.getConfigDetails()
-
-  experimental_taintUniqueValue(
-    'Do not pass configuration tokens to the client',
-    config,
-    config.SERVICE_API_KEY
-  )
-
-  return config
-}
-```
-
-```js switcher
-import { experimental_taintUniqueValue } from 'react'
-
-async function getSystemConfig() {
   const config = await configService.getConfigDetails()
 
   experimental_taintUniqueValue(

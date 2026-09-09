@@ -42,7 +42,7 @@ bun add -D babel-plugin-react-compiler
 
 그다음 `next.config.js`에 `reactCompiler` 옵션을 추가한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -50,22 +50,13 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactCompiler: true,
-}
-
-module.exports = nextConfig
 ```
 
 ### Annotations (주석)
 
 다음과 같이 컴파일러를 `opt-in` 모드로 구성할 수 있다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -77,27 +68,9 @@ const nextConfig: NextConfig = {
 export default nextConfig
 ```
 
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactCompiler: {
-    compilationMode: 'annotation',
-  },
-}
-
-module.exports = nextConfig
-```
-
 그다음 특정 컴포넌트나 훅에 React의 `"use memo"` 지시어를 붙여 opt-in할 수 있다.
 
-```ts filename="app/page.tsx" switcher
-export default function Page() {
-  'use memo'
-  // ...
-}
-```
-
-```js filename="app/page.js" switcher
+```ts filename="app/page.tsx"
 export default function Page() {
   'use memo'
   // ...

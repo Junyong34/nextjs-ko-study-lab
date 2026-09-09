@@ -18,24 +18,10 @@ Next.js는 CSRF(Cross-Site Request Forgery) 공격을 방지하기 위해 Server
 
 ### 기본 설정 구조
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['my-proxy.com', '*.my-proxy.com'],
-      bodySizeLimit: '2mb',
-    },
-  },
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   experimental: {
     serverActions: {
       allowedOrigins: ['my-proxy.com', '*.my-proxy.com'],

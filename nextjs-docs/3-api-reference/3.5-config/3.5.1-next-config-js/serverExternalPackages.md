@@ -18,19 +18,10 @@
 
 ### 기본 설정 구조
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['@acme/ui', 'package-name'],
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   serverExternalPackages: ['@acme/ui', 'package-name'],
 }
 

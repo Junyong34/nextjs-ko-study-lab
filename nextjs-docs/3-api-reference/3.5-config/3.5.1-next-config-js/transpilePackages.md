@@ -20,19 +20,10 @@ Next.js의 기본 SWC 컴파일 파이프라인은 성능을 최적화하려고 
 
 `transpilePackages`는 `next.config.js`, `next.config.mjs`, `next.config.ts`의 최상위 설정 객체에 패키지 이름 문자열 배열로 지정한다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['package-name', '@scope/pkg'],
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   transpilePackages: ['package-name', '@scope/pkg'],
 }
 

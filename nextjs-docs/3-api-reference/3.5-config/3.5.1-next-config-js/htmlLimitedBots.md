@@ -15,7 +15,7 @@
 
 `htmlLimitedBots`는 지정한 user agent 목록에 `streaming metadata` 대신 `blocking metadata`를 전달하도록 설정하는 옵션이다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const config: NextConfig = {
@@ -23,12 +23,6 @@ const config: NextConfig = {
 }
 
 export default config
-```
-
-```js filename="next.config.js" switcher
-module.exports = {
-  htmlLimitedBots: /MySpecialBot|MyAnotherSpecialBot|SimpleCrawler/,
-}
 ```
 
 ### 기본 목록 (Default list)
@@ -46,18 +40,12 @@ Next.js가 기본으로 담고 있는 HTML limited bot 목록은 다음과 같�
 
 기본 목록을 덮어쓰는 설정은 다음과 같다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 const config: NextConfig = {
   htmlLimitedBots: /MySpecialBot|MyAnotherSpecialBot|SimpleCrawler/,
 }
 
 export default config
-```
-
-```js filename="next.config.js" switcher
-module.exports = {
-  htmlLimitedBots: /MySpecialBot|MyAnotherSpecialBot|SimpleCrawler/,
-}
 ```
 
 ### 비활성화 (Disabling)
@@ -72,12 +60,6 @@ const config: NextConfig = {
 }
 
 export default config
-```
-
-```js filename="next.config.js" switcher
-module.exports = {
-  htmlLimitedBots: /.*/,
-}
 ```
 
 ### 버전 기록 (Version History)

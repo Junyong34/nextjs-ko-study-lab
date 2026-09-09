@@ -15,13 +15,11 @@
 
 ## 핵심 개념 및 설명
 
-> 이 기능은 현재 experimental이며 변경될 수 있다. production에서 사용하는 것은 권장하지 않는다. 사용해 본 뒤 GitHub에서 의견을 공유할 수 있다.
-
 CSS 파일을 chunk로 분할하고 순서를 다시 정해 웹 애플리케이션의 성능을 높이는 전략이 CSS Chunking이다. 이를 적용하면 애플리케이션의 CSS를 한 번에 모두 로드하지 않고, 각 route는 자신에게 필요한 CSS에 가까운 양만 로드한다.
 
 CSS 파일을 어떻게 나눌지는 next.config.js의 experimental.cssChunking 옵션에서 정한다.
 
-```tsx filename="next.config.ts" switcher
+```tsx filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig = {
@@ -31,17 +29,6 @@ const nextConfig = {
 } satisfies NextConfig
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    cssChunking: true, // 기본값
-  },
-}
-
-module.exports = nextConfig
 ```
 
 ### 옵션 (Options)
@@ -73,7 +60,7 @@ webpack 쪽 이유는 대개 정확성이다. 예기치 않은 CSS 동작이 발
 
 graph 전략은 CSS를 shared chunk로 묶어 요청 수를 줄이는데, 문자열 형식으로 활성화하면 기본 조정값을 그대로 쓴다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig = {
@@ -87,7 +74,7 @@ export default nextConfig
 
 균형을 바꾸려면 객체를 전달한다. requestCost와 weightDistribution은 모두 선택 사항이므로 변경할 값만 포함한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig = {

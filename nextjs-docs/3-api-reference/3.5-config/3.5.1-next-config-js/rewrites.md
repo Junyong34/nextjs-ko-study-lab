@@ -23,26 +23,10 @@
 
 `rewrites` 함수는 규칙 객체의 배열을 반환하거나 실행 단계별(`beforeFiles`, `afterFiles`, `fallback`) 속성을 갖는 객체를 반환한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: '/about',
-        destination: '/',
-      },
-    ]
-  },
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   async rewrites() {
     return [
       {

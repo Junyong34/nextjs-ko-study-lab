@@ -19,7 +19,7 @@
 
 ### 사용법 (Usage)
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -29,17 +29,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    turbopackLocalPostcssConfig: true,
-  },
-}
-
-module.exports = nextConfig
 ```
 
 ### 동작 방식 (Behavior)

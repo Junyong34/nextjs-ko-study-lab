@@ -19,7 +19,7 @@
 
 ### 사용법 (Usage)
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -33,21 +33,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  turbopack: {
-    ignoreIssue: [
-      {
-        path: '**/vendor/**',
-      },
-    ],
-  },
-}
-
-module.exports = nextConfig
 ```
 
 ### 옵션 (Options)
@@ -121,7 +106,7 @@ module.exports = {
 
 코드에서 선택적 `require()` 호출을 `try/catch`로 감싸면 Turbopack이 `"Module not found"` 경고를 보고할 수 있다. 다음과 같이 억제할 수 있다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -136,22 +121,6 @@ const nextConfig: NextConfig = {
 }
 
 export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  turbopack: {
-    ignoreIssue: [
-      {
-        path: '**/lib/optional-feature/**',
-        title: 'Module not found',
-      },
-    ],
-  },
-}
-
-module.exports = nextConfig
 ```
 
 #### 여러 규칙 조합 (Combining multiple rules)

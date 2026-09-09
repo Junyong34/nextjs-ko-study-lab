@@ -20,26 +20,11 @@
 
 MDX 지원 패키지(`@next/mdx`)와 함께 구성해 `.md` 및 `.mdx` 확장자를 라우팅 시스템에 추가한다. 전형적인 설정 예제는 다음과 같다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 import createMDX from '@next/mdx'
 
 const nextConfig: NextConfig = {
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
-}
-
-const withMDX = createMDX({
-  // 필요 시 마크다운 플러그인 옵션 추가
-})
-
-export default withMDX(nextConfig)
-```
-
-```js filename="next.config.mjs" switcher
-import createMDX from '@next/mdx'
-
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
 }
 

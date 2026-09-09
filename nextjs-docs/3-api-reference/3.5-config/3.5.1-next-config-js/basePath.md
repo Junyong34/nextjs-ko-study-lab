@@ -18,19 +18,10 @@
 
 `basePath`는 반드시 슬래시(`/`)로 시작해야 하며 끝에 슬래시(trailing slash)를 붙여서는 안 된다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  basePath: '/docs',
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   basePath: '/docs',
 }
 

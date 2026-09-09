@@ -14,11 +14,11 @@
 
 ## 핵심 개념 및 설명
 
-이 기능은 현재 experimental이며 변경될 수 있다. production에서는 사용을 권장하지 않는다. Lightning CSS는 Rust로 작성된 빠른 CSS transformer이자 minifier다. `useLightningcss`는 webpack에서 Lightning CSS를 사용하도록 설정한다.
+Lightning CSS는 Rust로 작성된 빠른 CSS transformer이자 minifier다. `useLightningcss`는 webpack에서 Lightning CSS를 사용하도록 설정한다.
 
 이 옵션을 설정하지 않으면 Next.js의 webpack은 기본적으로 PostCSS와 `postcss-preset-env`를 사용한다. Turbopack은 Next.js 14.2부터 Lightning CSS를 기본으로 사용하므로 이 옵션의 영향을 받지 않는다. Turbopack에서는 항상 Lightning CSS를 사용한다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -36,7 +36,7 @@ Lightning CSS는 기본적으로 [browserslist](https://browsersl.ist/) target�
 
 이 설정은 `useLightningcss`를 활성화한 webpack과 Turbopack 모두에 적용된다.
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {

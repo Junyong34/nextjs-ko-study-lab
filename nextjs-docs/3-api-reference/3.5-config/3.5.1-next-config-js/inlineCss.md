@@ -14,8 +14,6 @@
 
 ## 핵심 개념 및 설명
 
-이 기능은 현재 experimental 상태이며 변경될 수 있다. production 환경에는 권장하지 않는다. 기능을 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에 피드백을 공유할 수 있다.
-
 ## Usage (사용법)
 
 `inlineCss`는 `<head>` 안에 CSS를 삽입하는 experimental 지원 기능이다. 이 플래그를 활성화하면 Next.js는 일반적으로 `<link>` 태그를 생성하는 모든 위치에서 `<style>` 태그를 대신 생성한다.

@@ -18,21 +18,10 @@ Next.js는 개발 중인 페이지가 정적(Static)으로 prerender될 수 있�
 
 ### 기본 설정 구조
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  devIndicators: {
-    position: 'bottom-right',
-  },
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   devIndicators: {
     position: 'bottom-right',
   },

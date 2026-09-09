@@ -20,19 +20,10 @@
 
 `next.config.ts`, `next.config.mjs`, 또는 `next.config.js` 파일의 최상위 설정 객체에서 불리언(boolean) 값으로 활성화한다:
 
-```ts filename="next.config.ts" switcher
+```ts filename="next.config.ts"
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  typedRoutes: true,
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.mjs" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
   typedRoutes: true,
 }
 

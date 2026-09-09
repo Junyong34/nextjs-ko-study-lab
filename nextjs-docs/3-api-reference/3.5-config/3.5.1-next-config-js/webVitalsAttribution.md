@@ -15,8 +15,6 @@
 
 ## 핵심 개념 및 설명
 
-> **실험적 기능**: `experimental.webVitalsAttribution`은 현재 experimental이며 변경될 수 있다. production에는 권장하지 않는다. 기능을 사용해 보고 [GitHub](https://github.com/vercel/next.js/issues)에서 피드백을 공유한다.
-
 Web Vitals 문제를 디버깅할 때는 문제를 일으킨 원인을 특정하면 도움이 된다. 예를 들어 Cumulative Layout Shift(CLS)에서는 가장 큰 단일 layout shift가 발생했을 때 처음 이동한 요소가 무엇인지 알고 싶을 수 있다. Largest Contentful Paint(LCP)에서는 페이지의 LCP에 해당하는 요소를 확인할 수 있다. LCP 요소가 이미지라면 이미지 resource URL로 최적화할 asset을 찾는 데 도움이 된다.
 
 Web Vitals 점수에 가장 크게 기여한 요소를 특정하는 기능을 `attribution`이라고 한다. attribution을 사용하면 `PerformanceEventTiming`, `PerformanceNavigationTiming`, `PerformanceResourceTiming`의 entry처럼 더 자세한 정보를 얻을 수 있다. 관련 정의는 [`web-vitals`의 attribution 설명](https://github.com/GoogleChrome/web-vitals/blob/4ca38ae64b8d1e899028c692f94d4c56acfc996c/README.md#attribution)에서 확인한다.
