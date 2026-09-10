@@ -12,6 +12,7 @@ import type { LearningInventory } from '@/lib/learning-progress/types'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildWebsiteJsonLd } from '@/lib/seo/json-ld'
 import { siteConfig } from '@/lib/seo/config'
+import { isPublicIndexingAllowed } from '@/lib/seo/indexability'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
+  ...(!isPublicIndexingAllowed() ? { robots: { index: false, follow: false } } : {}),
 }
 
 export default function RootLayout({

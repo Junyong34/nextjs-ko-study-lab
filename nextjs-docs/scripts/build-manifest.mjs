@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { deriveDocumentSeo } from './manifest-seo.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -326,6 +327,7 @@ function buildManifest() {
       url,
       slug,
       title,
+      content,
       demos,
       demoFeasibility,
     };
@@ -338,6 +340,12 @@ function buildManifest() {
     }
     urlMap[url] = docEntry;
   }
+
+  const seoDocs = deriveDocumentSeo(docs);
+  docs.splice(0, docs.length, ...seoDocs.map(({ content, ...doc }) => doc));
+  allDocsMap.clear();
+  for (const doc of docs) allDocsMap.set(doc.path, doc);
+  for (const doc of docs) urlMap[doc.url] = doc;
 
   // URL 알파벳/계층 순서로 정렬
   docs.sort((a, b) => a.path.localeCompare(b.path));

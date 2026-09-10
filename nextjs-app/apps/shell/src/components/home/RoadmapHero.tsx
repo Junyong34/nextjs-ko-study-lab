@@ -6,10 +6,11 @@ import { Rocket, BookOpen, Layers, PlayCircle, BookmarkCheck, ArrowRight, Copy, 
 
 interface RoadmapHeroProps {
   totalDocs: number
-  totalDemos: number
+  registeredDemoCount: number
+  availableDemoCount: number
 }
 
-export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
+export function RoadmapHero({ totalDocs, registeredDemoCount, availableDemoCount }: RoadmapHeroProps) {
   const [copied, setCopied] = useState(false)
   const cliCommand = 'npx create-next-app@latest --typescript --tailwind --app'
 
@@ -56,7 +57,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
           </span>
           <span className="inline-flex items-center gap-1 rounded-full border border-zinc-200 bg-zinc-100/90 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-300">
             <PlayCircle className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-            {totalDemos} Live Demos
+            {availableDemoCount} Live Demos
           </span>
         </div>
 
@@ -71,7 +72,7 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
             </span>
           </h1>
           <p className="text-base sm:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-3xl">
-            Next.js 공식 문서를 한국어로 번역한 학습 문서를 읽고, {totalDemos}개 실습 예제에서 핵심 기능의 동작을 직접 확인해 보세요.
+            Next.js 공식 문서를 한국어로 번역한 학습 문서를 읽고, {availableDemoCount}개 실행 가능한 실습 예제에서 핵심 기능의 동작을 직접 확인해 보세요.
           </p>
         </div>
 
@@ -148,9 +149,11 @@ export function RoadmapHero({ totalDocs, totalDemos }: RoadmapHeroProps) {
               <span className="text-xs font-medium">실습 예제</span>
             </div>
             <p className="mt-2 text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
-              {totalDemos > 0 ? `${totalDemos}개` : '241개'}
+              {availableDemoCount}개
             </p>
-            <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">Next.js 기능을 실행하며 확인</p>
+            <p className="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">
+              전체 등록 {registeredDemoCount}개 중 실행 가능
+            </p>
           </div>
 
           <div className="rounded-2xl border border-zinc-200/70 bg-white/80 p-4 backdrop-blur-xs dark:border-zinc-800/70 dark:bg-zinc-900/70">

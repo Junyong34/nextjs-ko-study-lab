@@ -20,14 +20,20 @@ export const metadata: Metadata = buildPageMetadata({
 export default function HomePage() {
   const manifest = getManifest()
   const allDemos = getDemos()
+  const availableDemos = allDemos.filter((demo) => demo.status === 'done')
 
   const totalDocs = manifest.totalDocs || 0
-  const totalDemos = allDemos.length || 0
+  const registeredDemoCount = allDemos.length
+  const availableDemoCount = availableDemos.length
 
   return (
     <div className="w-full space-y-16 sm:space-y-20 pb-12">
       {/* 1. Hero Section */}
-      <RoadmapHero totalDocs={totalDocs} totalDemos={totalDemos} />
+      <RoadmapHero
+        totalDocs={totalDocs}
+        registeredDemoCount={registeredDemoCount}
+        availableDemoCount={availableDemoCount}
+      />
 
       {/* 2. Next.js 16 & React 19 Key Highlights (컨텐츠 개발 후 재연결 예정) */}
       {/* <Next16HighlightsSection /> */}
@@ -36,11 +42,14 @@ export default function HomePage() {
       <RoadmapBookshelf demos={allDemos} />
 
       {/* 4. Interactive Live Demos Showcase */}
-      <FeaturedDemosSection totalDemos={totalDemos} />
+      <FeaturedDemosSection
+        registeredDemoCount={registeredDemoCount}
+        availableDemoCount={availableDemoCount}
+        availableDemos={availableDemos}
+      />
 
       {/* 5. Learning Progress Dashboard Widget */}
       <LearningProgressWidget />
     </div>
   )
 }
-

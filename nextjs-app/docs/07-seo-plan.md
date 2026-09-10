@@ -8,6 +8,8 @@
 |---|---|
 | 사이트 URL | `packages/demos/src/metadata.ts`의 `siteUrl`: `NEXT_PUBLIC_SITE_URL` 또는 `https://www.learn-nextjs-lab.space` |
 | 셸 메타데이터 | `apps/shell/src/lib/seo/`의 config·metadata·json-ld 헬퍼 사용 |
+| 문서별 description | `nextjs-docs/docs-manifest.json`이 학습 목표 첫 불릿 또는 목차형 대체 문구에서 파생하며, 상세 문서 283개의 `seoTitle`·`description`을 고유하게 유지 |
+| Preview·staging 색인 정책 | `VERCEL_TARGET_ENV`·`VERCEL_ENV`가 모두 production일 때만 공개 색인을 허용. Preview·development·사용자 정의 환경·모순된 값은 `noindex, nofollow`와 전체 robots 차단 |
 | robots | `/zone/`, `/demo-static/` 크롤링 제외 설정 |
 | sitemap | 문서 매니페스트의 비어 있지 않은 slug와 `done` 데모 직접 URL, 홈·색인 포함 |
 | JSON-LD | `WebSite`, `LearningResource`, `BreadcrumbList` 생성 코드 존재 |
@@ -60,3 +62,12 @@ PWA manifest, 작성자 `Organization`·`Person` 스키마, 키워드 마케팅�
 ## 7. 확인 기록
 
 2026-09-01 SEO 구현 기록은 현재 소스와 구분해 보존한다. 당시 도메인 미확정을 전제로 나눴던 계획은 현재 공유 URL 설정과 맞지 않아 위 순서로 정리했다. 검색 서비스 등록 여부는 코드에서 알 수 없으므로 “미착수”로 단정하지 않고 확인 필요로 남겼다.
+
+2026-09-10 검색 발견성과 공개 정보 정확성 개선을 구현했다.
+
+- 홈은 `demos.yaml` 전체 등록 수와 `status: done` 수를 분리한다. `Live Demos`와 “실행 가능한 실습 예제”는 `done` 수만 사용하며, 현재 기준은 실행 가능 58개·전체 등록 240개다. 추천 카드는 현재 `done` 목록에 있는 항목만 보인다.
+- manifest 생성기는 문서 원문에서 SEO 제목과 description을 파생한다. 학습 목표가 있으면 첫 불릿을, 없는 목차형 README는 제목 기반 대체 문구를 쓴다. H1 중복은 상위 README 제목으로 구분하고 빈 값·중복은 생성 실패로 처리한다.
+- 문서 상세 HTML metadata, Open Graph, Twitter, 동적 OG 제목과 `LearningResource` JSON-LD는 같은 manifest 필드를 사용한다. 본문 H1과 학습 기록 키는 기존 값을 유지한다.
+- Vercel의 사용자 정의 환경은 `VERCEL_TARGET_ENV`로 구분하므로 `VERCEL_ENV`와 함께 판정한다. 두 값이 모두 없으면 기존 자체 호스팅 정책을 유지하고, 정의된 값 중 하나라도 production이 아니면 색인을 막는다. 환경 변수 정의는 [Vercel 시스템 환경 변수 문서](https://vercel.com/docs/environment-variables/system-environment-variables)를 기준으로 확인했다.
+- `pnpm --filter @study/docs build`, `pnpm test:manifest`, `pnpm lint`, `pnpm check-types`, `pnpm test`는 통과했다. lint의 캐시 태그 경고 26건은 기존 항목이며 새 경고는 없다.
+- 셸 production build는 실행 환경이 Turbopack의 내부 프로세스 포트 바인딩을 거부해 실패했다. 권한 확장 재시도도 같은 `Operation not permitted` 오류로 실패했으므로 코드 실패로 판정하지 않았다. 로컬 또는 CI에서 `pnpm --filter @study/shell build`와 production·preview 응답 점검을 다시 실행해야 한다.

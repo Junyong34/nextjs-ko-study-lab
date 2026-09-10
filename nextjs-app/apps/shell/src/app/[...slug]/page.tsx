@@ -35,10 +35,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return buildPageMetadata({
-    title: doc.title,
-    description: 'Next.js App Router 한국어 학습 가이드입니다.',
+    title: doc.seoTitle,
+    description: doc.description,
     path: doc.url,
-    dynamicOgImage: { title: doc.title },
+    dynamicOgImage: { title: doc.seoTitle },
   })
 }
 
@@ -61,12 +61,11 @@ export default async function DocPage({ params }: PageProps) {
   const allDemos = getDemos()
   const headings = parseHeadings(content)
   const breadcrumbs = doc.slug ? doc.slug.slice(0, -1).map((s) => s.replace(/-/g, ' ')) : []
-  const description = `${doc.title} - Next.js App Router 한국어 학습 가이드`
 
   return (
     <div className="flex items-start gap-8">
       <JsonLd data={buildBreadcrumbJsonLdFor({ title: doc.title, url: doc.url })} />
-      <JsonLd data={buildLearningResourceJsonLd({ title: doc.title, description, url: doc.url })} />
+      <JsonLd data={buildLearningResourceJsonLd({ title: doc.seoTitle, description: doc.description, url: doc.url })} />
       {/* Main Document Content */}
       <div className="min-w-0 flex-1 space-y-6">
         {/* Category / Breadcrumbs & Top-Right Share Button */}

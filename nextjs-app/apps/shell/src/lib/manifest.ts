@@ -8,6 +8,8 @@ export interface DocEntry {
   url: string
   slug: string[]
   title: string
+  seoTitle: string
+  description: string
   demos: Array<{
     path: string
     mode?: 'inline' | 'fullscreen'

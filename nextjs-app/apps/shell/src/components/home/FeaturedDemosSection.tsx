@@ -84,7 +84,20 @@ const FEATURED_DEMOS: FeaturedDemoItem[] = [
   },
 ]
 
-export function FeaturedDemosSection({ totalDemos }: { totalDemos: number }) {
+interface FeaturedDemosSectionProps {
+  registeredDemoCount: number
+  availableDemoCount: number
+  availableDemos: Demo[]
+}
+
+export function FeaturedDemosSection({
+  registeredDemoCount,
+  availableDemoCount,
+  availableDemos,
+}: FeaturedDemosSectionProps) {
+  const availableDemoUrls = new Set(availableDemos.map((demo) => demo.url))
+  const featuredDemos = FEATURED_DEMOS.filter((demo) => availableDemoUrls.has(demo.demoUrl.replace('/demo/', '')))
+
   return (
     <section className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-zinc-200/80 pb-4 dark:border-zinc-800/80">
@@ -98,7 +111,7 @@ export function FeaturedDemosSection({ totalDemos }: { totalDemos: number }) {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            전체 <strong className="text-zinc-900 dark:text-zinc-100">{totalDemos}개</strong> 예제
+            실행 가능 <strong className="text-zinc-900 dark:text-zinc-100">{availableDemoCount}개</strong> · 전체 등록 {registeredDemoCount}개
           </span>
           <Link
             href="/demo"
@@ -111,7 +124,7 @@ export function FeaturedDemosSection({ totalDemos }: { totalDemos: number }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {FEATURED_DEMOS.map((demo) => (
+        {featuredDemos.map((demo) => (
           <div
             key={demo.id}
             className="group flex flex-col justify-between rounded-2xl border border-zinc-200/80 bg-white/70 p-5 transition hover:border-zinc-300 hover:bg-white hover:shadow-md dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900/90"
