@@ -851,7 +851,7 @@
     "title": "REST GET/POST 주문 API (route.ts)",
     "doc": "3-api-reference/3.1-file-conventions/route.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/route/webhook-signature",
@@ -1089,7 +1089,7 @@
     "title": "useRouter push, replace, back 프로그래밍 방식 내비게이션",
     "doc": "3-api-reference/3.3-functions/use-router.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/use-router/refresh-server-sync",
@@ -1236,7 +1236,7 @@
     "title": "cookies().get() 읽기 & cookies().set() 세션 쿠키 발급",
     "doc": "3-api-reference/3.3-functions/cookies.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/cookies/delete-logout",
@@ -1341,7 +1341,7 @@
     "title": "NextResponse.json() 응답 빌더 및 상태 코드 주입",
     "doc": "3-api-reference/3.3-functions/next-response.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/next-response/rewrite-virtual",
@@ -1383,7 +1383,7 @@
     "title": "generateStaticParams 인기 상품 사전 SSG 빌드 생성",
     "doc": "3-api-reference/3.3-functions/generate-static-params.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/generate-static-params/multiple-segments",
