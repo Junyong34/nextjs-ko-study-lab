@@ -1113,7 +1113,7 @@
   title: "forbidden() 403 인가 거부 트리거"
   doc: 3-api-reference/3.3-functions/forbidden.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/unauthorized/trigger-401
   title: "unauthorized() 401 인증 필요 트리거"
