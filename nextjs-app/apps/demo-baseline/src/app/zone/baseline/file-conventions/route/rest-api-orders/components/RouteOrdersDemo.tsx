@@ -1,20 +1,14 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-
-interface Order {
-  id: string
-  productId: string
-  productName: string
-  quantity: number
-  price: number
-  total: number
-  status: string
-  createdAt: string
-}
+import { OrderConsolePanel } from './OrderConsolePanel'
+import type { DemoStatus, Order } from '../types'
 
 interface RouteOrdersDemoProps {
-  onStatusChange?: (status: { httpStatus: number; orderCount: number; lastMethod: string }) => void
+  onStatusChange?: (status: DemoStatus) => void
 }
+
+const INVALID_PRODUCT_ID = 'PROD-999'
+const API_ENDPOINT = '/zone/baseline/file-conventions/route/rest-api-orders/api'
 
 export function RouteOrdersDemo({ onStatusChange }: RouteOrdersDemoProps) {
   const [selectedProduct, setSelectedProduct] = useState('PROD-001')
@@ -23,16 +17,13 @@ export function RouteOrdersDemo({ onStatusChange }: RouteOrdersDemoProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [lastResponseStatus, setLastResponseStatus] = useState<number | null>(null)
   const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: route.ts 엔드포인트 연결 준비'
+    '쇼핑몰 세션 초기화: route.ts 엔드포인트 연결 준비',
   ])
-
-  const API_ENDPOINT = '/zone/baseline/file-conventions/route/rest-api-orders/api'
+  // POST로 방금 만든 주문 id. GET을 다시 호출해 실제로 목록에 나타나는지 대조하는 데 쓴다.
+  const [pendingCreatedOrderId, setPendingCreatedOrderId] = useState<string | null>(null)
 
   const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
+    setActionLog((prev) => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev.slice(0, 4)])
   }
 
   const fetchOrders = async () => {
@@ -43,8 +34,17 @@ export function RouteOrdersDemo({ onStatusChange }: RouteOrdersDemoProps) {
       setLastResponseStatus(res.status)
       if (res.ok && data.orders) {
         setOrders(data.orders)
+        const pendingId = pendingCreatedOrderId
+        const createdOrderVisible = pendingId ? data.orders.some((o: Order) => o.id === pendingId) : false
         addLog(`GET 200 OK: 총 ${data.total}건 주문 조회 완료`)
-        onStatusChange?.({ httpStatus: res.status, orderCount: data.total, lastMethod: 'GET' })
+        onStatusChange?.({
+          lastAction: 'get',
+          httpStatus: res.status,
+          expectedStatus: 200,
+          orderCount: data.total,
+          createdOrderId: pendingId,
+          createdOrderVisible,
+        })
       } else {
         addLog(`GET ${res.status} 에러: ${data.error || '조회 실패'}`)
       }
@@ -55,22 +55,38 @@ export function RouteOrdersDemo({ onStatusChange }: RouteOrdersDemoProps) {
     }
   }
 
-  const createOrder = async () => {
+  const createOrder = async (productId: string) => {
     setIsLoading(true)
     try {
       const res = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId: selectedProduct, quantity: orderQuantity }),
+        body: JSON.stringify({ productId, quantity: orderQuantity }),
       })
       const data = await res.json()
       setLastResponseStatus(res.status)
       if (res.ok && data.order) {
-        setOrders(prev => [data.order, ...prev])
+        // 로컬 목록은 아직 갱신하지 않는다 — GET 새로고침을 눌러야 서버 상태가 실제로 반영된다.
+        setPendingCreatedOrderId(data.order.id)
         addLog(`POST ${res.status} CREATED: ${data.order.id} (${data.order.productName} ${data.order.quantity}개)`)
-        onStatusChange?.({ httpStatus: res.status, orderCount: data.totalOrders, lastMethod: 'POST' })
+        onStatusChange?.({
+          lastAction: 'post-valid',
+          httpStatus: res.status,
+          expectedStatus: 201,
+          orderCount: orders.length,
+          createdOrderId: data.order.id,
+          createdOrderVisible: false,
+        })
       } else {
         addLog(`POST ${res.status} 에러: ${data.error || '주문 생성 실패'}`)
+        onStatusChange?.({
+          lastAction: 'post-invalid',
+          httpStatus: res.status,
+          expectedStatus: 400,
+          orderCount: orders.length,
+          createdOrderId: null,
+          createdOrderVisible: false,
+        })
       }
     } catch {
       addLog('POST 요청 네트워크 에러')
@@ -97,11 +113,13 @@ export function RouteOrdersDemo({ onStatusChange }: RouteOrdersDemoProps) {
         </div>
         <div className="flex items-center gap-2">
           {lastResponseStatus && (
-            <span className={`rounded px-2 py-1 text-xs font-mono font-bold ${
-              lastResponseStatus === 200 || lastResponseStatus === 201
-                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
-            }`}>
+            <span
+              className={`rounded px-2 py-1 text-xs font-mono font-bold ${
+                lastResponseStatus === 200 || lastResponseStatus === 201
+                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                  : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+              }`}
+            >
               HTTP {lastResponseStatus}
             </span>
           )}
@@ -122,79 +140,57 @@ export function RouteOrdersDemo({ onStatusChange }: RouteOrdersDemoProps) {
             <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
           </div>
           <div className="flex gap-2">
-            <button
-              onClick={() => setSelectedProduct('PROD-001')}
-              className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-                selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-              }`}
-            >
-              러닝화 (#001)
-            </button>
-            <button
-              onClick={() => setSelectedProduct('PROD-002')}
-              className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-                selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-              }`}
-            >
-              윈드브레이커 (#002)
-            </button>
-            <button
-              onClick={() => setSelectedProduct('PROD-003')}
-              className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-                selectedProduct === 'PROD-003' ? 'bg-blue-600 text-white' : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-              }`}
-            >
-              백팩 (#003)
-            </button>
+            {[
+              { id: 'PROD-001', label: '러닝화 (#001)' },
+              { id: 'PROD-002', label: '윈드브레이커 (#002)' },
+              { id: 'PROD-003', label: '백팩 (#003)' },
+            ].map((p) => (
+              <button
+                key={p.id}
+                onClick={() => setSelectedProduct(p.id)}
+                className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
+                  selectedProduct === p.id ? 'bg-blue-600 text-white' : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
           </div>
 
           <div className="flex items-center gap-2 pt-1">
             <span className="text-xs text-zinc-500">수량:</span>
             <button
-              onClick={() => setOrderQuantity(q => Math.max(1, q - 1))}
+              onClick={() => setOrderQuantity((q) => Math.max(1, q - 1))}
               className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
             >
               -
             </button>
             <span className="w-8 text-center font-bold font-mono">{orderQuantity}</span>
             <button
-              onClick={() => setOrderQuantity(q => q + 1)}
+              onClick={() => setOrderQuantity((q) => q + 1)}
               className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
             >
               +
             </button>
             <button
-              onClick={createOrder}
+              onClick={() => createOrder(selectedProduct)}
               disabled={isLoading}
               className="ml-auto rounded bg-zinc-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer disabled:opacity-50"
             >
               POST 주문 전송
             </button>
           </div>
+
+          <button
+            onClick={() => createOrder(INVALID_PRODUCT_ID)}
+            disabled={isLoading}
+            className="w-full rounded border border-rose-300 bg-rose-50 px-2.5 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-300 cursor-pointer disabled:opacity-50"
+          >
+            잘못된 상품({INVALID_PRODUCT_ID})으로 주문 시도 → 400 확인
+          </button>
         </div>
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-2">
-          <div className="flex items-center justify-between border-b border-zinc-800 pb-1">
-            <span className="font-bold text-zinc-400">서버 응답 / 주문 내역:</span>
-            <span className="text-[10px] text-zinc-500">총 {orders.length}건</span>
-          </div>
-          <div className="space-y-1 max-h-28 overflow-y-auto pt-1 text-[11px]">
-            {orders.slice(0, 3).map((ord) => (
-              <div key={ord.id} className="flex justify-between border-b border-zinc-900 py-0.5 text-zinc-400">
-                <span className="text-emerald-400">{ord.id}</span>
-                <span>{ord.productName} x {ord.quantity}</span>
-                <span className="text-zinc-500">{ord.total.toLocaleString()}원</span>
-              </div>
-            ))}
-          </div>
-          <div className="border-t border-zinc-800 pt-1 space-y-1 text-[10px]">
-            {actionLog.slice(0, 2).map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-amber-400' : 'text-zinc-500'}>
-                {log}
-              </div>
-            ))}
-          </div>
-        </div>
+        <OrderConsolePanel orders={orders} actionLog={actionLog} pendingCreatedOrderId={pendingCreatedOrderId} />
       </div>
     </div>
   )
