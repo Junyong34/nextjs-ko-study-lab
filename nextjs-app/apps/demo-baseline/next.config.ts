@@ -21,6 +21,9 @@ const nextConfig: NextConfig = {
       allowedOrigins: [publicOrigin],
     },
     taint: true,
+    // forbidden()/unauthorized() 및 forbidden.tsx/unauthorized.tsx 파일 컨벤션에 필요한 experimental 플래그.
+    // https://nextjs.org/docs/app/api-reference/config/next-config-js/authInterrupts
+    authInterrupts: true,
   },
 }
 
