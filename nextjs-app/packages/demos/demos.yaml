@@ -303,7 +303,7 @@
   title: "Server Action 내 redirect()를 통한 주문 완료 화면 이동"
   doc: 2-guides/redirecting.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/draft-mode/preview-toggle
   title: "미공개 특가 상품 Draft Mode 토글 및 Bypass 쿠키"
@@ -315,7 +315,7 @@
   title: "뷰포트 진입 시 자동 prefetch와 prefetch={false} 비교"
   doc: 2-guides/prefetching.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/layout/root-and-nested
   title: "루트 레이아웃(Root Layout) 및 카테고리 중첩 레이아웃"
@@ -327,13 +327,13 @@
   title: "loading.tsx 스켈레톤 UI 자동 래핑 및 Suspense"
   doc: 3-api-reference/3.1-file-conventions/loading.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/not-found/missing-product-404
   title: "not-found.tsx 및 notFound() 프로그래밍 404 트리거"
   doc: 3-api-reference/3.1-file-conventions/not-found.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/image/responsive-sizes
   title: "next/image responsive fill & sizes 속성 반응형 로딩"
@@ -891,7 +891,7 @@
   title: "priority 속성을 통한 LCP 이미지 사전 로드"
   doc: 3-api-reference/3.2-components/image.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/link/soft-navigation-scroll
   title: "<Link> 소프트 내비게이션 및 scroll 제어"
