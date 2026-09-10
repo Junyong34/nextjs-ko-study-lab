@@ -9,13 +9,8 @@ export function NotFoundDemo() {
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <div className="flex items-center gap-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100">쇼핑몰 not-found.tsx 및 notFound() 실습</h4>
-            <span className="rounded bg-amber-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-              items/[id]/not-found.tsx 구축 완료
-            </span>
-          </div>
-          <p className="text-xs text-zinc-500">데이터베이스에 없는 상품 접근 시 <code>notFound()</code> 함수로 404 전용 화면을 띄웁니다.</p>
+          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">쇼핑몰 상품 상세 카탈로그</h4>
+          <p className="text-xs text-zinc-500">데이터베이스에 없는 상품 ID로 접근하면 <code>notFound()</code> 함수가 호출되어 404 전용 화면을 띄웁니다.</p>
         </div>
       </div>
 
@@ -48,7 +43,7 @@ export function NotFoundDemo() {
           </div>
           <div className="pt-2">
             <Link
-              href={`${BASE_PATH}/items/PROD-999-NOT-FOUND`}
+              href={`${BASE_PATH}/items/PROD-999`}
               className="block text-center rounded bg-amber-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-700"
             >
               /items/PROD-999 진입 (404 확인) →
