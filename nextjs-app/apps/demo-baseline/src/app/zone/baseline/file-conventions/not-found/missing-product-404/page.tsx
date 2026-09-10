@@ -35,10 +35,10 @@ export default function DemoPage() {
           },
           {
                     "step": 4,
-                    "title": "404 Not Found 전용 UI 렌더링 및 상태 코드 관찰",
-                    "description": "not-found.tsx가 상위 레이아웃을 유지한 채 404 전용 화면을 렌더링하고 상태 코드를 반환하는지 관찰합니다.",
-                    "actionBadge": "404 격리 관찰",
-                    "observe": "notFound() 호출 시 상위 레이아웃은 유지된 채 not-found.tsx 컴포넌트가 404 상태로 렌더링됨",
+                    "title": "404 Not Found 전용 UI 및 실시간 상태 코드 패널 확인",
+                    "description": "not-found.tsx 화면 하단의 검증 패널이 같은 URL을 다시 요청해 실제 HTTP 상태 코드가 404인지 확인해 줍니다.",
+                    "actionBadge": "404 상태 코드 확인",
+                    "observe": "notFound() 호출 시 not-found.tsx 컴포넌트가 렌더링되고, 하단 패널의 Actual 값이 실제 응답 상태 코드 404로 일치함",
                     "observeAt": "playground"
           }
 ]}
