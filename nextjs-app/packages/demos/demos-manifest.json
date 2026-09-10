@@ -1250,14 +1250,14 @@
     "title": "headers().get('user-agent') 기기 식별 및 최적화",
     "doc": "3-api-reference/3.3-functions/headers.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/headers/custom-auth-token",
     "title": "headers().get('authorization') 커스텀 인증 토큰 검증",
     "doc": "3-api-reference/3.3-functions/headers.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/draft-mode/enable-preview",

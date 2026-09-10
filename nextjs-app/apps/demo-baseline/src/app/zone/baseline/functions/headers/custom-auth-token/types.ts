@@ -1,10 +1,17 @@
-export interface AuthHeaderCheckResult {
+export interface Order {
+  id: string
+  item: string
+  amount: number
+}
+
+export interface OrderLookupResult {
   status: 200 | 401
-  tokenReceived: string | null
-  userId?: string
-  role?: string
-  scope?: string[]
+  authorizationReceived: string | null
+  orders?: Order[]
   error?: string
-  headersList: Array<{ key: string; value: string }>
-  timestamp: string
+}
+
+export interface DebugHeader {
+  key: string
+  value: string
 }

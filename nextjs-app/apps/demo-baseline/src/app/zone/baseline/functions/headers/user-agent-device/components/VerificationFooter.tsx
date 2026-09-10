@@ -3,101 +3,108 @@ import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
 export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+  isMatched: boolean
+  expected: string
+  actual: string
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+function CodeBlock({ code }: { code: string }) {
+  return (
+    <pre className="mt-1.5 overflow-x-auto rounded-md bg-zinc-950 p-3 text-[11px] leading-relaxed text-zinc-100 dark:bg-black">
+      <code>{code}</code>
+    </pre>
+  )
+}
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+const PAGE_TSX_SNIPPET = [
+  "const headersList = await headers()",
+  "const userAgent = headersList.get('user-agent') ?? ''",
+  "const deviceType = detectDeviceType(userAgent)",
+].join('\n')
 
-  const defaultExpected = "• headers().get('user-agent') 기기 식별 및 최적화의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+const PROXY_TS_SNIPPET = [
+  '// apps/demo-baseline/src/proxy.ts',
+  "if (pathname.includes('/functions/headers/user-agent-device')) {",
+  "  const forcedDevice = url.searchParams.get('device')",
+  "  if (forcedDevice === 'mobile' || forcedDevice === 'desktop') {",
+  '    const requestHeaders = new Headers(request.headers)',
+  "    requestHeaders.set('user-agent', DEVICE_USER_AGENTS[forcedDevice])",
+  '    return NextResponse.next({ request: { headers: requestHeaders } })',
+  '  }',
+  '  return NextResponse.next()',
+  '}',
+].join('\n')
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+const DEVICE_DETECTION_SNIPPET = [
+  '// deviceDetection.ts',
+  'export const MOBILE_UA_PATTERN = /Mobile|Android|iPhone|iPad/i',
+  '',
+  'export function detectDeviceType(userAgent: string) {',
+  "  return MOBILE_UA_PATTERN.test(userAgent) ? 'mobile' : 'desktop'",
+  '}',
+].join('\n')
 
+export function VerificationFooter({ isMatched, expected, actual }: VerificationFooterProps) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="headers().get('user-agent') 기기 식별 및 최적화 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="User-Agent 판별 무결성 검증"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="headers()로 읽은 User-Agent 원문과, 그 값으로 판별한 기기 타입이 서로 논리적으로 일치하는지 확인합니다."
       />
-            <DemoDeepDiveCard title="headers() 디바이스 및 브라우저 파싱 레이아웃 분기">
+      <DemoDeepDiveCard title="headers() 를 이용한 User-Agent 기기 판별">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>headers()</code> (<code>next/headers</code>)는 HTTP 요청 헤더를 비동기 조회하는 표준 함수입니다. <code>user-agent</code> 헤더 등을 분석하여 서버 사이드 렌더링(SSR) 단계에서 디바이스(모바일/태블릿/데스크톱)에 최적화된 마크업을 사전 렌더링합니다.</p>
+            <p>
+              <code>headers()</code>(<code>next/headers</code>)는 Server Component에서 인입된 HTTP 요청 헤더를 읽는 비동기 함수다. <code>user-agent</code>는 브라우저가 모든 요청에 항상 실어 보내는 표준 헤더라서, 별도의 로그인이나 쿠키 없이도 서버가 실제로 받은 값을 그대로 관찰할 수 있다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 서버에서 <code>await headers()</code>를 호출하여 <code>User-Agent</code> 및 <code>Sec-CH-UA-Mobile</code> 헤더를 파싱하고, 클라이언트가 모바일인지 데스크톱인지 판별하여 디바이스 맞춤 레이아웃과 데이터 뷰를 사전 렌더링합니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 이번 예제의 실제 동작</h5>
+            <p>
+              [모바일로 보기]/[데스크톱으로 보기]를 누르면 URL에 <code>?device=</code> 쿼리가 붙어 다시 요청이 일어난다. <code>proxy.ts</code>가 이 쿼리를 보고 실제 요청의 <code>User-Agent</code> 헤더를 해당 기기의 진짜 User-Agent 문자열로 바꿔 넘긴다. 서버 컴포넌트는 <code>(await headers()).get(&apos;user-agent&apos;)</code>로 그 값을 그대로 읽어 <code>detectDeviceType()</code>에 넘기고, 그 결과로 위 [실습 화면]의 모바일/데스크톱 뷰가 갈린다. [실제 브라우저 값 사용]을 누르면 헤더를 건드리지 않아 지금 쓰고 있는 실제 브라우저의 User-Agent가 그대로 읽힌다 — 크롬 개발자 도구의 기기 툴바로 실제 User-Agent를 바꿔도 똑같이 동작한다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실제 코드</h5>
+            <p>이 페이지가 실제로 실행하는 코드를 그대로 발췌했다. [모바일로 보기]/[데스크톱으로 보기]/[실제 브라우저 값 사용]을 누를 때마다 이 세 코드가 순서대로 실행된다.</p>
+
+            <p className="mt-2.5 font-semibold text-zinc-800 dark:text-zinc-200">① 게이트웨이(proxy.ts) — 쿼리로 지정한 기기의 실제 User-Agent로 교체</p>
+            <CodeBlock code={PROXY_TS_SNIPPET} />
+
+            <p className="mt-2.5 font-semibold text-zinc-800 dark:text-zinc-200">② 서버 컴포넌트 — headers()로 읽어서 판별 함수에 그대로 전달</p>
+            <CodeBlock code={PAGE_TSX_SNIPPET} />
+
+            <p className="mt-2.5 font-semibold text-zinc-800 dark:text-zinc-200">③ 판별 함수 — 전달받은 값만으로 기기 타입 결정</p>
+            <CodeBlock code={DEVICE_DETECTION_SNIPPET} />
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Zero CLS 디바이스 최적화</strong>: 클라이언트 JS 하이드레이션 후 화면이 번쩍이며 모바일 UI로 전환되는 레이아웃 이동(CLS)을 원천 방지합니다.</li>
-              <li><strong>서버사이드 User-Agent 파싱</strong>: 클라이언트 번들에 무거운 디바이스 판별 라이브러리를 포함하지 않아 번들 크기를 최적화합니다.</li>
-              <li><strong>웹 표준 ReadonlyHeaders 인터페이스</strong>: 표준 <code>get()</code>, <code>has()</code>, <code>forEach()</code> 인터페이스를 제공하여 사용이 직관적입니다.</li>
+              <li><strong>Zero CLS 디바이스 최적화</strong>: 클라이언트에서 하이드레이션 후 화면이 바뀌는 레이아웃 이동 없이, 첫 HTML 응답부터 기기에 맞는 뷰가 그려진다.</li>
+              <li><strong>클라이언트 JS 불필요</strong>: 이 예제의 실습 화면(<code>HeadersUserAgentDemo</code>)은 <code>&apos;use client&apos;</code>가 없다 — 뷰 전환이 전부 서버에서 결정되기 때문이다.</li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>모바일/데스크톱 뷰포트별 적응형 GNB 메뉴 및 사이드바 렌더링</li>
-              <li>봇/크롤러(Googlebot, NaverBot) 감지 시 맞춤형 SEO 콘텐츠 사전 렌더링</li>
-              <li>글로벌 사용자의 <code>Accept-Language</code> 헤더 기반 기본 언어 감지</li>
+              <li>모바일/데스크톱 뷰포트별 적응형 레이아웃 사전 렌더링</li>
+              <li>봇/크롤러(Googlebot 등) 감지 시 맞춤 SEO 콘텐츠 렌더링</li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">6. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>동적 렌더링(Dynamic Rendering) 전환</strong>: <code>headers()</code> 호출은 요청 시점에만 값을 알 수 있으므로 해당 라우트를 정적(SSG)에서 동적(Dynamic) 렌더링으로 자동 전환시킵니다.</li>
-              <li><strong>Next.js 15+ 비동기 호출</strong>: Next.js 15부터 <code>headers()</code>는 Promise를 반환하므로 반드시 <code>await headers()</code> 또는 React 19 <code>use(headers())</code>로 언래핑해야 합니다.</li>
+              <li><strong>다이나믹 렌더링 전환</strong>: <code>headers()</code> 호출은 요청 시점에만 알 수 있는 값을 읽으므로 이 라우트는 정적 생성 없이 항상 다이나믹 렌더링으로 처리된다.</li>
+              <li><strong>User-Agent 문자열은 스푸핑 가능</strong>: 클라이언트가 값을 자유롭게 바꿔 보낼 수 있으므로, 보안이 걸린 판단(예: 결제 승인)에는 쓰지 않고 UI/UX 최적화 용도로만 쓴다.</li>
             </ul>
           </div>
         </div>
