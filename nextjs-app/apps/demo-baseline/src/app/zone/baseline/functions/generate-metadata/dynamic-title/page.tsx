@@ -5,42 +5,43 @@ export const metadata: Metadata = getDemoMetadata('baseline', 'functions/generat
 
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { GenerateMetadataTitleDemo } from './components/GenerateMetadataTitleDemo'
+import { DynamicTitleInspector } from './components/DynamicTitleInspector'
 import { VerificationFooter } from './components/VerificationFooter'
+import { PRODUCTS } from './types'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="generateMetadata 동적 SEO 타이틀 및 메타태그 생성"
-        concept="generateMetadata() 비동기 함수에서 DB 상품 정보를 조회하여 페이지별 고유 title, description, openGraph 메타태그를 서버 렌더링 시점에 동적으로 주입합니다."
+        concept="이 루트 페이지는 params 없이 항상 같은 정적 metadata를 씁니다. 아래 [상품 프리셋]을 클릭하면 실제로 /products/[productId] 라우트로 이동하고, 그 라우트가 export한 generateMetadata({ params })가 서버에서 상품마다 다른 title/description을 실제로 계산해 <head>에 반영합니다."
         steps={[
           {
             step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-            description: "동적 메타데이터를 생성할 상품을 선택합니다.",
-            actionBadge: "상품 선택",
+            title: "지금 이 페이지의 실제 <head> 인스펙터 확인",
+            description: "params가 없는 정적 metadata 값이 그대로 반영된 것을 아래 인스펙터에서 확인합니다.",
+            actionBadge: "정적 메타 확인",
           },
           {
             step: 2,
-            title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "generateMetadata()가 상품 정보를 페칭하여 HTML head 메타태그를 생성하도록 실행합니다.",
-            actionBadge: "메타 생성",
+            title: "[트레일 러닝화 X1] 등 상품 프리셋 클릭 → 실제 페이지 이동",
+            description: "실제 URL이 /products/running-shoes-001로 바뀌며, 그 세그먼트의 generateMetadata({ params })가 서버에서 실행됩니다.",
+            actionBadge: "실제 라우트 이동",
           },
           {
             step: 3,
-            title: "생성된 SEO 타이틀 및 OG 태그 관찰",
-            description: "HTML <title> 및 og:title 메타태그에 상품명과 가격이 올바르게 주입되었는지 실시간 로그에서 확인합니다.",
-            actionBadge: "태그 검증",
-            observe: "선택한 상품명과 상세 정보가 주입된 dynamic generateMetadata 결과가 실시간 로그에 반영됨",
-            observeAt: "verification",
+            title: "다른 상품 프리셋으로 계속 이동해 값 대조",
+            description: "상품을 바꿔가며 실제 title/description이 매번 다시 계산되어 바뀌는지 인스펙터에서 대조합니다.",
+            actionBadge: "동적 값 대조",
+            observe: "3개 상품 프리셋을 오갈 때마다 실제 <title>과 meta description이 서로 다른 값으로 바뀜",
+            observeAt: "playground",
           },
         ]}
       />
-      <DemoPlaygroundCard title={"generateMetadata 동적 SEO 타이틀 및 메타태그 생성 실습"}>
-        <GenerateMetadataTitleDemo />
+      <DemoPlaygroundCard title="상품 상세 generateMetadata 실습">
+        <DynamicTitleInspector products={PRODUCTS} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter products={PRODUCTS} />
     </DemoContainer>
   )
 }
