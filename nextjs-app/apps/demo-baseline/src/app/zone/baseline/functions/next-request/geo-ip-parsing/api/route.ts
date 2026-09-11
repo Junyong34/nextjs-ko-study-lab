@@ -1,49 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { GeoApiResponse } from '../types'
 
-const CURRENCY_MAP: Record<string, { currency: string; symbol: string; rate: number; locale: string }> = {
-  KR: { currency: 'KRW', symbol: '₩', rate: 1, locale: 'ko-KR' },
-  US: { currency: 'USD', symbol: '$', rate: 0.00075, locale: 'en-US' },
-  JP: { currency: 'JPY', symbol: '¥', rate: 0.11, locale: 'ja-JP' },
-  EU: { currency: 'EUR', symbol: '€', rate: 0.00069, locale: 'de-DE' },
-  GB: { currency: 'GBP', symbol: '£', rate: 0.00059, locale: 'en-GB' },
+// NextRequest.geo / NextRequest.ip는 Next.js v15.0.0에서 완전히 제거됐다.
+// 이 값들은 애초에 Next.js가 계산한 적이 없고, 호스팅 플랫폼(Vercel 등)이 엣지에서
+// 요청에 주입한 HTTP 헤더였을 뿐이다 — 그래서 지금은 request.headers로 직접 읽는다.
+// (@vercel/functions의 geolocation()/ipAddress() 헬퍼도 내부적으로 정확히 이 헤더들을 읽는다.)
+const GEO_HEADERS = {
+  country: 'x-vercel-ip-country',
+  city: 'x-vercel-ip-city',
+  countryRegion: 'x-vercel-ip-country-region',
+  realIp: 'x-real-ip',
+  forwardedFor: 'x-forwarded-for',
+} as const
+
+const CURRENCY_MAP: Record<string, { currency: string; symbol: string; locale: string; rate: number }> = {
+  KR: { currency: 'KRW', symbol: '₩', locale: 'ko-KR', rate: 1 },
+  US: { currency: 'USD', symbol: '$', locale: 'en-US', rate: 0.00075 },
+  JP: { currency: 'JPY', symbol: '¥', locale: 'ja-JP', rate: 0.11 },
+  DE: { currency: 'EUR', symbol: '€', locale: 'de-DE', rate: 0.00069 },
 }
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams
-  const simulateCountry = searchParams.get('simulateCountry')
-  const simulateIp = searchParams.get('simulateIp')
+  const country = request.headers.get(GEO_HEADERS.country)
+  const city = request.headers.get(GEO_HEADERS.city)
+  const countryRegion = request.headers.get(GEO_HEADERS.countryRegion)
 
-  // Next.js NextRequest IP & Geo 추출 (플랫폼 헤더 폴백 지원)
-  const forwardedFor = request.headers.get('x-forwarded-for')
-  const detectedIp = simulateIp || (request as any).ip || (forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1')
-  
-  const headerCountry = request.headers.get('x-vercel-ip-country') || request.headers.get('cf-ipcountry')
-  const detectedCountry = (simulateCountry || (request as any).geo?.country || headerCountry || 'KR').toUpperCase()
+  // Vercel은 x-real-ip를 신뢰할 수 있는 클라이언트 IP로 제공한다.
+  // x-forwarded-for는 표준 프록시 헤더라 체인에 여러 IP가 붙을 수 있어 첫 값만 쓴다.
+  const realIp = request.headers.get(GEO_HEADERS.realIp)
+  const forwardedFor = request.headers.get(GEO_HEADERS.forwardedFor)
+  const ip = realIp ?? forwardedFor?.split(',')[0]?.trim() ?? null
+  const ipSourceHeader = realIp ? 'x-real-ip' : forwardedFor ? 'x-forwarded-for' : null
 
-  const currencyConfig = CURRENCY_MAP[detectedCountry] || CURRENCY_MAP['KR']
+  const currencyConfig = country ? CURRENCY_MAP[country.toUpperCase()] : undefined
 
-  return NextResponse.json({
-    source: 'NextRequest (api/route.ts)',
-    telemetry: {
-      ip: detectedIp,
-      country: detectedCountry,
-      city: (request as any).geo?.city || (detectedCountry === 'KR' ? 'Seoul' : 'Default City'),
-      region: (request as any).geo?.region || 'Default Region',
-      userAgent: request.headers.get('user-agent') || 'Unknown',
-      acceptLanguage: request.headers.get('accept-language') || 'ko-KR,ko;q=0.9',
+  const body: GeoApiResponse = {
+    telemetry: { ip, ipSourceHeader, country, city, countryRegion },
+    localization: currencyConfig
+      ? {
+          currency: currencyConfig.currency,
+          symbol: currencyConfig.symbol,
+          locale: currencyConfig.locale,
+          formattedPriceExample: `${currencyConfig.symbol}${(129000 * currencyConfig.rate).toLocaleString(currencyConfig.locale)}`,
+        }
+      : null,
+    receivedHeaders: {
+      [GEO_HEADERS.country]: country ?? '(없음)',
+      [GEO_HEADERS.city]: city ?? '(없음)',
+      [GEO_HEADERS.countryRegion]: countryRegion ?? '(없음)',
+      [GEO_HEADERS.realIp]: realIp ?? '(없음)',
+      [GEO_HEADERS.forwardedFor]: forwardedFor ?? '(없음)',
     },
-    localization: {
-      currency: currencyConfig.currency,
-      symbol: currencyConfig.symbol,
-      locale: currencyConfig.locale,
-      exchangeRate: currencyConfig.rate,
-      formattedPriceExample: `${currencyConfig.symbol}${(129000 * currencyConfig.rate).toLocaleString()}`,
-    },
-    nextUrl: {
-      pathname: request.nextUrl.pathname,
-      search: request.nextUrl.search,
-      protocol: request.nextUrl.protocol,
-    },
-    timestamp: new Date().toISOString(),
-  })
+  }
+
+  return NextResponse.json(body)
 }
