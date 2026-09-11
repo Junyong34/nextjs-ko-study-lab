@@ -956,7 +956,7 @@
     "title": "비관리자 권한 차단 403 화면 (forbidden.tsx)",
     "doc": "3-api-reference/3.1-file-conventions/forbidden.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/unauthorized/anonymous-401",
@@ -1103,7 +1103,7 @@
     "title": "usePathname() 기반 GNB 활성 메뉴 하이라이트",
     "doc": "3-api-reference/3.3-functions/use-pathname.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/use-params/client-id",
@@ -1306,7 +1306,7 @@
     "title": "unauthorized() 401 인증 필요 트리거",
     "doc": "3-api-reference/3.3-functions/unauthorized.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/redirect/action-303",
@@ -1327,7 +1327,7 @@
     "title": "permanentRedirect() 영구 URL 변경 (308 Permanent)",
     "doc": "3-api-reference/3.3-functions/permanentRedirect.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/next-request/geo-ip-parsing",
@@ -1348,7 +1348,7 @@
     "title": "NextResponse.rewrite() 가상 라우팅 중계",
     "doc": "3-api-reference/3.3-functions/next-response.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/image-response/og-badge",
@@ -1369,7 +1369,7 @@
     "title": "generateMetadata 동적 SEO 타이틀 및 메타태그 생성",
     "doc": "3-api-reference/3.3-functions/generate-metadata.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/generate-metadata/parent-inheritance",
