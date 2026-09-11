@@ -140,6 +140,32 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // 7. NextResponse.rewrite() 가상 라우팅 데모: URL 유지 내부 리라이트(rewrite) vs 주소 변경 리다이렉트(redirect) 대조
+  if (pathname.includes('/functions/next-response/rewrite-virtual') && !pathname.includes('/target-event')) {
+    const scenario = url.searchParams.get('scenario')
+
+    if (scenario === 'rewrite') {
+      const target = url.clone()
+      target.pathname = '/zone/baseline/functions/next-response/rewrite-virtual/target-event'
+      target.search = ''
+      const requestHeaders = new Headers(request.headers)
+      requestHeaders.set('x-rewrite-origin', `${url.pathname}${url.search}`)
+      return NextResponse.rewrite(target, {
+        request: {
+          headers: requestHeaders,
+        },
+      })
+    }
+
+    if (scenario === 'redirect') {
+      const target = url.clone()
+      target.pathname = '/zone/baseline/functions/next-response/rewrite-virtual/target-event'
+      target.searchParams.delete('scenario')
+      target.searchParams.set('via', 'redirect')
+      return NextResponse.redirect(target, 307)
+    }
+  }
+
   return NextResponse.next()
 }
 
@@ -150,5 +176,6 @@ export const config = {
     '/zone/baseline/guides/authentication/:path*',
     '/zone/baseline/guides/content-security-policy/:path*',
     '/zone/baseline/functions/headers/:path*',
+    '/zone/baseline/functions/next-response/rewrite-virtual/:path*',
   ],
 }

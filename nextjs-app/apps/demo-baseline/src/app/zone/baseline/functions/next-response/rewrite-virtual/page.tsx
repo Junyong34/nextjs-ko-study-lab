@@ -1,55 +1,48 @@
-'use client'
-import React, { useState } from 'react'
+import type { Metadata } from 'next'
+import { getDemoMetadata } from '@study/demos'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'functions/next-response/rewrite-virtual')
+
+import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { NextResponseRewriteDemo } from './components/NextResponseRewriteDemo'
+import { RewriteEntryPlayground } from './components/RewriteEntryPlayground'
 import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
-  const [rewriteState, setRewriteState] = useState<{
-    isRewritten: boolean
-    targetRoute?: string
-    httpStatus: number | null
-  }>({
-    isRewritten: false,
-    httpStatus: null,
-  })
-
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="NextResponse.rewrite() 가상 라우팅 중계"
-        concept="NextResponse.rewrite()를 활용하여 브라우저 주소창의 URL은 그대로 유지한 채 서버 내부에서 다른 가상 엔드포인트나 백엔드 서비스의 컨텐츠를 프록시 서빙합니다."
+        concept="proxy.ts에서 NextResponse.rewrite()를 실행하면 브라우저 주소창의 URL은 그대로 유지한 채, 서버 내부적으로 다른 실제 경로(target-event)의 콘텐츠를 대신 서빙합니다. 반면 NextResponse.redirect()는 브라우저에게 새 URL로 다시 요청하라고 지시하므로 주소창이 실제로 바뀝니다."
         steps={[
           {
             step: 1,
-            title: "[가상 엔드포인트 호출] 클릭",
-            description: "NextResponse.rewrite()가 구성된 프록시 엔드포인트로 요청을 전송합니다.",
-            actionBadge: "리라이트 요청",
+            title: '[가상 세일 페이지 입장] 클릭',
+            description: 'proxy.ts가 ?scenario=rewrite 쿼리를 감지해 NextResponse.rewrite()로 target-event 콘텐츠를 내부 연결합니다.',
+            actionBadge: 'rewrite 진입',
+            observe: '주소창이 이 실습 페이지 그대로 유지된 채 세일 이벤트 콘텐츠가 표시됨',
+            observeAt: 'verification',
           },
           {
             step: 2,
-            title: "브라우저 표시 URL 보존 확인",
-            description: "클라이언트 브라우저 주소창의 URL이 변경되지 않고 유지되는 것을 확인합니다.",
-            actionBadge: "URL 보존",
+            title: '[레거시 상품 링크로 입장] 클릭',
+            description: 'proxy.ts가 ?scenario=redirect 쿼리를 감지해 NextResponse.redirect()로 target-event 경로로 이동시킵니다.',
+            actionBadge: 'redirect 진입',
+            observe: '주소창이 /target-event 실제 경로로 바뀜',
+            observeAt: 'verification',
           },
           {
             step: 3,
-            title: "가상 내부 서비스 응답 서빙 관찰",
-            description: "내부 마이크로서비스 또는 가상 경로의 데이터가 투명하게 프록시 서빙되는지 확인합니다.",
-            actionBadge: "결과 검증",
-            observe: "브라우저 URL 변경 없이 내부 대상 엔드포인트의 리라이트 응답 데이터가 정상 수신됨",
-            observeAt: "playground",
+            title: '두 결과를 검증 패널에서 대조',
+            description: '동일한 target-event/page.tsx 파일이 렌더링되지만, usePathname()으로 읽은 실제 주소가 두 경우에 다른지 확인합니다.',
+            actionBadge: '주소창 대조',
           },
         ]}
       />
       <DemoPlaygroundCard title="NextResponse.rewrite() 가상 경로 라우팅 실습">
-        <NextResponseRewriteDemo onStatusChange={setRewriteState} />
+        <RewriteEntryPlayground />
       </DemoPlaygroundCard>
-      <VerificationFooter
-        isRewritten={rewriteState.isRewritten}
-        targetRoute={rewriteState.targetRoute}
-        httpStatus={rewriteState.httpStatus}
-      />
+      <VerificationFooter variant="root" />
     </DemoContainer>
   )
 }
