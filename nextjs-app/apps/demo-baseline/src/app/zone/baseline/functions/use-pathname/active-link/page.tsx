@@ -4,43 +4,28 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'functions/use-pathname/active-link')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { UsePathnameActiveDemo } from './components/UsePathnameActiveDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { MOCK_PRODUCTS } from '@study/demo-kit'
+import { CategoryProductGrid } from './components/CategoryProductGrid'
 
-export default function DemoPage() {
+const FEATURED = MOCK_PRODUCTS.filter((p) => p.isNew || p.isBest).slice(0, 4)
+
+export default function ShopHomePage() {
   return (
-    <DemoContainer className="space-y-6">
-            <DemoGuideCard
-        title="usePathname() 기반 GNB 활성 메뉴 하이라이트"
-        concept="usePathname() 훅으로 현재 브라우저 URL 경로(/shop/deals, /shop/best)를 실시간 감지하여 GNB 및 네비게이션 링크의 활성 탭 하이라이트 스타일을 동적으로 적용합니다."
-        steps={[
-          {
-            step: 1,
-            title: "[신상품 (New)] 또는 [타임특가 (Deals)] 탭 클릭",
-            description: "GNB 상단의 네비게이션 링크 버튼을 클릭하여 라우트 경로를 전환합니다.",
-            actionBadge: "탭 전환",
-          },
-          {
-            step: 2,
-            title: "[베스트 (Best 100)] 또는 [기획전 (Events)] 탭 전환",
-            description: "usePathname() 훅이 변경된 pathname 문자열을 읽어 활성 메뉴 키를 실시간 추출합니다.",
-            actionBadge: "경로 추출",
-          },
-          {
-            step: 3,
-            title: "활성 탭 하이라이트 스타일 및 뱃지 관찰",
-            description: "현재 경로와 일치하는 메뉴에 파란색 강조 뱃지 및 볼드 스타일이 즉시 렌더링되는지 확인합니다.",
-            actionBadge: "UI 검증",
-            observe: "선택된 pathname과 일치하는 탭 버튼에 활성 테마 스타일과 녹색 펄스 뱃지가 동기화됨",
-            observeAt: "playground",
-          },
-        ]}
+    <div className="space-y-3">
+      <div className="rounded border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
+        <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          쇼핑몰 홈 (기본 경로 — /active-link)
+        </h3>
+        <p className="mt-1 text-[11px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+          위 GNB에서 [신상품], [타임특가], [베스트 100], [기획전] 탭을 눌러 실제 서브 라우트로 이동해 보세요.
+          usePathname()이 반환하는 값이 즉시 바뀌는 것을 인스펙터에서 확인할 수 있습니다.
+        </p>
+      </div>
+      <CategoryProductGrid
+        heading="오늘의 추천 상품"
+        description="신상품·베스트 상품 중 일부를 큐레이션했습니다."
+        products={FEATURED}
       />
-      <DemoPlaygroundCard title={"usePathname() 기반 GNB 활성 메뉴 하이라이트 실습"}>
-        <UsePathnameActiveDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
-    </DemoContainer>
+    </div>
   )
 }
