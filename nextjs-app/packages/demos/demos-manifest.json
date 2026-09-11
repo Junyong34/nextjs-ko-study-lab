@@ -1110,14 +1110,14 @@
     "title": "useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출",
     "doc": "3-api-reference/3.3-functions/use-params.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/use-search-params/filter-parsing",
     "title": "useSearchParams() URL 쿼리 파싱 및 필터링",
     "doc": "3-api-reference/3.3-functions/use-search-params.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/use-search-params/debounce-transition",
@@ -1131,7 +1131,7 @@
     "title": "useSelectedLayoutSegment() 하위 탭 인디케이터",
     "doc": "3-api-reference/3.3-functions/use-selected-layout-segment.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/use-selected-layout-segments/breadcrumb",
@@ -1334,7 +1334,7 @@
     "title": "NextRequest Geo 위치 및 클라이언트 IP 파싱",
     "doc": "3-api-reference/3.3-functions/next-request.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/next-response/json-builder",
@@ -1390,7 +1390,7 @@
     "title": "generateStaticParams [category]/[id] 다중 세그먼트 조합",
     "doc": "3-api-reference/3.3-functions/generate-static-params.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/connection/request-signal",
