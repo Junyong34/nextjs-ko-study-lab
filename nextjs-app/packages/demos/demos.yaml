@@ -1095,7 +1095,7 @@
   title: "after() 백그라운드 주문 로깅"
   doc: 3-api-reference/3.3-functions/after.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/after/analytics-batch
   title: "after() 비동기 데이터 분석 배치 파이프라인"
@@ -1215,7 +1215,7 @@
   title: "useReportWebVitals() 클라이언트 웹 바이탈 측정"
   doc: 3-api-reference/3.3-functions/use-report-web-vitals.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-server-inserted-html/head-style
   title: "useServerInsertedHTML SSR 인라인 스타일/스크립트 주입"
