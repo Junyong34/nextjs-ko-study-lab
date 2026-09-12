@@ -1,107 +1,53 @@
-'use client'
-import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { CookieHistory, CookieObservation } from '../types'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+interface VerificationFooterProps {
+  observation: CookieObservation | null
+  history: CookieHistory
+  result: boolean | undefined
+  error: string | null
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• cookies().delete() 세션 파기 및 로그아웃의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
+export function VerificationFooter({ observation, history, result, error }: VerificationFooterProps) {
   return (
-    <div className="space-y-4">
+    <>
       <ExpectedActualPanel
-        title="cookies().delete() 세션 파기 및 로그아웃 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        title="생성·삭제 이력과 새 요청의 쿠키 대조"
+        expected={<span>회원 쿠키 생성 확인 → 쿠키가 있을 때 삭제 → 검증 요청에서 쿠키 없음</span>}
+        actual={
+          <span>
+            {error ? '요청 실패로 현재 쿠키 상태를 확인하지 못했습니다.' : result === undefined
+              ? '대기 중입니다. 쿠키 삭제 검증 버튼으로 새 서버 요청을 보내세요.'
+              : `생성 확인: ${history.created ? '완료' : '미완료'} / 삭제 이력: ${history.deleted ? '완료' : '미완료'} / 검증 요청의 쿠키: ${observation?.present ? '있음' : '없음'}`}
+          </span>
+        }
+        isMatched={result}
+        description="처음부터 쿠키가 없거나 개발자 도구에서 수동으로 지운 것만으로는 이 실습의 삭제 검증을 통과하지 않습니다."
       />
-            <DemoDeepDiveCard title="cookies().delete() 로그아웃 및 세션 무효화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>(await cookies()).delete('session_id')</code>는 지정된 이름의 쿠키를 즉시 만료(<code>Max-Age=0</code>)시키는 응답 헤더(<code>Set-Cookie</code>)를 발행하여 클라이언트 브라우저에서 쿠키를 안전하게 파기하는 서버 메서드입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 [로그아웃] 버튼 클릭 시 실행되는 Server Action에서 세션 쿠키를 삭제하고, <code>redirect('/login')</code>과 연동하여 인증 상태를 초기화하고 로그인 페이지로 안전하게 이동시킵니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>완벽한 클라이언트 세션 파기</strong>: 브라우저 스토리지 잔재 없이 <code>Set-Cookie</code> 헤더를 통해 쿠키를 완전히 제거합니다.</li>
-              <li><strong>도메인/경로 스코프 일괄 정리</strong>: 특정 <code>path</code>나 <code>domain</code>에 종속된 쿠키도 옵션을 명시하여 정확하게 삭제합니다.</li>
-              <li><strong>원자적 로그아웃 플로우</strong>: 쿠키 삭제와 페이지 리다이렉트를 단일 Server Action 내에서 원자적으로 실행합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>회원 서비스 로그아웃 시 인증 토큰 및 리프레시 토큰 즉시 파기</li>
-              <li>결제 완료 또는 주문 취소 시 임시 결제 세션 쿠키 제거</li>
-              <li>팝업 [오늘 하루 보지 않기] 설정 만료 시 쿠키 정리</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>path/domain 불일치 주의</strong>: 쿠키 생성 시 <code>path: '/'</code>를 지정했다면 <code>delete()</code> 호출 시에도 동일한 <code>path: '/'</code> 옵션을 지정해야 브라우저에서 정상 파기됩니다.</li>
-              <li><strong>서버 세션 저장소 동기화</strong>: 쿠키 삭제뿐만 아니라 Redis 등 서버 세션 스토어의 토큰도 함께 블랙리스트 처리해야 완벽한 로그아웃이 완성됩니다.</li>
-            </ul>
-          </div>
+      <DemoDeepDiveCard title="쿠키 삭제는 다음 요청에서 확인한다">
+        <div className="space-y-4 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+          <section>
+            <h4 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">로그아웃 버튼에서 실제로 일어난 일</h4>
+            <p>버튼은 Server Action의 <code>deleteSessionCookie()</code>를 호출합니다. 서버는 <code>await cookies()</code>로 받은 저장소에서 실습 쿠키를 삭제하고 응답의 <code>Set-Cookie</code>로 만료를 지시합니다. 브라우저가 응답을 적용한 뒤 <code>readSessionCookie()</code>를 별도로 호출해 쿠키가 다음 요청에서 빠졌는지 확인합니다.</p>
+            <pre className="mt-2 overflow-x-auto rounded bg-zinc-100 p-3 dark:bg-zinc-900">{`로그아웃 버튼 → 삭제 Server Action
+  → Set-Cookie 만료 지시 → 브라우저 적용
+  → 별도 읽기 Server Action → 쿠키 없음`}</pre>
+          </section>
+          <section>
+            <h4 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">삭제와 화면 전환은 서로 다른 동작</h4>
+            <p>React 상태만 게스트로 바꿔도 브라우저 쿠키는 남을 수 있습니다. 이 페이지의 회원 표시는 서버가 실제 요청에서 읽은 결과입니다. 삭제 직후 같은 액션 안에서 읽은 값만으로는 브라우저 적용 여부를 증명할 수 없어 새 요청을 보냅니다.</p>
+          </section>
+          <section>
+            <h4 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">Network에서 확인할 것</h4>
+            <p>회원 쿠키 생성과 로그아웃은 각각 응답에 <code>Set-Cookie</code>를 보냅니다. 삭제 응답의 과거 만료 시각 등 만료 지시를 확인하고, 뒤따르는 읽기 요청의 <code>Cookie</code>에서 실습 이름이 빠졌는지 비교하세요. 만료 헤더가 반드시 <code>Max-Age=0</code> 형태인 것은 아닙니다.</p>
+          </section>
+          <section>
+            <h4 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">사용 조건과 흔한 오용</h4>
+            <p>쿠키 변경은 Server Action이나 Route Handler에서 수행합니다. 이 예제는 생성과 삭제에 같은 이름·path를 사용하며, 동일한 도메인과 프로토콜에서 실행합니다. <code>HttpOnly</code> 쿠키는 <code>document.cookie</code>로 확인할 수 없습니다. 전용 경로를 가진 실습 쿠키만 지우므로 다른 데모의 쿠키에는 영향을 주지 않습니다.</p>
+            <p className="mt-2">이것은 브라우저 쿠키 삭제 실습입니다. 실제 서비스가 서버 세션 저장소를 쓴다면 그 세션을 무효화하는 작업도 별도로 설계해야 합니다.</p>
+          </section>
         </div>
       </DemoDeepDiveCard>
-    </div>
+    </>
   )
 }

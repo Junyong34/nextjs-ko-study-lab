@@ -1065,7 +1065,7 @@
   title: "cookies().delete() 세션 파기 및 로그아웃"
   doc: 3-api-reference/3.3-functions/cookies.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/headers/user-agent-device
   title: "headers().get('user-agent') 기기 식별 및 최적화"
@@ -1125,13 +1125,13 @@
   title: "Server Action 내 redirect() (303 See Other)"
   doc: 3-api-reference/3.3-functions/redirect.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/redirect/handler-307
   title: "Route Handler 내 redirect() (307 Temporary Redirect)"
   doc: 3-api-reference/3.3-functions/redirect.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/permanent-redirect/seo-308
   title: "permanentRedirect() 영구 URL 변경 (308 Permanent)"

@@ -1,46 +1,48 @@
 import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { CookiesDeleteDemo } from './components/CookiesDeleteDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'functions/cookies/delete-logout')
-
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { CookiesDeleteDemo } from './components/CookiesDeleteDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
-        title="cookies().delete() 세션 파기 및 로그아웃"
-        concept="cookies().delete()를 Server Action 내부에서 호출하여 클라이언트 브라우저에 저장된 인증 세션 쿠키를 즉시 만료시키고 보안 로그아웃을 수행합니다."
+      <DemoGuideCard
+        title="회원 쿠키를 지운 뒤 다음 요청에서 확인하기"
+        concept="로그아웃 액션이 보낸 쿠키 만료 지시를 브라우저가 적용하면, 다음 서버 요청에는 그 쿠키가 실리지 않습니다."
         steps={[
           {
             step: 1,
-            title: "[로그아웃 (cookies().delete)] 클릭",
-            description: "로그아웃 Server Action을 호출하여 현재 저장된 session-token 쿠키를 삭제합니다.",
-            actionBadge: "로그아웃 실행",
+            title: '회원 쿠키 생성',
+            description: '준비가 끝나면 회원 쿠키를 생성하세요. 다음 서버 요청에서 예시 VIP 회원과 쿠키 존재 여부를 확인합니다.',
+            actionBadge: '생성',
+            observe: '쿠키 있음, 생성 확인 이력 완료',
+            observeAt: 'playground',
           },
           {
             step: 2,
-            title: "Set-Cookie 만료 헤더(Max-Age=0) 전송 확인",
-            description: "서버가 응답 헤더로 쿠키 만료 지시자를 전송하여 브라우저 저장소를 비우는 과정을 확인합니다.",
-            actionBadge: "쿠키 파기",
+            title: '삭제 전에 검증',
+            description: '쿠키 삭제 검증을 누르세요. 쿠키가 남아 있고 삭제 이력이 없어 불일치가 나와야 합니다.',
+            actionBadge: '실패 확인',
           },
           {
             step: 3,
-            title: "비로그인 게스트 상태 전환 관찰",
-            description: "화면의 사용자 프로필이 게스트 상태로 전환되고 세션 쿠키가 제거되었는지 확인합니다.",
-            actionBadge: "상태 검증",
-            observe: "cookies().delete() 호출 후 세션 쿠키가 즉시 파기되고 게스트 상태로 전환됨",
-            observeAt: "playground",
+            title: '로그아웃 후 다시 검증',
+            description: '로그아웃을 누르고 쿠키 없음을 관찰한 뒤 다시 검증하세요. Network에서 삭제 응답의 Set-Cookie와 뒤따르는 읽기 요청을 비교합니다.',
+            actionBadge: '삭제·검증',
+            observe: '새 요청에 쿠키 없음 + 생성·삭제 이력 충족 → 검증 완료',
+            observeAt: 'playground',
+          },
+          {
+            step: 4,
+            title: '초기화하고 재실행',
+            description: '예제 초기화로 쿠키와 이력을 비우세요. 게스트 상태에서 바로 검증하면 삭제 성공이 아닙니다.',
+            actionBadge: '초기화',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"cookies().delete() 세션 파기 및 로그아웃 실습"}>
-        <CookiesDeleteDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <CookiesDeleteDemo />
     </DemoContainer>
   )
 }
