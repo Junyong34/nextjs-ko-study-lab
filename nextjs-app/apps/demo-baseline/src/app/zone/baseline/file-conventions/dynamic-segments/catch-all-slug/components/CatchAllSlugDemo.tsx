@@ -1,9 +1,34 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 
-export function CatchAllSlugDemo() {
+interface ZeroSegmentProbeResult {
+  status: number
+  ok: boolean
+}
+
+interface CatchAllSlugDemoProps {
+  onProbeResult?: (result: ZeroSegmentProbeResult) => void
+}
+
+export function CatchAllSlugDemo({ onProbeResult }: CatchAllSlugDemoProps) {
   const BASE_PATH = '/zone/baseline/file-conventions/dynamic-segments/catch-all-slug'
+  const ZERO_SEGMENT_PATH = `${BASE_PATH}/shop`
+
+  const [probe, setProbe] = useState<ZeroSegmentProbeResult | null>(null)
+  const [probing, setProbing] = useState(false)
+
+  async function handleProbeZeroSegment() {
+    setProbing(true)
+    try {
+      const res = await fetch(ZERO_SEGMENT_PATH, { cache: 'no-store' })
+      const result: ZeroSegmentProbeResult = { status: res.status, ok: res.ok }
+      setProbe(result)
+      onProbeResult?.(result)
+    } finally {
+      setProbing(false)
+    }
+  }
 
   const DEMO_ROUTES = [
     {
@@ -74,6 +99,35 @@ export function CatchAllSlugDemo() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="rounded-lg border border-amber-300 bg-amber-50/60 p-4 dark:border-amber-900/60 dark:bg-amber-950/20">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <h5 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">0단계: 세그먼트 없음 (/shop)</h5>
+              <span className="rounded bg-amber-200 px-1.5 py-0.5 font-mono text-[10px] font-bold text-amber-900 dark:bg-amber-900 dark:text-amber-200">
+                매칭 실패 예상
+              </span>
+            </div>
+            <code className="block rounded bg-amber-100/70 px-2 py-1 font-mono text-[11px] text-amber-900 dark:bg-amber-950/40 dark:text-amber-200">
+              shop/[...slug]는 1개 이상 세그먼트가 있어야 매칭 — /shop 단독 경로에는 대응하는 page.tsx가 없음
+            </code>
+          </div>
+          <button
+            type="button"
+            onClick={handleProbeZeroSegment}
+            disabled={probing}
+            className="rounded bg-amber-700 px-3 py-1 text-xs font-semibold text-white hover:bg-amber-800 disabled:opacity-50"
+          >
+            {probing ? '요청 중...' : '실제 요청으로 확인'}
+          </button>
+        </div>
+        {probe && (
+          <p className="mt-3 border-t border-amber-200 pt-2 font-mono text-[11px] text-amber-900 dark:border-amber-900/60 dark:text-amber-300">
+            실제 HTTP 응답: {probe.status} {probe.ok ? '(라우트 매칭됨)' : '(Not Found — 매칭 실패 확인됨)'}
+          </p>
+        )}
       </div>
     </div>
   )
