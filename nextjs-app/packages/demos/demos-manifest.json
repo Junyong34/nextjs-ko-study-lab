@@ -1096,7 +1096,7 @@
     "title": "서버 데이터 갱신 상태 표시",
     "doc": "3-api-reference/3.3-functions/use-router.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/use-pathname/active-link",
@@ -1138,7 +1138,7 @@
     "title": "useSelectedLayoutSegments() 계층형 브레드크럼 생성",
     "doc": "3-api-reference/3.3-functions/use-selected-layout-segments.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/cache-life/preset-profiles",
@@ -1292,7 +1292,7 @@
     "title": "notFound() 404 트리거 및 not-found.tsx 렌더",
     "doc": "3-api-reference/3.3-functions/not-found.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/forbidden/trigger-403",
@@ -1397,7 +1397,7 @@
     "title": "connection() 비동기 연결 준비 대기",
     "doc": "3-api-reference/3.3-functions/connection.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/taint-unique-value/block-secret",
@@ -1432,7 +1432,7 @@
     "title": "'use client' 클라이언트 경계 선언 및 이벤트 바인딩",
     "doc": "3-api-reference/3.4-directives/use-client.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "directives/use-client/window-storage-access",
