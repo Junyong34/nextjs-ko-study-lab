@@ -802,14 +802,14 @@
     "title": "결제 세그먼트 에러 캡처 (error.tsx)",
     "doc": "3-api-reference/3.1-file-conventions/error.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/error/reset-recovery",
     "title": "error.tsx reset() 컴포넌트 재시도 복구",
     "doc": "3-api-reference/3.1-file-conventions/error.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/not-found/programmatic-not-found",
@@ -872,7 +872,7 @@
     "title": "URL 영향 없는 라우트 그룹 분리 (route-groups)",
     "doc": "3-api-reference/3.1-file-conventions/route-groups.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/route-groups/shop-vs-admin-roots",
@@ -893,7 +893,7 @@
     "title": "[...slug] Catch-all 다이나믹 세그먼트",
     "doc": "3-api-reference/3.1-file-conventions/dynamic-routes.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/dynamic-segments/optional-catch-all",
