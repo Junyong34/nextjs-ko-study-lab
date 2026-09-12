@@ -14,26 +14,28 @@ export default function MarketingAboutPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title="Route Group: (marketing)/about -> /about"
-        concept="Next.js의 괄호 폴더 (marketing)을 통해 마케팅 전용 배너 레이아웃을 독립적으로 적용하면서도 깔끔한 /about URL을 유지합니다."
+        title="Route Group: (marketing)/about/page.tsx -> /about"
+        concept="파일은 `app/.../(marketing)/about/page.tsx`에 있지만, (marketing)은 Route Group 폴더라 URL 세그먼트로 계산되지 않아 실제 요청 경로는 /about으로 끝난다."
         steps={[
           {
             step: 1,
-            title: "마케팅 레이아웃 확인",
-            description: "보라색 마케팅 배너 레이아웃이 (marketing) 그룹 하위의 /about에만 적용됩니다.",
-            actionBadge: "마케팅 레이아웃",
+            title: "폴더 경로와 실제 URL 비교",
+            description: "주소창의 경로가 .../group-url-isolation/about으로 끝나는지, 그 사이에 (marketing) 문자열이 없는지 확인합니다.",
+            actionBadge: "URL 확인",
           },
           {
             step: 2,
-            title: "URL 경로 격리 검증",
-            description: "주소창에 (marketing) 문구가 포함되지 않고 순수 /about으로 유지됩니다.",
-            actionBadge: "URL 검증",
+            title: "[(shop)/products 페이지로 이동 →] 클릭",
+            description: "쇼핑몰 상품 페이지(/products)로 이동해, 다른 그룹 폴더에서도 괄호 문자열이 URL에 나타나지 않는지 비교합니다.",
+            actionBadge: "그룹 전환",
           },
           {
             step: 3,
-            title: "(shop) 그룹과 비교",
-            description: "쇼핑몰 상품 페이지(/products)로 이동하여 완전히 다른 레이아웃 구조를 확인합니다.",
-            actionBadge: "그룹 전환",
+            title: "[홈으로 복귀] 클릭",
+            description: "최상위 인덱스로 돌아가 3단 검증 패널에서 usePathname() 값을 다시 확인합니다.",
+            actionBadge: "홈 복귀",
+            observe: "usePathname()이 반환한 문자열에 (marketing) 괄호 폴더명이 포함되지 않았는지",
+            observeAt: "verification",
           },
         ]}
       />
@@ -66,13 +68,13 @@ export default function MarketingAboutPage() {
               "혁신적인 기술로 최고의 쇼핑 경험을 선사합니다."
             </div>
             <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              본 페이지는 마케팅 전용 헤더 및 푸터를 탑재하고 있으며, 스토어프론트((shop)) 영역과 레이아웃 코드 간섭 없이 독립적으로 배포 및 유지보수됩니다.
+              폴더 경로는 <code>(marketing)/about</code>이지만, 브라우저 주소창에는 괄호 폴더명 없이 <code>/about</code>만 보입니다. 스토어프론트(<code>(shop)</code>) 폴더와 파일 트리는 나뉘어 있어도 최종 URL 규칙은 동일합니다.
             </p>
           </div>
         </div>
       </DemoPlaygroundCard>
 
-      <VerificationFooter currentGroup="marketing" currentPath="/about" />
+      <VerificationFooter />
     </DemoContainer>
   )
 }
