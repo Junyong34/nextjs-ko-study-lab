@@ -858,7 +858,7 @@
     "title": "Webhook 서명 검증 핸들러 (route.ts)",
     "doc": "3-api-reference/3.1-file-conventions/route.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/route/sse-stock-stream",
@@ -886,7 +886,7 @@
     "title": "[id] 단일 다이나믹 세그먼트",
     "doc": "3-api-reference/3.1-file-conventions/dynamic-routes.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/dynamic-segments/catch-all-slug",
