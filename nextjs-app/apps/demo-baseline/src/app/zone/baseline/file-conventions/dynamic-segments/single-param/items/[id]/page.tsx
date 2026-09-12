@@ -44,13 +44,14 @@ export default async function SingleParamItemPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const item = ITEMS_DB[id] || {
-    name: `알 수 없는 상품 (${id})`,
+  const knownItem = ITEMS_DB[id]
+  const item = knownItem || {
+    name: `카탈로그에 없는 상품 (${id})`,
     category: '기타 카테고리',
     price: 0,
     stock: 0,
-    badge: '커스텀 ID',
-    desc: '동적 세그먼트 [id]로 전달된 파라미터입니다.',
+    badge: 'DB에 없는 ID',
+    desc: `"${id}"는 상품 DB(ITEMS_DB)에 없는 값이지만, [id] 다이나믹 세그먼트는 매칭 여부와 무관하게 URL 세그먼트 값을 그대로 params.id로 전달합니다.`,
   }
 
   const BASE_PATH = '/zone/baseline/file-conventions/dynamic-segments/single-param'
@@ -58,7 +59,7 @@ export default async function SingleParamItemPage({
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={`[id] 단일 동적 세그먼트: /items/${id}`}
+        title={`[id] 단일 다이나믹 세그먼트: /items/${id}`}
         concept="Next.js App Router의 [id] 폴더 컨벤션에 의해 URL 파라미터가 Page 컴포넌트의 params Promise로 주입되어 렌더링된 실제 서브 라우트 화면입니다."
         steps={[
           {
@@ -75,9 +76,11 @@ export default async function SingleParamItemPage({
           },
           {
             step: 3,
-            title: "클라이언트 라우팅 전환",
-            description: "다른 상품 링크를 클릭하여 Next.js Soft Navigation 시의 파라미터 갱신을 확인합니다.",
-            actionBadge: "라우팅 전환",
+            title: "[PROD-999 (DB에 없음)] 링크 클릭",
+            description: "상품 DB에 없는 임의의 값도 [id]가 매칭 여부와 무관하게 params.id로 그대로 전달되는지 확인합니다.",
+            actionBadge: "임의 값 전달",
+            observe: "하단 검증 패널의 URL 세그먼트 값과 params.id 값이 카탈로그 존재 여부와 무관하게 항상 일치하는지 확인",
+            observeAt: "verification",
           },
         ]}
       />
@@ -88,7 +91,13 @@ export default async function SingleParamItemPage({
             <div>
               <div className="flex items-center gap-2">
                 <h4 className="font-bold text-zinc-900 dark:text-zinc-100">{item.name}</h4>
-                <span className="rounded bg-blue-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+                <span
+                  className={`rounded px-2 py-0.5 text-[11px] font-mono font-semibold ${
+                    knownItem
+                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
+                      : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                  }`}
+                >
                   {item.badge}
                 </span>
               </div>
@@ -125,16 +134,18 @@ export default async function SingleParamItemPage({
                 {JSON.stringify({ params: { id } }, null, 2)}
               </pre>
               <div className="pt-2 text-[11px] text-zinc-400 font-sans">
-                다른 동적 파라미터로 이동:
+                다른 다이나믹 파라미터로 이동 (마지막은 DB에 없는 임의 값):
               </div>
               <div className="flex gap-2 font-mono text-[10px]">
-                {['PROD-101', 'PROD-102', 'PROD-103'].map((targetId) => (
+                {['PROD-101', 'PROD-102', 'PROD-103', 'PROD-999'].map((targetId) => (
                   <Link
                     key={targetId}
                     href={`${BASE_PATH}/items/${targetId}`}
                     className={`rounded px-2 py-1 ${
                       targetId === id
                         ? 'bg-blue-600 text-white font-bold'
+                        : targetId === 'PROD-999'
+                        ? 'bg-amber-700 text-amber-100 hover:bg-amber-600'
                         : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
                     }`}
                   >

@@ -34,7 +34,7 @@ export function SingleParamDemo() {
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
           <div className="flex items-center gap-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100">동적 세그먼트 상품 카탈로그</h4>
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100">다이나믹 세그먼트 상품 카탈로그</h4>
             <span className="rounded bg-emerald-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
               items/[id] 디렉토리 구축 완료
             </span>
