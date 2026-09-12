@@ -2,11 +2,17 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-interface VerificationFooterProps {
-  currentSlug?: string[]
+interface ZeroSegmentProbeResult {
+  status: number
+  ok: boolean
 }
 
-export function VerificationFooter({ currentSlug }: VerificationFooterProps) {
+interface VerificationFooterProps {
+  currentSlug?: string[]
+  zeroSegmentProbe?: ZeroSegmentProbeResult | null
+}
+
+export function VerificationFooter({ currentSlug, zeroSegmentProbe }: VerificationFooterProps) {
   const isMatched = Boolean(currentSlug && currentSlug.length > 0)
 
   return (
@@ -22,6 +28,19 @@ export function VerificationFooter({ currentSlug }: VerificationFooterProps) {
         isMatched={currentSlug ? isMatched : undefined}
         description="Next.js App Router의 [...folderName] 컨벤션을 통해 1단계 이상의 모든 하위 경로 세그먼트를 배열 형태로 전달받는 동작을 검증합니다."
       />
+      {zeroSegmentProbe !== undefined && (
+        <ExpectedActualPanel
+          title="0단계(세그먼트 없음) 매칭 실패 검증"
+          expected="• /shop 단독 요청 시 대응하는 page.tsx가 없어 HTTP 404\n• [...slug]는 최소 1개 이상의 세그먼트가 있어야 매칭됨"
+          actual={
+            zeroSegmentProbe
+              ? `• 실제 fetch 응답 상태 코드: ${zeroSegmentProbe.status}\n• ${zeroSegmentProbe.ok ? '라우트가 매칭됨 (예상과 다름)' : '라우트 매칭 실패 — 404 확인됨'}`
+              : '• 아직 확인하지 않음 (실습화면의 [실제 요청으로 확인] 버튼을 클릭하세요)'
+          }
+          isMatched={zeroSegmentProbe ? zeroSegmentProbe.status === 404 : undefined}
+          description="실습화면에서 /shop(세그먼트 0개)로 실제 fetch 요청을 보내 [...slug]가 이 경로에는 매칭되지 않고 404를 반환하는지 실측합니다."
+        />
+      )}
       <DemoDeepDiveCard title="[...slug] 포괄적 동적 세그먼트 (Catch-all Segments)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
@@ -59,7 +78,7 @@ export function VerificationFooter({ currentSlug }: VerificationFooterProps) {
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>루트 경로 미매칭 (404 발생)</strong>: <code>[...slug]</code>는 최소 1개 이상의 하위 세그먼트가 있어야 매칭되므로, 파라미터가 없는 루트 경로(<code>/shop</code>) 접근 시 404 에러가 발생합니다. 루트까지 포함하려면 <code>[[...slug]]</code>(Optional Catch-all)을 사용해야 합니다.</li>
+              <li><strong>루트 경로 미매칭 (404 발생)</strong>: <code>[...slug]</code>는 최소 1개 이상의 하위 세그먼트가 있어야 매칭되므로, 파라미터가 없는 루트 경로(<code>/shop</code>) 접근 시 404 에러가 발생합니다. 위 실습화면의 [0단계: 세그먼트 없음] 버튼으로 실제 응답 코드를 직접 확인할 수 있습니다. 루트까지 포함하려면 <code>[[...slug]]</code>(Optional Catch-all)을 사용해야 합니다.</li>
               <li><strong>params 언래핑 타입</strong>: <code>params: Promise{'<'}{'{'} slug: string[] {'}'}{'>'}</code> 형태로 배열 타입을 명시하고 비동기 언래핑해야 합니다.</li>
             </ul>
           </div>
