@@ -12,10 +12,10 @@ export function PaymentErrorBoundaryDemo() {
           <div className="flex items-center gap-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">결제 세그먼트 error.tsx 에러 바운더리</h4>
             <span className="rounded bg-rose-100 px-2 py-0.5 text-[11px] font-mono font-semibold text-rose-800 dark:bg-rose-950 dark:text-rose-300">
-              checkout/error.tsx 구축 완료
+              checkout/error.tsx
             </span>
           </div>
-          <p className="text-xs text-zinc-500">결제 단계에서 발생하는 런타임 에러를 격리하여 애플리케이션 충돌을 방지합니다.</p>
+          <p className="text-xs text-zinc-500">결제(checkout) 세그먼트에서 발생하는 런타임 에러를 해당 세그먼트 안에만 격리합니다.</p>
         </div>
       </div>
 
