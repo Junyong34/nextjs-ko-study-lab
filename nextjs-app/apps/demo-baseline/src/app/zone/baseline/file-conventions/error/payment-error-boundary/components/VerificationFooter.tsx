@@ -14,52 +14,51 @@ export function VerificationFooter({ isErrorCaught = false }: VerificationFooter
         expected="• checkout/error.tsx 파일이 세그먼트 에러 바운더리로 등록\n• 런타임 오류 발생 시 상위 레이아웃을 파괴하지 않고 에러 카드 및 reset() 복구 기능 제공"
         actual={
           isErrorCaught
-            ? '• [에러 포착] checkout/error.tsx 컴포넌트 활성화 및 에러 격리 성공'
+            ? '• [에러 포착] checkout/error.tsx 활성화 · checkout/layout.tsx 진행 배너는 마운트 ID가 바뀌지 않은 채 그대로 표시됨'
             : '• 결제 세그먼트 정상 동작 대기 중 (/checkout 진입 후 에러를 발생시키세요)'
         }
         isMatched={isErrorCaught ? true : undefined}
-        description="Next.js App Router의 error.tsx 컨벤션을 통해 세그먼트 단위 React Error Boundary를 구축하고 안전한 복구 수명 주기를 검증합니다."
+        description="checkout/error.tsx가 같은 세그먼트의 page.tsx만 감싸고 layout.tsx는 감싸지 않는다는 것을, 에러 발생 전후 layout.tsx 배너의 마운트 ID가 동일한지로 직접 대조합니다."
       />
-      <DemoDeepDiveCard title="결제 세그먼트 error.tsx 에러 바운더리 & reset() 복구">
+      <DemoDeepDiveCard title="checkout/error.tsx는 왜 Client Component여야 하며, 무엇을 감싸는가">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. error.tsx가 &apos;use client&apos;여야 하는 이유</h5>
             <p>
-              <code>error.tsx</code>는 반드시 클라이언트 컴포넌트(<code>'use client'</code>)로 선언되며, 해당 라우트 세그먼트의 <code>page.tsx</code>와 하위 컴포넌트 트리를 React Error Boundary로 감싸는 표준 파일 컨벤션입니다. <code>{'{'} error, reset {'}'}</code> Props를 전달받아 에러 메시지를 표시하고 복구(Retry)를 시도합니다.
+              Next.js가 세그먼트마다 만드는 에러 경계는 내부적으로 <code>getDerivedStateFromError</code>/<code>componentDidCatch</code> 생명주기를 가진 React 클래스 컴포넌트(<code>ErrorBoundaryHandler</code>)입니다. 이 생명주기는 브라우저에서 커밋되는 렌더 트리 위에서만 동작하는 React 클라이언트 기능이라, 그 fallback으로 넘겨줄 <code>error.tsx</code> 자신도 클라이언트에서 인스턴스화될 수 있어야 합니다. 또한 <code>reset()</code>은 <code>onClick</code>으로 즉시 실행되는 이벤트 핸들러라 서버 컴포넌트는 가질 수 없는 상호작용입니다. <code>'use client'</code>를 빼면 Next.js가 빌드/개발 서버 단계에서 즉시 에러로 막습니다(아래 5번 참고).
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. error.tsx가 감싸는 범위 — layout.tsx는 밖에 있다</h5>
             <p>
-              본 데모에서는 결제 처리(<code>/checkout</code>) 중 PG사 통신 장애나 잔액 부족 예외가 발생했을 때, 상위 GNB 네비게이션과 주문 요약 레이아웃을 안전하게 유지한 채 결제 폼 영역만 <code>error.tsx</code> 폴백 UI로 격리 치환하고, [다시 시도] 버튼으로 결제 재인증을 수행하는 흐름을 검증합니다.
+              같은 폴더 안에서 특수 파일이 렌더링되는 순서는 <code>layout.js → template.js → error.js → loading.js → not-found.js → page.js(또는 하위 layout.js)</code>입니다. <code>error.tsx</code>는 이 순서에서 자기보다 뒤에 오는 <code>page.tsx</code>와 그 하위 트리만 React Error Boundary로 감싸며, 자기보다 앞에 있는 <strong>같은 세그먼트의 <code>layout.tsx</code>·<code>template.tsx</code>는 감싸지 않습니다</strong>. 이 데모의 <code>checkout/layout.tsx</code>가 렌더링하는 진행 배너가 그 증거입니다 — <code>checkout/page.tsx</code>가 던진 에러로 <code>checkout/error.tsx</code>가 활성화돼도 배너의 마운트 ID는 그대로입니다. layout.tsx가 에러 바운더리 밖에서 별도로 렌더링되고 있다는 뜻입니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 의미</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>화면 전체 크래시(White-out) 원천 방지</strong>: 단일 결제 모듈이나 API 실패가 앱 전체 붕괴로 이어지지 않도록 세그먼트 단위로 결함을 격리합니다.</li>
-              <li><strong>보안 다이제스트 제공</strong>: 프로덕션 환경에서 민감한 서버 스택 트레이스를 감추고 <code>error.digest</code> 해시 코드만 클라이언트에 전달하여 보안을 유지합니다.</li>
-              <li><strong>사용자 이탈 없는 즉시 복구</strong>: 전체 페이지 새로고침 없이 <code>reset()</code>을 호출하여 일시적 네트워크 오류를 즉각 복구합니다.</li>
+              <li><strong>세그먼트 단위 격리</strong>: 결제 폼 렌더링이 실패해도 같은 세그먼트의 내비게이션·진행 표시줄 같은 layout.tsx 요소는 리마운트 없이 그대로 유지됩니다.</li>
+              <li><strong>layout.tsx 자체의 에러는 못 잡는다</strong>: <code>checkout/layout.tsx</code>가 렌더링 중 던지는 에러는 <code>checkout/error.tsx</code> 밖에서 발생하므로 이 파일이 잡지 못하며, 상위 세그먼트의 <code>error.tsx</code>가 처리해야 합니다.</li>
+              <li><strong>보안 다이제스트</strong>: 프로덕션에서는 서버 컴포넌트가 던진 에러의 상세 메시지 대신 <code>error.digest</code> 해시만 클라이언트로 전달됩니다.</li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>외부 PG사/간편결제 연동 결제 처리 모듈 장애 대응</li>
-              <li>장바구니 결제금액 쿠폰 할인 계산 서버 오류 복구</li>
-              <li>배송지 주소 유효성 검증 API 실패 시 재입력 안내</li>
-            </ul>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 이 실습의 범위</h5>
+            <p>
+              <code>reset()</code>이 내부적으로 무엇을 다시 렌더링하는지, <code>retry()</code>와 어떻게 다른지는 같은 파일 컨벤션의 다른 실습(<code>reset-recovery</code>)에서 다룹니다. 이 페이지는 &quot;에러가 세그먼트 밖으로 전파되지 않고 격리된다&quot;는 격리 자체에만 집중합니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>동일 레벨 layout.tsx 에러 미포착</strong>: <code>error.tsx</code>는 계층상 <code>layout.tsx</code> 하위에 렌더링되므로, 동일 세그먼트 레이아웃의 에러는 포착하지 못하며 상위 세그먼트의 <code>error.tsx</code>가 처리해야 합니다.</li>
-              <li><strong>reset()과 router.refresh() 연계</strong>: 서버 컴포넌트 렌더링 실패 후 <code>reset()</code>만 단독 호출하면 캐시된 에러가 재발생할 수 있으므로 <code>startTransition(() ={'>'} {'{'} router.refresh(); reset(); {'}'})</code> 패턴을 적용해야 합니다.</li>
-            </ul>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실제로 확인한 사실</h5>
+            <p>
+              이 실습 페이지를 만들며 <code>checkout/error.tsx</code>에서 <code>&apos;use client&apos;</code>를 잠시 지우고 <code>next dev</code>로 직접 재현해봤습니다. Next.js(Turbopack)가 즉시 컴파일을 중단시키고{' '}
+              <code>&quot;checkout/error.tsx must be a Client Component. Add the &apos;use client&apos; directive the top of the file to resolve this issue.&quot;</code>{' '}
+              에러를 던졌습니다 — 공식 문서가 예제 코드마다 <code>{"// Error boundaries must be Client Components"}</code> 주석을 붙여 강조하는 이유를 실제 빌드 에러로 확인한 것입니다.
+            </p>
           </div>
         </div>
       </DemoDeepDiveCard>
