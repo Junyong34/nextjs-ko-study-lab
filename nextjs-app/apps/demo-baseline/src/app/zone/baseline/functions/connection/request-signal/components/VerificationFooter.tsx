@@ -1,102 +1,167 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+import React, { useEffect, useState } from 'react'
+import { ExpectedActualPanel, DemoDeepDiveCard, DemoResetButton } from '@study/demo-kit'
+
+const DYNAMIC_URL = '/zone/baseline/functions/connection/request-signal/dynamic-branch'
+const STATIC_URL = '/zone/baseline/functions/connection/request-signal/static-branch'
+
+function extractRenderedAt(html: string): string | null {
+  const match = html.match(/data-rendered-at="([^"]+)"/)
+  return match ? match[1] : null
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+async function fetchRenderedAt(url: string): Promise<string | null> {
+  const res = await fetch(url, { cache: 'no-store' })
+  const html = await res.text()
+  return extractRenderedAt(html)
+}
 
+interface ProbeState {
+  loading: boolean
+  dynamicFirst: string | null
+  dynamicSecond: string | null
+  staticOnce: string | null
+  error: string | null
+}
+
+const INITIAL_STATE: ProbeState = {
+  loading: true,
+  dynamicFirst: null,
+  dynamicSecond: null,
+  staticOnce: null,
+  error: null,
+}
+
+/**
+ * 이 패널은 실습 화면과 별도로 /static-branch, /dynamic-branch 두 실제 라우트에
+ * fetch()를 직접 보내 서버가 반환한 렌더 시각을 비교한다 — 실습 화면에서 관찰한 값을
+ * 그대로 믿지 않고 독립적으로 재확인한다.
+ */
+export function VerificationFooter() {
+  const [state, setState] = useState<ProbeState>(INITIAL_STATE)
+
+  const runVerification = async () => {
+    setState((prev) => ({ ...prev, loading: true, error: null }))
+    try {
+      const dynamicFirst = await fetchRenderedAt(DYNAMIC_URL)
+      const staticOnce = await fetchRenderedAt(STATIC_URL)
+      const dynamicSecond = await fetchRenderedAt(DYNAMIC_URL)
+      setState({ loading: false, dynamicFirst, dynamicSecond, staticOnce, error: null })
+    } catch {
+      setState({
+        loading: false,
+        dynamicFirst: null,
+        dynamicSecond: null,
+        staticOnce: null,
+        error: '두 브랜치 라우트에 실제 요청을 보내지 못했습니다.',
+      })
+    }
+  }
+
+  useEffect(() => {
+    runVerification()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const { loading, dynamicFirst, dynamicSecond, staticOnce, error } = state
   const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
+    !loading && !error && dynamicFirst !== null && dynamicSecond !== null
+      ? dynamicFirst !== dynamicSecond
       : undefined
 
-  const defaultExpected = "• connection() 비동기 연결 준비 대기의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  const expected = [
+    'connection() 브랜치(/dynamic-branch)를 연속으로 두 번 요청하면,',
+    '두 렌더 시각(renderedAt)이 서로 달라야 한다 — 코드가 매 요청 새로 실행된다는 증거.',
+  ].join('\n')
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = loading
+    ? '두 브랜치에 실제 요청을 보내는 중...'
+    : error
+      ? error
+      : [
+          `1차 요청 렌더 시각: ${dynamicFirst ?? '(읽기 실패)'}`,
+          `2차 요청 렌더 시각: ${dynamicSecond ?? '(읽기 실패)'}`,
+          `참고 — 정적 브랜치(/static-branch) 렌더 시각: ${staticOnce ?? '(읽기 실패)'}`,
+          'next dev에서는 정적 브랜치도 매 요청 새로 렌더링되어 이 값이 함께 바뀔 수 있다 — 이 차이는 next build 결과로만 확인된다(아래 [개념 정리] 참고).',
+        ].join('\n')
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="connection() 비동기 연결 준비 대기 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="connection() 브랜치의 요청별 재실행 검증"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="/static-branch, /dynamic-branch 두 실제 라우트에 직접 fetch() 요청을 보내 서버가 반환한 렌더 시각을 비교합니다."
       />
-            <DemoDeepDiveCard title="connection() 요청 수명주기 접근 및 동적 렌더링 조기 신호">
+      <div className="flex justify-end">
+        <DemoResetButton label="다시 검증" loadingLabel="요청 중..." onReset={runVerification} />
+      </div>
+      <DemoDeepDiveCard title="connection() 요청 시점 렌더링 강제">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>connection()</code> (<code>next/server</code>)은 Next.js 15+에서 도입된 비동기 함수로, 컴포넌트 렌더링이 빌드 타임 정적 생성이 아닌 실제 클라이언트 요청 수명주기에 진입했음을 명시적으로 선언하고 동적 렌더링 컨텍스트를 활성화합니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 동작 원리</h5>
+            <p>
+              <code>connection()</code> (<code>next/server</code>)은 매개변수 없이 <code>Promise&lt;void&gt;</code>를
+              반환하는 비동기 함수다. <code>await connection()</code> 호출 지점에서 정적 prerender가 멈추고, 그
+              아래 코드는 실제 클라이언트 요청이 들어온 시점에만 실행된다. <code>cookies()</code>나{' '}
+              <code>headers()</code>처럼 요청 시점 API를 직접 읽지 않지만 <code>Math.random()</code>,{' '}
+              <code>new Date()</code>, 동기 DB 쿼리처럼 매 요청 달라져야 하는 값을 다룰 때 필요하다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 <code>await connection()</code>을 호출하여 해당 컴포넌트가 사용자의 실시간 요청 시점에 동적으로 렌더링됨을 보장하고, 클라이언트 연결 상태를 확인하여 스트리밍 데이터 파이프라인을 구동합니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 이 데모의 동작 원리</h5>
+            <p>
+              <code>/static-branch</code>는 connection()을 호출하지 않고 재고 값과 렌더 시각을 곧바로 계산한다.{' '}
+              <code>/dynamic-branch</code>는 정적 App Shell 문구 다음에 <code>await connection()</code>이 선언된{' '}
+              <code>&lt;Suspense&gt;</code> 하위 컴포넌트를 배치해, connection() 이후 코드가 실제로 요청 시점에
+              실행되는 것을 스트리밍 지연으로 보여준다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+              3. next dev와 next build의 차이 — 실제 빌드 로그
+            </h5>
+            <p>
+              Next.js 공식 문서: &quot;In Development, Pages are always rendered on-demand and are never
+              cached.&quot; — 즉 <code>next dev</code>에서는 두 브랜치 모두 새로고침마다 값이 바뀐다. 정적/다이나믹
+              분류는 실제 프로덕션 빌드로만 확인할 수 있다. 아래는 이 브랜치에서 <code>npx next build</code>를
+              직접 실행해 그대로 캡처한 실제 라우트 표다(2026-09-12 캡처, 조작 없음 — 재현하려면 이 앱 디렉토리에서
+              같은 명령을 다시 실행):
+            </p>
+            <pre className="mt-2 overflow-x-auto rounded bg-zinc-950 p-2.5 font-mono text-[11px] leading-relaxed text-zinc-300">
+{`Route (app)                                                          Revalidate  Expire
+├ ○ /zone/baseline/functions/connection/request-signal
+├ ƒ /zone/baseline/functions/connection/request-signal/dynamic-branch
+├ ○ /zone/baseline/functions/connection/request-signal/static-branch
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand`}
+            </pre>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무 주의사항 (Caution &amp; Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>명시적 동적 렌더링 선언</strong>: 헤더나 쿠키를 직접 읽지 않고도 안전하게 정적 빌드 최적화에서 동적 요청 모드로 전환합니다.</li>
-              <li><strong>Partial Prerendering(PPR) 경계 최적화</strong>: 정적 셸(Shell)과 동적 데이터 영역의 경계를 명확히 분리합니다.</li>
-              <li><strong>코드 의도 명확화</strong>: 불필요한 더미 헤더 호출 안티패턴을 제거하고 공식 API로 의도를 표현합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>정적 레이아웃 내부에서 실시간 시간/요청별 동적 컴포넌트 렌더링</li>
-              <li>부분 사전 렌더링(PPR) 환경에서 동적 홀(Dynamic Hole) 스트리밍 경계 선언</li>
-              <li>요청별 고유 세션 컨텍스트 초기화</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Next.js 15+ 전용</strong>: Next.js 15 이전 버전에서는 지원되지 않으므로 레거시 환경에서는 <code>headers()</code> 또는 <code>cookies()</code>를 활용해야 합니다.</li>
+              <li>
+                <strong>레거시 API 대체</strong>: <code>connection()</code>은 Next.js 15에서 도입되어{' '}
+                <code>unstable_noStore()</code>를 공식 대체한다.
+              </li>
+              <li>
+                <strong>이미 Request-time API를 쓴다면 불필요</strong>: <code>cookies()</code>,{' '}
+                <code>headers()</code>, <code>searchParams</code>를 이미 읽고 있다면 그 자체로 다이나믹
+                렌더링이 강제되므로 <code>connection()</code>을 추가할 필요가 없다.
+              </li>
+              <li>
+                <strong>Cache Components 환경에서는 io() 우선 검토</strong>: 이 zone(<code>demo-baseline</code>)의{' '}
+                <code>next.config.ts</code>에는 <code>cacheComponents</code>가 켜져 있지 않다 — 이 조건에서는{' '}
+                <code>connection()</code>이 표준 선택지다. <code>cacheComponents</code>가 켜진 환경(
+                <code>demo-cache-components</code> zone)이라면 캐시·프리페치까지 지원하는{' '}
+                <code>io()</code>를 먼저 검토해야 한다.
+              </li>
             </ul>
           </div>
         </div>
