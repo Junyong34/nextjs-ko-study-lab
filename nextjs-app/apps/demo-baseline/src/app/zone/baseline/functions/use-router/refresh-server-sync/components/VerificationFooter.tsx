@@ -2,102 +2,97 @@
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+interface VerificationFooterProps {
+  /** 이 페이지의 서버 컴포넌트가 이번 렌더링에서 실제로 읽어온 재고 값 */
+  renderedStock: number
+  /** Server Action 응답으로 확인한 서버의 실제 재고. 아직 액션을 실행하지 않았으면 null */
+  trueStock: number | null
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({ renderedStock, trueStock }: VerificationFooterProps) {
+  const isMatched = trueStock === null ? undefined : trueStock === renderedStock
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  const expected =
+    trueStock === null
+      ? '아직 [재고 1개 감소] Server Action을 실행하지 않았습니다.'
+      : `서버 실제 재고: ${trueStock}개 (Server Action 응답으로 방금 확인한 값)`
 
-  const defaultExpected = '• 버튼 클릭에 따른 갱신 횟수와 상태 표시를 확인합니다.'
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  const actual = `화면에 렌더링된 재고: ${renderedStock}개 (이 라우트의 서버 컴포넌트가 마지막으로 렌더링한 값)`
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
+  const description =
+    isMatched === false
+      ? '서버의 실제 재고는 이미 바뀌었지만, 이 라우트의 서버 컴포넌트는 아직 다시 렌더링되지 않아 화면에는 예전 값이 남아 있습니다. [새로고침 → router.refresh()]를 눌러 동기화해 보세요.'
       : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+      ? 'router.refresh()가 서버 컴포넌트를 다시 렌더링해 화면 값과 서버 실제 값이 일치합니다. 위 메모 입력값이 그대로 남아 있는지도 함께 확인하세요.'
+      : undefined
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="서버 데이터 갱신 상태 표시 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="서버 실제 재고 vs 화면 렌더링 재고"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || '이 화면은 실제 router.refresh()가 아닌 로컬 상태 변경을 보여줍니다.'}
+        description={description}
       />
-            <DemoDeepDiveCard title="router.refresh()로 서버 데이터 갱신">
+
+      <DemoDeepDiveCard title="router.refresh()로 서버 데이터 갱신">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>router.refresh()</code>는 현재 라우트의 서버 컴포넌트 트리를 서버에 다시 요청하여 최신 RSC 페이로드를 가져와 병합하는 클라이언트 메서드입니다. 브라우저 새로고침(F5)과 달리 React 클라이언트 상태(입력 폼 값, 스크롤 위치 등)를 완벽히 보존합니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙</h5>
+            <p>
+              <code>useRouter()</code>가 제공하는 <code>router.refresh()</code>는 현재 라우트에 대해 서버로 새 요청을
+              보내 데이터 요청을 다시 수행하고 Server Component를 다시 렌더링한 뒤, 새 RSC Payload를 클라이언트에
+              병합하는 클라이언트 메서드입니다. 이 라우트의 클라이언트 라우터 캐시만 비우며, <code>useState</code> 같은
+              클라이언트 상태나 스크롤 위치 같은 브라우저 상태는 잃지 않습니다. 서버측 데이터 캐시는 무효화하지
+              않으므로, 캐시된 데이터까지 갱신하려면 <code>revalidatePath</code>/<code>revalidateTag</code>가 별도로
+              필요합니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>이 화면에서는 [데이터 갱신]을 누를 때 로컬 갱신 횟수가 늘어납니다. 실제 <code>router.refresh()</code>를 호출해 서버 데이터를 다시 읽는 과정은 포함하지 않습니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 이 데모에서 관찰한 것</h5>
+            <p>
+              [재고 1개 감소] Server Action은 서버 메모리의 실제 재고를 바꾸지만 <code>revalidatePath</code>나
+              서버측 <code>refresh</code>를 호출하지 않으므로, 이 라우트는 그 응답만으로는 다시 렌더링되지 않습니다.
+              그래서 화면 재고(Actual)와 서버 실제 재고(Expected)가 어긋난 채로 남습니다. [새로고침 →
+              router.refresh()]를 눌러야 서버 컴포넌트가 다시 렌더링되어 두 값이 일치하게 됩니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. Server Action과의 관계</h5>
+            <p>
+              Server Action이 <code>revalidatePath</code>, <code>revalidateTag</code>, <code>redirect</code>, 또는
+              서버측 <code>refresh()</code>(<code>next/cache</code>, Server Action 내부에서만 호출 가능) 중 하나를
+              호출하면 그 액션의 응답에 최신 RSC Payload가 함께 실려 화면이 같은 요청 안에서 즉시 갱신됩니다. 이
+              데모의 [예제 초기화] 버튼은 <code>revalidatePath</code>를 호출하므로 클릭 즉시 화면이 갱신되는 것을
+              대조해 확인할 수 있습니다. 반면 아무것도 호출하지 않는 액션은 서버 데이터를 실제로 바꾸고도 화면을
+              그대로 두며, 이때 클라이언트에서 명시적으로 <code>router.refresh()</code>를 호출해야 합니다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>클라이언트 상태 무손실 갱신</strong>: 사용자가 작성 중인 폼 데이터나 모달 열림 상태를 초기화하지 않고 서버 데이터만 최신화합니다.</li>
-              <li><strong>Router Cache 무효화 연동</strong>: 현재 활성화된 라우트 세그먼트의 클라이언트 캐시를 새로고침하여 최신 서버 상태를 즉각 반영합니다.</li>
-              <li><strong>낙관적 UI 후속 동기화</strong>: 클라이언트 상태를 먼저 변경한 뒤 <code>router.refresh()</code>를 트리거하여 최종 서버 상태와 안전하게 정렬합니다.</li>
+              <li>외부 REST API/웹훅으로 서버 데이터가 바뀐 뒤 현재 화면을 최신 상태로 동기화할 때</li>
+              <li>외부 결제 팝업이 완료된 뒤 메인 화면의 결제/주문 상태를 다시 읽어올 때</li>
+              <li>다른 사용자의 변경 사항을 주기적으로(폴링) 반영해야 할 때</li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 주의사항</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>장바구니 수량 변경 후 총 결제 예상 금액 및 쿠폰 할인율 서버 재계산</li>
-              <li>실시간 경매/주식 호가 화면에서 주기적 서버 데이터 폴링 동기화</li>
-              <li>외부 팝업 결제창 완료 신호 수신 후 메인 주문 화면의 결제 상태 갱신</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Server Action과의 차이</strong>: Server Action은 내부에서 <code>revalidatePath</code>를 호출해 자동으로 refresh를 유발하지만, 외부 REST API 호출 후에는 명시적으로 <code>router.refresh()</code>를 호출해야 합니다.</li>
-              <li><strong>네트워크 비용 고려</strong>: 잦은 <code>router.refresh()</code> 호출은 서버 RSC 렌더링 부하를 유발하므로 정밀한 캐시 태그 무효화와 병행해야 합니다.</li>
+              <li>
+                브라우저 새로고침(F5)과 다릅니다. F5는 문서를 통째로 다시 불러와 이 메모 입력 같은 클라이언트 상태를
+                모두 초기화하지만, <code>router.refresh()</code>는 그 상태를 보존합니다.
+              </li>
+              <li>
+                fetch 요청에 캐시가 걸려 있으면 <code>router.refresh()</code>를 호출해도 같은 캐시된 응답이 다시
+                올 수 있습니다 — 서버측 캐시까지 무효화하려면 <code>revalidatePath</code>/<code>revalidateTag</code>를
+                함께 사용해야 합니다.
+              </li>
             </ul>
           </div>
         </div>
