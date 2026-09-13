@@ -4,43 +4,71 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'functions/draft-mode/enable-preview')
 
 import React from 'react'
+import { draftMode } from 'next/headers'
+import { unstable_cache } from 'next/cache'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { DraftModeEnableDemo } from './components/DraftModeEnableDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import type { DraftPreviewSnapshot } from './types'
 
-export default function DemoPage() {
+const ENABLE_ROUTE = '/zone/baseline/functions/draft-mode/enable-preview/enable'
+
+// revalidate 시간을 지정하지 않으면 재검증 전까지 계속 캐시된다.
+// draftMode가 켜지면 이 함수는 Next.js에 의해 자동으로 캐시를 건너뛰고 매번 재실행된다.
+const getPreviewSnapshot = unstable_cache(
+  async (): Promise<DraftPreviewSnapshot> => ({
+    renderedAt: new Date().toISOString(),
+    requestId: Math.random().toString(36).slice(2, 8).toUpperCase(),
+  }),
+  ['draft-mode-enable-preview-snapshot']
+)
+
+export default async function DemoPage() {
+  const { isEnabled } = await draftMode()
+  const snapshot = await getPreviewSnapshot()
+
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="draftMode().enable() 초안 모드 활성화"
-        concept="draftMode().enable()을 실행하여 __prerender_bypass 쿠키를 브라우저에 발급하고 0ms 지연으로 정적 캐시를 우회하여 CMS 초안 상품을 즉시 미리보기 렌더링합니다."
+        concept="draftMode().enable()은 Route Handler에서 __prerender_bypass 쿠키를 Set-Cookie 응답 헤더로 실제 발급합니다. 이 쿠키가 있는 요청은 unstable_cache/fetch 캐시를 우회해 매번 새로 렌더링됩니다."
         steps={[
           {
             step: 1,
-            title: "[draftMode().enable() 실행] 클릭",
-            description: "Route Handler에서 draftMode().enable()을 호출하여 미리보기 바이패스 쿠키를 발급합니다.",
-            actionBadge: "미리보기 활성화",
+            title: '최초 진입 시 renderedAt 확인',
+            description: 'draftMode가 꺼진 상태에서 unstable_cache로 감싼 함수가 반환한 최초 렌더링 시각을 확인합니다.',
+            actionBadge: '초기 상태 확인',
           },
           {
             step: 2,
-            title: "__prerender_bypass 쿠키 발급 및 정적 캐시 우회 확인",
-            description: "브라우저 쿠키에 초안 모드 토큰이 저장되고 정적 페이지 캐시가 실시간 바이패스 모드로 전환됩니다.",
-            actionBadge: "바이패스 확인",
+            title: '[다시 요청]을 2~3회 클릭',
+            description: 'router.refresh()로 서버 컴포넌트를 재실행해도 renderedAt이 그대로인지 확인합니다.',
+            actionBadge: '캐시 HIT 확인',
+            observe: 'draftMode가 꺼진 동안에는 재요청해도 renderedAt/requestId가 바뀌지 않음',
+            observeAt: 'verification',
           },
           {
             step: 3,
-            title: "미발행 초안(Draft) 상품 렌더링 관찰",
-            description: "화면에 초안 모드 뱃지와 함께 CMS 비공개 상품 데이터가 렌더링되는지 확인합니다.",
-            actionBadge: "초안 렌더링",
-            observe: "draftMode 활성화 후 정적 캐시가 우회되어 비공개 초안 상품 데이터가 즉시 렌더링됨",
-            observeAt: "playground",
+            title: '[draftMode().enable() 실행] 클릭',
+            description: '실제 Route Handler(/enable)로 이동합니다. 응답의 Set-Cookie: __prerender_bypass 헤더를 확인합니다.',
+            actionBadge: '쿠키 발급 확인',
+            observe: 'Network 탭에서 /enable 요청의 응답 헤더에 Set-Cookie: __prerender_bypass=... 가 실제로 찍힘',
+            observeAt: 'network',
+          },
+          {
+            step: 4,
+            title: '되돌아온 뒤 [다시 요청]을 여러 번 클릭',
+            description: 'draftMode가 켜진 상태에서는 재요청마다 renderedAt/requestId가 매번 새로 나오는지 확인합니다.',
+            actionBadge: '캐시 우회 확인',
+            observe: 'draftMode 활성화 후에는 재요청할 때마다 renderedAt이 매번 달라짐 (정적 캐시 우회)',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"draftMode().enable() 초안 모드 활성화 실습"}>
-        <DraftModeEnableDemo />
+      <DemoPlaygroundCard title="draftMode().enable() 초안 모드 활성화 실습">
+        <DraftModeEnableDemo isEnabled={isEnabled} snapshot={snapshot} enableHref={ENABLE_ROUTE} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter isEnabled={isEnabled} snapshot={snapshot} />
     </DemoContainer>
   )
 }
