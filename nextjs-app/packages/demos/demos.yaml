@@ -909,7 +909,7 @@
   title: "Google Fonts 가변 폰트 CSS 변수 연동"
   doc: 3-api-reference/3.2-components/font.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/font/local-font-face
   title: "next/font/local 커스텀 로컬 폰트 매핑"
@@ -1089,7 +1089,7 @@
   title: "draftMode().disable() 정적 캐시 모드 복귀"
   doc: 3-api-reference/3.3-functions/draft-mode.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/after/background-logging
   title: "after() 백그라운드 주문 로깅"
@@ -1233,7 +1233,7 @@
   title: "'use client' 내부 브라우저 window.localStorage 접근"
   doc: 3-api-reference/3.4-directives/use-client.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: directives/use-server/file-level-action
   title: "파일 레벨 'use server' Server Action 모듈 분리"
@@ -1245,7 +1245,7 @@
   title: "컴포넌트 내부 인라인 'use server' 클로저 액션"
   doc: 3-api-reference/3.4-directives/use-server.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: directives/use-cache/function-cache
   title: "'use cache' 지시어를 통한 비동기 함수 결과 캐싱"
