@@ -1,103 +1,94 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { WebVitalLogEntry } from '../types'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+const RATING_LABEL: Record<string, string> = {
+  good: '양호',
+  'needs-improvement': '개선 필요',
+  poor: '나쁨',
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export interface VerificationFooterProps {
+  logs: WebVitalLogEntry[]
+}
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter({ logs }: VerificationFooterProps) {
+  const collectedNames = logs.map((log) => log.metric.name)
+  const isMatched = logs.length > 0
 
-  const defaultExpected = "• useReportWebVitals() 클라이언트 웹 바이탈 측정의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actualContent = isMatched
+    ? logs
+        .map(
+          (log) =>
+            `• ${log.metric.name}: ${log.metric.value.toFixed(1)} (${RATING_LABEL[log.metric.rating] ?? log.metric.rating}, id=${log.metric.id.slice(-6)})`
+        )
+        .join('\n')
+    : '• 아직 콜백이 호출되지 않았습니다. 위 실습 절차(클릭 → 탭 전환 후 복귀)를 따라 해보세요.'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="useReportWebVitals() 클라이언트 웹 바이탈 측정 검증 결과"
-        expected={propExpected || defaultExpected}
+        title="useReportWebVitals 콜백 수신 검증"
+        expected={
+          '• 실습 절차를 따르면 useReportWebVitals(callback)의 callback이\n  브라우저가 실측한 지표(name/value/rating)와 함께 최소 1회 이상 호출된다.'
+        }
         actual={actualContent}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description={`현재까지 수집된 지표: ${logs.length}개 (${collectedNames.join(', ') || '없음'})`}
       />
-            <DemoDeepDiveCard title="useReportWebVitals() Core Web Vitals 클라이언트 성능 측정 & APM 전송">
+
+      <DemoDeepDiveCard title="useReportWebVitals() 실측 원리 및 보고 타이밍">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>useReportWebVitals()</code> (<code>next/navigation</code>)는 브라우저에서 Core Web Vitals 지표(LCP, FID, CLS, INP, FCP, TTFB)를 실시간 캡처하여 개발자 콜백으로 전달하는 클라이언트 훅입니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙</h5>
+            <p>
+              <code>useReportWebVitals(callback)</code>(<code>next/web-vitals</code>)는 내부적으로{' '}
+              <code>useEffect</code>에서 <code>onCLS</code>/<code>onFID</code>/<code>onLCP</code>/
+              <code>onINP</code>/<code>onFCP</code>/<code>onTTFB</code>(모두 브라우저{' '}
+              <code>PerformanceObserver</code> 기반 <code>web-vitals</code> 라이브러리 함수이며 Next.js가
+              <code>next/dist/compiled/web-vitals</code>로 내장 제공)를 등록해, 각 지표가 확정될 때마다
+              같은 <code>callback</code>을 호출합니다. 화면에 보이는 값은 난수나 하드코딩이 아니라 이
+              브라우저가 실제로 계산한 값입니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 사용자가 페이지를 탐색하고 상호작용할 때 발생하는 LCP(최대 콘텐츠 렌더링 시간), INP(인터랙션 응답성), CLS(누적 레이아웃 이동) 메트릭을 수집하여 성능 상태 패널에 표시하고 <code>navigator.sendBeacon</code>으로 전송하는 흐름을 검증합니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 지표별 보고 시점이 다른 이유</h5>
+            <p>
+              <code>web-vitals</code>는 지표마다 &quot;확정&quot; 조건이 다릅니다. FCP/TTFB는 페이지 로드
+              직후 자동으로 보고되지만, LCP는 사용자의 첫 클릭/키 입력 시점에 최종값이 확정되고, CLS/INP는
+              기본 옵션(<code>reportAllChanges</code> 미사용)에서 탭이 백그라운드로 전환되는{' '}
+              <code>visibilitychange</code> 시점에야 세션 누적값이 계산되어 콜백으로 전달됩니다. 이 실습에서
+              위쪽 지표는 바로 뜨고 CLS/INP만 늦게 뜨는 것은 버그가 아니라 이 규격 때문입니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무 이점</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>실제 사용자 환경(RUM) 성능 측정</strong>: 실험실 데이터가 아닌 전 세계 실제 사용자의 네트워크/기기 환경에서의 성능 병목을 정확히 파악합니다.</li>
-              <li><strong>Google 검색 랭킹 최적화</strong>: 검색 순위에 직접 영향을 주는 Core Web Vitals 3대 지표를 지속적으로 모니터링합니다.</li>
-              <li><strong>경량 훅 구조</strong>: 브라우저 PerformanceObserver를 표준화하여 클라이언트 추가 라이브러리 부담 없이 측정합니다.</li>
+              <li>실험실 랩 데이터가 아닌 실제 사용자 환경(RUM)의 성능을 그대로 관찰할 수 있습니다.</li>
+              <li>Core Web Vitals는 검색 랭킹 신호이므로 지속 모니터링 근거가 됩니다.</li>
+              <li>브라우저 Performance API를 직접 다루지 않아도 표준화된 지표를 받을 수 있습니다.</li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주의사항</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>상용 서비스의 실시간 Core Web Vitals 성능 대시보드 구축 (Google Analytics / Datadog 연동)</li>
-              <li>대규모 카테고리/상품 상세 페이지의 LCP 저하 원인 실시간 모니터링</li>
-              <li>신규 배포 버전과 이전 버전 간의 INP 인터랙션 지연 성능 회귀(Regression) 비교</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>루트 레이아웃 분리</strong>: <code>useReportWebVitals</code>를 사용하는 컴포넌트는 <code>'use client'</code>로 선언하여 루트 레이아웃에 별도 텔레메트리 클라이언트 컴포넌트로 삽입해야 합니다.</li>
-              <li><strong>비콘 전송 사용</strong>: 메트릭 전송 시 페이지 이탈 중에도 안전하게 전송되도록 <code>navigator.sendBeacon()</code> 또는 <code>fetch(..., {'{'} keepalive: true {'}'})</code>를 사용하는 것이 권장됩니다.</li>
+              <li>
+                <strong>콜백 참조 고정</strong>: 공식 문서는 콜백 함수 참조가 바뀌면 중복 보고가 발생할 수
+                있다고 안내합니다. 이 데모는 <code>useCallback</code>으로 참조를 고정해 이를 지킵니다.
+              </li>
+              <li>
+                <strong>클라이언트 경계 최소화</strong>: 실무에서는 이 훅만 담은 별도 클라이언트 컴포넌트를
+                루트 레이아웃에 삽입하는 것이 권장됩니다. 이 데모는 학습 목적상 실습 화면 안에 직접
+                등록했습니다.
+              </li>
+              <li>
+                <strong>실전 전송</strong>: 실제 서비스에서는 <code>navigator.sendBeacon()</code> 또는{' '}
+                <code>fetch(url, {'{'} keepalive: true {'}'})</code>로 페이지 이탈 중에도 안전하게 전송합니다.
+              </li>
             </ul>
           </div>
         </div>
