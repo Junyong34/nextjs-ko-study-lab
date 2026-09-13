@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 <code>actions/cart.ts</code>에 파일 레벨 <code>'use server'</code>로 정의된 <code>addToCartAction(productId, quantity)</code>을 클라이언트 버튼 컴포넌트에서 일반 함수처럼 임포트하여 호출하고, 서버 DB 처리 후 반환된 결과를 실시간 UI에 반영합니다.</p>
+            <p>본 데모에서는 <code>actions.ts</code>에 파일 레벨 <code>'use server'</code>로 정의된 <code>applyCouponAction(code, orderAmount)</code>을 클라이언트 컴포넌트(<code>DirectiveUseServerDemo.tsx</code>)에서 일반 함수처럼 임포트해 호출합니다. 반환값의 <code>processedAt</code>은 서버에서만 생성되는 값이라 클라이언트가 흉내 낼 수 없고, 브라우저 개발자 도구 Network 탭에서 이 호출마다 실제 POST 요청이 발생하는 것을 직접 확인할 수 있습니다.</p>
           </div>
 
           <div>
