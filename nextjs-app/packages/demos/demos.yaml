@@ -915,7 +915,7 @@
   title: "next/font/local 커스텀 로컬 폰트 매핑"
   doc: 3-api-reference/3.2-components/font.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/script/loading-strategies
   title: "next/script 로딩 전략 상세 비교"
@@ -1083,7 +1083,7 @@
   title: "draftMode().enable() 초안 모드 활성화"
   doc: 3-api-reference/3.3-functions/draft-mode.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/draft-mode/disable-preview
   title: "draftMode().disable() 정적 캐시 모드 복귀"
@@ -1179,7 +1179,7 @@
   title: "부모 metadata 상속 및 canonical URL 오버라이드"
   doc: 3-api-reference/3.3-functions/generate-metadata.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/generate-static-params/basic-ssg
   title: "generateStaticParams 인기 상품 사전 SSG 빌드 생성"
@@ -1239,7 +1239,7 @@
   title: "파일 레벨 'use server' Server Action 모듈 분리"
   doc: 3-api-reference/3.4-directives/use-server.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: directives/use-server/inline-action-closure
   title: "컴포넌트 내부 인라인 'use server' 클로저 액션"
