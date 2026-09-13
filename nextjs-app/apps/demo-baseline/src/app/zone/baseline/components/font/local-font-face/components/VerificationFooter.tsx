@@ -1,107 +1,99 @@
 'use client'
+
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { FontFaceProbeResult, LocalFontWeight } from '../types'
 
 export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+  weight: LocalFontWeight
+  primaryFamily: string
+  hasInteracted: boolean
+  probe: FontFaceProbeResult
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({ weight, primaryFamily, hasInteracted, probe }: VerificationFooterProps) {
+  const { fontFaceRules, computedFontFamily, computedFontWeight, isFontLoaded, isReady } = probe
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  // 실제 측정값 3가지가 전부 통과해야만 "검증 완료" — 버튼 클릭만으로 무조건 성공하지 않는다.
+  const familyMatches = computedFontFamily.includes(primaryFamily)
+  const weightMatches = computedFontWeight === weight
+  const isMatched = !isReady ? undefined : familyMatches && weightMatches && isFontLoaded && fontFaceRules.length > 0
 
-  const defaultExpected = "• next/font/local 커스텀 로컬 폰트 매핑의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  const expected =
+    `• document.styleSheets 안에 family가 "${primaryFamily}"를 포함하는 @font-face 규칙이 최소 1개 존재\n` +
+    `• 미리보기 요소의 getComputedStyle().fontFamily가 "${primaryFamily}"를 포함\n` +
+    `• getComputedStyle().fontWeight가 선택한 굵기(${weight})와 일치\n` +
+    `• document.fonts.check('${weight} 16px "${primaryFamily}"')가 true`
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = !isReady
+    ? '• 폰트 로드 및 CSSOM 스캔 대기 중 (document.fonts.ready 완료 후 자동 측정)'
+    : `• 발견된 @font-face 규칙: ${fontFaceRules.length}개\n` +
+      `• computed font-family: ${computedFontFamily || '(없음)'}\n` +
+      `• computed font-weight: ${computedFontWeight || '(없음)'}\n` +
+      `• document.fonts.check 결과: ${isFontLoaded}\n` +
+      (hasInteracted ? '• 사용자가 굵기 버튼을 조작함' : '• 아직 굵기 버튼을 조작하지 않음 (초기 400 상태 측정값)')
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="next/font/local 커스텀 로컬 폰트 매핑 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="next/font/local @font-face 실측 검증"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="브라우저 CSSOM(document.styleSheets)과 getComputedStyle을 직접 읽어, next/font/local이 실제로 @font-face 규칙을 생성하고 그 스타일이 미리보기 요소에 적용됐는지 검증합니다."
       />
-      <DemoDeepDiveCard title="next/font/local 커스텀 로컬 폰트 매핑 및 멀티 웨이트 구성">
+
+      {fontFaceRules.length > 0 && (
+        <div className="rounded border border-zinc-200 bg-zinc-950 p-3 font-mono text-[10px] leading-relaxed text-zinc-300 dark:border-zinc-800 overflow-x-auto">
+          <div className="mb-1 font-bold text-zinc-400">실제 CSSOM @font-face 규칙 (document.styleSheets에서 직접 읽음):</div>
+          {fontFaceRules.map((rule, i) => (
+            <div key={i} className="whitespace-pre-wrap break-all">
+              {rule}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <DemoDeepDiveCard title="next/font/local 커스텀 로컬 폰트 매핑">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              <code>next/font/local</code>은 프로젝트 저장소 내의 커스텀 웹폰트 파일(<code>.woff2</code>, <code>.woff</code>, <code>.otf</code>, <code>.ttf</code>)을 로드하여 <code>@font-face</code> 규칙을 자동 생성하고, 폰트 파일 해싱 및 셀프 호스팅을 프레임워크 레벨에서 일원화하는 Next.js 폰트 컴포넌트입니다.
+              <code>next/font/local</code>은 <code>src</code>에 지정한 로컬 <code>.woff2</code>/<code>.woff</code>/<code>.otf</code>/<code>.ttf</code> 파일을 <code>localFont()</code>를 호출한 파일 기준 상대 경로로 찾아, 빌드 타임에 <code>@font-face</code> 규칙을 생성하고 자체 도메인(<code>/_next/static/media</code>)에서 셀프호스팅합니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 사내 전용 브랜드 폰트(Pretendard 등)의 Regular(400), Medium(500), Bold(700) woff2 파일들을 <code>localFont({'{'} src: [...] {'}'})</code> 배열로 매핑하여 단일 CSS 변수로 바인딩하고, 가변 웨이트에 맞춰 텍스트가 렌더링되는 과정을 검증합니다.
+              이 데모는 <code>src: [{'{'} path: &apos;./assets/fonts/Gaegu-Regular.woff2&apos;, weight: &apos;400&apos; {'}'}, {'{'} path: &apos;./assets/fonts/Gaegu-Bold.woff2&apos;, weight: &apos;700&apos; {'}'}]</code> 배열로 서로 다른 두 파일을 weight별로 매핑합니다. Next.js는 이 배열마다 개별 <code>@font-face</code> 규칙을 생성하고, 하나의 <code>className</code>으로 두 굵기를 모두 사용할 수 있게 묶습니다. 위 검증 패널의 값은 하드코딩이 아니라, 브라우저의 <code>document.styleSheets</code>와 <code>getComputedStyle()</code>을 직접 읽어 측정한 실제 값입니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>외부 CDN 의존성 탈피</strong>: 유료 라이선스 폰트나 기업 전용 커스텀 폰트를 안전하게 로컬 번들링하여 서빙합니다.</li>
-              <li><strong>단일 font-family 멀티 웨이트 통합</strong>: 여러 폰트 파일을 단 하나의 CSS 패밀리명으로 묶어 <code>font-bold</code>, <code>font-medium</code> 클래스만으로 자동 매핑합니다.</li>
-              <li><strong>자동 preload 링크 주입</strong>: 초기 렌더링에 필요한 폰트 파일에 대해 HTML head에 <code>{'<'}link rel="preload"{'>'}</code>를 자동 생성합니다.</li>
+              <li><strong>FOIT/FOUT 완화</strong>: 기본값 <code>display: &apos;swap&apos;</code>은 폴백 폰트로 즉시 텍스트를 그리고 로컬 폰트가 준비되면 교체해, 텍스트가 보이지 않는 FOIT(Flash of Invisible Text) 구간을 없앱니다.</li>
+              <li><strong>외부 CDN 요청 없음</strong>: 사내 전용/유료 라이선스 폰트를 외부 서버 없이 이 zone과 같은 도메인에서 서빙할 수 있습니다.</li>
+              <li><strong>다중 weight 파일을 단일 family로 통합</strong>: 실제 존재하는 굵기만 <code>src</code> 배열로 명시하면 각 굵기의 정적 파일만 받아 하나의 <code>font-family</code>로 매핑합니다.</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>기업 전용 CI/BI 커스텀 브랜드 폰트(Pretendard, Spoqa Han Sans 등) 서빙</li>
-              <li>오프라인 인트라넷 또는 폐쇄망 엔터프라이즈 사내 시스템 웹앱</li>
-              <li>영문/특수문자 전용 디스플레이 폰트와 본문 한글 폰트의 하이브리드 조합</li>
+              <li>Google Fonts에 없는 사내 전용 CI/BI 브랜드 폰트(Pretendard 등) 서빙</li>
+              <li>유료 라이선스 폰트를 외부 CDN 없이 자체 도메인에서만 배포해야 하는 경우</li>
+              <li>가변 폰트가 아니라 굵기별로 별도 파일이 나뉘어 있는 레거시 웹폰트 마이그레이션</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>WOFF2 포맷 우선 사용</strong>: 압축률이 가장 높은 <code>.woff2</code> 포맷을 사용해야 초기 번들 로딩 및 네트워크 대역폭을 최적화할 수 있습니다.</li>
-              <li><strong>상대 경로 정확성</strong>: <code>src</code> 속성에 지정하는 파일 경로는 폰트를 선언하는 파일 위치 기준의 상대 경로(<code>../fonts/font.woff2</code>)로 명확히 작성해야 합니다.</li>
+              <li><strong>src 경로는 호출 파일 기준 상대 경로</strong>: 이 데모는 <code>page.tsx</code>에서 <code>localFont()</code>를 호출하므로 <code>./assets/fonts/...</code>로 지정합니다.</li>
+              <li><strong>weight를 지정하지 않은 파일은 매칭 실패</strong>: <code>src</code> 배열의 각 항목에 실제 파일이 지원하는 <code>weight</code>/<code>style</code>을 정확히 맞춰야 브라우저가 올바른 <code>@font-face</code>를 선택합니다.</li>
+              <li><strong>adjustFontFallback 기본값은 &apos;Arial&apos;</strong>: 로컬 폰트와 폴백 폰트의 메트릭 차이를 자동 보정해 레이아웃 흔들림을 줄이며, 필요하면 <code>false</code>로 끌 수 있습니다.</li>
             </ul>
           </div>
         </div>
