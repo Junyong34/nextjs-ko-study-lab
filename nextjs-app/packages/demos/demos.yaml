@@ -963,7 +963,7 @@
   title: "useTransition 연동 디바운스 검색 쿼리 동기화"
   doc: 3-api-reference/3.3-functions/use-search-params.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-selected-layout-segment/subnav-pill
   title: "useSelectedLayoutSegment() 하위 탭 인디케이터"
@@ -1011,7 +1011,7 @@
   title: "unstable_noStore()로 다이나믹 렌더링 선언"
   doc: 3-api-reference/3.3-functions/unstable_noStore.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/revalidate-path/page-vs-layout
   title: "revalidatePath page vs layout 레벨 일괄 무효화 대조"
@@ -1101,7 +1101,7 @@
   title: "after() 비동기 데이터 분석 배치 파이프라인"
   doc: 3-api-reference/3.3-functions/after.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/not-found/trigger-404
   title: "notFound() 404 트리거 및 not-found.tsx 렌더"
@@ -1167,7 +1167,7 @@
   title: "ImageResponse 동적 결제 영수증 이미지 생성"
   doc: 3-api-reference/3.3-functions/image-response.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/generate-metadata/dynamic-title
   title: "generateMetadata 동적 SEO 타이틀 및 메타태그 생성"
