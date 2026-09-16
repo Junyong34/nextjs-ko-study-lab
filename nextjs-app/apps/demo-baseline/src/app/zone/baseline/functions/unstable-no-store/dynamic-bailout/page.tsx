@@ -4,43 +4,16 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'functions/unstable-no-store/dynamic-bailout')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { UnstableNoStoreDemo } from './components/UnstableNoStoreDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
-export default function DemoPage() {
+export default function OverviewPage() {
   return (
-    <DemoContainer className="space-y-6">
-            <DemoGuideCard
-        title="unstable_noStore()로 다이나믹 렌더링 선언"
-        concept="unstable_noStore()를 컴포넌트나 데이터 페칭 함수 내에 선언하여 0ms 정적 캐시 생성을 건너뛰고(Bailout) 매 요청마다 항상 최신 동적 렌더링(SSR)을 수행하도록 강제합니다."
-        steps={[
-          {
-            step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-            description: "실시간 주문 상태를 확인할 상품을 선택합니다.",
-            actionBadge: "상품 선택",
-          },
-          {
-            step: 2,
-            title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "unstable_noStore()가 선언된 데이터 페칭 로직을 호출하여 동적 렌더링을 트리거합니다.",
-            actionBadge: "동적 호출",
-          },
-          {
-            step: 3,
-            title: "동적 렌더링 타임스탬프 및 실시간 도메인 로그 관찰",
-            description: "정적 캐시가 적용되지 않고 요청 시점의 실시간 타임스탬프와 주문 상태가 로그에 기록되는지 확인합니다.",
-            actionBadge: "로그 검증",
-            observe: "unstable_noStore() 호출로 정적 캐시가 차단되고 매 요청마다 실시간 로그가 갱신됨",
-            observeAt: "verification",
-          },
-        ]}
-      />
-      <DemoPlaygroundCard title={"unstable_noStore()로 다이나믹 렌더링 선언 실습"}>
-        <UnstableNoStoreDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
-    </DemoContainer>
+    <div className="space-y-2 rounded border border-zinc-200 bg-white p-3.5 text-xs leading-relaxed text-zinc-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300">
+      <p className="font-bold text-zinc-900 dark:text-zinc-100">개요 — 기본 경로</p>
+      <p>
+        위 탭에서 [정적 브랜치 (미사용)]과 [unstable_noStore() 브랜치]로 이동해, 같은 타임세일 참여
+        인원 위젯이 실제로 서로 다르게 렌더링되는 과정을 비교합니다. 두 라우트 모두 이 디렉토리 안의
+        실제 page.tsx 파일이며, 어느 쪽도 하드코딩된 값을 흉내 내지 않습니다.
+      </p>
+    </div>
   )
 }
