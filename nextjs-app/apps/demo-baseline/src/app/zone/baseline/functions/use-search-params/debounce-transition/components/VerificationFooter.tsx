@@ -1,103 +1,99 @@
 'use client'
 import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { DemoDeepDiveCard, ExpectedActualPanel } from '@study/demo-kit'
+import { DEBOUNCE_MS } from '../types'
+import type { LastCommit, TransitionEdge } from '../types'
 
 export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+  queryFromUrl: string
+  rawQueryString: string
+  lastCommit: LastCommit | null
+  transitionEdges: TransitionEdge[]
+  inputRenderLatencyMs: number | null
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const COMMIT_DELAY_TOLERANCE_MS = 20
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter({
+  queryFromUrl,
+  rawQueryString,
+  lastCommit,
+  transitionEdges,
+  inputRenderLatencyMs,
+}: VerificationFooterProps) {
+  const hasTransitioned = transitionEdges.some((edge) => edge.type === 'start')
+  const queryMatches = lastCommit !== null && queryFromUrl === lastCommit.query
+  const delayHonored = lastCommit !== null && lastCommit.keystrokeToCommitMs >= DEBOUNCE_MS - COMMIT_DELAY_TOLERANCE_MS
+  const isMatched = lastCommit === null ? undefined : queryMatches && delayHonored && hasTransitioned
 
-  const defaultExpected = "• useTransition 연동 디바운스 검색 쿼리 동기화의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  // ExpectedActualPanel은 isMatched가 undefined일 때 expected/actual이 둘 다 string이면
+  // 문자열 내용을 그대로 비교해 "불일치"로 오판정한다(공유 컴포넌트 자체 로직, 수정 대상 아님).
+  // "대기 중" 3단 상태를 올바르게 보여주기 위해 텍스트를 <> 프래그먼트로 감싸 그 자동비교 분기를 우회한다.
+  const expectedText = [
+    `마지막 키 입력 후 ${DEBOUNCE_MS}ms 이상 지나야 startTransition으로 감싼 router.replace()가 실제 호출됨`,
+    `호출 직후 useSearchParams().get('q')가 커밋된 검색어와 정확히 일치해야 함 (query=${lastCommit ? `"${lastCommit.query}"` : '(대기 중)'})`,
+    'isPending이 최소 1회는 true → false로 실제 전환되어야 함',
+  ].join('\n')
+  const expected = <>{expectedText}</>
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actualText = lastCommit
+    ? [
+        `실측 커밋 지연: ${lastCommit.keystrokeToCommitMs.toFixed(1)}ms (기준 ${DEBOUNCE_MS}ms, 허용오차 -${COMMIT_DELAY_TOLERANCE_MS}ms)`,
+        `useSearchParams().toString() → "${rawQueryString || '(쿼리 없음)'}"`,
+        `쿼리 일치: ${queryMatches ? '일치' : '불일치'} · 디바운스 지연 충족: ${delayHonored ? '충족' : '미충족'} · isPending 전환 관측: ${hasTransitioned ? `${transitionEdges.length}건` : '없음'}`,
+        `로컬 입력 렌더 반영 지연: ${inputRenderLatencyMs !== null ? `${inputRenderLatencyMs.toFixed(1)}ms` : '측정 전'} (URL 커밋 지연과 별개로 즉시 반영됨을 실측)`,
+      ].join('\n')
+    : '상호작용 대기 중 (상단 실습 화면의 검색창에 입력해 결과를 확인해 주세요.)'
+  const actual = <>{actualText}</>
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="useTransition 연동 디바운스 검색 쿼리 동기화 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="디바운스 지연·URL 동기화·트랜지션 전환의 실측 일치 검증"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="이 패널은 실습 화면과 동일한 실측 데이터를 근거로, 커밋 지연이 300ms 기준을 실제로 충족했는지와 URL 쿼리·isPending 전환이 그 결과와 일치하는지 검증합니다."
       />
-            <DemoDeepDiveCard title="useTransition 연동 디바운스 검색 쿼리 동기화">
+      <DemoDeepDiveCard title="useTransition 연동 디바운스 검색 쿼리 동기화">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>useSearchParams()</code>와 <code>useTransition</code>을 결합하면 검색어 입력 시 디바운스(Debounce) 타이머를 적용하고, URL 쿼리 변경과 서버 렌더링을 React의 우선순위 트랜지션으로 스케줄링하여 타이핑 끊김을 원천 차단합니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 동작 원리</h5>
+            <p>
+              <code>useSearchParams()</code>는 현재 URL 쿼리를 읽는 읽기 전용 클라이언트 훅이고, <code>useTransition()</code>은
+              <code>[isPending, startTransition]</code>을 반환해 <code>startTransition</code> 콜백 안의 상태 업데이트를
+              낮은 우선순위 렌더로 예약합니다. 콜백이 동기 함수여야 트랜지션으로 인식되며, <code>await</code> 이후의 갱신은
+              트랜지션 범위 밖으로 빠집니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 검색창에 키워드를 빠르게 입력할 때 로컬 상태로 인풋 값을 즉시 반영하고, 300ms 디바운스 후 <code>startTransition(() ={'>'} router.replace('?q=...'))</code>을 실행하여 부드러운 URL 동기화와 서버 검색 결과 스트리밍을 수행합니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 이 데모의 동작 원리</h5>
+            <p>
+              키를 입력하면 <code>setInputValue</code>로 로컬 상태를 트랜지션 없이 즉시 갱신해 입력창이 끊기지 않게 하고,
+              동시에 <code>setTimeout(..., {DEBOUNCE_MS})</code>을 다시 예약합니다. 이전 타이머는 매 입력마다
+              <code>clearTimeout</code>으로 취소되므로, 타이핑을 멈춘 뒤 정확히 {DEBOUNCE_MS}ms가 지나야
+              <code>startTransition(() =&gt; router.replace(pathname + '?q=...'))</code>이 실행되어 주소창 쿼리가 실제로 바뀝니다.
+              이 갱신이 트랜지션으로 감싸져 있어 <code>useSearchParams()</code>를 구독하는 하위 트리가 다시 렌더링되는 동안에도
+              <code>isPending</code>이 true로 관측되고, 입력 자체는 계속 반응합니다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>타이핑 끊김(INP) 제로</strong>: URL 변경과 네트워크 요청을 백그라운드 트랜지션으로 처리하여 사용자 입력 반응성을 100% 보장합니다.</li>
-              <li><strong>불필요한 네트워크 요청 90% 절감</strong>: 디바운스를 통해 매 키스트로크마다 발생하는 과도한 서버 쿼리 요청을 방지합니다.</li>
-              <li><strong>뒤로가기 스택 오염 방지</strong>: <code>router.replace</code>를 사용하여 중간 검색어 타이핑 기록이 브라우저 히스토리에 쌓이지 않도록 정리합니다.</li>
+              <li><strong>입력 반응성 보존</strong>: URL 갱신과 그에 따른 리렌더를 낮은 우선순위로 미뤄, 타이핑 자체는 매 키 입력마다 즉시 반영됩니다.</li>
+              <li><strong>불필요한 URL 갱신 감소</strong>: 디바운스로 연속 입력 중 발생하는 과도한 <code>router.replace</code> 호출을 하나로 합칩니다.</li>
+              <li><strong>뒤로가기 스택 오염 방지</strong>: <code>router.push</code> 대신 <code>router.replace</code>를 사용해 중간 검색어 입력이 히스토리에 쌓이지 않습니다.</li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무 주의사항 및 핵심 팁 (Caution &amp; Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>대규모 이커머스 자동완성 및 상품 실시간 통합 검색바</li>
-              <li>관리자 주문 목록의 고객명/전화번호 실시간 라이브 필터링</li>
-              <li>지도 기반 매장 위치 검색 및 주소 자동완성 입력창</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>로컬 제어 상태 분리</strong>: URL searchParams를 input의 value로 직접 바인딩하면 디바운스 지연 동안 타이핑이 버벅이므로 로컬 <code>useState</code>와 분리해야 합니다.</li>
-              <li><strong>컴포넌트 언마운트 타이머 정리</strong>: <code>useEffect</code> 내 디바운스 구현 시 <code>clearTimeout</code> 반환 함수를 작성하여 메모리 누수를 방지해야 합니다.</li>
+              <li><strong>로컬 상태와 URL 상태 분리</strong>: input의 <code>value</code>를 <code>searchParams</code>에 직접 바인딩하면 디바운스 지연 동안 타이핑이 막힙니다. 반드시 별도의 <code>useState</code>로 즉시 반영해야 합니다.</li>
+              <li><strong>Suspense 경계 필수</strong>: <code>useSearchParams()</code>를 쓰는 클라이언트 컴포넌트는 프로덕션 빌드에서 <code>{'<'}Suspense{'>'}</code>로 감싸지 않으면 빌드가 실패합니다.</li>
+              <li><strong>읽기 전용 객체 복제 후 수정</strong>: <code>searchParams</code>는 수정할 수 없으므로 <code>new URLSearchParams(searchParams.toString())</code>로 복제한 뒤 <code>set()</code>/<code>delete()</code>를 호출해야 합니다.</li>
             </ul>
           </div>
         </div>
