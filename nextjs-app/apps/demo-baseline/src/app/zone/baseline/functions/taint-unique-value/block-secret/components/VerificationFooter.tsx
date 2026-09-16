@@ -1,103 +1,86 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { TaintDemoState } from '../types'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
-
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({ state }: { state: TaintDemoState }) {
+  const { tainted, untainted } = state
 
   const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+    !tainted || !untainted
+      ? undefined
+      : tainted.blocked === true && untainted.blocked === false
 
-  const defaultExpected = "• experimental_taintUniqueValue 원시 시크릿 유출 차단의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actualLines = [
+    tainted
+      ? `• taint 적용: ${tainted.blocked ? '차단됨' : '차단되지 않음(경고)'} — ${tainted.message}`
+      : '• taint 적용 시도 대기 중',
+    untainted
+      ? `• taint 미적용: 원문 그대로 반환됨 — ${untainted.revealedSecret ?? untainted.message}`
+      : '• taint 미적용 시도 대기 중',
+  ]
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
         title="experimental_taintUniqueValue 원시 시크릿 유출 차단 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        expected={
+          '• taint 적용 pgSecretKey 전달 시도는 React 런타임 에러로 차단되어야 한다 (원문 미노출)\n' +
+          '• taint 미적용 legacyWebhookSecret 전달 시도는 차단 없이 원문 그대로 반환되어야 한다'
+        }
+        actual={actualLines.join('\n')}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="위 실습 콘솔에서 두 버튼을 각각 눌러 실제 Server Action 호출 결과를 비교합니다. 아직 누르지 않은 쪽은 대기 상태로 표시됩니다."
       />
-            <DemoDeepDiveCard title="experimental_taintUniqueValue 비밀키 및 개인정보 클라이언트 유출 차단">
+      <DemoDeepDiveCard title="experimental_taintUniqueValue와 next.config.ts experimental.taint">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>experimental_taintUniqueValue</code> (<code>react</code>)는 React 19와 Next.js 15+에서 제공하는 보안 Taint API로, DB 비밀번호, PG사 Secret Key, 주민번호 등 민감한 고유 문자열 값을 오염(Taint) 처리하여 해당 값이 Client Component의 Props나 직렬화 스트림에 포함될 경우 런타임 에러를 발생시켜 번들 유출을 원천 방어합니다.</p>
+            <p>
+              <code>experimental_taintUniqueValue</code>(<code>react</code>)는 <code>next.config.ts</code>의{' '}
+              <code>experimental.taint: true</code>를 켰을 때 사용할 수 있는 React 19 experimental API다. 문자열 같은 원시
+              고유 값 하나에 taint를 걸면, 그 값이 <code>Server Component</code>와 <code>Client Component</code> 경계를
+              넘어 직렬화되려는 순간(<code>Client Component</code> props 또는 Server Action 응답 모두 동일한 직렬화
+              경계를 거친다) React가 실제 런타임 에러를 던진다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 서버 결제 서비스 초기화 시 <code>experimental_taintUniqueValue('결제 비밀키는 클라이언트에 전달될 수 없습니다.', process, process.env.PG_SECRET_KEY)</code>를 등록한 후, 해당 키를 실수로 클라이언트 컴포넌트 Props로 넘기려 할 때 React가 렌더링을 차단하고 보안 에러를 던지는 동작을 검증합니다.</p>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 이 데모의 실제 동작 원리</h5>
+            <p>
+              <code>payment-secret.ts</code>의 <code>getPaymentGatewaySecrets()</code>는 매 호출마다{' '}
+              <code>secrets.pgSecretKey</code>에 <code>experimental_taintUniqueValue</code>를 적용한다.
+              [taint 적용 PG 시크릿 키 전달 시도] 버튼은 이 값을 그대로 Server Action 응답에 담아 반환하려 시도하고,
+              React가 응답을 직렬화하는 도중 실제 에러를 던지므로 <code>page.tsx</code>의 <code>try/catch</code>가 그
+              에러 메시지를 그대로 화면에 표시한다. 반대로 <code>legacyWebhookSecret</code>은 taint를 걸지 않았기 때문에
+              같은 방식으로 반환해도 아무 보호도 받지 못하고 원문이 그대로 클라이언트에 도달한다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 필수 설정: next.config.ts</h5>
+            <p>
+              이 zone(<code>apps/demo-baseline/next.config.ts</code>)은 <code>experimental.taint: true</code>가 이미
+              켜져 있다. 이 플래그 없이는 <code>experimental_taintUniqueValue</code> import 자체는 되지만 taint 보호가
+              동작하지 않는다 — 즉 [taint 적용] 버튼을 눌러도 차단되지 않고 원문이 그대로 반환된다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무 주의사항 (Caveats)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>서버 시크릿 유출 원천 방어</strong>: 개발자의 실수로 발생하는 API Key, 암호화 키의 클라이언트 JS 번들 노출 사고를 빌드/런타임에서 완벽 차단합니다.</li>
-              <li><strong>개인정보보호 컴플라이언스 준수</strong>: 고객 주민등록번호, 계좌번호 등 민감 정보의 브라우저 전송을 방지합니다.</li>
-              <li><strong>정밀한 에러 메시지 제공</strong>: 유출 시도 시 개발자에게 등록된 경고 메시지를 명확히 표시하여 신속한 조치를 유도합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>PG사 결제 Secret Key 및 AWS IAM Secret Access Key 클라이언트 유출 방어</li>
-              <li>고객 비밀번호 해시, 주민등록번호, 신용카드 CVC 번호 직렬화 차단</li>
-              <li>내부 ERP 시스템의 관리자 마스터 토큰 보호</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>next.config.ts 활성화 필요</strong>: Next.js에서 React Taint API를 사용하려면 <code>next.config.ts</code>의 <code>experimental.taint: true</code> 설정이 필요합니다.</li>
-              <li><strong>taintObjectReference와의 차이</strong>: 객체 전체를 보호할 때는 <code>experimental_taintObjectReference</code>를, 개별 문자열/원시값을 보호할 때는 <code>experimental_taintUniqueValue</code>를 사용합니다.</li>
+              <li>
+                <strong>파생 값은 보호되지 않는다</strong>: <code>{'`token::${pgSecretKey}`'}</code>처럼 taint된 값에서
+                새 문자열을 만들면 그 파생 값은 taint되지 않은 채로 클라이언트에 전달될 수 있다.
+              </li>
+              <li>
+                <strong>taint API만으로는 부족하다</strong>: 공식 문서도 taint를 유일한 방어 수단으로 삼지 말라고
+                경고한다 — 애초에 민감한 데이터를 필요하지 않은 컨텍스트로 반환하지 않도록 설계하는 편이 우선이다.
+              </li>
+              <li>
+                <strong>taint된 값 자체는 재할당해도 보호된다</strong>: <code>pgSecretKey</code>를 다른 변수에 담아
+                반환해도 여전히 차단된다 — 이 데모에서도 별도 변수로 옮기지 않고 그대로 반환해 이를 실증한다.
+              </li>
             </ul>
           </div>
         </div>

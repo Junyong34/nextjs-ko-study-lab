@@ -1,101 +1,93 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
+import type { TaintDemoState } from '../types'
 
-export function TaintUniqueValueDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
-
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
-  }
-
+export function TaintUniqueValueDemo({
+  state,
+  isPending,
+  onTaintedAttempt,
+  onUntaintedAttempt,
+}: {
+  state: TaintDemoState
+  isPending: boolean
+  onTaintedAttempt: () => void
+  onUntaintedAttempt: () => void
+}) {
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
-        <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">experimental_taintUniqueValue 원시 시크릿 유출 차단 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
-        </div>
+      <div className="border-b pb-3 dark:border-zinc-800">
+        <h4 className="font-bold text-zinc-900 dark:text-zinc-100">PayHub 결제 게이트웨이 시크릿 관리 콘솔</h4>
+        <p className="text-xs text-zinc-500">
+          <code>pgSecretKey</code>는 <code>experimental_taintUniqueValue</code>로 보호되어 있고, <code>legacyWebhookSecret</code>은
+          taint를 걸지 않은 대조군입니다.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
+        <div className="space-y-2 rounded border border-red-200 bg-red-50/50 p-3.5 dark:border-red-900/40 dark:bg-red-950/20">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
+            <span className="text-xs font-bold text-red-700 dark:text-red-400">taint 적용 — pgSecretKey</span>
+            <span className="rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-mono text-red-700 dark:bg-red-900/50 dark:text-red-300">
+              protected
+            </span>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
+          <button
+            onClick={onTaintedAttempt}
+            disabled={isPending}
+            className="w-full rounded bg-red-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-red-700 disabled:opacity-50 cursor-pointer"
+          >
+            taint 적용 PG 시크릿 키 전달 시도 →
+          </button>
+          {state.tainted && (
+            <div
+              className={`rounded border p-2.5 font-mono text-[11px] leading-relaxed ${
+                state.tainted.blocked
+                  ? 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/30 dark:text-emerald-300'
+                  : 'border-red-400 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300'
+              }`}
             >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
-          </div>
+              <div className="font-bold">
+                {state.tainted.blocked ? 'React 런타임 에러로 차단됨' : '경고: 원문이 그대로 반환됨'}
+              </div>
+              <div className="mt-1 whitespace-pre-wrap">{state.tainted.message}</div>
+              <div className="mt-1 text-zinc-500">[{state.tainted.timestamp}]</div>
+            </div>
+          )}
         </div>
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
-              </div>
-            ))}
+        <div className="space-y-2 rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/40">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">taint 미적용 — legacyWebhookSecret</span>
+            <span className="rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] font-mono text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+              unprotected
+            </span>
           </div>
+          <button
+            onClick={onUntaintedAttempt}
+            disabled={isPending}
+            className="w-full rounded bg-zinc-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
+          >
+            taint 미적용 레거시 웹훅 시크릿 전달 시도 →
+          </button>
+          {state.untainted && (
+            <div className="rounded border border-amber-300 bg-amber-50 p-2.5 font-mono text-[11px] leading-relaxed text-amber-900 dark:border-amber-800/60 dark:bg-amber-950/30 dark:text-amber-300">
+              <div className="font-bold">차단되지 않고 클라이언트에 그대로 노출됨</div>
+              <div className="mt-1 whitespace-pre-wrap">{state.untainted.message}</div>
+              {state.untainted.revealedSecret && (
+                <div className="mt-1.5 rounded bg-white/70 px-2 py-1 text-amber-950 dark:bg-black/30 dark:text-amber-200">
+                  노출된 원문: <code>{state.untainted.revealedSecret}</code>
+                </div>
+              )}
+              <div className="mt-1 text-zinc-500">[{state.untainted.timestamp}]</div>
+            </div>
+          )}
         </div>
       </div>
+
+      <p className="text-[11px] text-zinc-500">
+        두 버튼 모두 Server Action을 실제로 호출합니다. 브라우저 DevTools의 Network 탭에서 각 요청/응답 payload를 직접 열어
+        원문 시크릿이 실제로 포함되는지(또는 되지 않는지) 확인할 수 있습니다.
+      </p>
     </div>
   )
 }
