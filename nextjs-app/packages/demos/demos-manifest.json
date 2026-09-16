@@ -1355,7 +1355,7 @@
     "title": "ImageResponse를 활용한 실시간 할인 뱃지 OG 이미지",
     "doc": "3-api-reference/3.3-functions/image-response.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/image-response/dynamic-receipt",
@@ -1404,14 +1404,14 @@
     "title": "experimental_taintUniqueValue 원시 시크릿 유출 차단",
     "doc": "3-api-reference/3.5-config/3.5.1-next-config-js/taint.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/server-runtime/edge-vs-nodejs",
     "title": "Server Component runtime 분기 제어",
     "doc": "3-api-reference/3.1-file-conventions/3.1.22-route-segment-config/runtime.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/use-report-web-vitals/telemetry",
@@ -1425,7 +1425,7 @@
     "title": "useServerInsertedHTML SSR 인라인 스타일/스크립트 주입",
     "doc": "2-guides/css-in-js.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "directives/use-client/boundary-declaration",
