@@ -807,7 +807,7 @@
   title: "클라이언트 성능 측정 훅 (instrumentation-client.ts)"
   doc: 3-api-reference/3.1-file-conventions/instrumentation-client.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/proxy/gateway-router
   title: "내부 마이크로서비스 프록시 라우팅 (proxy.ts)"
@@ -1203,7 +1203,7 @@
   title: "experimental_taintUniqueValue 원시 시크릿 유출 차단"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/taint.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/server-runtime/edge-vs-nodejs
   title: "Server Component runtime 분기 제어"
@@ -1215,7 +1215,7 @@
   title: "useReportWebVitals() 클라이언트 웹 바이탈 측정"
   doc: 3-api-reference/3.3-functions/use-report-web-vitals.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-server-inserted-html/head-style
   title: "useServerInsertedHTML SSR 인라인 스타일/스크립트 주입"
