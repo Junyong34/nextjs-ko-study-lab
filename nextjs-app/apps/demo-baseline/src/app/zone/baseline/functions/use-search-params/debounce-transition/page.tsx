@@ -3,44 +3,42 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'functions/use-search-params/debounce-transition')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { UseSearchParamsDebounceDemo } from './components/UseSearchParamsDebounceDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import React, { Suspense } from 'react'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { DebouncedSearchWorkspace } from './components/DebouncedSearchWorkspace'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="useTransition 연동 디바운스 검색 쿼리 동기화"
-        concept="React 19 useTransition과 300ms 디바운스를 결합하여 사용자 키보드 입력 중 UI 프리징 없이 URL searchParams를 논블로킹으로 동기화합니다."
+        concept="검색창에 연속으로 타이핑하는 동안 로컬 입력은 즉시 반영하고, 300ms 디바운스 후 startTransition으로 감싼 router.replace()만 실제 URL 쿼리를 갱신합니다."
         steps={[
           {
             step: 1,
-            title: "[상품명을 입력하세요 (예: 맥북, 모니터)] 검색창 입력",
-            description: "검색 입력창에 검색어를 연속으로 타이핑합니다.",
-            actionBadge: "키보드 입력",
+            title: '[상품명을 입력하세요 (예: 키보드, 헤드폰, 데님)] 검색창에 연속 타이핑',
+            description: '입력할 때마다 로컬 입력값과 키 입력 타임스탬프가 즉시 실습 화면에 기록됩니다.',
+            actionBadge: '키보드 입력',
           },
           {
             step: 2,
-            title: "300ms 디바운스 및 startTransition 백그라운드 전환",
-            description: "300ms 대기 후 startTransition을 통해 URL 쿼리 파라미터가 비동기 백그라운드로 갱신됩니다.",
-            actionBadge: "전환 실행",
+            title: '타이핑을 멈추고 300ms 대기',
+            description: '이전 디바운스 타이머가 취소되고 새 타이머가 걸리며, 정확히 300ms 뒤 startTransition 콜백이 router.replace()를 호출합니다.',
+            actionBadge: '디바운스 커밋',
           },
           {
             step: 3,
-            title: "입력 반응성 및 실시간 검색 결과 관찰",
-            description: "입력창 타이핑 지연 없이 URL searchParams와 검색 결과 목록이 부드럽게 동기화되는지 확인합니다.",
-            actionBadge: "결과 검증",
-            observe: "300ms 디바운스 후 URL 쿼리와 실시간 검색 결과 리스트가 논블로킹으로 갱신됨",
-            observeAt: "verification",
+            title: '주소창 쿼리(?q=)와 isPending 전환, 검증 패널 확인',
+            description: '주소창의 쿼리 문자열이 실제로 바뀌고 isPending이 true→false로 전환되는 실측 로그를 확인합니다.',
+            actionBadge: '결과 검증',
+            observe: '커밋 지연이 300ms 기준을 실제로 충족하고 useSearchParams().get(\'q\')가 커밋된 검색어와 일치함',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"useTransition 연동 디바운스 검색 쿼리 동기화 실습"}>
-        <UseSearchParamsDebounceDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <Suspense fallback={<div className="text-xs text-zinc-400">로딩 중...</div>}>
+        <DebouncedSearchWorkspace />
+      </Suspense>
     </DemoContainer>
   )
 }
