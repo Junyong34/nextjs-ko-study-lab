@@ -1,96 +1,159 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import {
+  OG_BADGE_API_ENDPOINT,
+  OG_BADGE_DISCOUNT_RATES,
+  OG_BADGE_PRODUCTS,
+  type OgBadgeResponseState,
+} from '../types'
 
-export function ImageResponseOgBadgeDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
+interface ImageResponseOgBadgeDemoProps {
+  onResponseChange?: (state: OgBadgeResponseState) => void
+}
 
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
+interface HistoryEntry {
+  productId: string
+  discountRate: number
+  contentLength: number
+  requestSeq: number
+}
+
+export function ImageResponseOgBadgeDemo({ onResponseChange }: ImageResponseOgBadgeDemoProps) {
+  const [productId, setProductId] = useState(OG_BADGE_PRODUCTS[0].id)
+  const [discountRate, setDiscountRate] = useState<number>(OG_BADGE_DISCOUNT_RATES[0])
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [history, setHistory] = useState<HistoryEntry[]>([])
+  const previousObjectUrl = useRef<string | null>(null)
+  const previousContentLength = useRef<number | null>(null)
+
+  const requestOgBadge = async (targetProductId: string, targetDiscountRate: number) => {
+    setIsLoading(true)
+    try {
+      const res = await fetch(
+        `${OG_BADGE_API_ENDPOINT}?product=${targetProductId}&discountRate=${targetDiscountRate}`,
+      )
+      const contentType = res.headers.get('content-type')
+      const cacheControl = res.headers.get('cache-control')
+      const requestSeqHeader = res.headers.get('x-study-og-request-seq')
+      const renderedAt = res.headers.get('x-study-og-rendered-at')
+      const blob = await res.blob()
+
+      if (previousObjectUrl.current) URL.revokeObjectURL(previousObjectUrl.current)
+      const objectUrl = URL.createObjectURL(blob)
+      previousObjectUrl.current = objectUrl
+      setImageUrl(objectUrl)
+
+      const requestSeq = requestSeqHeader ? Number(requestSeqHeader) : null
+      setHistory((prev) => [
+        { productId: targetProductId, discountRate: targetDiscountRate, contentLength: blob.size, requestSeq: requestSeq ?? 0 },
+        ...prev.slice(0, 3),
+      ])
+
+      onResponseChange?.({
+        requestedProductId: targetProductId,
+        requestedDiscountRate: targetDiscountRate,
+        httpStatus: res.status,
+        contentType,
+        contentLength: blob.size,
+        cacheControl,
+        requestSeq,
+        renderedAt,
+        previousContentLength: previousContentLength.current,
+      })
+      previousContentLength.current = blob.size
+    } finally {
+      setIsLoading(false)
+    }
   }
+
+  useEffect(() => {
+    requestOgBadge(productId, discountRate)
+    return () => {
+      if (previousObjectUrl.current) URL.revokeObjectURL(previousObjectUrl.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">ImageResponse를 활용한 실시간 할인 뱃지 OG 이미지 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
+          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">실시간 할인 뱃지 OG 이미지 생성 콘솔</h4>
+          <p className="text-xs text-zinc-500">
+            아래 조작은 <code>api/route.tsx</code>의 <code>ImageResponse</code>를 실제로 호출합니다.
+          </p>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
+          {OG_BADGE_PRODUCTS.map((product) => (
+            <button
+              key={product.id}
+              onClick={() => setProductId(product.id)}
+              className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
+                productId === product.id
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+              }`}
+            >
+              {product.name} (#{product.id.slice(-3)})
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+              ImageResponse 렌더링 결과 (실제 PNG, 1200 × 630 px):
+            </span>
+            <span className="font-mono text-[10px] text-zinc-400">GET {OG_BADGE_API_ENDPOINT}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
+          <div className="aspect-[1200/630] w-full overflow-hidden rounded-xl border border-zinc-300 bg-zinc-900 shadow-lg dark:border-zinc-700">
+            {imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={imageUrl} alt="실시간 생성된 할인 뱃지 OG 이미지" className="h-full w-full object-cover" />
+            ) : (
+              <div className="flex h-full items-center justify-center text-xs text-zinc-500">이미지 요청 중...</div>
+            )}
           </div>
         </div>
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
+        <div className="space-y-3">
+          <div className="rounded border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
+            <div className="text-xs font-bold text-zinc-700 dark:text-zinc-300">할인율 선택</div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {OG_BADGE_DISCOUNT_RATES.map((rate) => (
+                <button
+                  key={rate}
+                  onClick={() => setDiscountRate(rate)}
+                  className={`rounded px-2.5 py-1.5 text-xs font-semibold cursor-pointer ${
+                    discountRate === rate
+                      ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                      : 'border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+                  }`}
+                >
+                  -{rate}%
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => requestOgBadge(productId, discountRate)}
+              disabled={isLoading}
+              className="w-full rounded bg-zinc-900 px-3 py-2 text-xs font-bold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
+            >
+              {isLoading ? '렌더링 중...' : 'OG 이미지 생성'}
+            </button>
+          </div>
+
+          <div className="rounded border border-zinc-200 bg-zinc-950 p-3 font-mono text-[11px] text-zinc-300 dark:border-zinc-800 space-y-1">
+            <div className="font-bold text-zinc-400 font-sans text-xs border-b border-zinc-800 pb-1">
+              실제 요청 이력 (최근 4건):
+            </div>
+            {history.length === 0 && <div className="text-zinc-500 pt-1">요청 대기 중...</div>}
+            {history.map((entry, i) => (
+              <div key={i} className={i === 0 ? 'text-emerald-400 pt-1' : 'text-zinc-500 pt-1'}>
+                #{entry.requestSeq} {entry.productId} -{entry.discountRate}% → {entry.contentLength.toLocaleString()} bytes
               </div>
             ))}
           </div>
