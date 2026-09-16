@@ -6,98 +6,71 @@ export interface VerificationFooterProps {
   isMatched?: boolean
   expected?: React.ReactNode
   actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• useServerInsertedHTML SSR 인라인 스타일/스크립트 주입의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+export function VerificationFooter({ isMatched, expected, actual }: VerificationFooterProps = {}) {
+  const defaultExpected =
+    '• with-hook 라우트의 원본 응답에는 </head> 앞에 <style data-demo-registry="active">가 있고, without-hook 라우트에는 없어야 한다.'
+  const defaultActual = '• 상호작용 대기 중 (위에서 "두 라우트 실제 SSR 응답 비교" 버튼을 눌러 확인하세요.)'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="useServerInsertedHTML SSR 인라인 스타일/스크립트 주입 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="useServerInsertedHTML 원본 SSR 응답 검증 결과"
+        expected={expected || defaultExpected}
+        actual={actual || defaultActual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="두 라우트에 대한 Node http 실제 요청 결과를 정규식으로 대조합니다."
       />
-            <DemoDeepDiveCard title="useServerInsertedHTML() SSR 인라인 스타일 및 CSS-in-JS 주입">
+      <DemoDeepDiveCard title="useServerInsertedHTML() 서버 삽입 HTML과 CSS-in-JS 스트리밍">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>useServerInsertedHTML()</code> (<code>next/navigation</code>)는 서버 사이드 렌더링(SSR) 스트리밍 도중 <code>{'<'}head{'>'}</code> 영역에 인라인 CSS 스타일이나 스크립트를 동적으로 주입할 수 있도록 지원하는 훅입니다. 주로 Emotion, Styled-components 등 CSS-in-JS 라이브러리의 SSR Style Registry 구현에 사용됩니다.</p>
+            <p>
+              <code>useServerInsertedHTML()</code> (<code>next/navigation</code>)는 반드시 Client Component에서
+              호출해야 하는 훅으로, 인자로 준 콜백이 반환한 React 노드를 서버가 <strong>스트리밍 응답을 플러시할
+              때마다</strong> 문자열로 렌더링해 그 자리에 끼워 넣는다. styled-components·styled-jsx 같은
+              CSS-in-JS 라이브러리가 렌더 중 수집한 스타일 규칙을 이 훅으로 흘려보내 서버가 보낸 최초 HTML에
+              바로 반영되게 만드는 것이 공식 문서의 표준 사용법이다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 CSS-in-JS 스타일 레지스트리 프로바이더가 컴포넌트 렌더링 중 생성된 동적 클래스 스타일시트를 수집하고, <code>useServerInsertedHTML</code>을 통해 HTML 스트림 <code>{'<'}head{'>'}</code> 내에 <code>{'<'}style{'>'}</code> 태그로 실시간 주입하여 깜빡임 없는 첫 화면을 완성합니다.</p>
+            <p>
+              이 데모는 실제 라이브러리 대신 <code>StyleRuleRegistry</code>라는 최소 레지스트리를 직접 구현했다.
+              <code>ThemeBadge</code>가 렌더링 도중 <code>registry.add()</code>로 CSS 규칙을 등록하면,{' '}
+              <code>HookEnabledProvider</code>가 <code>useServerInsertedHTML</code> 콜백에서 <code>registry.flush()</code>
+              한 결과를 <code>&lt;style data-demo-registry&gt;</code>로 반환한다. Next.js 소스(
+              <code>createHeadInsertionTransformStream</code>)를 직접 확인한 결과, <strong>최초 플러시만 실제로
+              &lt;/head&gt; 앞에 삽입되고</strong>, Suspense로 지연된 두 번째 상품 배지가 resolve되며 발생하는 후속
+              플러시는 head가 이미 닫힌 뒤라 <strong>해당 스트리밍 청크 바로 앞 body 안에 인라인으로</strong>
+              삽입된다 — 위 대조 패널의 "body 인라인 삽입" 칸이 그 두 번째 삽입을 가리킨다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>FOUC(스타일 미적용 깜빡임) 원천 방지</strong>: 첫 HTML 응답과 함께 필수 CSS가 인라인 주입되어 브라우저 렌더링 즉시 완벽한 스타일을 표시합니다.</li>
-              <li><strong>스트리밍 SSR 완벽 호환</strong>: React 19 스트리밍 렌더링 도중에도 서브 청크가 렌더링될 때마다 필요한 스타일을 실시간으로 헤드에 추가합니다.</li>
-              <li><strong>전역 CSS-in-JS 레지스트리 표준화</strong>: 다양한 서드파티 스타일링 도구의 App Router 서버 렌더링 연동을 표준 인터페이스로 통일합니다.</li>
+              <li>
+                <strong>FOUC 원천 방지</strong>: without-hook 라우트처럼 훅을 빠뜨리면 스타일이 하이드레이션 이후에야
+                DOM에 붙어 무스타일 화면이 실제로 노출된다 — 이 데모의 두 라우트 원본 응답 차이가 그 증거다.
+              </li>
+              <li>
+                <strong>스트리밍 SSR 완전 호환</strong>: Suspense 경계마다 새 스타일을 계속 흘려보낼 수 있어, 나중에
+                도착하는 컴포넌트의 스타일도 해당 청크와 함께 즉시 적용된다.
+              </li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무 주의사항 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>styled-components 및 Emotion 기반 레거시 디자인 시스템의 Next.js App Router 마이그레이션</li>
-              <li>테넌트별 런타임 동적 테마 CSS 변수의 SSR 인라인 주입</li>
-              <li>다크모드 플래시 방지용 초기 인라인 스크립트 주입</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>서버 렌더링 중에만 실행</strong>: 이 훅은 클라이언트 사이드 내비게이션 중에는 실행되지 않으며 오직 초기 서버 렌더링 시점에만 실행됩니다.</li>
-              <li><strong>순수 함수 스타일 반환</strong>: 반환하는 JSX는 부수 효과 없이 순수 <code>{'<'}style{'>'}</code> 또는 <code>{'<'}script{'>'}</code> 태그여야 합니다.</li>
+              <li>Client Component에서만 호출 가능하며, 최초 서버 렌더링(및 재개) 중에만 실행된다.</li>
+              <li>
+                반환 노드는 부수효과 없는 순수 마크업(<code>&lt;style&gt;</code>/<code>&lt;script&gt;</code>)이어야
+                한다 — 등록과 flush 로직은 콜백 밖의 레지스트리 인스턴스가 담당한다.
+              </li>
             </ul>
           </div>
         </div>
