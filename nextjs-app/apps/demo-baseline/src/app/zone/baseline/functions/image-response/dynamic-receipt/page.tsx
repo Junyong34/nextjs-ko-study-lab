@@ -5,36 +5,42 @@ export const metadata: Metadata = getDemoMetadata('baseline', 'functions/image-r
 
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ImageResponseReceiptDemo } from './components/ImageResponseReceiptDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { ReceiptDemo } from './components/ReceiptDemo'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="ImageResponse 동적 결제 영수증 이미지 생성"
-        concept="Satori/Resvg 엔진 기반 ImageResponse를 사용하여 주문 번호(ORD-2026-9912)와 결제액(349,000원)이 포함된 모바일 전자 영수증 PNG 바이너리를 50ms 이내에 동적 생성합니다."
+        concept="next/og의 ImageResponse는 Route Handler(api/route.tsx)에서 요청마다 서버가 직접 JSX를 렌더링해 PNG를 반환합니다. 같은 상품을 골라도 매번 새 주문번호로 요청하므로 응답 바이트가 매번 달라집니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "디지털 결제 영수증 파라미터 명세 점검 및 ImageResponse Satori JSX 레이아웃 렌더링",
-                    "description": "주문번호(ORD-2026-9912) 및 결제금액(349,000원) 등의 영수증 데이터 페이로드를 확인합니다. Satori Flexbox CSS와 JSX 템플릿을 통해 전자 영수증 규격의 PNG 바이너리 스트림을 생성합니다.",
-                    "actionBadge": "파라미터 점검"
+            step: 1,
+            title: '[상품 · 수량 · 쿠폰 · 결제수단] 조합 선택',
+            description: '실제 계산 대상이 되는 주문 파라미터를 조합합니다. 조합에 따라 서버가 합계·할인·배송비·최종 금액을 다시 계산합니다.',
+            actionBadge: '주문 구성',
           },
           {
-                    "step": 2,
-                    "title": "전자 결제 영수증 PNG 생성 및 다운로드 지원 관찰",
-                    "description": "클라이언트 위변조가 불가능한 서버 서명 영수증 이미지가 소셜 메신저 및 다운로드 규격으로 생성되는지 확인합니다.",
-                    "actionBadge": "영수증 검증",
-                    "observe": "주문 결제 데이터가 주입된 ImageResponse 전자 영수증 PNG 바이너리가 정상 생성됨",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: '[영수증 생성 (ImageResponse 요청)] 클릭',
+            description: 'GET /api?orderId=...&productId=... 요청이 실제로 전송되고, 응답 PNG의 크기·Content-Type·Cache-Control·SHA-256 해시를 클라이언트가 직접 측정합니다.',
+            actionBadge: 'PNG 생성',
+            observe: '두 번째 생성부터 직전 응답과 SHA-256 해시가 달라짐 — 동일 상품이어도 매 요청 바이트가 다름',
+            observeAt: 'verification',
+          },
+          {
+            step: 3,
+            title: '[잘못된 상품 ID로 요청 (실패 케이스)] 클릭',
+            description: '존재하지 않는 상품 ID로 같은 엔드포인트를 호출해 서버 검증이 이미지 대신 4xx JSON 에러를 반환하는지 확인합니다.',
+            actionBadge: '실패 케이스',
+            observe: 'HTTP 404와 에러 메시지가 검증 패널에 그대로 표시됨',
+            observeAt: 'verification',
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"ImageResponse 동적 결제 영수증 이미지 생성 실습"}>
-        <ImageResponseReceiptDemo />
+      <DemoPlaygroundCard title="ImageResponse 동적 결제 영수증 이미지 생성 실습 (api/route.tsx)">
+        <ReceiptDemo />
       </DemoPlaygroundCard>
-      <VerificationFooter />
     </DemoContainer>
   )
 }

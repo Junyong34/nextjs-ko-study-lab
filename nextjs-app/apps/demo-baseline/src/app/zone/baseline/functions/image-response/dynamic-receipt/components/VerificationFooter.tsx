@@ -1,108 +1,95 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { ReceiptFetchSuccess, ReceiptFetchFailure } from '../types'
 
 export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+  mode: 'idle' | 'success' | 'error'
+  current?: ReceiptFetchSuccess
+  previous?: ReceiptFetchSuccess
+  error?: ReceiptFetchFailure
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({ mode, current, previous, error }: VerificationFooterProps) {
+  const expected =
+    '① 정상 파라미터로 요청하면 Content-Type: image/png가 반환되고, 다시 요청할 때마다 응답 PNG의 SHA-256 해시가 이전 값과 달라야 한다(주문번호·결제시각이 매번 새로 발급되므로).\n② 존재하지 않는 상품 ID로 요청하면 이미지가 아니라 4xx JSON 에러가 반환되어야 한다.'
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  let actual: string = '상호작용 대기 중 (위에서 [영수증 생성]을 눌러 실제 요청을 보내 주세요.)'
+  let isMatched: boolean | undefined
 
-  const defaultExpected = "• ImageResponse 동적 결제 영수증 이미지 생성의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  if (mode === 'success' && current) {
+    const hashChanged = previous ? previous.sha256 !== current.sha256 : undefined
+    actual = [
+      `Content-Type: ${current.contentType}`,
+      `Cache-Control: ${current.cacheControl}`,
+      `응답 크기: ${current.byteLength.toLocaleString()} bytes`,
+      `SHA-256: ${current.sha256.slice(0, 24)}…`,
+      previous
+        ? `직전 응답과 해시 다름: ${hashChanged ? '예' : '아니오'} (직전 ${previous.byteLength.toLocaleString()} bytes / ${previous.sha256.slice(0, 24)}…)`
+        : '아직 비교할 이전 응답 없음 — 한 번 더 [영수증 생성]을 눌러 두 PNG를 대조하세요.',
+    ].join('\n')
+    isMatched =
+      current.contentType === 'image/png' && (previous ? hashChanged === true : undefined)
+  } else if (mode === 'error' && error) {
+    actual = `HTTP ${error.status} · ${error.message}`
+    isMatched = error.status === 404 || error.status === 400
+  }
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="ImageResponse 동적 결제 영수증 이미지 생성 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="ImageResponse 동적 결제 영수증 생성 검증"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="curl/fetch로 실제 반환된 PNG 바이트와 HTTP 헤더를 측정해 대조합니다. 서버가 보낸 값을 그대로 표시할 뿐, 화면에서 만들어낸 값이 아닙니다."
       />
-      <DemoDeepDiveCard title="ImageResponse Satori 엔진 기반 동적 전자 영수증 이미지 생성">
+      <DemoDeepDiveCard title="ImageResponse Satori 엔진 기반 동적 결제 영수증 생성">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙</h5>
             <p>
-              <code>ImageResponse</code>(<code>next/og</code>)는 Satori 및 Resvg 엔진을 기반으로 JSX와 Flexbox CSS를 서버사이드에서 직접 해석하여 초경량 고속 PNG 바이너리를 생성하는 표준 API입니다. 헤드리스 브라우저(Puppeteer) 없이 주문 결제 영수증 같은 동적 문서를 수십 밀리초(ms) 만에 렌더링합니다.
+              <code>next/og</code>의 <code>ImageResponse</code>는 Route Handler(
+              <code>api/route.tsx</code>)의 <code>GET</code> 안에서 <code>new ImageResponse(jsx, options)</code>
+              를 호출해 JSX/Flexbox CSS를 Satori + Resvg로 해석, PNG 바이너리를 담은{' '}
+              <code>Response</code>를 반환하는 표준 함수입니다. 헤드리스 브라우저 없이 서버에서
+              직접 래스터화합니다.
             </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 이 데모의 동작 원리</h5>
             <p>
-              본 데모에서는 주문 결제 완료 시 주문 번호(<code>ORD-2026-8821</code>), 구매자명, 결제 품목 목록, 부가세 포함 총 결제액(<code>189,000원</code>), PG 승인 번호를 파라미터로 받아 Satori JSX 레이아웃에 주입하고, 모바일 규격의 전자 결제 영수증 PNG 스트림을 즉시 반환합니다.
+              상품·수량·쿠폰·결제수단을 바꿔 [영수증 생성]을 누르면, 클라이언트는 매번 새{' '}
+              <code>orderId</code>와 <code>paidAt</code>을 발급해 <code>GET /api?orderId=...&amp;productId=...</code>
+              로 요청합니다. Route Handler는 이 쿼리로 합계·쿠폰 할인·배송비·최종 결제금액을 서버에서
+              직접 계산해 JSX에 주입하므로, 같은 상품을 골라도 클릭할 때마다 실제로 다른 PNG 바이트가
+              생성됩니다 — 위 SHA-256 비교가 그 증거입니다.
             </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>서버 리소스 95% 절감</strong>: 수백 MB의 메모리를 점유하는 Chromium/Puppeteer 대비 수 MB 수준의 V8 메모리만으로 동작합니다.</li>
-              <li><strong>글로벌 초저지연 응답</strong>: Edge Runtime 배포를 통해 결제 완료 고객에게 50ms 이내의 속도로 영수증 이미지를 스트리밍합니다.</li>
-              <li><strong>이미지 기반 위변조 방지</strong>: HTML 텍스트가 아닌 서버 서명 렌더링된 PNG 이미지로 제공되어 클라이언트 변조를 방지하고 손쉬운 캡처/저장을 지원합니다.</li>
-            </ul>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. Cache-Control 설계</h5>
+            <p>
+              응답 헤더는 <code>public, max-age=31536000, immutable</code>입니다. 같은{' '}
+              <code>orderId</code>의 영수증 내용은 서버의 현재 시각이 아니라 요청 쿼리에만 좌우되는
+              순수 함수 결과라 재발급해도 항상 동일한 이미지이므로, 실제 결제 서비스의 영수증
+              이미지 링크처럼 브라우저·CDN이 영구 캐시해도 안전합니다.
+            </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>결제 완료 후 카카오톡 알림톡/문자 첨부용 전자 영수증 이미지 생성</li>
-              <li>모바일 앱/웹에서의 오프라인 매장 결제 확인용 바코드 영수증 다운로드</li>
-              <li>월간 정산 내역서 및 세금계산서 요약본 자동 이미지 발행</li>
-            </ul>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 한글 렌더링과 Satori 제약</h5>
+            <p>
+              Satori는 <code>display: flex</code> 기반 CSS 서브셋만 지원하고(Grid 불가), 커스텀 폰트는
+              ttf/otf/woff만 허용합니다. 이 데모는 별도 <code>fonts</code> 옵션을 지정하지 않았고,
+              한글은 Next.js가 감지된 문자 범위에 맞춰 자동으로 불러오는 기본 폰트로 렌더링됩니다 — 이
+              zone의 다른 opengraph-image 예제들과 같은 방식입니다.
+            </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 주의사항</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>한글 폰트 번들링 필수</strong>: Satori는 기본 영문 폰트만 내장하므로, 한글 텍스트(원, 품목명)가 깨지지 않으려면 Pretendard/NotoSans의 WOFF/TTF <code>ArrayBuffer</code>를 <code>fonts</code> 옵션에 명시해야 합니다.</li>
-              <li><strong>Flexbox CSS 제약</strong>: Satori는 CSS Grid나 <code>float</code>를 지원하지 않으며 <code>display: flex</code> 기반의 서브셋만 지원하므로 레이아웃 구성 시 Flexbox를 엄격히 사용해야 합니다.</li>
-              <li><strong>불변 캐시 헤더 설정</strong>: 동일 주문 번호의 영수증은 내용이 변하지 않으므로 <code>Cache-Control: public, max-age=31536000, immutable</code> 헤더를 부여하여 CDN 캐싱 효율을 극대화합니다.</li>
+              <li>JSX·CSS·폰트를 합친 번들이 500KB를 넘으면 생성에 실패합니다.</li>
+              <li>[잘못된 상품 ID로 요청] 버튼처럼 서버 쪽 파라미터 검증(404/400)이 없으면 위조된 요청으로 임의 금액의 위조 영수증이 만들어질 수 있습니다.</li>
+              <li>이 Cache-Control은 HTTP 캐시 계층 이야기이며, Next.js의 데이터 캐시(<code>fetch</code> 캐시)와는 별개입니다.</li>
             </ul>
           </div>
         </div>
