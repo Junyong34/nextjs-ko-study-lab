@@ -711,7 +711,7 @@
   title: "진입 애니메이션 및 폼 리셋 (template.tsx)"
   doc: 3-api-reference/3.1-file-conventions/template.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/default/parallel-fallback
   title: "Parallel Routes 미매칭 시 default.tsx 폴백"
@@ -741,7 +741,7 @@
   title: "SSE 실시간 재고 스트리밍 (route.ts)"
   doc: 3-api-reference/3.1-file-conventions/route.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/route-groups/group-url-isolation
   title: "URL 영향 없는 라우트 그룹 분리 (route-groups)"
@@ -825,7 +825,7 @@
   title: "미인증 세션 401 로그인 요구 화면 (unauthorized.tsx)"
   doc: 3-api-reference/3.1-file-conventions/unauthorized.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/metadata-app-icons/dynamic-favicon
   title: "icon.tsx 동적 파비콘 생성"
