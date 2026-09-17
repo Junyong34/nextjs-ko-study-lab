@@ -823,7 +823,7 @@
     "title": "template.tsx 인스턴스 재생성 및 수명주기",
     "doc": "3-api-reference/3.1-file-conventions/template.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/template/input-reset-animation",
@@ -1005,7 +1005,7 @@
     "title": "dynamicParams true vs false 설정",
     "doc": "3-api-reference/3.1-file-conventions/3.1.22-route-segment-config/dynamicParams.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/route-segment-config/instant-prefetch",
@@ -1054,7 +1054,7 @@
     "title": "<Link prefetch> 옵션 대조 (auto vs full vs false)",
     "doc": "3-api-reference/3.2-components/link.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "components/font/google-variable-tokens",
@@ -1229,7 +1229,7 @@
     "title": "Next.js 확장 fetch tags 태그 바인딩",
     "doc": "3-api-reference/3.3-functions/fetch.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/cookies/get-set-session",
