@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface SseStockStreamDemoProps {
   onStatusChange?: (status: { isConnected: boolean; ticksReceived: number; lastTick?: any }) => void
@@ -20,25 +20,32 @@ export function SseStockStreamDemo({ onStatusChange }: SseStockStreamDemoProps) 
   const [isConnected, setIsConnected] = useState(false)
   const [ticksCount, setTicksCount] = useState(0)
   const [eventLogs, setEventLogs] = useState<string[]>([])
-  const [abortController, setAbortController] = useState<AbortController | null>(null)
+  // ref로 관리해야 언마운트 시 cleanup 클로저가 최신 컨트롤러를 참조한다 (state였다면 마운트 시점 값(null)에 고정됨).
+  const abortControllerRef = useRef<AbortController | null>(null)
+  const lastEventAtRef = useRef<number | null>(null)
 
   const API_ENDPOINT = '/zone/baseline/file-conventions/route/sse-stock-stream/api'
 
   const addLog = (msg: string) => {
+    const now = performance.now()
+    const deltaMs = lastEventAtRef.current !== null ? now - lastEventAtRef.current : null
+    lastEventAtRef.current = now
+    const d = new Date()
+    const timeLabel = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}.${String(d.getMilliseconds()).padStart(3, '0')}`
+    const deltaLabel = deltaMs !== null ? ` (+${(deltaMs / 1000).toFixed(2)}s)` : ''
     setEventLogs(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
+      `[${timeLabel}]${deltaLabel} ${msg}`,
       ...prev.slice(0, 5)
     ])
   }
 
   const startStream = () => {
-    if (abortController) {
-      abortController.abort()
-    }
+    abortControllerRef.current?.abort()
 
     const controller = new AbortController()
-    setAbortController(controller)
+    abortControllerRef.current = controller
     setIsConnected(true)
+    lastEventAtRef.current = null
     addLog(`SSE 스트림 연결 요청 (${API_ENDPOINT})`)
 
     fetch(API_ENDPOINT, { signal: controller.signal })
@@ -98,10 +105,8 @@ export function SseStockStreamDemo({ onStatusChange }: SseStockStreamDemoProps) 
   }
 
   const stopStream = () => {
-    if (abortController) {
-      abortController.abort()
-      setAbortController(null)
-    }
+    abortControllerRef.current?.abort()
+    abortControllerRef.current = null
     setIsConnected(false)
     addLog('사용자에 의해 SSE 스트림 연결 중단됨')
     onStatusChange?.({ isConnected: false, ticksReceived: ticksCount })
@@ -109,10 +114,10 @@ export function SseStockStreamDemo({ onStatusChange }: SseStockStreamDemoProps) 
 
   useEffect(() => {
     startStream()
+    // 언마운트(페이지 이탈) 시 실제로 fetch 스트림을 abort() 한다.
+    // route.ts의 request.signal 'abort' 리스너가 이를 감지해 서버 콘솔에 정리 로그를 남긴다.
     return () => {
-      if (abortController) {
-        abortController.abort()
-      }
+      abortControllerRef.current?.abort()
     }
   }, [])
 
@@ -178,7 +183,7 @@ export function SseStockStreamDemo({ onStatusChange }: SseStockStreamDemoProps) 
 
         <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-2">
           <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1 flex justify-between">
-            <span>SSE 이벤트 청크 로그:</span>
+            <span>SSE 이벤트 청크 로그 (괄호 = 직전 이벤트와의 실측 시간차):</span>
             <span className="text-[10px] text-emerald-400">{isConnected ? '● RECEIVING' : '○ IDLE'}</span>
           </div>
           <div className="space-y-1 pt-1 text-[11px]">
