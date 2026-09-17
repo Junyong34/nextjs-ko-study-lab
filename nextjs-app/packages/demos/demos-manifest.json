@@ -991,7 +991,7 @@
     "title": "robots.ts 동적 크롤링 규칙 생성",
     "doc": "3-api-reference/3.1-file-conventions/3.1.21-metadata/robots.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/metadata-sitemap/split-index-sitemaps",
@@ -1012,7 +1012,7 @@
     "title": "세그먼트 prefetch 설정 (instant)",
     "doc": "3-api-reference/3.1-file-conventions/3.1.22-route-segment-config/instant.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/route-segment-config/max-duration-timeout",
@@ -1075,7 +1075,7 @@
     "title": "next/script 로딩 전략 상세 비교",
     "doc": "3-api-reference/3.2-components/script.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "components/script/pg-sdk-onload",
@@ -1222,7 +1222,7 @@
     "title": "Next.js 확장 fetch revalidate 옵션",
     "doc": "3-api-reference/3.3-functions/fetch.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/fetch-extended/tag-option",
