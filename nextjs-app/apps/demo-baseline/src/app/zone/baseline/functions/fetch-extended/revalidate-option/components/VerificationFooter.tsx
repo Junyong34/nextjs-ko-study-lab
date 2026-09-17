@@ -1,103 +1,113 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { PollLogEntry, ProductCode } from '../types'
 
 export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+  productCode: ProductCode
+  revalidateSeconds: number
+  log: PollLogEntry[]
+  isPolling: boolean
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({ productCode, revalidateSeconds, log, isPolling }: VerificationFooterProps) {
+  const observed = log.filter((e) => e.cacheStatus !== 'INIT')
+  const hitCount = observed.filter((e) => e.cacheStatus === 'HIT').length
+  const missCount = observed.filter((e) => e.cacheStatus === 'MISS').length
+  const hasObservedFullCycle = hitCount >= 1 && missCount >= 1
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  const isMatched = log.length === 0 ? undefined : hasObservedFullCycle
 
-  const defaultExpected = "• Next.js 확장 fetch revalidate 옵션의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  const expected =
+    `• 조회 간격(1초) 누적이 revalidate(${revalidateSeconds}초) 미만이면 originCallCount가 그대로인 캐시 HIT\n` +
+    `• 누적이 revalidate(${revalidateSeconds}초) 이상이 되는 첫 조회는 originCallCount가 증가하는 캐시 MISS(재검증)`
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual =
+    log.length === 0
+      ? '• 아직 조회하지 않았습니다. [자동 폴링 시작] 또는 [지금 1회 조회]를 눌러 주세요.'
+      : `• ${productCode} 누적 조회 ${observed.length}회 (HIT ${hitCount}회 / MISS ${missCount}회)\n` +
+        `• 최근 상태: ${log[0].cacheStatus} — 재고 ${log[0].stock}개, originCallCount=${log[0].originCallCount}, 응답 ${log[0].durationMs}ms\n` +
+        `• ${
+          hasObservedFullCycle
+            ? 'HIT가 유지되다가 MISS로 전환되는 것을 실제로 관찰했습니다.'
+            : isPolling
+              ? `아직 ${revalidateSeconds}초 경과 후 MISS 전환을 관찰하지 못했습니다. 자동 폴링을 유지해 주세요.`
+              : '자동 폴링을 시작하면 HIT → MISS 전환을 계속 관찰할 수 있습니다.'
+        }`
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
         title="Next.js 확장 fetch revalidate 옵션 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="1초 간격 실측 폴링으로 originCallCount 변화를 직접 비교해 캐시 HIT/MISS를 판정합니다."
       />
-            <DemoDeepDiveCard title="Next.js 확장 fetch revalidate 옵션 & 시간 기반 ISR 캐싱">
+      <DemoDeepDiveCard title="Next.js 확장 fetch revalidate 옵션 & 시간 기반 캐시 만료">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Next.js는 Web 표준 <code>fetch</code> API를 확장하여 <code>fetch(url, {'{'} next: {'{'} revalidate: 60 {'}'} {'}'})</code> 옵션을 제공합니다. 지정된 시간(초) 동안 데이터 소스 응답을 데이터 캐시(Data Cache)에 보관하고, 만료 후 Stale-While-Revalidate 방식으로 백그라운드 갱신을 수행합니다.</p>
+            <p>
+              Next.js는 Web 표준 <code>fetch</code> API를 확장해{' '}
+              <code>fetch(url, {'{'} next: {'{'} revalidate: N {'}'} {'}'})</code> 옵션을 제공한다. 이 옵션은
+              데이터 캐시(Data Cache)에 저장된 응답의 캐시 수명을 최대 N초로 지정하며, N초가 지나기 전까지는
+              같은 URL·옵션의 fetch 호출이 origin에 도달하지 않고 캐시된 응답을 그대로 반환한다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 외부 환율 API를 60초 <code>revalidate</code> 옵션으로 호출하여, 60초 이내의 요청에는 0ms 캐시 응답을 반환하고, 60초 초과 시 다음 요청에서 백그라운드 revalidation을 트리거하여 최신 환율로 캐시를 갱신합니다.</p>
+            <p>
+              이 데모는 <code>/api</code> Route Handler를 실제 origin으로 두고, Server Action이{' '}
+              <code>fetch(apiUrl, {'{'} next: {'{'} revalidate: {revalidateSeconds} {'}'} {'}'})</code>를 1초
+              간격으로 반복 호출한다. Route Handler는 <code>force-dynamic</code>이라 호출될 때마다 반드시
+              실행되며, 실행 횟수(<code>originCallCount</code>)를 응답에 그대로 실어 보낸다. 클라이언트는
+              직전 응답과 이번 응답의 <code>originCallCount</code>를 비교해 값이 그대로면 HIT(캐시 응답),
+              증가했으면 MISS(재검증으로 origin이 다시 실행됨)로 판정한다 — 값이 우연히 같아 보이는 것이
+              아니라 origin 실행 여부 자체를 세어 확인하는 방식이다.
+            </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>백엔드 API 트래픽 99% 절감</strong>: 초당 수천 건의 트래픽이 몰려도 외부 API는 60초에 단 1회만 호출하여 부하를 차단합니다.</li>
-              <li><strong>안정적인 고속 응답(TTFB)</strong>: 캐시된 응답을 즉시 서빙하여 외부 API의 레이턴시나 일시적 장애가 사용자에게 영향을 주지 않습니다.</li>
-              <li><strong>선언적 캐시 수명 관리</strong>: 별도 Redis나 캐시 서버 없이 <code>fetch</code> 옵션만으로 세분화된 수명 주기를 제어합니다.</li>
+              <li>
+                <strong>백엔드 트래픽 절감</strong>: 짧은 간격으로 반복 조회해도 revalidate 초당 최대 1회만
+                origin이 실행된다.
+              </li>
+              <li>
+                <strong>선언적 캐시 수명 관리</strong>: 별도 캐시 서버 없이 fetch 옵션 한 줄로 수명을 제어한다.
+              </li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>실시간성이 약간 허용되는 환율, 날씨, 인기 검색어 순위 데이터 조회</li>
-              <li>상품 상세 페이지의 기본 스펙 및 카테고리 트리 캐싱 (예: <code>revalidate: 3600</code>)</li>
-              <li>외부 뉴스 피드 및 블로그 포스트 목록 캐싱</li>
+              <li>실시간성이 약간 허용되는 환율, 날씨, 인기 검색어 데이터 조회</li>
+              <li>상품 상세 페이지의 기본 스펙·재고 캐싱 (예: <code>revalidate: 60</code>)</li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Next.js 15+ 기본값 변경</strong>: Next.js 15부터 <code>fetch</code>의 기본 동작이 <code>force-cache</code>에서 <code>no-store</code>(비캐시)로 변경되었으므로 캐싱을 원하면 명시적으로 <code>revalidate</code> 또는 <code>force-cache</code>를 선언해야 합니다.</li>
-              <li><strong>cacheLife로의 발전</strong>: Next.js 16에서는 보다 정밀한 제어를 위해 <code>'use cache'</code> 지시어 및 <code>cacheLife()</code> 함수 사용이 권장됩니다.</li>
+              <li>
+                <strong>Next.js 15+ 기본값 변경</strong>: fetch의 기본 동작이 <code>force-cache</code>에서{' '}
+                <code>no-store</code>(비캐시)로 바뀌었으므로, 캐싱을 원하면 <code>revalidate</code> 또는{' '}
+                <code>cache: &apos;force-cache&apos;</code>를 명시해야 한다.
+              </li>
+              <li>
+                <strong>같은 URL, 다른 revalidate 값</strong>: 같은 라우트에서 같은 URL에 서로 다른{' '}
+                <code>revalidate</code> 값을 지정하면 더 낮은 값이 적용된다. 이 데모가 revalidate 옵션을
+                바꿀 때마다 세션(캐시 키)을 새로 발급하는 것도 이 규칙 때문이다.
+              </li>
+              <li>
+                <strong>개발 모드 하드 리프레시</strong>: 브라우저 하드 새로고침처럼{' '}
+                <code>cache-control: no-cache</code> 헤더가 실린 요청은 개발 모드에서 revalidate 옵션을
+                무시하고 항상 origin을 호출한다.
+              </li>
             </ul>
           </div>
         </div>
