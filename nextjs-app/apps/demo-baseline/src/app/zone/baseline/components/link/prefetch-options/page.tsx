@@ -1,46 +1,45 @@
 import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { LinkPrefetchOptionsDemo } from './components/LinkPrefetchOptionsDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'components/link/prefetch-options')
-
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { LinkPrefetchOptionsDemo } from './components/LinkPrefetchOptionsDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"next/link prefetch (auto vs full vs false) 옵션 대조"}
-        concept={"<Link prefetch>의 3가지 모드(auto: 정적 세그먼트만, full: 전체 트리, false: 뷰포트 진입 시 페치 안함)를 통해 모바일 네트워크 대역폭과 0ms 전환 속도를 조율합니다."}
-        steps={[
-        {
-        "step": 1,
-        "title": "prefetch={null} (auto 기본값) 확인",
-        "description": "정적 세그먼트 데이터만 prefetch하고 동적 데이터는 클릭 시 가져오는 기본 동작을 점검합니다.",
-        "actionBadge": "auto prefetch"
-        },
-        {
-        "step": 2,
-        "title": "prefetch={true} (full prefetch) 확인",
-        "description": "정적/동적 데이터를 포함한 전체 라우트 트리를 즉시 캐싱하여 0ms 전환을 준비합니다.",
-        "actionBadge": "full prefetch"
-        },
-        {
-        "step": 3,
-        "title": "prefetch={false} 대역폭 절약 모드 확인",
-        "description": "뷰포트에 진입해도 백그라운드 prefetch를 실행하지 않아 네트워크 비용을 절감하는지 대조합니다.",
-        "actionBadge": "false 모드",
-        "observe": "3단 검증 패널에서 prefetch 옵션별 캐시 로딩 전략과 네트워크 요청 동작 대조",
-        "observeAt": "verification"
+        title="next/link prefetch (auto vs full vs false) 옵션 대조"
+        concept={
+          '<Link>의 prefetch는 auto(null, 기본값)/true/false 세 값을 받습니다. 대상 라우트를 동적 라우트로 ' +
+          '고정해두면 auto는 loading.tsx 경계까지만(부분), true는 동적 데이터까지 전부(전체), false는 아예 ' +
+          '요청하지 않는 차이가 실제 네트워크 리소스 로그로 드러납니다. 단, 이 뷰포트 기반 prefetch는 ' +
+          'production 빌드에서만 동작합니다.'
         }
+        steps={[
+          {
+            step: 1,
+            title: '[실습 화면] 박스 안에서 아래로 스크롤',
+            description: '상품 A(auto)/B(full)/C(false) 링크 3개를 실제 브라우저 뷰포트에 순서대로 진입시킵니다.',
+            actionBadge: '스크롤',
+          },
+          {
+            step: 2,
+            title: '뷰포트 교차 확인 뱃지 확인',
+            description: '각 링크 아래 "✓ 뷰포트 교차 확인됨"이 뜨면 이 데모의 IntersectionObserver가 실제 교차를 감지한 것입니다.',
+            actionBadge: '교차 확인',
+          },
+          {
+            step: 3,
+            title: 'PerformanceObserver 요청 로그 대조',
+            description: 'auto/full/false 각각 실제로 몇 건의 fetch 요청이 발생했는지, 크기는 얼마인지 확인합니다.',
+            actionBadge: '요청 로그',
+            observe: '3단 검증 패널에서 prefetch 옵션별 요청 건수·transferSize와, production/development 빌드에 따른 기대값 차이',
+            observeAt: 'verification',
+          },
         ]}
-        />
-      <DemoPlaygroundCard title={"<Link prefetch> 옵션 대조 (auto vs full vs false) 실습"}>
-        <LinkPrefetchOptionsDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      />
+      <LinkPrefetchOptionsDemo />
     </DemoContainer>
   )
 }
