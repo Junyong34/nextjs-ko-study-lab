@@ -1,108 +1,115 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { ProbeResult } from '../types'
 
 export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+  latestNormal?: ProbeResult
+  latestRsc?: ProbeResult
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({ latestNormal, latestRsc }: VerificationFooterProps) {
+  const bothRan = Boolean(latestNormal && latestRsc)
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  const isMatched = bothRan
+    ? Boolean(
+        latestNormal!.contentType?.startsWith('text/html') &&
+          !latestNormal!.redirected &&
+          latestRsc!.contentType === 'text/x-component' &&
+          latestRsc!.redirected
+      )
+    : undefined
 
-  const defaultExpected = "• 세그먼트 prefetch 설정 (instant)의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  const expected =
+    '일반 요청 → text/html, redirected=false\nRSC 프리페치 신호 요청 → text/x-component, redirected=true'
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = bothRan
+    ? `일반 요청 → ${latestNormal!.contentType ?? '(none)'}, redirected=${latestNormal!.redirected}\nRSC 프리페치 신호 요청 → ${latestRsc!.contentType ?? '(none)'}, redirected=${latestRsc!.redirected}`
+    : '• 2단에서 두 버튼을 모두 한 번씩 눌러 실제 요청을 보내면 결과가 여기 표시됩니다.'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="세그먼트 prefetch 설정 (instant) 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="RSC 프리페치 신호 요청·응답 검증"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="같은 URL에 헤더만 다르게 보낸 두 실제 요청의 서버 응답(Content-Type, redirect 여부)을 대조합니다."
       />
-      <DemoDeepDiveCard title="Next.js prefetching 아키텍처 & Router Cache 기반 인스턴트 내비게이션">
+      <DemoDeepDiveCard title="route segment config 'instant' / 'prefetch'의 정확한 정의">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+              1. 이 페이지 제목이 가리키는 실제 API
+            </h5>
             <p>
-              Next.js App Router는 <code>{'<'}Link prefetch{'>'}</code> 컴포넌트와 클라이언트 Router Cache, 그리고 부분 사전 렌더링(PPR)을 결합하여 페이지 이동 지연을 0ms로 단축하는 인스턴트 내비게이션 아키텍처를 제공합니다. (참고: Route Segment Config에 별도의 <code>export const instant</code> 상수는 존재하지 않으며, Link 컴포넌트 및 PPR 설정으로 제어합니다.)
+              Next.js 16.3.2 기준 <code>instant</code> route segment config는 실재하는
+              API입니다(<code>node_modules/next/dist/docs/.../route-segment-config/instant.md</code>{' '}
+              1차 확인). 그런데 그 역할은 &ldquo;호버 시 0ms로 prefetch를 실행하는 설정&rdquo;이
+              아니라, <strong>이 세그먼트로의 내비게이션이 즉시(instant) UI를 만들어내는지를 개발
+              오버레이에서 검증(validation)해 주는 개발 전용 도구</strong>입니다. 실제 prefetch
+              시점·범위를 제어하는 것은 별도의 <code>prefetch</code> route segment config(
+              <code>&apos;auto&apos;</code> | <code>&apos;partial&apos;</code> |{' '}
+              <code>&apos;force-disabled&apos;</code>)입니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+              2. 왜 이 데모에서 라이브로 켜서 보여줄 수 없는가
+            </h5>
             <p>
-              본 데모에서는 사용자의 뷰포트에 <code>{'<'}Link href="/products/101" prefetch={'{'}true{'}'}{'>'}</code>가 노출되거나 호버되는 순간, Next.js 라우터가 백그라운드에서 RSC 페이로드(또는 PPR 정적 셸)를 사전에 가져와 메모리 캐시에 적재함으로써 클릭 즉시 0ms 화면 전환을 구현합니다.
+              공식 문서는 두 export 모두 <code>cacheComponents: true</code>가 켜져 있을 때만
+              동작한다고 명시합니다. 이 저장소에서 <code>cacheComponents</code>는{' '}
+              <code>demo-cache-components</code> zone의 몫이고, 이 페이지가 속한{' '}
+              <code>demo-baseline</code>의 <code>next.config.ts</code>에는 켜져 있지 않습니다.
+              공유 설정 파일을 zone 경계를 넘어 고치는 대신, 이 zone 안에서 실제로 관찰 가능한
+              인접 개념(아래 3번)으로 대체했습니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+              3. 이 데모에서 실제로 측정한 것
+            </h5>
+            <p>
+              <code>cacheComponents</code> 없이도 항상 존재하는 것은 Next.js 클라이언트 라우터가
+              내비게이션·프리페치 시 실제로 보내는 <code>RSC</code>,{' '}
+              <code>Next-Router-Prefetch</code> 요청 헤더입니다. 위 실습에서 같은 URL에 이 헤더를
+              실었을 때만 서버가 307로 리다이렉트한 뒤 <code>Content-Type: text/x-component</code>
+              (React Flight 페이로드)를 돌려주고, 헤더가 없으면 <code>text/html</code> 전체 문서를
+              돌려주는 것을 <code>curl</code>과 실제 <code>fetch()</code>로 동일하게 확인했습니다.
+              이것이 &ldquo;즉시 전환&rdquo;을 가능하게 하는 실제 하부 프로토콜입니다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+              4. 실무 주의사항
+            </h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>네이티브 앱 수준의 반응 속도</strong>: 네트워크 왕복 시간(RTT)을 사용자의 클릭 전에 미리 소비하여 전환 체감 속도를 극대화합니다.</li>
-              <li><strong>대역폭 지능형 절약</strong>: 변경되지 않은 상위 레이아웃을 제외하고 변경되는 하위 세그먼트 데이터만 선별적으로 prefetch합니다.</li>
-              <li><strong>이커머스 구매 전환율 증대</strong>: 상품 목록에서 상세 페이지 및 주문서로의 이동 이탈률을 획기적으로 낮춥니다.</li>
+              <li>
+                <strong>자동 prefetch는 프로덕션에서만 동작합니다.</strong> <code>{'<Link>'}</code>가
+                뷰포트에 들어오거나 호버될 때 자동으로 prefetch하는 동작은{' '}
+                <code>next dev</code>에서 발생하지 않습니다(공식 문서 명시). 이 페이지를{' '}
+                <code>next dev</code>로 열어 두고 링크에 마우스를 올려도 자동 요청이 안 보이는
+                것은 버그가 아니라 이 제약 때문입니다 — 위 실습의 두 버튼은 자동 prefetch가 아니라
+                수동으로 같은 헤더 조합을 재현한 것입니다.
+              </li>
+              <li>
+                <code>{'<Link prefetch={false}>'}</code>는 뷰포트 진입·호버 모두에서 prefetch를
+                끕니다. 링크가 매우 많은 목록(무한 스크롤 등)에서 리소스 낭비를 막을 때 씁니다.
+              </li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 메인 GNB 카테고리 탭 메뉴 및 베스트셀러 배너 링크</li>
-              <li>장바구니 화면의 [주문서 작성/결제하기] CTA 버튼 사전 로드</li>
-              <li>검색 결과 목록 상위 노출 1~3위 핵심 상품 상세 링크</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>과도한 prefetch=true 지양</strong>: 링크가 수백 개 존재하는 대규모 리스트에서 <code>prefetch={'{'}true{'}'}</code>를 남용하면 서버 트래픽과 모바일 데이터가 낭비되므로, 기본 뷰포트 prefetch(정적 셸/loading.tsx까지만 로드)를 사용하는 것이 안전합니다.</li>
-              <li><strong>staleTimes 튜닝</strong>: 동적 데이터의 최신성이 중요한 경우 <code>next.config.ts</code>의 <code>experimental.staleTimes.dynamic</code> 설정을 통해 Router Cache 유효 시간을 조율해야 합니다.</li>
-            </ul>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 흔한 오용</h5>
+            <p>
+              <code>instant</code>를 &ldquo;켜면 빨라지는 성능 스위치&rdquo;로 오해하는 것이 가장
+              흔한 오용입니다. 실제로는 아무것도 빠르게 만들지 않고, 이미 만들어 둔 캐싱 구조가
+              즉시 UI 기대를 깨는 코드를 dev 오버레이에서 미리 잡아 주는 린트에 가깝습니다.
+            </p>
           </div>
         </div>
       </DemoDeepDiveCard>
