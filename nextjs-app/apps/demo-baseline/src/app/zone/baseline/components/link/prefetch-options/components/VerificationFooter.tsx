@@ -1,107 +1,146 @@
 'use client'
-import React from 'react'
+
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { PrefetchResourceEntry, PrefetchVariant, VariantConfig } from '../types'
 
 export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+  variants: VariantConfig[]
+  entries: PrefetchResourceEntry[]
+  seen: Record<PrefetchVariant, boolean>
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const IS_PRODUCTION_BUILD = process.env.NODE_ENV === 'production'
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+function statsFor(entries: PrefetchResourceEntry[], variant: PrefetchVariant) {
+  const matched = entries.filter((e) => e.variant === variant)
+  const lastTransferSize = matched.length > 0 ? matched[matched.length - 1].transferSize : null
+  return { count: matched.length, lastTransferSize }
+}
 
-  const defaultExpected = "• <Link prefetch> 옵션 대조 (auto vs full vs false)의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+function formatExpected() {
+  if (!IS_PRODUCTION_BUILD) {
+    return (
+      '• 현재 빌드: development\n' +
+      '• 뷰포트 진입 시 prefetch 요청: 0건 (auto/full/false 모두 동일)\n' +
+      '  근거: Next.js는 dev 모드에서 뷰포트 기반 prefetch를 아예 실행하지 않습니다\n' +
+      '  (컴파일 비용 때문 — next/dist/client/components/links.js의 명시적 분기).'
+    )
+  }
+  return (
+    '• 현재 빌드: production\n' +
+    '• auto(prefetch 미지정): 요청 1건, loading.tsx 경계까지만 = 작은 페이로드\n' +
+    '• full(prefetch={true}): 요청 1건, 동적 데이터 포함 전체 렌더 = auto보다 큰 페이로드\n' +
+    '• false(prefetch={false}): 요청 0건 (호버해도 발생하지 않음)'
+  )
+}
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+function formatActual(
+  variants: VariantConfig[],
+  entries: PrefetchResourceEntry[],
+  seen: Record<PrefetchVariant, boolean>,
+) {
+  const allSeen = variants.every((v) => seen[v.key])
+  if (!allSeen) {
+    return '• 대기 중 — 실습 화면에서 링크 3개를 모두 스크롤해 뷰포트에 진입시켜 주세요.'
+  }
+  return variants
+    .map((v) => {
+      const { count, lastTransferSize } = statsFor(entries, v.key)
+      const sizeText = lastTransferSize === null ? '' : ` · transferSize ${lastTransferSize}B`
+      return `• ${v.key} (${v.badge}): 요청 ${count}건${sizeText}`
+    })
+    .join('\n')
+}
+
+function computeIsMatched(
+  variants: VariantConfig[],
+  entries: PrefetchResourceEntry[],
+  seen: Record<PrefetchVariant, boolean>,
+): boolean | undefined {
+  const allSeen = variants.every((v) => seen[v.key])
+  if (!allSeen) return undefined
+
+  const auto = statsFor(entries, 'auto')
+  const full = statsFor(entries, 'full')
+  const falseVariant = statsFor(entries, 'false')
+
+  if (!IS_PRODUCTION_BUILD) {
+    return auto.count === 0 && full.count === 0 && falseVariant.count === 0
+  }
+
+  const countsMatch = auto.count === 1 && full.count === 1 && falseVariant.count === 0
+  if (!countsMatch) return false
+  if (auto.lastTransferSize !== null && full.lastTransferSize !== null) {
+    return full.lastTransferSize > auto.lastTransferSize
+  }
+  return true
+}
+
+export function VerificationFooter({ variants, entries, seen }: VerificationFooterProps) {
+  const isMatched = computeIsMatched(variants, entries, seen)
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="<Link prefetch> 옵션 대조 (auto vs full vs false) 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="prefetch 옵션별 실제 네트워크 요청 로그 (performance resource timing)"
+        expected={formatExpected()}
+        actual={formatActual(variants, entries, seen)}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="Expected는 Next.js 공식 문서(Link#prefetch, guides/prefetching)가 명시한 빌드 모드별 기대 동작이고, Actual은 PerformanceObserver('resource')가 지금 이 브라우저에서 실제로 잡아낸 요청입니다."
       />
-      <DemoDeepDiveCard title="<Link prefetch> 옵션 대조 (auto vs full vs false) & 네트워크 최적화">
+      <DemoDeepDiveCard title="<Link prefetch> auto vs full vs false — 실제로 무엇이 오가는가">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">1. 세 값의 실제 차이</h5>
             <p>
-              <code>{'<'}Link{'>'}</code> 컴포넌트의 <code>prefetch</code> 속성은 사용자가 링크를 클릭하기 전에 대상 페이지의 RSC 페이로드와 데이터를 뷰포트 진입 시 미리 다운로드하는 기능으로, <code>true</code>(전체 사전 로드), <code>false</code>(사전 로드 비활성화), <code>null</code>(기본값 auto: 정적 세그먼트만 사전 로드) 옵션을 제공합니다.
+              공식 문서(<code>api-reference/components/link.mdx#prefetch</code>)는 <code>&quot;auto&quot; 또는 null</code>
+              (기본값)을 &quot;정적 라우트면 전체, 동적 라우트면 가장 가까운 <code>loading.js</code> 경계까지만&quot;
+              prefetch한다고 명시합니다. <code>true</code>는 정적/동적 여부와 상관없이 <strong>항상 전체 라우트</strong>를
+              가져오며, 동적 라우트라면 서버가 그 순간 실제로 렌더링을 수행합니다. <code>false</code>는 뷰포트 진입과
+              호버 양쪽 모두에서 prefetch를 완전히 차단합니다. 이 데모의 대상 라우트(
+              <code>target/[variant]</code>)는 <code>export const dynamic = &apos;force-dynamic&apos;</code>으로
+              강제 동적화했기 때문에, auto와 full의 차이(부분 vs 전체 payload)가 실제로 드러납니다 — 정적 라우트였다면
+              둘 다 전체 prefetch라 차이가 보이지 않습니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">2. 뷰포트 기반 prefetch는 production 전용</h5>
             <p>
-              본 데모에서는 구매 전환율이 높은 [주문하기] 링크에는 <code>prefetch={'{'}true{'}'}</code>(즉시 전환 0ms), 트래픽이 낮은 [개인정보처리방침]에는 <code>prefetch={'{'}false{'}'}</code>(불필요한 네트워크 절약), 일반 상품 카드에는 기본 <code>auto</code> 모드를 적용하여 네트워크 대역폭과 내비게이션 속도의 균형을 검증합니다.
+              공식 문서는 &quot;Prefetching is only enabled in production&quot;이라고 명시하고, Next.js 16.3.2 소스
+              (<code>client/components/links.js</code>의 <code>onLinkVisibilityChanged</code>)에도 &quot;Prefetching on
+              viewport is disabled in development for performance reasons, because it requires compiling the target
+              page&quot;라는 주석과 함께 <code>NODE_ENV !== &apos;production&apos;</code>이면 즉시 return하는 코드가
+              있습니다. 호버 prefetch도 같은 파일의 <code>onMouseEnter</code> 핸들러에서 동일하게 dev 모드에 차단됩니다.
+              그래서 이 데모를 <code>next dev</code>로 열면 세 링크 모두 요청 0건이 정상이고, <code>next build &amp;&amp;
+              next start</code>로 열어야 auto/full/false의 차이가 실제로 관찰됩니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>클릭 즉시 화면 전환 (Instant Navigation)</strong>: 미리 캐시된 RSC 페이로드를 사용하여 네트워크 지연 없이 0ms로 화면이 전환됩니다.</li>
-              <li><strong>서버 부하 및 대역폭 제어</strong>: 무한 스크롤이나 수천 개의 링크가 있는 화면에서 불필요한 prefetch 요청을 차단하여 서버 부하를 방지합니다.</li>
-              <li><strong>정적/동적 세그먼트 지능형 분리</strong>: <code>auto</code> 모드에서는 정적 레이아웃 셸만 먼저 prefetch하고 동적 데이터는 클릭 시점에 효율적으로 가져옵니다.</li>
-            </ul>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. 이 데모가 관찰하는 방법</h5>
+            <p>
+              Next.js의 prefetch 요청은 내부적으로 표준 <code>fetch()</code>를 호출하므로(
+              <code>router-reducer/fetch-server-response.js</code>), 브라우저의{' '}
+              <code>PerformanceObserver({'{'}type: &apos;resource&apos;{'}'})</code>에 <code>initiatorType: &apos;fetch&apos;</code>
+              항목으로 그대로 잡힙니다. 이 데모는 그 리소스 엔트리의 <code>name</code>(URL)으로 어떤 링크의 prefetch인지
+              구분하고, <code>transferSize</code>로 실제 전송 바이트를 비교합니다 — 텍스트로 동작을 주장하는 대신 브라우저가
+              만든 진짜 네트워크 이벤트를 그대로 보여줍니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 장바구니/주문서 이동 등 핵심 결제 경로 사전 로드 (<code>prefetch={'{'}true{'}'}</code>)</li>
-              <li>수천 개의 푸터 링크 및 모달 닫기 링크의 prefetch 차단 (<code>prefetch={'{'}false{'}'}</code>)</li>
-              <li>상품 목록 카탈로그의 뷰포트 기반 기본 스마트 prefetch (<code>auto</code>)</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>개발 모드(Development) 동작 차이</strong>: <code>prefetch</code> 기능은 프로덕션 빌드(<code>pnpm build && pnpm start</code>) 환경에서만 실제로 네트워크 탭에 관찰되며 개발 모드(dev)에서는 링크 hover 시에만 일부 동작합니다.</li>
-              <li><strong>PPR(Partial Prerendering)과의 시너지</strong>: Next.js 최신 PPR 환경에서 <code>auto</code> prefetch는 정적 셸만 신속히 가져와 메모리 효율을 극대화합니다.</li>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">4. 실무 팁 — false를 쓰는 이유</h5>
+            <ul className="list-disc list-inside space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+              <li>수백 개의 링크가 있는 목록(무한 스크롤 등)에서 auto/true를 그대로 두면 서버 부하와 대역폭이 커집니다.</li>
+              <li>
+                <code>false</code>로 끄면 정적 라우트는 클릭 시점에만 받고, 동적 라우트는 서버 렌더를 먼저 기다린 뒤
+                이동합니다 — 트래픽이 낮은 링크(약관, 푸터)에 적합합니다.
+              </li>
+              <li>
+                완전히 끄지 않고 절충하려면 <code>prefetch={'{'}hovered ? null : false{'}'}</code> 패턴으로 호버 시에만
+                prefetch를 켤 수 있습니다(공식 가이드 &quot;Hover-triggered prefetch&quot;).
+              </li>
             </ul>
           </div>
         </div>
