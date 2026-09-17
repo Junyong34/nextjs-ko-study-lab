@@ -121,8 +121,11 @@ export function RuntimeProbePlayground({ onResultChange }: RuntimeProbePlaygroun
     <div className="space-y-3">
       <p className="text-xs text-zinc-500 dark:text-zinc-400">
         두 버튼은 실제로 서로 다른 route.ts 두 개(<code>api/edge</code>, <code>api/nodejs</code>)에 HTTP 요청을 보낸다. 각 라우트는
-        자신이 실제로 실행 중인 <code>process.env.NEXT_RUNTIME</code> 값과, <code>node:fs</code> /{' '}
-        <code>node:crypto</code>를 실제로 호출해본 성공/실패 결과를 그대로 반환한다.
+        자신이 실제로 실행 중인 <code>process.env.NEXT_RUNTIME</code> 값을 그대로 반환한다. nodejs 라우트는{' '}
+        <code>node:fs</code> / <code>node:crypto</code>를 실제로 호출한 성공/실패 결과를, edge 라우트는 Node.js 전용 전역(
+        <code>process.version</code>, <code>process.platform</code>)의 존재 여부를 실측해 반환한다 — edge에서 <code>node:</code> 모듈을
+        직접 import하면 배포 플랫폼의 Edge Function 빌드 자체가 거부되기 때문에, import 없이도 같은 사실(Node.js 전용 API
+        접근 불가)을 증명하는 방식이다.
       </p>
       <div className="flex flex-col gap-3 sm:flex-row">
         <ProbeColumn

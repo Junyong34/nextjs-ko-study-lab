@@ -8,8 +8,8 @@ interface VerificationFooterProps {
 }
 
 const EXPECTED =
-  "• edge 라우트: process.env.NEXT_RUNTIME === 'edge'로 실행되고, node:fs / node:crypto 호출은 둘 다 실패해야 한다\n" +
-  "  (Edge Runtime 샌드박스에는 이 네이티브 모듈이 없다)\n" +
+  "• edge 라우트: process.env.NEXT_RUNTIME === 'edge'로 실행되고, process.version / process.platform 전역은 둘 다 존재하지 않아야 한다\n" +
+  '  (Edge Runtime 샌드박스에는 Node.js 전용 전역이 없다)\n' +
   "• nodejs 라우트: process.env.NEXT_RUNTIME === 'nodejs'로 실행되고, node:fs / node:crypto 호출은 둘 다 성공해야 한다"
 
 function describeActual(state: RuntimeCheckState): string {
@@ -93,26 +93,25 @@ export function VerificationFooter({ state }: VerificationFooterProps) {
             <p>
               두 신호 모두 실측값이다. ① <code>process.env.NEXT_RUNTIME</code>은 Next.js가 각 런타임에 실제로 주입하는 값으로,
               공식 instrumentation 문서도 이 값으로 <code>if (process.env.NEXT_RUNTIME === 'nodejs')</code>처럼 분기하라고
-              안내한다. ② <code>node:fs.readFileSync</code> / <code>node:crypto.randomBytes</code>는 화면에서 버튼을 누를 때마다
-              실제로 호출되며, edge 라우트에서는 Turbopack의 Edge 샌드박스가 던지는 실제 에러 메시지(&quot;Failed to load
-              external module node:fs: TypeError: Native module not found&quot;)가, nodejs 라우트에서는 실제 파일 개수/난수
-              값이 그대로 응답에 담긴다.
+              안내한다. ② nodejs 라우트는 <code>node:fs.readFileSync</code> / <code>node:crypto.randomBytes</code>를 화면에서
+              버튼을 누를 때마다 실제로 호출해 파일 개수/난수 값을 그대로 응답에 담는다. edge 라우트는{' '}
+              <code>node:</code> 모듈을 <strong>import하지 않고</strong> 대신 Node.js 전용 전역(<code>process.version</code>,{' '}
+              <code>process.platform</code>)의 <code>typeof</code> 결과만으로 같은 사실을 증명한다 — edge 세그먼트의 의존성
+              그래프에 <code>node:fs</code>/<code>node:crypto</code> import가 하나라도 있으면, Vercel의 Edge Function
+              빌드가 배포 시점에 정적 분석으로 감지해 &quot;referencing unsupported modules&quot;로 배포 자체를 거부한다(로컬{' '}
+              <code>next dev</code>에서는 통과하더라도). 그래서 이 데모의 edge 쪽은 import 자체를 두지 않는 방식으로
+              구현되어 있다.
             </p>
           </div>
 
           <div>
             <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">4. 서버 콘솔에서 함께 확인할 수 있는 것</h5>
             <p>
-              <code>npx next dev</code>를 실행 중인 터미널을 보면, edge 라우트를 처음 컴파일할 때 다음 두 경고가 실제로
-              출력된다:
+              <code>npx next dev</code>를 실행 중인 터미널을 보면, edge 라우트를 처음 컴파일할 때 다음 경고가 실제로 출력된다:
             </p>
             <ul className="list-disc list-inside space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
               <li>
                 <code>The Edge Runtime is deprecated. You can use the &quot;nodejs&quot; runtime instead.</code>
-              </li>
-              <li>
-                <code>A Node.js module is loaded (&apos;node:fs&apos; at line ...) which is not supported in the Edge
-                Runtime.</code>
               </li>
             </ul>
           </div>
@@ -128,6 +127,11 @@ export function VerificationFooter({ state }: VerificationFooterProps) {
               <li>
                 신규 프로젝트라면 <code>runtime = 'edge'</code>를 새로 추가하지 않는다. 이미 있는 edge 세그먼트는
                 <code>runtime</code> export를 제거해 nodejs로 옮기는 것이 공식 마이그레이션 방향이다.
+              </li>
+              <li>
+                edge로 선언한 세그먼트(또는 그 세그먼트가 import하는 모듈)에는 <code>node:*</code> 모듈을 절대 import하지 않는다
+                — 로컬에서는 동작하거나 런타임 에러로 그칠 수 있지만, Vercel 등 배포 플랫폼의 Edge Function 빌드는 이를
+                정적으로 감지해 배포 자체를 차단한다(이 데모가 REBUILD 이후 실제로 겪은 배포 실패).
               </li>
             </ul>
           </div>
