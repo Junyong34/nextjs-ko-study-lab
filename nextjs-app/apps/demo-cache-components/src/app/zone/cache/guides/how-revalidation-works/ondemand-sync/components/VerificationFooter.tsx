@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 [상품 옵션 변경] 폼 제출 시 Server Action 실행 -{'>'} DB 업데이트 -{'>'} <code>revalidateTag('product-options')</code> 실행 -{'>'} 최신 RSC 스트림 수신 -{'>'} 클라이언트 UI 갱신으로 이어지는 5단계 동기화 라이프사이클을 실시간 타임라인으로 대조 검증합니다.</p>
+                  <p>본 데모에서는 [revalidateTag("products") 즉시 무효화] 버튼 클릭 시 Server Action 실행 -{'>'} 상품 가격·재고 갱신 -{'>'} <code>revalidateTag('products', 'max')</code> 실행 -{'>'} 재방문 시 캐시 ID 교체로 이어지는 실제 동기화 흐름을 캐시 ID와 생성 시각으로 대조 검증합니다.</p>
                 </div>
 
                 <div>

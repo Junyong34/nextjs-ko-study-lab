@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard, DemoPlaygroundCard, DemoResetButton } from '@study/demo-kit'
 import { VerificationFooter } from '../components/VerificationFooter'
 
 export default function CheckoutPage() {
@@ -16,7 +16,7 @@ export default function CheckoutPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title="결제 세그먼트 정상 마운트 상태"
-        concept="checkout/error.tsx 파일이 결제 화면 세그먼트를 감싸고 있으며, 렌더링 중 에러가 발생하면 상위 레이아웃을 파괴하지 않고 error.tsx로 대체됩니다."
+        concept="checkout/error.tsx는 같은 checkout 세그먼트의 page.tsx만 감싸는 경계입니다. 렌더링 중 에러가 발생해도 checkout/layout.tsx(동일 세그먼트 레이아웃)와 그 상위 레이아웃은 이 경계 밖에 있어 리마운트되지 않고 error.tsx로 교체됩니다."
         steps={[
           {
             step: 1,
@@ -35,6 +35,8 @@ export default function CheckoutPage() {
             title: "error.tsx 바운더리 포착 및 복구",
             description: "포착된 에러 UI에서 reset()을 클릭하여 컴포넌트 트리를 복구합니다.",
             actionBadge: "복구 테스트",
+            observe: "checkout/layout.tsx 진행 배너의 마운트 ID가 에러 발생 전후로 동일하게 유지되는지 확인",
+            observeAt: "playground",
           },
         ]}
       />
@@ -46,12 +48,15 @@ export default function CheckoutPage() {
               <h5 className="font-bold text-zinc-900 dark:text-zinc-100">결제 수단 및 주문 상품</h5>
               <p className="text-xs text-zinc-500">신용카드 결제 및 PG사 연동 모듈이 준비되었습니다.</p>
             </div>
-            <Link
-              href={BASE_PATH}
-              className="rounded bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
-            >
-              ← 목록으로 복귀
-            </Link>
+            <div className="flex items-center gap-2">
+              <DemoResetButton onReset={() => setShouldThrow(false)} label="결제 화면 초기화" />
+              <Link
+                href={BASE_PATH}
+                className="rounded bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
+              >
+                ← 목록으로 복귀
+              </Link>
+            </div>
           </div>
 
           <div className="rounded border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-3">

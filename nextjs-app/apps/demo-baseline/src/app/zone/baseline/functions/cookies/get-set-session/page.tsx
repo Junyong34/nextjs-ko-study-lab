@@ -4,43 +4,42 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'functions/cookies/get-set-session')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { CookiesSessionDemo } from './components/CookiesSessionDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { getSessionCookieState } from './actions'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const initialState = await getSessionCookieState()
+
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="cookies().get() 읽기 & cookies().set() 세션 쿠키 발급"
-        concept="await cookies() 비동기 API를 통해 서버 컴포넌트에서 브라우저 쿠키를 조회(get)하고 Server Action에서 HttpOnly 세션 쿠키를 0ms 지연 없이 안전하게 발급(set)합니다."
+        concept="Server Action에서 (await cookies()).set()으로 실제 Set-Cookie 응답 헤더를 보내 HttpOnly 세션 쿠키를 발급하면, 다음 렌더링에서 서버 컴포넌트가 (await cookies()).get()으로 그 값을 그대로 읽어옵니다."
         steps={[
           {
             step: 1,
-            title: "[홍길동 (CUSTOMER)], [김철수 (VIP)], [이영희 (ADMIN)] 역할 버튼 선택",
-            description: "일반 고객(홍길동), VIP(김철수), 관리자(이영희) 프로필 버튼을 클릭하여 세션 변경을 요청합니다.",
+            title: "[김쇼핑 (CUSTOMER)], [이우수 (VIP)], [박관리 (ADMIN)] 역할 버튼 선택",
+            description: "일반 고객(김쇼핑), VIP(이우수), 관리자(박관리) 프로필 버튼을 클릭해 issueSessionAction Server Action을 호출합니다.",
             actionBadge: "역할 선택",
           },
           {
             step: 2,
-            title: "cookies().set() HttpOnly 세션 쿠키 발급 확인",
-            description: "Server Action에서 session-token, user-role 등의 보안 쿠키가 새로 발급되는 과정을 확인합니다.",
+            title: "cookies().set() 호출 → session-token(HttpOnly) & user-role 쿠키 실제 발급",
+            description: "Server Action이 (await cookies()).set()을 호출해 실제 Set-Cookie 응답 헤더 2개를 브라우저로 전송합니다.",
             actionBadge: "쿠키 발급",
           },
           {
             step: 3,
-            title: "[( ) 등급: | 적립금: P] 서버 Cookies 헤더 갱신 결과 관찰",
-            description: "현재 요청의 Server Cookies 헤더 목록에 변경된 토큰과 등급/적립금 데이터가 동기화되는지 확인합니다.",
+            title: "서버 읽기(cookies().get()) vs document.cookie 비교 관찰",
+            description: "서버가 다시 읽은 쿠키 값과 브라우저 JS가 document.cookie로 직접 읽을 수 있는 값을 비교해 httpOnly의 실제 차단 효과를 확인합니다.",
             actionBadge: "헤더 검증",
-            observe: "선택한 사용자 세션에 맞춰 session-token 및 user-role 쿠키 값이 실시간 갱신됨",
-            observeAt: "playground",
+            observe: "session-token은 httpOnly라서 document.cookie에 나타나지 않고, user-role만 노출됨",
+            observeAt: "verification",
           },
         ]}
       />
-      <DemoPlaygroundCard title={"cookies().get() 읽기 & cookies().set() 세션 쿠키 발급 실습"}>
-        <CookiesSessionDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <CookiesSessionDemo initialState={initialState} />
     </DemoContainer>
   )
 }

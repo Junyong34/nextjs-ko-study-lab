@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { RotateCw, ExternalLink } from 'lucide-react'
 import { useDemoResizeBridge } from './useDemoResizeBridge'
 
@@ -83,11 +83,24 @@ export function DemoIframe({
   const style = VARIANT[variant]
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const height = useDemoResizeBridge(iframeRef, { initialHeight, minHeight })
+  const { height, hasContentSignal, resetContentSignal } = useDemoResizeBridge(iframeRef, {
+    initialHeight,
+    minHeight,
+  })
+
+  useEffect(() => {
+    // 스트리밍 SSR 데모는 네이티브 onLoad가 모든 Suspense 청크가 끝까지 도착해야 발생해서
+    // 그것만 기다리면 진행형 렌더링이 오버레이 뒤에 다 가려진다. 데모가 살아있다는 첫 신호가
+    // 오면 그만큼 일찍 오버레이를 걷어 실제 스트리밍 과정이 보이게 한다.
+    if (hasContentSignal) {
+      setIsLoading(false)
+    }
+  }, [hasContentSignal])
 
   const handleReload = () => {
     if (!iframeRef.current) return
     setIsLoading(true)
+    resetContentSignal()
     try {
       iframeRef.current.contentWindow?.location.reload()
     } catch {

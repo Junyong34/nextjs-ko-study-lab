@@ -3,7 +3,7 @@ import type { Product } from '../types'
 import { MountNotifier } from './MountNotifier'
 
 async function getRecommendedProducts(): Promise<Product[]> {
-  await new Promise((resolve) => setTimeout(resolve, 600))
+  await new Promise((resolve) => setTimeout(resolve, 1500))
   return [
     { id: 'rec-1', name: '알루미늄 팜레스트 손목 받침대', price: 29000, category: '액세서리' },
     { id: 'rec-2', name: 'USB-C 코일형 항공 케이블', price: 35000, category: '케이블' },
@@ -22,7 +22,7 @@ export async function RecommendedProducts({ children }: { children?: React.React
           함께 구매하면 좋은 추천 상품 (외측 스트리밍 청크)
         </h4>
         <span className="rounded bg-blue-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-blue-800 dark:bg-blue-950 dark:text-blue-300">
-          600ms 청크 (1단계)
+          1500ms 청크 (1단계)
         </span>
       </div>
 

@@ -18,12 +18,12 @@ describe('Tier 1: Feature 13 - Demo Index Pure State & Discovery UX', () => {
   const manifestRaw = fs.readFileSync(path.join(DOCS_ROOT, 'docs-manifest.json'), 'utf-8')
   const docsManifest = JSON.parse(manifestRaw)
 
-  it('13.1 should return all 241 source-ordered demos on page 1 with 24 items for empty query', () => {
+  it('13.1 should return all 240 source-ordered demos on page 1 with 24 items for empty query', () => {
     const query = parseDemoIndexQuery({})
     const vm = createDemoIndexViewModel(demos, docsManifest, query)
 
-    assert.strictEqual(vm.totalCount, 241, 'Total demo count must be exactly 241')
-    assert.strictEqual(vm.totalPages, 11, '241 items at 24/page should yield 11 pages (ceil(241/24))')
+    assert.strictEqual(vm.totalCount, 240, 'Total demo count must be exactly 240')
+    assert.strictEqual(vm.totalPages, 10, '240 items at 24/page should yield 10 pages (ceil(240/24))')
     assert.strictEqual(vm.currentPage, 1, 'Default page must be 1')
     assert.strictEqual(vm.items.length, 24, 'First page must have exactly 24 items')
     assert.strictEqual(vm.pageSize, DEMO_INDEX_PAGE_SIZE)
@@ -33,7 +33,7 @@ describe('Tier 1: Feature 13 - Demo Index Pure State & Discovery UX', () => {
     assert.strictEqual(vm.items[0].title, demos[0].title)
   })
 
-  it('13.2 should correctly categorize 100% of 241 demos into 4 major categories without orphaned entries', () => {
+  it('13.2 should correctly categorize 100% of 240 demos into 4 major categories without orphaned entries', () => {
     const counts: Record<string, number> = {
       'Getting Started': 0,
       'Guides': 0,
@@ -48,12 +48,12 @@ describe('Tier 1: Feature 13 - Demo Index Pure State & Discovery UX', () => {
 
     assert.strictEqual(counts['Getting Started'], 25, 'Getting Started must have 25 demos')
     assert.strictEqual(counts['Guides'], 77, 'Guides must have 77 demos')
-    assert.strictEqual(counts['API Reference'], 135, 'API Reference must have 135 demos')
+    assert.strictEqual(counts['API Reference'], 134, 'API Reference must have 134 demos')
     assert.strictEqual(counts['Architecture'], 4, 'Architecture must have 4 demos')
     assert.strictEqual(
       counts['Getting Started'] + counts['Guides'] + counts['API Reference'] + counts['Architecture'],
-      241,
-      'Total categorized demos must equal 241'
+      240,
+      'Total categorized demos must equal 240'
     )
   })
 
@@ -61,7 +61,7 @@ describe('Tier 1: Feature 13 - Demo Index Pure State & Discovery UX', () => {
     const categories = [
       { name: 'Getting Started', count: 25, pages: 2 },
       { name: 'Guides', count: 77, pages: 4 },
-      { name: 'API Reference', count: 135, pages: 6 },
+      { name: 'API Reference', count: 134, pages: 6 },
       { name: 'Architecture', count: 4, pages: 1 },
     ] as const
 

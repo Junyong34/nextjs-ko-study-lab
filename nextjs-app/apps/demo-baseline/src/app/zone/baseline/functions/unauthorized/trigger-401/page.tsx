@@ -7,40 +7,44 @@ import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { UnauthorizedTriggerDemo } from './components/UnauthorizedTriggerDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+import { getCurrentSession } from './actions'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const currentSession = await getCurrentSession()
+
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="unauthorized() 401 인증 필요 트리거"
-        concept="Next.js 15.1+ unauthorized() 함수를 호출하여 비로그인 사용자의 보호된 라우트 접근을 감지하고 HTTP 401 Unauthorized 상태와 unauthorized.tsx UI를 렌더링합니다."
+        concept="Next.js experimental unauthorized() 함수를 서버 컴포넌트에서 호출하면 미인증 방문자의 마이페이지 주문 내역 접근을 실제로 차단하고, HTTP 401 상태와 unauthorized.tsx UI를 렌더링합니다."
         steps={[
           {
             step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-            description: "보호된 주문 상세 리소스를 선택합니다.",
-            actionBadge: "리소스 선택",
+            title: '[익명 방문자 (ANONYMOUS)] 또는 [로그인 회원 (AUTHENTICATED)] 선택',
+            description: '실제 서버 세션 쿠키를 전환합니다. 페이지 로딩 시 초기값은 ANONYMOUS입니다.',
+            actionBadge: '세션 선택',
           },
           {
             step: 2,
-            title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "세션 없는 상태에서 보호된 서버 컴포넌트에 접근하여 unauthorized()를 트리거합니다.",
-            actionBadge: "unauthorized 실행",
+            title: '[마이페이지 주문 내역 접근 시도 →] 클릭',
+            description: '/mypage/orders 서브 라우트로 실제 이동합니다. 서버 컴포넌트가 쿠키를 읽어 인증 여부를 검사합니다.',
+            actionBadge: '실제 라우트 이동',
           },
           {
             step: 3,
-            title: "HTTP 401 응답 및 unauthorized.tsx 로그인 안내 관찰",
-            description: "HTTP 401 에러 상태와 로그인 요구 unauthorized.tsx 화면이 표시되는지 확인합니다.",
-            actionBadge: "401 검증",
-            observe: "unauthorized() 호출에 따라 HTTP 401 상태 코드 및 인증 필요 안내가 실시간 로그에 반영됨",
-            observeAt: "verification",
+            title: 'HTTP 401 Unauthorized 및 unauthorized.tsx UI 관찰',
+            description:
+              'ANONYMOUS 세션으로 접근하면 unauthorized()가 호출되어 401 상태와 unauthorized.tsx 화면이 렌더링됩니다. 하단 패널이 실제 응답 상태 코드를 다시 측정해 보여줍니다.',
+            actionBadge: '결과 검증',
+            observe: 'ANONYMOUS 접근 시 실제 401, AUTHENTICATED 접근 시 실제 200 — 이동한 페이지 하단의 실측 상태 코드 패널에서 확인',
+            observeAt: 'playground',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"unauthorized() 401 인증 필요 트리거 실습"}>
-        <UnauthorizedTriggerDemo />
+      <DemoPlaygroundCard title="unauthorized() 401 인증 필요 트리거 실습">
+        <UnauthorizedTriggerDemo currentSession={currentSession} />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <VerificationFooter currentSession={currentSession} />
     </DemoContainer>
   )
 }

@@ -1,6 +1,6 @@
 # 01. 화면 구성과 UI 설계
 
-2026-09-05 소스 기준의 화면 구성과 기존 설계 중 남은 항목을 구분한다. 시스템 경계는 [ARCHITECTURE](../ARCHITECTURE.md), 디자인 방향은 [DESIGN](../../DESIGN.md), 공개 상태 규칙은 [09](./09-demo-status-and-stepwise-release-guide.md)가 담당한다.
+2026-09-05 소스 기준의 화면 구성과 기존 설계 중 남은 항목을 구분한다. 현재 등록 데모는 240개다. 시스템 경계는 [ARCHITECTURE](../ARCHITECTURE.md), 디자인 방향은 [DESIGN](../../DESIGN.md), 공개 상태 규칙은 [09](./09-demo-status-and-stepwise-release-guide.md)가 담당한다.
 
 ## 1. 화면 골격
 

@@ -6,14 +6,25 @@ interface VerificationFooterProps {
   httpStatus?: number | null
   verified?: boolean
   eventName?: string
+  action?: 'valid' | 'tampered'
+}
+
+const EXPECTED_STATUS_BY_ACTION: Record<'valid' | 'tampered', number> = {
+  valid: 200,
+  tampered: 401,
 }
 
 export function VerificationFooter({
   httpStatus,
   verified,
   eventName,
+  action,
 }: VerificationFooterProps) {
-  const isMatched = Boolean(httpStatus !== null && httpStatus !== undefined)
+  // action(클릭한 버튼)별 기대 상태코드와 실제 응답 상태코드가 정확히 같을 때만 "일치"로 표시한다.
+  // 단순히 "응답이 왔는가"만 보면 500 에러 같은 예기치 못한 응답도 통과로 오판된다.
+  const isMatched = Boolean(
+    action && httpStatus !== null && httpStatus !== undefined && httpStatus === EXPECTED_STATUS_BY_ACTION[action]
+  )
 
   return (
     <div className="space-y-4">
@@ -21,9 +32,9 @@ export function VerificationFooter({
         title="Webhook 서명 검증 핸들러 (route.ts) 검증 결과"
         expected="• 정상 서명 전송 시 HTTP 200 OK 및 verified: true 응답\n• 변조 서명 전송 시 HTTP 401 Unauthorized 및 verified: false 응답"
         actual={
-          httpStatus
-            ? `• [HTTP ${httpStatus}] ${verified ? '서명 검증 통과 (verified: true)' : '서명 위조 감지 및 차단 (verified: false)'} (${eventName || 'event'})\n• crypto.timingSafeEqual 안전 검증 완료`
-            : '• 웹훅 시뮬레이션 버튼 클릭 대기 중...'
+          httpStatus && action
+            ? `• [HTTP ${httpStatus}] ${verified ? '서명 검증 통과 (verified: true)' : '서명 위조 감지 및 차단 (verified: false)'} (${eventName || 'event'})\n• 기대 상태코드(${EXPECTED_STATUS_BY_ACTION[action]})와 실제 응답: ${isMatched ? '일치' : '불일치'}`
+            : '• 웹훅 전송 버튼 클릭 대기 중...'
         }
         isMatched={isMatched}
         description="Next.js App Router route.ts에서 node:crypto 모듈을 활용하여 Webhook HMAC-SHA256 암호화 서명을 검증합니다."
@@ -67,6 +78,8 @@ export function VerificationFooter({
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>request.json() 대신 request.text() 사용</strong>: <code>request.json()</code>으로 파싱한 객체를 다시 <code>JSON.stringify()</code>하면 공백이나 키 순서가 달라져 HMAC 서명이 불일치하게 되므로, 반드시 <code>await request.text()</code>로 원본 텍스트를 읽어야 합니다.</li>
               <li><strong>Request 본문 다중 소비 불가</strong>: <code>request.text()</code>를 호출하면 스트림이 소비되므로, 이후 JSON 파싱이 필요하면 텍스트를 <code>JSON.parse()</code>하여 재사용해야 합니다.</li>
+              <li><strong>timingSafeEqual 길이 검사 선행</strong>: <code>crypto.timingSafeEqual</code>은 두 버퍼의 길이가 다르면 예외를 던집니다. 위조된 서명 문자열의 길이가 다를 수 있으므로, 비교 전에 길이를 먼저 확인해 즉시 401을 반환해야 500 에러로 새지 않습니다.</li>
+              <li><strong>시크릿 키는 서버 전용</strong>: 이 데모는 브라우저에서 서명 생성 과정을 직접 관찰할 수 있도록 클라이언트에도 시크릿을 두었습니다. 실제 서비스에서는 시크릿을 PG사와 우리 서버 사이에만 공유하고 브라우저에는 절대 내려주지 않습니다.</li>
             </ul>
           </div>
         </div>

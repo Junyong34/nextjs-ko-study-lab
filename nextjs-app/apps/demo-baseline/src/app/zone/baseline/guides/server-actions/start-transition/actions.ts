@@ -17,8 +17,8 @@ async function sleep(ms: number) {
 
 export async function filterCategoryProductsAction(category: string): Promise<ServerFilterResult> {
   const start = Date.now()
-  // 의도적인 600ms 서버 네트워크/DB 지연
-  await sleep(600)
+  // 의도적인 4000ms 서버 네트워크/DB 지연 — 논블로킹 입력을 실제로 타이핑해 볼 여유를 준다
+  await sleep(4000)
 
   const filtered = category === '전체'
     ? ALL_PRODUCTS

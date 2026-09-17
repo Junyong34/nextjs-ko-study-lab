@@ -85,6 +85,8 @@ export function ShareButton({ title, url, text }: ShareButtonProps) {
       aria-label={getAriaLabel()}
       aria-live="polite"
       disabled={status === 'sharing'}
+      data-analytics="share_click"
+      data-share-url={url}
       onClick={handleShare}
       className="cursor-pointer transition hover:bg-zinc-50 dark:hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
     >

@@ -2,7 +2,7 @@
   title: "Server Actions 기본 폼 처리 및 상태 변경"
   doc: 2-guides/server-actions.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: caching/basic
   title: "use cache 기본 동작 및 revalidateTag 무효화"
@@ -158,74 +158,74 @@
   title: "중첩 Suspense 점진적 청크 스트리밍"
   doc: 2-guides/streaming.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/server-actions-advanced
   title: "Server Action 폼 검증과 useActionState 할인 상태"
   doc: 2-guides/server-actions.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/swr-polling
   title: "SWR 실시간 배송 조회 자동 폴링 & mutate() 갱신"
   doc: 2-guides/2.15-client-side-data-fetching/swr.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/lazy-loading-chart
   title: "next/dynamic 지연 로딩 & 클라이언트 번들 최적화"
   doc: 2-guides/lazy-loading.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/auth-session
   title: "Next.js 인증 & 세션 기반 역할 분기 (RBAC)"
   doc: 2-guides/authentication.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/parallel-routes
-  title: "Parallel Routes (@slots) 다중 슬롯 병렬 렌더링"
+  title: "병렬 라우트의 이동과 새로고침 비교"
   doc: 3-api-reference/3.1-file-conventions/parallel-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/intercepting-routes
   title: "Intercepting Routes ((..)segment) 라우트 인터셉트"
   doc: 3-api-reference/3.1-file-conventions/intercepting-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/form-component
-  title: "Next.js 내장 <Form> 컴포넌트와 GET 검색 동기화"
+  title: "Form으로 검색하고 서버 결과 확인하기"
   doc: 3-api-reference/3.2-components/form.md
   zone: baseline
-  status: stub
+  status: done
 
 
 - url: architecture/fast-refresh-boundary
   title: "React Fast Refresh & 핫 모듈 리로딩 (HMR) 상태 보존"
   doc: 5-architecture/fast-refresh.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/rendering-philosophy/server-vs-client
   title: "서버 렌더링 vs 클라이언트 렌더링 수명주기 대조"
   doc: 2-guides/rendering-philosophy.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/server-and-client-boundary/children-slot
   title: "Server and Client Component 합성과 children 슬롯 주입"
   doc: 2-guides/server-and-client-boundary.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/how-revalidation-works/swr-flow
   title: "Stale-While-Revalidate 백그라운드 갱신 흐름"
   doc: 2-guides/how-revalidation-works.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/caching-legacy/fetch-cache
   title: "Next.js 14 레거시 fetch cache vs Route Segment revalidate"
@@ -237,25 +237,25 @@
   title: "Suspense 스트리밍과 로딩 청크 순차 처리"
   doc: 2-guides/streaming.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/isr/time-isr-60s
   title: "60초 주기 상품 상세 증분 정적 재생성 (ISR)"
   doc: 2-guides/incremental-static-regeneration.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/isr-cache-components/cache-life-hours
   title: "Next.js 16 cacheLife('hours') 프로필 기반 수명 제어"
   doc: 2-guides/incremental-static-regeneration-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/migrating-cache-components/unstable-to-use-cache
   title: "unstable_cache에서 Next.js 16 use cache로 마이그레이션"
   doc: 2-guides/migrating-to-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/adopting-partial-prefetching/hover-shell
   title: "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시)"
@@ -285,7 +285,7 @@
   title: "startTransition을 통한 프로그래밍 방식 Server Action 호출"
   doc: 2-guides/server-actions.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/swr/mutation-optimistic
   title: "SWR mutate()를 활용한 낙관적 장바구니 갱신"
@@ -303,19 +303,19 @@
   title: "Server Action 내 redirect()를 통한 주문 완료 화면 이동"
   doc: 2-guides/redirecting.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/draft-mode/preview-toggle
   title: "미공개 특가 상품 Draft Mode 토글 및 Bypass 쿠키"
   doc: 2-guides/draft-mode.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/prefetching/viewport-vs-hover
   title: "뷰포트 진입 시 자동 prefetch와 prefetch={false} 비교"
   doc: 2-guides/prefetching.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/layout/root-and-nested
   title: "루트 레이아웃(Root Layout) 및 카테고리 중첩 레이아웃"
@@ -327,13 +327,13 @@
   title: "loading.tsx 스켈레톤 UI 자동 래핑 및 Suspense"
   doc: 3-api-reference/3.1-file-conventions/loading.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/not-found/missing-product-404
   title: "not-found.tsx 및 notFound() 프로그래밍 404 트리거"
   doc: 3-api-reference/3.1-file-conventions/not-found.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/image/responsive-sizes
   title: "next/image responsive fill & sizes 속성 반응형 로딩"
@@ -345,19 +345,19 @@
   title: "Hydration 경계와 번들 격리"
   doc: 2-guides/rendering-philosophy.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/server-and-client-boundary/props-serialization
   title: "Props 직렬화 경계 및 안전한 전달"
   doc: 2-guides/server-and-client-boundary.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/how-revalidation-works/ondemand-sync
   title: "온디맨드 캐시 무효화와 상태 갱신"
   doc: 2-guides/how-revalidation-works.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/caching-legacy/segment-revalidate
   title: "Route Segment revalidate 설정"
@@ -369,19 +369,19 @@
   title: "revalidatePath에 따른 라우트 범위별 무효화"
   doc: 2-guides/incremental-static-regeneration.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/isr-cache-components/precision-tag-purge
   title: "cacheTag를 이용한 태그 기반 무효화"
   doc: 2-guides/incremental-static-regeneration-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/migrating-cache-components/cache-key-compare
   title: "캐시 키 생성 방식 비교 (수동 vs 자동)"
   doc: 2-guides/migrating-to-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/auth-cache-components/private-cache-user
   title: "개인화 사용자별 Private 캐시 격리"
@@ -405,7 +405,7 @@
   title: "Bypass 쿠키 검증 및 CMS 초안 렌더링"
   doc: 2-guides/draft-mode.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/prefetching/custom-prefetch-false
   title: "prefetch={false}로 prefetch 비활성화"
@@ -435,7 +435,7 @@
   title: "결제 모달 next/dynamic 지연 로드"
   doc: 2-guides/lazy-loading.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/preserving-ui-state/drawer-open
   title: "카테고리 전환 시 장바구니 Drawer 열림 유지"
@@ -477,13 +477,13 @@
   title: "Proxy 기반 라우트 보호 가드"
   doc: 2-guides/authentication.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/authentication/rsc-user-profile
   title: "Server Component 세션 프로필 렌더링"
   doc: 2-guides/authentication.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/data-security/server-only-guard
   title: "server-only 패키지를 통한 클라이언트 번들 유출 차단"
@@ -687,13 +687,13 @@
   title: "결제 세그먼트 에러 캡처 (error.tsx)"
   doc: 3-api-reference/3.1-file-conventions/error.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/error/reset-recovery
   title: "error.tsx reset() 컴포넌트 재시도 복구"
   doc: 3-api-reference/3.1-file-conventions/error.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/not-found/programmatic-not-found
   title: "notFound() 프로그래밍 트리거"
@@ -729,13 +729,13 @@
   title: "REST GET/POST 주문 API (route.ts)"
   doc: 3-api-reference/3.1-file-conventions/route.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/route/webhook-signature
   title: "Webhook 서명 검증 핸들러 (route.ts)"
   doc: 3-api-reference/3.1-file-conventions/route.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/route/sse-stock-stream
   title: "SSE 실시간 재고 스트리밍 (route.ts)"
@@ -747,7 +747,7 @@
   title: "URL 영향 없는 라우트 그룹 분리 (route-groups)"
   doc: 3-api-reference/3.1-file-conventions/route-groups.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/route-groups/shop-vs-admin-roots
   title: "상점용 vs 관리자용 다중 루트 레이아웃"
@@ -759,13 +759,13 @@
   title: "[id] 단일 다이나믹 세그먼트"
   doc: 3-api-reference/3.1-file-conventions/dynamic-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/dynamic-segments/catch-all-slug
   title: "[...slug] Catch-all 다이나믹 세그먼트"
   doc: 3-api-reference/3.1-file-conventions/dynamic-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/dynamic-segments/optional-catch-all
   title: "[[...slug]] Optional Catch-all 다이나믹 세그먼트"
@@ -819,7 +819,7 @@
   title: "비관리자 권한 차단 403 화면 (forbidden.tsx)"
   doc: 3-api-reference/3.1-file-conventions/forbidden.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/unauthorized/anonymous-401
   title: "미인증 세션 401 로그인 요구 화면 (unauthorized.tsx)"
@@ -891,7 +891,7 @@
   title: "priority 속성을 통한 LCP 이미지 사전 로드"
   doc: 3-api-reference/3.2-components/image.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/link/soft-navigation-scroll
   title: "<Link> 소프트 내비게이션 및 scroll 제어"
@@ -933,31 +933,31 @@
   title: "useRouter push, replace, back 프로그래밍 방식 내비게이션"
   doc: 3-api-reference/3.3-functions/use-router.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-router/refresh-server-sync
   title: "서버 데이터 갱신 상태 표시"
   doc: 3-api-reference/3.3-functions/use-router.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-pathname/active-link
   title: "usePathname() 기반 GNB 활성 메뉴 하이라이트"
   doc: 3-api-reference/3.3-functions/use-pathname.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-params/client-id
   title: "useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출"
   doc: 3-api-reference/3.3-functions/use-params.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-search-params/filter-parsing
   title: "useSearchParams() URL 쿼리 파싱 및 필터링"
   doc: 3-api-reference/3.3-functions/use-search-params.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-search-params/debounce-transition
   title: "useTransition 연동 디바운스 검색 쿼리 동기화"
@@ -969,13 +969,13 @@
   title: "useSelectedLayoutSegment() 하위 탭 인디케이터"
   doc: 3-api-reference/3.3-functions/use-selected-layout-segment.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-selected-layout-segments/breadcrumb
   title: "useSelectedLayoutSegments() 계층형 브레드크럼 생성"
   doc: 3-api-reference/3.3-functions/use-selected-layout-segments.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/cache-life/preset-profiles
   title: "cacheLife 내장 프리셋 프로필 (seconds, hours, max)"
@@ -1059,7 +1059,7 @@
   title: "cookies().get() 읽기 & cookies().set() 세션 쿠키 발급"
   doc: 3-api-reference/3.3-functions/cookies.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/cookies/delete-logout
   title: "cookies().delete() 세션 파기 및 로그아웃"
@@ -1071,13 +1071,13 @@
   title: "headers().get('user-agent') 기기 식별 및 최적화"
   doc: 3-api-reference/3.3-functions/headers.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/headers/custom-auth-token
   title: "headers().get('authorization') 커스텀 인증 토큰 검증"
   doc: 3-api-reference/3.3-functions/headers.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/draft-mode/enable-preview
   title: "draftMode().enable() 초안 모드 활성화"
@@ -1107,19 +1107,19 @@
   title: "notFound() 404 트리거 및 not-found.tsx 렌더"
   doc: 3-api-reference/3.3-functions/not-found.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/forbidden/trigger-403
   title: "forbidden() 403 인가 거부 트리거"
   doc: 3-api-reference/3.3-functions/forbidden.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/unauthorized/trigger-401
   title: "unauthorized() 401 인증 필요 트리거"
   doc: 3-api-reference/3.3-functions/unauthorized.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/redirect/action-303
   title: "Server Action 내 redirect() (303 See Other)"
@@ -1137,25 +1137,25 @@
   title: "permanentRedirect() 영구 URL 변경 (308 Permanent)"
   doc: 3-api-reference/3.3-functions/permanentRedirect.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/next-request/geo-ip-parsing
   title: "NextRequest Geo 위치 및 클라이언트 IP 파싱"
   doc: 3-api-reference/3.3-functions/next-request.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/next-response/json-builder
   title: "NextResponse.json() 응답 빌더 및 상태 코드 주입"
   doc: 3-api-reference/3.3-functions/next-response.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/next-response/rewrite-virtual
   title: "NextResponse.rewrite() 가상 라우팅 중계"
   doc: 3-api-reference/3.3-functions/next-response.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/image-response/og-badge
   title: "ImageResponse를 활용한 실시간 할인 뱃지 OG 이미지"
@@ -1173,7 +1173,7 @@
   title: "generateMetadata 동적 SEO 타이틀 및 메타태그 생성"
   doc: 3-api-reference/3.3-functions/generate-metadata.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/generate-metadata/parent-inheritance
   title: "부모 metadata 상속 및 canonical URL 오버라이드"
@@ -1185,19 +1185,19 @@
   title: "generateStaticParams 인기 상품 사전 SSG 빌드 생성"
   doc: 3-api-reference/3.3-functions/generate-static-params.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/generate-static-params/multiple-segments
   title: "generateStaticParams [category]/[id] 다중 세그먼트 조합"
   doc: 3-api-reference/3.3-functions/generate-static-params.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/connection/request-signal
   title: "connection() 비동기 연결 준비 대기"
   doc: 3-api-reference/3.3-functions/connection.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/taint-unique-value/block-secret
   title: "experimental_taintUniqueValue 원시 시크릿 유출 차단"
@@ -1227,7 +1227,7 @@
   title: "'use client' 클라이언트 경계 선언 및 이벤트 바인딩"
   doc: 3-api-reference/3.4-directives/use-client.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: directives/use-client/window-storage-access
   title: "'use client' 내부 브라우저 window.localStorage 접근"
@@ -1416,31 +1416,25 @@
   status: stub
 
 - url: architecture/accessibility/form-aria-support
-  title: "결제/주문 폼 WAI-ARIA 속성 및 스크린 리더 지원"
+  title: "입력 오류와 ARIA 설명 연결하기"
   doc: 5-architecture/accessibility.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: architecture/accessibility/modal-focus-trap
   title: "모달 다이얼로그 키보드 포커스 트랩(Focus Trap) 및 Esc 닫기"
   doc: 5-architecture/accessibility.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: architecture/compiler-optimization/react-compiler
   title: "React Compiler 자동 메모이제이션 최적화"
   doc: 5-architecture/nextjs-compiler.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: architecture/server-action-security/csrf-protection
-  title: "Server Actions 자동 CSRF Origin 헤더 검증"
+  title: "Server Action 정상 요청과 로컬 CSRF 차단 확인"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md
   zone: baseline
-  status: stub
-
-- url: architecture/turbopack/incremental-harness
-  title: "Turbopack 증분 빌드 및 핫 모듈 리로딩 가속"
-  doc: 3-api-reference/3.5-config/3.5.1-next-config-js/turbopack.md
-  zone: baseline
-  status: stub
+  status: done

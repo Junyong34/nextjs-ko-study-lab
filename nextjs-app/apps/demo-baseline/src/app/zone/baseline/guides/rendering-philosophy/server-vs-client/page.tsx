@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/rendering-philosophy/server-vs-client')
+export const dynamic = 'force-dynamic'
 
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { ServerInfoPanel } from './components/ServerInfoPanel'
 import { ServerVsClientDemo } from './components/ServerVsClientDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
@@ -18,7 +19,7 @@ export default function DemoPage() {
           {
             step: 1,
             title: "RSC 서버 렌더링 상품 정보 영역 확인",
-            description: "클라이언트 JS 번들에 포함되지 않고 서버에서 정적으로 생성된 HTML 블록을 확인합니다.",
+            description: "클라이언트 JS 번들에 포함되지 않고 요청마다 서버에서 새로 렌더링되는 HTML 블록을 확인합니다.",
             actionBadge: "RSC 영역 확인",
           },
           {
@@ -32,15 +33,16 @@ export default function DemoPage() {
             title: "서버 컴포넌트와 클라이언트 컴포넌트 경계 분리 관찰",
             description: "클라이언트 인터랙션이 발생해도 상위 RSC 영역이 재실행되지 않고 번들이 격리되는 구조를 확인합니다.",
             actionBadge: "경계 검증",
-            observe: "RSC 정적 영역과 RCC 상호작용 컴포넌트의 번들 사이즈(0 KB vs Hydrated) 격리 상태 관찰",
+            observe: "RSC 서버 렌더링 영역과 RCC 상호작용 컴포넌트의 번들 사이즈(0 KB vs Hydrated) 격리 상태 관찰",
             observeAt: "playground",
           },
         ]}
       />
       <DemoPlaygroundCard title={"서버 렌더링 vs 클라이언트 렌더링 수명주기 대조 실습"}>
-        <ServerVsClientDemo />
+        <ServerVsClientDemo>
+          <ServerInfoPanel />
+        </ServerVsClientDemo>
       </DemoPlaygroundCard>
-      <VerificationFooter />
     </DemoContainer>
   )
 }

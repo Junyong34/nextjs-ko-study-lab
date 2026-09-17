@@ -3,38 +3,32 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'directives/use-client/boundary-declaration')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { DirectiveUseClientDemo } from './components/DirectiveUseClientDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import Link from 'next/link'
 
-export default function DemoPage() {
+export default function BoundaryHubPage() {
   return (
-    <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"'use client' 클라이언트 컴포넌트 경계 선언"}
-        concept={"파일 최상단에 'use client'를 선언하면 해당 모듈과 모든 하위 임포트가 브라우저 번들로 분리되며 React useState, useEffect, 브라우저 이벤트 리스너를 사용할 수 있습니다."}
-        steps={[
-          {
-                    "step": 1,
-                    "title": "'use client' 지시어 선언 위치 확인 및 클라이언트 상호작용 훅 사용 점검",
-                    "description": "모듈의 맨 첫 줄에 'use client'가 위치하여 서버 컴포넌트와 클라이언트 컴포넌트의 경계를 정의하는지 확인합니다. useState, onClick 핸들러 등 브라우저 런타임 전용 기능이 에러 없이 동작하는지 점검합니다.",
-                    "actionBadge": "지시어 위치"
-          },
-          {
-                    "step": 2,
-                    "title": "서버/클라이언트 경계 번들 분리 검증",
-                    "description": "서버 전용 비밀키나 무거운 백엔드 모듈이 클라이언트 번들로 유출되지 않고 격리되는지 검증합니다.",
-                    "actionBadge": "번들 격리",
-                    "observe": "3단 검증 패널에서 'use client' 경계 선언에 따른 클라이언트 번들 분리 사양 확인",
-                    "observeAt": "verification"
-          }
-]}
-        />
-      <DemoPlaygroundCard title={"'use client' 클라이언트 경계 선언 및 이벤트 바인딩 실습"}>
-        <DirectiveUseClientDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
-    </DemoContainer>
+    <div className="space-y-3 rounded-md border border-zinc-200 bg-white p-4 text-xs dark:border-zinc-800 dark:bg-zinc-950">
+      <p className="text-zinc-600 dark:text-zinc-400">
+        이 화면(<code>page.tsx</code>)은 파일 최상단에 <code>&apos;use client&apos;</code>가 없는 실제{' '}
+        <strong>Server Component</strong>입니다. 아래 두 링크를 눌러 실제 라우트를 이동하며, 같은 형태의{' '}
+        <code>onClick</code> 핸들러가 어느 쪽 파일에서만 동작하는지 직접 비교하세요.
+      </p>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <Link
+          href="/zone/baseline/directives/use-client/boundary-declaration/server-attempt"
+          className="block rounded-lg border border-rose-300 bg-rose-50/60 p-3 transition hover:bg-rose-100/70 dark:border-rose-900/60 dark:bg-rose-950/20"
+        >
+          <div className="font-bold text-rose-800 dark:text-rose-300">① 서버 컴포넌트에서 onClick 시도 →</div>
+          <div className="mt-1 text-zinc-600 dark:text-zinc-400">server-attempt/page.tsx — &apos;use client&apos; 없음</div>
+        </Link>
+        <Link
+          href="/zone/baseline/directives/use-client/boundary-declaration/client-attempt"
+          className="block rounded-lg border border-emerald-300 bg-emerald-50/60 p-3 transition hover:bg-emerald-100/70 dark:border-emerald-900/60 dark:bg-emerald-950/20"
+        >
+          <div className="font-bold text-emerald-800 dark:text-emerald-300">② 클라이언트 컴포넌트에서 onClick 시도 →</div>
+          <div className="mt-1 text-zinc-600 dark:text-zinc-400">client-attempt/page.tsx — &apos;use client&apos; 있음</div>
+        </Link>
+      </div>
+    </div>
   )
 }

@@ -14,11 +14,11 @@ describe('Tier 1: Feature 17 - Demo Index Design Doc Alignment & Final Contract 
   const demos = loadDemosYaml()
   const designDocPath = path.join(NEXTJS_APP_ROOT, 'docs/01-ui-and-screen-design.md')
 
-  it('17.1 should verify 01-ui-and-screen-design.md reflects the 241 demos discovery UX contract', () => {
+  it('17.1 should verify 01-ui-and-screen-design.md reflects the 240 demos discovery UX contract', () => {
     assert.ok(fs.existsSync(designDocPath), '01-ui-and-screen-design.md must exist')
     const docContent = fs.readFileSync(designDocPath, 'utf-8')
 
-    assert.match(docContent, /241개/, 'Doc must mention 241 demos')
+    assert.match(docContent, /240개/, 'Doc must mention 240 demos')
     assert.match(docContent, /3\/2\/1\s*반응형/, 'Doc must mention 3/2/1 responsive grid')
     assert.match(docContent, /24개\s*고정/, 'Doc must state 24 items per page fixed')
     assert.match(docContent, /study_demo_list_context/, 'Doc must reference study_demo_list_context storage key')
@@ -38,13 +38,13 @@ describe('Tier 1: Feature 17 - Demo Index Design Doc Alignment & Final Contract 
     assert.ok(DEMO_LIST_STORAGE_KEY.startsWith('study_'))
   })
 
-  it('17.4 should verify all 241 demos are validly indexable with fixed page size 24', () => {
-    assert.strictEqual(demos.length, 241)
+  it('17.4 should verify all 240 demos are validly indexable with fixed page size 24', () => {
+    assert.strictEqual(demos.length, 240)
     assert.strictEqual(DEMO_INDEX_PAGE_SIZE, 24)
 
     const vm = createDemoIndexViewModel(demos, undefined, { q: '', category: 'All', page: 1 })
-    assert.strictEqual(vm.totalCount, 241)
-    assert.strictEqual(vm.totalPages, 11)
+    assert.strictEqual(vm.totalCount, 240)
+    assert.strictEqual(vm.totalPages, 10)
     assert.strictEqual(vm.items.length, 24)
   })
 

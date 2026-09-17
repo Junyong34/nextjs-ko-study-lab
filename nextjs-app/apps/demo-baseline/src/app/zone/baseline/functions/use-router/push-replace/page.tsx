@@ -5,42 +5,46 @@ export const metadata: Metadata = getDemoMetadata('baseline', 'functions/use-rou
 
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { NavigationClientDemo } from './components/NavigationClientDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { ProductOrderPlayground } from './components/ProductOrderPlayground'
+import { NavigationVerificationFooter } from './components/NavigationVerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="useRouter push, replace, back 프로그래밍 방식 내비게이션"
-        concept="useRouter() 훅의 router.push(), router.replace(), router.back() 메서드를 호출하여 히스토리 스택 조작 및 브라우저 URL 이동을 0ms 클라이언트 사이드로 제어합니다."
+        concept="useRouter()의 router.push()/router.replace()/router.back()으로 브라우저 히스토리 스택과 URL을 실제로 조작합니다. push는 새 엔트리를 추가하고, replace는 현재 엔트리를 교체하며, back은 직전 엔트리로 돌아갑니다."
         steps={[
           {
             step: 1,
-            title: "[1. router.push(상세)] 클릭",
-            description: "새로운 라우트 엔트리를 브라우저 히스토리 스택에 push 방식으로 추가하며 이동합니다.",
-            actionBadge: "push 이동",
+            title: '[주문하기 → router.push(주문 완료)] 클릭',
+            description: '상품 상세에서 주문 완료 화면으로 실제로 이동합니다. push는 히스토리에 새 엔트리를 추가합니다.',
+            actionBadge: 'push 이동',
+            observe: 'URL이 /orders/complete로 바뀌고, window.history.length가 1 늘어남',
+            observeAt: 'verification',
           },
           {
             step: 2,
-            title: "[2. router.replace(결제완료)] 클릭",
-            description: "결제 완료 후 뒤로가기를 방지하기 위해 현재 히스토리 스택 엔트리를 replace로 즉시 교체합니다.",
-            actionBadge: "replace 교체",
+            title: '[계속 쇼핑하기 → router.replace()] 클릭',
+            description: '주문 완료 화면에서 상품 상세로 되돌아가며, 완료 화면 엔트리는 히스토리에서 지워집니다.',
+            actionBadge: 'replace 교체',
+            observe: '상품 상세로 돌아오지만 history.length는 늘지 않음(엔트리 추가 없음)',
+            observeAt: 'verification',
           },
           {
             step: 3,
-            title: "[3. router.back()] 실행 및 히스토리 스택 관찰",
-            description: "router.back() 호출 시 직전 페이지로 복귀하며 브라우저 히스토리 스택 변화를 확인합니다.",
-            actionBadge: "스택 검증",
-            observe: "이동 방식(push/replace/back)에 따라 활성 라우트 및 히스토리 스냅샷이 실시간 로그에 반영됨",
-            observeAt: "verification",
+            title: '[주문하기]로 다시 이동한 뒤 [이전 화면으로 → router.back()] 클릭',
+            description: 'router.back()이 히스토리 스택의 직전 라우트로 이동하는 것을 확인합니다.',
+            actionBadge: '스택 복귀',
+            observe: '상품 상세로 돌아오며 history.length도 늘지 않음(replace와 같은 신호, 원리는 다름)',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"useRouter push, replace, back 프로그래밍 방식 내비게이션 실습"}>
-        <NavigationClientDemo />
+      <DemoPlaygroundCard title="상품 상세 — 주문하기(router.push)">
+        <ProductOrderPlayground />
       </DemoPlaygroundCard>
-      <VerificationFooter />
+      <NavigationVerificationFooter variant="root" />
     </DemoContainer>
   )
 }

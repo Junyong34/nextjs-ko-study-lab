@@ -5,12 +5,14 @@ import { getAugmentedTree, getDemos, getManifest } from '@/lib/docs'
 import { AppFrame } from '@/components/layout/AppFrame'
 import { LearningProgressProvider } from '@/components/learning-progress/LearningProgressProvider'
 import { LearningProgressTrigger } from '@/components/learning-progress/LearningProgressTrigger'
+import { ShareClickTracker } from '@/components/analytics/ShareClickTracker'
 import { GithubStarProvider, GithubStarPrompt } from '@/components/github-star'
 import { createLearningInventory } from '@/lib/learning-progress/inventory'
 import type { LearningInventory } from '@/lib/learning-progress/types'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildWebsiteJsonLd } from '@/lib/seo/json-ld'
 import { siteConfig } from '@/lib/seo/config'
+import { isPublicIndexingAllowed } from '@/lib/seo/indexability'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -35,6 +37,7 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
+  ...(!isPublicIndexingAllowed() ? { robots: { index: false, follow: false } } : {}),
 }
 
 export default function RootLayout({
@@ -64,6 +67,7 @@ export default function RootLayout({
             <Footer />
             <LearningProgressTrigger />
             <GithubStarPrompt />
+            <ShareClickTracker />
           </GithubStarProvider>
         </LearningProgressProvider>
       </body>

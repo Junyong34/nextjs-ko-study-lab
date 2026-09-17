@@ -3,44 +3,16 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'functions/use-params/client-id')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { UseParamsClientDemo } from './components/UseParamsClientDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
-export default function DemoPage() {
+export default function ProductListPage() {
   return (
-    <DemoContainer className="space-y-6">
-            <DemoGuideCard
-        title="useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출"
-        concept="useParams() 훅으로 Client Component 안에서 다이나믹 라우트 세그먼트([category], [id])의 파라미터를 읽고 타입에 맞게 사용합니다."
-        steps={[
-          {
-            step: 1,
-            title: "[/electronics/keyboard-900] 버튼 클릭",
-            description: "카테고리와 상품 ID가 포함된 첫 번째 다이나믹 세그먼트 경로를 활성화합니다.",
-            actionBadge: "경로 선택",
-          },
-          {
-            step: 2,
-            title: "[/fashion/hoodie-102] 버튼으로 전환",
-            description: "두 번째 다이나믹 세그먼트 경로를 선택하여 useParams() 훅의 파라미터를 갱신합니다.",
-            actionBadge: "파라미터 갱신",
-          },
-          {
-            step: 3,
-            title: "useParams() 반환 객체(category / id) 관찰",
-            description: "useParams()가 추출한 category 및 id 문자열이 화면에 올바르게 추출되는지 확인합니다.",
-            actionBadge: "파라미터 검증",
-            observe: "useParams()로 추출된 category(\"electronics\"/\"fashion\")와 id가 화면에 일치함",
-            observeAt: "playground",
-          },
-        ]}
-      />
-      <DemoPlaygroundCard title={"useParams()를 이용한 Client Component 다이나믹 세그먼트 파라미터 추출 실습"}>
-        <UseParamsClientDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
-    </DemoContainer>
+    <div className="rounded border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/60">
+      <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+        상품 목록 (기본 경로 — /client-id)
+      </h3>
+      <p className="mt-1 text-[11px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+        위에서 상품 링크를 눌러 실제 [category]/[id] 다이나믹 세그먼트 라우트로 이동해 보세요.
+        이동한 페이지 안의 Client Component가 useParams()로 category/id 값을 직접 읽어옵니다.
+      </p>
+    </div>
   )
 }

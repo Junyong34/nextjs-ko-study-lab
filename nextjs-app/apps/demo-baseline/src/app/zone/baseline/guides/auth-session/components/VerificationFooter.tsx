@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 일반 회원과 관리자 계정 간의 세션 토글을 시뮬레이션하여, 관리자 전용 정산/통계 위젯 노출 여부와 비인가 사용자 접근 시의 즉각적인 권한 에러 처리 및 로그인 리다이렉트 흐름을 검증합니다.</p>
+                  <p>본 데모에서는 로그인 버튼 클릭 시 Server Action(<code>loginAction</code>)이 <code>cookies().set()</code>으로 실제 httpOnly 쿠키를 발급하고, 로그아웃 시 <code>cookies().delete()</code>로 그 쿠키를 삭제합니다. 세션이 클라이언트 메모리가 아니라 브라우저에 저장된 실제 쿠키이므로, 새로고침해도 로그인 상태가 그대로 유지되고 관리자/일반 회원 권한에 따라 다른 배지 UI가 표시됩니다.</p>
                 </div>
 
                 <div>

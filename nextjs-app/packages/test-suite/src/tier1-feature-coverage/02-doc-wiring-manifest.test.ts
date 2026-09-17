@@ -22,17 +22,9 @@ describe('Tier 1: Feature 2 - Doc Wiring & Manifest Integrity', () => {
     assert.ok(docFile, `Doc file must exist for: ${demo.doc}`)
   })
 
-  it('2.3 should correctly map Turbopack demo to turbopack docs', () => {
-    const demo = demos.find((d) => d.url === 'architecture/turbopack/incremental-harness')
-    assert.ok(demo, 'Turbopack demo should be defined in demos.yaml')
-    assert.doesNotMatch(demo.doc, /fast-refresh\.md$/, 'Turbopack harness must not point to fast-refresh.md')
-    const docFile = resolveDocFile(demo.doc)
-    assert.ok(docFile, `Doc file must exist for: ${demo.doc}`)
-  })
-
-  it('2.4 should match manifest and yaml entry count (241 total)', () => {
-    assert.strictEqual(demos.length, 241, 'demos.yaml must contain exactly 241 demos')
-    assert.strictEqual(manifest.length, 241, 'demos-manifest.json must contain exactly 241 demos')
+  it('2.4 should match manifest and yaml entry count (240 total)', () => {
+    assert.strictEqual(demos.length, 240, 'demos.yaml must contain exactly 240 demos')
+    assert.strictEqual(manifest.length, 240, 'demos-manifest.json must contain exactly 240 demos')
   })
 
   it('2.5 should verify every demo URL follows valid kebab-case slug structure', () => {

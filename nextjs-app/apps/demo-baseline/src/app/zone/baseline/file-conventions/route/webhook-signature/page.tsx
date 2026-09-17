@@ -9,6 +9,7 @@ export default function DemoPage() {
     httpStatus: number | null
     verified: boolean
     eventName?: string
+    action?: 'valid' | 'tampered'
   }>({
     httpStatus: null,
     verified: false,
@@ -18,7 +19,7 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"route.ts HMAC SHA-256 결제 웹훅 서명 검증"}
-        concept={"PG사 웹훅 수신 시 crypto.createHmac을 사용하여 x-webhook-signature 헤더의 위변조 여부를 검증하고 유효한 경우 200 OK, 변조된 경우 401을 반환합니다."}
+        concept={"PG사 웹훅 수신 시 crypto.createHmac을 사용하여 x-signature-sha256 헤더의 위변조 여부를 검증하고 유효한 경우 200 OK, 변조된 경우 401을 반환합니다."}
         steps={[
         {
         "step": 1,
@@ -49,6 +50,7 @@ export default function DemoPage() {
         httpStatus={status.httpStatus}
         verified={status.verified}
         eventName={status.eventName}
+        action={status.action}
       />
     </DemoContainer>
   )

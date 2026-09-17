@@ -11,20 +11,20 @@ describe('Tier 1: Feature 13 - Demo Guide Consistency & Schema Validation', () =
   const manifest = loadDemosManifest()
   const result = validateGuideConsistency({ log: false })
 
-  it('13.1 should parse DemoGuideCard from all 241 demos without parsing failures', () => {
-    assert.strictEqual(result.totalDemos, 241, 'Expected exactly 241 demos to be scanned')
-    assert.strictEqual(result.audits.length, 241, 'Expected 241 demo audits')
+  it('13.1 should parse DemoGuideCard from all 240 demos without parsing failures', () => {
+    assert.strictEqual(result.totalDemos, 240, 'Expected exactly 240 demos to be scanned')
+    assert.strictEqual(result.audits.length, 240, 'Expected 240 demo audits')
     for (const audit of result.audits) {
       assert.ok(audit.guide, `DemoGuideCard must be parsed for demo '${audit.url}'`)
       assert.ok(audit.guide.steps.length >= 2, `Demo '${audit.url}' must have at least 2 steps`)
     }
   })
 
-  it('13.2 should verify 100% clean GC05 (zero string and HTML entity leaks across all 241 demos)', () => {
+  it('13.2 should verify 100% clean GC05 (zero string and HTML entity leaks across all 240 demos)', () => {
     assert.strictEqual(
       result.ruleStats.GC05.violations,
       0,
-      `Expected 0 GC05 string/entity leak violations across all 241 demos (found ${result.ruleStats.GC05.violations})`,
+      `Expected 0 GC05 string/entity leak violations across all 240 demos (found ${result.ruleStats.GC05.violations})`,
     )
     assert.strictEqual(result.ruleStats.GC05.passRate, 100)
   })
@@ -65,7 +65,7 @@ describe('Tier 1: Feature 13 - Demo Guide Consistency & Schema Validation', () =
 
     assert.strictEqual(result.categoryStats['1-getting-started'].total, 25)
     assert.strictEqual(result.categoryStats['2-guides'].total, 77)
-    assert.strictEqual(result.categoryStats['3-api-reference'].total, 135)
+    assert.strictEqual(result.categoryStats['3-api-reference'].total, 134)
     assert.strictEqual(result.categoryStats['5-architecture'].total, 4)
   })
 

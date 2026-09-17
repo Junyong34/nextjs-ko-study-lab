@@ -166,6 +166,20 @@
 | 2.61 | AI Coding Agents | [공식](https://nextjs.org/docs/app/guides/ai-agents) | 완료 |
 | 2.62 | Next.js MCP Server | [공식](https://nextjs.org/docs/app/guides/mcp) | 완료 |
 
+### 마이그레이션·업그레이드
+
+| 순번 | 메뉴 | 공식 링크 | md 상태 |
+|---|---|---|---|
+| 2.63 | Migrating | [공식](https://nextjs.org/docs/app/guides/migrating) | 완료 |
+| 2.63.1 | ㄴ App Router | [공식](https://nextjs.org/docs/app/guides/migrating/app-router-migration) | 완료 |
+| 2.63.2 | ㄴ Create React App | [공식](https://nextjs.org/docs/app/guides/migrating/from-create-react-app) | 완료 |
+| 2.63.3 | ㄴ Vite | [공식](https://nextjs.org/docs/app/guides/migrating/from-vite) | 완료 |
+| 2.64 | Upgrading | [공식](https://nextjs.org/docs/app/guides/upgrading) | 완료 |
+| 2.64.1 | ㄴ Codemods | [공식](https://nextjs.org/docs/app/guides/upgrading/codemods) | 완료 |
+| 2.64.2 | ㄴ Version 14 | [공식](https://nextjs.org/docs/app/guides/upgrading/version-14) | 완료 |
+| 2.64.3 | ㄴ Version 15 | [공식](https://nextjs.org/docs/app/guides/upgrading/version-15) | 완료 |
+| 2.64.4 | ㄴ Version 16 | [공식](https://nextjs.org/docs/app/guides/upgrading/version-16) | 완료 |
+
 ## 3. API Reference (하위 그룹 순서 재배열)
 
 ### 3.1 File-system conventions
@@ -276,7 +290,34 @@
 
 | 순번 | 메뉴 | 공식 링크 | md 상태 |
 |---|---|---|---|
-| 3.5.1 | next.config.js (65개 옵션, 알파벳순 유지) | [공식](https://nextjs.org/docs/app/api-reference/config/next-config-js) | 완료 |
+| 3.5.1 | next.config.js (69개 작성, 잔여 0개) | [공식](https://nextjs.org/docs/app/api-reference/config/next-config-js) | 완료 |
+
+#### 3.5.1 개별 번역 현황
+
+> `next.config.js` 옵션 69개를 모두 작성했습니다.
+
+| 파일 | md 상태 |
+|---|---|
+| [sassOptions.md](./3-api-reference/3.5-config/3.5.1-next-config-js/sassOptions.md) | 완료 |
+| [serverComponentsHmrCache.md](./3-api-reference/3.5-config/3.5.1-next-config-js/serverComponentsHmrCache.md) | 완료 |
+| [staleTimes.md](./3-api-reference/3.5-config/3.5.1-next-config-js/staleTimes.md) | 완료 |
+| [staticGeneration.md](./3-api-reference/3.5-config/3.5.1-next-config-js/staticGeneration.md) | 완료 |
+| [supportsImmutableAssets.md](./3-api-reference/3.5-config/3.5.1-next-config-js/supportsImmutableAssets.md) | 완료 |
+| [taint.md](./3-api-reference/3.5-config/3.5.1-next-config-js/taint.md) | 완료 |
+| [turbopackChunking.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackChunking.md) | 완료 |
+| [turbopackFileSystemCache.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackFileSystemCache.md) | 완료 |
+| [turbopackIgnoreIssue.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackIgnoreIssue.md) | 완료 |
+| [turbopackLocalPostcssConfig.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackLocalPostcssConfig.md) | 완료 |
+| [turbopackMemoryEviction.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackMemoryEviction.md) | 완료 |
+| [turbopackRustReactCompiler.md](./3-api-reference/3.5-config/3.5.1-next-config-js/turbopackRustReactCompiler.md) | 완료 |
+| [typescript.md](./3-api-reference/3.5-config/3.5.1-next-config-js/typescript.md) | 완료 |
+| [urlImports.md](./3-api-reference/3.5-config/3.5.1-next-config-js/urlImports.md) | 완료 |
+| [useLightningcss.md](./3-api-reference/3.5-config/3.5.1-next-config-js/useLightningcss.md) | 완료 |
+| [useOffline.md](./3-api-reference/3.5-config/3.5.1-next-config-js/useOffline.md) | 완료 |
+| [useTypeScriptCli.md](./3-api-reference/3.5-config/3.5.1-next-config-js/useTypeScriptCli.md) | 완료 |
+| [webVitalsAttribution.md](./3-api-reference/3.5-config/3.5.1-next-config-js/webVitalsAttribution.md) | 완료 |
+| [webpack.md](./3-api-reference/3.5-config/3.5.1-next-config-js/webpack.md) | 완료 |
+
 | 3.5.2 | TypeScript | [공식](https://nextjs.org/docs/app/api-reference/config/typescript) | 완료 |
 | 3.5.3 | ESLint | [공식](https://nextjs.org/docs/app/api-reference/config/eslint) | 완료 |
 

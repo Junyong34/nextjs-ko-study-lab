@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { FALLBACK_STATUS_CODE, VALID_STATUS_CODES } from '../types'
+
+function resolveStatus(requested: number): number {
+  return (VALID_STATUS_CODES as readonly number[]).includes(requested)
+    ? requested
+    : FALLBACK_STATUS_CODE
+}
 
 export async function GET(request: NextRequest) {
-  const statusParam = Number(request.nextUrl.searchParams.get('status') || '200')
-  const validStatus = [200, 201, 400, 404, 422, 500].includes(statusParam) ? statusParam : 200
-
+  const requestedStatus = Number(request.nextUrl.searchParams.get('status') || FALLBACK_STATUS_CODE)
+  const validStatus = resolveStatus(requestedStatus)
   const isSuccess = validStatus >= 200 && validStatus < 300
 
   const payload = isSuccess
@@ -29,31 +35,6 @@ export async function GET(request: NextRequest) {
     headers: {
       'x-study-response-builder': 'NextResponse.json',
       'x-custom-header-auth': 'bearer-token-verified',
-      'content-type': 'application/json; charset=utf-8',
     },
   })
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    return NextResponse.json(
-      {
-        success: true,
-        echo: body,
-        receivedAt: new Date().toISOString(),
-      },
-      {
-        status: 201,
-        headers: {
-          'x-study-response-builder': 'NextResponse.json',
-        },
-      }
-    )
-  } catch {
-    return NextResponse.json(
-      { success: false, error: '잘못된 JSON 형식' },
-      { status: 400 }
-    )
-  }
 }

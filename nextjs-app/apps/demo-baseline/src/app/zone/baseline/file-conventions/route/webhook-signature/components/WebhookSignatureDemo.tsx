@@ -2,7 +2,12 @@
 import React, { useState } from 'react'
 
 interface WebhookSignatureDemoProps {
-  onStatusChange?: (status: { httpStatus: number; verified: boolean; eventName?: string }) => void
+  onStatusChange?: (status: {
+    httpStatus: number
+    verified: boolean
+    eventName?: string
+    action: 'valid' | 'tampered'
+  }) => void
 }
 
 const WEBHOOK_SECRET = 'study_webhook_secret_key_2026'
@@ -40,6 +45,7 @@ export function WebhookSignatureDemo({ onStatusChange }: WebhookSignatureDemoPro
   }
 
   const sendWebhook = async (tamper: boolean) => {
+    const action: 'valid' | 'tampered' = tamper ? 'tampered' : 'valid'
     setIsLoading(true)
     try {
       const payloadObj = {
@@ -75,10 +81,10 @@ export function WebhookSignatureDemo({ onStatusChange }: WebhookSignatureDemoPro
 
       if (res.ok && data.verified) {
         addLog(`HTTP 200 검증 통과: ${data.event} (${data.paymentId})`)
-        onStatusChange?.({ httpStatus: 200, verified: true, eventName: data.event })
+        onStatusChange?.({ httpStatus: 200, verified: true, eventName: data.event, action })
       } else {
         addLog(`HTTP ${res.status} 거절: ${data.error || '검증 실패'}`)
-        onStatusChange?.({ httpStatus: res.status, verified: false, eventName: payloadObj.event })
+        onStatusChange?.({ httpStatus: res.status, verified: false, eventName: payloadObj.event, action })
       }
     } catch {
       addLog('웹훅 전송 네트워크 에러')

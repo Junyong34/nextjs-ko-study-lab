@@ -3,7 +3,6 @@ export interface CachedHeroBanner {
   title: string
   subtitle: string
   discountRate: string
+  cacheId: string
   cachedAt: string
-  hitType: '0ms HIT' | 'INITIAL_FETCH'
-  fetchLatencyMs: number
 }

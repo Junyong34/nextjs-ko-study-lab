@@ -14,26 +14,28 @@ export default function ShopProductsPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title="Route Group: (shop)/products -> /products"
-        concept="Next.js의 괄호 폴더 (folder) 컨벤션을 사용하면 URL 경로 세그먼트에 영향을 주지 않고 레이아웃을 논리적으로 분리할 수 있습니다."
+        title="Route Group: (shop)/products/page.tsx -> /products"
+        concept="파일은 `app/.../(shop)/products/page.tsx`에 있지만, (shop)은 Route Group 폴더라 URL 세그먼트로 계산되지 않아 실제 요청 경로는 /products로 끝난다."
         steps={[
           {
             step: 1,
-            title: "폴더 구조 확인",
-            description: "디렉토리는 /(shop)/products에 위치하지만 실제 요청 URL은 /products입니다.",
-            actionBadge: "URL 격리",
+            title: "폴더 경로와 실제 URL 비교",
+            description: "주소창의 경로가 .../group-url-isolation/products로 끝나는지, 그 사이에 (shop) 문자열이 없는지 확인합니다.",
+            actionBadge: "URL 확인",
           },
           {
             step: 2,
-            title: "(shop) 전용 레이아웃 적용",
-            description: "상단 파란색 스토어프론트 헤더 레이아웃이 (shop) 하위 페이지에만 적용됩니다.",
-            actionBadge: "쇼핑 레이아웃",
+            title: "[(marketing)/about 페이지로 이동 →] 클릭",
+            description: "마케팅 소개 페이지(/about)로 이동해, 다른 그룹 폴더에서도 괄호 문자열이 URL에 나타나지 않는지 비교합니다.",
+            actionBadge: "그룹 전환",
           },
           {
             step: 3,
-            title: "(marketing) 그룹으로 전환",
-            description: "마케팅 소개 페이지(/about)로 이동하여 보라색 마케팅 레이아웃과의 차이를 비교합니다.",
-            actionBadge: "그룹 전환",
+            title: "[홈으로 복귀] 클릭",
+            description: "최상위 인덱스로 돌아가 3단 검증 패널에서 usePathname() 값을 다시 확인합니다.",
+            actionBadge: "홈 복귀",
+            observe: "usePathname()이 반환한 문자열에 (shop) 괄호 폴더명이 포함되지 않았는지",
+            observeAt: "verification",
           },
         ]}
       />
@@ -74,7 +76,7 @@ export default function ShopProductsPage() {
         </div>
       </DemoPlaygroundCard>
 
-      <VerificationFooter currentGroup="shop" currentPath="/products" />
+      <VerificationFooter />
     </DemoContainer>
   )
 }

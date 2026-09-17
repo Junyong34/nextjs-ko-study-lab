@@ -1,101 +1,143 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
+import { DemoResetButton } from '@study/demo-kit'
+import { probeRedirectAction } from '../actions'
+import { LEGACY_PRODUCTS, type ProbeKind, type ProbeResult } from '../types'
+import { VerificationFooter } from './VerificationFooter'
+
+const DEMO_BASE = '/zone/baseline/functions/permanent-redirect/seo-308'
+
+const CASES: { kind: ProbeKind; label: string; badge: string; path: string; accent: string }[] = [
+  {
+    kind: 'permanent',
+    label: '영구 URL 개편 (permanentRedirect)',
+    badge: '기대: 308',
+    path: `${DEMO_BASE}/legacy/items`,
+    accent: 'border-emerald-300 dark:border-emerald-800/70',
+  },
+  {
+    kind: 'temporary',
+    label: '주말 한정 프로모션 (redirect)',
+    badge: '기대: 307',
+    path: `${DEMO_BASE}/legacy/promo`,
+    accent: 'border-amber-300 dark:border-amber-800/70',
+  },
+]
 
 export function PermanentRedirectSeoDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
+  const [selectedLegacyId, setSelectedLegacyId] = useState(LEGACY_PRODUCTS[0].legacyId)
+  const [probes, setProbes] = useState<Partial<Record<ProbeKind, ProbeResult>>>({})
+  const [pendingKind, setPendingKind] = useState<ProbeKind | null>(null)
+  const [isPending, startTransition] = useTransition()
 
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
+  // curl 예시의 origin은 SSR 시점엔 알 수 없으므로, 마운트 이후에만 채워 서버/클라이언트 렌더 결과를 일치시킨다
+  // (hydration mismatch 방지 — `typeof window !== 'undefined'`를 렌더 분기에 직접 쓰면 안 된다).
+  const [origin, setOrigin] = useState('')
+  useEffect(() => {
+    setOrigin(window.location.origin)
+  }, [])
+
+  const runProbe = (kind: ProbeKind) => {
+    setPendingKind(kind)
+    startTransition(async () => {
+      const result = await probeRedirectAction(kind, selectedLegacyId)
+      setProbes((prev) => ({ ...prev, [kind]: result }))
+      setPendingKind(null)
+    })
+  }
+
+  const handleReset = () => {
+    setSelectedLegacyId(LEGACY_PRODUCTS[0].legacyId)
+    setProbes({})
   }
 
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">permanentRedirect() 영구 URL 변경 (308 Permanent) 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
+          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">레거시 상품 URL 마이그레이션 콘솔</h4>
+          <p className="text-xs text-zinc-500">구형 숫자 ID URL이 어떤 방식으로 신규 URL로 이전되는지 실제 HTTP 응답으로 확인합니다.</p>
         </div>
-        <div className="flex gap-2">
+        <DemoResetButton onReset={handleReset} label="실습 초기화" />
+      </div>
+
+      <div className="flex gap-2">
+        {LEGACY_PRODUCTS.map((item) => (
           <button
+            key={item.legacyId}
+            type="button"
             onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
+              setSelectedLegacyId(item.legacyId)
+              setProbes({})
             }}
             className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+              selectedLegacyId === item.legacyId
+                ? 'bg-blue-600 text-white'
+                : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
             }`}
           >
-            러닝화 (#001)
+            /legacy/items/{item.legacyId} ({item.name})
           </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
-        </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
-          </div>
-        </div>
+        {CASES.map((demoCase) => {
+          const probe = probes[demoCase.kind]
+          const requestUrl = `${demoCase.path}/${selectedLegacyId}`
+          const isLoading = isPending && pendingKind === demoCase.kind
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
+          return (
+            <div
+              key={demoCase.kind}
+              className={`space-y-2.5 rounded border bg-zinc-50 p-3.5 dark:bg-zinc-900/50 ${demoCase.accent}`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">{demoCase.label}</span>
+                <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">
+                  {demoCase.badge}
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
+
+              <div className="font-mono text-[11px] text-zinc-500 break-all">GET {requestUrl}</div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => runProbe(demoCase.kind)}
+                  disabled={isLoading}
+                  className="rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
+                >
+                  {isLoading ? '실제 상태 코드 측정 중...' : '실제 상태 코드 측정'}
+                </button>
+                <a
+                  href={requestUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded border border-zinc-300 px-3 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                >
+                  새 탭에서 직접 이동
+                </a>
+              </div>
+
+              {probe && (
+                <div className="rounded border border-zinc-300 bg-white p-2 font-mono text-[11px] text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-300">
+                  HTTP {probe.status} {probe.statusText}
+                  <br />
+                  location: {probe.location ?? '(없음)'}
+                </div>
+              )}
+
+              <div className="text-[10px] text-zinc-400">
+                curl -I {origin}
+                {requestUrl}
+              </div>
+            </div>
+          )
+        })}
       </div>
+
+      <VerificationFooter probes={probes} />
     </div>
   )
 }

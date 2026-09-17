@@ -1,107 +1,91 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { PrefetchCounts } from '../types'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+interface VerificationFooterProps {
+  counts: PrefetchCounts
+  isDev: boolean
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({ counts, isDev }: VerificationFooterProps) {
+  const disabledOk = counts.disabledCount === 0
+  const autoOk = isDev ? true : counts.autoCount > 0
+  const isMatched = disabledOk && autoOk
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  const expected = isDev
+    ? [
+        '- prefetch={false} 링크: 자동 요청 0건 유지 (호버해도 발생하지 않음)',
+        '- 기본 링크: 개발 서버(pnpm dev)에서는 0건이 정상 — 자동 prefetch는 production 전용 동작',
+      ].join('\n')
+    : [
+        '- prefetch={false} 링크: 자동 요청 0건 유지 (호버해도 발생하지 않음)',
+        '- 기본 링크: 뷰포트 진입 즉시 1건 이상 관찰됨',
+      ].join('\n')
 
-  const defaultExpected = "• 뷰포트 진입 시 자동 prefetch와 prefetch={false} 비교의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = [
+    `- prefetch={false} 링크 실제 요청: ${counts.disabledCount}건`,
+    `- 기본 링크 실제 요청: ${counts.autoCount}건`,
+    `- 현재 모드: ${isDev ? 'development' : 'production'}`,
+  ].join('\n')
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="뷰포트 진입 시 자동 prefetch와 prefetch={false} 비교 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="뷰포트 자동 prefetch와 prefetch={false} 검증"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="숫자는 브라우저 Resource Timing API로 실측한 실제 네트워크 요청 건수이며, 버튼 클릭 여부와 무관하게 항상 실제 상태를 반영합니다."
       />
-                        <DemoDeepDiveCard title="뷰포트 진입 자동 prefetch vs 호버 시점 패칭 대조">
-              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p>Next.js <code>{'<'}Link{'>'}</code>의 기본 동작은 브라우저 <code>IntersectionObserver</code>를 통해 뷰포트에 나타난 링크의 정적 세그먼트를 자동 prefetch(Viewport Prefetch)하는 반면, <code>prefetch={'{'}false{'}'}</code>는 호버(Hover) 시점까지 요청을 유예하는 두 가지 서로 다른 prefetch 전략 스펙을 제공합니다.</p>
-                </div>
+      <DemoDeepDiveCard title="자동 prefetch와 prefetch={false}의 실제 동작">
+        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+          <div>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">1. 뷰포트 자동 prefetch는 production 전용</h5>
+            <p>
+              prefetch prop을 지정하지 않은 기본 <code>{'<Link>'}</code>는 <code>IntersectionObserver</code>로 뷰포트 진입을
+              감지해 자동으로 prefetch 요청을 보냅니다. 이 자동 요청은 <strong>production 빌드에서만</strong> 발생하며, 개발
+              서버(<code>next dev</code>)에서는 불필요한 서버 부하를 막기 위해 생략됩니다. 위 &quot;기본 링크&quot; 카드의
+              값이 개발 모드에서 0건인 것은 버그가 아니라 Next.js의 명시된 사양입니다.
+            </p>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 동일한 5개의 추천 상품 링크에 대해 [뷰포트 자동 prefetch 그룹]과 [호버 prefetch 그룹]을 나란히 배치하고, 스크롤 시 발생하는 네트워크 요청 발생 건수와 호버 시점의 지연 시간 차이를 실시간 비교 측정합니다.</p>
-                </div>
+          <div>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">2. prefetch={'{'}false{'}'}는 호버로도 대체되지 않는다</h5>
+            <p>
+              <code>prefetch={'{'}false{'}'}</code>는 자동 prefetch를 완전히 비활성화하는 옵션입니다. 뷰포트 진입은 물론
+              호버 시점에도 백그라운드 요청을 보내지 않으며, 실제 요청은 사용자가 링크를 클릭해 이동하는 순간에만
+              발생합니다. &quot;호버하면 대신 요청을 보낸다&quot;는 것은 흔한 오해입니다 — 호버 시점 prefetch를 원한다면
+              <code> prefetch={'{'}active ? null : false{'}'}</code> 패턴으로 직접 감싼 커스텀 Link가 필요합니다(공식 가이드의
+              Hover-triggered prefetch 패턴).
+            </p>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>트래픽 vs 속도의 최적 트레이드오프 수립</strong>: 전환율이 중요한 핵심 추천 상품과 부가 링크의 prefetch 전략을 명확히 분리하여 설계 가능합니다.</li>
-                    <li><strong>정밀한 네트워크 자원 통제</strong>: 한정된 모바일 네트워크 리소스를 중요한 콘텐츠 로딩에 우선 집중할 수 있습니다.</li>
-                    <li><strong>네트워크 탭 투명성 확보</strong>: 실제 전송되는 RSC 페이로드 크기와 발생 시점을 정확히 분석하여 프론트엔드 성능 튜닝에 기여합니다.</li>
-                  </ul>
-                </div>
+          <div>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. 실제로 확인하는 방법</h5>
+            <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+              <li>
+                이 저장소에서는 <code>pnpm --filter @study/demo-baseline build</code> 후{' '}
+                <code>pnpm --filter @study/demo-baseline start</code>로 production 서버를 띄우면 기본 링크의 요청 건수가
+                올라가는 것을 이 페이지에서 그대로 관찰할 수 있습니다.
+              </li>
+              <li>
+                DevTools Network 탭에서 요청을 선택하면 <code>rsc: 1</code>, <code>next-router-prefetch: 1</code> 헤더가
+                붙어 있어 일반 페이지 이동과 구분되는 진짜 prefetch 요청임을 직접 확인할 수 있습니다.
+              </li>
+            </ul>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li>메인 홈 화면의 실시간 타임특가 배너(Viewport Prefetch 적용)</li>
-                    <li>하단 카테고리 전체보기 드롭다운 메뉴(Hover Prefetch 적용)</li>
-                    <li>대규모 B2B 사이트맵 네비게이션 트리 최적화</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>정적 vs 동적 라우트 prefetch 차이</strong>: 정적 라우트는 페이지 전체가 prefetch되지만, 동적 라우트는 <code>loading.tsx</code>를 포함한 공통 레이아웃 셸만 prefetch됩니다.</li>
-                    <li><strong>모바일 터치 환경 고려</strong>: 모바일 디바이스에서는 마우스 호버가 없으므로 <code>onTouchStart</code> 시점에 prefetch가 트리거됩니다.</li>
-                  </ul>
-                </div>
-              </div>
-            </DemoDeepDiveCard>
+          <div>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">4. 언제 prefetch={'{'}false{'}'}를 쓰는가</h5>
+            <p>
+              무한 스크롤 목록처럼 뷰포트에 수십 개의 링크가 동시에 들어오는 화면에서는 자동 prefetch가 불필요한 대역폭을
+              소모합니다. 이런 화면의 링크에 <code>prefetch={'{'}false{'}'}</code>를 지정하면 클릭 시점에만 요청이 발생해
+              트래픽을 절약할 수 있습니다.
+            </p>
+          </div>
+        </div>
+      </DemoDeepDiveCard>
     </div>
   )
 }

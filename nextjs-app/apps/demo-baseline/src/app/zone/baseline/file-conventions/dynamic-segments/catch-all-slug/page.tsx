@@ -4,9 +4,8 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'file-conventions/dynamic-segments/catch-all-slug')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { CatchAllSlugDemo } from './components/CatchAllSlugDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { CatchAllSlugPlayground } from './components/CatchAllSlugPlayground'
 
 export default function DemoPage() {
   return (
@@ -34,13 +33,18 @@ export default function DemoPage() {
         "actionBadge": "복귀",
         "observe": "URL 세그먼트 깊이에 따라 params.slug 배열 길이가 1개에서 3개로 변환되는지 대조",
         "observeAt": "verification"
+        },
+        {
+        "step": 4,
+        "title": "[0단계: 세그먼트 없음 (/shop)] → [실제 요청으로 확인] 클릭",
+        "description": "shop 바로 다음에 세그먼트가 하나도 없는 경로로 실제 fetch 요청을 보내 [...slug]가 이 경로에는 매칭되지 않는지 확인합니다.",
+        "actionBadge": "0단계 검증",
+        "observe": "실제 HTTP 응답 상태 코드가 404인지, 검증 패널의 두 번째 항목이 '일치'로 표시되는지 대조",
+        "observeAt": "verification"
         }
         ]}
         />
-      <DemoPlaygroundCard title={"[...slug] Catch-all 동적 세그먼트 실습"}>
-        <CatchAllSlugDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <CatchAllSlugPlayground />
     </DemoContainer>
   )
 }

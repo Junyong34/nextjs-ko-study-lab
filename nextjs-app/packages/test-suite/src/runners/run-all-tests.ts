@@ -62,7 +62,7 @@ export function runAllTestSuites(): TestRunSummary {
   console.log('\n[1/6] Running Route & Manifest Consistency Validator...')
   const manifestResult = validateRouteAndManifestIntegrity()
   const manifestOk = manifestResult.errors.length === 0
-  console.log(`  -> Status: ${manifestOk ? 'PASSED (241/241 valid)' : 'FAILED'}`)
+  console.log(`  -> Status: ${manifestOk ? 'PASSED (240/240 valid)' : 'FAILED'}`)
 
   // 2. Static isMatched Audit
   console.log('\n[2/7] Running Static isMatched={true} Literal Audit...')
@@ -73,7 +73,7 @@ export function runAllTestSuites(): TestRunSummary {
   console.log('\n[3/7] Running Demo Guide Consistency & Authenticity Validator...')
   const guideResult = validateGuideConsistency({ log: false })
   const guideOk = guideResult.ruleStats.GC05.violations === 0
-  console.log(`  -> Status: ${guideOk ? 'PASSED (241/241 GC05 clean, M0 baseline recorded)' : 'FAILED'}`)
+  console.log(`  -> Status: ${guideOk ? 'PASSED (240/240 GC05 clean, M0 baseline recorded)' : 'FAILED'}`)
 
   // 4. Tier 1
   console.log('\n[4/7] Running Tier 1: Feature Coverage (65 cases across 13 areas)...')
@@ -106,7 +106,7 @@ export function runAllTestSuites(): TestRunSummary {
 
   const headers = ['Test Suite Tier', 'Scope / Feature Area', 'Cases', 'Passed', 'Failed', 'Status']
   const rows = [
-    ['Manifest Integrity', '241 Demo Routes & Docs SSOT', `${manifestResult.totalDemos}`, `${manifestResult.validDemos}`, `${manifestResult.invalidDemos}`, manifestOk ? 'PASS' : 'FAIL'],
+    ['Manifest Integrity', '240 Demo Routes & Docs SSOT', `${manifestResult.totalDemos}`, `${manifestResult.validDemos}`, `${manifestResult.invalidDemos}`, manifestOk ? 'PASS' : 'FAIL'],
     ['Static Literal Audit', 'VerificationFooter isMatched audit', `${auditResult.totalFilesScanned}`, `${auditResult.cleanFilesCount}`, `${auditResult.flaggedFilesCount}`, 'REPORTED'],
     ['Guide Consistency', 'GC01~GC07 & Leak-Free Verification', `${guideResult.totalDemos}`, `${guideResult.ruleStats.GC05.passed}`, `${guideResult.ruleStats.GC05.violations}`, guideOk ? 'PASS' : 'FAIL'],
     ['Tier 1: Feature Coverage', '13 Core Feature Areas', `${t1.total}`, `${t1.pass}`, `${t1.fail}`, t1.fail === 0 ? 'PASS' : 'FAIL'],

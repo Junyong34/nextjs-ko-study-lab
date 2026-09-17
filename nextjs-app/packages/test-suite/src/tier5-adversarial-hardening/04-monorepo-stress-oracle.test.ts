@@ -11,11 +11,11 @@ import {
 } from '../utils/test-helpers.ts'
 
 describe('Tier 5 Adversarial Hardening — 04: Monorepo Deep Invariant Oracle', () => {
-  it('Manifest & Docs SSOT: should assert 100% (241/241) demos map to valid docs and on-disk pages', () => {
+  it('Manifest & Docs SSOT: should assert 100% (240/240) demos map to valid docs and on-disk pages', () => {
     assert.ok(fs.existsSync(DEMOS_MANIFEST_PATH), `Manifest must exist at ${DEMOS_MANIFEST_PATH}`)
     const demos = loadDemosManifest()
 
-    assert.equal(demos.length, 241, 'Must have exactly 241 demos in manifest')
+    assert.equal(demos.length, 240, 'Must have exactly 240 demos in manifest')
 
     for (const demo of demos) {
       assert.ok(demo.url, `Demo must have url: ${JSON.stringify(demo)}`)

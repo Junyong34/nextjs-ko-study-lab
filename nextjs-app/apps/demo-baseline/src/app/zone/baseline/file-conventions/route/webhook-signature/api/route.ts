@@ -34,10 +34,14 @@ export async function POST(request: NextRequest) {
       .update(rawBody)
       .digest('hex')
 
-    const isValid = crypto.timingSafeEqual(
-      Buffer.from(signature, 'utf8'),
-      Buffer.from(expectedSignature, 'utf8')
-    )
+    const signatureBuffer = Buffer.from(signature, 'utf8')
+    const expectedBuffer = Buffer.from(expectedSignature, 'utf8')
+
+    // timingSafeEqual은 두 버퍼 길이가 다르면 예외를 던지므로,
+    // 위조된 서명(길이가 다른 문자열)이 500 에러로 새지 않도록 길이를 먼저 검사한다.
+    const isValid =
+      signatureBuffer.length === expectedBuffer.length &&
+      crypto.timingSafeEqual(signatureBuffer, expectedBuffer)
 
     if (!isValid) {
       return NextResponse.json(

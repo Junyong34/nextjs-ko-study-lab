@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { buildDynamicOgImageUrl, ogImageSize, siteConfig } from './config'
+import { isPublicIndexingAllowed } from './indexability'
 
 interface PageMetadataInput {
   title: string
@@ -23,6 +24,7 @@ export function buildPageMetadata({
   noIndex,
   dynamicOgImage,
 }: PageMetadataInput): Metadata {
+  const isPublicIndexing = isPublicIndexingAllowed()
   const image = dynamicOgImage
     ? { url: buildDynamicOgImageUrl(dynamicOgImage), width: ogImageSize.width, height: ogImageSize.height }
     : { url: siteConfig.ogImage, width: ogImageSize.width, height: ogImageSize.height }
@@ -46,6 +48,10 @@ export function buildPageMetadata({
       description,
       images: [image.url],
     },
-    ...(noIndex ? { robots: { index: false, follow: true } } : {}),
+    ...(!isPublicIndexing
+      ? { robots: { index: false, follow: false } }
+      : noIndex
+        ? { robots: { index: false, follow: true } }
+        : {}),
   }
 }

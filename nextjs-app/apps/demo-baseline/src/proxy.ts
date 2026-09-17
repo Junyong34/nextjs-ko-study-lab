@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+const DEVICE_USER_AGENTS = {
+  mobile:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+  desktop:
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+} as const
+
 export function proxy(request: NextRequest) {
   const url = request.nextUrl.clone()
   const pathname = url.pathname
@@ -103,6 +110,62 @@ export function proxy(request: NextRequest) {
     return response
   }
 
+  // 5. headers() Authorization 포워딩 데모: 세션 쿠키를 Authorization 헤더로 변환 (BFF 게이트웨이 역할)
+  if (pathname.includes('/functions/headers/custom-auth-token')) {
+    const sessionToken = request.cookies.get('demo_headers_auth_token')?.value
+    if (sessionToken) {
+      const requestHeaders = new Headers(request.headers)
+      requestHeaders.set('authorization', `Bearer ${sessionToken}`)
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      })
+    }
+    return NextResponse.next()
+  }
+
+  // 6. headers() User-Agent 기기 판별 데모: 쿼리로 지정한 기기의 실제 User-Agent로 교체
+  if (pathname.includes('/functions/headers/user-agent-device')) {
+    const forcedDevice = url.searchParams.get('device')
+    if (forcedDevice === 'mobile' || forcedDevice === 'desktop') {
+      const requestHeaders = new Headers(request.headers)
+      requestHeaders.set('user-agent', DEVICE_USER_AGENTS[forcedDevice])
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      })
+    }
+    return NextResponse.next()
+  }
+
+  // 7. NextResponse.rewrite() 가상 라우팅 데모: URL 유지 내부 리라이트(rewrite) vs 주소 변경 리다이렉트(redirect) 대조
+  if (pathname.includes('/functions/next-response/rewrite-virtual') && !pathname.includes('/target-event')) {
+    const scenario = url.searchParams.get('scenario')
+
+    if (scenario === 'rewrite') {
+      const target = url.clone()
+      target.pathname = '/zone/baseline/functions/next-response/rewrite-virtual/target-event'
+      target.search = ''
+      const requestHeaders = new Headers(request.headers)
+      requestHeaders.set('x-rewrite-origin', `${url.pathname}${url.search}`)
+      return NextResponse.rewrite(target, {
+        request: {
+          headers: requestHeaders,
+        },
+      })
+    }
+
+    if (scenario === 'redirect') {
+      const target = url.clone()
+      target.pathname = '/zone/baseline/functions/next-response/rewrite-virtual/target-event'
+      target.searchParams.delete('scenario')
+      target.searchParams.set('via', 'redirect')
+      return NextResponse.redirect(target, 307)
+    }
+  }
+
   return NextResponse.next()
 }
 
@@ -112,5 +175,7 @@ export const config = {
     '/zone/baseline/proxy/:path*',
     '/zone/baseline/guides/authentication/:path*',
     '/zone/baseline/guides/content-security-policy/:path*',
+    '/zone/baseline/functions/headers/:path*',
+    '/zone/baseline/functions/next-response/rewrite-virtual/:path*',
   ],
 }

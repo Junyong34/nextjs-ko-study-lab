@@ -1,101 +1,72 @@
 'use client'
-import React, { useState } from 'react'
 
-export function ArchReactCompilerDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
+import {
+  DemoDeepDiveCard,
+  DemoPlaygroundCard,
+  DemoResetButton,
+  ExpectedActualPanel,
+} from '@study/demo-kit'
+import { useState } from 'react'
+import { MemoizedProductGrid } from './MemoizedProductGrid'
 
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
-  }
+const PRODUCTS = [
+  { id: 'shoe', name: '러닝화', price: 129_000 },
+  { id: 'jacket', name: '윈드브레이커', price: 189_000 },
+  { id: 'cap', name: '러닝 캡', price: 39_000 },
+]
+
+interface ArchReactCompilerDemoProps {
+  compilerMode: 'annotation'
+  usesNativeCompiler: boolean
+}
+
+export function ArchReactCompilerDemo({ compilerMode, usesNativeCompiler }: ArchReactCompilerDemoProps) {
+  'use memo'
+
+  const [quantity, setQuantity] = useState(1)
+  const [filter, setFilter] = useState('')
+  const [unrelatedTick, setUnrelatedTick] = useState(0)
+  const visibleProducts = PRODUCTS.filter((product) =>
+    product.name.toLocaleLowerCase('ko').includes(filter.toLocaleLowerCase('ko')),
+  )
 
   return (
-    <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
-        <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">React Compiler 자동 메모이제이션 최적화 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
-        </div>
-      </div>
+    <>
+      <DemoPlaygroundCard title="annotation 모드 opt-in 상품 목록">
+        <div className="space-y-4">
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+            <label className="space-y-1 text-xs font-semibold" htmlFor="compiler-filter">
+              상품 필터
+              <input id="compiler-filter" value={filter} onChange={(event) => setFilter(event.target.value)} placeholder="러닝화" className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 font-normal dark:border-zinc-700 dark:bg-zinc-900" />
+            </label>
+            <div className="flex items-end gap-2">
+              <button type="button" onClick={() => setQuantity((current) => current + 1)} className="rounded-md bg-blue-600 px-3 py-2 text-xs font-semibold text-white">수량 증가</button>
+              <button type="button" onClick={() => setUnrelatedTick((current) => current + 1)} className="rounded-md bg-zinc-700 px-3 py-2 text-xs font-semibold text-white">상품 목록과 무관한 상태 변경</button>
+              <DemoResetButton onReset={() => { setQuantity(1); setFilter(''); setUnrelatedTick(0) }} />
+            </div>
+          </div>
+          <p className="text-xs text-zinc-500">
+            무관한 상태 변경 클릭 횟수: <span className="font-mono font-semibold">{unrelatedTick}</span> — 이 값은 아래 상품 목록의 props(products, quantity)에 전달되지 않습니다.
+          </p>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
-          </div>
+          <MemoizedProductGrid products={visibleProducts} quantity={quantity} />
         </div>
+      </DemoPlaygroundCard>
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+      <ExpectedActualPanel
+        title="React Compiler 적용 계약"
+        expected="reactCompiler: annotation구현체: Turbopack 네이티브 Rust컴포넌트: use memo로 opt-in"
+        actual={`공유 설정: ${compilerMode}\n네이티브 구현체: ${usesNativeCompiler}\n현재 수량: ${quantity}\n필터 결과: ${visibleProducts.length}개`}
+        isMatched={compilerMode === 'annotation' && usesNativeCompiler}
+        description="설정값은 next.config.ts와 페이지가 같은 모듈에서 읽습니다. 실제 변환 가능 여부는 프로덕션 빌드로 검증합니다."
+      />
+
+      <DemoDeepDiveCard title="컴파일러 최적화와 런타임 관찰의 경계">
+        <p>React Compiler는 빌드/변환 단계에서 컴포넌트와 훅을 분석해 순수한 계산과 JSX 생성을 자동으로 메모이즈합니다. &quot;리렌더링 0회&quot;를 항상 보장한다고 말할 수는 없지만, 이 변환의 효과 자체는 런타임에서 관찰할 수 있습니다 — 이 데모는 그 관찰을 콘솔 로그로 제공합니다.</p>
+        <p>이 컴포넌트(&apos;use memo&apos;)가 <code>&lt;MemoizedProductGrid products={'{'}...{'}'} /&gt;</code>를 생성하는 코드를 컴파일러가 메모이즈했다면, products와 quantity가 바뀌지 않는 한 매번 같은 JSX 참조를 반환합니다. React는 참조가 같으면 그 하위 트리를 재조정하지 않으므로 [상품 목록과 무관한 상태 변경]을 눌러도 <code>MemoizedProductGrid</code>는 다시 렌더링되지 않고, 콘솔의 렌더 횟수 로그도 늘지 않습니다.</p>
+        <p>Next.js 16.3의 <code>turbopackRustReactCompiler</code>는 Babel 변환 대신 Turbopack 내부의 네이티브 Rust 구현을 사용합니다. <code>compilationMode: &apos;annotation&apos;</code>과 함께 이 컴포넌트만 점진적으로 opt-in합니다.</p>
+        <p>렌더 횟수 카운터는 렌더 본문이 아니라 <code>useEffect</code> 안에서만 증가시킵니다. 렌더 중에 외부 값을 변경하면 순수성이 깨져 컴파일러가 그 컴포넌트의 최적화를 포기할 수 있으므로, 관찰용 부수효과는 항상 렌더가 끝난 뒤에만 실행되도록 분리했습니다.</p>
+      </DemoDeepDiveCard>
+    </>
   )
 }
