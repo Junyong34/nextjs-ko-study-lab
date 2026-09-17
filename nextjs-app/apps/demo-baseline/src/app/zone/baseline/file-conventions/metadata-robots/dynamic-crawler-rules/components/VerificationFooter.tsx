@@ -1,107 +1,113 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { CrawlerMode } from '../types'
 
 export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+  mode: CrawlerMode | null
+  bodyText: string
+  hasFetched: boolean
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+interface Evaluation {
+  isMatched: boolean
+  detail: string
+}
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+function evaluateStaging(text: string): Evaluation {
+  const blocksAll = text.includes('User-Agent: *') && text.includes('Disallow: /')
+  const hasStagingSitemap = text.includes(
+    'Sitemap: https://staging.study-lab.example.com/sitemap.xml',
+  )
+  const isMatched = blocksAll && hasStagingSitemap
+  return {
+    isMatched,
+    detail: isMatched
+      ? '• 응답 텍스트에서 "User-Agent: *" + "Disallow: /" 조합(전체 차단) 확인\n• staging 전용 Sitemap URL 확인'
+      : '• staging 모드에 필요한 전체 차단(Disallow: /) 또는 staging Sitemap URL을 응답 텍스트에서 찾지 못함',
+  }
+}
 
-  const defaultExpected = "• robots.ts 파일에서 MetadataRoute.Robots 객체 반환\n• Next.js가 robots.txt 텍스트 엔드포인트를 자동 생성하여 크롤러 규칙(Allow/Disallow/Sitemap) 제공"
-  const defaultActual = "• robots.ts 파일 컨벤션 파이프라인 마운트 완료 및 크롤링 규칙 직렬화 확인\n• User-Agent 필터링 및 관리자/결제 경로 차단 정책 감지"
+function evaluateProduction(text: string): Evaluation {
+  const allowsGooglebotProducts =
+    text.includes('User-Agent: Googlebot') && text.includes('Allow: /products/')
+  const hasProductionSitemap = text.includes(
+    'Sitemap: https://study-lab.example.com/sitemap.xml',
+  )
+  const hasHost = text.includes('Host: https://study-lab.example.com')
+  const isMatched = allowsGooglebotProducts && hasProductionSitemap && hasHost
+  return {
+    isMatched,
+    detail: isMatched
+      ? '• "User-Agent: Googlebot" 규칙에 "Allow: /products/" 포함 확인\n• 프로덕션 Sitemap/Host 라인 확인'
+      : '• 프로덕션 모드에 필요한 Googlebot 허용 규칙 또는 Sitemap/Host 라인을 응답 텍스트에서 찾지 못함',
+  }
+}
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+export function VerificationFooter({ mode, bodyText, hasFetched }: VerificationFooterProps) {
+  const evaluation: Evaluation | null = !hasFetched || !mode
+    ? null
+    : mode === 'staging'
+    ? evaluateStaging(bodyText)
+    : evaluateProduction(bodyText)
+
+  const expected =
+    '• production: User-Agent: * → Allow: /, Disallow: [/admin/, /checkout/, /account/]\n  Googlebot → Allow: [/products/, /catalog/]\n  Sitemap/Host 라인 포함\n• staging: User-Agent: * → Disallow: / (전체 차단), staging 전용 Sitemap'
+
+  const actual = !hasFetched
+    ? '• 요청 대기 중 (상단 production/staging 버튼을 눌러 실제 GET 요청을 보내세요)'
+    : `• 요청 모드: ${mode}\n${evaluation?.detail ?? ''}`
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="동적 검색 크롤러 규칙 (robots.ts) 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "Next.js App Router의 robots.ts 특수 파일을 통한 검색 로봇 접근 제어 및 SEO 정책 동적 구성을 검증합니다."}
+        title="robots.ts 생성 규칙 → 실제 robots.txt 응답 텍스트 검증"
+        expected={expected}
+        actual={actual}
+        isMatched={hasFetched ? evaluation?.isMatched : undefined}
+        description="Route Handler(preview/route.ts)가 실제로 반환한 robots.txt 텍스트를 직접 파싱해, 코드에서 정의한 규칙(User-Agent/Allow/Disallow/Sitemap/Host)이 그대로 반영됐는지 검증합니다."
       />
-      <DemoDeepDiveCard title="동적 검색 크롤러 규칙 (robots.ts) & 환경별 인덱싱 제어">
+      <DemoDeepDiveCard title="robots.ts 파일 컨벤션 & 동적 크롤링 규칙">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 앱 루트 제약</h5>
             <p>
-              <code>robots.ts</code>는 App Router 루트 세그먼트에서 <code>MetadataRoute.Robots</code> 객체를 반환하여 검색엔진 크롤러(Googlebot, Yeti 등)를 위한 <code>/robots.txt</code> 텍스트 지침을 동적으로 생성하고 서빙하는 표준 파일입니다.
+              <code>robots.ts</code>(또는 <code>robots.js</code>)는 <strong>app 디렉터리 루트</strong>에 있을 때만
+              Next.js가 특수 파일로 인식해 <code>MetadataRoute.Robots</code> 반환값을 실제{' '}
+              <code>/robots.txt</code> 텍스트로 직렬화해 서빙합니다. 이 zone(<code>demo-baseline</code>)의
+              app 루트는 여러 데모가 공유하는 자원이라, 이 데모는 <code>robots-rules.ts</code>에 동일한
+              규칙 함수를 두고 <code>preview/route.ts</code> Route Handler로 그 결과를 재현해 보여줍니다.
+              실제 프로젝트에서는 이 함수를 그대로 <code>app/robots.ts</code>의 default export로 옮기면 됩니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 실행 환경(<code>process.env.VERCEL_ENV</code> 또는 <code>NODE_ENV</code>)에 따라 스테이징/QA 서버에서는 전체 크롤링을 차단(<code>Disallow: /</code>)하고, 프로덕션 환경에서는 관리자/결제 경로(<code>Disallow: ['/admin', '/checkout']</code>)만 선별 차단하며 사이트맵 인덱스 URL을 동적으로 주입하는 규칙을 검증합니다.
+              [production 모드로 요청] 버튼은 관리자/결제 경로만 선별 차단하고 Googlebot에는{' '}
+              <code>/products/</code>, <code>/catalog/</code>를 허용하며 Sitemap/Host를 포함한 규칙을
+              요청합니다. [staging 모드로 요청] 버튼은 <code>User-Agent: *</code>에{' '}
+              <code>Disallow: /</code>(전체 차단)만 반환하는 규칙을 요청합니다. 두 버튼 모두 실제 GET
+              요청을 <code>preview/route.ts</code>로 보내고, 서버가 그때그때 계산한 텍스트를 그대로
+              화면에 표시합니다 — 하드코딩된 문자열이 아닙니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>개발/스테이징 검색 노출 사고 원천 방지</strong>: 환경변수 조건문을 통해 테스트 사이트가 검색엔진에 무단 색인되는 치명적인 SEO 사고를 차단합니다.</li>
-              <li><strong>TypeScript 기반 크롤링 규칙 정의</strong>: 오타나 잘못된 포맷 없이 타입 안전하게 User-Agent, Allow, Disallow, Sitemap URL을 관리합니다.</li>
-              <li><strong>도메인별 멀티 호스트 대응</strong>: 요청 호스트 헤더에 따라 서로 다른 브랜드 도메인의 사이트맵 경로를 유연하게 분기합니다.</li>
+              <li><strong>스테이징 검색 노출 사고 방지</strong>: 환경별로 다른 규칙 함수를 반환해 테스트 사이트가 검색엔진에 무단 색인되는 사고를 차단합니다.</li>
+              <li><strong>타입 안전한 크롤링 규칙</strong>: <code>MetadataRoute.Robots</code> 타입으로 User-Agent, Allow, Disallow, Sitemap URL 오타를 방지합니다.</li>
+              <li><strong>Route Handler와 동일한 캐싱/동적 API 규칙 적용</strong>: robots.ts는 요청 시점 API를 쓰지 않으면 기본적으로 캐시되는 특수 Route Handler입니다.</li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>프로덕션 vs 스테이징/QA 환경별 검색 인덱싱 자동 허용/차단</li>
-              <li>관리자 대시보드 및 개인정보/결제 페이지의 크롤러 접근 차단</li>
-              <li>멀티 도메인 쇼핑몰의 국가별 사이트맵 URL 동적 매핑</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>public/robots.txt 삭제 필수</strong>: <code>public/robots.txt</code> 정적 텍스트 파일이 존재하면 동적 <code>robots.ts</code>가 무시되므로 정적 파일은 반드시 제거해야 합니다.</li>
-              <li><strong>Sitemap 절대 URL 작성</strong>: <code>sitemap</code> 속성에는 상대 경로가 아닌 전체 도메인을 포함한 절대 URL(<code>https://example.com/sitemap.xml</code>)을 입력해야 검색 크롤러가 올바르게 인식합니다.</li>
+              <li><strong>루트 전용 파일</strong>: 하위 라우트 폴더에 robots.ts를 두어도 라우팅되지 않습니다 — app 루트에만 유효합니다.</li>
+              <li><strong>정적 robots.txt와 공존 불가</strong>: <code>app/robots.txt</code> 정적 파일이 있으면 동적 <code>robots.ts</code>는 무시됩니다.</li>
+              <li><strong>Sitemap 절대 URL</strong>: <code>sitemap</code> 속성에는 전체 도메인을 포함한 절대 URL을 입력해야 합니다.</li>
             </ul>
           </div>
         </div>

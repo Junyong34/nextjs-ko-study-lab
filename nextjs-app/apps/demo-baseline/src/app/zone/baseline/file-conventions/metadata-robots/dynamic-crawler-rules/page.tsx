@@ -6,35 +6,33 @@ export const metadata: Metadata = getDemoMetadata('baseline', 'file-conventions/
 import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { MetadataRobotsDemo } from './components/MetadataRobotsDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"robots.ts 동적 크롤러 색인 규칙"}
-        concept={"app/robots.ts에서 검색엔진 봇별(Googlebot, Yeti) Allow/Disallow 경로와 Sitemap URL을 동적으로 분기하여 SEO 크롤링을 최적화합니다."}
+        title="robots.ts 동적 크롤링 규칙 생성"
+        concept="robots.ts는 app 루트에서만 /robots.txt로 라우팅되는 특수 파일이다. 코드 안의 규칙 함수가 반환한 값이 실제 응답 텍스트로 그대로 직렬화되는지, production/staging 두 모드를 실제 요청으로 대조해 실측한다."
         steps={[
           {
-                    "step": 1,
-                    "title": "robots.ts rules 객체 선언 확인 및 사이트맵 URL 연동 점검",
-                    "description": "User-Agent별 허용 경로(/)와 차단 경로(/admin, /api)가 정의된 구조를 확인합니다. sitemap 속성에 정확한 사이트맵 절대 경로가 지정되어 있는지 점검합니다.",
-                    "actionBadge": "규칙 확인"
+            step: 1,
+            title: '[production 모드로 요청] 클릭',
+            description: '실제 GET 요청이 preview 라우트로 전송되고, robots-rules.ts의 production 규칙(Googlebot 허용, 관리자/결제 경로 차단, Sitemap/Host)이 텍스트로 직렬화되어 돌아옵니다.',
+            actionBadge: '실제 요청',
           },
           {
-                    "step": 2,
-                    "title": "robots.txt 텍스트 포맷 변환 검증",
-                    "description": "Next.js가 /robots.txt 요청에 대해 표준 robots.txt 포맷 텍스트로 응답하는지 검증합니다.",
-                    "actionBadge": "포맷 검증",
-                    "observe": "3단 검증 패널에서 robots.ts의 크롤러 규칙과 사이트맵 경로 매핑 상태 확인",
-                    "observeAt": "verification"
-          }
-]}
-        />
-      <DemoPlaygroundCard title={"robots.ts 동적 크롤링 규칙 생성 실습"}>
+            step: 2,
+            title: '[staging 모드로 요청] 클릭',
+            description: '같은 라우트에 mode=staging으로 요청하면 서버가 다른 규칙(User-Agent: * 전체 차단)을 계산해 다른 텍스트를 응답합니다. 코드의 조건 분기가 실제 응답을 바꾸는 과정을 확인합니다.',
+            actionBadge: '규칙 전환',
+            observe: '두 응답 텍스트의 Disallow/Sitemap 라인 차이 및 3단 검증 패널의 실측 판정',
+            observeAt: 'verification',
+          },
+        ]}
+      />
+      <DemoPlaygroundCard title="robots.ts 규칙 함수 → 실제 robots.txt 응답 (preview 라우트)">
         <MetadataRobotsDemo />
       </DemoPlaygroundCard>
-      <VerificationFooter />
     </DemoContainer>
   )
 }
