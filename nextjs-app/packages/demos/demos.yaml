@@ -399,7 +399,7 @@
   title: "세션 만료 시 returnUrl과 함께 로그인 리다이렉트"
   doc: 2-guides/redirecting.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/draft-mode/bypass-cookie
   title: "Bypass 쿠키 검증 및 CMS 초안 렌더링"
