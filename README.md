@@ -15,7 +15,8 @@
 <p align="center">
   <a href="https://www.learn-nextjs-lab.space/"><strong>웹사이트 바로가기</strong></a> |
   <a href="https://www.learn-nextjs-lab.space/getting-started"><strong>1장부터 학습 시작</strong></a> |
-  <a href="https://www.learn-nextjs-lab.space/demo"><strong>데모 둘러보기</strong></a>
+  <a href="https://www.learn-nextjs-lab.space/demo"><strong>데모 둘러보기</strong></a> |
+  <a href="https://www.learn-nextjs-lab.space/visualize"><strong>시각화 갤러리</strong></a>
 </p>
 
 공식 문서는 잘 정리되어 있지만, 영어로 읽다 보면 한 번 훑고 넘어가기 쉽고, 읽은 내용이 브라우저에서 실제로 어떻게 동작하는지 확인하려면 따로 프로젝트를 만들어야 합니다. 이 두 과정을 한 곳에서 해결할 수 있도록 만들었습니다. 문서를 읽고, 문제를 풀고, 바로 옆의 예제에서 실제 동작까지 눈으로 확인하는 순서로 학습할 수 있습니다.
@@ -53,6 +54,10 @@
 ### 5. 학습 진도 기록
 
 로그인 없이도 브라우저의 로컬 저장소에 읽은 문서와 완료한 예제가 기록됩니다. 같은 브라우저로 다시 들어오면 직접 표시해 둔 완료 기록을 이어서 확인할 수 있습니다.
+
+### 6. 인터랙티브 아키텍처 시각화 (`/visualize`)
+
+Streaming SSR, Selective Hydration, ISR, Cache Components 같은 Next.js·React의 핵심 런타임 동작을 글로 설명하는 대신 캔버스 애니메이션으로 직접 살펴볼 수 있는 갤러리입니다.
 
 ## 기타
 

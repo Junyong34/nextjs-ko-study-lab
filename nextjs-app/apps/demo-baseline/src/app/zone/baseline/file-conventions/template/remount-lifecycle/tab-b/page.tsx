@@ -14,7 +14,7 @@ export default function TabBPage() {
       <div className="flex justify-between items-center">
         <div>
           <h5 className="font-bold text-xs text-zinc-900 dark:text-zinc-100">탭 B: 구매 후기 및 Q&A (/tab-b)</h5>
-          <p className="text-xs text-zinc-500">layout.tsx의 인풋은 유지되지만 template.tsx는 새로 마운트되었습니다.</p>
+          <p className="text-xs text-zinc-500">layout.tsx의 마운트 횟수·인풋은 유지되지만 template.tsx는 마운트 횟수가 증가하며 새로 마운트되었습니다.</p>
         </div>
         <div className="flex gap-2">
           <Link

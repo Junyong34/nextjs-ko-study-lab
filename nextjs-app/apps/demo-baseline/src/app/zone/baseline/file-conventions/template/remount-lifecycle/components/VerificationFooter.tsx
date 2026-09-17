@@ -1,81 +1,52 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { useRemountCounts } from '../hooks/useRemountStore'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+export function VerificationFooter() {
+  const { layoutMountCount, layoutMountedAt, templateMountCount, templateMountedAt } =
+    useRemountCounts()
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+  const hasNavigated = layoutMountCount > 0 && templateMountCount > 0
+  const isMatched = hasNavigated ? templateMountCount > layoutMountCount : undefined
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  const expected =
+    '• layout.tsx 마운트 횟수: 최초 진입 이후 그대로 유지\n• template.tsx 마운트 횟수: 탭 이동마다 계속 증가해 결국 layout 횟수를 앞지름'
 
-  const defaultExpected = "• layout.tsx는 자식 경로 전환 시에도 상태(state)와 DOM을 지속 보존\n• template.tsx는 경로 이동 시마다 새 인스턴스로 재생성되어 상태 초기화 및 진입 애니메이션 재실행"
-  const defaultActual = "• layout.tsx 지속 보존 & template.tsx 재마운트 수명 주기 분리 감지 완료\n• 탭 간 전환 시 template DOM 재생성 확인"
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = hasNavigated
+    ? `• layout 마운트 횟수: ${layoutMountCount}회 (최초 마운트 ${layoutMountedAt})\n• template 마운트 횟수: ${templateMountCount}회 (최근 마운트 ${templateMountedAt})`
+    : '• 아직 탭을 이동하지 않았습니다. 실습 화면에서 [탭 A 진입 →] 또는 [탭 B 진입 →]을 눌러 세그먼트를 이동해 주세요.'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
         title="template.tsx vs layout.tsx 리마운트 수명 주기 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "Next.js App Router의 template.tsx 컨벤션을 통해 레이아웃 상태 보존과 템플릿 리마운트 메커니즘의 차이를 검증합니다."}
+        description="탭 A ↔ 탭 B ↔ 홈을 오가며 layout.tsx와 template.tsx가 실제로 몇 번 마운트됐는지 비교합니다. 개발 모드에서는 React Strict Mode로 인해 최초 마운트가 2회로 집계될 수 있지만, 'template 횟수 > layout 횟수' 관계 자체는 항상 성립합니다."
       />
       <DemoDeepDiveCard title="template.tsx vs layout.tsx 리마운트 수명 주기 & 인스턴스 재생성">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              Next.js 라우팅 계층의 컴포넌트 렌더링 순서는 <code>Layout {'>'} Template {'>'} ErrorBoundary {'>'} Suspense {'>'} Page</code>입니다. <code>template.tsx</code>는 <code>layout.tsx</code>와 달리 경로 이동 시마다 고유한 React <code>key</code>를 부여받아 매번 완전히 새 인스턴스로 마운트(Remount)되며 모든 내부 상태가 초기화됩니다.
+              Next.js 라우팅 계층의 컴포넌트 렌더링 순서는{' '}
+              <code>layout.js {'>'} template.js {'>'} error.js {'>'} loading.js {'>'} not-found.js {'>'} page.js</code>입니다
+              (공식 문서 Project Structure &ndash; Component Hierarchy 기준). <code>template.tsx</code>는{' '}
+              <code>layout.tsx</code>와 달리 자신이 속한 세그먼트 레벨에서 고유한 React <code>key</code>를 매번 새로
+              부여받아, 그 세그먼트(하위 세그먼트 포함)가 바뀔 때마다 완전히 새 인스턴스로 마운트(Remount)되며 모든
+              내부 상태가 초기화됩니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 동일 카테고리 내에서 탭 메뉴 간 전환 시 <code>layout.tsx</code>의 상태와 DOM은 그대로 유지되는 반면, <code>template.tsx</code> 내부의 입력 폼, <code>useState</code> 카운터, CSS 진입 트랜지션 애니메이션이 즉시 리셋되고 재마운트되는 수명 주기를 검증합니다.
+              본 데모에서는 <code>/tab-a</code> ↔ <code>/tab-b</code> ↔ 홈(<code>/remount-lifecycle</code>) 사이를
+              이동할 때마다 <code>layout.tsx</code>의 마운트 횟수·입력값·DOM은 그대로 유지되는 반면,{' '}
+              <code>template.tsx</code>는 <code>useEffect</code>가 매번 재실행되어 마운트 횟수가 계속 증가하고, 내부{' '}
+              <code>useState</code> 입력값과 진입 애니메이션이 즉시 리셋되는 수명 주기를 실측으로 확인합니다.
             </p>
           </div>
 
@@ -102,6 +73,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>불필요한 리렌더링 오버헤드 주의</strong>: 정적인 UI 요소(GNB, 사이드바)를 <code>template.tsx</code>에 배치하면 매 네비게이션마다 불필요한 DOM 재생성 비용이 발생하므로 반드시 상태 리셋이 필요한 서브 래퍼에만 한정해야 합니다.</li>
               <li><strong>children Props 필수 렌더링</strong>: <code>template.tsx</code>는 <code>{'{'} children {'}'}: {'{'} children: React.ReactNode {'}'}</code>를 필수로 받아 렌더링해야 하위 페이지가 정상적으로 마운트됩니다.</li>
+              <li><strong>개발 모드 카운트 오차</strong>: React Strict Mode(App Router 기본값 true)는 개발 모드에서 마운트 직후 한 번 더 마운트를 재실행하므로, 로컬 개발 환경에서는 마운트 횟수가 실제 이동 횟수의 2배로 보일 수 있습니다. 프로덕션 빌드에는 영향이 없습니다.</li>
             </ul>
           </div>
         </div>

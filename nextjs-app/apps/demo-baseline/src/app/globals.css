@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "../../../../packages/demo-kit";
+@source "../../node_modules/@study/demo-kit";
 
 @theme {
   --color-indigo-50: #14161a0f;

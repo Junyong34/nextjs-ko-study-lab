@@ -1,12 +1,13 @@
 'use client'
 import React, { useEffect, useState } from 'react'
+import { recordTemplateMount, useRemountCounts } from './hooks/useRemountStore'
 
 export default function RemountTemplate({ children }: { children: React.ReactNode }) {
   const [templateInput, setTemplateInput] = useState('')
-  const [mountedAt, setMountedAt] = useState<string>('')
+  const { templateMountCount, templateMountedAt } = useRemountCounts()
 
   useEffect(() => {
-    setMountedAt(new Date().toLocaleTimeString())
+    recordTemplateMount()
   }, [])
 
   return (
@@ -18,9 +19,12 @@ export default function RemountTemplate({ children }: { children: React.ReactNod
             template.tsx (페이지 전환 시 매번 재마운트 & 상태 리셋)
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="rounded bg-indigo-100 px-2 py-0.5 font-mono text-[10px] font-bold text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
-            마운트 시각: {mountedAt || '마운트 중...'}
+            template 마운트 횟수: {templateMountCount || '집계 중...'}
+          </span>
+          <span className="rounded bg-indigo-100 px-2 py-0.5 font-mono text-[10px] font-bold text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+            이번 마운트 시각: {templateMountedAt || '마운트 중...'}
           </span>
           <input
             type="text"

@@ -14,7 +14,7 @@ export default function TabAPage() {
       <div className="flex justify-between items-center">
         <div>
           <h5 className="font-bold text-xs text-zinc-900 dark:text-zinc-100">탭 A: 상품 상세 사양 (/tab-a)</h5>
-          <p className="text-xs text-zinc-500">탭 B로 전환할 때 template.tsx의 인풋과 애니메이션이 재실행됩니다.</p>
+          <p className="text-xs text-zinc-500">탭 B로 전환할 때 template.tsx의 마운트 횟수가 증가하고 인풋·애니메이션이 재실행됩니다.</p>
         </div>
         <div className="flex gap-2">
           <Link

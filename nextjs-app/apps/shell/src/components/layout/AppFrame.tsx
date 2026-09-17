@@ -8,7 +8,8 @@ export function AppFrame({ children, tree }: { children: React.ReactNode; tree: 
   const pathname = usePathname()
   const isLandingPage = pathname === '/'
   const isSystemScreen = pathname === '/study-progress'
-  const hideSidebar = isLandingPage || isSystemScreen
+  const isVisualizationScreen = pathname.startsWith('/visualize')
+  const hideSidebar = isLandingPage || isSystemScreen || isVisualizationScreen
 
   return (
     <div
@@ -17,7 +18,9 @@ export function AppFrame({ children, tree }: { children: React.ReactNode; tree: 
           ? 'max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-10'
           : isSystemScreen
             ? 'max-w-6xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8'
-            : 'max-w-[90rem] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10'
+            : isVisualizationScreen
+              ? 'max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8'
+              : 'max-w-[90rem] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10'
       }`}
     >
       {!hideSidebar && <DocTree tree={tree} />}
