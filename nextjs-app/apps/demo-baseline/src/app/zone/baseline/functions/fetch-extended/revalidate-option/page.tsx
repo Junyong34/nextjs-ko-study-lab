@@ -4,43 +4,40 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'functions/fetch-extended/revalidate-option')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { FetchExtendedRevalidateDemo } from './components/FetchExtendedRevalidateDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="Next.js 확장 fetch revalidate 옵션"
-        concept="Next.js 확장 fetch API의 { next: { revalidate: 60 } } 옵션을 사용하여 HTTP 요청 레벨에서 ISR 시간 기반 캐시 수명과 revalidation 주기를 제어합니다."
+        concept="Next.js 확장 fetch API의 { next: { revalidate: N } } 옵션은 데이터 캐시의 수명을 초 단위로 지정합니다. N초 이내 반복 호출은 캐시된 값을 그대로 반환하고, N초가 지난 뒤의 호출만 실제로 origin을 다시 호출합니다."
         steps={[
           {
             step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-            description: "시간 기반 ISR 캐시가 적용된 카탈로그 상품을 선택합니다.",
-            actionBadge: "상품 선택",
+            title: '[러닝화 (#001)] 또는 [윈드브레이커 (#002)]와 revalidate(5초/10초) 선택',
+            description: '어떤 상품을, 몇 초짜리 캐시 수명으로 조회할지 정합니다.',
+            actionBadge: '조건 선택',
           },
           {
             step: 2,
-            title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "revalidate: 60 옵션이 지정된 확장 fetch 함수를 호출합니다.",
-            actionBadge: "fetch 호출",
+            title: '[자동 폴링 시작] 클릭',
+            description: '1초 간격으로 fetch(next.revalidate) 실습 콘솔이 내부 /api Route Handler를 반복 호출합니다.',
+            actionBadge: '폴링 시작',
           },
           {
             step: 3,
-            title: "캐시 수명 주기 및 실시간 도메인 로그 관찰",
-            description: "60초 TTL 동안 캐시 HIT가 유지되고 만료 후 비동기 SWR 갱신이 일어나는지 실시간 로그에서 확인합니다.",
-            actionBadge: "로그 검증",
-            observe: "fetch next.revalidate 옵션에 따른 캐시 적재 및 갱신 상태가 실시간 로그에 반영됨",
-            observeAt: "verification",
+            title: 'originCallCount 변화로 HIT/MISS 전환 관찰',
+            description:
+              'revalidate 초 이내에는 origin이 실행되지 않아 originCallCount가 그대로(HIT)이고, 초가 지난 첫 호출에서만 origin이 실행되어 값이 증가(MISS)하는지 검증 패널에서 확인합니다.',
+            actionBadge: '로그 검증',
+            observe: 'HIT 유지 구간과 MISS 전환 시점이 revalidate 값과 일치하는지 실측',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"Next.js 확장 fetch revalidate 옵션 실습"}>
-        <FetchExtendedRevalidateDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <FetchExtendedRevalidateDemo />
     </DemoContainer>
   )
 }

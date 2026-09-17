@@ -1,101 +1,179 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { DemoPlaygroundCard, DemoResetButton } from '@study/demo-kit'
+import { fetchStockWithRevalidate } from '../actions'
+import type { CacheStatus, PollLogEntry, ProductCode } from '../types'
+import { VerificationFooter } from './VerificationFooter'
+
+const PRODUCTS: { code: ProductCode; label: string }[] = [
+  { code: 'PROD-001', label: '러닝화 (#001)' },
+  { code: 'PROD-002', label: '윈드브레이커 (#002)' },
+]
+
+const REVALIDATE_OPTIONS = [5, 10] as const
+
+const POLL_INTERVAL_MS = 1000
+const LOG_LIMIT = 10
 
 export function FetchExtendedRevalidateDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
+  const [productCode, setProductCode] = useState<ProductCode>('PROD-001')
+  const [revalidateSeconds, setRevalidateSeconds] = useState<number>(5)
+  const [sessionId, setSessionId] = useState(1)
+  const [isPolling, setIsPolling] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
+  const [log, setLog] = useState<PollLogEntry[]>([])
 
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
+  const lastOriginCallCountRef = useRef<number | null>(null)
+  const clientSeqRef = useRef(0)
+
+  const poll = useCallback(async () => {
+    setIsFetching(true)
+    try {
+      const result = await fetchStockWithRevalidate(productCode, sessionId, revalidateSeconds)
+      const prevCount = lastOriginCallCountRef.current
+      const cacheStatus: CacheStatus =
+        prevCount === null ? 'INIT' : prevCount === result.originCallCount ? 'HIT' : 'MISS'
+      lastOriginCallCountRef.current = result.originCallCount
+      clientSeqRef.current += 1
+
+      setLog((prev) => [{ ...result, clientSeq: clientSeqRef.current, cacheStatus }, ...prev].slice(0, LOG_LIMIT))
+    } finally {
+      setIsFetching(false)
+    }
+  }, [productCode, sessionId, revalidateSeconds])
+
+  useEffect(() => {
+    if (!isPolling) return
+    const id = setInterval(poll, POLL_INTERVAL_MS)
+    return () => clearInterval(id)
+  }, [isPolling, poll])
+
+  const startNewSession = useCallback(() => {
+    setIsPolling(false)
+    setLog([])
+    lastOriginCallCountRef.current = null
+    clientSeqRef.current = 0
+    setSessionId((id) => id + 1)
+  }, [])
+
+  const handleSelectProduct = (code: ProductCode) => {
+    if (code === productCode) return
+    setProductCode(code)
+    startNewSession()
+  }
+
+  const handleSelectRevalidate = (seconds: number) => {
+    if (seconds === revalidateSeconds) return
+    setRevalidateSeconds(seconds)
+    startNewSession()
   }
 
   return (
-    <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
-        <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Next.js 확장 fetch revalidate 옵션 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
+    <>
+      <DemoPlaygroundCard title="Next.js 확장 fetch revalidate 옵션 실습">
+        <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
+            <div>
+              <h4 className="font-bold text-zinc-900 dark:text-zinc-100">재고 조회 fetch 실습 콘솔</h4>
+              <p className="text-xs text-zinc-500">
+                아래 fetch가 1초 간격으로 <code>/api</code> 내부 Route Handler를{' '}
+                <code>next: {'{'} revalidate: {revalidateSeconds} {'}'}</code>로 호출합니다.
+              </p>
+            </div>
+            <DemoResetButton onReset={startNewSession} label="세션 초기화" loadingLabel="초기화 중..." />
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
-          </div>
-        </div>
 
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
+              <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">상품 선택</span>
+              <div className="flex gap-2">
+                {PRODUCTS.map((p) => (
+                  <button
+                    key={p.code}
+                    onClick={() => handleSelectProduct(p.code)}
+                    className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
+                      productCode === p.code
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
               </div>
-            ))}
+
+              <span className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 pt-1">
+                revalidate 옵션 (초)
+              </span>
+              <div className="flex gap-2">
+                {REVALIDATE_OPTIONS.map((seconds) => (
+                  <button
+                    key={seconds}
+                    onClick={() => handleSelectRevalidate(seconds)}
+                    className={`rounded px-2.5 py-1 text-xs font-mono font-semibold cursor-pointer ${
+                      revalidateSeconds === seconds
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+                    }`}
+                  >
+                    revalidate: {seconds}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  onClick={() => setIsPolling((p) => !p)}
+                  className={`rounded px-3 py-1 text-xs font-bold cursor-pointer ${
+                    isPolling ? 'bg-emerald-600 text-white' : 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                  }`}
+                >
+                  {isPolling ? '● 자동 폴링 중 (1초 간격)' : '자동 폴링 시작'}
+                </button>
+                <button
+                  onClick={poll}
+                  disabled={isFetching}
+                  className="rounded bg-zinc-200 px-3 py-1 text-xs font-semibold text-zinc-800 disabled:opacity-50 dark:bg-zinc-800 dark:text-zinc-200 cursor-pointer"
+                >
+                  지금 1회 조회
+                </button>
+              </div>
+            </div>
+
+            <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
+              <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">
+                실측 로그 (세션 #{sessionId}, 최근 {LOG_LIMIT}건):
+              </div>
+              <div className="space-y-1 pt-1 text-[11px] max-h-48 overflow-y-auto">
+                {log.length === 0 && <div className="text-zinc-600">아직 조회 기록이 없습니다.</div>}
+                {log.map((entry) => (
+                  <div key={entry.clientSeq} className="flex items-center justify-between gap-2">
+                    <span className="text-zinc-500">
+                      #{entry.clientSeq} {entry.fetchedAt}
+                    </span>
+                    <span
+                      className={
+                        entry.cacheStatus === 'HIT'
+                          ? 'text-emerald-400 font-bold'
+                          : entry.cacheStatus === 'MISS'
+                            ? 'text-amber-400 font-bold'
+                            : 'text-zinc-400 font-bold'
+                      }
+                    >
+                      {entry.cacheStatus}
+                    </span>
+                    <span className="text-zinc-300">
+                      재고 {entry.stock}개 (origin #{entry.originCallCount})
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </DemoPlaygroundCard>
+
+      <VerificationFooter productCode={productCode} revalidateSeconds={revalidateSeconds} log={log} isPolling={isPolling} />
+    </>
   )
 }
