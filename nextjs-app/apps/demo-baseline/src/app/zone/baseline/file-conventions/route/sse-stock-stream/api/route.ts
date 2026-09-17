@@ -2,6 +2,9 @@ import { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
+const TICK_INTERVAL_MS = 2000
+const MAX_TICKS = 20
+
 export async function GET(request: NextRequest) {
   const encoder = new TextEncoder()
 
@@ -12,9 +15,28 @@ export async function GET(request: NextRequest) {
   }
 
   let timer: NodeJS.Timeout | null = null
+  let closed = false
 
   const stream = new ReadableStream({
     start(controller) {
+      // request.signal의 'abort' 이벤트로 클라이언트 연결 해제를 즉시 감지해 정리한다.
+      const stop = (reason: string) => {
+        if (closed) return
+        closed = true
+        if (timer) {
+          clearInterval(timer)
+          timer = null
+        }
+        console.log(`[sse-stock-stream] 연결 정리: ${reason} @ ${new Date().toISOString()}`)
+        try {
+          controller.close()
+        } catch {
+          // 이미 닫힌 스트림이면 무시
+        }
+      }
+
+      console.log(`[sse-stock-stream] 연결 수립 @ ${new Date().toISOString()}`)
+
       // 1. 초기 상태 전송
       const initMessage = `data: ${JSON.stringify({
         type: 'INIT',
@@ -27,16 +49,6 @@ export async function GET(request: NextRequest) {
       // 2. 주기적 실시간 재고 변동 틱 전송
       let count = 0
       timer = setInterval(() => {
-        if (request.signal.aborted || count >= 30) {
-          if (timer) clearInterval(timer)
-          try {
-            controller.close()
-          } catch {
-            // ignore if already closed
-          }
-          return
-        }
-
         count++
         const productIds = Object.keys(initialStocks)
         const targetId = productIds[Math.floor(Math.random() * productIds.length)]
@@ -55,15 +67,25 @@ export async function GET(request: NextRequest) {
         try {
           controller.enqueue(encoder.encode(tickMessage))
         } catch {
-          if (timer) clearInterval(timer)
+          stop('청크 enqueue 실패')
+          return
         }
-      }, 1200)
+
+        if (count >= MAX_TICKS) {
+          stop('최대 틱 수 도달')
+        }
+      }, TICK_INTERVAL_MS)
+
+      request.signal.addEventListener('abort', () => stop('클라이언트 연결 해제(abort)'))
     },
-    cancel() {
+    cancel(reason) {
+      if (closed) return
+      closed = true
       if (timer) {
         clearInterval(timer)
         timer = null
       }
+      console.log(`[sse-stock-stream] stream.cancel() 호출됨: ${reason ?? '소비자 취소'} @ ${new Date().toISOString()}`)
     },
   })
 

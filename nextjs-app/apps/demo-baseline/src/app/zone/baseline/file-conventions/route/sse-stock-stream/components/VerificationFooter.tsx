@@ -66,7 +66,7 @@ export function VerificationFooter({
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>force-dynamic 선언 및 버퍼링 차단</strong>: SSE 엔드포인트에는 <code>export const dynamic = 'force-dynamic'</code> 선언이 필수이며, 프록시/CDN 버퍼링으로 인한 지연을 막기 위해 <code>Cache-Control: no-cache, no-transform</code> 및 <code>x-accel-buffering: no</code> 헤더를 설정해야 합니다.</li>
-              <li><strong>스트림 클린업(Cancelation) 처리</strong>: 클라이언트가 브라우저 창을 닫았을 때 서버 리소스 누수를 방지하기 위해 <code>ReadableStream</code>의 <code>cancel()</code> 콜백에서 타이머나 DB 구독을 반드시 해제해야 합니다.</li>
+              <li><strong>스트림 클린업(Cancelation) 처리</strong>: 이 데모는 클라이언트가 [스트림 일시중지]를 누르거나 페이지를 벗어나 컴포넌트가 언마운트되면 <code>AbortController.abort()</code>를 호출합니다. 서버 <code>route.ts</code>는 <code>request.signal</code>의 <code>'abort'</code> 이벤트로 이를 즉시 감지해 <code>setInterval</code>을 정리하고 <code>controller.close()</code>를 호출합니다 — <code>pnpm dev</code> 터미널 콘솔에서 <code>[sse-stock-stream] 연결 정리: 클라이언트 연결 해제(abort)</code> 로그로 실제 호출을 확인할 수 있습니다.</li>
             </ul>
           </div>
         </div>
