@@ -36,6 +36,5 @@ export interface DemoMeta {
   description: string;
   gridDescription: string;
   modules: string[];
-  code: string;
   component: React.ReactNode;
 }

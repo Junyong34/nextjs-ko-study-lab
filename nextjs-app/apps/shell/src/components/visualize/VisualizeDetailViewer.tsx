@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Check, Copy, ExternalLink, Code2 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { ShareButton } from '@study/ui'
 import type { DemoMeta } from './types'
 import { getDemoBadge } from './data'
@@ -13,18 +13,7 @@ interface VisualizeDetailViewerProps {
 }
 
 export function VisualizeDetailViewer({ demo, relatedDemos }: VisualizeDetailViewerProps) {
-  const [copied, setCopied] = useState(false)
   const badge = getDemoBadge(demo)
-
-  const handleCopyCode = async () => {
-    try {
-      await navigator.clipboard.writeText(demo.code)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // ignore
-    }
-  }
 
   return (
     <div className="space-y-8">
@@ -74,38 +63,6 @@ export function VisualizeDetailViewer({ demo, relatedDemos }: VisualizeDetailVie
           {demo.component}
         </div>
       </section>
-
-      {/* 결합 구현 소스 코드 섹션 */}
-      {demo.code && (
-        <section className="bg-zinc-950 text-zinc-100 rounded-2xl p-5 sm:p-6 border border-zinc-800 space-y-3 font-mono text-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-zinc-800 font-sans">
-            <div className="flex items-center gap-2 text-zinc-300 font-semibold">
-              <Code2 className="h-4 w-4 text-emerald-400" />
-              <span>시각화 조합 예시 코드</span>
-            </div>
-            <button
-              type="button"
-              onClick={handleCopyCode}
-              className="flex items-center gap-1 text-[11px] px-2.5 py-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition cursor-pointer"
-            >
-              {copied ? (
-                <>
-                  <Check className="h-3.5 w-3.5 text-emerald-400" />
-                  <span>복사됨!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-3.5 w-3.5" />
-                  <span>코드 복사</span>
-                </>
-              )}
-            </button>
-          </div>
-          <pre className="text-emerald-400 overflow-x-auto leading-relaxed py-2">
-            {demo.code}
-          </pre>
-        </section>
-      )}
 
       {/* 같은 카테고리의 다른 시각화 둘러보기 */}
       {relatedDemos.length > 0 && (
