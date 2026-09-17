@@ -13,26 +13,28 @@ export default function DemoPage() {
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title={"template.tsx 폼 리셋 및 진입 애니메이션"}
-        concept={"template.tsx는 페이지 전환 시마다 React 트리를 언마운트 후 다시 마운트하여 CSS slide-in-from-bottom 애니메이션을 매번 재생하고 폼 입력값(훌륭한 상품입니다!)을 리셋합니다."}
+        concept={"template.tsx는 세그먼트 이동마다 고유한 key로 새 인스턴스를 마운트하므로, 그 안의 비제어(uncontrolled) 입력은 이전 값과 무관하게 항상 빈 DOM으로 다시 태어나고 CSS 진입 애니메이션도 매번 재생됩니다."}
         steps={[
         {
         "step": 1,
-        "title": "[훌륭한 상품입니다!] 텍스트 입력 수정",
-        "description": "template.tsx 영역의 후기 작성 폼에 임의의 텍스트를 입력합니다.",
+        "title": "[이 사이즈 재고 있나요?] 입력창에 문구 입력",
+        "description": "template.tsx 영역(보라색 박스)의 상품 문의 입력창에 임의의 텍스트를 입력합니다.",
         "actionBadge": "폼 입력"
         },
         {
         "step": 2,
-        "title": "페이지 라우트 전환 실행",
-        "description": "다른 서브 페이지로 이동하여 template의 수명 주기 전환을 유도합니다.",
-        "actionBadge": "페이지 전환"
+        "title": "[사이즈 문의 탭 진입 →] 또는 [색상 문의 탭 진입 →] 클릭",
+        "description": "실제 서브 라우트로 이동하여 template.tsx를 실제로 언마운트·재마운트시킵니다.",
+        "actionBadge": "탭 이동",
+        "observe": "보라색 template 박스가 슬라이드 페이드인으로 다시 나타나고, 입력창이 비워짐",
+        "observeAt": "playground"
         },
         {
         "step": 3,
-        "title": "인스턴스 리셋 및 애니메이션 재생 확인",
-        "description": "새 페이지 진입 시 이전 입력값이 깨끗이 비워지고 CSS 페이드인 애니메이션이 재실행되는지 확인합니다.",
+        "title": "입력값 리셋 및 애니메이션 재생 확인",
+        "description": "탭을 몇 차례 오가며, 초록색 layout 박스의 대조군 입력은 유지되는지도 함께 비교합니다.",
         "actionBadge": "리셋 확인",
-        "observe": "3단 검증 패널에서 template.tsx의 인스턴스 재생성 및 상태 리셋 사양 충족 확인",
+        "observe": "3단 검증 패널에서 직전 값 소실 여부와 animationstart/animationend 발생 횟수 확인",
         "observeAt": "verification"
         }
         ]}

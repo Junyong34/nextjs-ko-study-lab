@@ -1,107 +1,82 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { useInputResetState } from '../hooks/useInputResetStore'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+export function VerificationFooter() {
+  const { templateMountCount, lastValueBeforeUnmount, animationLog } = useInputResetState()
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+  const startCount = animationLog.filter((entry) => entry.type === 'start').length
+  const endCount = animationLog.filter((entry) => entry.type === 'end').length
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  const hasNavigatedAway = templateMountCount > 1
+  const valueWasWiped = lastValueBeforeUnmount.trim().length > 0
+  const animationReplayed = startCount > 0 && startCount === endCount
 
-  const defaultExpected = "• 진입 애니메이션 및 폼 리셋 (template.tsx)의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  const isMatched = hasNavigatedAway ? valueWasWiped && animationReplayed : undefined
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const expected =
+    '• 폼 리셋: 탭 이동 시 직전 인스턴스의 입력값이 존재했더라도 새 인스턴스는 항상 빈 문자열로 시작\n' +
+    '• 애니메이션: template 마운트마다 animationstart → animationend 이벤트가 1회씩 대칭으로 발생'
+
+  const actual = hasNavigatedAway
+    ? `• template 마운트 횟수: ${templateMountCount}회\n` +
+      `• 직전 인스턴스에서 언마운트 직전 실제로 읽은 입력값: ${
+        valueWasWiped ? `"${lastValueBeforeUnmount}" (이번 인스턴스는 빈 값으로 시작)` : '(입력 없이 이동함 — 위 입력창에 문구를 적고 다시 이동해 보세요)'
+      }\n` +
+      `• animationstart 이벤트: ${startCount}회 / animationend 이벤트: ${endCount}회`
+    : '• 아직 탭을 이동하지 않았습니다. 실습 화면에서 입력 후 [사이즈 문의 탭] ↔ [색상 문의 탭]으로 이동해 주세요.'
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="진입 애니메이션 및 폼 리셋 (template.tsx) 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="template.tsx 진입 애니메이션 재생 및 폼 리셋 검증 결과"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="animationstart/animationend 네이티브 이벤트 리스너와 언마운트 직전 실제 DOM 입력값 캡처로 측정한 결과입니다. 개발 모드 React Strict Mode에서는 최초 진입 시 마운트가 한 번 더 실행될 수 있지만, '탭 이동마다 입력값이 비워지고 애니메이션이 재생된다'는 관계 자체는 항상 성립합니다."
       />
       <DemoDeepDiveCard title="template.tsx 진입 애니메이션 재생 및 폼 입력 상태 자동 리셋">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
             <p>
-              <code>template.tsx</code>는 라우트 이동 시마다 새로운 React 컴포넌트 인스턴스를 생성하므로, 내부의 로컬 폼 상태(<code>useState</code>)를 0ms 지연으로 자동 초기화하고 CSS 진입 애니메이션(Fade-in/Slide-in)을 매번 새롭게 재생시키는 파일 컨벤션입니다.
+              공식 문서(API Reference &ndash; File Conventions &ndash; <code>template.js</code>)에 따르면 template은
+              layout과 달리 <strong>세그먼트별로 고유한 <code>key</code></strong>를 부여받고, 그 세그먼트(하위
+              세그먼트 포함)가 바뀔 때마다 새 인스턴스로 마운트됩니다. DOM 요소는 완전히 재생성되고, 내부{' '}
+              <code>useState</code> 등 클라이언트 상태도 함께 초기화됩니다.
             </p>
           </div>
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
             <p>
-              본 데모에서는 사용자가 [검색어 입력 폼]에 텍스트를 작성하고 다른 탭 메뉴로 이동했을 때, <code>layout.tsx</code> 영역과 달리 <code>template.tsx</code>로 감싸진 입력 폼이 즉시 초기화되며 새로운 슬라이드인 애니메이션과 함께 렌더링되는 동작을 실증합니다.
+              본 데모에서는 사용자가 [사이즈 문의 탭] ↔ [색상 문의 탭] 사이를 이동할 때마다{' '}
+              <code>template.tsx</code>가 실제로 언마운트·재마운트됩니다. 언마운트 직전 <code>useEffect</code>{' '}
+              클린업 함수가 비제어(uncontrolled) 입력의 실제 DOM 값(<code>ref.current.value</code>)을 그대로
+              읽어 기록하고, 새 인스턴스는 <code>defaultValue</code>만 가진 새 DOM 노드로 태어나므로 그 값과
+              무관하게 항상 빈 상태로 시작합니다. 같은 방식의 입력이 <code>layout.tsx</code>(대조군, 세그먼트
+              유지)에서는 DOM 노드 자체가 파괴되지 않으므로 값이 그대로 남습니다.
             </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>자동 상태 격리(Zero Stale State)</strong>: 이전 탭에서 작성 중이던 미저장 폼 데이터가 다음 페이지에 오염되는 현상을 프레임워크 레벨에서 방지합니다.</li>
-              <li><strong>시각적 페이지 전환 피드백</strong>: 브라우저 히스토리 탐색 시 사용자에게 명확한 화면 갱신 인터랙션을 제공합니다.</li>
-              <li><strong>선언적 초기화 구조</strong>: 복잡한 <code>useEffect</code> 클린업 함수나 라우터 이벤트 리스너 없이 파일 분리만으로 리셋 메커니즘을 완성합니다.</li>
-            </ul>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. CSS 진입 애니메이션 실측 방법</h5>
+            <p>
+              template 박스에는 <code>@keyframes</code>로 정의한 슬라이드 페이드인 애니메이션이 적용돼 있고,
+              루트 요소의 <code>onAnimationStart</code>/<code>onAnimationEnd</code>(네이티브{' '}
+              <code>animationstart</code>/<code>animationend</code> 이벤트)가 실제로 발생할 때만 로그를 남깁니다.
+              타이머로 흉내 낸 것이 아니라 브라우저가 실제 애니메이션을 재생하고 끝냈다는 사실 자체를
+              측정합니다.
+            </p>
           </div>
 
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무 활용 및 주의사항</h5>
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>다단계 회원가입 및 결제 주문서의 단계별 입력 폼 초기화</li>
-              <li>탭별 독립 검색창 및 필터 입력 위젯</li>
-              <li>마케팅 이벤트 배너의 탭 전환 시 시각적 진입 모션</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>스크롤 위치 유지 충돌 고려</strong>: <code>template.tsx</code>로 전체 본문을 감싸면 페이지 전환 시 스크롤 위치가 유지되지 않고 상단으로 리셋될 수 있으므로, 스크롤 유지가 중요한 경우 <code>layout.tsx</code>와 조합하여 사용해야 합니다.</li>
-              <li><strong>Key 수동 조작 불필요</strong>: Next.js가 내부적으로 라우트 세그먼트 기반 고유 키를 자동 부여하므로 개발자가 임의의 <code>key</code>를 템플릿 루트에 덮어쓰지 않도록 주의합니다.</li>
+              <li>다단계 폼·탭별 검색창처럼 &ldquo;이전 화면의 미저장 입력이 다음 화면에 남으면 안 되는&rdquo; 곳에 적합합니다.</li>
+              <li>정적인 GNB·사이드바를 template에 두면 이동마다 불필요하게 DOM이 재생성되므로 피합니다.</li>
+              <li>스크롤 위치 유지가 중요하면 template 단독이 아니라 layout과 조합을 검토합니다.</li>
             </ul>
           </div>
         </div>
