@@ -1,52 +1,32 @@
 import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { FormValidationDemo } from './components/FormValidationDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/forms/use-action-state-errors')
-
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { FormValidationDemo } from './components/FormValidationDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"useActionState 폼 유효성 검사 및 필드 에러 처리"}
-        concept={"React 19 useActionState 훅을 통해 Server Action의 이전 상태와 폼 반환값(성공 여부, 필드별 에러 메시지)을 선언적으로 바인딩하고 비동기 제출 중 isPending 상태를 제어합니다."}
+        title="useActionState로 서버의 필드 오류 확인하기"
+        concept="폼을 제출하면 실제 Server Action의 반환값이 state가 되어 입력 오류와 성공 결과를 표시합니다."
         steps={[
-          {
-                    "step": 1,
-                    "title": "[name@domain.com] 이메일 입력",
-                    "description": "주문서 양식에 기본 이메일과 고객 정보를 작성합니다.",
-                    "actionBadge": "양식 입력"
-          },
-          {
-                    "step": 2,
-                    "title": "[잘못된 이메일 (예: invalid-email)] 에러 유발 입력",
-                    "description": "유효하지 않은 이메일 형식을 입력하여 유효성 검사 실패 조건을 만듭니다.",
-                    "actionBadge": "에러 조건 유발"
-          },
-          {
-                    "step": 3,
-                    "title": "[서버 검증 중... 주문서 제출 및 검증] 클릭",
-                    "description": "useActionState로 래핑된 Server Action을 디스패치합니다.",
-                    "actionBadge": "서버 액션 제출"
-          },
-          {
-                    "step": 4,
-                    "title": "서버 유효성 검증 에러 메시지 및 필드 피드백 관찰",
-                    "description": "서버에서 반환된 validation error 메시지가 각 폼 필드 하단에 실시간 렌더링되는지 관찰합니다.",
-                    "actionBadge": "에러 피드백 관찰",
-                    "observe": "useActionState 상태가 state.errors 객체를 수신하여 각 필드별 에러 피드백을 실시간 렌더링함",
-                    "observeAt": "playground"
-          }
-]}
+          { step: 1, title: '[주문서 제출 및 검증] 클릭',
+            description: '기본값 invalid-email / 0과 기대 시나리오 이메일·수량 오류를 그대로 제출하세요.',
+            observe: '두 필드 오류가 함께 표시되고, 서버 거절과 학습 검증 완료가 구분됩니다.', observeAt: 'verification' },
+          { step: 2, title: '[올바른 예시 입력] 후 [기대 시나리오]를 성공 응답으로 선택',
+            description: 'customer@example.com / 2를 제출해 오류가 사라지고 성공 결과가 나오는지 확인하세요.',
+            observe: 'state.status=success, errors={}, data의 이메일과 수량', observeAt: 'verification' },
+          { step: 3, title: '[오류 예시 입력] 후 다시 제출',
+            description: '성공 응답 기대를 유지하면 불일치가 됩니다. 기대를 이메일·수량 오류로 바꾸어 비교하세요.',
+            observe: '실제 서버 반환값은 그대로이고 선택한 기대에 따라 판정이 달라집니다.', observeAt: 'verification' },
+          { step: 4, title: '[예제 초기화] 후 재실행',
+            description: '입력·응답·기대 시나리오를 초기화합니다. Network에서도 제출마다 실제 POST를 확인할 수 있습니다.',
+            observe: '초기화 뒤 검증 패널은 대기 중으로 돌아갑니다.', observeAt: 'verification' },
+        ]}
       />
-      <DemoPlaygroundCard title={"useActionState 필드 에러 표시 및 유효성 검증 실습"}>
-        <FormValidationDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <FormValidationDemo />
     </DemoContainer>
   )
 }

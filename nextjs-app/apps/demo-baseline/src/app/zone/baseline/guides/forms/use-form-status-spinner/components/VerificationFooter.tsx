@@ -1,107 +1,48 @@
 'use client'
-import React from 'react'
+
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { Attempt, OrderResult } from '../types'
+import { verifyAttempt } from '../verification'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
-
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• useFormStatus pending 스피너 및 버튼 비활성화의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
+export function VerificationFooter({ attempt, result, pending }: {
+  attempt: Attempt | null
+  result: OrderResult | null
+  pending: boolean
+}) {
+  const isMatched = pending ? undefined : verifyAttempt(attempt, result)
   return (
-    <div className="space-y-4">
-      <ExpectedActualPanel
-        title="useFormStatus pending 스피너 및 버튼 비활성화 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+    <>
+      <ExpectedActualPanel title="이번 제출의 pending·data·서버 응답"
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
-      />
-      <DemoDeepDiveCard title="useFormStatus pending 스피너 및 버튼 비활성화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>useFormStatus()</code>는 부모 <code>{'<'}form{'>'}</code>의 제출 진행 상태(<code>pending, data, method, action</code>)를 Props 전달 없이 하위 컴포넌트에서 직접 구독하는 React 19 컨텍스트 기반 훅입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 결제 폼 하위의 <code>{'<'}SubmitButton{'>'}</code> 컴포넌트가 <code>useFormStatus()</code>의 <code>pending</code> 불리언 값을 읽어, 서버 액션이 네트워크 통신을 진행하는 동안 버튼을 <code>disabled</code> 처리하고 로딩 스피너 애니메이션을 노출합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Props Drilling 없는 컴포넌트 캡슐화</strong>: 상위 폼 컴포넌트에서 로딩 상태를 Props로 넘겨받지 않고도 하위 버튼 컴포넌트가 독립적으로 폼 상태를 감지합니다.</li>
-              <li><strong>중복 결제 및 다중 제출 방지</strong>: 폼 제출 중 결제 버튼을 즉시 비활성화하여 사용자의 빠른 연타 클릭으로 인한 다중 승인 사고를 원천 차단합니다.</li>
-              <li><strong>재사용 가능한 버튼 디자인 시스템</strong>: 어떤 <code>{'<'}form{'>'}</code> 내부에서도 그대로 재사용할 수 있는 범용 <code>{'<'}SubmitButton{'>'}</code> 컴포넌트 생태계를 구축합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 결제 승인 버튼(<code>[189,000원 결제하기]</code>)의 중복 클릭 방어</li>
-              <li>대용량 첨부파일 업로드 및 상품 대량 등록 폼의 진행 인디케이터</li>
-              <li>게시글 작성, 상품 리뷰 등록, 1:1 문의 제출 폼의 상태 피드백</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>부모 form 요소 하위 호출 필수</strong>: <code>useFormStatus()</code>는 반드시 <code>{'<'}form{'>'}</code>을 렌더링하는 컴포넌트의 <strong>자식 컴포넌트 내부</strong>에서 호출해야 합니다. <code>{'<'}form{'>'}</code>과 동일한 레벨에서 호출하면 항상 <code>pending: false</code>를 반환합니다.</li>
-              <li><strong>startTransition 미추적</strong>: <code>useFormStatus</code>는 <code>{'<'}form action=...{'>'}</code>의 제출만 감지하며, 폼 외부의 독립적인 <code>startTransition</code> 호출은 감지하지 않으므로 주의가 필요합니다.</li>
-            </ul>
-          </div>
+        description="검증 완료는 훅의 관측과 예상 응답이 일치했다는 뜻입니다. 서버의 수량 거절을 확인해도 학습 검증은 완료될 수 있습니다."
+        expected={<div className="space-y-1">
+          <p>폼 안 pending: false → true → false</p>
+          <p>처리 중 disabled=true, data와 이번 제출 입력 일치</p>
+          <p>폼 밖 pending=false 유지, 완료 후 버튼 활성화·data=null</p>
+          <p>수량 1~10 정수: 서버 접수 / 그 외: 수량 오류로 거절</p>
+        </div>}
+        actual={<div className="space-y-2">
+          {!attempt ? <p>제출 전 대기 중입니다.</p> : <>
+            <p>제출 {attempt.input.requestId} · 입력 수량 {attempt.input.quantity || '(빈 값)'}</p>
+            <ol className="list-inside list-decimal">
+              {attempt.observations.map((observation, index) => <li key={index}>
+                pending={String(observation.pending)}, disabled={String(observation.disabled)}, 밖={String(observation.outsidePending)}
+                {observation.input ? ` / data: 제출 ${observation.input.requestId}, 수량 ${observation.input.quantity}` : ' / data=null'}
+              </li>)}
+            </ol>
+            <p>{result ? result.status === 'success' ? '서버: 접수 완료' : '서버: 접수 거절 (수량 오류 등 확인)' : '이번 서버 응답을 아직 받지 못했습니다.'}</p>
+            <p>{isMatched ? '이번 제출의 관측과 예상 응답이 모두 일치합니다.' : '관측 또는 응답 조건이 아직 충족되지 않았습니다.'}</p>
+          </>}
+        </div>} />
+      <DemoDeepDiveCard title="부모 form의 상태를 구독하는 useFormStatus" className="min-w-0">
+        <div className="space-y-3 text-sm">
+          <p><code>useFormStatus()</code>는 호출한 컴포넌트의 부모 form을 구독합니다. SubmitButton을 form 안에 두면 pending과 제출된 FormData를 읽을 수 있습니다.</p>
+          <pre className="overflow-x-auto rounded bg-zinc-100 p-3 text-xs dark:bg-zinc-900">{'OrderExercise (폼 밖 훅: false)\n└─ form action={formAction}\n   └─ SubmitButton (자식 훅: false → true → false)'}</pre>
+          <p><code>actions.ts</code>의 <code>use server</code> 함수가 수량을 검사합니다. 응답 표시는 useActionState가 맡고, 버튼과 관측값은 자식의 useFormStatus에서 읽습니다. Network 탭에서 실제 POST를 확인할 수 있습니다.</p>
+          <p>pending=false는 처리가 끝났다는 뜻이며 접수 성공을 뜻하지 않습니다. 수량 0을 보내면 서버가 거절하지만 pending은 다시 false가 됩니다.</p>
+          <p>버튼 비활성화는 화면에서 반복 클릭을 줄이는 장치입니다. 실제 서비스의 중복 주문 방지는 별도의 서버 검증과 멱등성 처리가 필요합니다.</p>
         </div>
       </DemoDeepDiveCard>
-    </div>
+    </>
   )
 }

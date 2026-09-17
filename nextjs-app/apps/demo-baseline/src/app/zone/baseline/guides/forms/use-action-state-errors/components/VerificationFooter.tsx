@@ -1,107 +1,40 @@
 'use client'
-import React from 'react'
+
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { ExpectedScenario, FormState } from '../types'
+import { matchesScenario, scenarioLabels } from '../verification'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
-
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• useActionState 필드 에러 표시 및 유효성 검증의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
+export function VerificationFooter({ state, scenario, isPending }: {
+  state: FormState
+  scenario: ExpectedScenario
+  isPending: boolean
+}) {
+  const isMatched = matchesScenario(state, scenario, isPending)
   return (
-    <div className="space-y-4">
+    <>
       <ExpectedActualPanel
-        title="useActionState 필드 에러 표시 및 유효성 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="기대 시나리오와 서버 반환값"
+        expected={<span>{scenarioLabels[scenario]}{scenario === 'success'
+          ? '\nstatus=success, errors={}, data가 유효한 제출값과 일치'
+          : '\nstatus=error, 선택한 필드에만 오류, data=null, 제출값도 해당 오류 조건에 일치'}</span>}
+        actual={<span>{isPending ? '응답 대기 중입니다. 이전 결과로 판정하지 않습니다.' :
+          state.status === 'idle' ? '제출 전입니다. 주문서를 제출해 주세요.' : JSON.stringify(state, null, 2)}</span>}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="검증 완료는 선택한 학습 기대와 응답이 일치한다는 뜻입니다. 오류 응답을 예상했다면 검증은 완료되어도 주문 입력은 거절된 상태입니다."
       />
-      <DemoDeepDiveCard title="useActionState 필드 에러 표시 및 유효성 검증">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>useActionState(action, initialState)</code>는 React 19의 표준 폼 상태 관리 훅으로, Server Action 실행 결과 반환되는 필드별 에러 맵(<code>errors: {'{'} email, zipCode {'}'}</code>)과 폼 제출 상태(<code>state, formAction, isPending</code>)를 선언적으로 바인딩합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 배송지 폼 제출 시 Server Action이 서버에서 Zod/유효성 규칙으로 이메일 및 우편번호를 검증하고, 검증 실패 시 각 입력 필드 바로 아래에 <code>state.errors</code>의 구체적 에러 메시지를 붉은색 안내문으로 즉각 표시합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>필드 단위 정밀 에러 렌더링</strong>: 서버에서 반환된 에러 객체를 각 <code>{'<'}input{'>'}</code> 요소의 <code>aria-describedby</code> 및 텍스트와 1:1로 매핑하여 직관적인 피드백을 제공합니다.</li>
-              <li><strong>폼 보일러플레이트 제거</strong>: <code>isSubmitting</code>, <code>errors</code> 관리를 위한 수십 줄의 <code>useState</code> 및 <code>try/catch</code> 코드를 단 하나의 훅으로 간소화합니다.</li>
-              <li><strong>접근성(a11y) 표준 연동</strong>: 서버 검증 에러 상태를 <code>aria-invalid="true"</code> 속성과 손쉽게 연결하여 스크린 리더 사용자에게 즉시 전달할 수 있습니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>전자상거래 주문서 배송지/수령인 정보 입력 및 유효성 검증</li>
-              <li>B2B 파트너 정산 계좌 및 사업자등록번호 유효성 검사 폼</li>
-              <li>비밀번호 변경 및 복잡도(특수문자/길이) 실시간 피드백 폼</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>액션 함수 인수 순서 준수</strong>: <code>useActionState</code>에 전달하는 Server Action은 <code>(previousState, formData)</code> 형태로 <code>previousState</code>가 첫 번째 인수로 전달되므로 시그니처 순서에 주의해야 합니다.</li>
-              <li><strong>초기 상태(initialState) 스키마 일치</strong>: 초기 상태 객체의 구조(<code>{'{'} errors: {'{'}{'}'}, data: null {'}'}</code>)를 서버 액션 반환 타입과 동일하게 정의해야 런타임 <code>undefined</code> 참조 오류를 방지할 수 있습니다.</li>
-            </ul>
-          </div>
+      <DemoDeepDiveCard title="서버 반환값이 폼 상태가 되는 과정" className="min-w-0">
+        <div className="space-y-3 text-xs leading-relaxed">
+          <p><code>useActionState(action, initialState)</code>는 마지막 액션 반환값을 state로 제공합니다.
+            액션은 <code>(previousState, formData)</code> 순서로 받습니다. 이 예제는 매 제출값을 새로 검사하므로 이전 오류나 성공 결과를 재사용하지 않습니다.</p>
+          <pre className="overflow-x-auto rounded bg-zinc-100 p-3 dark:bg-zinc-900">{'page.tsx → FormValidationDemo\n  OrderForm: useActionState\n    form action → actions.ts (use server)\n      이메일·수량 검사 → { status, fields, errors, data }\n    반환 state → 필드 안내 + VerificationFooter'}</pre>
+          <p>액션은 이메일 기본 형식과 수량 정수 1~10을 서버에서 검사하며 두 필드 오류를 함께 반환합니다.
+            fields는 원래 제출값, data는 통과한 이메일(앞뒤 공백 제거)과 숫자 수량입니다. Network에서 실제 POST 요청을 확인할 수 있습니다.</p>
+          <p>noValidate는 서버 오류 관찰을 위한 설정입니다. 브라우저 검사와 별개로 서버 검사는 항상 필요합니다.
+            이 예제는 필드 오류를 반환하는 흐름이며, 이메일 존재 여부나 재고·결제 처리는 검사하지 않습니다.</p>
+          <p>검증 패널은 현재 편집 중인 입력이 아닌 마지막 서버 응답을 비교합니다. 예제 초기화는 폼을 다시 마운트하여
+            useActionState, 입력값, 기대 시나리오를 초기 상태로 돌립니다. 진행 중에는 제출과 초기화가 비활성화됩니다.</p>
         </div>
       </DemoDeepDiveCard>
-    </div>
+    </>
   )
 }

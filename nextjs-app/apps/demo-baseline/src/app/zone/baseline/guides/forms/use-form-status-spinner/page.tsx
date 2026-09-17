@@ -1,52 +1,22 @@
 import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { FormStatusDemo } from './components/FormStatusDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/forms/use-form-status-spinner')
-
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { FormStatusDemo } from './components/FormStatusDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"useFormStatus pending 스피너 및 버튼 비활성화"}
-        concept={"부모 <form>의 제출 진행 상태를 Props Drilling 없이 하위 <SubmitButton>에서 useFormStatus()로 직접 구독하여 1200ms 결제 통신 중 버튼을 disabled 처리하고 스피너를 노출합니다."}
+      <DemoGuideCard title="useFormStatus로 서버 제출 상태 관찰"
+        concept="useFormStatus는 form 안의 자식에서 제출 중 pending과 data를 읽습니다. 폼 밖의 훅은 그 제출을 구독하지 않습니다."
         steps={[
-          {
-                    "step": 1,
-                    "title": "결제 주문자 및 배송지 정보 입력",
-                    "description": "주문 결제 폼에 결제 수단 및 주문자 정보를 입력합니다.",
-                    "actionBadge": "주문 정보 입력"
-          },
-          {
-                    "step": 2,
-                    "title": "[💳 189,000원 즉시 결제 승인 (useFormStatus)] 클릭",
-                    "description": "결제 버튼을 클릭하여 Server Action 결제 프로세스를 시작합니다.",
-                    "actionBadge": "결제 요청"
-          },
-          {
-                    "step": 3,
-                    "title": "pending 상태 동안 버튼 비활성화 및 스피너 로딩 확인",
-                    "description": "useFormStatus 훅이 pending: true를 감지하여 중복 제출을 방지하고 스피너를 표시하는지 확인합니다.",
-                    "actionBadge": "pending 감지"
-          },
-          {
-                    "step": 4,
-                    "title": "결제 승인 완료 및 주문 결과 관찰",
-                    "description": "서버 통신 완료 후 pending이 false로 전환되며 결제 완료 확인 패널이 활성화되는지 관찰합니다.",
-                    "actionBadge": "결제 완료 관찰",
-                    "observe": "useFormStatus.pending 플래그에 따라 결제 버튼 비활성화 및 로딩 스피너가 정확히 동기화됨",
-                    "observeAt": "playground"
-          }
-]}
-      />
-      <DemoPlaygroundCard title={"useFormStatus pending 스피너 및 버튼 비활성화 실습"}>
-        <FormStatusDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+          { step: 1, title: '수량 2로 예시 주문 접수', description: '상품을 확인하고 수량 2를 입력한 뒤 예시 주문 접수 버튼을 누릅니다.', actionBadge: '제출' },
+          { step: 2, title: '서버 응답 전후 비교', description: '1.2초 관측용 서버 지연 동안 스피너·disabled·data를 확인하세요. 폼 밖 pending은 false입니다.', actionBadge: '관찰' },
+          { step: 3, title: '수량 0으로 서버 거절 확인', description: '수량 0을 제출하면 서버 오류가 표시됩니다. pending 종료와 접수 성공을 구별하고 이번 제출 이력을 확인하세요.', actionBadge: '거절 비교', observe: '이번 제출의 false → true → false 및 서버 입력 일치', observeAt: 'playground' },
+          { step: 4, title: '[예제 초기화] 후 재실행', description: '예제 초기화를 누르면 응답과 관측 이력이 비워지고 검증 대기로 돌아갑니다.', actionBadge: '초기화', observe: '서버 응답과 이전 관측 이력이 사라지고 검증 대기 표시', observeAt: 'verification' },
+        ]} />
+      <FormStatusDemo />
     </DemoContainer>
   )
 }

@@ -1,123 +1,88 @@
 'use client'
 
-import React, { useActionState } from 'react'
+import { useActionState, useState } from 'react'
+import { DemoPlaygroundCard, DemoResetButton, MOCK_PRODUCTS } from '@study/demo-kit'
+import { validateOrderFormAction } from '../actions'
+import type { ExpectedScenario, FormState } from '../types'
+import { scenarioLabels } from '../verification'
+import { VerificationFooter } from './VerificationFooter'
 
-interface FormState {
-  success: boolean
-  error?: string
-  message?: string
-  data?: {
-    email: string
-    quantity: number
-  }
-}
-
-async function validateOrderFormAction(
-  prevState: FormState,
-  formData: FormData
-): Promise<FormState> {
-  // Simulated server validation delay
-  await new Promise((r) => setTimeout(r, 400))
-
-  const email = formData.get('email') as string
-  const quantity = Number(formData.get('quantity'))
-
-  if (!email || !email.includes('@')) {
-    return {
-      success: false,
-      error: '올바른 이메일 주소 형식이 아닙니다 (예: customer@example.com).',
-    }
-  }
-
-  if (!quantity || quantity < 1 || quantity > 10) {
-    return {
-      success: false,
-      error: '주문 수량은 1개 이상 10개 이하여야 합니다.',
-    }
-  }
-
-  return {
-    success: true,
-    message: `[서버 검증 완료] ${email} 님에게 주문 확인서가 발송되었습니다.`,
-    data: { email, quantity },
-  }
-}
-
-const initialState: FormState = {
-  success: false,
-  message: '주문자 이메일과 수량을 입력하고 제출하세요.',
-}
+const initialState: FormState = { status: 'idle', errors: {}, fields: null, data: null }
+const product = MOCK_PRODUCTS[0]
+const inputClass = 'mt-1 w-full rounded border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900'
 
 export function FormValidationDemo() {
+  const [generation, setGeneration] = useState(0)
+  return <OrderForm key={generation} onReset={() => setGeneration((value) => value + 1)} />
+}
+
+function OrderForm({ onReset }: { onReset: () => void }) {
   const [state, formAction, isPending] = useActionState(validateOrderFormAction, initialState)
+  const [email, setEmail] = useState('invalid-email')
+  const [quantity, setQuantity] = useState('0')
+  const [scenario, setScenario] = useState<ExpectedScenario>('both-errors')
 
   return (
-    <form
-      action={formAction}
-      className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950"
-    >
-      <div className="border-b border-zinc-200 pb-3 dark:border-zinc-800">
-        <h4 className="font-bold text-zinc-900 dark:text-zinc-100">
-          React 19 useActionState 폼 서버 유효성 검증 콘솔
-        </h4>
-        <p className="text-xs text-zinc-500">
-          서버 액션 반환 상태(에러 메시지, 이전 입력값, 진행 중 상태)를 선언적으로 관리합니다.
-        </p>
-      </div>
-
-      <div className="space-y-3">
-        <div>
-          <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-            주문자 이메일 주소
-          </label>
-          <input
-            type="text"
-            name="email"
-            defaultValue="customer@example.com"
-            placeholder="name@domain.com"
-            className="mt-1 w-full rounded border border-zinc-300 px-3 py-1.5 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-            주문 수량 (1~10개)
-          </label>
-          <input
-            type="number"
-            name="quantity"
-            defaultValue={2}
-            min={1}
-            max={10}
-            className="mt-1 w-full rounded border border-zinc-300 px-3 py-1.5 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-          />
-        </div>
-
-        {state.error && (
-          <div className="rounded bg-rose-50 p-2 text-xs font-bold text-rose-600 dark:bg-rose-950/40 dark:text-rose-400">
-            ⚠️ {state.error}
+    <>
+      <DemoPlaygroundCard title="주문서 입력 확인">
+        <form action={formAction} noValidate className="space-y-4 text-sm" aria-busy={isPending}>
+          <div className="rounded border border-zinc-200 p-3 dark:border-zinc-800">
+            <h3 className="font-semibold">{product.name}</h3>
+            <p className="mt-1 text-xs text-zinc-500">개당 {product.price.toLocaleString('ko-KR')}원 · 예시 상품</p>
+            <p className="mt-2 text-xs">입력 정보만 서버에서 검사합니다. 주문 저장·결제·이메일 발송은 하지 않습니다.</p>
           </div>
-        )}
-
-        {state.success && (
-          <div className="rounded bg-emerald-50 p-2 text-xs font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-            ✓ {state.message}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label htmlFor="order-email" className="font-medium">주문자 이메일 주소</label>
+              <input id="order-email" name="email" type="email" required value={email}
+                onChange={(event) => setEmail(event.target.value)} disabled={isPending}
+                aria-invalid={Boolean(state.errors.email)}
+                aria-describedby={state.errors.email ? 'order-email-error' : undefined}
+                className={inputClass} />
+              {state.errors.email && <p id="order-email-error" className="mt-1 text-xs text-rose-600 dark:text-rose-400">{state.errors.email}</p>}
+            </div>
+            <div>
+              <label htmlFor="order-quantity" className="font-medium">주문 수량 (1~10개)</label>
+              <input id="order-quantity" name="quantity" type="number" min="1" max="10" step="1"
+                required value={quantity} onChange={(event) => setQuantity(event.target.value)} disabled={isPending}
+                aria-invalid={Boolean(state.errors.quantity)}
+                aria-describedby={state.errors.quantity ? 'order-quantity-error' : undefined}
+                className={inputClass} />
+              {state.errors.quantity && <p id="order-quantity-error" className="mt-1 text-xs text-rose-600 dark:text-rose-400">{state.errors.quantity}</p>}
+            </div>
           </div>
-        )}
-      </div>
-
-      <div className="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-900">
-        <span className="text-[11px] text-zinc-400 font-mono">
-          useActionState isPending: {isPending ? 'true (처리 중...)' : 'false (유휴)'}
-        </span>
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded bg-zinc-900 px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer shadow-2xs"
-        >
-          {isPending ? '서버 검증 중...' : '주문서 제출 및 검증'}
-        </button>
-      </div>
-    </form>
+          <p className="text-xs text-zinc-500">서버의 오류 응답을 관찰하도록 noValidate로 브라우저 기본 검사를 생략했습니다. 오류 안내는 마지막 제출 결과입니다.</p>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" disabled={isPending} className="rounded border px-3 py-1.5 text-xs"
+              onClick={() => { setEmail('customer@example.com'); setQuantity('2') }}>올바른 예시 입력</button>
+            <button type="button" disabled={isPending} className="rounded border px-3 py-1.5 text-xs"
+              onClick={() => { setEmail('invalid-email'); setQuantity('0') }}>오류 예시 입력</button>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <button type="submit" disabled={isPending}
+              className="rounded bg-zinc-900 px-4 py-2 font-semibold text-white disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900">
+              {isPending ? '서버 검증 중...' : '주문서 제출 및 검증'}
+            </button>
+            <DemoResetButton onReset={onReset} disabled={isPending} />
+          </div>
+          <div role="status" aria-live="polite" className="rounded bg-zinc-100 p-3 text-xs dark:bg-zinc-900">
+            <p>{isPending ? '서버 응답을 기다리고 있습니다.' : state.status === 'idle' ? '아직 제출하지 않았습니다.' :
+              state.status === 'error' ? '서버가 입력을 거절했습니다. 각 필드의 오류를 수정해 주세요.' : '서버 입력 검사에 통과했습니다.'}</p>
+            <p className="mt-1 font-mono">state.status: {state.status} · isPending: {String(isPending)}</p>
+            {state.fields && <p className="mt-2 break-all">마지막 제출: 이메일 “{state.fields.email}” · 수량 “{state.fields.quantity}”</p>}
+            {state.data && <p className="mt-1 break-all">성공 결과: {state.data.email} · {state.data.quantity}개</p>}
+          </div>
+        </form>
+        <div className="mt-4 border-t border-zinc-200 pt-3 dark:border-zinc-800">
+          <label htmlFor="expected-scenario" className="text-xs font-semibold">기대 시나리오</label>
+          <select id="expected-scenario" value={scenario} disabled={isPending}
+            onChange={(event) => setScenario(event.target.value as ExpectedScenario)} className={inputClass}>
+            {Object.entries(scenarioLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+          </select>
+          <p className="mt-1 text-xs text-zinc-500">입력 예시 버튼은 기대 시나리오를 바꾸지 않습니다. 마지막 서버 응답과 다른 기대를 골라 불일치도 비교하세요.</p>
+        </div>
+      </DemoPlaygroundCard>
+      <VerificationFooter state={state} scenario={scenario} isPending={isPending} />
+    </>
   )
 }

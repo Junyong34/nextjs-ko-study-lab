@@ -319,14 +319,14 @@
     "title": "useActionState 필드 에러 표시 및 유효성 검증",
     "doc": "2-guides/forms.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/forms/use-form-status-spinner",
     "title": "useFormStatus pending 스피너 및 버튼 비활성화",
     "doc": "2-guides/forms.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/server-actions/start-transition",

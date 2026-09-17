@@ -1,91 +1,79 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useActionState, useCallback, useRef, useState } from 'react'
 import { useFormStatus } from 'react-dom'
-
-function SubmitButton() {
-  const { pending, data, method, action } = useFormStatus()
-
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className={`w-full rounded py-2 text-xs font-bold text-white shadow-2xs transition cursor-pointer ${
-        pending
-          ? 'bg-amber-600 cursor-not-allowed opacity-80'
-          : 'bg-emerald-600 hover:bg-emerald-700'
-      }`}
-    >
-      {pending ? (
-        <span className="flex items-center justify-center gap-2">
-          <span className="animate-spin">⏳</span> 결제 승인 요청 처리 중 (useFormStatus pending=true)...
-        </span>
-      ) : (
-        '💳 189,000원 즉시 결제 승인 (useFormStatus)'
-      )}
-    </button>
-  )
-}
-
-function FormStatusInspector() {
-  const { pending, data } = useFormStatus()
-
-  return (
-    <div className="rounded bg-zinc-950 p-3 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-      <div className="text-zinc-400 border-b border-zinc-800 pb-1">
-        하위 컴포넌트에서 감지한 useFormStatus() 상태:
-      </div>
-      <div className="text-[11px] space-y-0.5">
-        <div>• pending: <strong className={pending ? 'text-amber-400' : 'text-emerald-400'}>{pending ? 'true' : 'false'}</strong></div>
-        <div>• data: <span className="text-zinc-400">{data ? `${data.get('orderName')} (수량: ${data.get('quantity')})` : 'null (제출 전)'}</span></div>
-      </div>
-    </div>
-  )
-}
+import { DemoPlaygroundCard, DemoResetButton, MOCK_PRODUCTS } from '@study/demo-kit'
+import { submitExampleOrder } from '../actions'
+import type { Attempt, Observation } from '../types'
+import { SubmitButton } from './SubmitButton'
+import { VerificationFooter } from './VerificationFooter'
 
 export function FormStatusDemo() {
-  const [resultMessage, setResultMessage] = useState<string | null>(null)
+  const [version, setVersion] = useState(0)
+  return <OrderExercise key={version} onReset={() => setVersion(value => value + 1)} />
+}
 
-  const handleOrderAction = async (formData: FormData) => {
-    // Simulated server payment processing latency
-    await new Promise((r) => setTimeout(r, 1200))
-    const orderName = formData.get('orderName')
-    setResultMessage(`[결제 성공] "${orderName}" 주문 번호 ORD-${Date.now().toString().slice(-6)}가 발급되었습니다.`)
-  }
+function OrderExercise({ onReset }: { onReset: () => void }) {
+  const product = MOCK_PRODUCTS[0]!
+  const [result, formAction, pending] = useActionState(submitExampleOrder, null)
+  // 이 컴포넌트가 반환하는 form은 훅의 부모가 아니므로 구독 대상이 아니다.
+  const outside = useFormStatus()
+  const [attempt, setAttempt] = useState<Attempt | null>(null)
+  const [quantity, setQuantity] = useState('2')
+  // React가 제출 이벤트를 처리할 때 이미 FormData를 읽을 수 있으므로 미리 렌더링한다.
+  const nextRequestId = String(Number(result?.input.requestId ?? 0) + 1)
+  const latest = useRef<Observation | null>(null)
+  const onObserve = useCallback((observation: Observation) => {
+    latest.current = observation
+    setAttempt(current => {
+      if (!current) return current
+      if (observation.input && observation.input.requestId !== current.input.requestId) return current
+      const last = current.observations.at(-1)
+      if (JSON.stringify(last) === JSON.stringify(observation)) return current
+      return { ...current, observations: [...current.observations, observation] }
+    })
+  }, [])
+  const currentResult = result?.input.requestId === attempt?.input.requestId ? result : null
 
   return (
-    <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="border-b border-zinc-200 pb-3 dark:border-zinc-800">
-        <h4 className="font-bold text-zinc-900 dark:text-zinc-100">
-          React 19 useFormStatus 하위 버튼 상태 감지 콘솔
-        </h4>
-        <p className="text-xs text-zinc-500">
-          부모 {'<'}form{'>'}의 제출 상태를 props 드릴링 없이 독립적인 하위 컴포넌트에서 훅으로 즉시 구독합니다.
-        </p>
-      </div>
-
-      <form action={handleOrderAction} className="space-y-4">
-        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-3">
-          <input type="hidden" name="orderName" value="프로 무선 기계식 키보드" />
-          <input type="hidden" name="quantity" value="1" />
-
-          <div className="flex items-center justify-between text-xs">
-            <span className="font-bold text-zinc-900 dark:text-zinc-100">주문 품목: 프로 무선 기계식 키보드</span>
-            <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">189,000원</span>
+    <>
+      <DemoPlaygroundCard title="예시 상품 주문 접수">
+        <div className="space-y-4 text-sm">
+          <p className="font-semibold">{product.name} · {product.price.toLocaleString('ko-KR')}원</p>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            실제 서버 요청에 관측용 1.2초 지연을 둡니다. 예시 입력만 검사하며 결제·메일 발송·영구 주문 저장은 하지 않습니다.
+          </p>
+          <form action={formAction} noValidate className="space-y-3" onSubmitCapture={event => {
+            if (pending) { event.preventDefault(); return }
+            const data = new FormData(event.currentTarget)
+            setAttempt({
+              input: { requestId: String(data.get('requestId')), productId: String(data.get('productId')), quantity: String(data.get('quantity')) },
+              observations: latest.current ? [latest.current] : [],
+            })
+          }}>
+            <input type="hidden" name="requestId" value={nextRequestId} />
+            <input type="hidden" name="productId" value={product.id} />
+            <label htmlFor="status-quantity" className="block font-medium">주문 수량</label>
+            <input id="status-quantity" name="quantity" type="number" min="1" max="10" step="1"
+              value={quantity} onChange={event => setQuantity(event.target.value)} disabled={pending}
+              aria-invalid={Boolean(currentResult?.errors.quantity)} aria-describedby="quantity-help quantity-error"
+              className="w-full rounded border border-zinc-400 bg-transparent px-3 py-2" />
+            <p id="quantity-help" className="text-xs">1~10의 정수를 입력하세요. 0도 제출할 수 있도록 noValidate를 적용해 서버의 거절을 관찰합니다.</p>
+            <p id="quantity-error" aria-live="polite" className="text-rose-700 dark:text-rose-300">{currentResult?.errors.quantity}</p>
+            <SubmitButton outsidePending={outside.pending} onObserve={onObserve} />
+          </form>
+          <p className="font-mono text-xs">폼 밖: pending={String(outside.pending)} · data={outside.data ? '있음' : 'null'}</p>
+          <div role="status" className="rounded border border-zinc-300 p-3 dark:border-zinc-700">
+            {currentResult ? <>
+              <p>{currentResult.status === 'success' ? '예시 주문 접수 완료' : '서버 접수 거절 — 주문 성공이 아닙니다.'}</p>
+              <p className="text-xs">서버가 받은 입력: 제출 {currentResult.input.requestId} / {currentResult.input.productId} / 수량 {currentResult.input.quantity}</p>
+              {Object.entries(currentResult.errors).filter(([key]) => key !== 'quantity').map(([key, message]) => <p key={key}>{message}</p>)}
+            </> : pending ? '서버 응답 대기 중' : '이번 제출의 서버 응답이 없습니다.'}
           </div>
-
-          <SubmitButton />
+          <DemoResetButton onReset={onReset} disabled={pending} />
         </div>
-
-        {/* useFormStatus 구독 인스펙터 */}
-        <FormStatusInspector />
-
-        {resultMessage && (
-          <div className="rounded bg-emerald-50 p-3 text-xs font-bold text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
-            ✓ {resultMessage}
-          </div>
-        )}
-      </form>
-    </div>
+      </DemoPlaygroundCard>
+      <VerificationFooter attempt={attempt} result={currentResult} pending={pending} />
+    </>
   )
 }
