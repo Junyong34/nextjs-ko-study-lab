@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { BookOpen, PlayCircle, ExternalLink } from 'lucide-react'
+import { BookOpen, PlayCircle, Layers, ExternalLink } from 'lucide-react'
 import { GitHubIcon } from '../../brand'
 
 export interface HeaderNavProps {
@@ -10,7 +10,7 @@ export interface HeaderNavProps {
   repoUrl: string
 }
 
-/** 헤더 우측 내비게이션 — 학습 문서 / 데모 / 공식 문서 / 저장소. */
+/** 헤더 우측 내비게이션 — 학습 문서 / 데모 / 시각화 / 공식 문서 / 저장소. */
 export function HeaderNav({ officialDocsUrl, repoUrl }: HeaderNavProps) {
   return (
     <nav className="flex shrink-0 items-center gap-1 sm:gap-3">
@@ -32,6 +32,14 @@ export function HeaderNav({ officialDocsUrl, repoUrl }: HeaderNavProps) {
         <span className="hidden md:inline-flex rounded bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 px-1.5 py-0.2 text-[10px] font-bold">
           Live
         </span>
+      </Link>
+
+      <Link
+        href="/visualize"
+        className="flex items-center gap-1 sm:gap-1.5 rounded-md px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 transition dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+      >
+        <Layers className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-zinc-800 dark:text-zinc-200" />
+        <span>시각화</span>
       </Link>
 
       <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800 mx-0.5 sm:mx-1 hidden min-[480px]:block" />
