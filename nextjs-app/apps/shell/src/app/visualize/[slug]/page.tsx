@@ -36,9 +36,11 @@ export async function generateMetadata({
   }
 
   return buildPageMetadata({
-    title: `${demo.title} | Next.js & React 인터랙티브 시각화`,
+    title: `${demo.title} | Next.js 학습`,
+    titleAbsolute: true,
     description: demo.description,
     path: `/visualize/${slug}`,
+    keywords: demo.keywords,
     dynamicOgImage: {
       title: demo.title,
       eyebrow: demo.category,
