@@ -17,5 +17,6 @@ export * from './CacheShellDemo';
 export * from './CacheKeysDemo';
 export * from './CacheLifetimeDemo';
 export * from './CacheTagsDemo';
+export * from './cache-shopping-story/CacheShoppingStoryDemo';
 export * from './showcase-types';
 export * from './showcase-demos';

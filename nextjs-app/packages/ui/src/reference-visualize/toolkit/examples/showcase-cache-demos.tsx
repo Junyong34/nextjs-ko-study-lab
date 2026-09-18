@@ -10,6 +10,7 @@ import { CacheShellDemo } from './CacheShellDemo';
 import { CacheKeysDemo } from './CacheKeysDemo';
 import { CacheLifetimeDemo } from './CacheLifetimeDemo';
 import { CacheTagsDemo } from './CacheTagsDemo';
+import { CacheShoppingStoryDemo } from './cache-shopping-story/CacheShoppingStoryDemo';
 
 const common = {
   group: 'cache-components',
@@ -62,5 +63,16 @@ export const cacheDemos: DemoMeta[] = [
     modules: ['paintTags', 'useCacheSequence', 'taggedEntries', 'StructureNotes'],
     keywords: ['Next.js updateTag', 'Next.js revalidateTag', 'Next.js 캐시 태그', 'Next.js Cache Components'],
     component: <CacheTagsDemo />
+  },
+  {
+    ...common,
+    key: 'cache-shopping-story',
+    title: '쇼핑몰로 보는 캐시 활용',
+    description:
+      '방문자 유준과 운영자 서아가 쇼핑몰을 오가는 4장의 이야기로 앞의 4개 데모(정적 셸, 캐시 키, cacheLife, 태그)를 이어봅니다. 각 장의 캔버스는 원본 데모를 그대로 재생하며, "왜 이 설정을 쓰는가"라는 맥락만 시나리오로 덧붙입니다.',
+    gridDescription: '홈 → 상품 상세 → 카테고리 → 가격 변경, 4장으로 잇는 캐시 활용 시나리오',
+    modules: ['scenes', 'useSceneController', 'RoleBadge', 'SceneNav'],
+    keywords: ['Next.js Cache Components 예시', 'Next.js 캐시 활용 사례', 'Next.js 쇼핑몰 캐시', 'Next.js use cache 시나리오'],
+    component: <CacheShoppingStoryDemo />
   }
 ];

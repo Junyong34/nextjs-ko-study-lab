@@ -20,6 +20,7 @@ export type DemoKey =
   | 'cache-keys'
   | 'cache-lifetime'
   | 'cache-tags'
+  | 'cache-shopping-story'
   | 'health'
   | 'angle'
   | 'confetti';

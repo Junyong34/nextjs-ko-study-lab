@@ -1,8 +1,8 @@
 Plan: 쇼핑몰 스토리텔링으로 감싼 Cache Components 시각화 페이지
 Spec: ./intent.md#requirements
 Author: Claude
-Status: draft
-Approval: 없음 (초안)
+Status: done
+Approval: 사용자 승인 (2026-09-18 대화, "좋아" 지시 후 구현 진행)
 
 ## Scope of change
 
@@ -47,6 +47,13 @@ Approval: 없음 (초안)
 
 ## Verification results
 
-- 상태: 미실행
-- 실행 명령·환경 / 결과 / 증거(PR·로그 링크):
-- 실패·미검증 항목과 후속 작업:
+- 상태: 통과
+- 실행 명령·환경:
+  - `pnpm --filter @study/ui check-types` — 통과
+  - `pnpm --filter @study/shell check-types` — 통과
+  - `pnpm --filter @study/shell build` — 통과. `/visualize/cache-shopping-story` 정적 프리렌더 확인(`.next/server/app/visualize/cache-shopping-story.html` 생성)
+  - `git diff --stat`으로 `CacheShellDemo.tsx`/`CacheKeysDemo.tsx`/`CacheLifetimeDemo.tsx`/`CacheTagsDemo.tsx` 4개 파일에 변경 없음 확인
+  - `pnpm --filter @study/shell dev` 로컬 구동 후 Chromium(playwright-core, `/opt/pw-browsers`)으로 수동 시나리오 자동화 검증: 1장 시작 시 역할 배지 "유준" 노출 → 내레이션 닫기 버튼 동작 → "다음 장" 3회 클릭 시 4장("가격 변경")까지 이동하며 역할 배지가 "서아"로 자동 전환 → 4장 "같은 태그로 함께 바뀌는 화면" 리스트 노출 → 스텝바 클릭으로 1장 복귀 시 역할이 "유준"으로 되돌아옴 → 각 장에서 `<canvas>` 1개 렌더 확인 → 콘솔/페이지 에러 0건
+  - `/visualize` 갤러리 HTML에 "쇼핑몰로 보는 캐시 활용" 카드 노출 확인, 기존 `/visualize/cache-shell`·`cache-keys`·`cache-lifetime`·`cache-tags` 4개 모두 200 응답 확인
+- Acceptance criteria(intent.md) 6개 항목: 전부 충족
+- 실패·미검증 항목과 후속 작업: 다크 모드 시각 확인은 스크린샷 기반 육안 검증을 하지 않았다(HTML/DOM 구조와 클래스만 확인). 필요하면 후속으로 스크린샷 비교를 추가한다.
