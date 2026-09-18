@@ -1,7 +1,7 @@
 Intent: /visualize/* SEO 메타데이터(title/description/keywords) 개선 및 sitemap 등록
 Author: Claude
-Status: approved
-Approval: 사용자 승인 (2026-09-18 대화, plan 검토 후 ExitPlanMode 승인). 저장소 규칙상 PR 머지 전 단계 효력 없음 — `feature/visualize-seo-keywords` 브랜치에서 구현·로컬 검증 완료, main 병합 전
+Status: done
+Approval: 사용자 승인 (2026-09-18 대화, plan 검토 후 ExitPlanMode 승인). PR #9 머지로 효력 발생 (`feature/visualize-seo-keywords` → main, merge commit `ec34634`)
 
 ## Problem
 
