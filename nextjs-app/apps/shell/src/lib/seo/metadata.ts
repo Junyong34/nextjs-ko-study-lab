@@ -11,6 +11,10 @@ interface PageMetadataInput {
   noIndex?: boolean
   /** 문서/데모 상세처럼 제목 기반 OG 이미지가 필요하면 지정 — 기본 og-image.png 대신 `/og` 라우트로 렌더링됨 */
   dynamicOgImage?: { title: string; eyebrow?: string }
+  /** <meta name="keywords"> 값 */
+  keywords?: string[]
+  /** true면 <title>이 부모 title.template를 무시하고 title 값을 그대로 쓴다 (호출부가 이미 완성된 접미사를 붙인 경우 이중 접미사 방지) */
+  titleAbsolute?: boolean
 }
 
 /**
@@ -23,6 +27,8 @@ export function buildPageMetadata({
   path,
   noIndex,
   dynamicOgImage,
+  keywords,
+  titleAbsolute,
 }: PageMetadataInput): Metadata {
   const isPublicIndexing = isPublicIndexingAllowed()
   const image = dynamicOgImage
@@ -30,8 +36,9 @@ export function buildPageMetadata({
     : { url: siteConfig.ogImage, width: ogImageSize.width, height: ogImageSize.height }
 
   return {
-    title,
+    title: titleAbsolute ? { absolute: title } : title,
     description,
+    ...(keywords && keywords.length > 0 ? { keywords } : {}),
     alternates: { canonical: path },
     openGraph: {
       title,

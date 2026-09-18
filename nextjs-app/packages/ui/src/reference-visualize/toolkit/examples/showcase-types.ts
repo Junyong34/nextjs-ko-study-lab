@@ -37,4 +37,6 @@ export interface DemoMeta {
   gridDescription: string;
   modules: string[];
   component: React.ReactNode;
+  /** 검색 키워드 노출용 <meta name="keywords"> 값. 데모 고유 기술어 + "Next.js" 조합 */
+  keywords?: string[];
 }

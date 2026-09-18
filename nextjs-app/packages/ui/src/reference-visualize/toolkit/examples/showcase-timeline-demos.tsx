@@ -34,6 +34,7 @@ export const timelineDemos: DemoMeta[] = [
       '두 레인이 같은 시간축을 공유합니다. 일괄 SSR은 2,150ms까지 이어지지만, 스트리밍 레인은 180ms에 완료 지점을 표시하고 나머지 구간은 스트림을 연 채 비워 둡니다.',
     gridDescription: '일괄 SSR 2,150ms vs 셸 스트리밍 180ms — 첫 화면까지의 길이 비교',
     modules: TIMELINE_MODULES,
+    keywords: ['Next.js Streaming SSR', 'Next.js Suspense', 'React Server Components 스트리밍', 'Next.js 스트리밍 렌더링'],
     component: <StreamingSsrTimelineDemo />
   },
   {
@@ -47,6 +48,7 @@ export const timelineDemos: DemoMeta[] = [
       '400ms에 도착한 클릭이 언제 처리되는지 대기 막대로 보여줍니다. 일괄 수화 레인에서는 840ms짜리 빨간 막대가 길게 이어지고, 선택적 수화 레인에서는 90ms 만에 끝납니다.',
     gridDescription: '클릭 대기 840ms vs 90ms — 우선순위 점프의 효과',
     modules: TIMELINE_MODULES,
+    keywords: ['Next.js Selective Hydration', 'React 하이드레이션', 'Next.js Hydration', 'React 우선순위 렌더링'],
     component: <SelectiveHydrationTimelineDemo />
   },
   {
@@ -60,6 +62,7 @@ export const timelineDemos: DemoMeta[] = [
       '정적 셸은 20ms에 페인트되어 완료 지점이 시간축 맨 왼쪽에 표시됩니다. 동적 홀은 그 뒤 350ms부터 스트리밍되지만 첫 화면은 이미 표시됩니다. Next 16에서는 cacheComponents: true가 이 동작을 활성화합니다. experimental.ppr은 16에서 제거됐습니다.',
     gridDescription: '전체 동적 430ms vs 정적 셸 20ms + 홀 스트리밍',
     modules: TIMELINE_MODULES,
+    keywords: ['Next.js Partial Prerendering', 'Next.js PPR', 'Next.js cacheComponents', 'Next.js 정적 셸'],
     component: <PartialPrerenderingTimelineDemo />
   },
   {
@@ -73,6 +76,7 @@ export const timelineDemos: DemoMeta[] = [
       '양보하는 렌더 레인에서는 청크 사이마다 메인 스레드 제어권을 넘겨주고, 남은 작업이 다음 태스크로 예약되는 흐름을 점선 아크 위의 파티클로 보여줍니다. 입력은 그 틈에서 16ms에 처리됩니다.',
     gridDescription: '동기 렌더 입력 지연 250ms vs 청크 양보 16ms',
     modules: TIMELINE_MODULES,
+    keywords: ['React 19 Transitions', 'useTransition', 'React Concurrent Rendering', 'Next.js 동시성 렌더링'],
     component: <ConcurrentTransitionsTimelineDemo />
   },
   {
@@ -86,6 +90,7 @@ export const timelineDemos: DemoMeta[] = [
       '클릭 이벤트의 대기 막대가 한쪽은 420ms 빨간 막대로, 다른 쪽은 점 하나로 끝납니다. 네트워크 왕복 380ms는 양쪽 다 존재하지만 한쪽만 사용자를 붙잡습니다.',
     gridDescription: '스피너 대기 420ms vs 낙관적 렌더 0ms',
     modules: TIMELINE_MODULES,
+    keywords: ['Next.js Server Actions', 'useOptimistic', 'Next.js Optimistic UI', 'React 19 Server Actions'],
     component: <OptimisticUiTimelineDemo />
   },
   {
@@ -99,6 +104,7 @@ export const timelineDemos: DemoMeta[] = [
       '재생성에 걸리는 시간은 두 레인에서 같습니다. 차이는 방문자가 그 시간을 기다리느냐(3,000ms 빨간 막대), 응답과 분리해 백그라운드에서 처리하느냐(0ms)입니다. export const revalidate 기준의 이전 모델이며, cacheComponents를 켜면 이 옵션은 제거되고 cacheLife가 대신합니다.',
     gridDescription: '캐시 미스 3,000ms 대기 vs 구버전 0ms 응답 + 백그라운드 재생성',
     modules: TIMELINE_MODULES,
+    keywords: ['Next.js ISR', 'Incremental Static Regeneration', 'stale-while-revalidate', 'Next.js revalidate'],
     component: <IsrLifecycleTimelineDemo />
   }
 ];
