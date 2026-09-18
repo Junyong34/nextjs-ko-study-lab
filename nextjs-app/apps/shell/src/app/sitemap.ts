@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getDemos, getManifest } from '@/lib/docs'
 import { siteConfig } from '@/lib/seo/config'
+import { nextjsVisualizeDemos } from '@/components/visualize/data'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const manifest = getManifest()
@@ -21,10 +22,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
+  const visualizeEntries: MetadataRoute.Sitemap = nextjsVisualizeDemos.map((demo) => ({
+    url: `${siteConfig.url}/visualize/${demo.key}`,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }))
+
   return [
     { url: siteConfig.url, changeFrequency: 'weekly', priority: 1 },
     { url: `${siteConfig.url}/demo`, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteConfig.url}/visualize`, changeFrequency: 'weekly', priority: 0.7 },
     ...docEntries,
     ...demoEntries,
+    ...visualizeEntries,
   ]
 }

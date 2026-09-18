@@ -12,6 +12,14 @@ export const metadata: Metadata = buildPageMetadata({
   description:
     'Streaming SSR, Selective Hydration, ISR, Cache Components 등 Next.js와 React의 핵심 런타임 동작을 캔버스에서 직접 살펴보는 시각화',
   path: '/visualize',
+  keywords: [
+    'Next.js 시각화',
+    'Next.js 아키텍처 다이어그램',
+    'React 인터랙티브 데모',
+    'Next.js App Router 학습',
+    'Next.js 캐시 시각화',
+    'Next.js 렌더링 시각화',
+  ],
   dynamicOgImage: {
     title: 'Next.js & React 인터랙티브 시각화 갤러리',
     eyebrow: 'Interactive Architecture & Canvas Toolkit',

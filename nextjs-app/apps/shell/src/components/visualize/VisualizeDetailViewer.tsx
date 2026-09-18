@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react'
 import { ShareButton } from '@study/ui'
 import type { DemoMeta } from './types'
 import { getDemoBadge } from './data'
+import { VisualizeViewTracker } from './VisualizeViewTracker'
 
 interface VisualizeDetailViewerProps {
   demo: DemoMeta
@@ -17,6 +18,8 @@ export function VisualizeDetailViewer({ demo, relatedDemos }: VisualizeDetailVie
 
   return (
     <div className="space-y-8">
+      <VisualizeViewTracker demoKey={demo.key} demoTitle={demo.title} group={demo.group} />
+
       {/* 상단 내비게이션 & 헤더 */}
       <div className="space-y-4 border-b border-zinc-200 pb-6 dark:border-zinc-800">
         <div className="flex items-center justify-between gap-4">

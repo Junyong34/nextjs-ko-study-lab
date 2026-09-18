@@ -27,6 +27,7 @@ export const cacheDemos: DemoMeta[] = [
       '핵심은 셸 경계 상자입니다. 정적 헤더와 use cache가 붙은 BlogPosts는 상자 안에 들어가고, cookies()를 읽는 Suspense 구역은 fallback만 상자 안에 남습니다. 본체는 요청 시 상자 밖에서 스트리밍됩니다. use cache는 페이지 전체를 정적으로 만드는 기능이 아니라 결과를 셸에 포함하는 기능입니다.',
     gridDescription: '셸 경계 상자 — 안(정적·캐시)과 밖(요청 시 스트리밍)',
     modules: ['paintShell', 'useCacheSequence', 'StructureControls', 'StructureNotes'],
+    keywords: ['Next.js Cache Components', 'Next.js use cache 셸', 'Next.js 정적 셸', 'Next.js 부분 캐싱'],
     component: <CacheShellDemo />
   },
   {
@@ -37,6 +38,7 @@ export const cacheDemos: DemoMeta[] = [
       '경계와 키가 만들어지는 과정을 함께 봅니다. cookies()는 경계 밖에서 읽어 인자로 넘기고, 안에서 읽으면 next-request-in-use-cache 오류가 발생합니다. 값을 바꾸면 바뀐 키 조각이 즉시 강조되고 HIT 또는 MISS로 나뉩니다.',
     gridDescription: '경계 밖 → 인자 전달, 키 4조각 → 해시 → HIT/MISS',
     modules: ['paintKeys', 'keySegments', 'readEntry', 'StructureNotes'],
+    keywords: ['Next.js use cache', 'Next.js 캐시 키', 'next-request-in-use-cache', 'Next.js Cache Components'],
     component: <CacheKeysDemo />
   },
   {
@@ -47,6 +49,7 @@ export const cacheDemos: DemoMeta[] = [
       '클라이언트와 서버에는 서로 다른 시간축이 있습니다. 위 레인의 stale은 라우터가 서버에 확인하지 않고 값을 쓰는 시간이고, 아래 레인의 revalidate·expire는 서버 쪽 시간입니다. 시간축을 클릭해 요청 시점을 옮기면 즉시 응답, 백그라운드 갱신, 대기 중 하나로 이어집니다.',
     gridDescription: '두 시간축 — 클라이언트 stale vs 서버 revalidate·expire',
     modules: ['paintLife', 'lifeZone', 'LIFE_PROFILES', 'StructureNotes'],
+    keywords: ['Next.js cacheLife', 'Next.js stale revalidate expire', 'Next.js 캐시 수명', 'Next.js Cache Components'],
     component: <CacheLifetimeDemo />
   },
   {
@@ -57,6 +60,7 @@ export const cacheDemos: DemoMeta[] = [
       '저장이 성공한 뒤 갱신 방식에 따라 흐름이 둘로 나뉩니다. updateTag는 즉시 만료해 다음 읽기에서 새 값을 반환하고, revalidateTag는 기존 값을 먼저 반환한 뒤 백그라운드에서 갱신합니다. 왼쪽에서 태그를 바꾸면 함께 영향을 받는 항목도 확인할 수 있습니다.',
     gridDescription: 'updateTag(즉시 만료) vs revalidateTag(SWR)의 다음 읽기 비교',
     modules: ['paintTags', 'useCacheSequence', 'taggedEntries', 'StructureNotes'],
+    keywords: ['Next.js updateTag', 'Next.js revalidateTag', 'Next.js 캐시 태그', 'Next.js Cache Components'],
     component: <CacheTagsDemo />
   }
 ];

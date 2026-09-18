@@ -29,6 +29,10 @@ export type AnalyticsEvent =
       name: 'book_click'
       params: { book_type: 'document' | 'demo' | 'visualize'; chapter_step: string; chapter_title: string }
     }
+  | {
+      name: 'visualize_view'
+      params: { demo_key: string; demo_title: string; group: string }
+    }
 
 export function trackEvent(event: AnalyticsEvent) {
   sendGAEvent('event', event.name, event.params)
