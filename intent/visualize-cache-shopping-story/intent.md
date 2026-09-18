@@ -1,7 +1,7 @@
 Intent: 쇼핑몰 스토리텔링으로 감싼 Cache Components 시각화 페이지
 Author: Claude
-Status: draft
-Approval: 없음 (초안)
+Status: approved
+Approval: 사용자 승인 (2026-09-18 대화, Open questions 기본값으로 진행 지시)
 
 ## Problem
 
@@ -50,7 +50,7 @@ Approval: 없음 (초안)
 
 - 래퍼 컴포넌트는 기존 데모를 감싸는 얇은 클라이언트 컴포넌트로, 장(1~4) 상태만 로컬로 관리한다. 캔버스 내부 상태(재생/속도/시퀀스)는 각 데모가 이미 갖고 있는 훅(`useCacheSequence` 등)을 그대로 쓴다.
 - 장 전환 시: 역할 배지 갱신 → 내레이션 오버레이 노출(수 초 후 자동 소멸 또는 닫기 버튼) → 기존 데모 컴포넌트 렌더.
-- `showcase-cache-demos.tsx`에 다섯 번째 `DemoMeta`(`key: 'cache-shopping-story'` 등, `group: 'cache-components'`)로 등록해 `/visualize` 갤러리와 `/visualize/[slug]` 상세 라우팅을 그대로 재사용한다(신규 라우트 불필요, Open questions 참고).
+- `showcase-cache-demos.tsx`에 다섯 번째 `DemoMeta`(`key: 'cache-shopping-story'`, `group: 'cache-components'`)로 등록해 `/visualize` 갤러리와 `/visualize/[slug]` 상세 라우팅을 그대로 재사용한다(신규 라우트 불필요).
 - 파일 분리: `page.tsx` 성격의 조립 컴포넌트, 장별 내레이션 카피 데이터(`scenes.ts` 등), 역할 배지/스텝바 UI 컴포넌트로 나눠 250줄 제한을 지킨다.
 
 ## Acceptance criteria
@@ -69,6 +69,8 @@ Approval: 없음 (초안)
 
 ## Open questions
 
-- 신규 래퍼를 `/visualize` 갤러리 카드 형태(5번째 항목)로 노출할지, `cache-components` 그룹 상단에 별도 "시작하기" 배너로 둘지
-- 슬러그 확정 (`cache-shopping-story` vs `cache-shell` 그룹 내 순번 등)
-- 4장 "영향받는 화면" 미니 리스트를 캔버스 애니메이션으로 만들지, 텍스트 리스트로 최소 구현할지
+모두 해결됨 (2026-09-18 대화, 사용자 지시로 기본값 채택):
+
+- 노출 방식: `/visualize` 갤러리에 `cache-components` 그룹의 5번째 `DemoMeta` 카드로 노출한다. 별도 배너 UI는 만들지 않는다 — 기존 갤러리·상세 라우팅(`/visualize/[slug]`)을 그대로 재사용하기 위함.
+- 슬러그: `cache-shopping-story` (`DemoKey`에 추가, 다른 `cache-*` 키와 명명 일관성 유지).
+- 4장 "영향받는 화면" 리스트: 캔버스 애니메이션이 아닌 캔버스 밖 텍스트 리스트로 최소 구현한다 (Non-goals의 "새 캔버스 애니메이션 제작 범위 밖"과 일관).
