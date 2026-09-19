@@ -16,6 +16,8 @@ export interface StructureControlsProps {
   onToggle: () => void;
   onReplay: () => void;
   onCycleSpeed: () => void;
+  /** 속도 버튼 툴팁 — 순환 순서가 다른 데모는 여기서 바꾼다 */
+  speedTitle?: string;
   /** 우측 슬롯 — 범례나 데모 고유 버튼 */
   extra?: React.ReactNode;
 }
@@ -30,6 +32,7 @@ export const StructureControls: React.FC<StructureControlsProps> = ({
   onToggle,
   onReplay,
   onCycleSpeed,
+  speedTitle = '재생 속도 전환 (1× → 2× → 0.5×)',
   extra
 }) => (
   <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
@@ -55,7 +58,7 @@ export const StructureControls: React.FC<StructureControlsProps> = ({
         className={`${BTN} ${
           speed === 1 ? 'text-slate-600 hover:bg-slate-200/60' : 'bg-blue-50 font-bold text-blue-700'
         }`}
-        title="재생 속도 전환 (1× → 2× → 0.5×)"
+        title={speedTitle}
       >
         {speed}× 속도
       </button>

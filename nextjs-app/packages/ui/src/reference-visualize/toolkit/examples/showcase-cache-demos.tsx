@@ -1,7 +1,9 @@
 /**
  * @fileoverview showcase-cache-demos Data
- * Cache Components 4종 메타데이터. 각 데모는 "핵심 그림" 하나를 갖는다 —
+ * Cache Components 5종 메타데이터. 앞 4종은 각각 "핵심 그림" 하나를 갖는다 —
  * 셸 경계 상자 · 경계선과 키 조립 · 두 시간축 · 두 갈래 비교.
+ * 5번째(`cache-mall`)는 앞 세 개념(cacheLife·cacheTag·동적 예외)을 쇼핑몰 스토리 하나로
+ * 묶어 통합 체감하게 하는 데모다 — 브라우저 → 레인 3개 → 원본 서버의 요청 추적도.
  */
 
 import React from 'react';
@@ -10,6 +12,7 @@ import { CacheShellDemo } from './CacheShellDemo';
 import { CacheKeysDemo } from './CacheKeysDemo';
 import { CacheLifetimeDemo } from './CacheLifetimeDemo';
 import { CacheTagsDemo } from './CacheTagsDemo';
+import { CacheMallDemo } from './CacheMallDemo';
 
 const common = {
   group: 'cache-components',
@@ -62,5 +65,16 @@ export const cacheDemos: DemoMeta[] = [
     modules: ['paintTags', 'useCacheSequence', 'taggedEntries', 'StructureNotes'],
     keywords: ['Next.js updateTag', 'Next.js revalidateTag', 'Next.js 캐시 태그', 'Next.js Cache Components'],
     component: <CacheTagsDemo />
+  },
+  {
+    ...common,
+    key: 'cache-mall',
+    title: '쇼핑몰로 보는 캐시 설정',
+    description:
+      '스터디몰 홈페이지 한 번의 요청이 세 구역을 동시에 지납니다. 베스트셀러 진열대는 use cache와 cacheLife로 수명을 정한 캐시에서 돌아오고, 상품 상세는 cacheTag가 붙어 관리자의 updateTag()·revalidateTag()에 따라 다음 요청이 달라지며, 장바구니는 cookies()를 읽어야 해서 매번 원본 서버까지 갑니다. 시계를 흘려 수명을 넘기고 페이지 요청을 보내면 점 3개가 어디서 돌아오는지가 곧 캐시의 답입니다.',
+    gridDescription: '한 페이지 요청 → 세 레인 — 캐시에서 돌아오나(HIT·STALE), 서버까지 가나(EXPIRED·동적)',
+    modules: ['paintMall', 'useCacheMallSim', 'sendPageRequest', 'StructureControls', 'StructureNotes'],
+    keywords: ['Next.js cacheLife 예시', 'Next.js updateTag revalidateTag 비교', 'Next.js Cache Components 실전', 'Next.js 캐시 스토리텔링'],
+    component: <CacheMallDemo />
   }
 ];
