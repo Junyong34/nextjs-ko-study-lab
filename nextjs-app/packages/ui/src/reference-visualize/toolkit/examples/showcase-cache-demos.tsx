@@ -1,9 +1,11 @@
 /**
  * @fileoverview showcase-cache-demos Data
- * Cache Components 5종 메타데이터. 앞 4종은 각각 "핵심 그림" 하나를 갖는다 —
+ * Cache Components 6종 메타데이터. 앞 4종은 각각 "핵심 그림" 하나를 갖는다 —
  * 셸 경계 상자 · 경계선과 키 조립 · 두 시간축 · 두 갈래 비교.
  * 5번째(`cache-mall`)는 앞 세 개념(cacheLife·cacheTag·동적 예외)을 쇼핑몰 스토리 하나로
  * 묶어 통합 체감하게 하는 데모다 — 브라우저 → 레인 3개 → 원본 서버의 요청 추적도.
+ * 6번째(`cache-regions`)는 한 페이지의 네 영역이 각기 다른 캐시 경계(정적 셸 · 컴포넌트 캐시 ·
+ * 함수 캐시 · 캐시 없음)로 데이터를 가져와 화면에 닿는 경로를 나란히 비교한다.
  */
 
 import React from 'react';
@@ -13,6 +15,7 @@ import { CacheKeysDemo } from './CacheKeysDemo';
 import { CacheLifetimeDemo } from './CacheLifetimeDemo';
 import { CacheTagsDemo } from './CacheTagsDemo';
 import { CacheMallDemo } from './CacheMallDemo';
+import { CachePageRegionsDemo } from './CachePageRegionsDemo';
 
 const common = {
   group: 'cache-components',
@@ -76,5 +79,16 @@ export const cacheDemos: DemoMeta[] = [
     modules: ['paintMall', 'useCacheMallSim', 'sendPageRequest', 'StructureControls', 'StructureNotes'],
     keywords: ['Next.js cacheLife 예시', 'Next.js updateTag revalidateTag 비교', 'Next.js Cache Components 실전', 'Next.js 캐시 스토리텔링'],
     component: <CacheMallDemo />
+  },
+  {
+    ...common,
+    key: 'cache-regions',
+    title: '한 페이지, 영역별 캐시 경계',
+    description:
+      "같은 페이지 안에서도 영역마다 캐시 전략이 다릅니다. 헤더는 데이터가 없어 정적 셸에 들어가고, 상품 목록은 컴포넌트 첫 줄의 'use cache'로 렌더 결과째 캐시되며, 환율 배너는 cookies()를 읽어 요청마다 렌더하되 getRate() 함수 결과만 재사용하고, 맞춤 추천은 캐시 없이 매번 서버에서 렌더해 스트리밍됩니다. 한 번의 요청을 재생하면 네 영역의 데이터가 원천 → 캐시 계층 → 화면으로 어떤 경로를 지나 언제 도착하는지, 캐시가 비어 있을 때 무엇이 늦어지는지가 보입니다.",
+    gridDescription: '정적 셸 · use cache 컴포넌트 · use cache 함수 · 캐시 없음 — 영역별 원천 → 캐시 → 화면 경로 비교',
+    modules: ['paintRegions', 'flowStepsFor', 'RegionCodeMap', 'useTimelinePlayback', 'StructureNotes'],
+    keywords: ['Next.js use cache 컴포넌트 함수 차이', 'Next.js 부분 캐싱 영역', 'Next.js cookies 캐시 불가', 'Next.js Cache Components 페이지 구성'],
+    component: <CachePageRegionsDemo />
   }
 ];

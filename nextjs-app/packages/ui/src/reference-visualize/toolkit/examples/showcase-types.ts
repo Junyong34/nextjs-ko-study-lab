@@ -21,6 +21,7 @@ export type DemoKey =
   | 'cache-lifetime'
   | 'cache-tags'
   | 'cache-mall'
+  | 'cache-regions'
   | 'health'
   | 'angle'
   | 'confetti';
