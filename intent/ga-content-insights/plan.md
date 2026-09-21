@@ -1,0 +1,101 @@
+Plan: GA4 콘텐츠 측정 확장과 공통화
+Spec: ./spec.md
+Author: Codex
+Status: draft
+Approval: 없음 — 검토용 계획이며 구현 승인 전
+
+## Scope of change
+
+모든 경로는 저장소 루트 기준이다.
+
+| 대상 | 변경 |
+|---|---|
+| nextjs-app/apps/shell/src/lib/analytics.ts 및 analytics/ 신규 모듈 | 기존 API 유지, 타입·전송·문맥·검증·DOM 변환 분리 |
+| nextjs-app/apps/shell/src/components/analytics/ | 기존 클릭 트래커 통합, 콘텐츠 경계와 진입 추적기 추가 |
+| nextjs-app/apps/shell/src/app/layout.tsx 및 [...slug]/page.tsx | 루트 수집기·문서 메타데이터·피드백 연결 |
+| nextjs-app/apps/shell/src/components/demo/{DemoViewTracker,DemoViewer}.tsx | 공통 진입 추적기로 교체 |
+| nextjs-app/apps/shell/src/components/visualize/{VisualizeViewTracker,VisualizeDetailViewer}.tsx | 공통 진입 추적기로 교체 |
+| nextjs-app/apps/shell/src/components/learning-progress/LearningProgressProvider.tsx | 기존 상태 전환을 공통 계약으로 연결 |
+| nextjs-app/apps/shell/src/components/github-star/GithubStarProvider.tsx 및 home/TrackedBookLink.tsx | 기존 의미 보존, 공통 API와 문맥 사용 |
+| nextjs-app/packages/docs-render/src/code/CodeBlock.tsx 및 markdown/MarkdownRenderer.tsx | 복사 성공 의미 이벤트·블록 식별자·문서 링크 속성 |
+| nextjs-app/packages/ui/src/nav/doc-tree/{DocTree,DocTreeNode,DocTreeSearch}.tsx 및 useTreeFilter.ts | 검색 확정 상태·실제 결과 집계·링크 선택 연결 |
+| nextjs-app/packages/ui/src/nav/toc/{TableOfContents,TocList}.tsx | 목차 의미 속성 |
+| nextjs-app/apps/shell/src/components/analytics/ContentFeedback.tsx (신규) | 문서 도움 여부 UI·세션 저장 |
+| nextjs-app/packages/test-suite/src/tier1-feature-coverage/22-ga-custom-events.test.ts | 기존 이벤트 계약 회귀 테스트 보강 |
+| nextjs-app/packages/test-suite/src/tier2-boundaries-edge-cases/ga-content-insights.test.ts (신규) | payload·검색·중복·실패 경계 테스트 |
+| nextjs-app/docs/ga-content-analytics.md (신규), docs/README.md | 이벤트 사전·보고서 구성·운영 확인 절차 |
+| intent/ga-content-insights/ 및 intent/README.md | 승인·검증 상태 동기화 |
+
+실제 사용처 검색으로 경로를 확인하며 일부 연결 파일이 추가되면 승인 범위 내 변경 이유를 기록한다.
+다른 작업의 baseline config/env 변경은 편집·커밋하지 않는다. 인덱스의 타 작업 변경도 보존한다.
+
+## Steps
+
+1. 승인 및 기준선 확인
+   - intent/spec/plan 승인 기록 확인 후 구현 브랜치에서 시작한다.
+   - 적용 AGENTS, docs/01-ui-and-screen-design.md, ADR 0006, 로컬 Next.js 문서를 읽는다.
+   - 기존 8종 이벤트 호출·속성 생산자·레이아웃 마운트 지도를 운영 문서에 정리한다.
+   - GA 설치 경로와 자동 페이지뷰 설정을 확인한다. 비밀값이나 측정 ID를 로그에 노출하지 않는다.
+2. 공통 수집 모듈과 회귀 검증
+   - 전송 어댑터를 주입 가능한 경계로 만들어 외부 네트워크 없는 payload 테스트를 작성한다.
+   - 기존 공개 trackEvent 유지, 이벤트 타입 분리, 허용 필드·URL 정규화·공통 문맥 생성 구현.
+   - 기존 8종을 먼저 이동하고 이벤트 의미와 기존 매개변수의 호환성을 확인한다.
+3. 중복 트래커 정리
+   - 루트 클릭 수집기로 DemoClickTracker/ShareClickTracker를 대체하고 기존 마운트를 제거한다.
+   - Element/SVG/키보드 활성화를 처리하며 정확한 전용 이벤트 우선순위를 둔다.
+   - 콘텐츠 경계와 공통 진입 트래커를 연결한다. 재렌더와 실제 재진입을 구분한다.
+   - 문서 content_view를 추가하고 기존 demo_view/visualize_view는 이름을 유지한다.
+4. 실제 콘텐츠 행동 측정
+   - CodeBlock에 성공 시점 이벤트를 추가하고 클릭 당시 문서 귀속을 고정한다.
+   - 검색의 정규화·허용 topic·안정화·IME·모바일 노출·빠른 선택 규칙을 순수 상태 로직으로 분리한다.
+   - 검색 결과 링크·일반 문서 링크·목차 클릭을 공통 DOM 어댑터로 연결한다.
+5. 문서 피드백
+   - 문서 하단 버튼, 접근성, 최초 응답 세션 저장과 실패 대체를 구현한다.
+   - 실제 GA 수신을 보장하는 성공 문구나 메일 전송 의미를 추가하지 않는다.
+6. 브라우저 통합 검증 및 보고서 문서
+   - 아래 시나리오를 실제 앱에서 수행하고 dataLayer와 GA 네트워크를 구분해서 기록한다.
+   - GA 접근이 있으면 DebugView 수신 확인 및 3개 보고서 설정을 진행한다.
+   - 접근이 없으면 필요한 측정기준·이벤트 필터·분모·설정 절차를 완성하고 미적용 목록을 남긴다.
+7. 최종 확인
+   - 단위/타입/빌드 및 영향 범위 브라우저 검증 결과를 기록한다.
+   - 기존 이벤트 회귀와 중앙화 경계를 리뷰한다. 구현·배포·GA 수신·보고서 적용 상태를 각각 기록한다.
+   - 승인 및 머지 조건을 충족하기 전 done 처리하지 않는다.
+
+## Verification
+
+저장소 루트에서 실행한다. 계획 작성 단계에서는 실행하지 않는다.
+
+- 기존 회귀: `node --test --experimental-strip-types --disable-warning=ExperimentalWarning nextjs-app/packages/test-suite/src/tier1-feature-coverage/22-ga-custom-events.test.ts`
+- 신규 경계: `node --test --experimental-strip-types --disable-warning=ExperimentalWarning nextjs-app/packages/test-suite/src/tier2-boundaries-edge-cases/ga-content-insights.test.ts`
+- 타입: `pnpm --filter @study/shell check-types`, `pnpm --filter @study/ui check-types`, `pnpm --filter @study/docs-render check-types`
+- 빌드: `pnpm --filter @study/shell build`
+- 경계 검색: sendGAEvent/gtag/dataLayer 직접 호출이 전송 어댑터 외 새로 생기지 않았는지 확인.
+  테스트 코드·GoogleAnalytics 설치는 전송 어댑터 중복으로 취급하지 않는다.
+- `git diff --check` 및 변경 파일 250줄 제한 확인.
+
+| 브라우저 시나리오 | 기대 결과 |
+|---|---|
+| 문서 직접 진입→다른 문서→뒤로→앞으로 | 진입별 문서 이벤트 1회, 최신 문맥; GA 접근 시 page_view와 referrer 검증 |
+| 데모/시각화 진입 및 선택 변경 | 기존 이름/값 유지, 재렌더 중복 없음, 재방문 기록 |
+| 복사 성공/클립보드 거절/복사 대기 중 이동 | 성공만 1회, 거절 0회, 원래 문서에 귀속 |
+| 검색 타이핑·IME·지우기·0건·빠른 클릭 | 확정된 표시만 집계, 결과 수 정확, 원문 없음 |
+| 모바일 숨김→서랍 열기 | 숨김 중 결과 노출 집계 없음, 표시된 결과만 기록 |
+| 검색 결과/목차/문서/데모 링크 클릭 | 의도한 이벤트만 발생, 이전 리스너 잔존으로 중복되지 않음 |
+| 피드백 선택→새로고침→재선택 | 탭 세션 문서당 최초 응답만, 선택 상태 유지 |
+| 저장소·GA 차단 | 본래 UI 기능 유지, 예외 전파 없음 |
+| 기존 완료 토글·공유·책·GitHub 팝업 | 8종 이벤트의 기존 의미와 매개변수 유지 |
+
+브라우저 관찰만으로 GA 수신 성공을 선언하지 않는다. 실제 계정 수신은 DebugView로 별도 확인한다.
+자동 페이지뷰 설정 접근 불가 시 그 항목은 미검증으로 남기며 임의 수동 전송을 추가하지 않는다.
+
+## Rollback
+
+이번 작업 소유 커밋만 revert한다. 공통화와 호출부 변경을 함께 되돌려 이벤트 누락을 막는다.
+새 피드백 세션 키는 이전 코드가 사용하지 않으며 데이터 마이그레이션은 없다.
+GA 맞춤 정의·보고서는 이번 작업에서 생성한 항목만 별도 정리한다. 기존 정의는 삭제하지 않는다.
+
+## Verification results
+
+- 상태: 미실행 — spec/plan 작성만 수행.
+- 앱 코드 변경·테스트·빌드·브라우저 검증·GA 계정 설정: 아직 수행하지 않음.
+- 남은 작업: 계획 승인 후 구현, 필수 검증 및 GA 계정 적용 여부 확인.
