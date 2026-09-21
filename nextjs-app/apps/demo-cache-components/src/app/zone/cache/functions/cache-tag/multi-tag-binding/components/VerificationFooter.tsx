@@ -63,45 +63,51 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
         isMatched={isMatched}
         description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-                        <DemoDeepDiveCard title="다중 엔티티 캐시 태그 복합 바인딩">
-              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p>다중 태그 바인딩은 하나의 복합 비즈니스 뷰(e.g. 상품 상세 화면)가 의존하는 여러 도메인 엔티티(상품 기본 정보, 판매자 정보, 리뷰 평점)의 태그들을 <code>cacheTag('product-101', 'seller-202', 'reviews-101')</code>로 한 번에 등록하여, 어떤 엔티티가 변경되더라도 복합 뷰가 정확히 갱신되도록 보장하는 스펙입니다.</p>
-                </div>
+      <DemoDeepDiveCard title="하나의 캐시 항목에 여러 태그 바인딩하기">
+        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <p>
+              <code>cacheTag()</code>는 여러 문자열을 한 번에 받아 <strong>하나의 캐시 항목</strong>에 여러 태그를 동시에 등록할 수 있다(
+              <code>cacheTag('multi-tag-binding:product-891', 'multi-tag-binding:category-electronics', 'multi-tag-binding:brand-logitech')</code>
+              ). 태그를 여러 번 적용해도 추가 효과는 없다(idempotent).
+            </p>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 복합 상품 뷰에 [상품], [판매자], [리뷰] 3개 태그를 등록하고, [판매자 정보 변경] 또는 [신규 리뷰 등록] 버튼을 각각 눌렀을 때 해당 엔티티 태그를 통해 복합 화면 캐시가 즉시 무효화되는 정밀 반응성을 검증합니다.</p>
-                </div>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <p>
+              본 데모의 상품 상세 캐시 하나에 상품·카테고리·브랜드 3개 태그가 동시에 묶여 있다. 위 실습화면에서 세 버튼 중 어느 것을 눌러도(<code>revalidateTag('multi-tag-binding:product-891', 'max')</code> /
+              <code>...category-electronics...</code> / <code>...brand-logitech...</code>) 같은 캐시 항목이 무효화되어 새로고침 후 <code>cacheId</code>가 바뀐다 — 태그 3개가 서로 다른 캐시가 아니라 같은 캐시 항목을 가리키는 별도의 "열쇠"라는 것을 보여준다.
+            </p>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>데이터 불일치(Stale Data) 완벽 방지</strong>: 상품 정보는 최신인데 판매자 이름이나 리뷰 개수가 이전 상태로 남는 데이터 파편화 현상을 방지합니다.</li>
-                    <li><strong>마이크로서비스 이벤트 연동 최적화</strong>: 서로 다른 백엔드 서비스(상품 서비스, 회원 서비스, 리뷰 서비스)에서 발행된 웹훅에 맞춰 각각 태그를 무효화할 수 있습니다.</li>
-                    <li><strong>독립적인 엔티티 수명 주기 관리</strong>: 각 도메인의 수정 빈도에 구애받지 않고 통합 캐시의 무결성을 유지합니다.</li>
-                  </ul>
-                </div>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>이벤트 발생 지점 다양화 대응</strong>: 상품 정보 변경, 카테고리 개편, 브랜드 공지 변경 등 서로 다른 이벤트가 각자의 태그로 같은 상품 상세 캐시를 무효화할 수 있다.</li>
+              <li><strong>일괄 무효화도 가능</strong>: 카테고리 태그 하나만 무효화해도 그 카테고리에 속한 모든 상품 캐시가 함께 갱신된다(이 데모는 상품 1개만 다루지만 실제로는 여러 상품이 같은 카테고리 태그를 공유한다).</li>
+            </ul>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li>상품 상세 페이지(상품 데이터 + 판매자 프로필 + 최신 리뷰 평점 통합 뷰)</li>
-                    <li>사용자 피드 화면(작성자 프로필 + 게시글 내용 + 댓글 수 태그 바인딩)</li>
-                    <li>대시보드 메인 뷰(주문 통계 + 결제 정산 현황 + 고객 문의 지표)</li>
-                  </ul>
-                </div>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li>상품 상세 화면(상품 자체 + 소속 카테고리 + 브랜드 정보를 한 화면에 표시)</li>
+              <li>게시글 화면(게시글 자체 + 작성자 + 소속 게시판 태그를 동시에 바인딩)</li>
+            </ul>
+          </div>
 
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>가변 인자 및 배열 전달</strong>: <code>cacheTag('tag1', 'tag2')</code>와 같이 가변 인자로 넘기거나 여러 번 호출해도 모두 합집합으로 정상 등록됩니다.</li>
-                    <li><strong>대소문자 구분</strong>: 캐시 태그 문자열은 대소문자를 엄격히 구분하므로 소문자 통일(e.g. <code>toLowerCase()</code>) 컨벤션을 권장합니다.</li>
-                  </ul>
-                </div>
-              </div>
-            </DemoDeepDiveCard>
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>대소문자 구분</strong>: 캐시 태그 문자열은 대소문자를 엄격히 구분한다.</li>
+              <li><strong>데모 접두사 필수</strong>: 캐시 태그는 앱 전역에서 공유되므로 이 저장소는 <code>데모슬러그:태그명</code> 접두사 규칙(예: <code>multi-tag-binding:...</code>)으로 다른 데모의 캐시를 실수로 지우지 않게 한다.</li>
+              <li><strong>revalidateTag('max')의 지연 반영</strong>: <code>profile: 'max'</code>는 태그를 stale로 표시할 뿐, 실제 갱신은 다음 방문(새로고침) 시 일어난다. 클릭 직후 한 번에 안 바뀌면 한 번 더 새로고침해서 확인한다.</li>
+            </ul>
+          </div>
+        </div>
+      </DemoDeepDiveCard>
     </div>
   )
 }

@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
                 <div>
                   <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 카테고리 공통 GNB 배너가 변경되었을 때 <code>type: 'layout'</code>을 실행하여 하위 모든 상품 페이지들이 일괄 갱신되는 동작과, 개별 상품 수정 시 <code>type: 'page'</code>를 실행하여 해당 페이지만 선별 갱신되는 범위를 대조 분석합니다.</p>
+                  <p>이 데모는 실제 파일 시스템 라우트로 구성됩니다: 허브(<code>page.tsx</code>) 아래 공유 <code>layout.tsx</code>가 있고, 그 아래 <code>items/[id]</code>·<code>category/[slug]</code> 서브 라우트가 중첩되어 있습니다. 'page' 버튼은 <code>revalidatePath(허브경로, 'page')</code>를 호출해 허브 자신만 무효화합니다 — 상품/카테고리 링크로 이동해도 cacheId가 그대로입니다. 'layout' 버튼은 <code>revalidatePath(허브경로, 'layout')</code>을 호출해 공유 layout.tsx와 그 아래 모든 페이지(허브·상품·카테고리)를 함께 무효화합니다 — 링크로 이동하면 layout 배너와 해당 페이지의 cacheId가 모두 바뀌어 있습니다.</p>
                 </div>
 
                 <div>
@@ -98,6 +98,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
                   <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
                     <li><strong>기본값은 'page'</strong>: 두 번째 인자를 생략하면 기본값으로 <code>'page'</code>가 적용되므로 하위 중첩 페이지까지 갱신하려면 반드시 <code>'layout'</code>을 명시해야 합니다.</li>
                     <li><strong>루트 레이아웃 무효화 주의</strong>: <code>revalidatePath('/', 'layout')</code>을 실행하면 전체 사이트의 모든 캐시가 무효화되므로 대규모 트래픽 환경에서는 극히 신중해야 합니다.</li>
+                    <li><strong>직접 방문해서 확인</strong>: 이 검증 패널은 허브 자신의 cacheId 변화만 자동으로 측정합니다. 상품/카테고리 서브 라우트의 무효화 여부는 실습화면의 링크로 직접 이동해 눈으로 확인해야 합니다.</li>
                   </ul>
                 </div>
               </div>

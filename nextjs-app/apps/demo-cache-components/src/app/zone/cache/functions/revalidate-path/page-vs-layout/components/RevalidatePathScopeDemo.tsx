@@ -1,101 +1,81 @@
 'use client'
 
 import React, { useState, useTransition } from 'react'
-import type { ScopeRevalidateResult } from '../types'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { DemoResetButton } from '@study/demo-kit'
 import { executeScopeRevalidateAction } from '../actions'
+import { SAMPLE_ITEM_ID, SAMPLE_CATEGORY_SLUG } from '../paths'
 
-export function RevalidatePathScopeDemo() {
-  const [result, setResult] = useState<ScopeRevalidateResult | null>(null)
-  const [scope, setScope] = useState<'page' | 'layout'>('page')
+interface RevalidatePathScopeDemoProps {
+  hub: { cacheId: string; generatedAt: string }
+}
+
+export function RevalidatePathScopeDemo({ hub }: RevalidatePathScopeDemoProps) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
+  const [lastScope, setLastScope] = useState<'page' | 'layout' | null>(null)
+  const [prevHubCacheId, setPrevHubCacheId] = useState<string | null>(null)
 
-  const handleRun = (targetScope: 'page' | 'layout') => {
-    setScope(targetScope)
+  const runScope = (scope: 'page' | 'layout') => {
+    setPrevHubCacheId(hub.cacheId)
     startTransition(async () => {
-      const res = await executeScopeRevalidateAction(targetScope)
-      setResult(res)
+      await executeScopeRevalidateAction(scope)
+      setLastScope(scope)
+      router.refresh()
     })
   }
 
-  return (
-    <div className="space-y-4">
-      {/* 1. 상단 스코프 선택 버튼 바 */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/60">
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => handleRun('page')}
-            disabled={isPending}
-            className={`rounded px-3.5 py-1.5 text-xs font-bold transition cursor-pointer ${
-              scope === 'page'
-                ? 'bg-blue-600 text-white shadow-2xs'
-                : 'border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300'
-            }`}
-          >
-            revalidatePath('/shop', 'page')
-          </button>
-          <button
-            type="button"
-            onClick={() => handleRun('layout')}
-            disabled={isPending}
-            className={`rounded px-3.5 py-1.5 text-xs font-bold transition cursor-pointer ${
-              scope === 'layout'
-                ? 'bg-purple-600 text-white shadow-2xs'
-                : 'border border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300'
-            }`}
-          >
-            revalidatePath('/shop', 'layout')
-          </button>
-        </div>
+  const hubChanged = prevHubCacheId !== null && prevHubCacheId !== hub.cacheId
 
-        <span className="text-xs font-mono text-zinc-500">
-          {isPending ? '무효화 파이프라인 실행 중...' : result ? `퍼지된 라우트: ${result.purgedCount}개` : '옵션을 선택하세요'}
-        </span>
+  return (
+    <div className="space-y-3 rounded border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="rounded border border-zinc-200 bg-zinc-50 p-3 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="font-sans font-bold text-zinc-900 dark:text-zinc-100">허브 페이지 (이 페이지 자신)</div>
+        <div>hub cacheId: <span className="font-bold text-emerald-600 dark:text-emerald-400">#{hub.cacheId}</span></div>
+        <div className="text-zinc-500">{hub.generatedAt}</div>
       </div>
 
-      {/* 2. 라우트 트리 무효화 범위 매트릭스 */}
-      <div className="rounded-lg border border-zinc-200 bg-white p-4 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-950 space-y-2.5">
-        <div className="flex items-center justify-between border-b border-zinc-100 pb-2 dark:border-zinc-800 font-sans">
-          <span className="font-bold text-zinc-900 dark:text-zinc-100">
-            라우트 트리 세그먼트별 캐시 무효화 결과 대조
-          </span>
-          <span className="text-[11px] text-zinc-400">
-            현재 스코프: <strong>'{scope}'</strong>
-          </span>
-        </div>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => runScope('page')}
+          disabled={isPending}
+          className="cursor-pointer rounded bg-blue-600 px-3 py-1 text-xs font-bold text-white disabled:opacity-50"
+        >
+          'page' 스코프로 무효화 (허브만)
+        </button>
+        <button
+          type="button"
+          onClick={() => runScope('layout')}
+          disabled={isPending}
+          className="cursor-pointer rounded bg-rose-600 px-3 py-1 text-xs font-bold text-white disabled:opacity-50"
+        >
+          'layout' 스코프로 무효화 (허브+하위 전체)
+        </button>
+      </div>
 
-        <div className="space-y-1.5">
-          {(result?.segments || [
-            { path: '/shop', label: '메인 쇼핑몰 허브 (루트 페이지)', status: 'PURGED' },
-            { path: '/shop/items/101', label: '상품 상세 (나이키 러닝화)', status: 'PRESERVED' },
-            { path: '/shop/category/shoes', label: '신발 카테고리 피드', status: 'PRESERVED' },
-            { path: '/shop/category/clothing', label: '의류 카테고리 피드', status: 'PRESERVED' },
-            { path: '/account/profile', label: '사용자 프로필 (다른 레이아웃)', status: 'PRESERVED' },
-          ]).map((seg, i) => (
-            <div
-              key={i}
-              className={`flex items-center justify-between rounded p-2.5 border transition ${
-                seg.status === 'PURGED'
-                  ? 'border-emerald-200 bg-emerald-50/70 text-emerald-950 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-300'
-                  : 'border-zinc-100 bg-zinc-50/60 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/30 dark:text-zinc-500'
-              }`}
-            >
-              <div>
-                <span className="font-bold">{seg.path}</span>
-                <span className="ml-2 text-[11px] font-sans">({seg.label})</span>
-              </div>
-              <span
-                className={`rounded px-2 py-0.5 text-[10px] font-bold ${
-                  seg.status === 'PURGED'
-                    ? 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-200'
-                    : 'bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
-                }`}
-              >
-                {seg.status === 'PURGED' ? 'PURGED (캐시 재생성)' : 'PRESERVED (캐시 유지)'}
-              </span>
-            </div>
-          ))}
-        </div>
+      {lastScope && (
+        <p className="text-[11px] text-zinc-500">
+          방금 <code>revalidatePath(path, '{lastScope}')</code> 실행됨 →{' '}
+          {hubChanged ? `허브 cacheId가 #${prevHubCacheId} → #${hub.cacheId}로 바뀜.` : '새로고침 반영 대기 중.'}{' '}
+          {lastScope === 'page'
+            ? '이 스코프는 허브 자신만 무효화합니다 — 아래 상품/카테고리 링크로 이동해도 cacheId가 그대로인지 확인해 보세요.'
+            : '이 스코프는 공유 layout.tsx와 그 아래 모든 페이지를 무효화합니다 — 아래 상품/카테고리 링크로 이동하면 cacheId와 layout 배너가 모두 바뀌어 있어야 합니다.'}
+        </p>
+      )}
+
+      <div className="flex flex-wrap gap-3 border-t border-zinc-100 pt-3 text-xs dark:border-zinc-800">
+        <Link href={`/zone/cache/functions/revalidate-path/page-vs-layout/items/${SAMPLE_ITEM_ID}`} className="text-blue-700 underline dark:text-blue-300">
+          → 상품 상세로 이동 (items/{SAMPLE_ITEM_ID})
+        </Link>
+        <Link href={`/zone/cache/functions/revalidate-path/page-vs-layout/category/${SAMPLE_CATEGORY_SLUG}`} className="text-purple-700 underline dark:text-purple-300">
+          → 카테고리 피드로 이동 (category/{SAMPLE_CATEGORY_SLUG})
+        </Link>
+      </div>
+
+      <div className="flex justify-end pt-1">
+        <DemoResetButton label="캐시 상태 초기화" />
       </div>
     </div>
   )

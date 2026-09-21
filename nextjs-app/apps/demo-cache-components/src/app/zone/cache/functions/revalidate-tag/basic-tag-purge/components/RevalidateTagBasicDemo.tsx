@@ -1,81 +1,101 @@
 'use client'
 
 import React, { useState, useTransition } from 'react'
-import type { InventoryTagPurgeResult } from '../types'
+import { useRouter } from 'next/navigation'
+import { DemoResetButton } from '@study/demo-kit'
 import { purgeInventoryTagAction } from '../actions'
+import type { InventoryItem, InventoryTagPurgeResult } from '../types'
 
-export function RevalidateTagBasicDemo() {
-  const [result, setResult] = useState<InventoryTagPurgeResult | null>(null)
+interface InventoryCacheSnapshot {
+  items: InventoryItem[]
+  cacheId: string
+  generatedAt: string
+}
+
+interface RevalidateTagBasicDemoProps {
+  cache: InventoryCacheSnapshot
+}
+
+export function RevalidateTagBasicDemo({ cache }: RevalidateTagBasicDemoProps) {
+  const router = useRouter()
   const [isPending, startTransition] = useTransition()
+  const [actionResult, setActionResult] = useState<InventoryTagPurgeResult | null>(null)
+  const [prevCacheId, setPrevCacheId] = useState<string | null>(null)
 
   const handlePurge = () => {
+    setPrevCacheId(cache.cacheId)
     startTransition(async () => {
       const res = await purgeInventoryTagAction()
-      setResult(res)
+      setActionResult(res)
+      router.refresh()
     })
   }
 
+  const cacheCaughtUp = prevCacheId !== null && prevCacheId !== cache.cacheId
+
   return (
     <div className="space-y-4">
-      {/* 1. 상단 태그 정보 및 무효화 버튼 */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/60">
         <div className="flex items-center gap-2 text-xs">
           <span className="font-bold text-zinc-900 dark:text-zinc-100">무효화 대상 태그:</span>
           <code className="rounded bg-zinc-200 px-2 py-0.5 font-mono text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-            #{result ? `${result.tag} (revalidateTag 호출됨)` : 'inventory'}
+            basic-tag-purge:inventory
           </code>
-          {result && (
-            <span className="rounded bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-              {result.versionId}
-            </span>
-          )}
         </div>
-
         <button
           type="button"
           onClick={handlePurge}
           disabled={isPending}
-          className="rounded bg-zinc-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 cursor-pointer"
+          className="cursor-pointer rounded bg-zinc-900 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
         >
-          {isPending ? '태그 퍼지 중...' : "revalidateTag('inventory') 실행"}
+          {isPending ? '태그 퍼지 중...' : "revalidateTag('inventory', 'max') 실행"}
         </button>
       </div>
 
-      {/* 2. 재고 캐시 테이블 뷰어 */}
-      <div className="rounded-lg border border-zinc-200 bg-white p-4 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-950 space-y-2.5">
-        <div className="flex items-center justify-between border-b border-zinc-100 pb-2 dark:border-zinc-800 font-sans">
-          <span className="font-bold text-zinc-800 dark:text-zinc-200">
-            재고 캐시 슬롯 (Tag: <code>'inventory'</code>)
-          </span>
-          <span className="text-[11px] text-zinc-400">
-            {result ? `동기화 시각: ${result.timestamp}` : '초기 캐시 유지 중'}
-          </span>
-        </div>
-
-        <div className="space-y-2">
-          {(result?.items || [
-            { sku: 'SKU-HD01', name: '노이즈캔슬링 무선 헤드폰', stock: 8, location: '물류센터 A (김포)', lastSync: '초기 로드' },
-            { sku: 'SKU-MS02', name: 'RGB 초경량 게이밍 마우스', stock: 24, location: '물류센터 B (이천)', lastSync: '초기 로드' },
-          ]).map((item) => (
-            <div
-              key={item.sku}
-              className="flex items-center justify-between rounded bg-zinc-50 p-2.5 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800"
-            >
-              <div>
-                <div className="font-bold text-zinc-900 dark:text-zinc-100">{item.name}</div>
-                <div className="text-[11px] text-zinc-500 font-mono">
-                  {item.sku} • {item.location}
-                </div>
-              </div>
-              <div className="text-right">
-                <span className="font-mono text-sm font-bold text-emerald-600 dark:text-emerald-400">
-                  재고 {item.stock}개
-                </span>
-                <div className="text-[10px] text-zinc-400 mt-0.5">{item.lastSync}</div>
-              </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="rounded-lg border border-blue-200 bg-blue-50/40 p-3.5 font-mono text-xs dark:border-blue-900/50 dark:bg-blue-950/20 space-y-2">
+          <div className="font-sans font-bold text-blue-950 dark:text-blue-200">
+            ① 캐시된 조회 결과 (page.tsx가 getInventoryCache()로 읽은 값)
+          </div>
+          <div className="text-zinc-500">cacheId: #{cache.cacheId} · {cache.generatedAt}</div>
+          {cache.items.map((item) => (
+            <div key={item.sku} className="rounded bg-white/70 p-2 dark:bg-zinc-950/40">
+              <div className="font-bold text-zinc-900 dark:text-zinc-100">{item.name}</div>
+              <div>재고 {item.stock}개 · {item.lastSync}</div>
             </div>
           ))}
         </div>
+
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50/40 p-3.5 font-mono text-xs dark:border-emerald-900/50 dark:bg-emerald-950/20 space-y-2">
+          <div className="font-sans font-bold text-emerald-950 dark:text-emerald-200">
+            ② 방금 실행한 액션의 응답 (즉시 반영)
+          </div>
+          {actionResult ? (
+            <>
+              <div className="text-zinc-500">버전: {actionResult.versionId} · {actionResult.timestamp}</div>
+              {actionResult.items.map((item) => (
+                <div key={item.sku} className="rounded bg-white/70 p-2 dark:bg-zinc-950/40">
+                  <div className="font-bold text-zinc-900 dark:text-zinc-100">{item.name}</div>
+                  <div>재고 {item.stock}개 · {item.lastSync}</div>
+                </div>
+              ))}
+            </>
+          ) : (
+            <div className="text-zinc-500">아직 실행하지 않음</div>
+          )}
+        </div>
+      </div>
+
+      {prevCacheId !== null && (
+        <p className="text-[11px] text-zinc-500">
+          {cacheCaughtUp
+            ? `캐시 조회 결과의 cacheId가 #${prevCacheId} → #${cache.cacheId}로 바뀌었습니다 — revalidateTag 이후 재방문에서 새 값이 반영된 것입니다.`
+            : '액션 응답(②)은 이미 최신 재고를 보여주지만, 캐시된 조회(①)는 아직 이전 cacheId입니다. revalidateTag(tag, \'max\')는 stale-while-revalidate이므로 새로고침을 한 번 더 하면 ①도 갱신됩니다.'}
+        </p>
+      )}
+
+      <div className="flex justify-end pt-1">
+        <DemoResetButton label="캐시 상태 초기화" />
       </div>
     </div>
   )

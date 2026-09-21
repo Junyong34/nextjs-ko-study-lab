@@ -993,7 +993,7 @@
   title: "cacheTag 다중 태그 바인딩 및 연관 캐시 구성"
   doc: 3-api-reference/3.3-functions/cacheTag.md
   zone: cache
-  status: stub
+  status: done
 
 - url: functions/cache-tag/cascade-invalidation
   title: "cacheTag 연쇄 무효화 (Cascade Invalidation)"
@@ -1017,7 +1017,7 @@
   title: "revalidatePath page vs layout 레벨 일괄 무효화 대조"
   doc: 3-api-reference/3.3-functions/revalidatePath.md
   zone: cache
-  status: stub
+  status: done
 
 - url: functions/revalidate-path/dynamic-route
   title: "다이나믹 라우트 세그먼트의 revalidatePath 동작"
@@ -1029,7 +1029,7 @@
   title: "revalidateTag() 기본 무효화와 SWR"
   doc: 3-api-reference/3.3-functions/revalidateTag.md
   zone: cache
-  status: stub
+  status: done
 
 - url: functions/revalidate-tag/max-expiration
   title: "revalidateTag max 캐시 만료 제어"
