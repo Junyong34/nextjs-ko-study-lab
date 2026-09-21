@@ -767,7 +767,7 @@
     "title": "클라이언트 상태 보존 중첩 레이아웃",
     "doc": "3-api-reference/3.1-file-conventions/layout.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/layout/dynamic-category-layout",
@@ -795,7 +795,7 @@
     "title": "중첩 라우트 세그먼트 로딩 격리",
     "doc": "3-api-reference/3.1-file-conventions/loading.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/error/payment-error-boundary",

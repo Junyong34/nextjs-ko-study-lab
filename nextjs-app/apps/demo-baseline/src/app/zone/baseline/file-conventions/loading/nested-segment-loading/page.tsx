@@ -4,37 +4,25 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'file-conventions/loading/nested-segment-loading')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { NestedSegmentLoadingDemo } from './components/NestedSegmentLoadingDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
-export default function DemoPage() {
+export default function NestedSegmentLoadingHomePage() {
   return (
-    <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"중첩 세그먼트별 독립 loading.tsx 스트리밍"}
-        concept={"상위 레이아웃과 하위 세그먼트에 각각 loading.tsx를 두면, 상위 UI(GNB)가 즉시 노출된 상태에서 지연(1000ms)되는 하위 세그먼트만 독립 Suspense 스켈레톤으로 스트리밍됩니다."}
-        steps={[
-          {
-                    "step": 1,
-                    "title": "상위 세그먼트 loading.tsx 동작 확인 및 하위 세그먼트 독립 loading.tsx 확인",
-                    "description": "상위 레이아웃 레벨의 로딩 바운더리가 페이지 전체 전환 시 어떻게 반응하는지 확인합니다. 지연 시간이 긴 하위 세그먼트만 국소적으로 스켈레톤을 띄우는 중첩 스트리밍 구조를 점검합니다.",
-                    "actionBadge": "상위 로딩"
-          },
-          {
-                    "step": 2,
-                    "title": "세그먼트 격리 렌더링 검증",
-                    "description": "상위 네비게이션이 블로킹되지 않고 하위 콘텐츠만 점진적으로 마운트되는지 검증합니다.",
-                    "actionBadge": "격리 검증",
-                    "observe": "3단 검증 패널에서 중첩 세그먼트별 loading.tsx 경계 분리 사양이 정상 충족되는지 확인",
-                    "observeAt": "verification"
-          }
-]}
-        />
-      <DemoPlaygroundCard title={"중첩 라우트 세그먼트 로딩 격리 실습"}>
-        <NestedSegmentLoadingDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
-    </DemoContainer>
+    <div className="min-w-0 space-y-3 text-xs text-zinc-600 dark:text-zinc-400">
+      <p>
+        아직 실행을 시작하지 않았습니다. 위 콘솔의 [새 실행 시작]을 누르면{' '}
+        <code className="rounded bg-zinc-100 px-1 py-0.5 font-mono dark:bg-zinc-800">catalog/[run]</code> 경로가 새로
+        만들어지고, 카탈로그 → 상품 상세 순서로 실제 loading.tsx 경계를 관찰합니다.
+      </p>
+      <pre className="min-w-0 overflow-x-auto rounded border border-zinc-200 bg-zinc-50 p-3 font-mono text-[11px] leading-relaxed dark:border-zinc-800 dark:bg-zinc-900">
+{`catalog/
+├─ loading.tsx        상위 fallback
+└─ [run]/
+   ├─ layout.tsx       상위 GNB
+   ├─ page.tsx         카탈로그 목록
+   └─ [product]/
+      ├─ loading.tsx   하위 fallback
+      └─ page.tsx      상품 상세`}
+      </pre>
+    </div>
   )
 }
