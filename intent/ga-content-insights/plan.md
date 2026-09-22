@@ -1,8 +1,8 @@
 Plan: GA4 콘텐츠 측정 확장과 공통화
 Spec: ./spec.md
 Author: Codex
-Status: draft
-Approval: 없음 — 검토용 계획이며 구현 승인 전
+Status: approved
+Approval: 2026-09-22 대화에서 사용자 "ga 플랜 작업 시작… main 브랜치에 커밋 푸쉬" 지시로 구현·직접 main 커밋/push 승인. 구현 5957095 원격 반영. GA 관리 화면 적용 및 실수신 확인은 남아 있음.
 
 ## Scope of change
 
@@ -96,6 +96,32 @@ GA 맞춤 정의·보고서는 이번 작업에서 생성한 항목만 별도 �
 
 ## Verification results
 
-- 상태: 미실행 — spec/plan 작성만 수행.
-- 앱 코드 변경·테스트·빌드·브라우저 검증·GA 계정 설정: 아직 수행하지 않음.
-- 남은 작업: 계획 승인 후 구현, 필수 검증 및 GA 계정 적용 여부 확인.
+- 구현 커밋: `5957095` (main, 원격 push 확인). 이번 커밋에는 GA 작업 33개 파일만 포함.
+- 상태: 코드 구현·로컬 검증 완료, GA 계정 적용·실수신 및 일부 시나리오 확인은 남아 있어 approved 유지.
+- 사용자 지시에 따라 PR 없이 main에 직접 커밋/push.
+- `pnpm --filter @study/shell check-types`: 통과.
+- `pnpm --filter @study/ui check-types`, `pnpm --filter @study/docs-render check-types`: 통과.
+- `pnpm --filter @study/shell build`: 최종 통과, 834개 정적 페이지 생성.
+  중간 transport 타입 오류는 수정 후 타입 검사와 빌드를 다시 통과했다.
+- 기존 GA 계약 11개 + payload 경계 3개 + 피드백 4개 + 검색 로직 3개: 총 21개 통과.
+  실행 파일: 22-ga-custom-events.test.ts, ga-content-insights.test.ts, ga-feedback.test.ts,
+  packages/ui/src/nav/doc-tree/search-measurement.test.mjs.
+- Playwright, localhost:3000: 코드 복사·피드백·검색 표시·검색 결과 클릭·목차·일반 문서 이동·
+  문서 진입·visualize_view의 dataLayer 이벤트 관찰. 뒤로/앞으로 각각 content_view 1회 확인.
+- 복사 성공/실패는 clipboard.writeText를 제어하여 성공 시 1회, 거절 시 0회 확인.
+  지연 완료 후 다른 문서로 이동해도 원래 문서에 code_copy 귀속됨을 확인.
+  실제 OS 클립보드 권한 검증과 구분한다.
+- 빠른 검색 결과 클릭은 결과 표시→결과 클릭 순서, 0건 검색은 result_count=0 확인.
+  이메일 형태 검색은 search_topic=other로 전송되어 원문 미포함 확인.
+- 피드백 재방문 시 버튼 비활성 상태 확인. 모바일 390px에서 서랍 검색 이벤트 및 가로 넘침 없음 확인.
+- 브라우저 검증은 Google 측정 네트워크를 차단한 상태의 dataLayer 검증이다.
+  GA 서버 요청 성공, 자동 page_view, DebugView 수신은 검증하지 않았다.
+- 코드 리뷰에서 기존 상대 식별자 변형, ui_location 누락, 전역 코드블록 탐색을 발견·수정했다.
+  후속 위임 리뷰는 사용량 한도로 중단되어 별도 최종 리뷰 완료를 주장하지 않는다.
+- 설계 조정: CodeBlock은 renderer 전체 수정 대신 가장 가까운 콘텐츠 경계와 article 내 코드블록
+  순서를 사용한다. 기존 demo/visualize 래퍼는 공통 ContentViewTracker를 호출하는 얇은 어댑터로 유지.
+- 전체 기존 8종의 브라우저 상호작용 회귀, IME 실제 브라우저 입력, demo_view 선택 변경은 미검증.
+- GA 관리 화면 맞춤 정의·탐색 3종 생성은 미적용. 운영 절차는
+  `nextjs-app/docs/ga-content-analytics.md`에 작성했다. Search Console은 제외.
+- push 내역: 기존 로컬 커밋 671f9e4, 문서 커밋 5743e89도 5957095와 함께 원격 main에 포함됐다.
+  GA 외 미커밋 baseline/config/env/manifest 작업 파일은 보존했다.

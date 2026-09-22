@@ -1,7 +1,7 @@
 Intent: 개발 문서 콘텐츠 이용 분석 및 GA4 보고서 개선
 Author: Codex
-Status: draft
-Approval: 2026-09-22 대화에서 사용자가 spec·plan 작성 및 기존 GA 공통화·리팩토링 범위 추가를 요청함. 문서 검토·plan 승인 및 PR 머지 기록은 아직 없음.
+Status: approved
+Approval: 2026-09-22 대화에서 사용자 "ga 플랜 작업 시작… main 브랜치에 커밋 푸쉬" 지시로 구현·직접 main 커밋/push 승인. 구현 5957095 원격 반영. GA 관리 화면 적용 및 실수신 확인은 남아 있음.
 
 ## Problem
 
