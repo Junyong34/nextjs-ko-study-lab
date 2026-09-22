@@ -21,6 +21,8 @@ export interface DocTreeNodeProps {
   currentPath: string
   level?: number
   onNavigate?: () => void
+  searching?: boolean
+  onResultClick?: (target: string) => void
 }
 
 /** 트리의 한 항목. 자식이 있으면 접히는 그룹(카테고리), 없으면 문서 링크. */
@@ -29,6 +31,8 @@ export function DocTreeNode({
   currentPath,
   level = 0,
   onNavigate,
+  searching = false,
+  onResultClick,
 }: DocTreeNodeProps) {
   const hasChildren = Boolean(node.children && node.children.length > 0)
   const isDemoMode = currentPath.startsWith('/demo')
@@ -93,7 +97,12 @@ export function DocTreeNode({
     return (
       <Link
         href={targetUrl}
-        onClick={onNavigate}
+        data-analytics={searching ? 'search_result_click' : isDemoMode ? undefined : 'doc_navigation_click'}
+        data-ui-location="sidebar"
+        onClick={() => {
+          if (searching) onResultClick?.(targetUrl)
+          onNavigate?.()
+        }}
         title={node.title}
         data-active={isSelected ? 'true' : undefined}
         className={cn(
@@ -192,7 +201,7 @@ export function DocTreeNode({
       </div>
 
       {/* 아코디언 하위 노드 목록 */}
-      {isOpen && (
+      {(isOpen || searching) && (
         <div className="space-y-0.5 border-l border-zinc-100 ml-2 pl-1 dark:border-zinc-800/80">
           {node.children!.map((child, idx) => {
             const prevSection = idx > 0 ? node.children![idx - 1].section : null
@@ -210,6 +219,8 @@ export function DocTreeNode({
                   currentPath={currentPath}
                   level={level + 1}
                   onNavigate={onNavigate}
+                  searching={searching}
+                  onResultClick={onResultClick}
                 />
               </React.Fragment>
             )

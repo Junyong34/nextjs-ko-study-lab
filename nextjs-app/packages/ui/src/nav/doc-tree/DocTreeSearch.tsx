@@ -7,6 +7,7 @@ import { Input } from '../../primitives/Input'
 export interface DocTreeSearchProps {
   value: string
   onChange: (next: string) => void
+  onCompositionChange?: (composing: boolean) => void
   placeholder?: string
 }
 
@@ -14,6 +15,7 @@ export interface DocTreeSearchProps {
 export function DocTreeSearch({
   value,
   onChange,
+  onCompositionChange,
   placeholder = '문서 목차 검색...',
 }: DocTreeSearchProps) {
   return (
@@ -25,6 +27,8 @@ export function DocTreeSearch({
           padding="withIcon"
           placeholder={placeholder}
           value={value}
+          onCompositionStart={() => onCompositionChange?.(true)}
+          onCompositionEnd={() => onCompositionChange?.(false)}
           onChange={(e) => onChange(e.target.value)}
         />
         {value && (

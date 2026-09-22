@@ -17,6 +17,7 @@
 | [07. SEO 계획](./07-seo-plan.md) | 현재 설정 위치·남은 운영 확인 | 공유 metadata, 셸 SEO, OG 라우트 |
 | [08. 콘텐츠 아이디어](./08-future-content-ideas.md) | 향후 후보 백로그 | 착수 시 별도 조사 필요 |
 | [09. 공개 운영 가이드](./09-demo-status-and-stepwise-release-guide.md) | 공개 상태·집계·화면별 노출의 대표 문서 | YAML·생성 JSON·상태 분기 코드 |
+| [GA 콘텐츠 분석](./ga-content-analytics.md) | 이벤트 계약·맞춤 정의·탐색 3종 설정 절차 | GA 공통 모듈과 콘텐츠 측정. 계정 적용은 별도 확인 |
 | [CONTEXT](../CONTEXT.md) | 용어 정의 | 위 문서들과 의미 정합성 |
 
 ## 유지관리 기준

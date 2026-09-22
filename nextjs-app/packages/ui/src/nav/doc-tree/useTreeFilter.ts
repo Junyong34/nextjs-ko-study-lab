@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import type { TreeNode } from '../../types'
+import { normalizeSearch } from './search-measurement'
 
 /**
  * 검색어로 트리를 걸러냅니다.
@@ -11,17 +12,17 @@ export function useTreeFilter(tree: TreeNode[], query: string): TreeNode[] {
   return useMemo(() => {
     if (!query.trim()) return tree
 
-    const q = query.toLowerCase()
+    const q = normalizeSearch(query)
 
     const filterNode = (node: TreeNode): TreeNode | null => {
       const matchSelf =
-        node.title.toLowerCase().includes(q) ||
+        normalizeSearch(node.title).includes(q) ||
         (node.order && node.order.includes(q)) ||
-        (node.section && node.section.toLowerCase().includes(q))
+        (node.section && normalizeSearch(node.section).includes(q))
 
       let filteredChildren: TreeNode[] | undefined
       if (node.children) {
-        filteredChildren = node.children
+        filteredChildren = matchSelf ? node.children : node.children
           .map(filterNode)
           .filter((n): n is TreeNode => n !== null)
       }

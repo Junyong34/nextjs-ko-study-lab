@@ -31,6 +31,9 @@ export function TocList({ headings, activeId, onJump, onTop }: TocListProps) {
           .map((h) => (
             <li key={h.id} style={{ paddingLeft: `${(h.level - 2) * 12}px` }}>
               <a
+                data-analytics="toc_click"
+                data-section-id={h.id}
+                data-ui-location="toc"
                 href={`#${h.id}`}
                 title={h.text}
                 onClick={(e) => {

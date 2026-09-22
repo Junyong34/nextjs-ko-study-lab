@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Check, Copy, FileCode, Terminal } from 'lucide-react'
 import { normalizeLang, cacheKeyFor, getCached, highlight } from './highlight'
 
@@ -12,6 +12,7 @@ export interface CodeBlockProps {
 
 /** 구문 강조 + 파일명 헤더 + 복사 버튼이 붙은 코드블록. */
 export function CodeBlock({ code, language, filename }: CodeBlockProps) {
+  const root = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
   const normLang = normalizeLang(language)
   const cacheKey = cacheKeyFor(normLang, code)
@@ -40,8 +41,17 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
   }, [code, language, cacheKey])
 
   const handleCopy = async () => {
+    const marker = root.current?.closest<HTMLElement>('[data-content-id][data-page-path]')
+    const context = marker?.dataset.contentType === 'document' && marker.dataset.pagePath === location.pathname ? {
+      page_path: location.pathname, content_id: marker.dataset.contentId,
+      content_group: marker.dataset.contentGroup,
+    } : undefined
+    const blockId = String(Array.from(root.current?.closest('article')?.querySelectorAll('[data-code-block]') || []).indexOf(root.current!))
     try {
       await navigator.clipboard.writeText(code)
+      if (context) document.dispatchEvent(new CustomEvent('study:analytics', { detail: {
+        name: 'code_copy', params: { code_block_id: blockId, code_language: normLang }, context,
+      } }))
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
@@ -52,7 +62,7 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
   const isTerminal = normLang === 'bash' || normLang === 'shell' || normLang === 'sh' || normLang === 'terminal'
 
   return (
-    <div className="not-prose group relative my-4 overflow-hidden rounded-xl border border-zinc-200/80 bg-[#24292e] text-zinc-100 shadow-xs dark:border-zinc-800 dark:bg-[#1f2428]">
+    <div ref={root} data-code-block className="not-prose group relative my-4 overflow-hidden rounded-xl border border-zinc-200/80 bg-[#24292e] text-zinc-100 shadow-xs dark:border-zinc-800 dark:bg-[#1f2428]">
       <div className="flex items-center justify-between border-b border-zinc-800/80 bg-[#1f2428]/95 px-4 py-2 text-xs text-zinc-400">
         <div className="flex items-center gap-2 min-w-0">
           {filename ? (

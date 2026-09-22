@@ -54,7 +54,10 @@ export function GlossaryIndex({
             {majorSections.map((sec) => (
               <li key={sec.id}>
                 <a
-                  href={`#${sec.id}`}
+                  data-analytics="toc_click"
+                data-section-id={sec.id}
+                data-ui-location="toc"
+                href={`#${sec.id}`}
                   title={sec.text}
                   onClick={(e) => {
                     e.preventDefault()

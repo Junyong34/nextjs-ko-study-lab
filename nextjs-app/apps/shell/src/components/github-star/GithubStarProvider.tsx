@@ -56,11 +56,14 @@ export function GithubStarProvider({
   const recordRef = useRef<StarEngagementRecord | null>(null)
   recordRef.current = record
 
+  const initialized = useRef(false)
   const lastTickTimeRef = useRef<number>(0)
   const isWindowActiveRef = useRef<boolean>(true)
 
   // 1. 초기 마운트 시 스토리지 로드 및 새 세션 방문 카운트
   useEffect(() => {
+    if (initialized.current) return
+    initialized.current = true
     const now = new Date().toISOString()
     let current = readStoredStarRecord(window.localStorage, now).record
 

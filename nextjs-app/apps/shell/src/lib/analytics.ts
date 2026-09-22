@@ -1,39 +1,14 @@
-import { sendGAEvent } from '@next/third-parties/google'
+import type { AnalyticsEvent } from './analytics/events'
+import { currentContext, type ContentContext } from './analytics/context'
+import { parseEvent } from './analytics/payload'
+import { sendEvent } from './analytics/transport'
 
-export type AnalyticsEvent =
-  | {
-      name: 'learning_progress_toggle'
-      params: { kind: 'document' | 'demo'; item_key: string; completed: boolean }
-    }
-  | {
-      name: 'learning_complete'
-      params: { doc_id: string; chapter: string }
-    }
-  | {
-      name: 'demo_click'
-      params: { demo_type: string; from_doc: string }
-    }
-  | {
-      name: 'github_star_click'
-      params: { action: 'open_modal' | 'go_to_repo' | 'dismiss' | 'dismiss_forever' }
-    }
-  | {
-      name: 'share_click'
-      params: { share_url: string; page_path: string }
-    }
-  | {
-      name: 'demo_view'
-      params: { zone: string; demo_url: string; demo_title: string }
-    }
-  | {
-      name: 'book_click'
-      params: { book_type: 'document' | 'demo' | 'visualize'; chapter_step: string; chapter_title: string }
-    }
-  | {
-      name: 'visualize_view'
-      params: { demo_key: string; demo_title: string; group: string }
-    }
+export type { AnalyticsEvent } from './analytics/events'
 
-export function trackEvent(event: AnalyticsEvent) {
-  sendGAEvent('event', event.name, event.params)
+export function trackEvent(event: AnalyticsEvent, context?: ContentContext) {
+  if (typeof window === 'undefined') return
+  try {
+    const parsed = parseEvent(event)
+    if (parsed) sendEvent(parsed.name, { ...currentContext(), ...context, ui_location: event.name === 'code_copy' ? 'code' : event.name.includes('search') ? 'sidebar' : event.name === 'content_feedback' ? 'feedback' : 'page', ...parsed.params })
+  } catch { /* Never turn telemetry into a UI failure. */ }
 }

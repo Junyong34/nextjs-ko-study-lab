@@ -5,7 +5,8 @@ import { MarkdownRenderer, parseHeadings, isGlossaryDoc } from '@study/docs-rend
 import { TableOfContents, ShareButton } from '@study/ui'
 import { getManifest, getDocBySlug, getDocContent, getDemos } from '@/lib/docs'
 import { LearningCompletionControl } from '@/components/learning-progress/LearningCompletionControl'
-import { DemoClickTracker } from '@/components/analytics/DemoClickTracker'
+import { ContentViewTracker } from '@/components/analytics/ContentViewTracker'
+import { ContentFeedback } from '@/components/analytics/ContentFeedback'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildBreadcrumbJsonLdFor, buildLearningResourceJsonLd } from '@/lib/seo/json-ld'
 import { buildPageMetadata } from '@/lib/seo/metadata'
@@ -63,7 +64,7 @@ export default async function DocPage({ params }: PageProps) {
   const breadcrumbs = doc.slug ? doc.slug.slice(0, -1).map((s) => s.replace(/-/g, ' ')) : []
 
   return (
-    <div className="flex items-start gap-8">
+    <div data-page-path={doc.url} data-content-id={doc.path} data-content-group={doc.path.split('/')[0]} data-content-type="document" className="flex items-start gap-8">
       <JsonLd data={buildBreadcrumbJsonLdFor({ title: doc.title, url: doc.url })} />
       <JsonLd data={buildLearningResourceJsonLd({ title: doc.seoTitle, description: doc.description, url: doc.url })} />
       {/* Main Document Content */}
@@ -101,18 +102,19 @@ export default async function DocPage({ params }: PageProps) {
         />
 
         {/* Main Content */}
-        <div className="prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:font-medium prose-pre:bg-zinc-900 dark:prose-pre:bg-zinc-900">
+        <div data-document-body className="prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:font-medium prose-pre:bg-zinc-900 dark:prose-pre:bg-zinc-900">
           <MarkdownRenderer
             content={content}
             docPath={doc.path}
             demos={allDemos}
           />
         </div>
+        {!doc.path.endsWith('README.md') && <ContentFeedback key={doc.path} docId={doc.path} />}
       </div>
 
       {/* Right Sticky Table of Contents / Index Map */}
       <TableOfContents headings={headings} isGlossary={isGlossaryDoc(content, headings, doc.path)} />
-      <DemoClickTracker />
+      <ContentViewTracker contentId={doc.path} group={doc.path.split('/')[0]} type="document" event={{ name: 'content_view', params: {} }} />
     </div>
   )
 }

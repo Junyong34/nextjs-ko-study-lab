@@ -6,6 +6,7 @@ import { Menu, X, PlayCircle, BookOpen } from 'lucide-react'
 import type { TreeNode } from '../../types'
 import { DocTreeNode } from './DocTreeNode'
 import { DocTreeSearch } from './DocTreeSearch'
+import { useSearchMeasurement } from './useSearchMeasurement'
 import { useTreeFilter } from './useTreeFilter'
 import { useTreeScrollToActive } from './useTreeScrollToActive'
 
@@ -38,6 +39,7 @@ export function DocTree({ tree }: DocTreeProps) {
   })
 
   const filteredTree = useTreeFilter(tree, query)
+  const search = useSearchMeasurement(tree, filteredTree, query, isDemoMode, mobileOpen)
 
   return (
     <>
@@ -110,7 +112,7 @@ export function DocTree({ tree }: DocTreeProps) {
           )}
         </div>
 
-        <DocTreeSearch value={query} onChange={setQuery} placeholder={isDemoMode ? '예제 및 메뉴 검색…' : '문서 검색…'} />
+        <DocTreeSearch onCompositionChange={search.composing} value={query} onChange={setQuery} placeholder={isDemoMode ? '예제 및 메뉴 검색…' : '문서 검색…'} />
 
         {/* 트리 본문 — 검색창과 별개로 스크롤된다 */}
         <div
@@ -123,6 +125,8 @@ export function DocTree({ tree }: DocTreeProps) {
               node={rootNode}
               currentPath={pathname}
               level={0}
+              searching={search.searching}
+              onResultClick={search.onResultClick}
               onNavigate={() => setMobileOpen(false)}
             />
           ))}

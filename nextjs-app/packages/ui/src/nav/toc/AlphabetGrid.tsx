@@ -41,7 +41,10 @@ export function AlphabetGrid({ available, activeLetter, onJump }: AlphabetGridPr
           return (
             <a
               key={letter}
-              href={`#${letter.toLowerCase()}`}
+              data-analytics="toc_click"
+                data-section-id={letter.toLowerCase()}
+                data-ui-location="toc"
+                href={`#${letter.toLowerCase()}`}
               onClick={(e) => {
                 e.preventDefault()
                 onJump(letter.toLowerCase())

@@ -1,20 +1,5 @@
-'use client'
+import { ContentViewTracker } from '@/components/analytics/ContentViewTracker'
 
-import { useEffect } from 'react'
-import { trackEvent } from '@/lib/analytics'
-
-export function DemoViewTracker({
-  zone,
-  demoUrl,
-  demoTitle,
-}: {
-  zone: string
-  demoUrl: string
-  demoTitle: string
-}) {
-  useEffect(() => {
-    trackEvent({ name: 'demo_view', params: { zone, demo_url: demoUrl, demo_title: demoTitle } })
-  }, [zone, demoUrl, demoTitle])
-
-  return null
+export function DemoViewTracker({ zone, demoUrl, demoTitle }: { zone: string; demoUrl: string; demoTitle: string }) {
+  return <ContentViewTracker contentId={demoUrl} group={zone} type="demo" event={{ name: 'demo_view', params: { zone, demo_url: demoUrl, demo_title: demoTitle } }} />
 }

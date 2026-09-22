@@ -9,13 +9,13 @@ describe('Tier 1: Feature 22 - GA4 Custom Events Contract', () => {
   const docsRenderSrc = path.join(NEXTJS_APP_ROOT, 'packages/docs-render/src')
 
   describe('22.1 AnalyticsEvent Type Definitions', () => {
-    const analyticsPath = path.join(shellSrc, 'lib/analytics.ts')
+    const analyticsPath = path.join(shellSrc, 'lib/analytics/events.ts')
 
     it('analytics.ts exists and exports AnalyticsEvent type and trackEvent function', () => {
       assert.ok(fs.existsSync(analyticsPath), 'analytics.ts must exist')
       const content = fs.readFileSync(analyticsPath, 'utf-8')
       assert.match(content, /export type AnalyticsEvent =/, 'Must export AnalyticsEvent')
-      assert.match(content, /export function trackEvent\(/, 'Must export trackEvent')
+      assert.match(fs.readFileSync(path.join(shellSrc, 'lib/analytics.ts'), 'utf-8'), /export function trackEvent\(/)
     })
 
     it('defines learning_complete event with doc_id and chapter parameters', () => {
@@ -54,7 +54,7 @@ describe('Tier 1: Feature 22 - GA4 Custom Events Contract', () => {
     const docDemoListPath = path.join(docsRenderSrc, 'demo/DocDemoList.tsx')
     const demoLinkCardPath = path.join(docsRenderSrc, 'demo/DemoLinkCard.tsx')
     const markdownRendererPath = path.join(docsRenderSrc, 'markdown/MarkdownRenderer.tsx')
-    const trackerPath = path.join(shellSrc, 'components/analytics/DemoClickTracker.tsx')
+    const trackerPath = path.join(shellSrc, 'components/analytics/AnalyticsTracker.tsx')
     const pagePath = path.join(shellSrc, 'app/[...slug]/page.tsx')
 
     it('DocDemoList anchor provides data-analytics, data-demo-type, and data-from-doc attributes', () => {
@@ -80,20 +80,11 @@ describe('Tier 1: Feature 22 - GA4 Custom Events Contract', () => {
       assert.match(content, /<DocDemoList[^>]*docPath=\{docPath\}/s)
     })
 
-    it('DemoClickTracker captures [data-analytics="demo_click"] and calls trackEvent', () => {
-      assert.ok(fs.existsSync(trackerPath), 'DemoClickTracker.tsx must exist')
-      const content = fs.readFileSync(trackerPath, 'utf-8')
-      assert.match(content, /target\.closest\('\[data-analytics="demo_click"\]'\)/)
-      assert.match(content, /trackEvent\(\{\s*name:\s*'demo_click'/)
-      assert.match(content, /demo_type:/)
-      assert.match(content, /from_doc:/)
-    })
-
-    it('Shell [...slug]/page.tsx mounts DemoClickTracker', () => {
-      assert.ok(fs.existsSync(pagePath), '[...slug]/page.tsx must exist')
-      const content = fs.readFileSync(pagePath, 'utf-8')
-      assert.match(content, /import\s*\{\s*DemoClickTracker\s*\}\s*from\s*'@\/components\/analytics\/DemoClickTracker'/)
-      assert.match(content, /<DemoClickTracker\s*\/>/)
+    it('root mounts one shared tracker and document removes its old listener', () => {
+      const root = fs.readFileSync(path.join(shellSrc, 'app/layout.tsx'), 'utf-8')
+      assert.match(root, /<AnalyticsTracker/)
+      assert.doesNotMatch(fs.readFileSync(pagePath, 'utf-8'), /DemoClickTracker/)
+      assert.ok(fs.existsSync(trackerPath))
     })
   })
 
