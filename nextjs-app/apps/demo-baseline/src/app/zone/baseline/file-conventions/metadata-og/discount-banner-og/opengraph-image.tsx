@@ -1,39 +1,40 @@
 import { ImageResponse } from 'next/og'
+import { connection } from 'next/server'
+import { getDiscountAt } from './discount-data'
+import { IMAGE_HEADERS, OG_IMAGE } from './image-config'
+import { DiscountBannerArt } from './components/DiscountBannerArt'
 
-export const alt = '이커머스 타임세일 할인 배너'
-export const size = { width: 1200, height: 630 }
-export const contentType = 'image/png'
+// config export → <head>의 og:image:alt / og:image:width·height / og:image:type 으로 주입된다.
+export const alt = OG_IMAGE.alt
+export const size = OG_IMAGE.size
+export const contentType = OG_IMAGE.contentType
 
+/**
+ * 요청 시(request-time) 생성되는 OG 이미지.
+ * connection()은 Request-time API라서 이 특수 Route Handler는 빌드 시 프리렌더되지 않고,
+ * 매 요청마다 할인율 데이터를 다시 읽어 새 PNG를 만든다.
+ */
 export default async function Image() {
+  await connection()
+  const generatedAt = new Date()
+  const snapshot = getDiscountAt(generatedAt)
+
   return new ImageResponse(
     (
-      <div
-        style={{
-          fontSize: 48,
-          background: 'linear-gradient(to bottom right, #1e1b4b, #312e81, #4338ca)',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontWeight: 'bold',
-          padding: 40,
-          textAlign: 'center',
-        }}
-      >
-        <div style={{ fontSize: 24, color: '#38bdf8', marginBottom: 12 }}>
-          NEXT.JS 16 APP ROUTER STUDY LAB
-        </div>
-        <div style={{ fontSize: 56, color: '#facc15' }}>
-          🔥 2026 시즌 오픈 특별 30% 타임 세일 🔥
-        </div>
-        <div style={{ fontSize: 22, color: '#cbd5e1', marginTop: 20 }}>
-          프리미엄 러닝화 & 테크 웨어 전 품목 즉시 할인 적용
-        </div>
-      </div>
+      <DiscountBannerArt
+        snapshot={snapshot}
+        generatedAt={generatedAt.toISOString()}
+        channel="og:image"
+        strategy="connection()"
+      />
     ),
-    { ...size }
+    {
+      ...size,
+      headers: {
+        [IMAGE_HEADERS.generatedAt]: generatedAt.toISOString(),
+        [IMAGE_HEADERS.rate]: String(snapshot.rate),
+        [IMAGE_HEADERS.slot]: String(snapshot.slot),
+      },
+    },
   )
 }

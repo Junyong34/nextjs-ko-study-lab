@@ -1,36 +1,38 @@
 import { ImageResponse } from 'next/og'
+import { getDiscountAt } from './discount-data'
+import { IMAGE_HEADERS, TWITTER_IMAGE } from './image-config'
+import { DiscountBannerArt } from './components/DiscountBannerArt'
 
-export const alt = '이커머스 타임세일 트위터 카드 배너'
-export const size = { width: 1200, height: 600 }
-export const contentType = 'image/png'
+// config export → <head>의 twitter:image:alt / width·height / type 으로 주입된다.
+export const alt = TWITTER_IMAGE.alt
+export const size = TWITTER_IMAGE.size
+export const contentType = TWITTER_IMAGE.contentType
 
+/**
+ * 대조군: Request-time API도, 캐시되지 않는 fetch도 쓰지 않는다.
+ * 공식 문서대로 기본값인 정적 최적화가 적용되어 `next build` 때 한 번 생성된 PNG가 계속 서빙된다
+ * (next dev에서는 매 요청 새로 생성). 그래서 이미지 안 할인율은 "빌드 시점"의 스냅샷이다.
+ */
 export default async function Image() {
+  const generatedAt = new Date()
+  const snapshot = getDiscountAt(generatedAt)
+
   return new ImageResponse(
     (
-      <div
-        style={{
-          fontSize: 44,
-          background: 'linear-gradient(to bottom right, #09090b, #18181b, #27272a)',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontWeight: 'bold',
-          padding: 40,
-          textAlign: 'center',
-        }}
-      >
-        <div style={{ fontSize: 22, color: '#a1a1aa', marginBottom: 8 }}>
-          TWITTER CARD METADATA PREVIEW
-        </div>
-        <div style={{ fontSize: 52, color: '#38bdf8' }}>
-          ⚡ 쇼핑몰 30% 타임세일 이벤트 ⚡
-        </div>
-      </div>
+      <DiscountBannerArt
+        snapshot={snapshot}
+        generatedAt={generatedAt.toISOString()}
+        channel="twitter:image"
+        strategy="no request-time API"
+      />
     ),
-    { ...size }
+    {
+      ...size,
+      headers: {
+        [IMAGE_HEADERS.generatedAt]: generatedAt.toISOString(),
+        [IMAGE_HEADERS.rate]: String(snapshot.rate),
+        [IMAGE_HEADERS.slot]: String(snapshot.slot),
+      },
+    },
   )
 }
