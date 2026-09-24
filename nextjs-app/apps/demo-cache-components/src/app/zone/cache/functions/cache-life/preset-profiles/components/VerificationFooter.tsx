@@ -1,107 +1,111 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+import React from 'react'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import { formatAge, formatServerTime, PRESET_SPECS, type Observation, type PresetName } from '../types'
+import { useObservations } from './ObservationContext'
+
+const REVALIDATE_MS = Object.fromEntries(PRESET_SPECS.map((s) => [s.name, s.revalidate * 1000])) as Record<PresetName, number>
+
+const age = (o: Observation, p: PresetName) => o.requestAt - o.rows[p].generatedAt
+
+/** 연속된 두 관측 사이에 cacheId가 바뀐 지점 */
+function changes(obs: Observation[], p: PresetName) {
+  return obs.slice(1).flatMap((b, i) => (obs[i].rows[p].cacheId !== b.rows[p].cacheId ? [[obs[i], b] as const] : []))
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+function evaluate(obs: Observation[]) {
+  const secondsChanges = changes(obs, 'seconds')
+  const minutesChanges = changes(obs, 'minutes')
+  const longChanges = [...changes(obs, 'hours'), ...changes(obs, 'max')]
+  // revalidate가 지난 항목이 그대로 응답에 쓰인 횟수 (dev의 백그라운드 재생성 경로에서만 나타난다)
+  const staleServed = obs.filter((o) => age(o, 'seconds') >= REVALIDATE_MS.seconds)
+  const spanMs = obs.length > 1 ? obs[obs.length - 1].requestAt - obs[0].requestAt : 0
+  const isMatched = longChanges.length > 0 ? false : secondsChanges.length > 0 ? true : undefined
+  return { secondsChanges, minutesChanges, longChanges, staleServed, spanMs, isMatched }
+}
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter() {
+  const { observations: obs } = useObservations()
+  const { secondsChanges, minutesChanges, longChanges, staleServed, spanMs, isMatched } = evaluate(obs)
+  const mode = obs.at(-1)?.mode
+  const last = obs.at(-1)
 
-  const defaultExpected = "• cacheLife 내장 프리셋 프로필 (seconds, hours, max)의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  const expected = (
+    <span>
+      {"• cacheLife('seconds') (revalidate 1초): 1초 넘게 기다렸다 다시 요청하면 본문이 재실행되어 cacheId가 바뀜\n"}
+      {"• cacheLife('minutes') (revalidate 1분): 1분 안에는 같은 cacheId, 1분이 지난 뒤 요청에서 바뀜\n"}
+      {"• cacheLife('hours') / cacheLife('max'): 실습하는 동안 cacheId·실행 시각이 그대로 유지됨\n"}
+      {mode === 'development'
+        ? '• next dev: seconds는 캐시된 항목을 먼저 응답하고 요청마다 백그라운드에서 다시 만듦 → 매 요청 직전 요청 때 만든 cacheId가 보임 (경과 ≈ 요청 간격)'
+        : '• next start: 기본 in-memory 핸들러가 revalidate 지난 항목을 버리므로 그 요청에서 바로 다시 실행됨 (seconds 행 경과가 항상 1초 미만)'}
+    </span>
+  )
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = (
+    <span>
+      {obs.length === 0 && '• 관측 대기 중 (페이지 로드 후 첫 요청이 기록됩니다)\n'}
+      {obs.length > 0 && `• ${obs.length}회 요청 관측, 첫 요청부터 ${formatAge(spanMs)} 경과 (서버 모드 ${mode})\n`}
+      {secondsChanges.length > 0
+        ? `• seconds: cacheId ${secondsChanges.length}회 교체 (예: 요청 #${secondsChanges[0][0].seq} #${secondsChanges[0][0].rows.seconds.cacheId} → #${secondsChanges[0][1].seq} #${secondsChanges[0][1].rows.seconds.cacheId})\n`
+        : '• seconds: 아직 cacheId 교체가 관측되지 않았습니다. 1초 이상 간격을 두고 다시 요청해 보세요\n'}
+      {minutesChanges.length > 0
+        ? `• minutes: cacheId ${minutesChanges.length}회 교체 (요청 #${minutesChanges[0][1].seq}에서 #${minutesChanges[0][1].rows.minutes.cacheId})\n`
+        : last
+          ? `• minutes: 같은 cacheId 유지 중 (항목 경과 ${formatAge(age(last, 'minutes'))} / revalidate 1분)\n`
+          : ''}
+      {longChanges.length > 0
+        ? `• 불일치: hours/max cacheId가 바뀜 (요청 #${longChanges[0][1].seq}). 서버 재시작·파일 수정(HMR)으로 캐시가 비워졌는지 확인하세요\n`
+        : last
+          ? `• hours/max: ${obs.length}회 요청 동안 #${last.rows.hours.cacheId} / #${last.rows.max.cacheId} 유지\n`
+          : ''}
+      {obs.length > 0 &&
+        `• revalidate 지난 seconds 항목이 응답에 쓰인 횟수: ${staleServed.length}회${staleServed[0] ? ` (요청 #${staleServed[0].seq}, 경과 ${formatAge(age(staleServed[0], 'seconds'))})` : ''}`}
+    </span>
+  )
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <ExpectedActualPanel
-        title="cacheLife 내장 프리셋 프로필 (seconds, hours, max) 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="프리셋별 재계산 시점 검증"
+        description="요청마다 서버가 보낸 cacheId와 경과 시간을 모아, seconds는 바뀌고 hours·max는 유지되는지 비교합니다."
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-                        <DemoDeepDiveCard title="Next.js 16 cacheLife 내장 프리셋 프로파일">
-              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p>Next.js 16은 자주 사용되는 캐시 주기를 위해 <code>cacheLife('seconds')</code>, <code>cacheLife('minutes')</code>, <code>cacheLife('hours')</code>, <code>cacheLife('days')</code>, <code>cacheLife('weeks')</code>, <code>cacheLife('max')</code> 등 표준 내장 프리셋을 제공하여 복잡한 숫자 설정 없이 즉시 활용 가능한 프리셋 스펙입니다.</p>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 6가지 표준 프리셋을 각각 적용한 데이터 함수들의 TTL 파라미터(stale/revalidate/expire) 매핑 테이블을 확인하고, 프리셋 적용 시 캐시 헤더와 백그라운드 revalidation 동작이 자동으로 스케줄링되는 과정을 대조 검증합니다.</p>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>코드 가독성 및 생산성 극대화</strong>: 숫자 대신 <code>'hours'</code>, <code>'days'</code> 등 직관적인 문자열 프리셋을 사용하여 코드의 의도를 명확히 드러냅니다.</li>
-                    <li><strong>Next.js 프레임워크 표준 모범 사례 준수</strong>: Vercel 및 글로벌 엣지 인프라에 최적화된 사전 검증된 TTL 설정값을 그대로 활용합니다.</li>
-                    <li><strong>휴먼 에러 방지</strong>: 초/밀리초 변환 계산 실수나 비정상적인 만료 시간 설정으로 인한 버그를 원천 차단합니다.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li>실시간 환율/날씨 위젯(cacheLife('minutes'))</li>
-                    <li>쇼핑몰 일반 상품 카탈로그 및 카테고리 목록(cacheLife('hours'))</li>
-                    <li>이용약관, 개인정보처리방침 등 정적 공지 문서(cacheLife('max'))</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>프리셋 오버라이드 가능</strong>: 내장 프리셋의 기본 시간은 <code>next.config.ts</code>의 <code>experimental.cacheLife</code> 설정을 통해 전역 오버라이드할 수 있습니다.</li>
-                    <li><strong>오타 주의</strong>: 정의되지 않은 프리셋 문자열을 전달하면 빌드 시 경고 또는 기본 fallback 정책이 적용되므로 표준 프리셋 명칭을 준수해야 합니다.</li>
-                  </ul>
-                </div>
-              </div>
-            </DemoDeepDiveCard>
+      {obs.length > 0 && (
+        <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
+          <table data-testid="observation-log" className="w-full min-w-[600px] text-left font-mono text-[11px]">
+            <thead className="bg-zinc-50 text-zinc-500 dark:bg-zinc-900">
+              <tr>
+                <th className="px-2 py-1.5">요청</th>
+                <th className="px-2 py-1.5">서버 시각</th>
+                {PRESET_SPECS.map((s) => (
+                  <th key={s.name} className="px-2 py-1.5">
+                    {s.name} (경과)
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {obs.map((o, i) => (
+                <tr key={o.requestId} className="border-t border-zinc-100 dark:border-zinc-800">
+                  <td className="px-2 py-1">#{o.seq}</td>
+                  <td className="px-2 py-1">{formatServerTime(o.requestAt)}</td>
+                  {PRESET_SPECS.map((s) => {
+                    const changed = i > 0 && obs[i - 1].rows[s.name].cacheId !== o.rows[s.name].cacheId
+                    return (
+                      <td key={s.name} className={`px-2 py-1 ${changed ? 'font-bold text-amber-600 dark:text-amber-400' : ''}`}>
+                        #{o.rows[s.name].cacheId} ({formatAge(age(o, s.name))})
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }

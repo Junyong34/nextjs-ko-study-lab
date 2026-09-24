@@ -3,44 +3,53 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('cache', 'functions/cache-life/preset-profiles')
 
-import React from 'react'
+import { Suspense } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { CacheLifePresetsDemo } from './components/CacheLifePresetsDemo'
+import { ObservationProvider } from './components/ObservationContext'
+import { PresetBoard } from './components/PresetBoard'
 import { VerificationFooter } from './components/VerificationFooter'
+import { ConceptDeepDive } from './components/ConceptDeepDive'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="cacheLife 내장 프리셋 프로필 (seconds, hours, max)"
-        concept="cacheLife() 함수에 Next.js 16 빌트인 프리셋('seconds', 'hours', 'days')을 선언하여 캐시의 stale, revalidate, expire 수명 주기를 직관적으로 지정합니다."
+        concept="'use cache' 함수 안에서 cacheLife('seconds'), cacheLife('hours') 같은 내장 프리셋을 부르면 프리셋의 revalidate·expire 값에 따라 본문이 다시 실행되는 시점이 달라집니다."
         steps={[
           {
             step: 1,
-            title: "[cacheLife('seconds')] 클릭",
-            description: "초 단위(stale: 1s, revalidate: 10s, expire: 60s) 초단기 캐시 수명 프로파일을 적용합니다.",
-            actionBadge: "seconds 선택",
+            title: '처음 표시된 cacheId 확인',
+            description: '네 개의 캐시 함수가 각자 다른 프리셋으로 cacheId와 본문 실행 시각을 기록합니다.',
+            actionBadge: '초기 관측',
           },
           {
             step: 2,
-            title: "[cacheLife('hours')] 또는 [cacheLife('days')] 클릭",
-            description: "시간 단위 또는 일 단위의 중장기 캐시 수명 프로파일로 전환합니다.",
-            actionBadge: "hours/days 선택",
+            title: '2~3초 기다린 뒤 [서버에 다시 요청] 클릭',
+            description: 'router.refresh()로 서버에 다시 요청합니다. 브라우저 새로고침(F5)으로 해도 됩니다. 몇 번 반복합니다.',
+            actionBadge: 'revalidate 경과',
+            observe: 'seconds 행의 cacheId·실행 횟수만 바뀌고 hours·max 행은 그대로',
+            observeAt: 'playground',
           },
           {
             step: 3,
-            title: "선택된 프리셋별 수명 주기 타임라인 관찰",
-            description: "프리셋에 정의된 stale, revalidate, expire 초 단위 수치가 화면에 올바르게 반영되는지 확인합니다.",
-            actionBadge: "수명 검증",
-            observe: "선택한 cacheLife 프리셋에 따른 stale/revalidate/expire 수명 타임라인이 화면에 표시됨",
-            observeAt: "playground",
+            title: '1분 이상 지난 뒤 한 번 더 요청',
+            description: 'minutes 프리셋의 revalidate(1분)가 지나면 minutes 행도 바뀝니다.',
+            actionBadge: '프리셋 비교',
+            observe: '관측 기록 표에서 프리셋별 교체 시점이 갈리고, 검증 패널이 "검증 완료"로 바뀜',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"cacheLife 내장 프리셋 프로필 (seconds, hours, max) 실습"}>
-        <CacheLifePresetsDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <ObservationProvider>
+        <DemoPlaygroundCard title="내장 프리셋별 'use cache' 함수 (cached.ts)">
+          <Suspense fallback={<div className="h-56 animate-pulse rounded-lg bg-zinc-100 dark:bg-zinc-900" />}>
+            <PresetBoard />
+          </Suspense>
+        </DemoPlaygroundCard>
+        <VerificationFooter />
+      </ObservationProvider>
+      <ConceptDeepDive />
     </DemoContainer>
   )
 }
