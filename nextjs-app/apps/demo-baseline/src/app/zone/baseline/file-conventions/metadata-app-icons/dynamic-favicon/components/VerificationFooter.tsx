@@ -1,107 +1,103 @@
 'use client'
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { EXPECTED_ICONS } from '../specs'
+import { evaluate, expectedPath } from '../evaluate'
+import type { ProbeSnapshot } from '../types'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+export function VerificationFooter({ snapshot }: { snapshot: ProbeSnapshot | null }) {
+  const evaluation = evaluate(snapshot)
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+  const expected = (
+    <ul className="space-y-1">
+      {EXPECTED_ICONS.map((spec) => (
+        <li key={expectedPath(spec)} className="break-all">
+          • &lt;head&gt;에 rel=&quot;{spec.rel}&quot; href=&quot;{expectedPath(spec)}?&lt;해시&gt;&quot; sizes=&quot;
+          {spec.width}x{spec.height}&quot; type=&quot;{spec.contentType}&quot; → fetch 200, {spec.contentType},{' '}
+          {spec.width}x{spec.height}px
+        </li>
+      ))}
+      <li>• no-reset(루트 layout의 metadata.icons 상속) 라우트에는 이 세그먼트의 파일 아이콘이 주입되지 않음</li>
+    </ul>
+  )
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• icon.tsx 및 apple-icon.tsx가 Next.js 메타데이터 라우트로 등록\n• ImageResponse(JSX)를 통해 32x32 및 180x180 PNG 바이너리 스트림 생성"
-  const defaultActual = "• icon.tsx (32x32) 및 apple-icon.tsx (180x180) 파일 컨벤션 파이프라인 마운트 완료\n• HTML head 태그에 link rel=icon 및 apple-touch-icon 자동 주입 감지"
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = !evaluation ? (
+    <span>• 측정 대기 중 (상단 [head 아이콘 링크 읽고 fetch] 버튼을 눌러 주세요)</span>
+  ) : (
+    <ul className="space-y-1.5">
+      {evaluation.lines.map((line) => (
+        <li key={line.label} className="break-all">
+          <span className={line.ok ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}>
+            {line.ok ? '[일치]' : '[불일치]'}
+          </span>{' '}
+          {line.label}
+          <div className="pl-3 font-mono text-[10px] text-zinc-500">{line.observed}</div>
+        </li>
+      ))}
+    </ul>
+  )
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="동적 메타데이터 앱 아이콘 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "Next.js App Router의 icon.tsx 및 apple-icon.tsx 특수 파일을 통한 동적 아이콘 자동 서빙 및 메타데이터 주입을 검증합니다."}
+        title="icon.tsx / apple-icon.tsx → head 링크 주입 및 실제 이미지 응답"
+        expected={expected}
+        actual={actual}
+        isMatched={evaluation?.isMatched}
+        description="기대값은 icon.tsx·apple-icon.tsx가 import하는 specs.ts에서 계산하고, 실제값은 이 문서의 DOM에서 읽은 link 속성과 그 href를 fetch·디코딩한 결과입니다."
       />
-      <DemoDeepDiveCard title="동적 메타데이터 앱 아이콘 (icon.tsx / apple-icon.tsx)">
+      <DemoDeepDiveCard title="코드로 만드는 앱 아이콘 (icon.tsx / apple-icon.tsx)">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">1. 동작 원리</h5>
             <p>
-              <code>icon.tsx</code> 및 <code>apple-icon.tsx</code>는 Next.js App Router의 메타데이터 특수 파일 컨벤션으로, <code>ImageResponse</code> JSX를 통해 빌드 또는 런타임에 동적으로 PNG/SVG 파비콘 및 앱 터치 아이콘 바이너리 스트림을 생성하고 HTML <code>{'<'}head{'>'}</code>에 <code>{'<'}link{'>'}</code> 태그를 자동 주입합니다.
+              라우트 세그먼트에 <code>icon.tsx</code> / <code>apple-icon.tsx</code>를 두면 Next.js가 두 가지를 동시에 만듭니다.
+              (1) 기본 export 함수가 반환한 <code>ImageResponse</code>를 서빙하는 특수 Route Handler
+              (<code>…/icon</code>, <code>…/apple-icon</code>), (2) 그 세그먼트 페이지의 <code>&lt;head&gt;</code>에 들어가는{' '}
+              <code>&lt;link rel=&quot;icon&quot;&gt;</code> / <code>&lt;link rel=&quot;apple-touch-icon&quot;&gt;</code>.
+              <code> size</code>는 <code>sizes</code> 속성으로, <code>contentType</code>은 <code>type</code> 속성과 응답
+              Content-Type으로 반영되고, href 끝에는 캐시 무효화용 해시 쿼리가 붙습니다.
             </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">2. 이 데모의 파일 구조</h5>
+            <pre className="overflow-x-auto rounded bg-zinc-100 p-2 font-mono text-[11px] dark:bg-zinc-900">{`dynamic-favicon/
+├─ icon.tsx        generateImageMetadata → id: small(32) / large(192)
+│                  → /icon/small?<해시>, /icon/large?<해시>
+├─ apple-icon.tsx  export size(180) + contentType → /apple-icon?<해시>
+├─ specs.ts        두 파일과 검증 패널이 공유하는 크기/타입
+├─ page.tsx        metadata = { ...getDemoMetadata(), icons: null }
+└─ no-reset/page.tsx  icons 초기화 없음 (비교용)`}</pre>
+          </div>
+          <div>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. generateImageMetadata</h5>
             <p>
-              본 데모에서는 장바구니 담긴 상품 수량 뱃지나 사용자 접속 알림 개수를 반영하여 32x32(favicon) 및 180x180(apple-touch-icon) 크기의 아이콘을 실시간 렌더링하고 브라우저 탭 아이콘으로 적용하는 흐름을 검증합니다.
+              한 <code>icon.tsx</code>에서 여러 아이콘을 만들 때 사용합니다. 반환 배열의 항목마다 링크가 하나씩 생기고
+              URL은 <code>/icon/[id]</code>가 되며, 기본 export 함수는 <code>id</code>를 Promise로 받습니다. 동적 세그먼트
+              (<code>app/shop/[slug]/icon.tsx</code>) 아래라면 <code>params</code>도 Promise로 전달됩니다.
             </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>실시간 상태 기반 파비콘 변경</strong>: 읽지 않은 알림 수, 다크/라이트 모드, 사용자 프로필 이니셜을 파비콘에 즉시 반영합니다.</li>
-              <li><strong>자동 HTML Head 태그 관리</strong>: 정적 파일 경로 작성 없이 파일 컨벤션만으로 완벽한 MIME 타입과 rel 속성을 자동 주입합니다.</li>
-              <li><strong>Edge 런타임 고속 이미지 생성</strong>: 경량 V8 환경에서 <code>ImageResponse</code>를 실행하여 10ms 미만으로 아이콘을 서빙합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 장바구니 담긴 개수 또는 신규 주문 알림 뱃지 파비콘</li>
-              <li>사용자 다크모드/라이트모드 테마 감지 기반 브랜드 로고 파비콘 자동 반전</li>
-              <li>PWA 모바일 홈 화면 추가용 다이내믹 애플 터치 아이콘</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>정적 파일 우선순위</strong>: 동일 폴더에 <code>favicon.ico</code>나 <code>icon.png</code> 등 정적 파일이 있으면 정적 파일이 우선되므로 동적 생성을 위해서는 정적 아이콘 파일을 제거하거나 이름을 분리해야 합니다.</li>
-              <li><strong>크기(size) export 필수</strong>: <code>export const size = {'{'} width: 32, height: 32 {'}'}</code> 및 <code>export const contentType = 'image/png'</code>를 명시하여 Next.js가 정확한 메타데이터 헤더를 구성하도록 해야 합니다.</li>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">4. 주의사항 (16.3.2 실측)</h5>
+            <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+              <li>
+                <strong>상위 layout의 metadata.icons가 파일 아이콘을 가립니다</strong>: 이 zone의 루트 layout은{' '}
+                <code>icons</code>를 직접 지정합니다. Next.js는 해석된 <code>icons</code>가 비어 있을 때만 파일 기반 아이콘을
+                넣으므로(<code>resolve-metadata.js</code>), 이 페이지는 <code>icons: null</code>로 상속값을 비웁니다.
+                no-reset 비교 결과가 그 차이입니다.
+              </li>
+              <li>
+                <strong>기본은 정적 최적화</strong>: Request-time API를 쓰지 않으면 빌드 시 생성·캐시됩니다. dev와{' '}
+                <code>next build</code> 후의 Cache-Control / x-nextjs-cache 값을 비교해 보세요.
+              </li>
+              <li>
+                <strong>favicon은 코드로 만들 수 없습니다</strong>: <code>favicon.ico</code>는 app 루트의 정적 파일만 가능하며,
+                세그먼트별 아이콘은 <code>icon</code>을 씁니다.
+              </li>
+              <li>
+                <strong>탭 아이콘은 셸 문서가 결정합니다</strong>: 이 데모는 셸 iframe 안에서 렌더링되므로 브라우저 탭에는
+                셸의 아이콘이 보일 수 있습니다. 그래서 이 문서의 링크와 응답을 직접 측정합니다.
+              </li>
             </ul>
           </div>
         </div>
