@@ -24,8 +24,8 @@ export function RuntimeContrastSection() {
     if (result.status === 'ok') {
       const ok = segmentMatches(segment, result.data)
       const d = result.data
-      const fs = d.fsAccess.startsWith('ok') ? 'fs 사용 가능' : 'fs 사용 불가'
-      const summary = `NEXT_RUNTIME=${d.nextRuntime}, typeof EdgeRuntime=${d.edgeRuntimeGlobal}, node=${d.nodeVersion}, ${fs}`
+      const nodeOnly = d.nodeGlobals.includes('process.version:string') ? 'Node 전용 전역 있음' : 'Node 전용 전역 없음'
+      const summary = `NEXT_RUNTIME=${d.nextRuntime}, typeof EdgeRuntime=${d.edgeRuntimeGlobal}, node=${d.nodeVersion}, ${nodeOnly}`
       return { segment, ok, text: `./${segment}: ${summary} → ${ok ? '기대와 일치' : '기대와 다름'}` }
     }
     if (result.status === 'error') return { segment, ok: false, text: `./${segment}: 요청 실패 (${result.message})` }
@@ -81,7 +81,7 @@ export function RuntimeContrastSection() {
               (segment) =>
                 `• ./${segment}: ${PROBE_ROWS.map((row) => `${row.label}=${row.expected[segment]}`).slice(0, 2).join(', ')}`,
             ).join('\n')}
-            {'\n• edge에서만 process.versions.node가 없고 node:fs 접근이 실패'}
+            {'\n• edge에서만 process.versions.node와 process.version·platform이 없음'}
           </span>
         }
         actual={<span className="whitespace-pre-line">{verdicts.map((v) => `• ${v.text}`).join('\n')}</span>}

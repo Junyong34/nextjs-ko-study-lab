@@ -33,10 +33,14 @@ export const PROBE_ROWS: ProbeRowSpec[] = [
     check: (s, p) => (isEdge(s) ? p.nodeVersion === null : typeof p.nodeVersion === 'string'),
   },
   {
-    field: 'fsAccess',
-    label: "getBuiltinModule('node:fs')",
-    expected: { default: 'ok (fs 사용 가능)', node: 'ok (fs 사용 가능)', edge: '사용 불가 / 예외' },
-    check: (s, p) => (isEdge(s) ? !p.fsAccess.startsWith('ok') : p.fsAccess.startsWith('ok')),
+    field: 'nodeGlobals',
+    label: 'typeof process.version / platform',
+    expected: { default: "'string' / 'string'", node: "'string' / 'string'", edge: "'undefined' / 'undefined'" },
+    check: (s, p) =>
+      p.nodeGlobals ===
+      (isEdge(s)
+        ? 'process.version:undefined, process.platform:undefined'
+        : 'process.version:string, process.platform:string'),
   },
   {
     field: 'webApis',

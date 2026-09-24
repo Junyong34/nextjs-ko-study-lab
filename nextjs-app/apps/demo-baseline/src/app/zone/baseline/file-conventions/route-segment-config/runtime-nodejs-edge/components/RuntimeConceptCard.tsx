@@ -32,8 +32,8 @@ export function RuntimeConceptCard() {
             세 핸들러는 같은 <code>collectRuntimeProbe()</code>를 호출해 실행 환경을 그대로 JSON으로 돌려줍니다.
             Next.js는 실행 환경마다 <code>process.env.NEXT_RUNTIME</code>을 주입하고, Edge 샌드박스에는 전역{' '}
             <code>EdgeRuntime</code>이 정의됩니다. Node 런타임에서는 <code>process.versions.node</code>와{' '}
-            <code>process.getBuiltinModule(&apos;node:fs&apos;)</code>가 동작하지만, Edge에서는 버전 정보가 없고 Node API 호출이
-            예외로 끝납니다. <code>fetch</code>·<code>Response</code>·<code>crypto.subtle</code> 같은 Web API는 양쪽에 모두 있어 대조군 역할을 합니다.
+            <code>process.version</code>·<code>process.platform</code> 같은 Node.js 전용 전역이 있지만, Edge에서는 이 값들이 모두
+            <code>undefined</code>입니다. <code>fetch</code>·<code>Response</code>·<code>crypto.subtle</code> 같은 Web API는 양쪽에 모두 있어 대조군 역할을 합니다.
           </p>
         </div>
 
@@ -56,8 +56,8 @@ export function RuntimeConceptCard() {
               <code>.next/server/edge/chunks/</code>로 번들되며, <code>node</code>·<code>default</code>는 일반 <code>route.js</code>로 남습니다.
             </li>
             <li>
-              이 예제는 <code>node:*</code> 모듈을 <code>import</code>하지 않고 전역 객체를 실행 시점에 조사합니다. edge 세그먼트의 의존성
-              그래프에 Node 모듈 import가 섞이면 배포 플랫폼의 Edge Function 빌드가 거부할 수 있습니다. 모듈 차단은{' '}
+              이 예제는 <code>node:*</code> 모듈을 <code>import</code>하거나 Node API를 호출하지 않고, 전역의 존재 여부만 <code>typeof</code>로 조사합니다. edge 세그먼트의 의존성
+              그래프에 Node 모듈 import가 섞이면 Vercel의 Edge Function 빌드가 배포를 거부합니다. 모듈 차단은{' '}
               <code>edge/v8-lightweight/nodejs-modules-bailout</code>, 런타임별 Node API 실호출 비교는{' '}
               <code>functions/server-runtime/edge-vs-nodejs</code> 예제에서 다룹니다.
             </li>

@@ -21,8 +21,8 @@ export interface RuntimeProbe {
   edgeRuntimeGlobal: string
   /** globalThis.process?.versions?.node — Node.js 프로세스 버전 */
   nodeVersion: string | null
-  /** getBuiltinModule('node:fs')로 실제 파일 시스템 접근을 시도한 결과 */
-  fsAccess: string
+  /** Node.js 전용 전역(process.version, process.platform)의 typeof 결과 — import·호출 없이 조사 */
+  nodeGlobals: string
   /** 두 런타임 공통 Web API — 차이가 나지 않아야 하는 대조군 */
   webApis: string
   /** 응답이 캐시가 아니라 요청마다 새로 만들어졌는지 확인하는 서버 측 시각 */
