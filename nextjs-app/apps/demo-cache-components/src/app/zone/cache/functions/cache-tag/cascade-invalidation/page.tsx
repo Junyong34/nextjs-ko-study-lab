@@ -3,44 +3,44 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('cache', 'functions/cache-tag/cascade-invalidation')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { CacheTagCascadeDemo } from './components/CacheTagCascadeDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import React, { Suspense } from 'react'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { CatalogSection, CatalogSectionFallback } from './components/CatalogSection'
+import { CascadeDeepDive } from './components/CascadeDeepDive'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="cacheTag 연쇄 무효화 (Cascade Invalidation)"
-        concept="상위 카테고리 태그를 revalidateTag로 무효화할 때 하위 10개 상품 및 연관 뷰 캐시가 0ms 내에 일괄 퍼지(Purge)되는 연쇄 무효화(Cascade Invalidation) 메커니즘을 검증합니다."
+        concept="여러 'use cache' 엔트리에 상위·카테고리·상품 태그를 계층으로 부착해 두면, 무효화할 태그를 고르는 것만으로 재계산 범위가 정해집니다. 상위 태그는 전체를, 하위 태그는 해당 엔트리만 다시 계산합니다."
         steps={[
           {
             step: 1,
-            title: "[상위 카테고리 태그 연쇄 무효화] 클릭",
-            description: "상위 태그(category-fashion)를 대상으로 revalidateTag를 호출합니다.",
-            actionBadge: "연쇄 무효화",
+            title: '엔트리 7개의 cacheId와 태그 확인',
+            description: '카탈로그 요약 1개, 카테고리 목록 2개, 상품 상세 4개가 각각 독립된 캐시 엔트리입니다. 카드 하단에 부착된 태그가 보입니다.',
+            actionBadge: '구조 확인',
           },
           {
             step: 2,
-            title: "하위 종속 캐시 태그 일괄 퍼지 처리",
-            description: "상위 태그에 종속된 모든 하위 상품 및 필터 캐시 엔트리가 동시 만료 처리됩니다.",
-            actionBadge: "퍼지 처리",
+            title: '상품 → 카테고리 → 상위 순서로 무효화',
+            description: '버튼은 Server Action에서 updateTag()를 호출합니다. 좁은 태그부터 넓은 태그 순으로 눌러 봅니다.',
+            actionBadge: 'updateTag 실행',
           },
           {
             step: 3,
-            title: "연쇄 무효화 결과 및 캐시 재생성 관찰",
-            description: "무효화된 하위 캐시 엔트리들이 최신 데이터로 동시 갱신되는지 확인합니다.",
-            actionBadge: "상태 검증",
-            observe: "상위 태그 무효화 시 하위 종속 캐시들이 일괄 무효화되고 최신 상태로 갱신됨",
-            observeAt: "playground",
+            title: '재계산된 엔트리 범위 비교',
+            description: 'cacheId가 바뀐 카드(재계산)와 그대로인 카드(유지)를 검증 패널의 기대 범위와 대조합니다.',
+            actionBadge: '범위 검증',
+            observe: '상품 태그 1개, 카테고리 태그 3개, 상위 태그 7개 엔트리의 cacheId가 바뀜',
+            observeAt: 'playground',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"cacheTag 연쇄 무효화 (Cascade Invalidation) 실습"}>
-        <CacheTagCascadeDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <Suspense fallback={<CatalogSectionFallback />}>
+        <CatalogSection />
+      </Suspense>
+      <CascadeDeepDive />
     </DemoContainer>
   )
 }
