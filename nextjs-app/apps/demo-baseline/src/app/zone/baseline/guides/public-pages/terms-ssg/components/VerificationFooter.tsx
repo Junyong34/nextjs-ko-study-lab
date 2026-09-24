@@ -1,107 +1,60 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+import React from 'react'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import { RUN_MODE } from '../probe'
+import { PROBE_TARGETS, SAMPLES_PER_TARGET } from '../terms'
+import { useProbe } from './ProbeContext'
+import { ConceptCard } from './ConceptCard'
+
+const N = SAMPLES_PER_TARGET
+
+const EXPECTED_BY_MODE = {
+  production:
+    '• next build 라우트 표: documents/[lang]/[version] ●(SSG) + 생성 경로 3개, with-cookies/[version] ƒ\n' +
+    `• documents/ko/2025-07 · ko/2026-03 · en/2026-03: ${N}번 모두 200, 렌더 ID 1개\n` +
+    '  - 렌더 시각이 실측 시작보다 과거(빌드 시점에 고정)\n' +
+    '  - x-nextjs-cache 존재, cache-control에 s-maxage (CDN 공유 캐시 허용)\n' +
+    `• documents/ko/2019-01 · en/2025-07: ${N}번 모두 404 (dynamicParams=false)\n` +
+    `• with-cookies/2026-03: ${N}번 모두 200, 렌더 ID ${N}개, x-nextjs-cache 없음, cache-control에 no-store`,
+  development:
+    '• next dev는 사전 생성 여부와 무관하게 page를 요청마다 렌더링\n' +
+    `• 200 대상 4개 모두 렌더 ID ${N}개 (빌드 시점 고정은 next start에서만 관찰)\n` +
+    `• documents/ko/2019-01 · en/2025-07: ${N}번 모두 404 — dev에서도 generateStaticParams를 호출해 목록 밖 조합을 거절`,
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter() {
+  const { results, running } = useProbe()
+  const done = !running && results.length === PROBE_TARGETS.length
+  const isMatched = done ? results.every((r) => r.ok) : undefined
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• 이용약관 정적 SSG 페이지 생성 및 캐시의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual =
+    results.length === 0
+      ? `• 아직 실측하지 않았습니다. 위 [약관 URL을 ${N}번씩 실제 요청] 버튼을 누르세요.`
+      : results
+          .map((r) => {
+            const s = r.samples[0]
+            const failed = r.checks.filter((c) => !c.ok).map((c) => c.label)
+            return [
+              `[${r.target.label}] status ${r.samples.map((x) => x.status).join('/')} · 고유 렌더 ID ${r.uniqueIds}개 → ${r.ok ? '일치' : `불일치 (${failed.join(', ')})`}`,
+              s.renderedAt ? `  렌더 시각 ${s.renderedAt} (실측 시작 ${r.probedAt})` : null,
+              `  x-nextjs-cache=${s.xNextjsCache ?? '없음'} · cache-control=${s.cacheControl ?? '없음'}`,
+            ]
+              .filter(Boolean)
+              .join('\n')
+          })
+          .join('\n')
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="이용약관 정적 SSG 페이지 생성 및 캐시 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title={`약관 문서 사전 생성·404·캐시 헤더 (현재 ${RUN_MODE})`}
+        expected={<>{EXPECTED_BY_MODE[RUN_MODE]}</>}
+        actual={<>{actual}</>}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="판정은 브라우저가 실제로 받은 상태 코드, HTML 안의 렌더 ID·렌더 시각, 응답 헤더로만 합니다. 기대값은 실행 모드(next dev / next start)에 따라 달라집니다."
       />
-      <DemoDeepDiveCard title="이용약관 정적 SSG 페이지 생성 및 캐시">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>정적 사이트 생성(SSG)은 자주 변경되지 않는 공용 페이지(이용약관, 개인정보처리방침, 회사 소개)를 빌드 시점에 순수 정적 HTML 파일로 사전 렌더링하여, 글로벌 CDN 엣지에서 0ms TTFB 속도로 서빙하는 Next.js의 핵심 렌더링 스펙입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 전자상거래 표준 이용약관 및 개인정보 처리방침 전문을 SSG로 컴파일하여, 서버 CPU 연산 및 DB 쿼리 없이 CDN 캐시 히트(Cache-HIT)로 브라우저에 즉각 전달되는 초고속 응답을 검증합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>서버 부하 0% 및 무제한 트래픽 감당</strong>: 대규모 마케팅이나 트래픽 폭증 상황에서도 정적 HTML이 CDN 엣지에서 캐시 서빙되어 오리진 서버에 부하를 주지 않습니다.</li>
-              <li><strong>글로벌 최저 응답 지연(TTFB {'<'} 20ms)</strong>: 전 세계 CDN 엣지 노드에서 캐시된 정적 파일을 사용자에게 즉시 전송하여 최고 속도의 페이지 로드를 달성합니다.</li>
-              <li><strong>운영 인프라 비용 극적 절감</strong>: 동적 SSR 서버 인스턴스를 확장할 필요 없이 S3/Cloudflare Pages 등의 정적 스토리지로 저비용 서빙이 가능합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 전자상거래 표준 이용약관 및 개인정보 취급방침 페이지</li>
-              <li>기업 연혁, 오시는 길, 투자자 정보(IR) 정적 웹페이지</li>
-              <li>오픈소스 라이선스 고지 및 서비스 환불/배송 규정 안내 페이지</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>동적 함수 사용 금지</strong>: 페이지 내부에서 <code>cookies()</code>, <code>headers()</code>, <code>searchParams</code> 등의 동적 API를 호출하면 SSG에서 동적 SSR로 탈락하므로 주의해야 합니다.</li>
-              <li><strong>약관 개정 시 온디맨드 revalidation 연동</strong>: 약관 내용이 변경되었을 때는 <code>revalidatePath('/terms')</code>를 호출하여 전체 사이트 재빌드 없이 해당 페이지만 즉시 갱신할 수 있습니다.</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+      <ConceptCard />
     </div>
   )
 }
