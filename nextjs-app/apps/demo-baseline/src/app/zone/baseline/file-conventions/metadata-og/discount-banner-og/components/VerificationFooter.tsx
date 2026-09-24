@@ -1,107 +1,100 @@
 'use client'
-import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { evaluateChannel, expectsRegeneration } from '../evaluate'
+import { OG_IMAGE, TWITTER_IMAGE } from '../image-config'
+import type { Inspection, MetaTagRow } from '../types'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+const isDev = process.env.NODE_ENV === 'development'
+const mode = isDev ? 'next dev' : 'next build + start'
+
+function Lines({ lines }: { lines: string[] }) {
+  return <div className="whitespace-pre-wrap">{lines.join('\n')}</div>
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({
+  htmlMeta,
+  probes,
+  hasRun,
+}: {
+  htmlMeta: MetaTagRow[]
+  probes: Inspection['probes']
+  hasRun: boolean
+}) {
+  const og = hasRun ? evaluateChannel('og', probes.og, htmlMeta, isDev) : null
+  const tw = hasRun ? evaluateChannel('twitter', probes.twitter, htmlMeta, isDev) : null
+  const regen = (b: boolean) => (b ? '요청마다 재생성' : '빌드 결과 재사용')
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  const expected = (
+    <Lines
+      lines={[
+        `실행 모드: ${mode}`,
+        `• og:image → .../opengraph-image?<hash>, width ${OG_IMAGE.size.width}, height ${OG_IMAGE.size.height}, type ${OG_IMAGE.contentType}, alt 주입`,
+        `• twitter:image → .../twitter-image?<hash>, ${TWITTER_IMAGE.size.width}x${TWITTER_IMAGE.size.height}, alt 주입`,
+        '• 두 이미지 모두 200 · image/png, 이미지 속 할인율 = 생성 시각 기준 원본 할인율',
+        `• og (connection()): ${regen(expectsRegeneration('og', isDev))}`,
+        `• twitter (정적): ${regen(expectsRegeneration('twitter', isDev))}`,
+      ]}
+    />
+  )
 
-  const defaultExpected = "• opengraph-image.tsx 및 twitter-image.tsx 파일에서 ImageResponse 반환\n• Next.js가 1200x630 및 1200x600 규격의 이미지 엔드포인트를 생성하고 meta property=og:image 주입"
-  const defaultActual = "• opengraph-image.tsx (1200x630) 및 twitter-image.tsx (1200x600) 파이프라인 생성 완료\n• SNS 공유용 동적 이미지 바이너리 렌더링 확인"
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = !hasRun ? (
+    <Lines lines={['• 대기 중 (상단 버튼으로 HTML 파싱과 이미지 요청을 실행하세요)']} />
+  ) : (
+    <Lines lines={['[og:image]', ...(og?.lines ?? []), '', '[twitter:image]', ...(tw?.lines ?? [])]} />
+  )
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="동적 OpenGraph / Twitter 이미지 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "Next.js App Router의 opengraph-image.tsx 특수 파일을 통한 SNS 공유 카드 썸네일 동적 생성 메커니즘을 검증합니다."}
+        title="head 메타 태그 주입 + 이미지 생성 시점 실측"
+        expected={expected}
+        actual={actual}
+        isMatched={og && tw ? og.isMatched && tw.isMatched : undefined}
+        description="이 페이지 HTML 원문의 <head>를 파싱해 파일 기반 이미지 메타 태그를 확인하고, 그 URL을 실제로 두 번씩 요청해 응답 헤더(x-demo-generated-at, x-demo-discount-rate)와 데이터 원본(discount-source 라우트)을 대조합니다."
       />
-      <DemoDeepDiveCard title="동적 OpenGraph / Twitter 이미지 생성 (opengraph-image.tsx)">
+      <DemoDeepDiveCard title="opengraph-image / twitter-image와 ImageResponse">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">1. 파일 하나 = 이미지 라우트 + head 태그</h5>
             <p>
-              <code>opengraph-image.tsx</code> 및 <code>twitter-image.tsx</code>는 특정 라우트 세그먼트에서 <code>ImageResponse</code>를 반환하여 소셜 미디어 공유 시 표시되는 1200x630 규격의 맞춤형 오픈그래프 이미지를 서버리스로 실시간 렌더링하는 Next.js 메타데이터 파일입니다.
+              세그먼트에 <code>opengraph-image.tsx</code>를 두면 Next.js는 이를 특수 Route Handler(<code>/…/opengraph-image?&lt;hash&gt;</code>)로
+              등록하고, 같은 세그먼트 페이지의 <code>&lt;head&gt;</code>에 <code>og:image</code>와 <code>alt</code>·<code>size</code>·<code>contentType</code>
+              export에서 나온 <code>og:image:alt/width/height/type</code>을 자동으로 넣습니다. <code>twitter-image.tsx</code>는 <code>twitter:image*</code>를 만듭니다.
             </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">2. 생성 시점은 파일 안의 데이터 접근 방식이 정한다</h5>
             <p>
-              본 데모에서는 상품 상세 페이지(<code>products/[id]/opengraph-image.tsx</code>)에서 파라미터 <code>id</code>를 수신하여 해당 상품의 고해상도 이미지, 상품명, 할인가격, 할인율 뱃지를 Flexbox 기반 JSX로 합성하고 카카오톡/트위터/슬랙 공유 카드로 실시간 생성하는 과정을 검증합니다.
+              공식 문서: 생성 이미지는 Request-time API나 캐시되지 않는 데이터를 쓰지 않으면 기본적으로 빌드 시 정적 최적화됩니다.
+              이 데모의 <code>opengraph-image.tsx</code>는 <code>await connection()</code> 뒤에 할인율을 읽어 요청마다 새 PNG를 만들고,
+              <code>twitter-image.tsx</code>는 같은 데이터를 그냥 읽기만 해서 <code>next build</code> 시점의 할인율이 PNG에 고정됩니다.
+              <code>next dev</code>는 두 파일 모두 요청마다 다시 실행하므로 정적/동적 차이는 프로덕션 빌드에서만 보입니다.
             </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>SNS 공유 전환율 극대화</strong>: 고정된 기본 로고 대신 상품별 가격/할인율/제목이 새겨진 맞춤형 썸네일 카드를 자동 생성하여 소셜 유입 클릭률(CTR)을 높입니다.</li>
-              <li><strong>React JSX & CSS Flexbox 지원</strong>: 별도의 캔버스 라이브러리(node-canvas 등) 없이 순수 React 컴포넌트 문법으로 이미지를 디자인합니다.</li>
-              <li><strong>글로벌 CDN 에지 캐싱</strong>: 생성된 이미지는 Next.js 이미지 캐시 레이어에 저장되어 동일 URL 요청 시 0ms로 응답합니다.</li>
-            </ul>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. 주의: 같은 세그먼트의 metadata.openGraph.images</h5>
+            <p>
+              <code>generateMetadata</code> 문서는 &quot;파일 기반 메타데이터가 우선한다&quot;고 하지만, Next.js 16.3.2의 병합 로직(<code>mergeStaticMetadata</code>)은
+              <strong>같은 세그먼트</strong>의 <code>metadata.openGraph</code>/<code>twitter</code>에 <code>images</code> 키가 있으면 파일 기반 이미지를 적용하지 않습니다.
+              이 페이지는 공용 <code>getDemoMetadata()</code> 결과에서 <code>images</code>만 제거해 파일 기반 이미지가 주입되게 했습니다.
+            </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>이커머스 타임세일 상품별 실시간 할인율 배너 OG 이미지</li>
-              <li>블로그 포스트 제목 및 작성자 프로필 카드 소셜 공유 썸네일</li>
-              <li>이벤트 프로모션 및 쿠폰 당첨 결과 맞춤형 SNS 공유 이미지</li>
-            </ul>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">4. metadataBase와 절대 URL</h5>
+            <p>
+              OG 이미지 URL은 절대 URL이어야 합니다. 파일 기반 이미지의 경우 Next.js 16.3.2는 <code>next dev</code>에서{' '}
+              <code>http://localhost:&lt;PORT&gt;</code>를, 프로덕션에서는 루트 layout의 <code>metadataBase</code>(Vercel Preview 배포에서는 Preview URL)를
+              앞에 붙입니다(<code>getSocialImageMetadataBaseFallback</code>). 그래서 프로덕션 빌드를 로컬에서 띄워도 태그에는 배포 도메인이 찍히며,
+              이 데모는 같은 라우트를 실측하려고 태그 URL에서 경로와 쿼리(<code>?&lt;hash&gt;</code>)만 떼어 현재 서버에 요청합니다.
+              <code>metadataBase</code> 없이 프로덕션 빌드하면 대체 URL을 쓴다는 경고가 출력됩니다.
+            </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>지원 CSS 스타일 제한</strong>: Satori 기반 <code>ImageResponse</code> 엔진은 Flexbox 중심의 CSS 서브셋만 지원하므로 CSS Grid나 복잡한 애니메이션 속성은 지원되지 않습니다.</li>
-              <li><strong>커스텀 폰트 로딩</strong>: 한글 폰트를 렌더링하려면 Google Fonts의 Noto Sans KR woff 버퍼를 <code>fetch</code>하여 <code>fonts</code> 옵션 배열에 반드시 등록해야 글자 깨짐을 방지할 수 있습니다.</li>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">5. ImageResponse 제약</h5>
+            <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+              <li>flexbox와 CSS 일부만 지원합니다(<code>display: grid</code> 불가). 자식이 여럿인 요소에는 <code>display: flex</code>가 필요합니다.</li>
+              <li>폰트는 ttf/otf/woff만 지원합니다. 기본 폰트에 없는 한글 글리프는 런타임에 외부에서 내려받아야 하므로 이미지 안 텍스트는 영문·숫자로 두었습니다.</li>
+              <li><code>headers</code> 옵션으로 응답 헤더를 붙일 수 있어, 생성 시각과 할인율을 헤더로도 내보내 실측에 사용합니다.</li>
             </ul>
           </div>
         </div>
