@@ -27,7 +27,7 @@ export function VerificationFooter({ preset, verdicts }: VerificationFooterProps
         expected={<span>{ready ? join(done, 'expected') : '• 세 이미지의 load 이벤트를 기다리는 중'}</span>}
         actual={<span>{ready ? join(done, 'actual') : '• 측정 중…'}</span>}
         isMatched={isMatched}
-        description="Expected는 next@16.3.2의 get-img-props.js(getWidths·generateImgAttrs)와 공식 문서 fill·sizes 절에서 도출한 값, Actual은 getAttribute('srcset'|'sizes'), currentSrc, naturalWidth, getBoundingClientRect, 그리고 currentSrc를 새 Image로 다시 읽은 파일 폭입니다. 창 크기를 바꾸면 다시 측정합니다."
+        description="Expected는 공식 문서 components/image.md의 fill·sizes·unoptimized·deviceSizes/imageSizes 절과 HTML srcset 선택 규칙에서 도출한 값, Actual은 getAttribute('srcset'|'sizes'), currentSrc, naturalWidth, getBoundingClientRect, 그리고 currentSrc를 새 Image로 다시 읽은 파일 폭입니다. 창 크기를 바꾸면 다시 측정합니다."
       />
       <DemoDeepDiveCard title="fill은 레이아웃, sizes는 srcset 선택 힌트">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
@@ -48,22 +48,22 @@ export function VerificationFooter({ preset, verdicts }: VerificationFooterProps
             </p>
           </div>
           <div>
-            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. sizes가 srcset 모양 자체를 바꾼다</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. 최적화가 켜진 next/image의 srcset 모양 (문서 기준)</h5>
             <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
-              <li>sizes 없음 + 고정 width: <code>1x, 2x</code> 서술자 2개(C). 뷰포트와 무관하게 DPR만 본다.</li>
-              <li>sizes 없음 + fill: <code>deviceSizes</code>(640~3840) w 서술자, sizes는 자동으로 <code>100vw</code>.</li>
-              <li>sizes 있음: <code>deviceSizes + imageSizes</code> 중 <code>640 × 가장 작은 vw 비율</code> 이상만 남긴 w 서술자. 33vw면 256부터, 10vw면 64부터.</li>
+              <li>sizes 없음: <code>1x, 2x</code> 같은 제한된 srcset — 고정 크기 이미지용. C가 이 형태를 네이티브로 쓴 것이다.</li>
+              <li>sizes 있음: <code>640w, 750w, …</code> 같은 전체 srcset. 후보 폭은 <code>deviceSizes</code>(기본 640~3840)와 <code>imageSizes</code>(기본 32~384)를 합친 목록에서 온다.</li>
+              <li>B는 그 기본값 15개를 모두 w 후보로 적고 sizes만 바꾼다. next/image가 실제로 어떤 부분집합을 고르는지는 문서가 규정하지 않으므로 여기서 재현하지 않는다.</li>
             </ul>
           </div>
           <div>
-            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">4. 이 앱에서 A에 srcset이 없는 이유</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">4. 이 앱에서 A에 srcset이 없는 이유 — unoptimized의 영향</h5>
             <p>
-              데모 zone은 <code>images.unoptimized: true</code>다(<code>/_next/image</code>가 셸 rewrites를 타지 못해서). get-img-props.js는
-              <code> config.unoptimized</code>가 참이면 prop과 무관하게 <code>unoptimized = true</code>로 덮어써, 컴포넌트 단위 <code>unoptimized={'{false}'}</code>도,
-              <code> loader</code> prop도 효과가 없다. 이때 <code>srcSet</code>과 <code>sizes</code>를 모두 <code>undefined</code>로 돌려주므로 A는 sizes 값을 바꿔도 DOM이 그대로다.
-              B·C는 같은 함수(<code>next/dist/shared/lib/get-img-props</code>, 내부 모듈)에 <code>imageConfigDefault</code>와 <code>unoptimized: false</code>만 넣어 호출한 결과를
-              <code> &lt;img&gt;</code>에 그대로 펼친 것이다. 폭별 파일은 <code>photo/route.ts</code>가 요청 폭을 intrinsic width로 갖는 SVG로 응답한다 — 래스터 리사이즈나
-              AVIF/WebP 변환은 하지 않으므로 바이트 절감이 아니라 &quot;어떤 후보를 골랐는가&quot;만 관찰한다.
+              데모 zone은 <code>next.config.ts</code>에 <code>images: {'{ unoptimized: true }'}</code>를 둔다(<code>/_next/image</code>가 셸 rewrites를 타지 못해서).
+              문서의 unoptimized 절대로 이때 원본은 &quot;as-is&quot;로 제공되어, A의 DOM에는 <code>srcset</code>·<code>sizes</code> 속성이 없고 currentSrc에도 폭 파라미터가 없다.
+              실측해 보면 컴포넌트에 <code>loader</code> prop을 넘겨도 호출되지 않는다(전역 설정이 우선 — next 소스
+              <code> next/dist/shared/lib/get-img-props.js</code>에서 확인 가능하지만 이 데모는 그 모듈을 import하지 않는다).
+              그래서 sizes가 후보 선택에 미치는 영향은 B·C의 네이티브 <code>&lt;img&gt;</code>로 본다. 폭별 파일은 <code>photo/route.ts</code>가 요청 폭을 intrinsic width로 갖는
+              SVG로 응답한다 — 래스터 리사이즈나 포맷 변환은 없으므로 바이트 절감이 아니라 &quot;어떤 후보를 골랐는가&quot;만 관찰한다.
             </p>
           </div>
           <div>

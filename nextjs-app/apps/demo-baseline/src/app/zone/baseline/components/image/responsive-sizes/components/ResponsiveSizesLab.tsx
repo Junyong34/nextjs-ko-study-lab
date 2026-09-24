@@ -4,8 +4,17 @@ import React, { useRef, useState } from 'react'
 import Image from 'next/image'
 import { DemoPlaygroundCard, DemoResetButton } from '@study/demo-kit'
 import type { SizesPresetId } from '../types'
-import { SIZES_PRESETS, buildPhotoSrc, getOptimizedImgProps, photoLoader } from '../lib/imageSetup'
-import { judgeAppImage, judgeFixedWidth, judgeOptimizedFill } from '../lib/verdict'
+import {
+  ALL_WIDTHS,
+  FIXED_WIDTH,
+  SIZES_PRESETS,
+  buildDensitySrcset,
+  buildPhotoSrc,
+  buildWidthSrcset,
+  photoLoader,
+  photoUrl,
+} from '../lib/imageSetup'
+import { judgeAppImage, judgeFixedWidth, judgeNativeFill } from '../lib/verdict'
 import { useImgProbe } from './useImgProbe'
 import { ProbeCard } from './ProbeCard'
 import { VerificationFooter } from './VerificationFooter'
@@ -26,14 +35,14 @@ export function ResponsiveSizesLab() {
   const probeB = useImgProbe(refB, tag)
   const probeC = useImgProbe(refC, tag)
 
-  // 이 앱 설정과 무관하게 Next.js 기본 이미지 설정(unoptimized: false)으로 계산한 <img> 속성
-  const optimizedFill = getOptimizedImgProps({ src, alt: '최적화 fill 상품 사진', fill: true, sizes: preset.sizes })
-  const optimizedFixed = getOptimizedImgProps({ src, alt: '고정 크기 썸네일', width: 320, height: 160 })
+  // B·C는 next/image가 아니라 직접 작성한 네이티브 srcset이다(후보 폭은 공식 문서의 기본 imageSizes·deviceSizes).
+  const widthSrcset = buildWidthSrcset(src, ALL_WIDTHS)
+  const densitySrcset = buildDensitySrcset(src)
   const sizesCode = preset.sizes ? ` sizes="${preset.sizes}"` : ''
 
   const verdicts = [
     probeA && judgeAppImage(probeA),
-    probeB && judgeOptimizedFill(probeB, preset),
+    probeB && judgeNativeFill(probeB, preset),
     probeC && judgeFixedWidth(probeC),
   ]
 
@@ -82,6 +91,11 @@ export function ResponsiveSizesLab() {
             767px 이하/이상으로 바꾸면 그리드가 1열↔3열로 바뀌고, 선택된 후보가 다시 계산됩니다. 크게 받은 후보는 창을 줄여도
             브라우저가 그대로 재사용할 수 있으니 줄인 뒤에는 [캐시 없이 다시 요청]으로 새로 고르게 하세요.
           </p>
+          <p className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+            A만 next/image입니다. 이 앱은 <code>images.unoptimized: true</code>라 A에는 srcset이 렌더되지 않습니다.
+            B·C는 next/image가 생성한 것이 아니라, 공식 문서의 기본 <code>imageSizes</code>·<code>deviceSizes</code> 값으로 직접 작성한
+            네이티브 <code>&lt;img srcSet sizes&gt;</code>이며 브라우저의 srcset 선택 원리를 보여 줍니다.
+          </p>
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             <ProbeCard
@@ -105,23 +119,39 @@ export function ResponsiveSizesLab() {
               </div>
             </ProbeCard>
             <ProbeCard
-              title="B. 최적화가 켜진 앱이라면: fill + sizes"
-              code={`getImgProps({ fill${sizesCode} }, unoptimized:false)`}
+              title="B. 브라우저 네이티브 <img srcSet sizes> — next/image 아님"
+              code={`<img srcSet="…?w=32 32w, …, …?w=3840 3840w"${sizesCode} />`}
               probe={probeB}
             >
               <div className={SLOT}>
-                {/* getImgProps가 만든 <img> props(alt·srcSet·sizes·style 포함)를 그대로 펼친다 */}
-                <img key={tag} ref={refB} {...optimizedFill} className="object-cover" />
+                {/* 직접 작성한 srcset을 브라우저가 sizes로 고르는 원리만 본다. A와 같은 레이아웃을 CSS로 준다. */}
+                <img
+                  key={tag}
+                  ref={refB}
+                  src={photoUrl(src, ALL_WIDTHS[ALL_WIDTHS.length - 1])}
+                  srcSet={widthSrcset}
+                  sizes={preset.sizes}
+                  alt="네이티브 srcset 상품 사진"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
               </div>
             </ProbeCard>
             <ProbeCard
-              title="C. 최적화가 켜진 앱이라면: 고정 width, sizes 없음"
-              code="getImgProps({ width: 320, height: 160 }, unoptimized:false)"
+              title="C. 브라우저 네이티브 <img srcSet 1x/2x> — next/image 아님"
+              code={`<img width={${FIXED_WIDTH}} srcSet="…?w=${FIXED_WIDTH} 1x, …?w=${FIXED_WIDTH * 2} 2x" />`}
               probe={probeC}
             >
               <div className="relative overflow-hidden rounded-md bg-zinc-100 dark:bg-zinc-900">
-                {/* getImgProps가 만든 <img> props(alt·srcSet·sizes·style 포함)를 그대로 펼친다 */}
-                <img key={tag} ref={refC} {...optimizedFixed} className="h-auto max-w-full" />
+                <img
+                  key={tag}
+                  ref={refC}
+                  src={photoUrl(src, FIXED_WIDTH)}
+                  srcSet={densitySrcset}
+                  width={FIXED_WIDTH}
+                  height={FIXED_WIDTH / 2}
+                  alt="고정 크기 썸네일"
+                  className="h-auto max-w-full"
+                />
               </div>
             </ProbeCard>
           </div>
