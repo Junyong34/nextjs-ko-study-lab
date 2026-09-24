@@ -424,7 +424,7 @@
     "title": "Route Segment revalidate 설정",
     "doc": "2-guides/caching-without-cache-components.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/isr/revalidate-path-sync",
@@ -480,21 +480,21 @@
     "title": "prefetch={false}로 prefetch 비활성화",
     "doc": "2-guides/prefetching.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/optimizing-prefetching/bandwidth-saver",
     "title": "대규모 카탈로그 prefetch 최적화",
     "doc": "2-guides/optimizing-prefetching.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/instant-navigation/loading-skeleton",
     "title": "Instant Navigation loading.tsx 스켈레톤 전환",
     "doc": "2-guides/instant-navigation.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/instant-navigation/router-cache-back",
@@ -515,7 +515,7 @@
     "title": "카테고리 전환 시 장바구니 Drawer 열림 유지",
     "doc": "2-guides/preserving-ui-state.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/preserving-ui-state/scroll-retention",
@@ -529,7 +529,7 @@
     "title": "다크모드 SSR 인라인 스크립트 FOUC 방지",
     "doc": "2-guides/preventing-flash-before-hydration.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/view-transitions/zoom-card",
@@ -606,14 +606,14 @@
     "title": "Schema.org Product 구조화 데이터 (JSON-LD)",
     "doc": "2-guides/json-ld.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/interactive-apps/multi-filter-widget",
     "title": "다중 필터/정렬/장바구니 복합 인터랙티브 위젯",
     "doc": "2-guides/interactive-apps.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/scripts/strategy-order",
@@ -662,7 +662,7 @@
     "title": "Route Handler를 통한 레거시 주문/재고 API 취합 (BFF)",
     "doc": "2-guides/backend-for-frontend.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/bff/response-shaping",
@@ -746,7 +746,7 @@
     "title": "이용약관 정적 SSG 페이지 생성 및 캐시",
     "doc": "2-guides/public-static-pages.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/analytics/custom-beacon",
