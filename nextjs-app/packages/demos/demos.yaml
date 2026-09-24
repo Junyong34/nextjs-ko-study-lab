@@ -771,7 +771,7 @@
   title: "[[...slug]] Optional Catch-all 다이나믹 세그먼트"
   doc: 3-api-reference/3.1-file-conventions/dynamic-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/parallel-routes/conditional-slot
   title: "권한별 조건부 슬롯 분기 (Parallel Routes)"
@@ -885,7 +885,7 @@
   title: "placeholder='blur' 저용량 블러 미리보기"
   doc: 3-api-reference/3.2-components/image.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/image/priority-lcp-preload
   title: "priority 속성을 통한 LCP 이미지 사전 로드"
@@ -1005,7 +1005,7 @@
   title: "unstable_cache를 통한 DB 쿼리 결과 캐싱"
   doc: 3-api-reference/3.3-functions/unstable_cache.md
   zone: cache
-  status: stub
+  status: done
 
 - url: functions/unstable-no-store/dynamic-bailout
   title: "unstable_noStore()로 다이나믹 렌더링 선언"
@@ -1023,7 +1023,7 @@
   title: "다이나믹 라우트 세그먼트의 revalidatePath 동작"
   doc: 3-api-reference/3.3-functions/revalidatePath.md
   zone: cache
-  status: stub
+  status: done
 
 - url: functions/revalidate-tag/basic-tag-purge
   title: "revalidateTag() 기본 무효화와 SWR"
