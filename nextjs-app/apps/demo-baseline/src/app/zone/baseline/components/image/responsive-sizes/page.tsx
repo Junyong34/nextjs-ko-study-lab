@@ -1,53 +1,44 @@
-'use client'
-import React, { useState } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ImageResponsiveDemo } from './components/ImageResponsiveDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import type { Metadata } from 'next'
+import React from 'react'
+import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { ResponsiveSizesLab } from './components/ResponsiveSizesLab'
+
+export const metadata: Metadata = getDemoMetadata('baseline', 'components/image/responsive-sizes')
 
 export default function DemoPage() {
-  const [device, setDevice] = useState<'mobile' | 'desktop'>('desktop')
-  const [loadInfo, setLoadInfo] = useState<{ naturalWidth: number; naturalHeight: number; sizesAttr: string | null } | null>(null)
-
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"next/image fill 및 sizes 속성 반응형 최적화"}
-        concept={"<Image fill sizes=\"(max-width: 768px) 100vw, 50vw\"> 설정으로 뷰포트에 맞는 최적 너비의 이미지를 자동 서빙하여 모바일과 데스크톱의 LCP 성능을 극대화합니다."}
+        title="next/image fill과 sizes — 부모를 채우는 레이아웃과 srcset 후보 선택"
+        concept={
+          'fill은 부모(position: relative + 크기)를 꽉 채우는 absolute <img>를 만들고, sizes는 브라우저가 srcset 후보 중 무엇을 받을지 정하는 폭 힌트입니다. ' +
+          '이 앱은 images.unoptimized: true라 <Image>가 srcset을 만들지 않는다는 사실까지 포함해, 렌더된 <img>의 srcset·sizes·currentSrc·파일 폭을 직접 읽어 비교합니다.'
+        }
         steps={[
-        {
-        "step": 1,
-        "title": "[[모바일] 모바일 (375px)] 버튼 클릭",
-        "description": "모바일 뷰포트 시뮬레이션을 활성화하여 100vw 기준의 최적화 이미지 srcset이 선택되도록 합니다.",
-        "actionBadge": "375px 뷰"
-        },
-        {
-        "step": 2,
-        "title": "[데스크톱 (1200px)] 버튼 클릭",
-        "description": "데스크톱 뷰포트로 전환하여 50vw 기준의 고해상도 이미지가 요청되도록 분기합니다.",
-        "actionBadge": "1200px 뷰"
-        },
-        {
-        "step": 3,
-        "title": "반응형 sizes 마크업 및 LCP 최적화 관찰",
-        "description": "브라우저 화면 너비에 따라 sizes 속성이 브라우저 다운로드 해상도를 제어하는 원리를 확인합니다.",
-        "actionBadge": "sizes 검증",
-        "observe": "뷰포트 프리셋 전환에 따른 렌더링 컨테이너 너비 변화와 3단 검증 패널의 sizes 속성 일치 확인",
-        "observeAt": "verification"
-        }
+          {
+            step: 1,
+            title: '[sizes = 그리드 실제 폭] 상태에서 A·B·C 비교',
+            description: 'A는 srcset이 없고, B는 w 서술자, C는 1x/2x 서술자가 렌더된 것을 카드 아래 DOM 값으로 확인합니다.',
+            actionBadge: 'srcset 모양',
+          },
+          {
+            step: 2,
+            title: '[sizes 생략]·[10vw (과소)] 전환',
+            description: 'B의 sizes 속성·후보 개수·선택된 후보와 파일 폭이 어떻게 달라지는지 봅니다. A는 그대로입니다.',
+            actionBadge: 'sizes 변경',
+          },
+          {
+            step: 3,
+            title: '창 폭을 767px 아래·위로 바꾸고 [캐시 없이 다시 요청]',
+            description: '1열↔3열 전환에 따라 sizes 평가값과 currentSrc가 바뀌는지 관찰합니다.',
+            actionBadge: '뷰포트 변경',
+            observe: '3단 검증 패널에서 세 이미지의 srcset·sizes·선택 후보·파일 폭·렌더 박스가 기대와 일치하는지 대조',
+            observeAt: 'verification',
+          },
         ]}
-        />
-      <DemoPlaygroundCard title={"next/image responsive fill & sizes 속성 반응형 로딩 실습"}>
-        <ImageResponsiveDemo device={device} onSetDevice={setDevice} onLoadInfo={setLoadInfo} />
-      </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={loadInfo ? loadInfo.sizesAttr === (device === 'mobile' ? '100vw' : '50vw') : undefined}
-        actual={
-          loadInfo
-            ? `- 실제 DOM <img sizes="${loadInfo.sizesAttr}">\n- naturalWidth x naturalHeight: ${loadInfo.naturalWidth} x ${loadInfo.naturalHeight}\n- 현재 device: ${device}`
-            : undefined
-        }
-        expected="next/image가 렌더링한 실제 <img> 태그의 sizes 속성이 선택한 device에 맞는 값(모바일 100vw / 데스크톱 50vw)과 일치해야 한다."
       />
+      <ResponsiveSizesLab />
     </DemoContainer>
   )
 }
