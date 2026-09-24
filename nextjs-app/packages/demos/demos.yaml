@@ -339,7 +339,7 @@
   title: "next/image responsive fill & sizes 속성 반응형 로딩"
   doc: 3-api-reference/3.2-components/image.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/rendering-philosophy/hydration-boundary
   title: "Hydration 경계와 번들 격리"
@@ -663,13 +663,13 @@
   title: "[category]/layout.tsx 동적 카테고리 레이아웃"
   doc: 3-api-reference/3.1-file-conventions/layout.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/page/static-and-dynamic
   title: "정적(Static) vs 동적(Dynamic) page.tsx 렌더링"
   doc: 3-api-reference/3.1-file-conventions/page.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/page/react-19-use-params
   title: "React 19 use(params) & use(searchParams) 언래핑"
@@ -699,7 +699,7 @@
   title: "notFound() 프로그래밍 트리거"
   doc: 3-api-reference/3.1-file-conventions/not-found.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/template/remount-lifecycle
   title: "template.tsx 인스턴스 재생성 및 수명주기"
@@ -831,7 +831,7 @@
   title: "icon.tsx 동적 파비콘 생성"
   doc: 3-api-reference/3.1-file-conventions/3.1.21-metadata/app-icons.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/metadata-manifest/dynamic-pwa-manifest
   title: "manifest.ts 동적 매니페스트 출력"
@@ -843,7 +843,7 @@
   title: "ImageResponse 실시간 할인율 OG 이미지"
   doc: 3-api-reference/3.1-file-conventions/3.1.21-metadata/opengraph-image.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/metadata-robots/dynamic-crawler-rules
   title: "robots.ts 동적 크롤링 규칙 생성"
@@ -879,7 +879,7 @@
   title: "nodejs vs edge 런타임 대조"
   doc: 3-api-reference/3.1-file-conventions/3.1.22-route-segment-config/runtime.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: components/image/blur-placeholder
   title: "placeholder='blur' 저용량 블러 미리보기"
@@ -981,7 +981,7 @@
   title: "cacheLife 내장 프리셋 프로필 (seconds, hours, max)"
   doc: 3-api-reference/3.3-functions/cacheLife.md
   zone: cache
-  status: stub
+  status: done
 
 - url: functions/cache-life/custom-profile
   title: "next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩"
@@ -1035,7 +1035,7 @@
   title: "revalidateTag max 캐시 만료 제어"
   doc: 3-api-reference/3.3-functions/revalidateTag.md
   zone: cache
-  status: stub
+  status: done
 
 - url: functions/update-tag/instant-memory-sync
   title: "장바구니 수량 상태 변경"
@@ -1251,7 +1251,7 @@
   title: "'use cache' 지시어를 통한 비동기 함수 결과 캐싱"
   doc: 3-api-reference/3.4-directives/use-cache.md
   zone: cache
-  status: stub
+  status: done
 
 - url: directives/use-cache/component-jsx-cache
   title: "'use cache' 컴포넌트 JSX 렌더링 결과 캐싱"
