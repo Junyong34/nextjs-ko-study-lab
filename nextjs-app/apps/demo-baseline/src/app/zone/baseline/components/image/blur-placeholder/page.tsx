@@ -1,46 +1,48 @@
 import type { Metadata } from 'next'
+import React from 'react'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { BlurPlaceholderLab } from './components/BlurPlaceholderLab'
+import { buildManualBlurDataURL } from './lib/scene'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'components/image/blur-placeholder')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ImageBlurPlaceholderDemo } from './components/ImageBlurPlaceholderDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
 export default function DemoPage() {
+  // 원격/동적 이미지는 빌드가 blurDataURL을 만들 수 없으므로, 서버에서 8x4 축소본을 직접 만들어 넘긴다.
+  const manualBlurDataURL = buildManualBlurDataURL()
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"next/image blurDataURL 블러 플레이스홀더"}
-        concept={"<Image placeholder=\"blur\" blurDataURL=\"...\"> 설정을 적용하여 고해상도 이미지가 로드되기 전 저용량 블러 프리뷰를 0ms 즉시 노출하고 CLS를 0으로 방지합니다."}
-        steps={[
-        {
-        "step": 1,
-        "title": "블러 플레이스홀더 렌더링 확인",
-        "description": "이미지 다운로드 완료 전 Base64 인코딩된 블러 이미지가 0ms에 즉시 표시되는 것을 확인합니다.",
-        "actionBadge": "블러 0ms"
-        },
-        {
-        "step": 2,
-        "title": "[로드 상태 토글] 클릭",
-        "description": "이미지 로드 완료 상태를 시뮬레이션하여 블러 프리뷰에서 원본 이미지로 페이드인 전환합니다.",
-        "actionBadge": "로드 토글"
-        },
-        {
-        "step": 3,
-        "title": "CLS 방지 및 부드러운 전환 검증",
-        "description": "고정된 종횡비 컨테이너 덕분에 이미지 로드 전후 레이아웃 이동(CLS: 0)이 없는지 확인합니다.",
-        "actionBadge": "CLS 0 검증",
-        "observe": "3단 검증 패널에서 placeholder='blur' 적용에 따른 로딩 상태 및 CLS 방지 결과 대조",
-        "observeAt": "verification"
+        title="next/image placeholder='blur' — 로딩 중 블러 미리보기와 blurDataURL 출처"
+        concept={
+          'placeholder="blur"는 이미지가 도착하기 전까지 <img>의 inline background-image에 blurDataURL을 흐리게 깔아 두고, ' +
+          '로드·디코드가 끝나면 그 style을 지웁니다. 정적 import는 빌드가 blurDataURL을 자동으로 만들고, 동적/원격 URL은 직접 넘겨야 합니다.'
         }
+        steps={[
+          {
+            step: 1,
+            title: '[3000 ms] 버튼 클릭',
+            description: '서버가 실제로 3초 늦게 응답하게 만든 뒤 B(blur)와 C(empty) 카드의 로딩 중 화면 차이를 봅니다.',
+            actionBadge: '지연 3000 ms',
+          },
+          {
+            step: 2,
+            title: '카드별 background-image 수치 확인',
+            description: '마운트 직후 style 길이, 안에 든 blurDataURL의 출처(import 객체 / 직접 넘긴 prop), onLoad까지의 ms를 읽습니다.',
+            actionBadge: '실측 확인',
+          },
+          {
+            step: 3,
+            title: '로드 후 제거 여부 대조',
+            description: '[이미지 다시 요청]으로 재측정하며 로드 후 background-image가 사라지는지 확인합니다.',
+            actionBadge: '제거 검증',
+            observe: '3단 검증 패널에서 세 카드의 로드 전 background 유무·blurDataURL 출처·로드 후 제거가 기대와 일치하는지 대조',
+            observeAt: 'verification',
+          },
         ]}
-        />
-      <DemoPlaygroundCard title={"placeholder='blur' 저용량 블러 미리보기 실습"}>
-        <ImageBlurPlaceholderDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      />
+      <BlurPlaceholderLab manualBlurDataURL={manualBlurDataURL} />
     </DemoContainer>
   )
 }
