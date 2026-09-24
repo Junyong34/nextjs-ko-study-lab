@@ -3,46 +3,74 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/interactive-apps/multi-filter-widget')
 
-import React, { Suspense } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { MultiFilterWidgetDemo } from './components/MultiFilterWidgetDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import React from 'react'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { createRenderStamp, listCategories, queryProducts, SERVER_LATENCY_MS } from './data'
+import { normalizeSearch, parseFilters, toURLSearchParams } from './lib/filters'
+import type { ServerSnapshot } from './types'
+import { ShopDemo } from './components/ShopDemo'
 
-export default function DemoPage() {
+type SearchParams = Record<string, string | string[] | undefined>
+
+/**
+ * Server Component page.
+ * - 필터/정렬 상태의 원본은 URL(searchParams)이다. page는 그것을 받아 서버에서 필터링·정렬한다.
+ * - 장바구니처럼 공유·복원이 필요 없는 상태만 Client Component(ShopDemo)가 useState로 가진다.
+ */
+export default async function MultiFilterWidgetPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const received = toURLSearchParams(await searchParams)
+  const filters = parseFilters(received)
+  const { products, total } = await queryProducts(filters)
+
+  const snapshot: ServerSnapshot = {
+    ...createRenderStamp(),
+    receivedSearch: normalizeSearch(received),
+    filters,
+    total,
+    count: products.length,
+    latencyMs: SERVER_LATENCY_MS,
+  }
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"URL searchParams 기반 다중 필터 위젯 상태 동기화"}
-        concept={"useSearchParams와 useRouter를 결합하여 카테고리, 가격대, 정렬 필터 상태를 브라우저 URL 쿼리 스트링(?category=shoes&sort=price_asc)과 실시간 동기화하여 북마크 및 공유를 지원합니다."}
+        title="필터는 URL, 목록은 서버, 장바구니는 클라이언트 — 상태를 어디에 두는가"
+        concept="필터·정렬은 URL searchParams에 두고 Server Component page가 그 값으로 목록을 렌더링합니다. 칩은 useOptimistic과 transition으로 즉시 반응하고, 장바구니만 Client Component 상태로 둡니다. 각 상태가 필터 이동·뒤로가기·새로고침에서 어떻게 달라지는지 실측합니다."
         steps={[
           {
             step: 1,
-            title: "다중 필터 위젯(카테고리/가격/정렬) 옵션 확인",
-            description: "초기 쿼리 스트링 상태와 필터 선택 체크박스/라디오 버튼을 점검합니다.",
-            actionBadge: "필터 옵션 확인",
+            title: '상품 카드의 [담기]를 1~2번 클릭',
+            description: '장바구니는 ShopDemo(Client Component)의 useState에만 있습니다. URL과 서버는 이 값을 모릅니다.',
+            actionBadge: '클라이언트 상태',
           },
           {
             step: 2,
-            title: "카테고리 및 가격 필터 조합 선택",
-            description: "필터 항목을 클릭하여 URLSearchParams 객체를 생성하고 shallow 라우팅을 실행합니다.",
-            actionBadge: "필터 선택",
+            title: '[카테고리] / [정렬] / [재고] 칩 클릭',
+            description:
+              '칩은 현재 프레임에 바로 선택되고, router.push로 URL이 바뀌면 서버가 새 searchParams로 다시 렌더링합니다. 기다리는 동안 목록이 흐려집니다.',
+            actionBadge: 'URL 상태',
+            observe: '주소 표시줄·서버 렌더 ID·결과 개수가 바뀌고, 장바구니 수량과 인스턴스 ID는 그대로',
+            observeAt: 'playground',
           },
           {
             step: 3,
-            title: "브라우저 URL 쿼리 스트링 갱신 및 필터링 결과 관찰",
-            description: "URL 주소창에 쿼리 매개변수가 즉시 반영되고 필터 조건에 부합하는 상품만 필터링되는지 검증합니다.",
-            actionBadge: "동기화 검증",
-            observe: "필터 선택에 따른 URL searchParams 쿼리 스트링 변경 및 일치하는 상품 목록 즉시 렌더링 관찰",
-            observeAt: "playground",
+            title: '[뒤로가기 history.back()] 클릭',
+            description: '이전 URL로 돌아가면 필터 UI와 목록이 그 URL 기준으로 복원됩니다. 장바구니는 history에 없으므로 되돌아가지 않습니다.',
+            actionBadge: '뒤로가기',
+            observe: '관측 로그의 popstate 행: 이전 쿼리로 복원, 서버 렌더 ID 재사용 여부',
+            observeAt: 'playground',
+          },
+          {
+            step: 4,
+            title: '필터가 걸린 상태에서 장바구니를 채우고 [새로고침] 클릭',
+            description: '문서를 다시 불러오면 URL에 있던 필터는 서버가 그대로 다시 적용하고, 메모리에만 있던 장바구니는 비어서 시작합니다.',
+            actionBadge: '새로고침',
+            observe: '새로고침 전/후 쿼리와 장바구니 수량 비교',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"다중 필터/정렬/장바구니 복합 인터랙티브 위젯 실습"}>
-        <Suspense fallback={<div className="text-xs text-zinc-400">로딩 중...</div>}>
-          <MultiFilterWidgetDemo />
-        </Suspense>
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <ShopDemo snapshot={snapshot} products={products} categories={listCategories()} />
     </DemoContainer>
   )
 }
