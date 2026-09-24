@@ -3,53 +3,15 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/caching-legacy/segment-revalidate')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { SegmentRevalidateDemo } from './components/SegmentRevalidateDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
-export const revalidate = 10
-
-export default function DemoPage() {
-  const renderId = Math.random().toString(36).slice(2, 8).toUpperCase()
-  const generatedAt = new Date().toLocaleTimeString()
-
+/**
+ * 기본 경로. 4단 레이아웃은 layout.tsx가 그리고, 이 page는 하위 page를 고르기 전 안내만 표시한다.
+ * 실측 대상은 isr-10s/와 static/ 두 하위 page이며, 이 page 자체는 revalidate를 선언하지 않는다.
+ */
+export default function SegmentRevalidateIndexPage() {
   return (
-    <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"라우트 세그먼트 레벨 revalidate 설정"}
-        concept={"페이지 세그먼트 상단에 export const revalidate = 10을 선언하면 이 라우트의 렌더 결과가 10초간 캐시되고, 그 이후 요청에서만 백그라운드로 재계산됩니다."}
-        steps={[
-          {
-            step: 1,
-            title: "현재 renderId, generatedAt 확인",
-            description: "이 페이지가 마지막으로 재계산된 시점의 식별자를 확인합니다.",
-            actionBadge: "초기 상태 확인",
-          },
-          {
-            step: 2,
-            title: "10초 이내에 새로고침",
-            description: "revalidate 기간 안에는 renderId가 그대로 유지되는지 확인합니다.",
-            actionBadge: "캐시 유지 확인",
-          },
-          {
-            step: 3,
-            title: "10초 이후 새로고침",
-            description: "revalidate 기간이 지난 뒤에는 renderId가 바뀌는지 확인합니다.",
-            actionBadge: "재계산 확인",
-            observe: "10초 전후 renderId 값의 변화를 직접 대조 관찰",
-            observeAt: "verification",
-          },
-        ]}
-      />
-      <DemoPlaygroundCard title={"Route Segment revalidate 설정 실습"}>
-        <SegmentRevalidateDemo renderId={renderId} generatedAt={generatedAt} />
-      </DemoPlaygroundCard>
-      <VerificationFooter
-        isLoaded={Boolean(renderId)}
-        actual={`- renderId: ${renderId}\n- generatedAt: ${generatedAt}\n- revalidate: 10초`}
-        expected="10초 이내 재방문은 같은 renderId, 10초 이후 재방문은 새 renderId를 반환해야 한다."
-      />
-    </DemoContainer>
+    <div className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-4 text-[11px] leading-relaxed text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-400">
+      위 링크로 하위 page를 열면 이 자리에 그 page가 서버에서 렌더링된 시각과 렌더 ID가 표시됩니다. 두 page의 차이는{' '}
+      <code>export const revalidate = 10</code> 한 줄뿐입니다. 시간에 따른 변화는 아래 [자동 관측]으로 기록하세요.
+    </div>
   )
 }
