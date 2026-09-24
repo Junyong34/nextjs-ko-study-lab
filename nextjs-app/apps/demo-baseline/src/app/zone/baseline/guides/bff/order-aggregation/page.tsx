@@ -1,55 +1,57 @@
 'use client'
-import React, { useState } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { BffAggregationDemo } from './components/BffAggregationDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
-interface AggregatedResult {
-  order: { orderId: string; status: string }
-  inventory: { warehouse: string; remaining: number }
-  shipping: { courier: string; status: string }
-  elapsedMs: number
-}
+import React from 'react'
+import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { AggregationPlayground } from './components/AggregationPlayground'
+import { VerificationFooter } from './components/VerificationFooter'
+import { useAggregationRuns } from './hooks/useAggregationRuns'
 
 export default function DemoPage() {
-  const [result, setResult] = useState<AggregatedResult | null>(null)
+  const { results, running, error, lastBff, run, reset } = useAggregationRuns()
 
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"BFF(Backend-for-Frontend) 마이크로서비스 주문 데이터 병렬 통합"}
-        concept={"Next.js Route Handler(/api/bff/order)에서 주문 서비스, 회원 서비스, 배송 서비스를 Promise.all()로 병렬 호출하여 클라이언트를 위한 단일 최적화 JSON으로 통합 반환합니다."}
+        title="Route Handler 하나로 레거시 주문·재고·배송 API 취합 (BFF)"
+        concept="브라우저가 레거시 API 3개를 각각 부르는 대신, bff/route.ts가 서버에서 세 시스템을 Promise.all로 동시에 호출해 화면에 필요한 JSON 1개로 합쳐 보냅니다. 요청 수와 서버 대기 시간을 실제로 재서 비교합니다."
         steps={[
           {
             step: 1,
-            title: "BFF 통합 전 마이크로서비스 개별 호출 오버헤드 점검",
-            description: "클라이언트가 3개 API를 순차 호출할 때 발생하는 네트워크 왕복 지연을 확인합니다.",
-            actionBadge: "구조 분석",
+            title: '[클라이언트 직접 호출] 클릭',
+            description: '브라우저가 legacy/orders·inventory·shipping Route Handler를 직접 3번 호출합니다.',
+            actionBadge: '직접 호출',
+            observe: '요청 수 3건과 요청 경로 3개가 브라우저 Resource Timing에 기록되는지',
+            observeAt: 'playground',
           },
           {
             step: 2,
-            title: "[BFF 통합 주문 조회 API 호출 (/api/bff/order)] 버튼 클릭",
-            description: "서버 측 BFF 엔드포인트를 호출하여 내부 MSA 서비스 병렬 집계를 수행합니다.",
-            actionBadge: "BFF 호출",
+            title: '[BFF 1회 (내부 직렬)] → [BFF 1회 (내부 Promise.all)] 차례로 클릭',
+            description: '두 경우 모두 브라우저 요청은 bff 1건이며, 서버 내부에서 레거시를 부르는 방식만 다릅니다.',
+            actionBadge: 'BFF 호출',
+            observe: '서버 측정 소요가 직렬은 지연 합계, 병렬은 가장 느린 호출 수준인지와 구간 막대의 겹침',
+            observeAt: 'playground',
           },
           {
             step: 3,
-            title: "단일 응답 JSON으로 통합된 주문·회원·배송 데이터 관찰",
-            description: "네트워크 요청 1회만으로 화면 렌더링에 필요한 모든 집계 데이터가 즉시 수신되는지 검증합니다.",
-            actionBadge: "집계 결과 검증",
-            observe: "BFF API 호출을 통한 3개 MSA 응답(주문/회원/배송)의 단일 최적화 페이로드 집계 수신 관찰",
-            observeAt: "playground",
+            title: '검증 패널에서 판정 확인',
+            description: '요청 수(3 → 1)와 서버 소요(직렬 > 병렬)를 기대 조건과 대조합니다. DevTools Network 탭에서도 같은 요청을 확인할 수 있습니다.',
+            actionBadge: '검증',
+            observe: '세 시나리오를 모두 실행한 뒤 "검증 완료" 표시',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"Route Handler를 통한 레거시 주문/재고 API 취합 (BFF) 실습"}>
-        <BffAggregationDemo onResult={setResult} />
+      <DemoPlaygroundCard title="레거시 주문/재고/배송 API 취합 — 직접 호출 vs BFF">
+        <AggregationPlayground
+          results={results}
+          running={running}
+          error={error}
+          lastBff={lastBff}
+          onRun={run}
+          onReset={reset}
+        />
       </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={result ? result.elapsedMs < 550 : undefined}
-        actual={result ? `- orderId: ${result.order.orderId}\n- Promise.all 병렬 실행 소요 시간: ${result.elapsedMs}ms\n- (순차 호출이었다면 약 550ms 이상 소요)` : undefined}
-        expected="Route Handler가 실제 fetch 1회로 3개 서비스를 Promise.all 병렬 호출해, 순차 합산(약 550ms)보다 훨씬 짧은 시간에 응답해야 한다."
-      />
+      <VerificationFooter results={results} />
     </DemoContainer>
   )
 }
