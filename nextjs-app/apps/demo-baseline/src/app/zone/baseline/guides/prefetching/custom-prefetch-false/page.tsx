@@ -1,58 +1,83 @@
 'use client'
-import React, { useState } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { PrefetchFalseDemo } from './components/PrefetchFalseDemo'
+
+import { DemoContainer, DemoGuideCard, DemoPlaygroundCard, DemoResetButton } from '@study/demo-kit'
+import { LaneBoard } from './components/LaneBoard'
+import { MeasurementTable } from './components/MeasurementTable'
 import { VerificationFooter } from './components/VerificationFooter'
+import { useRscEntries } from './hooks/useRscEntries'
+import { resetServerCounts, useServerCounts } from './hooks/useServerCounts'
+import { useMeasurements } from './lib/navTiming'
+import { summarizeLanes, toRows } from './lib/summarize'
+import { LAYOUT_COST_MS, PAGE_COST_MS } from './types'
 
 export default function DemoPage() {
-  const [prefetchMode, setPrefetchMode] = useState(false)
-  const [hoverCount, setHoverCount] = useState(0)
+  const isDev = process.env.NODE_ENV !== 'production'
+  const entries = useRscEntries()
+  const measurements = useMeasurements()
+  const counts = useServerCounts()
+  const summary = summarizeLanes(entries, measurements, counts)
+  const rows = toRows(entries, measurements)
+
+  const handleReset = async () => {
+    await resetServerCounts()
+    window.location.reload()
+  }
 
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"prefetch={false} 선언을 통한 불필요한 백그라운드 prefetch 방지"}
-        concept={"<Link prefetch={false}>를 명시하여 사용자가 많은 모바일 환경에서 수십 개의 링크가 동시에 뷰포트에 들어올 때 발생하는 불필요한 RSC 페이로드 다운로드를 0건으로 차단합니다."}
+        title="prefetch={false}로 비싼 목적지의 prefetch 끄기와 클릭 비용"
+        concept={`링크가 많고 목적지가 비쌀수록 뷰포트 prefetch는 서버 작업과 트래픽을 링크 수만큼 늘립니다. prefetch={false}는 그 비용을 0으로 만들지만, 대신 클릭한 순간에 목적지 layout(${LAYOUT_COST_MS}ms)을 기다리게 됩니다. hover 시에만 prefetch하는 커스텀 링크가 그 중간 해법입니다.`}
         steps={[
           {
             step: 1,
-            title: "[prefetch=false] 모드 확인",
-            description: "자동 prefetch가 비활성화된 링크 목록의 초기 네트워크 리스너 상태를 점검합니다.",
-            actionBadge: "모드 확인",
+            title: '[예제 초기화] 후 레인별 "클릭 전 RSC 요청"과 서버 layout 렌더 수 확인',
+            description: '아무 것도 누르지 않은 상태에서 A(기본)만 링크 수만큼 요청·서버 렌더가 올라가고 B·C·D는 0인지 봅니다.',
+            actionBadge: '초기 비용 확인',
+            observe: '레인 A와 B의 클릭 전 요청 수·서버 layout 렌더 수 차이',
+            observeAt: 'playground',
           },
           {
             step: 2,
-            title: "[상품 상세로 이동] 링크 위로 마우스 호버(Hover) 실행",
-            description: "호버 카운터를 증가시키며 prefetch={false} 상태에서 사전 요청이 차단되는지 테스트합니다.",
-            actionBadge: "호버 테스트",
+            title: 'B 링크를 hover 없이 바로 클릭 → 돌아오기, 이어서 C·D 링크에 1초 hover 후 클릭 → 돌아오기',
+            description: '목적지 화면 하단에 클릭→스켈레톤/본문 소요 ms가 표시됩니다. 돌아오면 아래 표에 누적됩니다.',
+            actionBadge: '클릭 비용 측정',
           },
           {
             step: 3,
-            title: "네트워크 요청 차단 및 클릭 시 온디맨드 패칭 관찰",
-            description: "불필요한 백그라운드 네트워크 트래픽이 0건으로 억제되고 실제 클릭 시점에만 패칭되는지 검증합니다.",
-            actionBadge: "대역폭 최적화 검증",
-            observe: "prefetch={false} 적용 시 뷰포트 진입 자동 다운로드 차단 및 클릭 시점 온디맨드 패칭 동작 관찰",
-            observeAt: "playground",
+            title: '클릭→스켈레톤 시간을 레인별로 대조',
+            description: `B는 클릭 후에야 layout을 요청하므로 스켈레톤까지 약 ${LAYOUT_COST_MS}ms 이상, 미리 받아둔 A·C는 거의 즉시입니다. 본문(${PAGE_COST_MS}ms)은 모두 클릭 후 요청합니다.`,
+            actionBadge: '결과 대조',
+            observe: '3단 검증 패널의 레인별 클릭→스켈레톤 ms',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"prefetch={false}로 prefetch 비활성화 실습"}>
-        <PrefetchFalseDemo
-          prefetchMode={prefetchMode}
-          hoverCount={hoverCount}
-          onSetPrefetchMode={setPrefetchMode}
-          onHover={() => setHoverCount((h) => h + 1)}
-        />
+
+      <DemoPlaygroundCard title="상품 목록 링크 12개 — 실제 파일: components/LaneBoard.tsx, dest/[id]/*">
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span
+              className={`rounded px-2 py-0.5 font-mono text-[11px] font-bold ${
+                isDev
+                  ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                  : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+              }`}
+            >
+              {isDev ? 'development — 자동 prefetch 비활성(사양)' : 'production — 자동 prefetch 활성'}
+            </span>
+            <DemoResetButton onReset={handleReset} label="예제 초기화 (서버 카운터 + 새로고침)" />
+          </div>
+          <LaneBoard summary={summary} />
+          <MeasurementTable rows={rows} />
+          <p className="text-[10px] text-zinc-500">
+            요청 수는 <code>PerformanceObserver(&apos;resource&apos;)</code>가 기록한 <code>?_rsc=</code> 요청, 서버 렌더 수는{' '}
+            <code>stats/route.ts</code>가 돌려주는 목적지 layout/page 실행 횟수입니다. 모두 실제 측정값입니다.
+          </p>
+        </div>
       </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={hoverCount > 0 ? true : undefined}
-        actual={
-          hoverCount > 0
-            ? `- 현재 <Link prefetch={${prefetchMode}}>\n- 호버 감지 횟수: ${hoverCount}\n- Network 탭에서 hover 시점에 RSC 요청이 발생하는지 직접 대조하세요 (prefetch={false}는 hover 시점 온디맨드 요청을 허용하는 사양이며, 이 패널은 hover 이벤트 자체만 실측합니다)`
-            : undefined
-        }
-        expected="prefetch prop 값이 Link에 그대로 전달되고, hover 이벤트가 실제로 카운트된다. 자동/온디맨드 prefetch 발생 여부는 브라우저 Network 탭에서 별도로 확인한다."
-      />
+
+      <VerificationFooter isDev={isDev} summary={summary} rows={rows} />
     </DemoContainer>
   )
 }
