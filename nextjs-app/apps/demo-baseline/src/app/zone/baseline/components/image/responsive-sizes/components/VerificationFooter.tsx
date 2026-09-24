@@ -1,107 +1,77 @@
 'use client'
+
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import type { CaseVerdict, SizesPreset } from '../types'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+interface VerificationFooterProps {
+  preset: SizesPreset
+  verdicts: (CaseVerdict | null)[]
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+function join(verdicts: CaseVerdict[], pick: 'expected' | 'actual') {
+  return verdicts
+    .map((v) => `[${v.title}]${pick === 'actual' ? (v.matched ? ' 일치' : ' 불일치') : ''}\n${v[pick]}`)
+    .join('\n\n')
+}
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• next/image responsive fill & sizes 속성 반응형 로딩의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+export function VerificationFooter({ preset, verdicts }: VerificationFooterProps) {
+  const ready = verdicts.every((v): v is CaseVerdict => v !== null)
+  const done = ready ? (verdicts as CaseVerdict[]) : []
+  const isMatched = ready ? done.every((v) => v.matched) : undefined
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="next/image responsive fill & sizes 속성 반응형 로딩 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title={`sizes 프리셋 "${preset.label}" — 렌더된 <img> 3개의 DOM 실측 대조`}
+        expected={<span>{ready ? join(done, 'expected') : '• 세 이미지의 load 이벤트를 기다리는 중'}</span>}
+        actual={<span>{ready ? join(done, 'actual') : '• 측정 중…'}</span>}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="Expected는 next@16.3.2의 get-img-props.js(getWidths·generateImgAttrs)와 공식 문서 fill·sizes 절에서 도출한 값, Actual은 getAttribute('srcset'|'sizes'), currentSrc, naturalWidth, getBoundingClientRect, 그리고 currentSrc를 새 Image로 다시 읽은 파일 폭입니다. 창 크기를 바꾸면 다시 측정합니다."
       />
-      <DemoDeepDiveCard title="next/image responsive fill & sizes 속성 반응형 로딩">
+      <DemoDeepDiveCard title="fill은 레이아웃, sizes는 srcset 선택 힌트">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">1. fill — 부모를 채우는 absolute 이미지</h5>
             <p>
-              <code>next/image</code>의 <code>fill</code> 속성과 <code>sizes</code> 속성은 부모 컨테이너 크기에 맞춰 반응형으로 확장되는 유동 레이아웃에서, 브라우저가 현재 뷰포트 너비(모바일/태블릿/데스크톱)에 가장 적합한 최적 해상도의 이미지를 <code>srcset</code>에서 선택 다운로드하도록 지시하는 이미지 최적화 스펙입니다.
+              <code>fill</code>은 <code>&lt;img&gt;</code>에 <code>position:absolute; inset:0; width:100%; height:100%</code>를 inline으로 넣는다.
+              그래서 부모에 <code>position: relative</code>(또는 fixed/absolute)와 크기(여기서는 <code>aspect-[2/1] w-full</code>)가 있어야 하고,
+              렌더 박스는 부모 박스와 같아진다. 잘림·비율은 <code>object-fit</code>으로 정한다. 크기를 모르니 브라우저에 폭을 알려 줄 방법이 <code>sizes</code>뿐이다.
             </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">2. sizes — 다운로드 전에 브라우저가 쓰는 폭 예고</h5>
             <p>
-              본 데모에서는 반응형 3단 상품 그리드에서 <code>sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"</code>를 적용하여, 모바일에서는 390px, 데스크톱에서는 400px에 최적화된 WebP/AVIF 이미지만 선별 다운로드하여 모바일 데이터 낭비를 방지하는 과정을 검증합니다.
+              브라우저는 CSS 레이아웃이 끝나기 전에 이미지를 고른다. <code>sizes</code>의 미디어 조건을 평가해 슬롯 폭을 얻고, 슬롯 폭 × DPR 이상인
+              <code> w</code> 후보(또는 그에 인접한 후보)를 받는다. sizes를 생략하면 fill 이미지도 <code>100vw</code>로 가정해 3열 카드에 화면 전체 폭 파일을 받는다.
+              반대로 실제보다 작게 적으면(10vw 프리셋) 작은 후보를 골라 흐려진다 — 이때 <code>naturalWidth</code>(밀도 보정값)가 렌더 박스보다 작아지는 것을 볼 수 있다.
             </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>모바일 데이터 대역폭 절약</strong>: 고해상도 데스크톱 이미지가 모바일 화면에 낭비 전송되는 것을 막아 초기 페이지 로딩 속도를 향상시킵니다.</li>
-              <li><strong>부모 요소 반응형 완벽 결합</strong>: <code>fill</code> 속성을 통해 고정 width/height 없이도 CSS Aspect-Ratio 및 Flex/Grid 컨테이너에 완벽히 들어맞는 레이아웃을 구성합니다.</li>
-              <li><strong>자동 차세대 포맷(AVIF/WebP) 트랜스코딩</strong>: 브라우저 지원 여부에 따라 가장 가벼운 최신 압축 포맷으로 온디맨드 변환 서빙합니다.</li>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. sizes가 srcset 모양 자체를 바꾼다</h5>
+            <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+              <li>sizes 없음 + 고정 width: <code>1x, 2x</code> 서술자 2개(C). 뷰포트와 무관하게 DPR만 본다.</li>
+              <li>sizes 없음 + fill: <code>deviceSizes</code>(640~3840) w 서술자, sizes는 자동으로 <code>100vw</code>.</li>
+              <li>sizes 있음: <code>deviceSizes + imageSizes</code> 중 <code>640 × 가장 작은 vw 비율</code> 이상만 남긴 w 서술자. 33vw면 256부터, 10vw면 64부터.</li>
             </ul>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>반응형 이커머스 상품 카드 그리드 (모바일 1열, 태블릿 2열, 데스크톱 4열)</li>
-              <li>뷰포트 너비에 따라 비율이 변하는 풀위드(Full-width) 프로모션 배너</li>
-              <li>다양한 해상도 모바일 디바이스에 최적화된 리뷰 갤러리 썸네일</li>
-            </ul>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">4. 이 앱에서 A에 srcset이 없는 이유</h5>
+            <p>
+              데모 zone은 <code>images.unoptimized: true</code>다(<code>/_next/image</code>가 셸 rewrites를 타지 못해서). get-img-props.js는
+              <code> config.unoptimized</code>가 참이면 prop과 무관하게 <code>unoptimized = true</code>로 덮어써, 컴포넌트 단위 <code>unoptimized={'{false}'}</code>도,
+              <code> loader</code> prop도 효과가 없다. 이때 <code>srcSet</code>과 <code>sizes</code>를 모두 <code>undefined</code>로 돌려주므로 A는 sizes 값을 바꿔도 DOM이 그대로다.
+              B·C는 같은 함수(<code>next/dist/shared/lib/get-img-props</code>, 내부 모듈)에 <code>imageConfigDefault</code>와 <code>unoptimized: false</code>만 넣어 호출한 결과를
+              <code> &lt;img&gt;</code>에 그대로 펼친 것이다. 폭별 파일은 <code>photo/route.ts</code>가 요청 폭을 intrinsic width로 갖는 SVG로 응답한다 — 래스터 리사이즈나
+              AVIF/WebP 변환은 하지 않으므로 바이트 절감이 아니라 &quot;어떤 후보를 골랐는가&quot;만 관찰한다.
+            </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>fill 사용 시 부모 스타일 필수</strong>: <code>fill</code> 속성을 사용할 때는 부모 컨테이너에 반드시 <code>position: relative</code>, <code>position: absolute</code>, 또는 <code>position: fixed</code>가 지정되어 있어야 이미지가 화면 전체로 넘치지 않습니다.</li>
-              <li><strong>sizes 생략 시 기본값 주의</strong>: <code>sizes</code>를 생략하고 <code>fill</code>을 쓰면 브라우저가 기본값으로 <code>100vw</code>를 가정하여 모바일에서도 큰 원본 이미지를 다운로드하므로 <code>sizes</code>를 반드시 명시해야 합니다.</li>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">5. 주의</h5>
+            <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+              <li>셸에서 볼 때 <code>vw</code>는 셸 창이 아니라 데모 iframe의 폭이다.</li>
+              <li>정확한 선택 규칙은 브라우저 재량이다. 이미 받은 큰 후보는 창을 줄여도 재사용할 수 있어, 검증은 &quot;필요값 바로 아래 후보 이상&quot;을 허용 범위로 본다.</li>
+              <li>sizes는 실제 CSS 레이아웃과 같게 써야 한다. 브레이크포인트(여기서는 md = 768px)가 바뀌면 sizes도 함께 고친다.</li>
             </ul>
           </div>
         </div>
