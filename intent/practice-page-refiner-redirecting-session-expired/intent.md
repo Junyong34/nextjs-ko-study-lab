@@ -47,11 +47,11 @@ Approval: 2026-09-18 현재 대화에서 사용자가 practice-page-refiner-form
 
 ## Acceptance criteria
 
-- [ ] [세션 만료] 클릭 → 실제 POST/Server Action 호출 → `/login?returnUrl=...`로 실제 이동 확인.
-- [ ] `returnUrl` 쿼리 값이 로그인 페이지에 실제로 표시됨을 확인.
-- [ ] 검증 패널이 이동 전(대기)과 이동 후(성공/관측값 표시)를 구분하며, 초기화 후 대기로 복귀.
-- [ ] 콘솔·런타임·hydration 오류 확인, 타입·빌드·매니페스트 검사 수행.
-- [ ] 완료 증거 확보 후 해당 항목만 `done`으로 변경, main에서 커밋.
+- [x] [세션 만료] 클릭 → 실제 POST/Server Action 호출 → `/login?returnUrl=...`로 실제 이동 확인.
+- [x] `returnUrl` 쿼리 값이 로그인 페이지에 실제로 표시됨을 확인.
+- [x] 검증 패널이 이동 전(대기)과 이동 후(성공/관측값 표시)를 구분하며, 초기화 후 대기로 복귀.
+- [x] 콘솔·런타임·hydration 오류 확인, 타입·빌드·매니페스트 검사 수행.
+- [x] 완료 증거 확보 후 해당 항목만 `done`으로 변경, main에서 커밋.
 
 ## Open questions
 

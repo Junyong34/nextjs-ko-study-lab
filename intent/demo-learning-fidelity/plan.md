@@ -85,7 +85,7 @@ korean-humanizer 기준으로 번역체, 과장, 불필요한 영어 병기, 줄
 
 ## Verification results
 
-- 현재 상태: 계획 작성만 완료. 위 자동·브라우저 검증은 아직 미실행.
+- 현재 상태: Turbopack 제외 변경본 구현 후 자동·브라우저 검증을 실행했다. 결과와 미통과·미실행 항목(tier1 기존 실패 3건, 샌드박스 제약으로 인한 baseline·shell 빌드 실패, 스크린 리더 미확인)은 [`verification.md`](./verification.md) 참고. 변경본 재승인 전이라 Status는 draft를 유지한다.
 - 사전 진단: 이전 spec 조사에서 baseline 포트 3001의 기존 브라우저 세션에 Turbopack SSR 값 차이로 hydration 오류가 기록돼 있었다. 구현 후 새 세션에서 재검증한다.
-- 문서 검증: git diff --check를 실행하고 결과를 확인한다.
+- 문서 검증: `git diff --check` 통과.
 - 승인 PR·머지 기록: 없음. 대화상 방향 승인과 공식 단계 진입을 구분한다.

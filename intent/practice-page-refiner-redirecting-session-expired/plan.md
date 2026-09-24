@@ -25,7 +25,7 @@ Approval: 2026-09-18 현재 대화에서 사용자가 대상 선택 후 진행�
 - [x] 가이드 스텝과 `DemoDeepDiveCard` 설명을 실제 구현 범위에 맞게 재작성했다.
 - [x] 직접 zone URL로 열어 런타임 절차를 실행하고 관찰 결과를 기록했다(agent-browser CLI, `verification.md` 참고).
 - [x] 필수 검사와 앱 빌드를 수행한 뒤 YAML 항목을 `done`으로 전환하고 매니페스트를 생성했다.
-- [ ] 범위·줄 수·실제 diff를 확인하고 이번 작업 파일만 스테이징하여 커밋한다. push하지 않는다.
+- [x] 범위·줄 수·실제 diff를 확인하고 이번 작업 파일만 스테이징하여 커밋한다. push하지 않는다. (`9bc9caf`)
 
 ## Verification
 

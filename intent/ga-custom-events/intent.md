@@ -1,7 +1,7 @@
 Intent: GA4 핵심 커스텀 이벤트 3종 연동
 Author: devpark
-Status: approved
-Approval: 사용자 승인 (implementation_plan.md)
+Status: done
+Approval: 사용자 승인 (implementation_plan.md). 구현 `5455170`, 검증 결과는 plan.md 참고
 
 ## Problem
 

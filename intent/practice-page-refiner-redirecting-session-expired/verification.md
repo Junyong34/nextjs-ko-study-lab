@@ -28,7 +28,7 @@ pnpm test:manifest
 - 매니페스트 생성 및 등록/라우트 검사 240개 통과(done 128 / stub 112).
 - `guides/forms/**`, 다른 실습, 공유 패키지는 git diff로 미변경 확인.
 
-ESLint는 baseline 패키지에 실행 스크립트가 없어 미실행이며, 이를 타입 검사·등록 lint로 대체했다고 혼동하지 않는다. baseline/shell 프로덕션 빌드(`pnpm --filter @study/demo-baseline build`, `pnpm --filter @study/shell build`)는 이번 라운드에서 실행하지 않았다 — 남은 사항에 기록한다.
+ESLint는 baseline 패키지에 실행 스크립트가 없어 미실행이며, 이를 타입 검사·등록 lint로 대체했다고 혼동하지 않는다. baseline/shell 프로덕션 빌드는 이후 실행해 통과했다 — 아래 "프로덕션 빌드" 참고.
 
 ## 브라우저 검증 (agent-browser CLI)
 
