@@ -3,44 +3,45 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('cache', 'functions/unstable-cache/db-query')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { UnstableCacheDbDemo } from './components/UnstableCacheDbDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import React, { Suspense } from 'react'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { WorkbenchSection, WorkbenchSectionFallback } from './components/WorkbenchSection'
+import { UnstableCacheDeepDive } from './components/UnstableCacheDeepDive'
+import { REVALIDATE_SECONDS } from './tags'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="unstable_cache를 통한 DB 쿼리 결과 캐싱"
-        concept="unstable_cache()를 활용하여 무거운 데이터베이스 쿼리 및 외부 API 결과를 메모리/Data Cache에 캐싱하고 revalidateTag로 수동 무효화합니다."
+        concept={`unstable_cache(fn, keyParts, { tags, revalidate })는 "함수 소스 + keyParts + 인자"를 키로 DB 쿼리 결과를 저장합니다. 같은 키는 쿼리를 실행하지 않고, 태그 무효화나 ${REVALIDATE_SECONDS}초 경과 후에만 다시 실행합니다. Next.js 16에서는 'use cache'로 대체된 레거시 API입니다.`}
         steps={[
           {
             step: 1,
-            title: "[조회 (HIT/MISS)] 클릭",
-            description: "unstable_cache로 래핑된 DB 쿼리 함수를 호출하여 첫 번째 조회(MISS) 및 캐시 적재를 수행합니다.",
-            actionBadge: "캐시 조회",
+            title: '[조회]를 같은 카테고리로 두 번, 다른 카테고리로 한 번',
+            description: '첫 호출은 MISS(쿼리 실행), 같은 인자 재호출은 HIT(카운터 그대로), 다른 인자는 별도 엔트리라 다시 MISS입니다.',
+            actionBadge: '인자 기반 키',
           },
           {
             step: 2,
-            title: "반복 조회 시 캐시 HIT 및 응답 지연 0ms 확인",
-            description: "동일 버튼을 다시 클릭하여 DB 재조회 없이 캐시 메모리에서 즉시 0ms로 반환되는지 확인합니다.",
-            actionBadge: "HIT 확인",
+            title: '[가격 +1,000원] → [조회] → [updateTag] → [조회]',
+            description: 'DB만 바꾸면 캐시는 옛 가격을 돌려주고, 태그를 무효화해야 쿼리가 재실행되어 새 가격이 보입니다.',
+            actionBadge: 'tags',
           },
           {
             step: 3,
-            title: "[태그 무효화 (revalidateTag)] 클릭 및 캐시 MISS 관찰",
-            description: "태그 무효화 버튼을 눌러 캐시를 퍼지하고 다음 조회가 MISS로 재계산되는지 확인합니다.",
-            actionBadge: "무효화 검증",
-            observe: "캐시 무효화 전후로 HIT/MISS 상태 및 쿼리 실행 타임스탬프가 즉시 전환됨",
-            observeAt: "playground",
+            title: `${REVALIDATE_SECONDS}초 대기 후 [조회] 두 번, 그리고 B의 [keyParts 누락] KRW·USD`,
+            description: '만료 후 첫 호출은 STALE(옛 값 + 백그라운드 재실행), 다음 호출이 새 runId를 받습니다. keyParts를 빼면 다른 통화에도 같은 결과가 돌아옵니다.',
+            actionBadge: 'revalidate · keyParts',
+            observe: '검증 패널 5개 항목이 [관측됨]으로 바뀌고, 호출 기록의 runId·카운터가 근거로 표시됨',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"unstable_cache를 통한 DB 쿼리 결과 캐싱 실습"}>
-        <UnstableCacheDbDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <Suspense fallback={<WorkbenchSectionFallback />}>
+        <WorkbenchSection />
+      </Suspense>
+      <UnstableCacheDeepDive />
     </DemoContainer>
   )
 }
