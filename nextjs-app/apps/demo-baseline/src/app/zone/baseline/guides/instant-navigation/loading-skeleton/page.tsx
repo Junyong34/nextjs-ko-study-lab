@@ -3,44 +3,18 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/instant-navigation/loading-skeleton')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { InstantNavDemo } from './components/InstantNavDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
+/**
+ * 시작 화면. 가이드·실습·검증 영역은 공유 layout.tsx가 그리고,
+ * 이 page는 layout의 children 슬롯(측정 대상 영역)의 초기 내용만 담당한다.
+ */
 export default function DemoPage() {
   return (
-    <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"loading.tsx 스켈레톤을 활용한 즉각적인 내비게이션 피드백"}
-        concept={"느린 데이터 패칭 라우트로 실제 이동하면 shop/loading.tsx가 데이터보다 먼저 즉시 마운트되어 스켈레톤 UI를 제공함으로써 사용자에게 화면 멈춤 없는 내비게이션 경험을 선사합니다."}
-        steps={[
-          {
-            step: 1,
-            title: "현재 홈 화면 확인",
-            description: "아직 이동하지 않은 초기 상태를 확인합니다.",
-            actionBadge: "초기 확인",
-          },
-          {
-            step: 2,
-            title: "[쇼핑몰 진입 (스켈레톤 관찰) →] 실제 링크 클릭",
-            description: "실제 서브 라우트로 이동하여 loading.tsx 스켈레톤 마운트를 관찰합니다.",
-            actionBadge: "실제 이동",
-          },
-          {
-            step: 3,
-            title: "0ms 스켈레톤 렌더링 후 최종 상품 목록 교체 관찰",
-            description: "내비게이션 클릭 즉시 스켈레톤이 뜨고 데이터 완료 후 실제 상품 목록으로 부드럽게 전환되는지 검증합니다.",
-            actionBadge: "즉각 피드백 검증",
-            observe: "쇼핑몰 이동 클릭 즉시 loading.tsx 스켈레톤 노출 및 데이터 패칭 완료 후 실제 콘텐츠 전환 관찰",
-            observeAt: "playground",
-          },
-        ]}
-      />
-      <DemoPlaygroundCard title={"Instant Navigation loading.tsx 스켈레톤 전환 실습"}>
-        <InstantNavDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
-    </DemoContainer>
+    <section className="rounded-lg border border-dashed border-zinc-300 p-4 text-xs leading-relaxed text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
+      <p className="font-semibold text-zinc-900 dark:text-zinc-100">시작 화면 (loading-skeleton/page.tsx)</p>
+      <p className="mt-1">
+        위 두 링크 중 하나를 클릭하면 이 영역이 하위 page로 바뀝니다. 클릭 시각, 스켈레톤이 이 영역에 처음 붙은 시각,
+        최종 카탈로그가 붙은 시각을 브라우저가 직접 기록합니다.
+      </p>
+    </section>
   )
 }
