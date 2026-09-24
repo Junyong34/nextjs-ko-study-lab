@@ -3,44 +3,50 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('cache', 'functions/update-tag/instant-memory-sync')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { UpdateTagInstantDemo } from './components/UpdateTagInstantDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import React, { Suspense } from 'react'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { CartSection, CartSectionFallback } from './components/CartSection'
+import { UpdateTagDeepDive } from './components/UpdateTagDeepDive'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="장바구니 수량 상태 변경"
-        concept="이 예제는 버튼 클릭에 따라 장바구니 수량이 바뀌는 클라이언트 상태를 보여줍니다. 실제 updateTag()를 호출하는 서버 캐시 동작과는 구분됩니다."
+        concept="Server Action에서 수량을 바꾼 뒤 updateTag(tag)를 호출하면 그 태그의 캐시가 즉시 만료되어, 같은 액션 응답에서 사용자가 자신의 변경을 바로 봅니다(read-your-own-writes). revalidateTag(tag, 'max')는 stale 표시만 하므로 액션 응답에 새 렌더가 없고, 이어진 첫 재요청에서도 이전 수량이 보입니다."
         steps={[
           {
             step: 1,
-            title: "[수량 1개 늘리기] 클릭",
-            description: "클라이언트 상태의 장바구니 수량을 1 늘립니다.",
-            actionBadge: "수량 변경",
+            title: '두 상품의 캐시 값과 원본 값 확인',
+            description: '각 줄은 독립된 \'use cache\' 엔트리입니다. 캐시 함수가 반환한 수량·cacheId·생성 시각과 서버 메모리 원본 수량을 나란히 봅니다.',
+            actionBadge: '초기 상태',
           },
           {
             step: 2,
-            title: "수량 변경 결과 확인",
-            description: "네트워크 요청 없이 화면의 수량이 바뀌는지 확인합니다.",
-            actionBadge: "상태 변경",
+            title: '무선 이어폰 [+] 클릭 (updateTag)',
+            description: '원본 수량을 바꾸고 updateTag()를 호출합니다. 액션 응답 한 번으로 캐시 수량이 원본과 같아지는지 봅니다.',
+            actionBadge: 'updateTag',
           },
           {
             step: 3,
-            title: "장바구니 수량 변경 관찰",
-            description: "버튼을 누를 때마다 수량이 1씩 늘어나는지 확인합니다.",
-            actionBadge: "결과 검증",
-            observe: "버튼을 누르면 클라이언트 상태가 바뀌고 수량이 1 증가함",
-            observeAt: "playground",
+            title: 'USB-C 케이블 [+] 클릭 (revalidateTag max)',
+            description: "원본 수량을 바꾸고 revalidateTag(tag, 'max')를 호출합니다. 액션 응답과 바로 이어진 재요청(router.refresh)에서 캐시 수량이 이전 값으로 남는지 봅니다.",
+            actionBadge: '대조군',
+            observe: 'updateTag 줄은 액션 응답에서 새 cacheId·원본과 같은 수량, revalidateTag max 줄은 첫 재요청에서도 쓰기 이전 엔트리(캐시 ≠ 원본)',
+            observeAt: 'playground',
+          },
+          {
+            step: 4,
+            title: 'Route Handler에서 updateTag 호출',
+            description: 'Server Action이 아닌 곳에서 updateTag()를 호출하면 실제로 에러가 나는지 확인합니다.',
+            actionBadge: '호출 제약',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"장바구니 수량 변경 실습"}>
-        <UpdateTagInstantDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <Suspense fallback={<CartSectionFallback />}>
+        <CartSection />
+      </Suspense>
+      <UpdateTagDeepDive />
     </DemoContainer>
   )
 }
