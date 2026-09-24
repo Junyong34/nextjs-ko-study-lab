@@ -1,7 +1,7 @@
 Intent: 검색 발견성과 공개 정보 정확성 개선
 Author: devpark
-Status: draft
-Approval: 사용자 승인 (2026-09-10 대화 메시지). 저장소 규칙상 PR 머지 전 단계 효력 없음
+Status: done
+Approval: 사용자 승인 (2026-09-10 대화 메시지). 저장소 규칙상 PR 머지 전 단계 효력 없음 2026-09-24 사용자 지시로 done 전환 — 구현 `ba36372` main 반영, 셸 production·Preview·staging build와 실행 응답 로컬 검증 완료(`407bcd3`). 실제 Vercel Preview 배포 응답·Deployment Protection은 외부 확인 항목으로 남김.
 
 ## Problem
 
