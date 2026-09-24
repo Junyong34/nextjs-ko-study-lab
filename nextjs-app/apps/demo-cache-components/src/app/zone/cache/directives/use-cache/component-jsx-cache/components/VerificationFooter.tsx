@@ -1,107 +1,105 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+import React from 'react'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import type { Observation } from '../types'
+import { useObservations } from './ObservationContext'
+
+function evaluate(obs: Observation[]) {
+  const pairs = obs.flatMap((a, i) => obs.slice(i + 1).map((b) => [a, b] as const))
+  const hit = pairs.find(([a, b]) => a.category === b.category && a.renderId === b.renderId)
+  const newEntry = pairs.find(([a, b]) => a.category !== b.category && a.renderId !== b.renderId)
+  const keyViolation = pairs.find(([a, b]) => a.category !== b.category && a.renderId === b.renderId)
+  const childrenStale = pairs.find(([a, b]) => a.requestId === b.requestId)
+  // 다른 prop을 거쳐 이전 prop으로 돌아왔을 때 이전 렌더 ID가 다시 나타났는지
+  const returned = pairs.find(
+    ([a, b]) =>
+      a.category === b.category &&
+      a.renderId === b.renderId &&
+      obs.some((m) => m.seq > a.seq && m.seq < b.seq && m.category !== a.category),
+  )
+  const isMatched =
+    keyViolation || childrenStale ? false : hit && newEntry && returned ? true : undefined
+  return { hit, newEntry, returned, keyViolation, childrenStale, isMatched }
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter() {
+  const { observations } = useObservations()
+  const { hit, newEntry, returned, keyViolation, childrenStale, isMatched } = evaluate(observations)
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+  const expected = (
+    <span>
+      {'• 같은 category prop으로 다시 요청: 캐시된 JSX의 렌더 ID·시각·실행 횟수가 그대로 (본문 미실행)\n'}
+      {'• 다른 category prop: 새 캐시 항목 생성 → 새 렌더 ID, 해당 prop 실행 횟수 1회\n'}
+      {'• 이전 prop으로 복귀: 처음 렌더 ID가 다시 나타남 (prop별 항목 유지)\n'}
+      {'• children 슬롯: 캐시 HIT 여부와 무관하게 매 요청 새 요청 ID·시각'}
+    </span>
+  )
 
-  const defaultExpected = "• 'use cache' 컴포넌트 JSX 렌더링 결과 캐싱의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = (
+    <span>
+      {observations.length === 0 && '• 관측 대기 중 (페이지 로드 후 첫 요청이 기록됩니다)\n'}
+      {hit
+        ? `• 캐시 HIT 확인: category="${hit[0].category}" 요청 #${hit[0].seq}·#${hit[1].seq} 모두 렌더 ID #${hit[0].renderId} (${hit[0].renderedAt}), children 요청 시각 ${hit[0].requestAt} → ${hit[1].requestAt}\n`
+        : '• 캐시 HIT: 아직 같은 prop으로 두 번 요청하지 않았습니다\n'}
+      {newEntry
+        ? `• prop별 캐시 키 확인: "${newEntry[0].category}" #${newEntry[0].renderId} ≠ "${newEntry[1].category}" #${newEntry[1].renderId}\n`
+        : '• prop별 캐시 키: 아직 다른 category로 요청하지 않았습니다\n'}
+      {returned
+        ? `• 이전 prop 복귀 확인: "${returned[0].category}"로 돌아오자 렌더 ID #${returned[1].renderId}가 다시 나타남 (요청 #${returned[1].seq})\n`
+        : '• 이전 prop 복귀: 다른 category를 거쳐 처음 category로 돌아오면 확인합니다\n'}
+      {keyViolation && `• 불일치: 서로 다른 prop이 같은 렌더 ID #${keyViolation[0].renderId}를 공유\n`}
+      {childrenStale
+        ? `• 불일치: children 요청 ID #${childrenStale[0].requestId}가 재사용됨`
+        : observations.length > 1
+          ? `• children 슬롯: ${observations.length}번의 요청 모두 서로 다른 요청 ID`
+          : '• children 슬롯: 두 번 이상 요청하면 비교합니다'}
+    </span>
+  )
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <ExpectedActualPanel
-        title="'use cache' 컴포넌트 JSX 렌더링 결과 캐싱 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="props 캐시 키와 children 인터리빙 검증"
+        description="서버가 보낸 캐시된 JSX 안의 값과 children 슬롯의 값을 요청마다 짝지어 비교합니다."
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-                                    <DemoDeepDiveCard title="컴포넌트 JSX 레벨 'use cache' 지시어 선언">
-                    <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                        <p>컴포넌트 함수 상단에 <code>'use cache'</code>를 선언하면, 해당 컴포넌트가 렌더링한 React JSX Virtual DOM 결과물(Flight Payload) 전체가 서버 캐시에 저장되어, 이후 요청 시 컴포넌트 내부의 복잡한 연산 없이 캐시된 JSX를 0ms 즉시 반환하는 컴포넌트 캐싱 스펙입니다.</p>
-                      </div>
-
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                        <p>본 데모에서는 수만 건의 판매 통계를 집계하여 복잡한 SVG 뱃지와 마크업을 생성하는 <code>{'<'}TopSellerBanner{'>'}</code> 컴포넌트에 <code>'use cache'</code>를 적용하고, 첫 렌더링 이후 연산 비용 없이 즉각 반환되는 성능 차이를 검증합니다.</p>
-                      </div>
-
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                          <li><strong>렌더링 연산 비용 획기적 절감</strong>: 복잡한 JSX 트리 생성 및 컴포넌트 내부 계산 로직을 매 요청마다 반복하지 않고 캐시에서 즉각 서빙합니다.</li>
-                          <li><strong>부분 사전 렌더링(PPR)과의 완벽한 결합</strong>: 정적 셸뿐만 아니라 무거운 중간 위젯 컴포넌트 단위로 캐시 조각을 구성하여 유연하게 결합합니다.</li>
-                          <li><strong>코드 가독성 향상</strong>: 데이터 패칭 캐싱과 UI 렌더링 캐싱을 별도로 분리하지 않고 컴포넌트 레벨에서 직관적으로 캡슐화합니다.</li>
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                          <li>쇼핑몰 메인 상단 실시간 인기 키워드 순위 및 복합 추천 배너</li>
-                          <li>수많은 카테고리 계층 구조를 렌더링하는 대형 메가 드롭다운 메뉴</li>
-                          <li>푸터(Footer)의 글로벌 파트너사 목록 및 다국어 지원 언어 선택 위젯</li>
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                          <li><strong>Props 직렬화 필수</strong>: <code>'use cache'</code>가 적용된 컴포넌트로 전달되는 모든 Props는 캐시 키 생성 및 저장을 위해 JSON 직렬화 가능해야 합니다.</li>
-                          <li><strong>컴포넌트 내부 훅 사용 불가</strong>: 서버 컴포넌트 캐싱이므로 <code>useState</code>, <code>useEffect</code> 등 클라이언트 훅은 컴포넌트 내부에서 사용할 수 없습니다.</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </DemoDeepDiveCard>
+      {observations.length > 0 && (
+        <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
+          <table data-testid="observation-log" className="w-full text-left font-mono text-[11px]">
+            <thead className="bg-zinc-50 text-zinc-500 dark:bg-zinc-900">
+              <tr>
+                <th className="px-2 py-1.5">요청</th>
+                <th className="px-2 py-1.5">category</th>
+                <th className="px-2 py-1.5">캐시 렌더 ID / 시각</th>
+                <th className="px-2 py-1.5">prop 실행 횟수</th>
+                <th className="px-2 py-1.5">children 요청 시각</th>
+              </tr>
+            </thead>
+            <tbody>
+              {observations.map((o, i) => {
+                const reused = observations.slice(0, i).some((p) => p.renderId === o.renderId)
+                return (
+                  <tr key={o.requestId} className="border-t border-zinc-100 dark:border-zinc-800">
+                    <td className="px-2 py-1">#{o.seq}</td>
+                    <td className="px-2 py-1">{o.category}</td>
+                    <td className="px-2 py-1">
+                      #{o.renderId} {o.renderedAt}{' '}
+                      <span className={reused ? 'text-indigo-600 dark:text-indigo-400' : 'text-amber-600 dark:text-amber-400'}>
+                        {reused ? '(재사용)' : '(이 화면에서 첫 관측)'}
+                      </span>
+                    </td>
+                    <td className="px-2 py-1">{o.categoryExecNo}회</td>
+                    <td className="px-2 py-1 text-emerald-700 dark:text-emerald-400">{o.requestAt}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
