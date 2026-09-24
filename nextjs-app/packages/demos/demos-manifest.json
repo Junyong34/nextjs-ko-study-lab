@@ -1047,7 +1047,7 @@
     "title": "<Link> 소프트 내비게이션 및 scroll 제어",
     "doc": "3-api-reference/3.2-components/link.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "components/link/prefetch-options",
@@ -1166,7 +1166,7 @@
     "title": "cacheTag 연쇄 무효화 (Cascade Invalidation)",
     "doc": "3-api-reference/3.3-functions/cacheTag.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/unstable-cache/db-query",
@@ -1467,7 +1467,7 @@
     "title": "'use cache' 컴포넌트 JSX 렌더링 결과 캐싱",
     "doc": "3-api-reference/3.4-directives/use-cache.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "directives/use-cache/private-profile-cache",
