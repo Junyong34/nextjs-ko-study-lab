@@ -1,10 +1,4 @@
 import type { ImageLoader } from 'next/image'
-// 아래 두 모듈은 next/image가 <img> 속성을 만들 때 실제로 쓰는 Next.js 16.3.2 내부 구현이다.
-// 이 앱은 next.config.ts의 images.unoptimized: true 때문에 <Image>가 srcset을 절대 만들지 않으므로,
-// "최적화가 켜진 앱이라면 무엇이 렌더되는가"를 같은 함수에 unoptimized: false 설정만 바꿔 넣어 얻는다.
-import { getImgProps } from 'next/dist/shared/lib/get-img-props'
-import { imageConfigDefault } from 'next/dist/shared/lib/image-config'
-import defaultLoader from 'next/dist/shared/lib/image-loader'
 import type { SizesPreset } from '../types'
 
 export const PHOTO_PATH = '/zone/baseline/components/image/responsive-sizes/photo'
@@ -14,9 +8,42 @@ export function buildPhotoSrc(run: number): string {
   return `${PHOTO_PATH}?run=${run}`
 }
 
-/** 공식 문서 loader 예시와 같은 형태: 요청 폭을 쿼리로 붙여 photo/route.ts가 그 폭의 파일을 응답한다. */
-export const photoLoader: ImageLoader = ({ src, width }) =>
-  `${src}${src.includes('?') ? '&' : '?'}w=${width}`
+/** 폭 w의 파일 URL. photo/route.ts가 ?w= 값을 intrinsic width로 갖는 SVG로 응답한다. */
+export function photoUrl(src: string, width: number): string {
+  return `${src}${src.includes('?') ? '&' : '?'}w=${width}`
+}
+
+/**
+ * 공식 문서 loader 예시와 같은 형태의 공개 ImageLoader. A 카드의 <Image>에 넘기지만,
+ * 이 앱은 images.unoptimized: true라 호출되지 않는다는 것 자체가 관찰 대상이다.
+ */
+export const photoLoader: ImageLoader = ({ src, width }) => photoUrl(src, width)
+
+/**
+ * 공식 문서 components/image.md "deviceSizes"·"imageSizes" 절에 적힌 기본값(next.config.js에
+ * images 설정이 없을 때 쓰이는 값). next/image 내부 모듈에서 읽지 않고 문서 값을 그대로 옮겼다.
+ */
+export const DEVICE_SIZES = [640, 750, 828, 1080, 1200, 1920, 2048, 3840] as const
+export const IMAGE_SIZES = [32, 48, 64, 96, 128, 256, 384] as const
+
+/**
+ * 문서: "imageSizes ... are concatenated with the array of device sizes to form the full array of
+ * sizes used to generate image srcset". B 카드의 w 후보는 이 전체 목록이다. 프리셋과 무관하게
+ * 후보를 고정해야 sizes 값만 바꿨을 때 브라우저 선택이 어떻게 달라지는지 분리해서 볼 수 있다.
+ */
+export const ALL_WIDTHS: number[] = [...IMAGE_SIZES, ...DEVICE_SIZES].sort((a, b) => a - b)
+
+/** 네이티브 srcset 문자열: `url 32w, url 48w, …` (URL에 콤마가 없어 파싱이 단순하다) */
+export function buildWidthSrcset(src: string, widths: readonly number[]): string {
+  return widths.map((w) => `${photoUrl(src, w)} ${w}w`).join(', ')
+}
+
+/** C 카드: 고정 크기 이미지용 x 서술자 srcset. 표시 폭 320px → 1x는 320, 2x는 640 파일. */
+export const FIXED_WIDTH = 320
+export const FIXED_DENSITIES = [1, 2] as const
+export function buildDensitySrcset(src: string): string {
+  return FIXED_DENSITIES.map((d) => `${photoUrl(src, FIXED_WIDTH * d)} ${d}x`).join(', ')
+}
 
 export const SIZES_PRESETS: SizesPreset[] = [
   {
@@ -29,7 +56,7 @@ export const SIZES_PRESETS: SizesPreset[] = [
     id: 'omitted',
     label: 'sizes 생략',
     sizes: undefined,
-    hint: 'fill인데 sizes가 없으면 100vw로 가정한다',
+    hint: 'w 서술자 srcset에 sizes가 없으면 브라우저는 100vw로 가정한다',
   },
   {
     id: 'undersized',
@@ -38,22 +65,3 @@ export const SIZES_PRESETS: SizesPreset[] = [
     hint: 'md 이상에서 실제보다 작게 알려 흐린 후보를 고르게 만든다',
   },
 ]
-
-const OPTIMIZED_CONFIG = { ...imageConfigDefault, unoptimized: false }
-
-type OptimizedInput = { src: string; alt: string; sizes?: string } & (
-  | { fill: true }
-  | { width: number; height: number }
-)
-
-/** Next.js 기본 deviceSizes/imageSizes + unoptimized: false로 getImgProps를 실제 호출한 결과(<img> props). */
-export function getOptimizedImgProps(input: OptimizedInput) {
-  const { props } = getImgProps(
-    { ...input, loader: photoLoader },
-    { defaultLoader, imgConf: OPTIMIZED_CONFIG, showAltText: false, blurComplete: false },
-  )
-  return props
-}
-
-export const DEVICE_SIZES = imageConfigDefault.deviceSizes
-export const IMAGE_SIZES = imageConfigDefault.imageSizes

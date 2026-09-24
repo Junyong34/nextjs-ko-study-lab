@@ -13,19 +13,19 @@ export default function DemoPage() {
         title="next/image fill과 sizes — 부모를 채우는 레이아웃과 srcset 후보 선택"
         concept={
           'fill은 부모(position: relative + 크기)를 꽉 채우는 absolute <img>를 만들고, sizes는 브라우저가 srcset 후보 중 무엇을 받을지 정하는 폭 힌트입니다. ' +
-          '이 앱은 images.unoptimized: true라 <Image>가 srcset을 만들지 않는다는 사실까지 포함해, 렌더된 <img>의 srcset·sizes·currentSrc·파일 폭을 직접 읽어 비교합니다.'
+          '이 앱은 images.unoptimized: true라 <Image>가 srcset을 만들지 않는다는 사실을 DOM으로 확인하고, sizes에 따른 후보 선택은 문서 기본 폭으로 직접 작성한 네이티브 <img srcSet sizes>로 실측합니다.'
         }
         steps={[
           {
             step: 1,
             title: '[sizes = 그리드 실제 폭] 상태에서 A·B·C 비교',
-            description: 'A는 srcset이 없고, B는 w 서술자, C는 1x/2x 서술자가 렌더된 것을 카드 아래 DOM 값으로 확인합니다.',
+            description: 'A(next/image)는 srcset이 없고, B·C(네이티브 img)는 w 서술자·1x/2x 서술자로 어떤 후보를 골랐는지 카드 아래 DOM 값으로 확인합니다.',
             actionBadge: 'srcset 모양',
           },
           {
             step: 2,
             title: '[sizes 생략]·[10vw (과소)] 전환',
-            description: 'B의 sizes 속성·후보 개수·선택된 후보와 파일 폭이 어떻게 달라지는지 봅니다. A는 그대로입니다.',
+            description: 'B의 sizes 속성·슬롯 폭·선택된 후보와 파일 폭이 어떻게 달라지는지 봅니다(후보 목록은 고정). A는 sizes를 바꿔도 DOM이 그대로입니다.',
             actionBadge: 'sizes 변경',
           },
           {

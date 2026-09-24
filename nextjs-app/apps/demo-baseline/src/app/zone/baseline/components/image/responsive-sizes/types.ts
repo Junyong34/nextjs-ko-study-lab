@@ -8,7 +8,7 @@ export interface SizesPreset {
   hint: string
 }
 
-export type CaseId = 'appImage' | 'optimizedFill' | 'fixedWidth'
+export type CaseId = 'appImage' | 'nativeFill' | 'fixedWidth'
 
 /** 렌더된 srcset 속성을 파싱한 후보 하나. value는 w 서술자면 폭(px), x 서술자면 배율. */
 export interface SrcsetCandidate {

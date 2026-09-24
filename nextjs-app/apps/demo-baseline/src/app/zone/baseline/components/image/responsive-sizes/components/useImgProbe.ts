@@ -38,7 +38,12 @@ function readImg(img: HTMLImageElement, tag: string): ImgProbe {
     parentHeight: Math.round((parentRect?.height ?? 0) * 100) / 100,
     viewportWidth: window.innerWidth,
     dpr: window.devicePixelRatio,
-    slotWidth: sizesAttr ? evaluateSizes(sizesAttr) : null,
+    // w 서술자인데 sizes 속성이 없으면 HTML 규칙상 기본값 100vw로 평가된다(x 서술자는 슬롯 폭을 쓰지 않음).
+    slotWidth: sizesAttr
+      ? evaluateSizes(sizesAttr)
+      : candidates[0]?.kind === 'w'
+        ? evaluateSizes('100vw')
+        : null,
     candidates,
     chosen,
   }
