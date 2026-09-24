@@ -396,7 +396,7 @@
     "title": "next/image responsive fill & sizes 속성 반응형 로딩",
     "doc": "3-api-reference/3.2-components/image.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/rendering-philosophy/hydration-boundary",
@@ -774,14 +774,14 @@
     "title": "[category]/layout.tsx 동적 카테고리 레이아웃",
     "doc": "3-api-reference/3.1-file-conventions/layout.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/page/static-and-dynamic",
     "title": "정적(Static) vs 동적(Dynamic) page.tsx 렌더링",
     "doc": "3-api-reference/3.1-file-conventions/page.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/page/react-19-use-params",
@@ -816,7 +816,7 @@
     "title": "notFound() 프로그래밍 트리거",
     "doc": "3-api-reference/3.1-file-conventions/not-found.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/template/remount-lifecycle",
@@ -970,7 +970,7 @@
     "title": "icon.tsx 동적 파비콘 생성",
     "doc": "3-api-reference/3.1-file-conventions/3.1.21-metadata/app-icons.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/metadata-manifest/dynamic-pwa-manifest",
@@ -984,7 +984,7 @@
     "title": "ImageResponse 실시간 할인율 OG 이미지",
     "doc": "3-api-reference/3.1-file-conventions/3.1.21-metadata/opengraph-image.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/metadata-robots/dynamic-crawler-rules",
@@ -1026,7 +1026,7 @@
     "title": "nodejs vs edge 런타임 대조",
     "doc": "3-api-reference/3.1-file-conventions/3.1.22-route-segment-config/runtime.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "components/image/blur-placeholder",
@@ -1145,7 +1145,7 @@
     "title": "cacheLife 내장 프리셋 프로필 (seconds, hours, max)",
     "doc": "3-api-reference/3.3-functions/cacheLife.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/cache-life/custom-profile",
@@ -1208,7 +1208,7 @@
     "title": "revalidateTag max 캐시 만료 제어",
     "doc": "3-api-reference/3.3-functions/revalidateTag.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/update-tag/instant-memory-sync",
@@ -1460,7 +1460,7 @@
     "title": "'use cache' 지시어를 통한 비동기 함수 결과 캐싱",
     "doc": "3-api-reference/3.4-directives/use-cache.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "directives/use-cache/component-jsx-cache",
