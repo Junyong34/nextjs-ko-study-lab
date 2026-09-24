@@ -117,8 +117,14 @@ describe('Tier 1: Feature 25 - Search discoverability and public accuracy', () =
         'utf-8',
       )
 
-      assert.strictEqual(demos.length, 240)
-      assert.strictEqual(doneDemos.length, 58)
+      // Counts come from demos.yaml and grow over time; only the gap between them is a contract.
+      assert.ok(doneDemos.length > 0)
+      assert.ok(doneDemos.length < demos.length)
+      for (const count of [demos.length, doneDemos.length]) {
+        for (const source of [homePage, hero, featured]) {
+          assert.doesNotMatch(source, new RegExp(`(?<![\\w.-])${count}(?![\\w.-])`))
+        }
+      }
       assert.match(homePage, /allDemos\.filter\(\(demo\) => demo\.status === 'done'\)/)
       assert.match(homePage, /availableDemoCount=\{availableDemoCount\}/)
       assert.match(hero, /\{availableDemoCount\} Live Demos/)

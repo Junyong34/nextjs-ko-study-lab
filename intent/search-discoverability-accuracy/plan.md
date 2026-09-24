@@ -99,6 +99,9 @@ Approval: 사용자 승인 (2026-09-10 `$implement` 지시). 저장소 규칙상
 - `pnpm check-types` — 통과. 워크스페이스 9개 패키지
 - `pnpm test` — 통과. 집계 480/480
 - `pnpm --filter @study/shell build` — 미통과. sandbox 및 권한 확장 재시도 모두 Turbopack 내부 프로세스의 포트 바인딩을 `Operation not permitted`로 거부했다. `globals.css` 처리 중 발생했으며 이번 변경의 타입·테스트 실패로 판정하지 않는다.
+- 2026-09-24 후속: `done` 예제가 58→133개로 늘어 25.3이 고정값(240·58) 비교로 실패했다. 계획의 "fixture 검증값으로만 사용" 의도대로
+  고정값 비교를 `0 < done < 전체` 불변식과 홈·Hero·추천 소스에 두 수치가 숫자로 하드코딩되지 않았는지 검사로 바꿨다.
+  25번 7/7 통과, test-suite 타입 통과. `pnpm test` 876/903 — 남은 tier1 3건(14.3·14.5·17.1)·tier5 24건은 수정 전 main에서도 동일하게 실패하는 기존 실패다.
 - 실패·미검증 항목과 후속 작업: 로컬 또는 CI에서 셸 build를 재실행하고 production·Preview 환경의 HTML metadata, robots, sitemap 응답을 확인한다. 배포·외부 운영 설정 변경은 이 작업에서 수행하지 않았다.
 
 구현 후 실제 결과를 기록한다. 계획만 작성한 상태에서 통과로 표시하지 않는다.
