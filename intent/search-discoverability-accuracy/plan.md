@@ -91,7 +91,7 @@ Approval: 사용자 승인 (2026-09-10 `$implement` 지시). 저장소 규칙상
 
 ## Verification results
 
-- 상태: 부분 완료 — 코드·정적 검증은 완료, production build·실행 응답 점검은 환경 제한으로 미검증
+- 상태: 로컬 검증 완료 — 09-10 코드·정적 검증, 09-24 production·Preview·staging build와 실행 응답 점검 통과. 실제 Vercel Preview 배포 응답은 외부 확인 항목
 - `pnpm --filter @study/docs build` — 통과. 284개 문서 manifest 생성, SEO 필드 기록
 - 새 계약 테스트 — 통과. `25-search-discoverability-accuracy.test.ts` 7개 사례 통과
 - `pnpm test:manifest` — 통과. 240개 데모 경로·문서 연결 유효
@@ -102,7 +102,16 @@ Approval: 사용자 승인 (2026-09-10 `$implement` 지시). 저장소 규칙상
 - 2026-09-24 후속: `done` 예제가 58→133개로 늘어 25.3이 고정값(240·58) 비교로 실패했다. 계획의 "fixture 검증값으로만 사용" 의도대로
   고정값 비교를 `0 < done < 전체` 불변식과 홈·Hero·추천 소스에 두 수치가 숫자로 하드코딩되지 않았는지 검사로 바꿨다.
   25번 7/7 통과, test-suite 타입 통과. `pnpm test` 876/903 — 남은 tier1 3건(14.3·14.5·17.1)·tier5 24건은 수정 전 main에서도 동일하게 실패하는 기존 실패다.
-- 실패·미검증 항목과 후속 작업: 로컬 또는 CI에서 셸 build를 재실행하고 production·Preview 환경의 HTML metadata, robots, sitemap 응답을 확인한다. 배포·외부 운영 설정 변경은 이 작업에서 수행하지 않았다.
+- 2026-09-24 셸 build 재실행 (`pnpm --filter @study/shell build`, 로컬 production 모드 `next start`): 위 09-10 미통과 항목을 대체한다.
+  - `pnpm --filter @study/docs build`: 284개 문서, URL 284개. 재생성 diff는 `generatedAt` 한 줄뿐이라 되돌렸다.
+  - 환경 변수 없음(production): build 통과(정적 페이지 834개, 47초).
+    - `/`: 고유 title·description, canonical `https://www.learn-nextjs-lab.space`, robots meta 없음(색인 허용). 초기 HTML에 `133 Live Demos`·`전체 등록 240개`가 포함돼 `demos.yaml`의 done 133·전체 240과 일치.
+    - 일반 문서 `/getting-started/caching`, 목차형 README `/getting-started`, 중복 H1 `/getting-started/upgrading`·`/guides/upgrading`: 문서별 title·description이 다르고, OG·Twitter 제목과 `LearningResource` JSON-LD 이름이 `seoTitle`과 같다. 중복 H1 두 문서는 상위 README 제목으로 구분됐다. canonical은 각 URL이고 초기 HTML에 h1이 있다.
+    - `/study-progress` `noindex, follow` 유지, 미완료 예제(`/demo/guides/caching-legacy/fetch-cache`, stub) `noindex, follow` 유지, 완료 예제는 robots meta 없음. 없는 URL은 404 + `noindex`.
+    - `/robots.txt`: 전체 allow, `/zone/`·`/demo-static/` disallow, sitemap 안내. `/sitemap.xml` 436개 URL: 루트, 상세 문서 283개, `/demo`, done 예제 133개, `/visualize` 18개. `/study-progress`·미완료 예제·zone 경로는 없다.
+  - `VERCEL_ENV=preview`, `VERCEL_TARGET_ENV=staging` 각각 build 통과(834개). `/`·일반 문서·README·완료 예제·`/visualize`·`/study-progress` 모두 `noindex, nofollow`, `/robots.txt`는 `Disallow: /`만 있고 sitemap 안내 없음.
+    `/sitemap.xml` 경로 자체는 200으로 응답한다. 계획 범위는 robots의 sitemap 미광고이며 경로 제거는 요구사항이 아니다.
+- 실패·미검증 항목과 후속 작업: 실제 Vercel Preview 배포의 응답과 Deployment Protection 설정은 외부 계정 확인 항목으로 남긴다. 배포·외부 운영 설정 변경은 이 작업에서 수행하지 않았다.
 
 구현 후 실제 결과를 기록한다. 계획만 작성한 상태에서 통과로 표시하지 않는다.
 
