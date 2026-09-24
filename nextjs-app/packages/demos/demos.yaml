@@ -675,7 +675,7 @@
   title: "React 19 use(params) & use(searchParams) 언래핑"
   doc: 3-api-reference/3.1-file-conventions/page.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/loading/nested-segment-loading
   title: "중첩 라우트 세그먼트 로딩 격리"
@@ -927,7 +927,7 @@
   title: "외부 PG사 결제 SDK onLoad 이벤트"
   doc: 3-api-reference/3.2-components/script.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: functions/use-router/push-replace
   title: "useRouter push, replace, back 프로그래밍 방식 내비게이션"
@@ -1041,7 +1041,7 @@
   title: "장바구니 수량 상태 변경"
   doc: 3-api-reference/3.3-functions/updateTag.md
   zone: cache
-  status: stub
+  status: done
 
 - url: functions/fetch-extended/revalidate-option
   title: "Next.js 확장 fetch revalidate 옵션"
