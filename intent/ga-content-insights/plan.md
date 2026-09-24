@@ -1,8 +1,8 @@
 Plan: GA4 콘텐츠 측정 확장과 공통화
 Spec: ./spec.md
 Author: Codex
-Status: approved
-Approval: 2026-09-22 대화에서 사용자 "ga 플랜 작업 시작… main 브랜치에 커밋 푸쉬" 지시로 구현·직접 main 커밋/push 승인. 구현 5957095 원격 반영. GA 관리 화면 적용 및 실수신 확인은 남아 있음.
+Status: done
+Approval: 2026-09-22 대화에서 사용자 "ga 플랜 작업 시작… main 브랜치에 커밋 푸쉬" 지시로 구현·직접 main 커밋/push 승인. 구현 5957095 원격 반영. 2026-09-24 대화에서 사용자가 GA 관리 화면 적용·확인을 직접 완료했다고 알려 done 전환 지시.
 
 ## Scope of change
 
@@ -137,3 +137,5 @@ GA 맞춤 정의·보고서는 이번 작업에서 생성한 항목만 별도 �
   `nextjs-app/docs/ga-content-analytics.md`에 작성했다. Search Console은 제외.
 - push 내역: 기존 로컬 커밋 671f9e4, 문서 커밋 5743e89도 5957095와 함께 원격 main에 포함됐다.
   GA 외 미커밋 baseline/config/env/manifest 작업 파일은 보존했다.
+- 2026-09-24 GA 관리 화면(맞춤 정의·보고서) 적용과 확인은 사용자가 직접 수행했다고 대화에서 알려 옴.
+  이 세션은 GA 계정에 접근하지 않았으므로 해당 항목의 세부 결과는 사용자 확인에 근거한다. 상태를 done으로 전환.

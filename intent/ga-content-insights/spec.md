@@ -1,8 +1,8 @@
 Spec: GA4 콘텐츠 측정 확장과 공통화
 Intent: ./intent.md
 Author: Codex
-Status: approved
-Approval: 2026-09-22 대화에서 사용자 "ga 플랜 작업 시작… main 브랜치에 커밋 푸쉬" 지시로 구현·직접 main 커밋/push 승인. 구현 5957095 원격 반영. GA 관리 화면 적용 및 실수신 확인은 남아 있음.
+Status: done
+Approval: 2026-09-22 대화에서 사용자 "ga 플랜 작업 시작… main 브랜치에 커밋 푸쉬" 지시로 구현·직접 main 커밋/push 승인. 구현 5957095 원격 반영. 2026-09-24 대화에서 사용자가 GA 관리 화면 적용·확인을 직접 완료했다고 알려 done 전환 지시.
 
 ## Requirements
 
