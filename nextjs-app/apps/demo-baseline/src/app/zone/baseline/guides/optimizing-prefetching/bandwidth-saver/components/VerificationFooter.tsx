@@ -1,112 +1,94 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+import { ExpectedActualPanel } from '@study/demo-kit'
+import { MODES } from '../catalog'
+import type { ModeActivity, ModeNetworkStats, PrefetchMode, RenderSnapshot } from '../types'
+import { formatBytes } from './CostTable'
+import { StrategyDeepDive } from './StrategyDeepDive'
+
+interface VerificationFooterProps {
+  isDev: boolean
+  network: Record<PrefetchMode, ModeNetworkStats>
+  activity: Record<PrefetchMode, ModeActivity>
+  renders: RenderSnapshot | null
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const avgBody = (n: ModeNetworkStats) => (n.requests > 0 ? n.bodyBytes / n.requests : 0)
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+/** 모드별 판정. 아직 측정 조건(스크롤·hover)이 채워지지 않았으면 null. */
+function judge(isDev: boolean, key: PrefetchMode, props: VerificationFooterProps): boolean | null {
+  const { network, activity, renders } = props
+  const n = network[key]
+  const a = activity[key]
+  if (a.seen === 0 || (key === 'hover' && a.hovered === 0)) return null
+  if (isDev) return n.requests === 0
+  switch (key) {
+    case 'full':
+      return n.skus > 0 && (renders?.full.page ?? 0) >= 1 && avgBody(n) > avgBody(network.auto)
+    case 'auto':
+      return n.skus > 0
+    case 'hover':
+      return n.skus <= a.hovered
+    case 'off':
+      return n.requests === 0
+  }
+}
 
-  const defaultExpected = "• 대규모 카탈로그 prefetch 최적화의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+const EXPECTED_PROD: Record<PrefetchMode, string> = {
+  full: '보인 링크마다 요청(경로 트리 요청이 더해져 링크 수보다 많을 수 있음) · 서버 page 실행 ≥ 1 · 요청당 본문이 기본값보다 큼',
+  auto: '보인 링크 수만큼 요청 · 서버는 layout까지만(loading.tsx 경계) 실행',
+  hover: '요청된 상품 수 ≤ 마우스를 올린 링크 수 (스크롤만으로는 0건)',
+  off: '스크롤·hover와 무관하게 요청 0건',
+}
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+export function VerificationFooter(props: VerificationFooterProps) {
+  const { isDev, network, activity, renders } = props
+  const results = MODES.map((m) => ({ mode: m, ok: judge(isDev, m.key, props) }))
+  const pending = results.filter((r) => r.ok === null)
+  const isMatched = pending.length > 0 ? undefined : results.every((r) => r.ok)
+
+  const expected = (
+    <ul className="space-y-1">
+      <li>현재 실행 모드: {isDev ? 'development' : 'production'}</li>
+      {MODES.map((m) => (
+        <li key={m.key}>
+          <strong>{m.label}</strong>: {isDev ? '요청 0건 — 뷰포트 prefetch는 production 전용' : EXPECTED_PROD[m.key]}
+        </li>
+      ))}
+    </ul>
+  )
+
+  const actual = (
+    <ul className="space-y-1">
+      {results.map(({ mode, ok }) => {
+        const n = network[mode.key]
+        const r = renders?.[mode.key]
+        const state = ok === null ? '측정 대기' : ok ? '일치' : '불일치'
+        return (
+          <li key={mode.key}>
+            <strong>{mode.label}</strong> [{state}]: 본 링크 {activity[mode.key].seen} · hover {activity[mode.key].hovered} → 요청{' '}
+            {n.requests}건({n.skus}개 상품) · {formatBytes(n.transferBytes)} · 서버 layout/page {r ? `${r.layout}/${r.page}` : '…'}
+          </li>
+        )
+      })}
+      {pending.length > 0 && (
+        <li className="text-zinc-500">
+          남은 측정: {pending.map((p) => p.mode.label).join(', ')} — 해당 전략으로 바꿔 스크롤{pending.some((p) => p.mode.key === 'hover') ? '(hover 기반은 상품에 마우스 올리기까지)' : ''}하세요.
+        </li>
+      )}
+    </ul>
+  )
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="대규모 카탈로그 prefetch 최적화 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="전략별 prefetch 네트워크·서버 비용"
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="네 전략을 모두 측정하면 판정합니다. 요청 수·바이트는 브라우저 Resource Timing, 서버 실행 횟수는 목적지 layout/page의 실제 카운터입니다. 서버 카운터는 목적지를 직접 클릭해 이동한 횟수도 포함하므로 정확히 비교하려면 먼저 측정 초기화를 누르세요."
       />
-      <DemoDeepDiveCard title="대규모 카탈로그 prefetch 최적화">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>
-              Next.js의 <code>{'<'}Link prefetch={'{'}...{'}'}{'>'}</code> 속성과 Router Cache 세분화 제어는 수백~수천 개의 상품 링크가 포함된 대규모 카탈로그 화면에서 불필요한 전체 RSC 페이로드 프리패칭을 방지하고, 뷰포트 교차 시점에만 경량 정적 셸(loading.tsx)을 선별적으로 가져와 클라이언트 대역폭(Bandwidth)과 서버 리소스를 극대화하여 절약하는 최적화 스펙입니다.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>
-              본 데모에서는 대규모 상품 목록에서 기본 전체 prefetch(<code>prefetch={'{'}true{'}'}</code>) 적용 시(120개 요청, 1.8MB)와 선별적 prefetch/호버 기반 prefetch 최적화 적용 시(6개 요청, 92KB)의 네트워크 전송량을 대조하여, 95% 이상의 대역폭 절감 효과를 실증합니다.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>모바일 데이터 비용 95% 절감</strong>: 무선 모바일 네트워크 환경의 사용자 데이터 소모량을 최소화하고 브라우저 메인 스레드 파싱 부하를 경감합니다.</li>
-              <li><strong>서버 트래픽 및 오리진 부하 완화</strong>: 불필요한 RSC 렌더링 요청을 사전에 차단하여 피크 타임 서버 CPU 사용량을 안정화합니다.</li>
-              <li><strong>Core Web Vitals (INP/LCP) 개선</strong>: 백그라운드 prefetch 네트워크 경합을 줄여 사용자 인터랙션 응답성을 최고 수준으로 유지합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>수천 개의 상품이 나열되는 무한 스크롤(Infinite Scroll) 및 가상화 그리드 카탈로그</li>
-              <li>복잡한 필터 및 페이지네이션이 포함된 이커머스 카테고리/검색 결과 리스트</li>
-              <li>데이터 사용량에 민감한 글로벌 모바일 웹 환경 서비스</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Next.js 15 기본 prefetch 동작 이해</strong>: <code>prefetch</code> prop을 생략(undefined)하면 뷰포트 진입 시 전체 페이지가 아닌 가장 가까운 <code>loading.tsx</code> 세그먼트 페이로드만 가져오므로, 무분별하게 <code>prefetch={'{'}true{'}'}</code>를 지정하지 않는 것이 좋습니다.</li>
-              <li><strong>prefetch=false 적용 대상</strong>: 빈번히 스크롤만 지나치는 푸터 링크나 관리자 메뉴 등에는 <code>prefetch={'{'}false{'}'}</code>를 명시하고 호버(<code>onMouseEnter</code>) 시에만 <code>router.prefetch()</code>를 호출하는 전략이 권장됩니다.</li>
-              <li><strong>Connection/Data Saver 모드 감지</strong>: <code>navigator.connection.saveData</code>가 true인 모바일 환경에서는 프리패칭을 완전 비활성화하는 적응형 로직을 적용할 수 있습니다.</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+      <StrategyDeepDive />
     </div>
   )
 }
