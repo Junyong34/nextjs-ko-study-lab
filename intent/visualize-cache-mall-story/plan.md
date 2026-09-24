@@ -1,8 +1,8 @@
 Plan: /visualize "스터디몰" 캐시 스토리텔링 데모 구현
 Spec: ./intent.md#requirements
 Author: Claude
-Status: draft
-Approval: intent.md와 동일 — 2026-09-18 대화 승인(ExitPlanMode). PR 머지 전 승인 효력 없음, 대화 승인에 따라 구현은 바로 진행. 2026-09-19 사용자 재피드백("제대로 동작도 안 하고 시각화도 안 됨 — 다른 /visualize 페이지와 비교해 전면 개편")으로 아래 Scope를 2차 개편본으로 교체.
+Status: done
+Approval: intent.md와 동일 — 2026-09-18 대화 승인(ExitPlanMode). PR 머지 전 승인 효력 없음, 대화 승인에 따라 구현은 바로 진행. 2026-09-19 사용자 재피드백("제대로 동작도 안 하고 시각화도 안 됨 — 다른 /visualize 페이지와 비교해 전면 개편")으로 아래 Scope를 2차 개편본으로 교체. 2026-09-24 사용자 지시로 done 전환 — 구현 `09a6b71` main 반영 확인, 이후 셸 production build(GA 작업 `5957095` 검증, 834개 정적 페이지) 통과.
 
 ## Scope of change (2026-09-19 2차 개편본)
 

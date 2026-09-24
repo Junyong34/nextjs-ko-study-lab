@@ -1,8 +1,8 @@
 Plan: /visualize "한 페이지, 영역별 캐시 경계" 데이터 흐름 데모 구현
 Spec: ./intent.md#requirements
 Author: Claude
-Status: draft
-Approval: intent.md와 동일 — 2026-09-19 대화 요청. PR 머지 전 승인 효력 없음.
+Status: done
+Approval: intent.md와 동일 — 2026-09-19 대화 요청. PR 머지 전 승인 효력 없음. 2026-09-24 사용자 지시로 done 전환 — 구현 `6728970` main 반영 확인, 이후 셸 production build(GA 작업 `5957095` 검증, 834개 정적 페이지) 통과.
 
 ## Scope of change
 

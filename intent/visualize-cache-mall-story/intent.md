@@ -1,7 +1,7 @@
 Intent: /visualize "스터디몰" 캐시 스토리텔링 데모 추가
 Author: Claude
-Status: draft
-Approval: 2026-09-18 현재 대화의 플랜 모드에서 스토리·범위(핵심 3구역, cache-components 그룹 5번째 항목으로 등록, 버튼 클릭식 진행, 기존 4종 UI 비재사용·신규 디자인, "이해가 스토리보다 먼저" 원칙, 대표값만 사용)를 사용자와 반복 조율한 뒤 ExitPlanMode로 최종 승인받았다. 저장소 규칙상 단계 진입 승인은 PR 머지 전에는 효력이 없어 Status는 draft로 두되, 대화 승인에 따라 구현은 바로 진행한다(선례: `search-discoverability-accuracy`, `practice-page-refiner-forms-two` — 사용자 승인 후 PR 없이 코드·검증 진행).
+Status: done
+Approval: 2026-09-18 현재 대화의 플랜 모드에서 스토리·범위(핵심 3구역, cache-components 그룹 5번째 항목으로 등록, 버튼 클릭식 진행, 기존 4종 UI 비재사용·신규 디자인, "이해가 스토리보다 먼저" 원칙, 대표값만 사용)를 사용자와 반복 조율한 뒤 ExitPlanMode로 최종 승인받았다. 저장소 규칙상 단계 진입 승인은 PR 머지 전에는 효력이 없어 Status는 draft로 두되, 대화 승인에 따라 구현은 바로 진행한다(선례: `search-discoverability-accuracy`, `practice-page-refiner-forms-two` — 사용자 승인 후 PR 없이 코드·검증 진행). 2026-09-24 사용자 지시로 done 전환 — 구현 `09a6b71` main 반영 확인, 이후 셸 production build(GA 작업 `5957095` 검증, 834개 정적 페이지) 통과.
 
 **2026-09-19 개편(같은 대화, 구현 후 사용자 피드백으로 승인 범위 내 개정)**: 최초 구현("손님 입장" 통합 버튼 하나가 세 구역을 동시에 갱신)에 대해 사용자가 "흐름이 눈에 안 들어오고 애니메이션 퀄리티가 낮다", "각 버튼도 Next.js cache 관련 버튼으로 만들어 누르면 그 흐름이 보이게 하라"고 피드백. 요구사항·완료 기준(3구역·5번째 항목·새 UI·이해 최우선)은 그대로 두고 상호작용 방식만 다음처럼 바꿨다 — 통합 버튼 대신 **버튼 자체가 실제 Next.js API**(use cache · `updateTag()` · `revalidateTag()` · `cookies()`) 4개로 분리하고, 각 버튼은 그 구역 하나에만 손님(요청)이 걸어 들어가 결과가 드러나는 자체 완결된 애니메이션을 재생한다. 세부는 plan.md 갱신 기록 참고.
 
