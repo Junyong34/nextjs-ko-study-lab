@@ -1,107 +1,70 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+import { ExpectedActualPanel } from '@study/demo-kit'
+import type { LaneSummary, MeasurementRow } from '../lib/summarize'
+import { LAYOUT_COST_MS, type LaneKey } from '../types'
+import { ConceptCard } from './ConceptCard'
+
+interface Props {
+  isDev: boolean
+  summary: Record<LaneKey, LaneSummary>
+  rows: MeasurementRow[]
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const ms = (v: number | null | undefined) => (v === null || v === undefined ? '-' : `${Math.round(v)}ms`)
+const lastOf = (rows: MeasurementRow[], lanes: LaneKey[], pred: (r: MeasurementRow) => boolean = () => true) =>
+  [...rows].reverse().find((r) => lanes.includes(r.lane) && pred(r))
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter({ isDev, summary, rows }: Props) {
+  const { a, b, c, d } = summary
+  const bRow = lastOf(rows, ['b'])
+  const hoverRow = lastOf(rows, ['c', 'd'], (r) => r.before > 0)
 
-  const defaultExpected = "• prefetch={false}로 prefetch 비활성화의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  let isMatched: boolean | undefined
+  if (isDev) {
+    isMatched = a.prefetchRequests > 0 || b.prefetchRequests > 0 ? false : bRow ? true : undefined
+  } else if (b.prefetchRequests > 0) {
+    isMatched = false
+  } else if (a.prefetchRequests > 0 && bRow && hoverRow) {
+    isMatched = bRow.loadingMs !== null && hoverRow.loadingMs !== null && bRow.loadingMs > hoverRow.loadingMs
+  }
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const expected = isDev
+    ? [
+        '- development: 모든 레인의 클릭 전 RSC 요청 0건 (뷰포트·hover·router.prefetch 모두 production 전용)',
+        `- B 링크 클릭 시 클릭 후에야 요청 → 스켈레톤까지 layout 비용(${LAYOUT_COST_MS}ms) 이상`,
+        '- 레인 간 차이는 production(next build && next start)에서 확인',
+      ].join('\n')
+    : [
+        '- A(기본): 뷰포트 진입만으로 링크마다 요청 + 서버 layout 렌더, page는 클릭한 링크만 렌더',
+        '- B(prefetch={false}): hover해도 클릭 전 요청·서버 렌더 0건',
+        '- C·D: hover한 링크만 클릭 전 요청 발생',
+        `- 클릭→스켈레톤: B는 ${LAYOUT_COST_MS}ms 이상, hover 후 클릭한 C·D는 그보다 짧음`,
+      ].join('\n')
+
+  const actual = (
+    <div className="whitespace-pre-line">
+      {[
+        `- 클릭 전 요청: A ${a.prefetchRequests} / B ${b.prefetchRequests} / C ${c.prefetchRequests} / D ${d.prefetchRequests}건`,
+        `- 서버 layout 렌더: A ${a.layoutRenders} / B ${b.layoutRenders} / C ${c.layoutRenders} / D ${d.layoutRenders}회`,
+        `- 서버 page 렌더: A ${a.pageRenders} / B ${b.pageRenders} / C ${c.pageRenders} / D ${d.pageRenders}회`,
+        `- 최근 B 이동 클릭→스켈레톤: ${ms(bRow?.loadingMs)} (본문 ${ms(bRow?.contentMs)})`,
+        `- 최근 hover 후 C·D 이동 클릭→스켈레톤: ${ms(hoverRow?.loadingMs)} (${hoverRow?.id ?? '기록 없음'})`,
+        `- 현재 모드: ${isDev ? 'development' : 'production'}`,
+      ].join('\n')}
+    </div>
+  )
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="prefetch={false}로 prefetch 비활성화 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="prefetch 비활성화의 절감 효과와 클릭 비용"
+        expected={<div className="whitespace-pre-line">{expected}</div>}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="요청 수는 Resource Timing, 서버 렌더 수는 목적지 layout/page의 실제 실행 횟수, ms는 링크 onClick부터 loading.tsx/page.tsx 마운트까지의 performance.now() 차이입니다. B 이동과 hover 후 C·D 이동이 모두 기록되면 판정합니다."
       />
-                        <DemoDeepDiveCard title="prefetch={false}로 prefetch 비활성화 및 데이터 절약">
-              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p><code>{'<'}Link prefetch={'{'}false{'}'}{'>'}</code>는 뷰포트(Viewport)에 진입한 링크를 자동으로 사전 다운로드하는 Next.js의 기본 prefetch 동작을 명시적으로 차단하여, 사용자가 실제로 링크에 마우스를 올리거나(Hover) 터치할 때까지 네트워크 요청을 지연시키는 대역폭 최적화 스펙입니다.</p>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 페이지 하단에 배치된 수십 개의 푸터 링크 및 이용약관 링크에 <code>prefetch={'{'}false{'}'}</code>를 적용하여, 스크롤 다운 시 불필요한 수십 건의 RSC 청크 prefetch가 발송되지 않고 마우스 호버 시점에만 선별적으로 다운로드되는 네트워크 절감 효과를 검증합니다.</p>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>모바일 사용자 데이터 대역폭 절감</strong>: 사용자가 클릭할 확률이 극히 낮은 보조 링크들의 자동 다운로드를 막아 네트워크 데이터 소모를 최소화합니다.</li>
-                    <li><strong>서버 I/O 및 prefetch 트래픽 절약</strong>: 수많은 사용자가 메인 페이지를 스크롤할 때 발생하는 수백만 건의 백그라운드 prefetch 서버 부하를 방지합니다.</li>
-                    <li><strong>초기 메인 스레드 CPU 점유율 완화</strong>: 불필요한 리소스 파싱 작업을 줄여 메인 페이지 인터랙션 반응성(INP)을 개선합니다.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li>쇼핑몰 하단 푸터(Footer)의 이용약관, 개인정보처리방침, 회사소개 링크</li>
-                    <li>수백 개의 페이지네이션 번호 링크 그리드</li>
-                    <li>로그아웃, 회원탈퇴 등 즉각 prefetch할 필요가 없는 위험/보조 액션 링크</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>마우스 호버 시점의 다운로드 지연</strong>: <code>prefetch={'{'}false{'}'}</code>를 적용해도 마우스를 올리면(Hover) prefetch가 시작되지만, 호버 없이 초고속으로 클릭할 경우 약간의 로딩 전환이 발생할 수 있습니다.</li>
-                    <li><strong>핵심 전환 링크에는 적용 지양</strong>: [장바구니 담기], [결제하기], [다음 단계] 등 핵심 전환율에 직결되는 주요 CTA 링크에는 <code>prefetch={'{'}true{'}'}</code>를 유지해야 합니다.</li>
-                  </ul>
-                </div>
-              </div>
-            </DemoDeepDiveCard>
+      <ConceptCard />
     </div>
   )
 }
