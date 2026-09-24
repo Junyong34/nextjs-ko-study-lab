@@ -1,7 +1,7 @@
 import React from 'react'
 import { DemoDeepDiveCard } from '@study/demo-kit'
 
-const TREE = `cacheTag('catalog')                                    -> 카탈로그 요약
+const TREE = `cacheTag('catalog' /* 단일 태그 */)                      -> 카탈로그 요약
 cacheTag('catalog', 'catalog:category:keyboard')       -> 키보드 목록
 cacheTag('catalog', 'catalog:category:mouse')          -> 마우스 목록
 cacheTag('catalog', 'catalog:category:keyboard', 'product:k1' | 'product:k2')
@@ -31,7 +31,7 @@ export function CascadeDeepDive() {
           <p>
             <code>cachedData.ts</code>의 <code>&apos;use cache&apos;</code> 함수 3종이 인자별로 서로 다른 엔트리 7개를
             만든다. 각 엔트리는 본문이 실행될 때만 새 <code>cacheId</code>와 생성 시각을 기록하므로, 값이 바뀌었다면 그
-            엔트리가 실제로 다시 계산된 것이다. (실제 태그 문자열에는 <code>cascade-invalidation:</code> 접두사가 붙는다.)
+            엔트리가 실제로 다시 계산된 것이다. (실제 태그 문자열에는 <code>functions-cache-tag-cascade-invalidation:</code> 접두사가 붙는다.)
           </p>
           <pre className="mt-2 overflow-x-auto rounded border border-zinc-200 bg-zinc-50 p-2.5 font-mono text-[11px] dark:border-zinc-800 dark:bg-zinc-900">
             {TREE}

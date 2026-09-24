@@ -56,7 +56,7 @@ export function EntryCard({ entry, state, previousCacheId, highlightTag }: Entry
                 : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
             }`}
           >
-            {tag.replace('cascade-invalidation:', '')}
+            {tag.replace('functions-cache-tag-cascade-invalidation:', '')}
           </li>
         ))}
       </ul>

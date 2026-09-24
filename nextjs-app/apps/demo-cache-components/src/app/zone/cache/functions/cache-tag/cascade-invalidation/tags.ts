@@ -1,7 +1,7 @@
 import type { CategoryId, ProductId } from './types'
 
 // 태그는 앱 전역이므로 데모 접두사를 붙인다 (apps/AGENTS.md 8항)
-const PREFIX = 'cascade-invalidation'
+const PREFIX = 'functions-cache-tag-cascade-invalidation'
 
 export const CATEGORIES: Record<CategoryId, { name: string; products: ProductId[] }> = {
   keyboard: { name: '키보드', products: ['k1', 'k2'] },
