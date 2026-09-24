@@ -120,7 +120,19 @@ GA 맞춤 정의·보고서는 이번 작업에서 생성한 항목만 별도 �
   후속 위임 리뷰는 사용량 한도로 중단되어 별도 최종 리뷰 완료를 주장하지 않는다.
 - 설계 조정: CodeBlock은 renderer 전체 수정 대신 가장 가까운 콘텐츠 경계와 article 내 코드블록
   순서를 사용한다. 기존 demo/visualize 래퍼는 공통 ContentViewTracker를 호출하는 얇은 어댑터로 유지.
-- 전체 기존 8종의 브라우저 상호작용 회귀, IME 실제 브라우저 입력, demo_view 선택 변경은 미검증.
+- 2026-09-24 후속 브라우저 검증 (Playwright/Chromium, 셸 dev localhost:3000, 더미 GA ID,
+  Google 측정 네트워크 차단, dataLayer 관찰, 데스크톱 1280px). 페이지 오류 0건.
+  - 기존 8종 회귀: book_click(visualize), learning_progress_toggle 켜기/끄기,
+    learning_complete(켤 때만 1회, 끌 때 0회), share_click, demo_click, demo_view, visualize_view,
+    github_star_click open_modal/dismiss/dismiss_forever/go_to_repo 모두 기존 매개변수로 1회씩 발생.
+    GitHub 팝업은 노출 조건을 충족하는 localStorage 기록을 앱 실행 전에 주입해 띄웠다.
+  - demo_view 선택 변경: 이전/다음 예제 이동마다 새 demo_url로 1회, 같은 데모에서 완료 토글로
+    재렌더해도 추가 발생 없음, 이전 데모 재방문 시 다시 1회.
+  - IME: CDP 조합 입력(ㅋ→캐→캐ㅅ→캐시)을 디바운스(500ms)보다 길게 유지하는 동안
+    content_search_results 0회, 조합 확정 후 1회(search_topic=other, result_count=0, 표시 결과 0개와 일치).
+    지운 뒤 영문 `cache` 입력 시 1회(cache, 14건). 전송 값에 검색 원문 미포함.
+  - 한계: CDP 조합 이벤트는 실제 OS IME와 다를 수 있다. 데모 iframe 대상 zone은 실행하지 않아
+    iframe 내부 500 응답은 검증 범위 밖이다.
 - GA 관리 화면 맞춤 정의·탐색 3종 생성은 미적용. 운영 절차는
   `nextjs-app/docs/ga-content-analytics.md`에 작성했다. Search Console은 제외.
 - push 내역: 기존 로컬 커밋 671f9e4, 문서 커밋 5743e89도 5957095와 함께 원격 main에 포함됐다.
