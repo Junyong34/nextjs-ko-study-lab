@@ -39,6 +39,53 @@ export function proxy(request: NextRequest) {
     return response
   }
 
+  // 8. 게이트웨이 라우터 데모: 경로 접두사(prefix) 기반 내부 마이크로서비스 rewrite 라우팅
+  // (/file-conventions/proxy/gateway-router)
+  // 주의: 분기 2(일반 프록시 게이트웨이 데모)가 '/file-conventions/proxy'로 시작하는 모든 경로를
+  // 조건 없이 가로채 반환하므로, 분기 2 뒤에 두면 이 분기는 영원히 실행되지 않는 도달 불가 코드가
+  // 된다. 그래서 분기 2보다 앞에 배치했다 — 분기 1과 분기 2~7의 코드·순서, matcher의 기존 항목은
+  // 그대로 두었고(바이트 단위로 무수정), 이 블록만 새로 추가했다.
+  if (pathname.includes('/file-conventions/proxy/gateway-router/api/')) {
+    const GATEWAY_SERVICE_TABLE: Record<string, { service: string; port: number }> = {
+      orders: { service: 'order-service', port: 8081 },
+      inventory: { service: 'inventory-service', port: 8082 },
+      search: { service: 'search-service', port: 8083 },
+    }
+
+    const routeMatch = pathname.match(/\/file-conventions\/proxy\/gateway-router\/api\/([^/?]+)\/?$/)
+    const prefix = routeMatch?.[1] ?? ''
+    const upstream = GATEWAY_SERVICE_TABLE[prefix]
+
+    if (upstream) {
+      const target = url.clone()
+      target.pathname = `/zone/baseline/file-conventions/proxy/gateway-router/services/${upstream.service}`
+      target.search = ''
+
+      const requestHeaders = new Headers(request.headers)
+      requestHeaders.set('x-gateway-target-service', upstream.service)
+      requestHeaders.set('x-gateway-matched-prefix', `/api/${prefix}`)
+      requestHeaders.set('x-gateway-upstream-port', String(upstream.port))
+      requestHeaders.set('x-gateway-request-id', crypto.randomUUID())
+
+      const response = NextResponse.rewrite(target, {
+        request: { headers: requestHeaders },
+      })
+      response.headers.set('x-gateway-target-service', upstream.service)
+      response.headers.set('x-gateway-matched-prefix', `/api/${prefix}`)
+      response.headers.set('x-gateway-upstream-port', String(upstream.port))
+      return response
+    }
+
+    // 라우팅 테이블에 없는 접두사: 실제 매핑이 없음을 헤더로만 표시하고 그대로 통과시켜
+    // Next.js 파일 시스템 라우터가 존재하지 않는 services/* 파일에 대해 자연스러운 404를
+    // 내도록 둔다 (가짜 응답을 직접 만들어내지 않는다 — No-Simulation 원칙).
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-gateway-target-service', 'unrouted')
+    const response = NextResponse.next({ request: { headers: requestHeaders } })
+    response.headers.set('x-gateway-target-service', 'unrouted')
+    return response
+  }
+
   // 2. 일반 프록시 게이트웨이 데모 경로
   if (pathname.includes('/file-conventions/proxy') || pathname.includes('/proxy/')) {
     const requestHeaders = new Headers(request.headers)
