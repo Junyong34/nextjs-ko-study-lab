@@ -30,6 +30,6 @@ export async function triggerNestingViolation(): Promise<NestingViolationProbe> 
  * 공식 문서 설명("Good to know" 항목)을 그대로 실행하는 것이다.
  */
 export async function revalidateCategoryTags(category: StatsCategory): Promise<void> {
-  updateTag(`cache-remote-redis-cache:default:${category}`)
-  updateTag(`cache-remote-redis-cache:remote:${category}`)
+  updateTag(`directives-use-cache-remote-redis-cache:default:${category}`)
+  updateTag(`directives-use-cache-remote-redis-cache:remote:${category}`)
 }

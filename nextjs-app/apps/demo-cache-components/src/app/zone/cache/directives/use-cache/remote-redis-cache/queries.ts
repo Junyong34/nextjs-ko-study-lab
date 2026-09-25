@@ -4,7 +4,7 @@ import type { CategoryStatsResult, Currency, StatsCategory } from './types'
 import { formatServerTime } from './types'
 
 // 데모 태그 접두사. zone 전역에서 캐시 태그를 공유하므로 다른 데모의 태그를 지우지 않도록 접두사를 붙인다.
-const TAG_PREFIX = 'cache-remote-redis-cache'
+const TAG_PREFIX = 'directives-use-cache-remote-redis-cache'
 const KRW_PER_USD = 1400
 
 // 서버 프로세스 메모리에 남는 실행 카운터. 캐시 HIT이면 본문이 실행되지 않으므로 그대로다.
