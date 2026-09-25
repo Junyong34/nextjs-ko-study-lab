@@ -723,7 +723,7 @@
   title: "새로고침(Hard Reload) 시 슬롯 복구"
   doc: 3-api-reference/3.1-file-conventions/default.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/route/rest-api-orders
   title: "REST GET/POST 주문 API (route.ts)"
@@ -795,7 +795,7 @@
   title: "글로벌 MDX 스타일 매핑 (mdx-components.tsx)"
   doc: 3-api-reference/3.1-file-conventions/mdx-components.md
   zone: baseline
-  status: done
+  status: stub
 
 - url: file-conventions/instrumentation/server-boot-log
   title: "서버 부팅 register() 로그 (instrumentation.ts)"
