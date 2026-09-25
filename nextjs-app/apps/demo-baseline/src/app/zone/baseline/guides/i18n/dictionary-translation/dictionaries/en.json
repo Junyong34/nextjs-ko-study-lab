@@ -1,0 +1,12 @@
+{
+  "product": {
+    "title": "Silent Mechanical Keyboard K7",
+    "description": "Quiet red switches let you type late at night without waking anyone",
+    "price": "Price $99",
+    "cart": "Add this keyboard to your cart"
+  },
+  "notice": {
+    "shipping": "Free shipping on orders over $40",
+    "returns": "Free returns within 14 days of delivery"
+  }
+}
