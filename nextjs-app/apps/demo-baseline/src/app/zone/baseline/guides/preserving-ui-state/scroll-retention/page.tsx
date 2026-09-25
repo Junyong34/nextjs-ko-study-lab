@@ -1,48 +1,48 @@
 import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { RetentionWorkbench } from './components/RetentionWorkbench'
+import { RetentionDeepDive } from './components/RetentionDeepDive'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/preserving-ui-state/scroll-retention')
-
-import React, { Suspense } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ScrollRetentionDemo } from './components/ScrollRetentionDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"카탈로그 필터 변경 시 스크롤 위치 유지(scroll={false})"}
-        concept={"<Link scroll={false}> 또는 얕은 상태 변경을 적용하여 정렬 필터(최신순/인기순/낮은가격순)를 바꿀 때 페이지 상단으로 불필요하게 스크롤 점프하는 DOM 스크롤 리셋 현상을 방지합니다."}
+        title="searchParams 필터 변경 시 문서 scrollY와 목록 scrollTop 보존 비교"
+        concept="?cat=만 바꾸는 필터 이동도 Page 재렌더링이라, 기본 Link·router.push는 Page 상단이 뷰포트 밖이면 문서를 Page 상단으로 올립니다. scroll={false} / { scroll: false }는 문서 위치를 그대로 두고, 목록 컨테이너의 scrollTop은 DOM이 유지되는 한 방법과 무관하게 남습니다(key를 바꾸면 초기화). 고정 높이 창 안의 실제 라우트에서 전후 값을 실측합니다."
         steps={[
           {
             step: 1,
-            title: "[최신순], [인기순], [낮은가격순] 필터 버튼 확인",
-            description: "카탈로그 목록 상단에 배치된 정렬 필터 버튼들을 점검합니다.",
-            actionBadge: "필터 점검",
+            title: '실습 창의 [측정 준비] 클릭 (또는 두 패널과 문서를 직접 스크롤)',
+            description: '패널 A·B scrollTop 240, 문서 scrollY 700으로 Page 상단이 뷰포트 위로 사라집니다. 헤더 HUD 값이 바뀝니다.',
+            actionBadge: '스크롤',
           },
           {
             step: 2,
-            title: "[인기순] 또는 [낮은가격순] 버튼 클릭",
-            description: "정렬 필터를 변경하여 상품 목록 정렬 순서를 갱신합니다.",
-            actionBadge: "필터 전환",
+            title: '[Link · 기본]과 [push · 기본] 클릭 — 매번 [측정 준비] 후',
+            description: 'URL은 ?cat=만 바뀌고 서버가 새 목록을 렌더링합니다. scrollY는 Page 상단 쪽으로 올라가고, 패널 A는 그대로, 패널 B는 0이 됩니다.',
+            actionBadge: '기본값',
           },
           {
             step: 3,
-            title: "페이지 상단 튐 없는 정렬 갱신 및 스크롤 위치 보존 관찰",
-            description: "필터 변경 후에도 현재 스크롤 위치가 유지되며 상품 리스트만 부드럽게 재배열되는지 확인합니다.",
-            actionBadge: "스크롤 보존 검증",
-            observe: "필터 옵션 전환 시 스크롤 상단 점프 없이 목록 정렬 순서만 갱신되는 스크롤 보존 동작 관찰",
-            observeAt: "playground",
+            title: '[Link · scroll={false}] · [push · scroll: false] · [replace · scroll: false] 클릭',
+            description: 'scrollY가 전과 같게 남습니다. 패널 결과는 2단계와 같습니다 — 컨테이너 보존은 scroll 옵션이 아니라 DOM 유지가 결정합니다.',
+            actionBadge: 'scroll=false',
+          },
+          {
+            step: 4,
+            title: '기록 표와 검증 패널 확인',
+            description: '서버가 받은 searchParams, 렌더 ID 변화, timeOrigin(문서 재로드 없음)을 함께 봅니다.',
+            actionBadge: '검증',
+            observe: '5가지 방법의 scrollY·scrollTop 전→후 실측값과 기대 규칙의 일치 여부',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"searchParams 필터 스크롤 위치 보존 실습"}>
-        <Suspense fallback={<div className="text-xs text-zinc-400">로딩 중...</div>}>
-          <ScrollRetentionDemo />
-        </Suspense>
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <RetentionWorkbench />
+      <RetentionDeepDive />
     </DemoContainer>
   )
 }
