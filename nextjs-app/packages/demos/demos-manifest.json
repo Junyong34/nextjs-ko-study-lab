@@ -844,7 +844,7 @@
     "title": "새로고침(Hard Reload) 시 슬롯 복구",
     "doc": "3-api-reference/3.1-file-conventions/default.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/route/rest-api-orders",
@@ -879,7 +879,7 @@
     "title": "상점용 vs 관리자용 다중 루트 레이아웃",
     "doc": "3-api-reference/3.1-file-conventions/route-groups.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/dynamic-segments/single-param",
@@ -921,7 +921,7 @@
     "title": "직접 진입 vs 모달 대조 (Intercepting Routes)",
     "doc": "3-api-reference/3.1-file-conventions/intercepting-routes.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/mdx-components/global-mdx-theme",
@@ -935,21 +935,21 @@
     "title": "서버 부팅 register() 로그 (instrumentation.ts)",
     "doc": "3-api-reference/3.1-file-conventions/instrumentation.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/instrumentation/client-timing-metrics",
     "title": "클라이언트 성능 측정 훅 (instrumentation-client.ts)",
     "doc": "3-api-reference/3.1-file-conventions/instrumentation-client.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/proxy/gateway-router",
     "title": "내부 마이크로서비스 프록시 라우팅 (proxy.ts)",
     "doc": "3-api-reference/3.1-file-conventions/proxy.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/forbidden/admin-role-403",
@@ -977,7 +977,7 @@
     "title": "manifest.ts 동적 매니페스트 출력",
     "doc": "3-api-reference/3.1-file-conventions/3.1.21-metadata/manifest.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/metadata-og/discount-banner-og",
@@ -1019,7 +1019,7 @@
     "title": "주문 정산 배치 maxDuration 타임아웃 제한",
     "doc": "3-api-reference/3.1-file-conventions/3.1.22-route-segment-config/maxDuration.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/route-segment-config/runtime-nodejs-edge",
@@ -1152,7 +1152,7 @@
     "title": "next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩",
     "doc": "3-api-reference/3.3-functions/cacheLife.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "functions/cache-tag/multi-tag-binding",
@@ -1481,7 +1481,7 @@
     "title": "'use cache: remote' 분산 원격 캐시 계층 연동",
     "doc": "3-api-reference/3.4-directives/use-cache-remote.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "config/base-path/subpath-routing",
