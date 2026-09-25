@@ -1,58 +1,29 @@
 import type { MetadataRoute } from 'next'
+import { getProducts, getSitemapCount, URLS_PER_SITEMAP } from './catalog'
 
+/**
+ * generateSitemaps()가 반환한 id 개수만큼 `<이 세그먼트>/sitemap/[id].xml`이 생성된다.
+ * 여기서는 전체 상품 수로 필요한 파일 수를 계산한다: [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }]
+ */
 export async function generateSitemaps() {
-  // 분할 사이트맵 인덱스 ID 목록 (상품 0, 카테고리 1, 프로모션 2)
-  return [{ id: 0 }, { id: 1 }, { id: 2 }]
+  return Array.from({ length: getSitemapCount() }, (_, id) => ({ id }))
 }
 
-export default async function sitemap(props: { id: Promise<string | number> }): Promise<MetadataRoute.Sitemap> {
-  const { id } = await props
-  const sitemapId = Number(id)
-  const BASE_URL = 'https://study-lab.example.com'
+/**
+ * Next.js 16부터 id는 Promise<string>으로 전달된다. generateSitemaps()에서 숫자로 반환했어도
+ * await 결과는 문자열이므로, 오프셋 계산 전에 Number()로 변환한다.
+ */
+export default async function sitemap(props: {
+  id: Promise<string>
+}): Promise<MetadataRoute.Sitemap> {
+  const id = await props.id
+  const start = Number(id) * URLS_PER_SITEMAP
+  const end = start + URLS_PER_SITEMAP
 
-  if (sitemapId === 0) {
-    // 상품 사이트맵 (sitemap/0.xml)
-    return [
-      {
-        url: `${BASE_URL}/products/PROD-101`,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 0.9,
-      },
-      {
-        url: `${BASE_URL}/products/PROD-102`,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 0.9,
-      },
-    ]
-  }
-
-  if (sitemapId === 1) {
-    // 카테고리 사이트맵 (sitemap/1.xml)
-    return [
-      {
-        url: `${BASE_URL}/category/shoes`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      },
-      {
-        url: `${BASE_URL}/category/apparel`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      },
-    ]
-  }
-
-  // 프로모션/기획전 사이트맵 (sitemap/2.xml)
-  return [
-    {
-      url: `${BASE_URL}/promotions/summer-sale`,
-      lastModified: new Date(),
-      changeFrequency: 'hourly',
-      priority: 1.0,
-    },
-  ]
+  return getProducts(start, end).map((product) => ({
+    url: product.url,
+    lastModified: product.lastModified,
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  }))
 }
