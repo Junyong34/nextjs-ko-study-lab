@@ -1,46 +1,58 @@
 'use client'
-import React, { useState } from 'react'
+
+import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { BffResponseShapingDemo } from './components/BffResponseShapingDemo'
+import { ShapingPlayground } from './components/ShapingPlayground'
 import { VerificationFooter } from './components/VerificationFooter'
+import { useShapingRuns } from './hooks/useShapingRuns'
+import { FIELD_RULES } from './shaping'
 
 export default function DemoPage() {
-  const [measured, setMeasured] = useState<{ rawBytes: number; shapedBytes: number } | null>(null)
+  const { results, selected, running, error, run, reset } = useShapingRuns()
 
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"BFF 응답 셰이핑(Response Shaping)을 통한 92% 페이로드 감축"}
-        concept={"백엔드 원본 데이터(50개 필드, 120 KB)에서 프론트엔드 화면 표시에 불필요한 내부 감사 로그와 원시 필드를 필터링하여 6개 핵심 필드(10 KB)로 92% 다이어트하여 전송합니다."}
+        title="Route Handler로 레거시 상품 응답을 모바일 카드용으로 가공 (BFF)"
+        concept={`레거시 상품 API는 원가·공급사 계약·감사 로그까지 담은 깊은 JSON을 통째로 돌려줍니다. bff/route.ts가 서버에서 화면에 필요한 ${FIELD_RULES.length}개 필드만 골라 평탄화·이름 변환하고, 입력 검증과 오류 변환까지 맡아 응답 크기와 노출 정보를 함께 줄입니다.`}
         steps={[
           {
-                    "step": 1,
-                    "title": "원본 백엔드 응답(50개 필드, 120 KB) 페이로드 분석 및 BFF 응답 셰이핑 적용 후(6개 필드, 10 KB) 대조",
-                    "description": "내부 감사 로그(internal_audit) 등 비대한 미가공 데이터 구조를 확인합니다. 프론트엔드 컴포넌트 렌더링에 꼭 필요한 필수 필드만 선별된 슬림 페이로드를 확인합니다.",
-                    "actionBadge": "원본 페이로드 점검"
+            step: 1,
+            title: '[P-101]·[P-102]·[P-103] 중 하나 클릭',
+            description: '같은 상품을 legacy(원본)와 bff(가공) 경로로 각각 받아 비교표에 채웁니다.',
+            actionBadge: '정상 조회',
+            observe: '본문 크기(decodedBodySize), 값 개수, 중첩 깊이, 민감 필드 행의 원본 vs BFF 차이',
+            observeAt: 'playground',
           },
           {
-                    "step": 2,
-                    "title": "92% 네트워크 전송량 절감 및 JSON 파싱 속도 개선 관찰",
-                    "description": "모바일 환경에서의 네트워크 대기 시간 단축과 메모리 사용량 최적화 효과를 검증합니다.",
-                    "actionBadge": "효과 검증",
-                    "observe": "BFF Response Shaping 적용에 따른 페이로드 감축(120 KB -> 10 KB, 92% 절감) 결과 관찰",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: '[P-999 없는 상품] → [abc 형식 오류] 클릭',
+            description: '레거시는 둘 다 HTTP 200에 오류 코드·서버 노드·스택을 싣고, BFF는 404/400과 error 한 줄로 바꿉니다.',
+            actionBadge: '오류 응답',
+            observe: 'HTTP 상태, 민감 필드, 형식 오류일 때 "레거시 호출 안 함"',
+            observeAt: 'playground',
+          },
+          {
+            step: 3,
+            title: '검증 패널에서 판정 확인',
+            description: 'DevTools Network 탭에서 legacy·bff 요청의 Size 열과 Response 본문도 같은 값으로 확인할 수 있습니다.',
+            actionBadge: '검증',
+            observe: '정상 조회 1건 + 오류 2건을 실행한 뒤 "검증 완료" 표시',
+            observeAt: 'verification',
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"모바일 앱 최적화 응답 가공 (Response Shaping) 실습"}>
-        <BffResponseShapingDemo onMeasure={(rawBytes, shapedBytes) => setMeasured({ rawBytes, shapedBytes })} />
+      <DemoPlaygroundCard title="레거시 상품 API 원본 vs BFF 가공 응답 — legacy/route.ts · bff/route.ts">
+        <ShapingPlayground
+          results={results}
+          selected={selected}
+          running={running}
+          error={error}
+          onRun={run}
+          onReset={reset}
+        />
       </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={measured ? measured.shapedBytes < measured.rawBytes : undefined}
-        actual={
-          measured
-            ? `- 원본 실측 크기: ${measured.rawBytes} bytes\n- 정제 실측 크기: ${measured.shapedBytes} bytes\n- 실측 감축률: ${Math.round((1 - measured.shapedBytes / measured.rawBytes) * 100)}%`
-            : undefined
-        }
-        expected="TextEncoder로 실측한 정제 응답 크기가 원본보다 작아야 하며, 감축률은 사전에 고정된 수치가 아니라 실제 계산값이어야 한다."
-      />
+      <VerificationFooter results={results} />
     </DemoContainer>
   )
 }
