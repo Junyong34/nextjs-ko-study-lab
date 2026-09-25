@@ -312,7 +312,7 @@
     "title": "정적 상품 레이아웃과 UserContext 기반 세션 스트리밍",
     "doc": "2-guides/authentication-with-cache-components.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/forms/use-action-state-errors",
@@ -375,7 +375,7 @@
     "title": "루트 레이아웃(Root Layout) 및 카테고리 중첩 레이아웃",
     "doc": "3-api-reference/3.1-file-conventions/layout.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/loading/skeleton-boundary",
@@ -501,7 +501,7 @@
     "title": "Router Cache와 뒤로 가기 시 복원",
     "doc": "2-guides/instant-navigation.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/lazy-loading/modal-dynamic",
@@ -522,7 +522,7 @@
     "title": "searchParams 필터 스크롤 위치 보존",
     "doc": "2-guides/preserving-ui-state.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/preventing-flash/darkmode-script",
@@ -620,7 +620,7 @@
     "title": "next/script strategy 로드 순서 최적화",
     "doc": "2-guides/scripts.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/scripts/pg-sdk-onload",
@@ -669,7 +669,7 @@
     "title": "모바일 앱 최적화 응답 가공 (Response Shaping)",
     "doc": "2-guides/backend-for-frontend.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/pwas/app-install-prompt",
@@ -690,7 +690,7 @@
     "title": "서버 측 JSON 사전 기반 번역 렌더링",
     "doc": "2-guides/internationalization.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/multi-tenant/subdomain-tenant",
@@ -998,7 +998,7 @@
     "title": "generateSitemaps 대규모 인덱스 분할",
     "doc": "3-api-reference/3.1-file-conventions/3.1.21-metadata/sitemap.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/route-segment-config/dynamic-params-toggle",
@@ -1474,7 +1474,7 @@
     "title": "'use cache: private' 개인화 주문 내역 캐시 격리",
     "doc": "3-api-reference/3.4-directives/use-cache-private.md",
     "zone": "cache",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "directives/use-cache/remote-redis-cache",
@@ -1642,7 +1642,7 @@
     "title": "Edge Runtime V8 Web API 실행",
     "doc": "3-api-reference/edge.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "edge/v8-lightweight/nodejs-modules-bailout",
