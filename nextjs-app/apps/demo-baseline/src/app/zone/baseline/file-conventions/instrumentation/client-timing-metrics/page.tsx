@@ -12,27 +12,35 @@ export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"instrumentation-client 성능 메트릭 수집"}
-        concept={"클라이언트 사이드에서 페이지 로딩, FCP, LCP 메트릭을 수집하여 성능 모니터링 API 엔드포인트로 0ms 비동기 전송합니다."}
+        title="클라이언트 성능 측정 훅 (instrumentation-client.ts)"
+        concept="instrumentation-client.ts가 내보내는 onRouterTransitionStart는 라우터 전환이 시작되는 순간을 알려준다. 이 데모는 그 시작 시각과 도착 페이지가 실제로 마운트되는 시각의 차이를 계산해 실제 클라이언트 전환 지연(ms)을 화면에 보여준다."
         steps={[
           {
-                    "step": 1,
-                    "title": "클라이언트 타이밍 메트릭 초기화 확인 및 페이지 인터랙션 및 타이밍 측정",
-                    "description": "브라우저 성능 API(PerformanceObserver)를 통해 웹 바이탈 수집기가 등록되는지 확인합니다. 사용자 인터랙션을 수행하며 FCP, LCP, TTFB 지표가 측정되는 과정을 관찰합니다.",
-                    "actionBadge": "메트릭 초기화"
+            step: 1,
+            title: '[상세 리포트로 이동 →] 클릭',
+            description: '실제 Next.js Link로 /station-b로 이동합니다. 이 순간 onRouterTransitionStart(url, navigationType, event)가 호출됩니다.',
+            actionBadge: '실제 이동',
           },
           {
-                    "step": 2,
-                    "title": "성능 데이터 비동기 전송 검증",
-                    "description": "측정된 성능 메트릭이 분석 서버로 정상 전송되는지 확인합니다.",
-                    "actionBadge": "전송 검증",
-                    "observe": "3단 검증 패널에서 클라이언트 웹 바이탈 수집 상태와 타이밍 수치 확인",
-                    "observeAt": "verification"
-          }
-]}
-        />
-      <DemoPlaygroundCard title={"클라이언트 성능 측정 훅 (instrumentation-client.ts) 실습"}>
-        <InstrumentationClientTimingDemo />
+            step: 2,
+            title: '도착 페이지에서 전환 시간 확인',
+            description: '상세 리포트 페이지가 마운트되는 순간 종료 시각이 기록되어, 표에 실측 전환 시간(ms)이 채워집니다.',
+            actionBadge: '실측 기록',
+            observe: '전환 표의 durationMs 값이 "측정 중…"에서 실제 ms 값으로 바뀌는지 확인',
+            observeAt: 'playground',
+          },
+          {
+            step: 3,
+            title: '[성능 대시보드로 이동 →]으로 왕복',
+            description: '되돌아오는 전환도 새 기록으로 쌓입니다. 검증 패널에서 누적된 실측 결과를 확인합니다.',
+            actionBadge: '검증 확인',
+            observe: '3단 검증 패널이 [대기 중]에서 [검증 완료]로 전환되는지 확인',
+            observeAt: 'verification',
+          },
+        ]}
+      />
+      <DemoPlaygroundCard title="instrumentation-client.ts 실습 — /zone/baseline/.../client-timing-metrics">
+        <InstrumentationClientTimingDemo station="dashboard" />
       </DemoPlaygroundCard>
       <VerificationFooter />
     </DemoContainer>
