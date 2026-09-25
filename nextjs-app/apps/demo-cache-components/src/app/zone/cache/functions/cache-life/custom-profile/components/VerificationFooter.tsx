@@ -1,107 +1,108 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+import React from 'react'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import { BINDING_SPECS, CUSTOM_PROFILE_NAME, formatAge, formatServerTime, type BindingMode, type Observation } from '../types'
+import { useObservations } from './ObservationContext'
+
+const REVALIDATE_MS = Object.fromEntries(BINDING_SPECS.map((s) => [s.mode, s.revalidate * 1000])) as Record<BindingMode, number>
+
+const age = (o: Observation, m: BindingMode) => o.requestAt - o.rows[m].generatedAt
+
+/** 연속된 두 관측 사이에 cacheId가 바뀐 지점 */
+function changes(obs: Observation[], m: BindingMode) {
+  return obs.slice(1).flatMap((b, i) => (obs[i].rows[m].cacheId !== b.rows[m].cacheId ? [[obs[i], b] as const] : []))
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+function evaluate(obs: Observation[]) {
+  const customChanges = changes(obs, 'custom')
+  const defaultChanges = changes(obs, 'default')
+  const spanMs = obs.length > 1 ? obs[obs.length - 1].requestAt - obs[0].requestAt : 0
+  // default가 짧은 실습 시간 안에 바뀌면 이상 신호(false). 안 바뀌었고 custom만 바뀌면 기대대로(true).
+  const isMatched = defaultChanges.length > 0 ? false : customChanges.length > 0 ? true : undefined
+  return { customChanges, defaultChanges, spanMs, isMatched }
+}
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter() {
+  const { observations: obs } = useObservations()
+  const { customChanges, defaultChanges, spanMs, isMatched } = evaluate(obs)
+  const mode = obs.at(-1)?.mode
+  const last = obs.at(-1)
 
-  const defaultExpected = "• next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  // expected/actual을 문자열이 아닌 ReactNode(<span>)로 감싼다: ExpectedActualPanel은 expected·actual이
+  // 둘 다 순수 문자열일 때만 자동으로 isMatched를 재계산하는데(autoMatched), 그 경로를 타면 위에서 계산한
+  // 실측 isMatched(undefined 포함)가 문자열 단순 비교 결과로 덮어써진다. <span>으로 감싸 그 경로를 우회한다.
+  const expected = (
+    <span>
+      {`• cacheLife('${CUSTOM_PROFILE_NAME}') (revalidate 4초): 4초 넘게 기다렸다 다시 요청하면 본문이 재실행되어 cacheId가 바뀜\n`}
+      {'• cacheLife() 호출 없음 (default, revalidate 15분): 실습하는 동안 cacheId·실행 시각이 그대로 유지됨\n'}
+      {mode === 'development'
+        ? '• next dev: custom 행은 expire(20초) 미만이라 요청마다 백그라운드에서 다시 만들어 두므로, 매 요청에 직전 요청 때 만든 cacheId가 보임 (경과 ≈ 요청 간격)'
+        : '• next start: 기본 in-memory 핸들러가 revalidate 지난 항목을 버리므로 custom 행은 그 요청에서 바로 다시 실행됨 (경과가 항상 4초 미만)'}
+    </span>
+  )
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = (
+    <span>
+      {obs.length === 0 && '• 관측 대기 중 (페이지 로드 후 첫 요청이 기록됩니다)\n'}
+      {obs.length > 0 && `• ${obs.length}회 요청 관측, 첫 요청부터 ${formatAge(spanMs)} 경과 (서버 모드 ${mode})\n`}
+      {customChanges.length > 0
+        ? `• custom: cacheId ${customChanges.length}회 교체 (예: 요청 #${customChanges[0][0].seq} #${customChanges[0][0].rows.custom.cacheId} → #${customChanges[0][1].seq} #${customChanges[0][1].rows.custom.cacheId})\n`
+        : '• custom: 아직 cacheId 교체가 관측되지 않았습니다. 4초 이상 간격을 두고 다시 요청해 보세요\n'}
+      {defaultChanges.length > 0
+        ? `• 불일치: default cacheId가 바뀜 (요청 #${defaultChanges[0][1].seq}). 서버 재시작·파일 수정(HMR)으로 캐시가 비워졌는지 확인하세요\n`
+        : last
+          ? `• default: ${obs.length}회 요청 동안 #${last.rows.default.cacheId} 유지 (항목 경과 ${formatAge(age(last, 'default'))} / revalidate 15분)\n`
+          : ''}
+      {last &&
+        `• custom 항목 경과: ${formatAge(age(last, 'custom'))} (revalidate ${(REVALIDATE_MS.custom / 1000).toFixed(0)}초 대비 ${
+          age(last, 'custom') >= REVALIDATE_MS.custom ? '경과' : '이내'
+        })`}
+    </span>
+  )
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <ExpectedActualPanel
-        title="next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="커스텀 프로필 vs default 재계산 시점 검증"
+        description="요청마다 서버가 보낸 cacheId와 경과 시간을 모아, custom(4초 revalidate)은 바뀌고 default(15분 revalidate)는 유지되는지 비교합니다."
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-                        <DemoDeepDiveCard title="cacheLife() 런타임 커스텀 수명 프로파일 적용">
-              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p><code>cacheLife({'{'} stale, revalidate, expire {'}'})</code> 함수는 <code>'use cache'</code> 스코프 내부에서 호출되어, 해당 캐시 엔트리의 신선도(stale), 백그라운드 revalidation 시작 시점(revalidate), 최종 메모리 폐기 시점(expire)을 런타임에 동적으로 부여하는 표준 캐시 수명 제어 함수입니다.</p>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 <code>cacheLife({'{'} stale: 5, revalidate: 15, expire: 60 {'}'})</code>을 선언한 실시간 재고 조회 함수가 5초 동안은 완전 정적 응답, 15초 이후에는 백그라운드 SWR 갱신, 60초 경과 시에는 완전 만료 후 즉시 재계산되는 3단계 수명 주기를 시각화합니다.</p>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>비즈니스 도메인별 정밀 TTL 부여</strong>: 초 단위(재고 현황), 분 단위(베스트셀러), 일 단위(회사 정보) 등 데이터의 변동 주기에 맞춰 완벽한 수명 설계 가능.</li>
-                    <li><strong>직관적인 선언형 수명 관리</strong>: 복잡한 HTTP Cache-Control 헤더 문자열을 직접 조합하지 않고 명확한 객체 인자로 TTL을 정의합니다.</li>
-                    <li><strong>서버 부하와 데이터 신선도의 최적화</strong>: Stale 시간 동안에는 서버 I/O를 100% 차단하여 성능을 극대화합니다.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li>선착순 타임세일 이벤트 잔여 수량 표시(stale: 5s, revalidate: 10s)</li>
-                    <li>실시간 인기 검색어 및 급상승 트렌드 랭킹(stale: 30s, revalidate: 60s)</li>
-                    <li>일간 결제 통계 및 일일 리포트 요약 카드(stale: 1h, revalidate: 6h)</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>'use cache' 스코프 내부 호출 필수</strong>: <code>cacheLife()</code>는 반드시 <code>'use cache'</code>가 선언된 함수나 컴포넌트 본문 내부에서 호출해야 유효합니다.</li>
-                    <li><strong>중첩 호출 시 최소값 병합</strong>: 한 컴포넌트 내부에서 여러 개의 <code>cacheLife</code>가 호출되면 가장 짧은 수명이 전체 캐시 수명으로 적용됩니다.</li>
-                  </ul>
-                </div>
-              </div>
-            </DemoDeepDiveCard>
+      {obs.length > 0 && (
+        <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
+          <table data-testid="observation-log" className="w-full min-w-[560px] text-left font-mono text-[11px]">
+            <thead className="bg-zinc-50 text-zinc-500 dark:bg-zinc-900">
+              <tr>
+                <th className="px-2 py-1.5">요청</th>
+                <th className="px-2 py-1.5">서버 시각</th>
+                {BINDING_SPECS.map((s) => (
+                  <th key={s.mode} className="px-2 py-1.5">
+                    {s.mode} (경과)
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {obs.map((o, i) => (
+                <tr key={o.requestId} className="border-t border-zinc-100 dark:border-zinc-800">
+                  <td className="px-2 py-1">#{o.seq}</td>
+                  <td className="px-2 py-1">{formatServerTime(o.requestAt)}</td>
+                  {BINDING_SPECS.map((s) => {
+                    const changedRow = i > 0 && obs[i - 1].rows[s.mode].cacheId !== o.rows[s.mode].cacheId
+                    return (
+                      <td key={s.mode} className={`px-2 py-1 ${changedRow ? 'font-bold text-amber-600 dark:text-amber-400' : ''}`}>
+                        #{o.rows[s.mode].cacheId} ({formatAge(age(o, s.mode))})
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
