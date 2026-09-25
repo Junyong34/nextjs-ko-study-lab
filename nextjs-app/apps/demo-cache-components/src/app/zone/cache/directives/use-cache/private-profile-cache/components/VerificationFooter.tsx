@@ -1,107 +1,118 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+import { ExpectedActualPanel } from '@study/demo-kit'
+import { viewerName, VIEWS } from '../types'
+import { evaluate } from './evaluate'
+import { useObservations } from './ObservationContext'
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const routeLabel = (id: string) => VIEWS.find((v) => v.id === id)?.label ?? id
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter() {
+  const { visits, execChecks, probe } = useObservations()
+  const { reuse, noServerExec, execDuringReuse, reloadFresh, persisted, viewers, crossShared, isolated, probeRejected, isMatched } =
+    evaluate(visits, probe, execChecks)
 
-  const defaultExpected = "• 'use cache: private' 개인화 주문 내역 캐시 격리의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  const expected = (
+    <span>
+      {'• 탭을 오가도(같은 문서): 같은 사용자·같은 탭은 cacheId 그대로 (브라우저 메모리 재사용, 서버 실행 없음)\n'}
+      {'• 새로고침(F5) 후: 같은 사용자·같은 탭이라도 새 cacheId (서버에도 브라우저에도 남지 않음)\n'}
+      {'• 사용자 전환: 다른 사용자는 절대 같은 cacheId를 받지 않음 (사용자 간 공유 없음)\n'}
+      {"• 대조군: 일반 'use cache' 안의 cookies()는 오류로 거부됨"}
+    </span>
+  )
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual = (
+    <span>
+      {visits.length === 0 && '• 관측 대기 중 (탭이 화면에 나타날 때마다 기록됩니다)\n'}
+      {reuse
+        ? `• 재사용 확인: ${routeLabel(reuse[0].route)} #${reuse[0].seq} → 다른 탭 → #${reuse[1].seq} 모두 cacheId #${reuse[0].cacheId} (본문 실행 ${reuse[0].generatedAt})\n`
+        : '• 재사용: 아직 다른 탭을 거쳐 같은 탭으로 돌아오지 않았습니다\n'}
+      {execDuringReuse
+        ? `• 불일치: 재사용 표시 전후 서버 실행 횟수 ${execDuringReuse[0].count}회 → ${execDuringReuse[1].count}회 (서버가 다시 실행함)\n`
+        : noServerExec
+          ? `• 서버 미실행 확인: 재사용 표시 전후 조회 ${noServerExec[0].checkedAt} → ${noServerExec[1].checkedAt} 모두 ${noServerExec[0].count}회\n`
+          : '• 서버 실행 횟수: 재사용 탭 이동 전후로 [서버 실행 횟수 조회]를 눌러 비교합니다\n'}
+      {persisted
+        ? `• 불일치: 새로고침 전후 기록 #${persisted[0].seq}·#${persisted[1].seq}가 같은 cacheId #${persisted[0].cacheId}\n`
+        : reloadFresh
+          ? `• 새로고침 후 새 값: ${routeLabel(reloadFresh[0].route)} #${reloadFresh[0].cacheId}(문서 ${reloadFresh[0].pageLoadId}) → #${reloadFresh[1].cacheId}(문서 ${reloadFresh[1].pageLoadId})\n`
+          : '• 새로고침: 아직 같은 사용자로 새로고침 전후를 비교하지 않았습니다\n'}
+      {crossShared
+        ? `• 불일치: ${viewerName(crossShared[0].viewer)}·${viewerName(crossShared[1].viewer)}가 같은 cacheId #${crossShared[0].cacheId}\n`
+        : isolated
+          ? `• 사용자 격리 확인: ${viewers.map(viewerName).join('·')} 기록 ${visits.length}건 중 사용자 간 공유된 cacheId 0건\n`
+          : '• 사용자 격리: 두 사용자로 모두 조회하면 확인합니다\n'}
+      {probe === null
+        ? '• 대조군: 아직 실행하지 않았습니다'
+        : probeRejected
+          ? `• 대조군 오류 확인: ${probe.ok ? '' : `${probe.name}${probe.digest ? ` (digest ${probe.digest})` : ''}`}`
+          : '• 불일치: 일반 use cache에서 cookies()가 값을 반환했습니다'}
+    </span>
+  )
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <ExpectedActualPanel
-        title="'use cache: private' 개인화 주문 내역 캐시 격리 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="'use cache: private' 저장 위치와 사용자 격리 검증"
+        description="탭이 화면에 나타날 때 서버가 보낸 cacheId·본문 실행 시각을 기록해 문서 로드 ID·사용자·탭 기준으로 비교합니다."
+        expected={expected}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
       />
-                                    <DemoDeepDiveCard title="사용자 세션 스코프 개인화 데이터 'use cache' 패턴">
-                    <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                        <p>개인화 데이터 캐싱은 <code>'use cache'</code> 함수에 사용자 식별자(User ID, Tenant ID)를 명시적 인자로 주입하여 캐시 키를 사용자 단위로 격리하고, 전역 캐시와 개인 캐시의 오염을 방지하는 표준 보안 캐싱 패턴입니다.</p>
-                      </div>
-
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                        <p>이 예제에서는 사용자 A(user_101)와 사용자 B(user_202)의 개인 장바구니 요약 데이터를 <code>getUserCart(userId)</code>로 캐싱하고, 사용자별 캐시가 서로 섞이지 않는지 확인합니다.</p>
-                      </div>
-
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                          <li><strong>사용자별 캐시 분리</strong>: 사용자 ID를 캐시 키에 포함해 다른 사용자의 개인정보나 결제 정보가 섞이지 않도록 합니다.</li>
-                          <li><strong>개인화 화면 재사용</strong>: 마이페이지나 개인 대시보드처럼 사용자마다 다른 화면도 사용자별로 캐시할 수 있습니다.</li>
-                          <li><strong>사용자별 독립 캐시 무효화</strong>: 사용자 A가 장바구니를 수정하면 <code>cacheTag('user-cart-' + userId)</code>를 통해 해당 사용자의 캐시만 정밀 타겟 무효화합니다.</li>
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                          <li>쇼핑몰 마이페이지의 회원 등급, 보유 적립금, 사용 가능 쿠폰 수 요약</li>
-                          <li>B2B SaaS 멀티테넌트 대시보드의 테넌트별 구독 플랜 및 사용량 통계</li>
-                          <li>개인 맞춤형 추천 알고리즘 결과 및 최근 본 상품 목록</li>
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                          <li><strong>쿠키 직접 참조 금지</strong>: <code>'use cache'</code> 내부에서 <code>cookies()</code>를 직접 호출하면 다이나믹 렌더링으로 bailout될 수 있으므로, 외부에서 세션을 확인하고 <code>userId</code>를 인자로 넘깁니다.</li>
-                          <li><strong>cacheLife 짧은 수명 권장</strong>: 개인화 데이터는 변경 빈도가 높으므로 <code>cacheLife('minutes')</code> 등 적절히 짧은 수명을 설정하거나 이벤트 기반 태그 무효화를 결합해야 합니다.</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </DemoDeepDiveCard>
+      {process.env.NODE_ENV === 'development' && (
+        <p className="rounded-md border border-amber-300 bg-amber-50 p-2.5 text-[11px] leading-relaxed text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
+          dev 서버(next dev)에서는 저장 위치를 판정할 수 없습니다. 링크 프리페치가 동작하지 않아 탭 이동마다 서버 요청이 가고, 서버는
+          본문을 실행하면서도 같은 쿠키로 들어온 직전 요청의 결과를 돌려주는 dev 전용 동작이 관측됩니다(다른 브라우저라도 쿠키가 같으면 같은
+          cacheId). [서버 실행 횟수 조회]가 탭 이동 뒤에도 늘어나는 것으로 구분할 수 있습니다. 프로덕션 빌드(next build → next start)에서
+          확인하세요.
+        </p>
+      )}
+      {visits.length > 0 && (
+        <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
+          <table data-testid="observation-log" className="w-full text-left font-mono text-[11px]">
+            <thead className="bg-zinc-50 text-zinc-500 dark:bg-zinc-900">
+              <tr>
+                <th className="px-2 py-1.5">기록</th>
+                <th className="px-2 py-1.5">문서</th>
+                <th className="px-2 py-1.5">사용자</th>
+                <th className="px-2 py-1.5">탭</th>
+                <th className="px-2 py-1.5">cacheId</th>
+                <th className="px-2 py-1.5">본문 실행 시각</th>
+                <th className="px-2 py-1.5">서버 실행 순번</th>
+                <th className="px-2 py-1.5">화면 표시 시각</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visits.map((v, i) => {
+                const reused = visits.slice(0, i).some((p) => p.cacheId === v.cacheId)
+                return (
+                  <tr key={`${v.pageLoadId}-${v.seq}`} className="border-t border-zinc-100 dark:border-zinc-800">
+                    <td className="px-2 py-1">#{v.seq}</td>
+                    <td className="px-2 py-1">{v.pageLoadId}</td>
+                    <td className="px-2 py-1">{viewerName(v.viewer)}</td>
+                    <td className="px-2 py-1">{routeLabel(v.route)}</td>
+                    <td className="px-2 py-1">
+                      #{v.cacheId}{' '}
+                      <span className={reused ? 'text-indigo-600 dark:text-indigo-400' : 'text-amber-600 dark:text-amber-400'}>
+                        {reused ? '(재사용)' : '(새 실행)'}
+                      </span>
+                    </td>
+                    <td className="px-2 py-1">{v.generatedAt}</td>
+                    <td className="px-2 py-1">{v.execNoForViewer}번째</td>
+                    <td className="px-2 py-1 text-emerald-700 dark:text-emerald-400">{v.shownAt}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {execChecks.length > 0 && (
+        <p data-testid="exec-check-log" className="font-mono text-[11px] text-zinc-600 dark:text-zinc-400">
+          서버 실행 횟수 조회:{' '}
+          {execChecks.map((c) => `${viewerName(c.viewer)} ${c.count}회(${c.checkedAt})`).join(' → ')}
+        </p>
+      )}
     </div>
   )
 }
