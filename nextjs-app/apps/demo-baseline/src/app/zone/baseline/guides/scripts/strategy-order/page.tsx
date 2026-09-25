@@ -1,47 +1,37 @@
-'use client'
-import React, { useState } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ScriptStrategyDemo } from './components/ScriptStrategyDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
-interface ScriptLoad {
-  strategy: string
-  at: number
-}
+import React from 'react'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { StrategyOrderWorkspace } from './components/StrategyOrderWorkspace'
 
 export default function DemoPage() {
-  const [loads, setLoads] = useState<ScriptLoad[]>([])
-
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"next/script 로딩 전략(beforeInteractive/afterInteractive/lazyOnload)"}
-        concept={"next/script의 3대 로딩 전략을 상황에 맞게 배치하여, 보안/결제는 beforeInteractive, 분석(GA)은 afterInteractive(기본값), 챗봇은 lazyOnload로 실행하여 LCP 성능을 극대화합니다."}
+        title="next/script 배치 전략: 실행 순서 · 라우트 로드 범위 · 중복 방지"
+        concept="한 화면에 서드파티 스크립트 여러 개를 둘 때, 실제 실행 순서는 선언 순서가 아니라 strategy와 도착 시점이 정하고, 로드 범위는 스크립트를 둔 layout/page가 정하며, 중복 실행은 id가 막습니다. 로컬 Route Handler가 서빙하는 실제 JS의 실행 시각으로 확인합니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "[beforeInteractive]: 보안/결제 모듈 최우선 로드 확인 및 [afterInteractive]: 기본 분석 도구(GA) 실행 점검",
-                    "description": "페이지 하이드레이션 전에 실행되어야 하는 필수 스크립트 실행 순서를 확인합니다. 페이지 인터랙션 준비 완료 직후 백그라운드에서 로드되는 표준 전략을 점검합니다.",
-                    "actionBadge": "우선순위 점검"
+            step: 1,
+            title: '실측 타임라인에서 실행 순서 확인',
+            description: '먼저 선언된 core-sdk(800ms 지연)보다 core-plugin이 먼저 실행되고, onReady 뒤에 렌더한 chained 플러그인만 코어를 찾는지, chat-widget이 load 이벤트 뒤에 오는지 봅니다.',
+            actionBadge: '순서 관찰',
           },
           {
-                    "step": 2,
-                    "title": "[lazyOnload]: 채팅봇 등 부가 기능 지연 로딩 관찰",
-                    "description": "브라우저 유휴 시간(Idle)까지 로딩을 미뤄 초기 로딩 성능(LCP)을 방어하는 동작을 검증합니다.",
-                    "actionBadge": "전략 대조 검증",
-                    "observe": "3가지 next/script strategy 속성에 따른 스크립트 다운로드 및 실행 타임라인 분기 관찰",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: '[campaign] → [campaign/detail] → [루트 페이지] 이동',
+            description: 'Link로 실제 하위 라우트를 오가며 layout-analytics와 core-sdk가 다시 실행되지 않는지, campaign-pixel이 campaign 진입 때 처음 요청되는지 확인합니다.',
+            actionBadge: 'Link 이동',
+          },
+          {
+            step: 3,
+            title: '[위젯 슬롯 추가] / [마지막 슬롯 제거] 반복',
+            description: '같은 id의 스크립트는 1회로 고정되고, id 없는 인라인 스크립트만 마운트마다 늘어나는지 봅니다.',
+            actionBadge: 'id 중복 방지',
+            observe: '4개 판정이 모두 실측값으로 "일치"가 되는지 확인',
+            observeAt: 'verification',
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"next/script strategy 로드 순서 최적화 실습"}>
-        <ScriptStrategyDemo onLoadsChange={setLoads} />
-      </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={loads.length > 0 ? loads.length === 3 : undefined}
-        actual={loads.length > 0 ? `- 로드 완료된 전략(window.__scriptLoads): ${loads.map((l) => l.strategy).join(', ')} (${loads.length}/3)` : undefined}
-        expected="beforeInteractive, afterInteractive, lazyOnload 3개 실제 Route Handler 스크립트가 모두 로드되어 window.__scriptLoads에 기록되어야 한다."
-      />
+      <StrategyOrderWorkspace />
     </DemoContainer>
   )
 }
