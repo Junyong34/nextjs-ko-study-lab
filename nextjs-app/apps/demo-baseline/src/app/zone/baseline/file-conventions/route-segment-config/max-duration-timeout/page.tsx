@@ -1,46 +1,51 @@
 import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
-
-export const metadata: Metadata = getDemoMetadata('baseline', 'file-conventions/route-segment-config/max-duration-timeout')
-
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { MaxDurationTimeoutDemo } from './components/MaxDurationTimeoutDemo'
 import { VerificationFooter } from './components/VerificationFooter'
+
+export const metadata: Metadata = getDemoMetadata(
+  'baseline',
+  'file-conventions/route-segment-config/max-duration-timeout',
+)
+
+/**
+ * 이 페이지에서 호출하는 모든 Server Action(./actions.ts)의 기본 타임아웃을 결정한다.
+ * ./settle-batch/route.ts는 별도로 자신만의 maxDuration(3초)을 선언한다 — 세그먼트마다 독립적이다.
+ */
+export const maxDuration = 6
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"export const maxDuration 서버리스 실행 제한 시간"}
-        concept={"Vercel 서버리스 함수 실행 제한 시간을 maxDuration = 60초로 설정하여 대용량 PDF 생성이나 외부 PG사 연동 시 504 Gateway Timeout을 방지합니다."}
+        title="export const maxDuration — 서버 로직 최대 실행 시간 선언"
+        concept="maxDuration은 라우트 세그먼트 서버 로직의 최대 실행 시간(초)을 배포 플랫폼에 전달하는 선언일 뿐이다. 실제 강제 종료는 Vercel 같은 배포 플랫폼이 수행하며, 로컬 next dev/start는 이 값으로 요청을 끊지 않는다 — 이 데모는 그 차이를 실측으로 보여준다."
         steps={[
-        {
-        "step": 1,
-        "title": "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-        "description": "실행 시간이 긴 작업을 수행할 상품 데이터를 선택합니다.",
-        "actionBadge": "데이터 선택"
-        },
-        {
-        "step": 2,
-        "title": "[+] 수량 조절 후 [동작 실행] 클릭",
-        "description": "장시간 소요되는 서버리스 API 핸들러 호출을 트리거합니다.",
-        "actionBadge": "API 호출"
-        },
-        {
-        "step": 3,
-        "title": "maxDuration 타임아웃 방지 및 200 완료 확인",
-        "description": "maxDuration 설정으로 15초 이상의 비동기 작업이 504 에러 없이 200 OK로 완료되는지 확인합니다.",
-        "actionBadge": "200 완료",
-        "observe": "3단 검증 패널에서 maxDuration 설정값과 장기 실행 작업의 성공 상태 대조",
-        "observeAt": "verification"
-        }
+          {
+            step: 1,
+            title: '주문 건수를 늘려 [+] 클릭',
+            description: '건당 약 0.7초가 실제로 걸리므로, 건수를 늘리면 처리 시간이 실제로 늘어난다.',
+            actionBadge: '건수 조절',
+          },
+          {
+            step: 2,
+            title: '[Server Action으로 정산 실행] 또는 [Route Handler로 정산 실행] 클릭',
+            description: 'actions.ts의 Server Action(페이지 maxDuration=6초) 또는 settle-batch/route.ts(자체 maxDuration=3초)를 실제로 호출한다.',
+            actionBadge: 'API 호출',
+          },
+          {
+            step: 3,
+            title: '선언값과 실측 처리 시간 비교',
+            description: '건수를 충분히 늘려 선언값(6초 또는 3초)을 넘겨도 로컬은 요청을 끝까지 실행해 200으로 응답하는지 확인한다.',
+            actionBadge: '실측 대조',
+            observe: '응답의 declaredMaxDurationSeconds·elapsedMs·exceededDeclaredLimit 필드가 검증 패널에 그대로 반영되는지',
+            observeAt: 'verification',
+          },
         ]}
-        />
-      <DemoPlaygroundCard title={"주문 정산 배치 maxDuration 타임아웃 제한 실습"}>
-        <MaxDurationTimeoutDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      />
+      <MaxDurationTimeoutDemo pageMaxDurationSeconds={maxDuration} />
+      <VerificationFooter pageMaxDurationSeconds={maxDuration} />
     </DemoContainer>
   )
 }
