@@ -1,111 +1,102 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { DemoDeepDiveCard, ExpectedActualPanel } from '@study/demo-kit'
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const base = '/zone/baseline/file-conventions/default/hard-reload-restore'
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter() {
+  const pathname = usePathname()
+  const previous = useRef(pathname)
+  const [soft, setSoft] = useState(false)
+  const [screens, setScreens] = useState<Record<string, string>>({})
 
-  const defaultExpected = "• 새로고침(Hard Reload) 시 슬롯 복구의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  useEffect(
+    function observeSlots() {
+      if (previous.current !== pathname) setSoft(true)
+      previous.current = pathname
+      const root = document.getElementById('hard-reload-observation')
+      if (!root) return
+      function read() {
+        setScreens(
+          Object.fromEntries(
+            Array.from(root!.querySelectorAll<HTMLElement>('[data-slot]')).map((el) => [
+              el.dataset.slot!,
+              el.dataset.screen!,
+            ]),
+          ),
+        )
+      }
+      read()
+      const observer = new MutationObserver(read)
+      observer.observe(root, { childList: true, subtree: true, attributes: true })
+      return () => observer.disconnect()
+    },
+    [pathname],
+  )
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const onDetail = pathname === `${base}/preview-detail`
+  // 하드 리로드(soft=false)로 상세 URL에 도착했을 때만 children이 default.tsx로 복구된다.
+  // 소프트 내비게이션(soft=true)으로 이동했을 때는 children이 이전 화면(home)을 유지한다.
+  const expectedChildren = onDetail && !soft ? 'default' : 'home'
+  const expectedPreview = onDetail ? 'detail' : 'home'
+  const loaded = Object.keys(screens).length === 2
+  const isMatched = loaded
+    ? screens.children === expectedChildren && screens.preview === expectedPreview
+    : undefined
 
   return (
-    <div className="space-y-4">
+    <>
       <ExpectedActualPanel
-        title="새로고침(Hard Reload) 시 슬롯 복구 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="children 슬롯 vs preview 슬롯 실제 화면 대조"
+        expected={
+          <span>{`children: ${expectedChildren}\npreview: ${expectedPreview}`}</span>
+        }
+        actual={
+          loaded ? (
+            <span className="break-all">
+              {`경로: ${pathname}\n탐색 방식: ${soft ? '소프트 내비게이션(Link)' : '하드 리로드/최초 로드'}\nchildren: ${screens.children}\npreview: ${screens.preview}`}
+            </span>
+          ) : (
+            <span>화면을 읽는 중이다.</span>
+          )
+        }
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="data-slot / data-screen 값을 실제 DOM에서 읽어 대조한다. 이 라우트를 벗어나면(다른 데모로 이동) 값이 초기화된다."
       />
-      <DemoDeepDiveCard title="default.tsx를 통한 새로고침(Hard Reload) 시 슬롯 상태 복구">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>
-              Parallel Routes 사용 시 브라우저 새로고침(Hard Reload)이 발생하면 Next.js 서버는 이전 클라이언트 탐색 상태를 알 수 없습니다. 이 때 일치하지 않는 모든 병렬 슬롯에 대해 <code>default.tsx</code>를 검색하여 렌더링함으로써 404 에러를 방지하고 화면을 복구합니다.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>
-              본 데모에서는 사용자가 <code>@sidebar</code> 슬롯에서 특정 필터를 탐색하던 중 브라우저 새로고침을 실행했을 때, 서버가 해당 슬롯의 <code>default.tsx</code>를 즉각 호출하여 기본 필터 요약 UI로 안전하게 초기화 복구하는 메커니즘을 실증합니다.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>하드 리로드 404 원천 차단</strong>: 클라이언트 메모리에만 존재하던 슬롯 상태가 새로고침으로 소실되더라도 서버 사이드 렌더링(SSR) 단계에서 404 없이 복구합니다.</li>
-              <li><strong>SSR 및 SSG 무결성 유지</strong>: 서버에서 사전 생성되는 HTML에 모든 슬롯의 디폴트 마크업이 누락 없이 채워집니다.</li>
-              <li><strong>사용자 탐색 연속성 보장</strong>: 새로고침 후에도 깨지지 않는 완전한 대시보드 레이아웃을 제공합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>쇼핑몰 다중 탭 검색/필터 패널의 새로고침 시 기본 선택 상태 복원</li>
-              <li>관리자 콘솔의 실시간 시스템 로그 및 알림 슬롯 복구</li>
-              <li>복합 결제/주문서 화면의 서브 위젯 상태 안정화</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>모든 병렬 슬롯에 default.tsx 배치 권장</strong>: Parallel Routes를 도입할 때는 예상치 못한 새로고침에 대비하여 모든 <code>@slot</code> 폴더 내에 <code>default.tsx</code>를 필수로 생성해야 프로덕션 404 장애를 예방할 수 있습니다.</li>
-              <li><strong>Root level default.tsx</strong>: 루트 슬롯뿐 아니라 하위 중첩 슬롯에서도 각 계층에 맞는 <code>default.tsx</code>를 배치해야 합니다.</li>
-            </ul>
-          </div>
+      <DemoDeepDiveCard title="같은 URL, 다른 결과 — default.tsx가 필요한 이유">
+        <div>
+          <h5 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">1. 핵심 메커니즘</h5>
+          <p>
+            이 세그먼트의 <code>layout.tsx</code>는 <code>children</code>(암시적 슬롯)과 <code>preview</code>(
+            <code>@preview</code> 폴더, 명명된 슬롯) 두 개를 동시에 전달받는다. <code>@</code>로 시작하는 폴더 이름은
+            URL 경로에 나타나지 않는다.
+          </p>
+        </div>
+        <div>
+          <h5 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">2. 소프트 내비게이션 vs 하드 리로드</h5>
+          <p>
+            <code>&lt;Link href=&quot;{base}/preview-detail&quot;&gt;</code>로 이동하면 라우터는 <code>preview</code> 슬롯의
+            활성 상태를 <code>preview-detail/page.tsx</code>로 갱신하면서, 그 URL에 대응하는 페이지가 없는{' '}
+            <code>children</code> 슬롯은 직전에 렌더링해 둔 상태(home)를 클라이언트 메모리에서 그대로 유지한다.
+            브라우저 새로고침은 이 메모리를 지우므로, 서버는 <code>children</code>에 대해 다시 <code>/preview-detail</code>과
+            일치하는 페이지를 찾다가 없으면 <code>default.tsx</code>를 렌더링한다.
+          </p>
+        </div>
+        <div>
+          <h5 className="mb-1 font-semibold text-zinc-900 dark:text-zinc-100">3. 실무 주의사항</h5>
+          <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+            <li>
+              병렬 라우트를 쓰는 모든 세그먼트는 명명된 슬롯뿐 아니라 <code>children</code>에도 각자의{' '}
+              <code>default.tsx</code>가 필요하다. 없으면 그 슬롯 경로는 새로고침 시 404가 된다.
+            </li>
+            <li>
+              이전의 404 동작을 유지하고 싶다면 <code>default.tsx</code>에서 <code>notFound()</code>를 호출하면 된다.
+            </li>
+          </ul>
         </div>
       </DemoDeepDiveCard>
-    </div>
+    </>
   )
 }
