@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 <code>poweredByHeader: false</code> 적용 전후의 HTTP 응답 헤더를 비교하여, 외부 공격자에게 서버가 Next.js 프레임워크 기반으로 구동되고 있다는 정보를 노출하지 않도록 차단하는 보안 검증을 수행합니다.</p>
+            <p>이 demo-baseline 앱의 <code>next.config.ts</code>에는 실제로 <code>poweredByHeader: false</code>가 설정되어 있습니다. 버튼을 누르면 이 페이지 자신의 URL을 브라우저에서 다시 <code>fetch()</code>하고, 그 응답의 <code>Headers</code> 객체에서 <code>x-powered-by</code>를 직접 읽어 <code>null</code>인지 확인합니다 — 설정을 켜고 끈 두 상태를 동시에 비교하는 것이 아니라, "설정을 켠 이 앱에서 실제로 헤더가 빠져 있다"는 사실 자체를 실측합니다.</p>
           </div>
 
           <div>

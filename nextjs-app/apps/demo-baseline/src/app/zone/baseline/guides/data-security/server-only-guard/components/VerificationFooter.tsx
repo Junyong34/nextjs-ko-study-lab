@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 DB 쿼리 모듈(<code>lib/db/orders.ts</code>) 상단에 <code>import 'server-only'</code>를 주입하여, 클라이언트 컴포넌트가 해당 모듈을 직접 import하려고 시도할 때 Webpack/Turbopack 빌드 엔진이 번들링을 거부하고 에러를 출력하는 메커니즘을 실증합니다.</p>
+            <p>이 데모의 <code>lib/orderSyncSecret.ts</code> 최상단에 실제로 <code>import 'server-only'</code>가 선언되어 있습니다. "빌드 타임 에러"는 클라이언트 컴포넌트가 실제로 이 파일을 import해야만 재현되는데, 그러면 이 페이지 자체가 빌드에 실패해 서비스할 수 없으므로 브라우저에서 직접 재연할 수 없습니다. 대신 [클라이언트 번들 스캔] 버튼이 <code>server-only</code>가 실제로 보장하는 결과 — "이 페이지가 브라우저로 내려보낸 모든 JS 청크 안 어디에도 시크릿 문자열이 없다" — 를 직접 검증합니다: 현재 문서의 모든 <code>&lt;script&gt;</code> 청크를 다시 <code>fetch()</code>해 텍스트를 검사합니다.</p>
           </div>
 
           <div>
@@ -98,6 +98,8 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>상단 임포트 위치 준수</strong>: 모듈 파일의 가장 첫 번째 줄에 <code>import 'server-only'</code>를 배치해야 모듈 로딩 즉시 가드가 평가됩니다.</li>
               <li><strong>클라이언트 전용 파일에는 client-only</strong>: 반대로 브라우저 <code>window/localStorage</code> 전용 파일이 서버에서 실행되는 것을 방지할 때는 <code>client-only</code> 패키지를 사용할 수 있습니다.</li>
+              <li><strong>이 스캔이 실제로 무엇을 증명하는가</strong>: 만약 <code>lib/orderSyncSecret.ts</code>에서 <code>import 'server-only'</code>를 지우고 어떤 클라이언트 컴포넌트가 그 함수를 직접 호출하도록 바꾼다면, 시크릿 상수가 클라이언트 JS 청크 안에 문자열로 그대로 번들링되어 이 스캔이 그 청크에서 시크릿 접두사를 실제로 찾아내며 실패(불일치)로 바뀝니다. 즉 <code>server-only</code>가 없으면 이 검증이 잡아낼 수 있는 실수를, 있기 때문에 애초에 발생하지 않게(빌드 단계에서) 막아주는 것입니다.</li>
+              <li><strong>스캔 범위의 한계</strong>: 이 스캔은 현재 페이지가 이미 내려받은 <code>&lt;script&gt;</code> 청크만 검사합니다. 아직 로드되지 않은(지연 로딩) 청크까지 완전히 보장하지는 않으므로, 실무에서는 이 스캔이 아니라 <code>server-only</code>의 빌드 타임 차단 자체가 1차 방어선입니다.</li>
             </ul>
           </div>
         </div>

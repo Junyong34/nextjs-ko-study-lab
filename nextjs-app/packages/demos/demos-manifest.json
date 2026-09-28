@@ -571,7 +571,7 @@
     "title": "server-only 패키지를 통한 클라이언트 번들 유출 차단",
     "doc": "2-guides/data-security.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/data-security/react-taint-api",
@@ -592,7 +592,7 @@
     "title": "NEXT_PUBLIC_ vs 서버 환경변수 노출 범위",
     "doc": "2-guides/environment-variables.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/environment-variables/runtime-env",
@@ -1586,7 +1586,7 @@
     "title": "poweredByHeader: false 서버 정보 은닉 보안",
     "doc": "3-api-reference/3.5-config/3.5.1-next-config-js/poweredByHeader.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "config/cache-components/enable-flag",

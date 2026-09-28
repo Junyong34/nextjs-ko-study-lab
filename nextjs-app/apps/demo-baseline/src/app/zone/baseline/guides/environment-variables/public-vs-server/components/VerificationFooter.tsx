@@ -72,7 +72,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
 
           <div>
             <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 서버 컴포넌트와 클라이언트 컴포넌트에서 각각 <code>process.env</code>를 참조할 때, 서버 전용 키는 클라이언트 번들에서 <code>undefined</code>로 안전하게 숨겨지고 공개 키만 브라우저에 안전하게 노출되는 범위를 비교 검증합니다.</p>
+            <p>이 앱의 실제 <code>.env</code>에는 <code>NEXT_PUBLIC_STORE_NAME</code>과 <code>INTERNAL_ADMIN_EMAIL</code> 두 값이 정의돼 있습니다. 왼쪽 카드는 클라이언트 컴포넌트 코드가 직접 <code>process.env.NEXT_PUBLIC_STORE_NAME</code> / <code>process.env.INTERNAL_ADMIN_EMAIL</code>을 참조한 결과이고, 오른쪽 카드는 Server Action이 서버에서 같은 두 키를 읽은 결과입니다. 클라이언트는 접두사 없는 값을 <code>undefined</code>로만 보고, 서버는 요청마다 실제 값을 읽습니다.</p>
           </div>
 
           <div>
@@ -98,6 +98,7 @@ export function VerificationFooter(props: VerificationFooterProps = {}) {
             <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
               <li><strong>NEXT_PUBLIC_에 비밀키 선언 절대 금지</strong>: <code>NEXT_PUBLIC_</code>이 붙은 변수는 소스코드 검색뿐만 아니라 브라우저 개발자 도구의 번들 파일에서도 누구나 열람할 수 있으므로 절대 시크릿을 저장하면 안 됩니다.</li>
               <li><strong>비구조화 할당(Destructuring) 제약</strong>: 클라이언트 코드에서 <code>const {'{'} NEXT_PUBLIC_KEY {'}'} = process.env</code> 형태로 구조분해 할당하면 Webpack의 인라인 치환이 동작하지 않을 수 있으므로 <code>process.env.NEXT_PUBLIC_KEY</code>로 전체 경로를 직접 참조해야 합니다.</li>
+              <li><strong>'use client' 컴포넌트도 최초 1회는 서버에서 실행됨</strong>: 이 데모를 만들며 실제로 겪은 함정입니다 — 클라이언트 컴포넌트의 렌더 본문에서 바로 <code>process.env.INTERNAL_ADMIN_EMAIL</code>을 읽으면, 최초 SSR 시점엔 그 코드가 실제 Node.js 서버 프로세스에서 실행되므로 진짜 값이 그대로 HTML에 섞여 나갑니다. 이 데모는 <code>useEffect</code>(브라우저에서만 실행) 안에서 읽어 이 문제를 피합니다.</li>
             </ul>
           </div>
         </div>

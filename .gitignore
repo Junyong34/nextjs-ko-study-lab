@@ -7,6 +7,7 @@
 .env
 .env.*
 !.env.example
+!nextjs-app/apps/demo-baseline/.env
 
 # Node.js dependencies and package-manager files
 node_modules/

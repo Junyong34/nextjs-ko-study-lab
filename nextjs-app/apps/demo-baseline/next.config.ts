@@ -14,6 +14,9 @@ const publicOrigin = withRelatedProject({
 const nextConfig: NextConfig = {
   assetPrefix: '/demo-static/baseline',
   images: { unoptimized: true },
+  // config/powered-by-header/hide-x-powered 데모의 실제 검증 대상.
+  // https://nextjs.org/docs/app/api-reference/config/next-config-js/poweredByHeader
+  poweredByHeader: false,
   reactCompiler: REACT_COMPILER_SETTINGS,
   experimental: {
     turbopackRustReactCompiler: USE_TURBOPACK_RUST_REACT_COMPILER,

@@ -1,15 +1,19 @@
 'use client'
 import React from 'react'
 import type { OrderSyncResult } from '../actions'
+import type { BundleScanResult } from '../lib/scanBundle'
 
 interface ServerOnlyGuardDemoProps {
   selectedProduct: string
   orderQuantity: number
   result: OrderSyncResult | null
   isPending: boolean
+  scanResult: BundleScanResult | null
+  isScanning: boolean
   onSelectProduct: (id: string) => void
   onChangeQuantity: (delta: number) => void
   onSync: () => void
+  onScan: () => void
 }
 
 export function ServerOnlyGuardDemo({
@@ -17,9 +21,12 @@ export function ServerOnlyGuardDemo({
   orderQuantity,
   result,
   isPending,
+  scanResult,
+  isScanning,
   onSelectProduct,
   onChangeQuantity,
   onSync,
+  onScan,
 }: ServerOnlyGuardDemoProps) {
   return (
     <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
@@ -82,6 +89,31 @@ export function ServerOnlyGuardDemo({
             <div className="pt-1 text-[11px] text-zinc-500">동작 실행 전</div>
           )}
         </div>
+      </div>
+
+      <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 text-xs dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <span className="font-bold text-zinc-700 dark:text-zinc-300">클라이언트 번들 유출 스캔</span>
+          <button
+            onClick={onScan}
+            disabled={!result || isScanning}
+            className="rounded bg-emerald-600 px-3 py-1 text-xs font-bold text-white hover:bg-emerald-700 disabled:opacity-50 cursor-pointer"
+          >
+            {isScanning ? '스캔 중...' : '클라이언트 번들 스캔'}
+          </button>
+        </div>
+        {!result && <p className="text-[11px] text-zinc-500">먼저 [동작 실행]을 눌러 시크릿 접두사(secretPreview)를 받아야 스캔할 수 있습니다.</p>}
+        {scanResult && (
+          <div className="font-mono text-[11px] space-y-1">
+            <div>스캔한 JS 청크 수: {scanResult.scannedCount}</div>
+            <div>
+              시크릿 접두사 발견:{' '}
+              <span className={scanResult.foundIn.length > 0 ? 'font-bold text-rose-600' : 'font-bold text-emerald-600 dark:text-emerald-400'}>
+                {scanResult.foundIn.length}개 청크
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -4,37 +4,33 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/environment-variables/public-vs-server')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { EnvVariablesDemo } from './components/EnvVariablesDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { EnvPlayground } from './components/EnvPlayground'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"NEXT_PUBLIC_ 환경변수 vs 서버 전용 시크릿 분리"}
-        concept={"NEXT_PUBLIC_ 접두사가 붙은 환경변수(NEXT_PUBLIC_API_URL)만 클라이언트 번들에 인라인 주입되고, 접두사가 없는 DB_PASSWORD/SECRET_KEY는 서버 런타임에만 격리 보관됩니다."}
+        title="NEXT_PUBLIC_ 환경변수 vs 서버 전용 시크릿 분리"
+        concept="NEXT_PUBLIC_ 접두사가 붙은 환경변수(NEXT_PUBLIC_STORE_NAME)만 빌드 시 클라이언트 번들에 인라인되고, 접두사 없는 값(INTERNAL_ADMIN_EMAIL)은 서버에서만 접근됩니다. 이 앱의 실제 .env에 두 값이 정의되어 있습니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "클라이언트 공개 환경변수(NEXT_PUBLIC_API_URL) 점검 및 서버 전용 비밀 환경변수(DB_SECRET_KEY) 격리 상태 검사",
-                    "description": "브라우저 번들에 인라인으로 번들링되어 노출이 허용된 공개 URL 값을 확인합니다. 클라이언트 코드에서 접근 시 undefined로 보호되는 서버 전용 시크릿을 점검합니다.",
-                    "actionBadge": "공개 변수 확인"
+            step: 1,
+            title: "브라우저 쪽 값과 서버 쪽 값을 나란히 비교",
+            description: "왼쪽 카드는 클라이언트 코드가 직접 process.env를 참조한 결과입니다. NEXT_PUBLIC_STORE_NAME은 보이고 INTERNAL_ADMIN_EMAIL은 undefined인지 확인합니다.",
+            actionBadge: "클라이언트 값 확인",
           },
           {
-                    "step": 2,
-                    "title": "클라이언트 번들 분석을 통한 비밀키 노출 방지 관찰",
-                    "description": "클라이언트 JS 파일에 민감한 데이터베이스 패스워드가 전혀 포함되지 않음을 검증합니다.",
-                    "actionBadge": "격리 검증",
-                    "observe": "NEXT_PUBLIC_ 변수의 클라이언트 렌더링 및 비접두사 서버 시크릿의 클라이언트 격리 상태 관찰",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: "[Server Action으로 서버에서 다시 읽기] 클릭",
+            description: "서버에서 실제로 process.env를 읽어 반환합니다. 서버는 INTERNAL_ADMIN_EMAIL도 정상적으로 읽을 수 있어야 합니다.",
+            actionBadge: "서버 값 확인",
+            observe: "클라이언트는 INTERNAL_ADMIN_EMAIL이 undefined, 서버는 실제 값을 반환함",
+            observeAt: "playground",
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"NEXT_PUBLIC_ vs 서버 환경변수 노출 범위 실습"}>
-        <EnvVariablesDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <EnvPlayground />
     </DemoContainer>
   )
 }

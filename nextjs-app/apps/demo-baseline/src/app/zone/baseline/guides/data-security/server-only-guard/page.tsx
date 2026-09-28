@@ -1,21 +1,39 @@
 'use client'
 import React, { useState, useTransition } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard, DemoPlaygroundCard, DemoResetButton } from '@study/demo-kit'
 import { ServerOnlyGuardDemo } from './components/ServerOnlyGuardDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 import { syncOrderAction, type OrderSyncResult } from './actions'
+import { scanClientBundleForToken, type BundleScanResult } from './lib/scanBundle'
 
 export default function DemoPage() {
   const [selectedProduct, setSelectedProduct] = useState('PROD-001')
   const [orderQuantity, setOrderQuantity] = useState(1)
   const [result, setResult] = useState<OrderSyncResult | null>(null)
+  const [scanResult, setScanResult] = useState<BundleScanResult | null>(null)
   const [isPending, startTransition] = useTransition()
+  const [isScanning, startScan] = useTransition()
 
   const handleSync = () => {
     startTransition(async () => {
       const next = await syncOrderAction(selectedProduct, orderQuantity)
       setResult(next)
+      setScanResult(null)
     })
+  }
+
+  const handleScan = () => {
+    if (!result) return
+    const token = result.secretPreview.replace(/\*+$/, '')
+    startScan(async () => {
+      const scan = await scanClientBundleForToken(token)
+      setScanResult(scan)
+    })
+  }
+
+  const handleReset = () => {
+    setResult(null)
+    setScanResult(null)
   }
 
   return (
@@ -44,11 +62,11 @@ export default function DemoPage() {
           },
           {
             step: 4,
-            title: "서버 전용 모듈 보안 경계 및 동기화 성공 로그 관찰",
-            description: "클라이언트 번들에 비밀 키가 포함되지 않고 서버 측에서만 로직이 수행되는지 검증합니다.",
-            actionBadge: "보안 검증",
-            observe: "import 'server-only' 경계 내 안전한 서버 API 트리거 및 장바구니 동기화 성공 로그 관찰",
-            observeAt: "playground",
+            title: "[클라이언트 번들 스캔] 클릭",
+            description: "브라우저가 실제로 내려받은 모든 JS 청크를 다시 fetch()해 시크릿 접두사 문자열이 하나라도 포함돼 있는지 직접 검사합니다.",
+            actionBadge: "번들 스캔",
+            observe: "스캔한 청크 수와 시크릿 발견 여부(0건이어야 함)를 검증 패널에서 확인",
+            observeAt: "verification",
           },
         ]}
       />
@@ -58,20 +76,25 @@ export default function DemoPage() {
           orderQuantity={orderQuantity}
           result={result}
           isPending={isPending}
+          scanResult={scanResult}
+          isScanning={isScanning}
           onSelectProduct={setSelectedProduct}
           onChangeQuantity={(delta) => setOrderQuantity((q) => Math.max(1, q + delta))}
           onSync={handleSync}
+          onScan={handleScan}
         />
+        <div className="flex justify-end pt-3">
+          <DemoResetButton onReset={handleReset} label="예제 초기화" />
+        </div>
       </DemoPlaygroundCard>
       <VerificationFooter
-        isMatched={result ? !result.responseContainsRawSecret : undefined}
-        logs={result ? [`digest=${result.digest}`, `secretPreview=${result.secretPreview}`] : undefined}
+        isMatched={scanResult ? scanResult.foundIn.length === 0 : undefined}
         actual={
-          result
-            ? `- digest: ${result.digest}\n- secretPreview: ${result.secretPreview}\n- 응답에 원본 시크릿 포함 여부: ${result.responseContainsRawSecret}`
+          scanResult
+            ? `- 스캔한 JS 청크 수: ${scanResult.scannedCount}\n- 시크릿 접두사가 발견된 청크: ${scanResult.foundIn.length}개\n- digest: ${result?.digest}\n- secretPreview: ${result?.secretPreview}`
             : undefined
         }
-        expected="server-only로 보호된 모듈에서 시크릿을 계산하지만, Server Action의 클라이언트 응답 JSON에는 원본 시크릿 문자열이 포함되지 않는다."
+        expected="server-only로 보호된 모듈은 클라이언트 번들에 전혀 포함되지 않으므로, 브라우저가 받은 어떤 JS 청크에서도 시크릿 접두사가 발견되지 않아야 한다(0건)."
       />
     </DemoContainer>
   )
