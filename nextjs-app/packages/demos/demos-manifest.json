@@ -1678,5 +1678,19 @@
     "doc": "3-api-reference/3.5-config/3.5.1-next-config-js/serverActions.md",
     "zone": "baseline",
     "status": "done"
+  },
+  {
+    "url": "guides/interactive-apps/optimistic-queue",
+    "title": "겹치는 낙관적 저장 조율: useActionState 큐와 useOptimistic 롤백",
+    "doc": "2-guides/interactive-apps.md",
+    "zone": "baseline",
+    "status": "done"
+  },
+  {
+    "url": "guides/interactive-apps/optimistic-context",
+    "title": "낙관적 변경을 Context로 공유하는 이벤트 보드",
+    "doc": "2-guides/interactive-apps.md",
+    "zone": "baseline",
+    "status": "done"
   }
 ]
