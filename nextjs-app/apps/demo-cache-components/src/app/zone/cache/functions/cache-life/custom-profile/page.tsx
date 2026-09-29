@@ -3,54 +3,61 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('cache', 'functions/cache-life/custom-profile')
 
-import { Suspense } from 'react'
+import React from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ObservationProvider } from './components/ObservationContext'
-import { ProfileBoard } from './components/ProfileBoard'
+import { CacheLifeCustomDemo } from './components/CacheLifeCustomDemo'
 import { VerificationFooter } from './components/VerificationFooter'
-import { ConceptDeepDive } from './components/ConceptDeepDive'
-import { CUSTOM_PROFILE_NAME } from './types'
+import { getCustomProfileSnapshot, getBuiltinCompareSnapshot } from './cachedData'
 
-export default function DemoPage() {
+// 커스텀 cacheLife 프로필의 정적 셸 프리렌더가 빌드 타임에 실패해(blocking-prerender-runtime)
+// 정적 셸 없이 매 요청 시 렌더한다. 'use cache' 자체의 서버 캐싱 동작에는 영향이 없다.
+export const instant = false
+
+export default async function DemoPage() {
+  const [custom, compare] = await Promise.all([
+    getCustomProfileSnapshot(),
+    getBuiltinCompareSnapshot(),
+  ])
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
         title="next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩"
-        concept={`next.config.ts의 cacheLife 객체에 새 이름('${CUSTOM_PROFILE_NAME}')의 커스텀 프로필을 정의하고, 컴포넌트 안에서 cacheLife(그 이름)을 호출하면 stale·revalidate·expire가 실제로 그 값으로 바뀝니다. 옆에는 cacheLife()를 아예 호출하지 않은 default 대조군을 나란히 둡니다.`}
+        concept="cacheLife('minutes')처럼 내장 프리셋은 next.config.ts에 아무것도 적지 않아도 바로 쓸 수 있지만, 그 값이 우리 비즈니스에 맞지 않으면 next.config.ts의 cacheLife 객체에 원하는 이름으로 stale/revalidate/expire를 직접 정의하고 cacheLife('그 이름')으로 바인딩해야 합니다."
         steps={[
           {
             step: 1,
-            title: '처음 표시된 custom / default 두 행의 cacheId 확인',
-            description: 'custom 행은 next.config.ts 커스텀 프로필(revalidate 4초)에, default 행은 cacheLife() 미호출(revalidate 15분)에 바인딩되어 있습니다.',
-            actionBadge: '초기 관측',
+            title: 'custom-profile 카드와 minutes 카드의 초기 캐시 ID·생성 시각 확인',
+            description:
+              "왼쪽 카드는 next.config.ts에 새로 정의한 'functions-cache-life-custom-profile:restock-alert' 커스텀 프로필, 오른쪽 카드는 내장 'minutes' 프리셋에 바인딩된 실제 'use cache' 함수입니다.",
+            actionBadge: '초기 상태 확인',
           },
           {
             step: 2,
-            title: '5초 이상 기다린 뒤 [서버에 다시 요청] 클릭',
-            description: 'router.refresh()로 서버에 다시 요청합니다. 브라우저 새로고침(F5)으로 해도 됩니다. 몇 번 반복합니다.',
-            actionBadge: 'revalidate 경과',
-            observe: 'custom 행의 cacheId·실행 횟수만 바뀌고 default 행은 그대로',
-            observeAt: 'playground',
+            title: '[전체 새로고침]을 45초 이내 간격으로 2~3회 클릭',
+            description:
+              "custom-profile 카드는 revalidate가 45초라 그 전에는 캐시 ID가 유지되고, minutes 카드는 revalidate가 60초라 더 오래 유지됩니다. 두 값 모두 next.config.ts에 실제로 선언된 숫자입니다.",
+            actionBadge: '재계산 주기 비교',
           },
           {
             step: 3,
-            title: '검증 패널과 요청 기록 표 확인',
-            description: 'custom 프로필이 실제로 4초 revalidate로 동작하는지, default 프로필은 15분 동안 그대로인지 대조합니다.',
+            title: '두 카드의 stale/revalidate/expire 값과 next.config.ts 코드 대조',
+            description:
+              'custom-profile 카드의 숫자(20/45/240)는 어떤 내장 프리셋과도 겹치지 않는 이 데모 전용 값이고, minutes 카드의 숫자(300/60/3600)는 재정의 없이 그대로 쓴 내장 값입니다.',
             actionBadge: '결과 검증',
-            observe: '검증 패널이 "검증 완료"로 바뀌고, 요청 기록 표에서 custom 열만 굵게 강조됨',
-            observeAt: 'verification',
+            observe: '두 카드의 stale/revalidate/expire 숫자가 next.config.ts / cacheLife.md 프리셋 표와 각각 일치한다',
+            observeAt: 'playground',
           },
         ]}
       />
-      <ObservationProvider>
-        <DemoPlaygroundCard title="커스텀/default cacheLife 바인딩 비교 (cached.ts)">
-          <Suspense fallback={<div className="h-56 animate-pulse rounded-lg bg-zinc-100 dark:bg-zinc-900" />}>
-            <ProfileBoard />
-          </Suspense>
-        </DemoPlaygroundCard>
-        <VerificationFooter />
-      </ObservationProvider>
-      <ConceptDeepDive />
+      <DemoPlaygroundCard title="next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩 실습">
+        <CacheLifeCustomDemo custom={custom} compare={compare} />
+      </DemoPlaygroundCard>
+      <VerificationFooter
+        isLoaded={Boolean(custom.cacheId && compare.cacheId)}
+        actual={`- functions-cache-life-custom-profile:restock-alert #${custom.cacheId} (${custom.generatedAt}) → stale 20초 / revalidate 45초 / expire 240초\n- minutes(내장) #${compare.cacheId} (${compare.generatedAt}) → stale 300초 / revalidate 60초 / expire 3600초`}
+        expected="custom-profile 카드는 next.config.ts에 새로 선언한 20/45/240초 값을, minutes 카드는 next.config.ts 수정 없이도 존재하는 내장 300/60/3600초 값을 그대로 반영한다."
+      />
     </DemoContainer>
   )
 }

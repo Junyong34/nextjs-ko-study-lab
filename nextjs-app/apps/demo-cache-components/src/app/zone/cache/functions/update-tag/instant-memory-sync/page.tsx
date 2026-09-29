@@ -3,50 +3,46 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('cache', 'functions/update-tag/instant-memory-sync')
 
-import React, { Suspense } from 'react'
+import React from 'react'
 import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
-import { CartSection, CartSectionFallback } from './components/CartSection'
-import { UpdateTagDeepDive } from './components/UpdateTagDeepDive'
+import { UpdateTagInstantDemo } from './components/UpdateTagInstantDemo'
+import { getUpdateTagCartCache, getRevalidateTagCartCache } from './cachedData'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const [updateTagCache, revalidateTagCache] = await Promise.all([
+    getUpdateTagCartCache(),
+    getRevalidateTagCartCache(),
+  ])
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title="장바구니 수량 상태 변경"
-        concept="Server Action에서 수량을 바꾼 뒤 updateTag(tag)를 호출하면 그 태그의 캐시가 즉시 만료되어, 같은 액션 응답에서 사용자가 자신의 변경을 바로 봅니다(read-your-own-writes). revalidateTag(tag, 'max')는 stale 표시만 하므로 액션 응답에 새 렌더가 없고, 이어진 첫 재요청에서도 이전 수량이 보입니다."
+        title="updateTag() vs revalidateTag() — 장바구니 수량 즉시 반영 비교"
+        concept="updateTag()는 Server Action 안에서 캐시를 즉시 만료시켜 다음 요청이 새 값을 기다리게 합니다(read-your-own-writes). revalidateTag(tag, 'max')는 캐시를 stale로만 표시해 다음 방문까지 이전 값이 먼저 보일 수 있습니다(stale-while-revalidate)."
         steps={[
           {
             step: 1,
-            title: '두 상품의 캐시 값과 원본 값 확인',
-            description: '각 줄은 독립된 \'use cache\' 엔트리입니다. 캐시 함수가 반환한 수량·cacheId·생성 시각과 서버 메모리 원본 수량을 나란히 봅니다.',
-            actionBadge: '초기 상태',
+            title: '두 패널의 초기 수량 확인',
+            description: '왼쪽(updateTag)과 오른쪽(revalidateTag) 카드의 캐시된 조회 수량이 아직 같은 시작 값인지 확인합니다.',
+            actionBadge: '초기 상태 확인',
           },
           {
             step: 2,
-            title: '무선 이어폰 [+] 클릭 (updateTag)',
-            description: '원본 수량을 바꾸고 updateTag()를 호출합니다. 액션 응답 한 번으로 캐시 수량이 원본과 같아지는지 봅니다.',
-            actionBadge: 'updateTag',
+            title: '[updateTag 실행]과 [revalidateTag 실행]을 각각 클릭',
+            description: '두 버튼은 실제 Server Action에서 updateTag() 또는 revalidateTag()를 호출해 각자의 장바구니 수량을 1 늘립니다.',
+            actionBadge: '액션 실행',
           },
           {
             step: 3,
-            title: 'USB-C 케이블 [+] 클릭 (revalidateTag max)',
-            description: "원본 수량을 바꾸고 revalidateTag(tag, 'max')를 호출합니다. 액션 응답과 바로 이어진 재요청(router.refresh)에서 캐시 수량이 이전 값으로 남는지 봅니다.",
-            actionBadge: '대조군',
-            observe: 'updateTag 줄은 액션 응답에서 새 cacheId·원본과 같은 수량, revalidateTag max 줄은 첫 재요청에서도 쓰기 이전 엔트리(캐시 ≠ 원본)',
+            title: '새로고침 직후 캐시 수량이 액션 응답을 따라잡는 시점 비교',
+            description: 'updateTag 쪽은 새로고침 직후 캐시 수량이 액션 응답과 바로 같아집니다. revalidateTag 쪽은 같은 새로고침에서 이전 수량이 남아 있을 수 있습니다.',
+            actionBadge: '즉시성 비교',
+            observe: 'updateTag 캐시 수량은 즉시 액션 응답과 일치, revalidateTag 캐시 수량은 지연될 수 있음',
             observeAt: 'playground',
-          },
-          {
-            step: 4,
-            title: 'Route Handler에서 updateTag 호출',
-            description: 'Server Action이 아닌 곳에서 updateTag()를 호출하면 실제로 에러가 나는지 확인합니다.',
-            actionBadge: '호출 제약',
           },
         ]}
       />
-      <Suspense fallback={<CartSectionFallback />}>
-        <CartSection />
-      </Suspense>
-      <UpdateTagDeepDive />
+      <UpdateTagInstantDemo updateTagCache={updateTagCache} revalidateTagCache={revalidateTagCache} />
     </DemoContainer>
   )
 }

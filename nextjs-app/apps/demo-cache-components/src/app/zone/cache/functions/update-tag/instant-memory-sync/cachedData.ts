@@ -1,21 +1,26 @@
 import { cacheTag } from 'next/cache'
-import { LINES, nowStamp } from './tags'
-import { readSourceLine } from './cartStore'
-import type { CachedLine, LineId } from './types'
+import { TAGS } from './tags'
+import { getUpdateTagCartQty, getRevalidateTagCartQty } from './cartStore'
+import type { CartQtySnapshot } from './types'
 
-/**
- * 장바구니 줄 조회 캐시. 본문은 캐시 미스(또는 만료 후 재계산) 때만 실행되므로
- * cacheId·generatedAt·qty는 "이 엔트리가 마지막으로 계산된 순간"의 값이다.
- */
-export async function getCachedCartLine(lineId: LineId): Promise<CachedLine> {
+export async function getUpdateTagCartCache(): Promise<CartQtySnapshot> {
   'use cache'
-  cacheTag(LINES[lineId].tag)
+  cacheTag(TAGS.updateTagCart)
 
-  const at = nowStamp()
   return {
-    qty: readSourceLine(lineId).qty,
+    qty: getUpdateTagCartQty(),
     cacheId: Math.random().toString(36).slice(2, 8).toUpperCase(),
-    generatedAt: at.label,
-    generatedAtMs: at.ms,
+    generatedAt: new Date().toLocaleTimeString(),
+  }
+}
+
+export async function getRevalidateTagCartCache(): Promise<CartQtySnapshot> {
+  'use cache'
+  cacheTag(TAGS.revalidateTagCart)
+
+  return {
+    qty: getRevalidateTagCartQty(),
+    cacheId: Math.random().toString(36).slice(2, 8).toUpperCase(),
+    generatedAt: new Date().toLocaleTimeString(),
   }
 }

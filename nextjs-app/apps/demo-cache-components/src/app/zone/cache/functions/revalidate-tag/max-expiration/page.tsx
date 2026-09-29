@@ -3,44 +3,43 @@ import { getDemoMetadata } from '@study/demos'
 
 export const metadata: Metadata = getDemoMetadata('cache', 'functions/revalidate-tag/max-expiration')
 
-import React, { Suspense } from 'react'
+import React from 'react'
 import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
-import { PriceSection, PriceSectionFallback } from './components/PriceSection'
-import { MaxExpirationDeepDive } from './components/MaxExpirationDeepDive'
+import { RevalidateTagMaxDemo } from './components/RevalidateTagMaxDemo'
+import { getPromoNoticeCache, getRecallNoticeCache } from './cachedData'
 
-export default function DemoPage() {
+export default async function DemoPage() {
+  const [promo, recall] = await Promise.all([getPromoNoticeCache(), getRecallNoticeCache()])
+
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title="revalidateTag max 캐시 만료 제어"
-        concept="revalidateTag(tag, profile)의 두 번째 인자는 무효화된 캐시를 '언제까지 이전 값으로 응답해도 되는지'(expire)를 정합니다. 'max'는 expire가 1년이라 무효화 후 첫 요청이 이전 값을 즉시 받고 백그라운드에서 재계산하며(SWR), { expire: 0 }은 즉시 만료라 첫 요청이 재계산을 기다려 새 값을 받습니다."
+        title="revalidateTag() 만료 인자(profile)가 만드는 반영 시점 차이"
+        concept="revalidateTag(tag, { expire: 0 })는 다음 요청을 블로킹 재검증해 Server Action 실행만으로 이미 새 값이 반영됩니다. revalidateTag(tag, 'max')는 stale-while-revalidate라 실행 직후에는 아직 이전 값이 보이고, [새로고침]을 한 번 더 눌러야 반영됩니다. 같은 cacheLife('max') 캐시 항목이라도 무효화 시점의 두 번째 인자만 다르면 반영 시점이 달라집니다."
         steps={[
           {
             step: 1,
-            title: "'max' 줄에서 [가격 변경 후 1·2회차 요청] 클릭",
-            description: 'Route Handler가 원본 버전을 올리고 revalidateTag(tag, \'max\')를 호출한 뒤, 같은 캐시를 읽는 GET 요청을 두 번 보냅니다.',
-            actionBadge: 'SWR',
+            title: "[프로모션 배너]와 [긴급 리콜 공지] 두 카드의 초기 문구·revision 확인",
+            description: "두 캐시 항목 모두 cacheLife('max')로 장기 보존 설정되어 있습니다.",
+            actionBadge: "초기 상태 확인",
           },
           {
             step: 2,
-            title: '{ expire: 0 } 줄에서 같은 버튼 클릭',
-            description: '1회차 요청이 이전 값 대신 새 버전을 받는지, 캐시 조회가 원본 지연(600ms)만큼 느려졌는지 봅니다.',
-            actionBadge: '즉시 만료',
+            title: "[프로모션 배너 수정 실행]과 [긴급 리콜 공지 수정 실행]을 각각 클릭",
+            description: "Server Action이 실제 데이터를 바꾸고, 서로 다른 profile 인자로 revalidateTag를 호출합니다 — 배너는 'max', 리콜 공지는 { expire: 0 }.",
+            actionBadge: "무효화 실행",
           },
           {
             step: 3,
-            title: "'hours'와 { expire: 5 } 줄을 대기 0초·6초로 비교",
-            description: '다른 프리셋도 expire가 길면 max와 같고, 커스텀 expire는 무효화 후 그 시간이 지나면 1회차부터 새 값을 받습니다.',
-            actionBadge: 'expire 비교',
-            observe: 'expire 안의 1회차 = 이전 cacheId(즉시), expire가 지난 1회차 = 새 cacheId(재계산 대기), 2회차는 모두 새 버전',
-            observeAt: 'verification',
+            title: "[새로고침 (router.refresh())]을 눌러 정책 A가 반영되는지 관찰",
+            description: "리콜 공지(정책 B)는 [수정 실행] 직후 이미 반영되어 있습니다. 배너(정책 A)는 아직 이전 문구이며, [새로고침]을 한 번 더 눌러야 반영됩니다.",
+            actionBadge: "반영 시점 비교",
+            observe: "정책 B는 [수정 실행] 직후 곧바로 '반영 완료'(0회), 정책 A는 [새로고침] 1회 후에 '반영 완료'로 바뀜",
+            observeAt: "verification",
           },
         ]}
       />
-      <Suspense fallback={<PriceSectionFallback />}>
-        <PriceSection />
-      </Suspense>
-      <MaxExpirationDeepDive />
+      <RevalidateTagMaxDemo promo={promo} recall={recall} />
     </DemoContainer>
   )
 }

@@ -1,108 +1,146 @@
 'use client'
-
 import React from 'react'
-import { ExpectedActualPanel } from '@study/demo-kit'
-import { BINDING_SPECS, CUSTOM_PROFILE_NAME, formatAge, formatServerTime, type BindingMode, type Observation } from '../types'
-import { useObservations } from './ObservationContext'
+import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-const REVALIDATE_MS = Object.fromEntries(BINDING_SPECS.map((s) => [s.mode, s.revalidate * 1000])) as Record<BindingMode, number>
-
-const age = (o: Observation, m: BindingMode) => o.requestAt - o.rows[m].generatedAt
-
-/** 연속된 두 관측 사이에 cacheId가 바뀐 지점 */
-function changes(obs: Observation[], m: BindingMode) {
-  return obs.slice(1).flatMap((b, i) => (obs[i].rows[m].cacheId !== b.rows[m].cacheId ? [[obs[i], b] as const] : []))
+export interface VerificationFooterProps {
+  isMatched?: boolean
+  expected?: React.ReactNode
+  actual?: React.ReactNode
+  status?: string | number | null
+  description?: string
+  isLoaded?: boolean
+  logs?: string[]
+  count?: number
+  [key: string]: any
 }
 
-function evaluate(obs: Observation[]) {
-  const customChanges = changes(obs, 'custom')
-  const defaultChanges = changes(obs, 'default')
-  const spanMs = obs.length > 1 ? obs[obs.length - 1].requestAt - obs[0].requestAt : 0
-  // default가 짧은 실습 시간 안에 바뀌면 이상 신호(false). 안 바뀌었고 custom만 바뀌면 기대대로(true).
-  const isMatched = defaultChanges.length > 0 ? false : customChanges.length > 0 ? true : undefined
-  return { customChanges, defaultChanges, spanMs, isMatched }
-}
+export function VerificationFooter(props: VerificationFooterProps = {}) {
+  const {
+    isMatched: propIsMatched,
+    expected: propExpected,
+    actual: propActual,
+    status,
+    description: propDescription,
+    isLoaded,
+    logs,
+    count,
+    ...rest
+  } = props
 
-export function VerificationFooter() {
-  const { observations: obs } = useObservations()
-  const { customChanges, defaultChanges, spanMs, isMatched } = evaluate(obs)
-  const mode = obs.at(-1)?.mode
-  const last = obs.at(-1)
+  const isMatched =
+    propIsMatched !== undefined
+      ? propIsMatched
+      : status !== undefined && status !== null
+      ? typeof status === 'number'
+        ? status >= 200 && status < 400
+        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
+      : isLoaded !== undefined
+      ? Boolean(isLoaded)
+      : logs && Array.isArray(logs) && logs.length > 0
+      ? true
+      : count !== undefined && count > 0
+      ? true
+      : undefined
 
-  // expected/actual을 문자열이 아닌 ReactNode(<span>)로 감싼다: ExpectedActualPanel은 expected·actual이
-  // 둘 다 순수 문자열일 때만 자동으로 isMatched를 재계산하는데(autoMatched), 그 경로를 타면 위에서 계산한
-  // 실측 isMatched(undefined 포함)가 문자열 단순 비교 결과로 덮어써진다. <span>으로 감싸 그 경로를 우회한다.
-  const expected = (
-    <span>
-      {`• cacheLife('${CUSTOM_PROFILE_NAME}') (revalidate 4초): 4초 넘게 기다렸다 다시 요청하면 본문이 재실행되어 cacheId가 바뀜\n`}
-      {'• cacheLife() 호출 없음 (default, revalidate 15분): 실습하는 동안 cacheId·실행 시각이 그대로 유지됨\n'}
-      {mode === 'development'
-        ? '• next dev: custom 행은 expire(20초) 미만이라 요청마다 백그라운드에서 다시 만들어 두므로, 매 요청에 직전 요청 때 만든 cacheId가 보임 (경과 ≈ 요청 간격)'
-        : '• next start: 기본 in-memory 핸들러가 revalidate 지난 항목을 버리므로 custom 행은 그 요청에서 바로 다시 실행됨 (경과가 항상 4초 미만)'}
-    </span>
-  )
+  const defaultExpected = '• next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩의 동작과 기대 결과를 확인합니다.'
+  const defaultActual = '• 사용자 조작 후 실제 결과를 표시합니다.'
 
-  const actual = (
-    <span>
-      {obs.length === 0 && '• 관측 대기 중 (페이지 로드 후 첫 요청이 기록됩니다)\n'}
-      {obs.length > 0 && `• ${obs.length}회 요청 관측, 첫 요청부터 ${formatAge(spanMs)} 경과 (서버 모드 ${mode})\n`}
-      {customChanges.length > 0
-        ? `• custom: cacheId ${customChanges.length}회 교체 (예: 요청 #${customChanges[0][0].seq} #${customChanges[0][0].rows.custom.cacheId} → #${customChanges[0][1].seq} #${customChanges[0][1].rows.custom.cacheId})\n`
-        : '• custom: 아직 cacheId 교체가 관측되지 않았습니다. 4초 이상 간격을 두고 다시 요청해 보세요\n'}
-      {defaultChanges.length > 0
-        ? `• 불일치: default cacheId가 바뀜 (요청 #${defaultChanges[0][1].seq}). 서버 재시작·파일 수정(HMR)으로 캐시가 비워졌는지 확인하세요\n`
-        : last
-          ? `• default: ${obs.length}회 요청 동안 #${last.rows.default.cacheId} 유지 (항목 경과 ${formatAge(age(last, 'default'))} / revalidate 15분)\n`
-          : ''}
-      {last &&
-        `• custom 항목 경과: ${formatAge(age(last, 'custom'))} (revalidate ${(REVALIDATE_MS.custom / 1000).toFixed(0)}초 대비 ${
-          age(last, 'custom') >= REVALIDATE_MS.custom ? '경과' : '이내'
-        })`}
-    </span>
-  )
+  const actualContent =
+    propActual !== undefined
+      ? propActual
+      : isMatched === true
+      ? defaultActual
+      : isMatched === false
+      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
+      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <ExpectedActualPanel
-        title="커스텀 프로필 vs default 재계산 시점 검증"
-        description="요청마다 서버가 보낸 cacheId와 경과 시간을 모아, custom(4초 revalidate)은 바뀌고 default(15분 revalidate)는 유지되는지 비교합니다."
-        expected={expected}
-        actual={actual}
+        title="next.config.ts에서 custom cacheLife 프로필 정의 및 바인딩 검증 결과"
+        expected={propExpected || defaultExpected}
+        actual={actualContent}
         isMatched={isMatched}
+        description={propDescription || '이 예제의 동작과 검증 결과를 표시합니다.'}
       />
-      {obs.length > 0 && (
-        <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
-          <table data-testid="observation-log" className="w-full min-w-[560px] text-left font-mono text-[11px]">
-            <thead className="bg-zinc-50 text-zinc-500 dark:bg-zinc-900">
-              <tr>
-                <th className="px-2 py-1.5">요청</th>
-                <th className="px-2 py-1.5">서버 시각</th>
-                {BINDING_SPECS.map((s) => (
-                  <th key={s.mode} className="px-2 py-1.5">
-                    {s.mode} (경과)
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {obs.map((o, i) => (
-                <tr key={o.requestId} className="border-t border-zinc-100 dark:border-zinc-800">
-                  <td className="px-2 py-1">#{o.seq}</td>
-                  <td className="px-2 py-1">{formatServerTime(o.requestAt)}</td>
-                  {BINDING_SPECS.map((s) => {
-                    const changedRow = i > 0 && obs[i - 1].rows[s.mode].cacheId !== o.rows[s.mode].cacheId
-                    return (
-                      <td key={s.mode} className={`px-2 py-1 ${changedRow ? 'font-bold text-amber-600 dark:text-amber-400' : ''}`}>
-                        #{o.rows[s.mode].cacheId} ({formatAge(age(o, s.mode))})
-                      </td>
-                    )
-                  })}
+      <DemoDeepDiveCard title="Next.js 16.3.2 cacheLife 커스텀 프로필 정의 및 바인딩">
+        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 내장 프리셋 vs 커스텀 정의</h5>
+            <p>
+              형제 데모(<code>functions/cache-life/preset-profiles</code>)는 <code>cacheLife('seconds')</code>,{' '}
+              <code>('hours')</code>, <code>('max')</code>처럼 <strong>next.config.ts를 전혀 건드리지 않고도</strong>{' '}
+              쓸 수 있는 내장 프리셋 세 개를 시연한다. 이 데모는 그 내장 프리셋의 stale/revalidate/expire 조합이
+              우리 비즈니스 요구(재입고 알림 20/45/240초)와 맞지 않을 때, <strong>next.config.ts의 cacheLife
+              객체에 직접 이름과 초 값을 선언</strong>하고 그 이름을 <code>cacheLife('functions-cache-life-custom-profile:restock-alert')</code>
+              로 호출해 바인딩하는 절차를 보여준다.
+            </p>
+            <table className="mt-2 w-full border-collapse text-[11px]">
+              <thead>
+                <tr className="text-left text-zinc-500 dark:text-zinc-400">
+                  <th className="border-b border-zinc-200 pb-1 dark:border-zinc-800">구분</th>
+                  <th className="border-b border-zinc-200 pb-1 dark:border-zinc-800">next.config.ts 수정</th>
+                  <th className="border-b border-zinc-200 pb-1 dark:border-zinc-800">stale</th>
+                  <th className="border-b border-zinc-200 pb-1 dark:border-zinc-800">revalidate</th>
+                  <th className="border-b border-zinc-200 pb-1 dark:border-zinc-800">expire</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="font-mono">
+                <tr>
+                  <td className="py-1">functions-cache-life-custom-profile:restock-alert</td>
+                  <td>필요</td>
+                  <td>20초</td>
+                  <td>45초</td>
+                  <td>240초</td>
+                </tr>
+                <tr>
+                  <td className="py-1">minutes (내장)</td>
+                  <td>불필요</td>
+                  <td>300초</td>
+                  <td>60초</td>
+                  <td>3600초</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. next.config.ts 스키마 (교차 검증 결과)</h5>
+            <p>
+              이 프로젝트에 설치된 <code>next@16.3.2</code> 번들 문서(
+              <code>node_modules/next/dist/docs/.../config/next-config-js/cacheLife.md</code>)와 실제 zod 설정
+              스키마(<code>node_modules/next/dist/server/config-schema.js</code>)를 대조한 결과, <code>cacheLife</code>는{' '}
+              <code>cacheComponents</code>와 마찬가지로 <strong>next.config.ts 최상위 필드</strong>다.
+              (<code>experimental.cacheLife</code>는 구버전 호환용으로 스키마에는 남아 있지만, 공식 문서의 모든
+              예제는 최상위 사용법만 안내한다.)
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 데모 예제 기반 동작 원리</h5>
+            <p>
+              두 프로필 모두 각각 독립된 <code>'use cache'</code> 함수(<code>cachedData.ts</code>)에 선언되어 있다.
+              페이지 새로고침마다 두 함수가 함께 재요청되지만, revalidate 값(45초 vs 60초)이 다르기 때문에 두
+              카드의 캐시 ID가 서로 다른 시점에 교체된다 — 커스텀 프로필이 실제로 독립된 TTL로 동작함을 눈으로
+              확인하는 지점이다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li><strong>프로필 이름에 데모 접두사 필수</strong>: <code>cacheLife</code> 프로필 이름과 <code>cacheTag</code>는
+                앱 전역 네임스페이스라, 접두사가 없으면 다른 데모의 캐시와 이름이 충돌한다
+                (<code>apps/AGENTS.md</code> 8항).</li>
+              <li><strong>내장 이름 재정의도 가능</strong>: <code>seconds</code>·<code>hours</code>·<code>max</code> 같은
+                내장 이름으로 다시 정의하면 그 프리셋 자체의 값을 프로젝트 전역에서 바꿀 수 있지만, 이 데모는 혼동을
+                막기 위해 새 이름(<code>functions-cache-life-custom-profile:restock-alert</code>)을 썼다.</li>
+              <li><strong>expire는 revalidate보다 커야 함</strong>: Next.js가 빌드 시점에 이 조건을 검증하고, 위반하면
+                에러를 낸다.</li>
+            </ul>
+          </div>
         </div>
-      )}
+      </DemoDeepDiveCard>
     </div>
   )
 }

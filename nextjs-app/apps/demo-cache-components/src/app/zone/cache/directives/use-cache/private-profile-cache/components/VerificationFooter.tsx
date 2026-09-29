@@ -1,118 +1,92 @@
-'use client'
+import React from 'react'
+import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { SESSION_LABELS, type PrivateSessionId, type SwitchableSessionId } from '../types'
 
-import { ExpectedActualPanel } from '@study/demo-kit'
-import { viewerName, VIEWS } from '../types'
-import { evaluate } from './evaluate'
-import { useObservations } from './ObservationContext'
+export interface VerificationFooterProps {
+  currentSessionId: PrivateSessionId
+  cacheInstanceId: string
+  generatedAt: string
+  pendingTarget: SwitchableSessionId | null
+  isPending: boolean
+  isMatched: boolean | undefined
+  reloadNote: string | null
+}
 
-const routeLabel = (id: string) => VIEWS.find((v) => v.id === id)?.label ?? id
-
-export function VerificationFooter() {
-  const { visits, execChecks, probe } = useObservations()
-  const { reuse, noServerExec, execDuringReuse, reloadFresh, persisted, viewers, crossShared, isolated, probeRejected, isMatched } =
-    evaluate(visits, probe, execChecks)
-
-  const expected = (
-    <span>
-      {'• 탭을 오가도(같은 문서): 같은 사용자·같은 탭은 cacheId 그대로 (브라우저 메모리 재사용, 서버 실행 없음)\n'}
-      {'• 새로고침(F5) 후: 같은 사용자·같은 탭이라도 새 cacheId (서버에도 브라우저에도 남지 않음)\n'}
-      {'• 사용자 전환: 다른 사용자는 절대 같은 cacheId를 받지 않음 (사용자 간 공유 없음)\n'}
-      {"• 대조군: 일반 'use cache' 안의 cookies()는 오류로 거부됨"}
-    </span>
-  )
-
-  const actual = (
-    <span>
-      {visits.length === 0 && '• 관측 대기 중 (탭이 화면에 나타날 때마다 기록됩니다)\n'}
-      {reuse
-        ? `• 재사용 확인: ${routeLabel(reuse[0].route)} #${reuse[0].seq} → 다른 탭 → #${reuse[1].seq} 모두 cacheId #${reuse[0].cacheId} (본문 실행 ${reuse[0].generatedAt})\n`
-        : '• 재사용: 아직 다른 탭을 거쳐 같은 탭으로 돌아오지 않았습니다\n'}
-      {execDuringReuse
-        ? `• 불일치: 재사용 표시 전후 서버 실행 횟수 ${execDuringReuse[0].count}회 → ${execDuringReuse[1].count}회 (서버가 다시 실행함)\n`
-        : noServerExec
-          ? `• 서버 미실행 확인: 재사용 표시 전후 조회 ${noServerExec[0].checkedAt} → ${noServerExec[1].checkedAt} 모두 ${noServerExec[0].count}회\n`
-          : '• 서버 실행 횟수: 재사용 탭 이동 전후로 [서버 실행 횟수 조회]를 눌러 비교합니다\n'}
-      {persisted
-        ? `• 불일치: 새로고침 전후 기록 #${persisted[0].seq}·#${persisted[1].seq}가 같은 cacheId #${persisted[0].cacheId}\n`
-        : reloadFresh
-          ? `• 새로고침 후 새 값: ${routeLabel(reloadFresh[0].route)} #${reloadFresh[0].cacheId}(문서 ${reloadFresh[0].pageLoadId}) → #${reloadFresh[1].cacheId}(문서 ${reloadFresh[1].pageLoadId})\n`
-          : '• 새로고침: 아직 같은 사용자로 새로고침 전후를 비교하지 않았습니다\n'}
-      {crossShared
-        ? `• 불일치: ${viewerName(crossShared[0].viewer)}·${viewerName(crossShared[1].viewer)}가 같은 cacheId #${crossShared[0].cacheId}\n`
-        : isolated
-          ? `• 사용자 격리 확인: ${viewers.map(viewerName).join('·')} 기록 ${visits.length}건 중 사용자 간 공유된 cacheId 0건\n`
-          : '• 사용자 격리: 두 사용자로 모두 조회하면 확인합니다\n'}
-      {probe === null
-        ? '• 대조군: 아직 실행하지 않았습니다'
-        : probeRejected
-          ? `• 대조군 오류 확인: ${probe.ok ? '' : `${probe.name}${probe.digest ? ` (digest ${probe.digest})` : ''}`}`
-          : '• 불일치: 일반 use cache에서 cookies()가 값을 반환했습니다'}
-    </span>
-  )
+export function VerificationFooter({
+  currentSessionId,
+  cacheInstanceId,
+  generatedAt,
+  pendingTarget,
+  isPending,
+  isMatched,
+  reloadNote,
+}: VerificationFooterProps) {
+  const actual = pendingTarget
+    ? isPending
+      ? `세션 전환 중... (목표: ${SESSION_LABELS[pendingTarget]})`
+      : `sessionId: ${currentSessionId} (목표 ${pendingTarget}와(과) ${isMatched ? '일치' : '불일치'}) · cacheInstanceId: #${cacheInstanceId} · 조회 시각: ${generatedAt}`
+    : `아직 세션을 전환하지 않았습니다. 현재 세션: ${SESSION_LABELS[currentSessionId]} · cacheInstanceId: #${cacheInstanceId}`
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <ExpectedActualPanel
-        title="'use cache: private' 저장 위치와 사용자 격리 검증"
-        description="탭이 화면에 나타날 때 서버가 보낸 cacheId·본문 실행 시각을 기록해 문서 로드 ID·사용자·탭 기준으로 비교합니다."
-        expected={expected}
+        title="'use cache: private' 세션 전환 격리 검증"
+        expected={"다른 사용자 버튼을 클릭하면 Server Action이 세션 쿠키를 바꾸고, 'use cache: private' 함수가 새 쿠키 값으로 다시 계산되어 선택한 사용자의 주문 내역과 sessionId가 즉시 반영되어야 한다."}
         actual={actual}
         isMatched={isMatched}
+        description="쿠키를 바꾸는 것은 실제 Server Action이고, 그 결과를 읽는 것은 실제 'use cache: private' 함수다 — 흉내 낸 상태 전환이 아니다."
       />
-      {process.env.NODE_ENV === 'development' && (
-        <p className="rounded-md border border-amber-300 bg-amber-50 p-2.5 text-[11px] leading-relaxed text-amber-900 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-200">
-          dev 서버(next dev)에서는 저장 위치를 판정할 수 없습니다. 링크 프리페치가 동작하지 않아 탭 이동마다 서버 요청이 가고, 서버는
-          본문을 실행하면서도 같은 쿠키로 들어온 직전 요청의 결과를 돌려주는 dev 전용 동작이 관측됩니다(다른 브라우저라도 쿠키가 같으면 같은
-          cacheId). [서버 실행 횟수 조회]가 탭 이동 뒤에도 늘어나는 것으로 구분할 수 있습니다. 프로덕션 빌드(next build → next start)에서
-          확인하세요.
-        </p>
-      )}
-      {visits.length > 0 && (
-        <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
-          <table data-testid="observation-log" className="w-full text-left font-mono text-[11px]">
-            <thead className="bg-zinc-50 text-zinc-500 dark:bg-zinc-900">
-              <tr>
-                <th className="px-2 py-1.5">기록</th>
-                <th className="px-2 py-1.5">문서</th>
-                <th className="px-2 py-1.5">사용자</th>
-                <th className="px-2 py-1.5">탭</th>
-                <th className="px-2 py-1.5">cacheId</th>
-                <th className="px-2 py-1.5">본문 실행 시각</th>
-                <th className="px-2 py-1.5">서버 실행 순번</th>
-                <th className="px-2 py-1.5">화면 표시 시각</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visits.map((v, i) => {
-                const reused = visits.slice(0, i).some((p) => p.cacheId === v.cacheId)
-                return (
-                  <tr key={`${v.pageLoadId}-${v.seq}`} className="border-t border-zinc-100 dark:border-zinc-800">
-                    <td className="px-2 py-1">#{v.seq}</td>
-                    <td className="px-2 py-1">{v.pageLoadId}</td>
-                    <td className="px-2 py-1">{viewerName(v.viewer)}</td>
-                    <td className="px-2 py-1">{routeLabel(v.route)}</td>
-                    <td className="px-2 py-1">
-                      #{v.cacheId}{' '}
-                      <span className={reused ? 'text-indigo-600 dark:text-indigo-400' : 'text-amber-600 dark:text-amber-400'}>
-                        {reused ? '(재사용)' : '(새 실행)'}
-                      </span>
-                    </td>
-                    <td className="px-2 py-1">{v.generatedAt}</td>
-                    <td className="px-2 py-1">{v.execNoForViewer}번째</td>
-                    <td className="px-2 py-1 text-emerald-700 dark:text-emerald-400">{v.shownAt}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+
+      {reloadNote && (
+        <div className="rounded border border-amber-300 bg-amber-50/60 px-3.5 py-2.5 text-[11px] leading-relaxed text-amber-800 dark:border-amber-800/60 dark:bg-amber-950/20 dark:text-amber-300">
+          <span className="font-semibold">재조회 관찰:</span> {reloadNote}
         </div>
       )}
-      {execChecks.length > 0 && (
-        <p data-testid="exec-check-log" className="font-mono text-[11px] text-zinc-600 dark:text-zinc-400">
-          서버 실행 횟수 조회:{' '}
-          {execChecks.map((c) => `${viewerName(c.viewer)} ${c.count}회(${c.checkedAt})`).join(' → ')}
-        </p>
-      )}
+
+      <DemoDeepDiveCard title="'use cache: private'로 개인화 주문 내역을 캐시하는 원리">
+        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 일반 'use cache'와의 결정적 차이</h5>
+            <p>
+              일반 <code>'use cache'</code> 함수 안에서는 <code>cookies()</code>·<code>headers()</code>·<code>searchParams</code>를
+              호출할 수 없다. <code>'use cache: private'</code>는 이 세 API를 캐시 스코프 안에서 그대로 호출하도록
+              허용하는 대신, 그 결과를 서버에 저장하지 않는다. 이 데모의 <code>getPrivateOrderHistory()</code>가
+              스코프 내부에서 <code>cookies()</code>를 직접 읽는 것이 바로 이 허용 규칙 때문에 가능하다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 이 데모의 동작 원리</h5>
+            <p>
+              [다른 사용자로 전환] 버튼 → <code>switchPrivateSessionAction</code>(Server Action)이 실제
+              Set-Cookie 응답 헤더를 보냄 → 라우트가 다시 렌더링되며 <code>getPrivateOrderHistory()</code>가
+              바뀐 쿠키를 읽어 <code>cacheTag(`directives-use-cache-private-profile-cache:${'{sessionId}'}`)</code>로 사용자별 캐시를 분리하고
+              해당 사용자의 주문 내역만 반환한다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+              3. 서버에 저장되지 않는다 — 브라우저 메모리 전용 캐시
+            </h5>
+            <p>
+              공식 문서(<code>use-cache-private.md</code>)는 이 캐시가 <strong>서버에 절대 저장되지 않으며 브라우저
+              메모리에만 캐시</strong>된다고 명시한다. 그래서 페이지를 새로고침하거나 같은 세션으로 다시 전환해도
+              <code>cacheInstanceId</code>와 조회 시각이 매번 새로 발급된다 — 위 재조회 관찰 메모가 그 증거다.
+            </p>
+          </div>
+
+          <div>
+            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 실무 이점 및 주의사항</h5>
+            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+              <li>규정 준수상 개인화 데이터를 서버에 임시로라도 남길 수 없을 때 적합하다.</li>
+              <li><code>cacheLife</code> 설정이 필요하다 — 생략하면 암묵적인 <code>default</code> 프로파일이 적용되어 동작을 예측하기 어렵다.</li>
+              <li><code>connection()</code>은 두 지시어 모두에서 금지된다 — 안전하게 캐시될 수 없는 연결별 정보이기 때문이다.</li>
+              <li>이 지시어는 Route Handler에서는 사용할 수 없다.</li>
+            </ul>
+          </div>
+        </div>
+      </DemoDeepDiveCard>
     </div>
   )
 }
