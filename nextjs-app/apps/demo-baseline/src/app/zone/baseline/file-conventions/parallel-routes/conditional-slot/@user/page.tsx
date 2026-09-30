@@ -1,13 +1,8 @@
-import type { Metadata } from 'next'
-import { getDemoMetadata } from '@study/demos'
-
-export const metadata: Metadata = getDemoMetadata('baseline', 'file-conventions/parallel-routes/conditional-slot/@user')
-
 import React from 'react'
 
 export default function UserSlotPage() {
   return (
-    <div className="rounded-lg border-2 border-emerald-500/40 bg-emerald-50/30 p-4 dark:border-emerald-900/50 dark:bg-emerald-950/20 space-y-2">
+    <div data-slot="user" className="rounded-lg border-2 border-emerald-500/40 bg-emerald-50/30 p-4 dark:border-emerald-900/50 dark:bg-emerald-950/20 space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-emerald-500"></span>

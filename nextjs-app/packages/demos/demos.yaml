@@ -231,7 +231,7 @@
   title: "Next.js 14 레거시 fetch cache vs Route Segment revalidate"
   doc: 2-guides/caching-without-cache-components.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/streaming/chunk-loading
   title: "Suspense 스트리밍과 로딩 청크 순차 처리"
@@ -387,7 +387,7 @@
   title: "개인화 사용자별 Private 캐시 격리"
   doc: 2-guides/authentication-with-cache-components.md
   zone: cache
-  status: stub
+  status: done
 
 - url: guides/tanstack-query/ssr-hydration
   title: "TanStack Query prefetchQuery와 서버 Hydration"
@@ -495,7 +495,7 @@
   title: "React experimental_taintObjectReference 비밀키 보호"
   doc: 2-guides/data-security.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/content-security-policy/nonce-injection
   title: "Proxy Nonce 기반 CSP 헤더 주입"
@@ -513,7 +513,7 @@
   title: "process.env 런타임 환경변수 동적 참조"
   doc: 2-guides/environment-variables.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/json-ld/product-schema
   title: "Schema.org Product 구조화 데이터 (JSON-LD)"
@@ -585,7 +585,7 @@
   title: "/[lang]/products 다국어 서브패스 라우팅"
   doc: 2-guides/internationalization.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/i18n/dictionary-translation
   title: "서버 측 JSON 사전 기반 번역 렌더링"
@@ -645,7 +645,7 @@
   title: "상품 클릭 커스텀 이벤트 비콘 전송"
   doc: 2-guides/analytics.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/videos/lazy-video-player
   title: "상품 홍보 영상 지연 로딩 및 자동 재생"
@@ -717,7 +717,7 @@
   title: "Parallel Routes 미매칭 시 default.tsx 폴백"
   doc: 3-api-reference/3.1-file-conventions/default.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/default/hard-reload-restore
   title: "새로고침(Hard Reload) 시 슬롯 복구"
@@ -777,13 +777,13 @@
   title: "권한별 조건부 슬롯 분기 (Parallel Routes)"
   doc: 3-api-reference/3.1-file-conventions/parallel-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/parallel-routes/independent-tabs
   title: "독립 탭 내비게이션 슬롯 (Parallel Routes)"
   doc: 3-api-reference/3.1-file-conventions/parallel-routes.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/intercepting-routes/direct-vs-modal
   title: "직접 진입 vs 모달 대조 (Intercepting Routes)"
@@ -1413,7 +1413,7 @@
   title: "Edge Runtime 내 Node.js 전용 모듈 접근 차단 제한점"
   doc: 3-api-reference/edge.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: architecture/accessibility/form-aria-support
   title: "입력 오류와 ARIA 설명 연결하기"

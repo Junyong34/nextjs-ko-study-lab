@@ -2,33 +2,25 @@
 
 import { getPaymentConfig } from './lib/taintedPaymentConfig'
 
-export interface TaintActionResult {
-  ok: boolean
-  merchantId?: string
-  maskedKey?: string
-  errorMessage?: string
-  timestamp: string
+// 네 액션 모두 "클라이언트로 무엇을 반환하는가"만 다르다. 차단 여부는 React의 직렬화 단계가 결정한다.
+
+/** 마스킹된 값만 반환 — 시크릿이 경계를 넘지 않는 올바른 패턴. */
+export async function returnMaskedAction() {
+  const config = getPaymentConfig()
+  return { merchantId: config.merchantId, maskedKey: `${config.secretKey.slice(0, 7)}****` }
 }
 
-export async function safePaymentAction(): Promise<TaintActionResult> {
-  const config = getPaymentConfig()
-  const maskedKey = `${config.secretKey.slice(0, 7)}${'*'.repeat(config.secretKey.length - 7)}`
-  return {
-    ok: true,
-    merchantId: config.merchantId,
-    maskedKey,
-    timestamp: new Date().toLocaleTimeString(),
-  }
+/** 오염된 config 객체 참조를 그대로 반환 — taintObjectReference가 차단해야 한다. */
+export async function returnTaintedObjectAction() {
+  return getPaymentConfig()
 }
 
-// 의도적으로 tainted 값을 그대로 클라이언트에 반환하려는 "위험한 시도".
-// React가 이 반환값을 클라이언트로 직렬화하는 시점에 실제 런타임 에러를 던지므로,
-// 이 함수 자체는 정상 반환처럼 보여도 호출부(클라이언트)의 await가 예외로 reject된다.
-export async function leakPaymentSecretAction(): Promise<TaintActionResult> {
-  const config = getPaymentConfig()
-  return {
-    ok: true,
-    merchantId: config.secretKey,
-    timestamp: new Date().toLocaleTimeString(),
-  }
+/** 오염된 secretKey 문자열을 그대로 반환 — taintUniqueValue가 차단해야 한다. */
+export async function returnTaintedValueAction() {
+  return { value: getPaymentConfig().secretKey }
+}
+
+/** 시크릿을 문자열로 가공(파생)해 반환 — 파생 값은 추적되지 않아 taint를 우회한다. */
+export async function returnDerivedValueAction() {
+  return { value: `key=${getPaymentConfig().secretKey}` }
 }

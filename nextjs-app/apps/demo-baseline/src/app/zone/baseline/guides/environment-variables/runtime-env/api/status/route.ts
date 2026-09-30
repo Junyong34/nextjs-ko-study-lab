@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server'
-import os from 'node:os'
+import { snapshotServerEnv } from '../../lib/serverEnv'
 
-// Route Handler는 정적으로 사전 렌더링되지 않는다 — 매 요청마다 이 함수가 실제로 실행되어
-// 그 시점의 process.env / process.pid를 읽는다. 빌드 타임에 값이 굳는 SSG와 다르다.
+// GET 핸들러는 기본이 동적이다(v15.0.0-RC부터). 호출될 때마다 이 함수가 실제로 실행되어
+// 그 순간의 process.env를 읽는다. 모듈 변수 requestCount는 "같은 서버 프로세스에서 매 요청 실행됨"의 증거다.
+let requestCount = 0
+
 export async function GET() {
-  return NextResponse.json({
-    pid: process.pid,
-    nodeEnv: process.env.NODE_ENV ?? null,
-    hostname: process.env.HOSTNAME ?? os.hostname(),
-    evaluatedAt: new Date().toISOString(),
-  })
+  requestCount += 1
+  return NextResponse.json(snapshotServerEnv('route-handler', requestCount))
 }

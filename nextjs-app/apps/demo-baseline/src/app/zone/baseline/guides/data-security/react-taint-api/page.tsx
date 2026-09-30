@@ -1,87 +1,82 @@
 'use client'
 import React, { useState, useTransition } from 'react'
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ReactTaintDemo, type TaintTestOutcome } from './components/ReactTaintDemo'
+import { ReactTaintDemo } from './components/ReactTaintDemo'
 import { VerificationFooter } from './components/VerificationFooter'
-import { safePaymentAction, leakPaymentSecretAction } from './actions'
+import {
+  returnMaskedAction,
+  returnTaintedObjectAction,
+  returnTaintedValueAction,
+  returnDerivedValueAction,
+} from './actions'
+import { DEMO_SECRET_PREFIX, EMPTY_STATE, type TaintCaseId, type TaintDemoState } from './types'
+
+const ACTIONS: Record<TaintCaseId, () => Promise<unknown>> = {
+  safe: returnMaskedAction,
+  object: returnTaintedObjectAction,
+  value: returnTaintedValueAction,
+  derived: returnDerivedValueAction,
+}
 
 export default function DemoPage() {
-  const [lastOutcome, setLastOutcome] = useState<TaintTestOutcome | null>(null)
+  const [state, setState] = useState<TaintDemoState>(EMPTY_STATE)
   const [isPending, startTransition] = useTransition()
 
-  const handleSafeCall = () => {
+  const run = (id: TaintCaseId) => {
     startTransition(async () => {
-      const res = await safePaymentAction()
-      setLastOutcome({
-        kind: 'safe',
-        message: `merchantId=${res.merchantId}, maskedKey=${res.maskedKey}`,
-        timestamp: res.timestamp,
-      })
-    })
-  }
-
-  const handleLeakAttempt = () => {
-    startTransition(async () => {
+      let blocked = false
+      let message: string
+      let secretLeaked = false
       try {
-        const res = await leakPaymentSecretAction()
-        // 여기 도달하면 taint가 유출을 막지 못한 것이다.
-        setLastOutcome({
-          kind: 'leak-not-blocked',
-          message: `반환된 merchantId 필드에 원본 시크릿이 그대로 담겨 있음: ${res.merchantId}`,
-          timestamp: res.timestamp,
-        })
+        const res = await ACTIONS[id]()
+        message = JSON.stringify(res)
+        // 클라이언트가 받은 응답 안에 시크릿 원문이 있는지 직접 검사한다.
+        secretLeaked = message.includes(DEMO_SECRET_PREFIX)
       } catch (error) {
-        setLastOutcome({
-          kind: 'leak-blocked',
-          message: error instanceof Error ? error.message : String(error),
-          timestamp: new Date().toLocaleTimeString(),
-        })
+        blocked = true
+        message = error instanceof Error ? error.message : String(error)
       }
+      setState((prev) => ({
+        ...prev,
+        [id]: { case: id, blocked, message, secretLeaked, timestamp: new Date().toLocaleTimeString('ko-KR') },
+      }))
     })
   }
 
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"React Taint API(taintUniqueValue) 민감 데이터 전송 차단"}
-        concept={"experimental_taintUniqueValue()를 사용하여 128비트 신용카드 번호나 패스워드 해시를 Taint로 지정하고, 실수로 클라이언트 컴포넌트 props로 전달될 경우 런타임 예외를 발생시켜 차단합니다."}
+        title="React Taint API로 서버 시크릿 유출 차단"
+        concept="next.config의 experimental.taint를 켜면 experimental_taintObjectReference(객체 참조)와 experimental_taintUniqueValue(값)로 표시한 데이터가 Server Action 응답 등 클라이언트 직렬화 경계를 넘으려 할 때 React가 예외를 던집니다. 다만 값에서 파생된 새 문자열은 추적하지 못합니다."
         steps={[
           {
             step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-            description: "결제 보안 로직이 연동된 상품 카탈로그 항목을 선택합니다.",
-            actionBadge: "상품 선택",
+            title: '[① 마스킹 값 반환] 클릭',
+            description: '시크릿은 서버에 두고 앞 7자리만 마스킹해 돌려줍니다. 정상 통과해야 합니다.',
+            actionBadge: '정상 경로',
           },
           {
             step: 2,
-            title: "[+] 버튼으로 주문 수량 증정",
-            description: "보안 민감 데이터(결제 토큰)와 결합될 주문 수량을 변경합니다.",
-            actionBadge: "수량 변경",
+            title: '[② config 객체 반환]과 [③ secretKey 문자열 반환] 클릭',
+            description: '오염된 객체 참조와 오염된 값을 각각 그대로 반환해 React 에러로 차단되는지 봅니다.',
+            actionBadge: '차단 확인',
+            observe: '두 카드 모두 "차단됨"이며 응답에 시크릿 원문이 없음',
+            observeAt: 'playground',
           },
           {
             step: 3,
-            title: "[동작 실행] 클릭으로 Taint 검증 트랜잭션 수행",
-            description: "서버 액션을 실행하여 Taint로 마킹된 데이터가 클라이언트로 유출되지 않음을 확인합니다.",
-            actionBadge: "트랜잭션 실행",
-          },
-          {
-            step: 4,
-            title: "민감 데이터 클라이언트 전달 차단 및 안전한 처리 관찰",
-            description: "클라이언트로 전달되는 응답 객체에 민감 정보가 배제되고 성공 로그만 기록되는지 검증합니다.",
-            actionBadge: "Taint 검증",
-            observe: "taintUniqueValue 규칙에 의한 민감 데이터 클라이언트 유출 차단 및 동기화 완료 관찰",
-            observeAt: "playground",
+            title: '[④ 문자열로 가공해 반환] 클릭',
+            description: 'secretKey를 템플릿 문자열에 섞어 반환합니다. 파생 값은 taint가 따라가지 않아 그대로 유출됩니다.',
+            actionBadge: '한계 확인',
+            observe: '차단되지 않고 시크릿 원문이 응답에 포함됨',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"React experimental_taintObjectReference 비밀키 보호 실습"}>
-        <ReactTaintDemo lastOutcome={lastOutcome} isPending={isPending} onSafeCall={handleSafeCall} onLeakAttempt={handleLeakAttempt} />
+      <DemoPlaygroundCard title="결제 시크릿 taint 실습 콘솔">
+        <ReactTaintDemo state={state} isPending={isPending} onRun={run} onReset={() => setState(EMPTY_STATE)} />
       </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={lastOutcome ? lastOutcome.kind !== 'leak-not-blocked' : undefined}
-        actual={lastOutcome ? `[${lastOutcome.kind}] ${lastOutcome.message}` : undefined}
-        expected="안전한 호출은 마스킹된 값만 반환하고, 위험한 시도는 experimental_taintUniqueValue에 의해 실제 런타임 에러로 차단된다."
-      />
+      <VerificationFooter state={state} />
     </DemoContainer>
   )
 }

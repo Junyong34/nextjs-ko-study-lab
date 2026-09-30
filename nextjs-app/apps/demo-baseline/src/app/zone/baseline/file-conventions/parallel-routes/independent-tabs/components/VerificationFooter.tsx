@@ -1,111 +1,26 @@
 'use client'
-import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { DemoDeepDiveCard, ExpectedActualPanel } from '@study/demo-kit'
+import { useSlotObservation } from '../hooks/useSlotObservation'
+import { judge } from '../lib/judge'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
-
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• 독립 탭 내비게이션 슬롯 (Parallel Routes)의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
+export function VerificationFooter({ rootId }: { rootId: string }) {
+  const { curr, prev, viaAnchor } = useSlotObservation(rootId)
+  const v = judge(prev, curr, viaAnchor)
   return (
-    <div className="space-y-4">
+    <>
       <ExpectedActualPanel
-        title="독립 탭 내비게이션 슬롯 (Parallel Routes) 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        title="다른 슬롯이 유지되는지 실측"
+        expected={<span className="whitespace-pre-wrap break-all">{v.expected}</span>}
+        actual={<span className="whitespace-pre-wrap break-all">{v.actual}</span>}
+        isMatched={v.isMatched}
+        description="이동 직전과 직후의 DOM에서 슬롯별 화면, 인스턴스 id(마운트 시 생성), 메모 입력값을 읽어 비교합니다."
       />
-      <DemoDeepDiveCard title="독립 탭 내비게이션 슬롯 (Parallel Routes Independent Sub-navigation)">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>
-              Parallel Routes의 각 <code>@slot</code>은 독립적인 서브 라우팅 히스토리를 가질 수 있어, 한 슬롯 내부에서 탭 이동이나 서브 세그먼트 전환이 발생해도 다른 슬롯의 스크롤 위치와 상태가 그대로 보존됩니다.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>
-              본 데모에서는 좌측 <code>@metrics</code> 슬롯에서 [일간/주간/월간] 탭을 전환하거나 우측 <code>@feed</code> 슬롯에서 [실시간 알림/시스템 로그] 탭을 클릭했을 때, 상대편 슬롯의 렌더링 상태를 전혀 방해하지 않고 독립적으로 서브 뷰가 전환되는 동작을 실증합니다.
-            </p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>상호 독립적 탭 상태 유지</strong>: 복수의 인터랙티브 위젯이 서로의 UI 상태를 초기화하지 않고 각자 독립적으로 동작합니다.</li>
-              <li><strong>정밀한 Suspense 스트리밍</strong>: 탭 전환 시 변경된 슬롯의 데이터만 선별적으로 revalidation하여 네트워크 비용을 절감합니다.</li>
-              <li><strong>멀티태스킹 최적화 UX</strong>: 사용자가 여러 작업 영역(분석 지표 확인 + 로그 모니터링)을 동시에 탐색할 수 있습니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>거래소/핀테크 플랫폼의 차트 위젯과 호가창/체결 내역 패널의 독립 전환</li>
-              <li>이커머스 판매자 센터의 주문 관리 탭과 배송 현황 탭의 동시 모니터링</li>
-              <li>고객센터 상담원의 문의 내역 조회와 고객 프로필 탭 분할 뷰</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>URL 동기화 설계</strong>: 슬롯별 서브 경로가 URL에 매핑될 때 상위 레이아웃의 슬롯 수명 주기를 고려하여 <code>default.tsx</code> 폴백을 철저히 구성해야 합니다.</li>
-              <li><strong>클라이언트 상태와의 결합</strong>: 탭 전환이 빈번한 경우 서버 라우팅 대신 로컬 컴포넌트 상태로 처리할지, 독립 URL이 필요한지(Parallel Route)를 트레이드오프 분석 후 선택해야 합니다.</li>
-            </ul>
-          </div>
-        </div>
+      <DemoDeepDiveCard title="슬롯은 왜 서로 독립적으로 이동하는가">
+        <p>layout.tsx는 children과 함께 @dashboard, @metrics를 props로 받습니다. @ 폴더 이름은 URL에 들어가지 않으므로 /sales와 /30d 같은 세그먼트는 각 슬롯 안에서만 해석됩니다.</p>
+        <p>Link로 이동하는 소프트 내비게이션은 URL과 일치하는 슬롯만 부분 렌더링하고, 일치하지 않는 슬롯은 이전 화면을 그대로 둡니다. 그래서 인스턴스 id와 메모 state가 살아남습니다.</p>
+        <p>새로고침이나 일반 &lt;a&gt; 이동은 전체 로드입니다. 이때 Next.js는 다른 슬롯의 활성 화면을 알 수 없어 default.tsx를 그립니다. 슬롯마다 default.tsx가 없으면 404가 됩니다. children도 암묵적 슬롯이라 default.tsx가 필요합니다.</p>
+        <p>이 예제는 슬롯 이동의 독립성만 다룹니다. 슬롯별 loading·error 격리는 다루지 않습니다.</p>
       </DemoDeepDiveCard>
-    </div>
+    </>
   )
 }

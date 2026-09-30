@@ -1,107 +1,60 @@
 'use client'
 import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import type { EnvReadResult, EnvSnapshot, Prediction } from '../types'
+import { RuntimeEnvDeepDive } from './RuntimeEnvDeepDive'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+interface Props {
+  reads: EnvReadResult[]
+  prediction: Prediction | null
+  serverSnapshot: EnvSnapshot
+  renderCount: number
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const EXPECTED = (
+  <ul className="list-disc space-y-1 pl-4">
+    <li>[변수 읽기]를 두 번 누르면 요청 번호가 증가하고 evaluatedAt이 달라진다 (요청마다 process.env를 새로 읽음).</li>
+    <li>Route Handler가 읽은 값과 서버 렌더(page.tsx)가 읽은 값이 같다 (같은 프로세스 환경).</li>
+    <li>브라우저 동적 조회 process.env[name]는 값을 못 찾고, 리터럴 참조는 빌드 때 인라인된 경우(NEXT_PUBLIC_·NODE_ENV)에만 서버와 같다 — 당신의 예측과 일치해야 한다.</li>
+  </ul>
+)
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter({ reads, prediction, serverSnapshot, renderCount }: Props) {
+  const [latest, prev] = reads
+  const ready = reads.length >= 2 && prediction !== null && reads[0].name === reads[1].name
 
-  const defaultExpected = "• process.env 런타임 환경변수 동적 참조의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+  let isMatched: boolean | undefined
+  let actual: React.ReactNode = '• 대기 중: 변수를 고르고 예측한 뒤, 같은 변수로 [변수 읽기]를 두 번 실행하세요.'
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  if (ready) {
+    const perRequest = latest.server.requestCount > prev.server.requestCount && latest.server.evaluatedAt !== prev.server.evaluatedAt
+    const sameAsRender = latest.server.values[latest.name] === serverSnapshot.values[latest.name]
+    const literalSame = latest.browserLiteral === latest.server.values[latest.name]
+    const predictionOk = (prediction === 'same') === literalSame
+    const dynamicMissing = latest.browserDynamic === null
+    isMatched = perRequest && sameAsRender && predictionOk && dynamicMissing
+    const mark = (ok: boolean) => (ok ? '✅' : '❌')
+    actual = (
+      <ul className="space-y-1">
+        <li>{mark(perRequest)} 요청 #{prev.server.requestCount} → #{latest.server.requestCount}, evaluatedAt {perRequest ? '갱신됨' : '변화 없음'}</li>
+        <li>{mark(sameAsRender)} Route Handler 값 {String(latest.server.values[latest.name])} / 서버 렌더 값 {String(serverSnapshot.values[latest.name])}</li>
+        <li>{mark(predictionOk)} 브라우저 리터럴은 서버와 {literalSame ? '같음' : '다름'} — 예측 &quot;{prediction === 'same' ? '같다' : '다르다'}&quot;</li>
+        <li>{mark(dynamicMissing)} 브라우저 동적 조회 결과: {String(latest.browserDynamic)}</li>
+        <li>서버 렌더 실행 횟수: {renderCount}회</li>
+      </ul>
+    )
+  }
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="process.env 런타임 환경변수 동적 참조 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="process.env 요청 시점 참조 검증 결과"
+        expected={EXPECTED}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="화면에 표시된 서버·브라우저 측정값으로만 판정합니다. 예측이 틀리면 실패로 표시됩니다."
       />
-      <DemoDeepDiveCard title="process.env 런타임 환경변수 동적 참조">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Next.js 서버 컴포넌트 및 Route Handler에서의 <code>process.env</code> 런타임 동적 참조는 빌드 타임 하드코딩 없이, 컨테이너(Docker/Kubernetes) 실행 시점에 OS 주입 환경변수를 실시간으로 읽어 동일한 빌드 아티팩트를 다양한 환경에 배포할 수 있도록 지원하는 엔터프라이즈 운영 표준 스펙입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 실제 Route Handler(<code>api/status/route.ts</code>)가 <code>process.pid</code>, <code>process.env.NODE_ENV</code>, 현재 시각을 매 요청마다 새로 읽어 응답한다. 같은 서버 프로세스(pid 동일)에서 호출할 때마다 <code>evaluatedAt</code>이 갱신되는 것을 직접 확인해, 이 값이 빌드 타임에 번들에 굳지 않고 요청 시점에 평가됨을 실증한다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>Build Once, Deploy Anywhere (12-Factor App)</strong>: 단 한 번의 CI 빌드로 생성된 Docker 이미지를 Staging, QA, Production 환경으로 무재빌드 승격(Promotion) 배포할 수 있습니다.</li>
-              <li><strong>Kubernetes ConfigMap/Secrets 즉시 반영</strong>: Pod 재기동 시점에 최신 ConfigMap 및 Secret 값을 런타임 <code>process.env</code>로 즉시 로드합니다.</li>
-              <li><strong>빌드 시간 단축 및 캐시 최적화</strong>: 환경별로 별도의 빌드를 수행하지 않아 CI/CD 파이프라인의 소요 시간을 70% 이상 단축합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>Kubernetes 기반의 마이크로서비스 인프라 엔드포인트 및 Redis 캐시 호스트 바인딩</li>
-              <li>카나리 배포 및 블루-그린 배포 시 팟(Pod) 단위 환경변수 제어</li>
-              <li>글로벌 리전별(서울/도쿄/버지니아) 데이터베이스 리드 리플리카(Read Replica) 접속 분기</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>클라이언트 컴포넌트 참조 불가</strong>: 런타임 동적 <code>process.env</code>는 오직 서버 런타임(Node.js/Edge)에서만 평가되며, 클라이언트 컴포넌트에서는 접근할 수 없습니다.</li>
-              <li><strong>정적 생성 페이지의 런타임 변수 주의</strong>: 빌드 타임에 완전 정적으로 생성된 페이지(SSG)는 빌드 시점의 환경변수 값이 HTML에 각인되므로, 런타임 변수가 필요할 경우 <code>export const dynamic = 'force-dynamic'</code>을 선언해야 합니다.</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+      <RuntimeEnvDeepDive />
     </div>
   )
 }
