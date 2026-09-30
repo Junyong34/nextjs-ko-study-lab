@@ -1272,16 +1272,16 @@
   status: done
 
 - url: config/base-path/subpath-routing
-  title: "basePath: '/shop' 설정에 따른 전체 서브패스 라우팅"
+  title: "basePath의 서브패스와 링크·이미지 경로"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/basePath.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/asset-prefix/cdn-distribution
-  title: "assetPrefix: 'https://cdn.shop.com' CDN 자산 배포"
+  title: "assetPrefix의 CDN 적용 범위와 배포 절차"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/assetPrefix.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/redirects/regex-pattern-matching
   title: "redirects() 정규식 패턴 및 와일드카드 리다이렉트"
@@ -1392,16 +1392,16 @@
   status: stub
 
 - url: config/output/standalone-container
-  title: "output: 'standalone' 도커 경량 컨테이너 패키징"
+  title: "output: 'standalone'의 서버 패키징과 정적 파일"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/output.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/output/export-static-spa
-  title: "output: 'export' 정적 산출물 생성"
+  title: "output: 'export'의 정적 산출물과 서버 기능 제한"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/output.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: edge/v8-lightweight/global-web-apis
   title: "Edge Runtime V8 Web API 실행"

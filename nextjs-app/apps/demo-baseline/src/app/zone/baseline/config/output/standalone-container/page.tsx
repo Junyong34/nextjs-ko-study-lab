@@ -1,45 +1,26 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
-
-export const metadata: Metadata = getDemoMetadata('baseline', 'config/output/standalone-container')
-
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { ConfigOutputStandaloneDemo } from './components/ConfigOutputStandaloneDemo'
 import { VerificationFooter } from './components/VerificationFooter'
 
+export const metadata: Metadata = getDemoMetadata('baseline', 'config/output/standalone-container')
+
 export default function DemoPage() {
   return (
-    <DemoContainer className="space-y-6">
-            <DemoGuideCard
-        title="output: 'standalone' 도커 경량 컨테이너 패키징"
-        concept="next.config.ts의 output: 'standalone' 설정을 통해 node_modules 의존성을 필요한 파일만 최소 추출하여 도커(Docker) 컨테이너 이미지를 80% 이상 경량화합니다."
+    <DemoContainer className="min-w-0 space-y-4 [&_fieldset]:min-w-0 [&_legend]:max-w-full [&_legend]:break-words">
+      <DemoGuideCard
+        title="output: 'standalone'의 서버 패키징과 정적 파일"
+        concept="next.config.ts의 standalone 설정은 실행에 필요한 서버 파일과 의존성을 모읍니다. Node.js 서버와 정적 자산의 배포는 계속 필요합니다."
+        className="min-w-0 break-words"
         steps={[
-          {
-            step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-            description: "standalone 산출물에 포함될 런타임 상품 모듈을 선택합니다.",
-            actionBadge: "모듈 선택",
-          },
-          {
-            step: 2,
-            title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "standalone 빌드 아티팩트의 런타임 실행 동작을 트리거합니다.",
-            actionBadge: "산출물 실행",
-          },
-          {
-            step: 3,
-            title: "경량 컨테이너 산출물 크기 및 독립 구동 관찰",
-            description: "외부 node_modules 전체 설치 없이 standalone 번들만으로 서버가 정상 구동되는지 실시간 로그에서 확인합니다.",
-            actionBadge: "로그 검증",
-            observe: "output: standalone 빌드 산출물 구조에 따라 경량화된 독립 서버 패키징이 검증됨",
-            observeAt: "verification",
-          },
+          { step: 1, title: "standalone [설정 예제]와 server.js 실행 절차 읽기", description: ".next/standalone의 서버 파일과 수동 복사할 정적 파일을 구분합니다.", observe: '설정의 적용 대상과 별도 앱에서 실행할 절차', observeAt: 'playground' },
+          { step: 2, title: '[개념 확인]에서 답을 고르고 [답안 확인] 누르기', description: '두 문항을 모두 고르면 답안을 확인할 수 있습니다. 오답도 선택해 차이를 비교하세요.', observe: '선택한 답과 정답 수, 각 문항의 해설', observeAt: 'verification' },
+          { step: 3, title: '[답안 초기화] 후 다시 풀기', description: '선택과 판정이 대기 상태로 돌아옵니다. 개념 정리에서 설정의 제한을 확인한 뒤 다시 답하세요.', observe: '선택 해제와 검증 패널의 대기 상태', observeAt: 'verification' },
         ]}
       />
-      <DemoPlaygroundCard title={"output: 'standalone' 도커 경량 컨테이너 패키징 실습"}>
-        <ConfigOutputStandaloneDemo />
-      </DemoPlaygroundCard>
+      <ConfigOutputStandaloneDemo />
       <VerificationFooter />
     </DemoContainer>
   )
