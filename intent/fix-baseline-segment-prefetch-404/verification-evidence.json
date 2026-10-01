@@ -1,0 +1,2907 @@
+{
+  "checkedOn": "2026-10-01",
+  "timezone": "Asia/Seoul",
+  "baseCommit": "8166967a2cbf17f787e864fcd302d0afdb19026c",
+  "branch": "devPark/fix-baseline-segment-prefetch-404",
+  "scope": "로컬 구현·검증. 배포 미실행.",
+  "publicBefore": {
+    "checkedAt": "2026-10-01T04:42:57.694Z",
+    "shellOrigin": "https://www.learn-nextjs-lab.space",
+    "baselineOrigin": "https://demo-baseline.vercel.app",
+    "total": 46,
+    "failed": 9,
+    "results": [
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 404,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/404",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d",
+        "trees": {
+          "pages": [],
+          "invalidParams": []
+        },
+        "errors": [
+          "HTTP 404 (기대: 200)",
+          "응답 종류 불일치: text/html; charset=utf-8",
+          "대상 경로 불일치: /404",
+          "RSC 트리에 기대한 페이지가 없음: /zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        ]
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.rsc",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "72cb205897f231e929aa66b84ee34d352e41189396867056bed7c4ac12aa9db4",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/guides/adopting-partial-prefetching/hover-shell",
+            "/adopting-partial-prefetching/hover-shell",
+            "/hover-shell",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "dcedd5688d2544c36e421c7d221e615b5e7aa887908901cfe73a766e646b8f36",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 404,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/404",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d",
+        "trees": {
+          "pages": [],
+          "invalidParams": []
+        },
+        "errors": [
+          "HTTP 404 (기대: 200)",
+          "응답 종류 불일치: text/html; charset=utf-8",
+          "대상 경로 불일치: /404",
+          "RSC 트리에 기대한 페이지가 없음: /zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]"
+        ]
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "c58c86cb93147fb8a5b542ca3ea9bcf359a884ed26d8b91d001a0e12554cd0b7",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "8f1a12bc73e6039b7f6ae94af3c075b32daa2ea6c166ce3e119fb8e6aa4c951e",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 404,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/404",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d",
+        "trees": {
+          "pages": [],
+          "invalidParams": []
+        },
+        "errors": [
+          "HTTP 404 (기대: 200)",
+          "응답 종류 불일치: text/html; charset=utf-8",
+          "대상 경로 불일치: /404",
+          "RSC 트리에 기대한 페이지가 없음: /zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]"
+        ]
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "f3ef8ffe1da26d1eaa55fa3e86b356984f3f9ffac4e2351e3d829f7381fb30f2",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "3b2de2b476beb717c5ea1a64ab30635ab4c74fe6868c91d72feb5a3eba2f0f56",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/architecture/fast-refresh-boundary?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 404,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/404",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d",
+        "trees": {
+          "pages": [],
+          "invalidParams": []
+        },
+        "errors": [
+          "HTTP 404 (기대: 200)",
+          "응답 종류 불일치: text/html; charset=utf-8",
+          "대상 경로 불일치: /404",
+          "RSC 트리에 기대한 페이지가 없음: /zone/baseline/architecture/fast-refresh-boundary"
+        ]
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/architecture/fast-refresh-boundary?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary.rsc",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "38aee66447a9a87c918c6814df8ecc4ed1f758ec3da4c8ff36a60ae9aa68363a",
+        "trees": {
+          "pages": [
+            "/zone/baseline/architecture/fast-refresh-boundary",
+            "/baseline/architecture/fast-refresh-boundary",
+            "/architecture/fast-refresh-boundary",
+            "/fast-refresh-boundary",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/architecture/fast-refresh-boundary",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "1439f2a578cf0fb9bcb5d4783785c6a1e420823e383b766cb40191997870ddbb",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 404,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/404",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d",
+        "trees": {
+          "pages": [],
+          "invalidParams": []
+        },
+        "errors": [
+          "HTTP 404 (기대: 200)",
+          "응답 종류 불일치: text/html; charset=utf-8",
+          "대상 경로 불일치: /404",
+          "RSC 트리에 기대한 페이지가 없음: /zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]"
+        ]
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "b3372e81958b0795f9b31f97eb33f48094bb9317d3ecc96a5d1d063514134ff1",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/dynamic-segments/single-param/items/[id]",
+            "/single-param/items/[id]",
+            "/items/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/dynamic-segments/single-param/items/1",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "235a36555e83eb015a53eff0ddc32a11280b3a23a30ca94ec667dc392c3723fe",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]/[item].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "d955035815aa55c238e308f1b4039b0857110aed5e619cd5d63e6e446e22ec4e",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]/[item]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]/[item]",
+            "/file-conventions/layout/dynamic-category-layout/[category]/[item]",
+            "/layout/dynamic-category-layout/[category]/[item]",
+            "/dynamic-category-layout/[category]/[item]",
+            "/[category]/[item]",
+            "/[item]",
+            "/"
+          ],
+          "invalidParams": [
+            "category=[category].segments",
+            "item=_tree.segment"
+          ]
+        },
+        "errors": [
+          "대상 경로 불일치: /zone/baseline/file-conventions/layout/dynamic-category-layout/[category]/[item].rsc",
+          "잘못된 전송 경로 params: category=[category].segments, item=_tree.segment",
+          "RSC 트리에 기대한 페이지가 없음: /zone/baseline/file-conventions/layout/dynamic-category-layout/[category]"
+        ]
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "af1e272b0986b67d778d420dd28d67a2bf7e0c1e2c21f3d215a093e10e28f9c6",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]/[item].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "d955035815aa55c238e308f1b4039b0857110aed5e619cd5d63e6e446e22ec4e",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]/[item]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]/[item]",
+            "/file-conventions/layout/dynamic-category-layout/[category]/[item]",
+            "/layout/dynamic-category-layout/[category]/[item]",
+            "/dynamic-category-layout/[category]/[item]",
+            "/[category]/[item]",
+            "/[item]",
+            "/"
+          ],
+          "invalidParams": [
+            "category=[category].segments",
+            "item=_tree.segment"
+          ]
+        },
+        "errors": [
+          "대상 경로 불일치: /zone/baseline/file-conventions/layout/dynamic-category-layout/[category]/[item].rsc",
+          "잘못된 전송 경로 params: category=[category].segments, item=_tree.segment",
+          "RSC 트리에 기대한 페이지가 없음: /zone/baseline/file-conventions/layout/dynamic-category-layout/[category]"
+        ]
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "37c2ee70b2dc8321fa5de259e14b2085bc43ac14a4de617d80d52e6abd889bb7",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "c44d07ba31ae1e3277321200383e5ff03ed783aa3b2418aa93252decec9a2094",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "e82b45add2a1cca67145756a626d409946ac2ae529fbdaaddf59029ed88ee11b",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/guides/adopting-partial-prefetching/hover-shell",
+            "/adopting-partial-prefetching/hover-shell",
+            "/hover-shell",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.rsc",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "72cb205897f231e929aa66b84ee34d352e41189396867056bed7c4ac12aa9db4",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/guides/adopting-partial-prefetching/hover-shell",
+            "/adopting-partial-prefetching/hover-shell",
+            "/hover-shell",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "dcedd5688d2544c36e421c7d221e615b5e7aa887908901cfe73a766e646b8f36",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "4533a94b3634dc0d324e12ef439d9116aff897df959a0534319f5edf80bc85db",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "f727e656adf7091588215b727f0f66e7fe40d6796da438e162f8d1832eb2e10c",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "08a72eada0310a1d9ea3358163d798e4e6781df9d80ceeeddcf0e68727a91acf",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "7fbd3ab8cd1c49b9dfe67bc8db63e5a4321c683cc897327a19691402f2a43533",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "097812093d9e16742068ab8e7585d79c70188cf1f0d357e19f6164db1c6077da",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "c9bdc64717775ef220d76d482e01abc554109e97cc49d86f30b2bf25235b8642",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/architecture/fast-refresh-boundary?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary.segments/_tree.segment.rsc",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "96c16548417ff1b31290a0f04451390c93f91e53262f37a39069c7eecdae565b",
+        "trees": {
+          "pages": [
+            "/zone/baseline/architecture/fast-refresh-boundary",
+            "/baseline/architecture/fast-refresh-boundary",
+            "/architecture/fast-refresh-boundary",
+            "/fast-refresh-boundary",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/architecture/fast-refresh-boundary?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary.rsc",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "38aee66447a9a87c918c6814df8ecc4ed1f758ec3da4c8ff36a60ae9aa68363a",
+        "trees": {
+          "pages": [
+            "/zone/baseline/architecture/fast-refresh-boundary",
+            "/baseline/architecture/fast-refresh-boundary",
+            "/architecture/fast-refresh-boundary",
+            "/fast-refresh-boundary",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/architecture/fast-refresh-boundary",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "1439f2a578cf0fb9bcb5d4783785c6a1e420823e383b766cb40191997870ddbb",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "7ad8b24b83e909918500919e7a80f03b60a86ce93d1fa79b8129f8fd942b1590",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/dynamic-segments/single-param/items/[id]",
+            "/single-param/items/[id]",
+            "/items/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "a00d2af7ae4b9cad78aebb4ae1a2d0b633c8974aaf939d5bf8d771fa1a70a8e8",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/dynamic-segments/single-param/items/[id]",
+            "/single-param/items/[id]",
+            "/items/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/dynamic-segments/single-param/items/1",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "235a36555e83eb015a53eff0ddc32a11280b3a23a30ca94ec667dc392c3723fe",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "c8c080343db51ca7c29b55cc89e7616ca897faa35d18e7a0ce3ba7f9af03df1a",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "8b66e36a0bf5725cde1c1e44576a863737e1c7e06295730b73534088a6d640af",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "d22320c79bff691f3d6a356e594d172df2c55c9717e94c939cab1bd5e92b2f65",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "95caec61ccb3611166bd895ff7889345e38b3040b2fd8e73ee9679f0830cbb08",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+          "x-vercel-cache": "MISS"
+        },
+        "bodySha256": "fc28a35b304c512b19d94f6b5615a964ea40474f0981500228713dcf7106ed33",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 404,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/404",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "292b1874a20a37e5f923c15552759f2da06ed49c38af38b992fe049bf846e805",
+        "trees": {
+          "pages": [],
+          "invalidParams": []
+        },
+        "errors": [
+          "HTTP 404 (기대: 200)",
+          "응답 종류 불일치: text/html; charset=utf-8",
+          "대상 경로 불일치: /404",
+          "RSC 트리에 기대한 페이지가 없음: /zone/cache/revalidating/time-based-isr"
+        ]
+      },
+      {
+        "target": "shell-cache",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/cache/revalidating/time-based-isr.rsc",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "bf08890e3b8ac315a7dd1c54f7171e24edc10aa70441aaf4efeecc8dfd340c90",
+        "trees": {
+          "pages": [
+            "/zone/cache/revalidating/time-based-isr",
+            "/cache/revalidating/time-based-isr",
+            "/revalidating/time-based-isr",
+            "/time-based-isr",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "html",
+        "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/cache/revalidating/time-based-isr",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "c870212da37aa1808a90e4d011c56a58589814d8bda94d027457c60216259830",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "segment",
+        "url": "https://www.learn-nextjs-lab.space/zone/cache/guides/isr-cache-components/cache-life-hours?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": false,
+        "status": 404,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/404",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "292b1874a20a37e5f923c15552759f2da06ed49c38af38b992fe049bf846e805",
+        "trees": {
+          "pages": [],
+          "invalidParams": []
+        },
+        "errors": [
+          "HTTP 404 (기대: 200)",
+          "응답 종류 불일치: text/html; charset=utf-8",
+          "대상 경로 불일치: /404",
+          "RSC 트리에 기대한 페이지가 없음: /zone/cache/guides/isr-cache-components/cache-life-hours"
+        ]
+      },
+      {
+        "target": "shell-cache",
+        "mode": "rsc",
+        "url": "https://www.learn-nextjs-lab.space/zone/cache/guides/isr-cache-components/cache-life-hours?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component",
+          "x-matched-path": "/zone/cache/guides/isr-cache-components/cache-life-hours.rsc",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "ac97db8e4c855ba712dea4480b88eb62ad8e77a857046fc5b1c9bd27511075ca",
+        "trees": {
+          "pages": [
+            "/zone/cache/guides/isr-cache-components/cache-life-hours",
+            "/cache/guides/isr-cache-components/cache-life-hours",
+            "/guides/isr-cache-components/cache-life-hours",
+            "/isr-cache-components/cache-life-hours",
+            "/cache-life-hours",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "html",
+        "url": "https://www.learn-nextjs-lab.space/zone/cache/guides/isr-cache-components/cache-life-hours",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8",
+          "x-matched-path": "/zone/cache/guides/isr-cache-components/cache-life-hours",
+          "x-vercel-cache": "HIT"
+        },
+        "bodySha256": "6af0a961acba0b7afd87be8c1dad4b66e6b53e491abec98d51f1381aba3744e2",
+        "trees": null,
+        "errors": []
+      }
+    ]
+  },
+  "localAfter": {
+    "checkedAt": "2026-10-01T04:49:11.087Z",
+    "shellOrigin": "http://localhost:3198",
+    "baselineOrigin": "http://localhost:3001",
+    "total": 46,
+    "failed": 0,
+    "results": [
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "7277438d8d8909866bfb42499d122a4580896158c77fa6d0320054e28f85e4ed",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/guides/adopting-partial-prefetching/hover-shell",
+            "/adopting-partial-prefetching/hover-shell",
+            "/hover-shell",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "92235556d23e2daab4fc53f414cf083dd1e17cfd34c8fd99a92b740d519131dd",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/guides/adopting-partial-prefetching/hover-shell",
+            "/adopting-partial-prefetching/hover-shell",
+            "/hover-shell",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "d390b37611b36edd1a108d0ac080fb1bf9071e617572fe5ffa27af4763033179",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "0b2d10396a8bc026a1b5e12e555e68c5de117571def46bf19104f0e8ae5616fb",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "de1c91ec10d231f9f766a05e1acf6c4e6082b6737ab4ef9e6c7be0361953b552",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "dfc212359c869b8c1221e30d9f5469ddad0833013e865159db7b3e8299b7eb4d",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "f08145da1adc5ac9d97099e6c5d43fba8179b5e64d9513b9ddc210997280272f",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "0449e4fd45caf7c20f54734af3669db9906fb4821a9c1878a04e707208bedbe5",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "9d0639bd86b2875e044841340a64c6794ce985100bdc9eabd5b69c2b0cfae3fd",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/baseline/architecture/fast-refresh-boundary?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "9da1c80b77add2b0ca63325b83097120980a11d156bac9d35ab916fa515f0604",
+        "trees": {
+          "pages": [
+            "/zone/baseline/architecture/fast-refresh-boundary",
+            "/baseline/architecture/fast-refresh-boundary",
+            "/architecture/fast-refresh-boundary",
+            "/fast-refresh-boundary",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/baseline/architecture/fast-refresh-boundary?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "d5952b45eb72da97e38c43cee5cf642144edae24cfbdbf824827e311854f8ef7",
+        "trees": {
+          "pages": [
+            "/zone/baseline/architecture/fast-refresh-boundary",
+            "/baseline/architecture/fast-refresh-boundary",
+            "/architecture/fast-refresh-boundary",
+            "/fast-refresh-boundary",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "http://localhost:3198/zone/baseline/architecture/fast-refresh-boundary",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "cc3c56c094f70e06a111dcc46c33c8618d06eff72cc7c13ad93faa8f5b8399f9",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "11c75225743be85d67fa30dfeaa088f4d1224815a25769ee5d0dda89499c17ae",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/dynamic-segments/single-param/items/[id]",
+            "/single-param/items/[id]",
+            "/items/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "e23da4ef110066d46083c41371435990d24aa931d56680cf61a442b4579b5ffc",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/dynamic-segments/single-param/items/[id]",
+            "/single-param/items/[id]",
+            "/items/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "http://localhost:3198/zone/baseline/file-conventions/dynamic-segments/single-param/items/1",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "0d6ebe6ed63393fa86bffeeae89d13add8d9918bb6a88123c78d12d0de814eb0",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "af3941b7ff31a0ccf9c0326b6c4c0111c6b0c956f100ec0def2a9b05a3b9a513",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "9093674d501404c686d95ad065fe5111a8e03185425765852096ecacf24c1894",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "1854140f18bfef701296bd8f226a04847066d9774fdbc20fe50c5e22c2bc23b9",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "c7de902fd9bba8314527747971cc0aefccda7982c85fb87f0d6b321f79cb4adb",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell",
+        "mode": "html",
+        "url": "http://localhost:3198/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "9444703a85cac8f3999f51340d4d3086834df55e8a88830ad6547e91d075c833",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "7277438d8d8909866bfb42499d122a4580896158c77fa6d0320054e28f85e4ed",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/guides/adopting-partial-prefetching/hover-shell",
+            "/adopting-partial-prefetching/hover-shell",
+            "/hover-shell",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "92235556d23e2daab4fc53f414cf083dd1e17cfd34c8fd99a92b740d519131dd",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "/guides/adopting-partial-prefetching/hover-shell",
+            "/adopting-partial-prefetching/hover-shell",
+            "/hover-shell",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "d390b37611b36edd1a108d0ac080fb1bf9071e617572fe5ffa27af4763033179",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "0b2d10396a8bc026a1b5e12e555e68c5de117571def46bf19104f0e8ae5616fb",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "3b85200cd9234a4e009ffddf40fe081dc65b8b938a88e855a3b09dd7ce5aaa1d",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "2a411276fe5263c3a5915d9cfbf4fdeacb1c4df99817f55c5900d6ae684b1b54",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "f08145da1adc5ac9d97099e6c5d43fba8179b5e64d9513b9ddc210997280272f",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "390102cf59c301847c073006fc0a98dffa64e2b575861c53534f4bf2b93a149e",
+        "trees": {
+          "pages": [
+            "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/adopting-partial-prefetching/hover-shell/products/[id]",
+            "/hover-shell/products/[id]",
+            "/products/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "http://localhost:3001/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "4bbd7f4adf991ea9428c708516d3c8e6b94158bd8323dcfd40989715040074c2",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "http://localhost:3001/zone/baseline/architecture/fast-refresh-boundary?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "9da1c80b77add2b0ca63325b83097120980a11d156bac9d35ab916fa515f0604",
+        "trees": {
+          "pages": [
+            "/zone/baseline/architecture/fast-refresh-boundary",
+            "/baseline/architecture/fast-refresh-boundary",
+            "/architecture/fast-refresh-boundary",
+            "/fast-refresh-boundary",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "http://localhost:3001/zone/baseline/architecture/fast-refresh-boundary?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "d5952b45eb72da97e38c43cee5cf642144edae24cfbdbf824827e311854f8ef7",
+        "trees": {
+          "pages": [
+            "/zone/baseline/architecture/fast-refresh-boundary",
+            "/baseline/architecture/fast-refresh-boundary",
+            "/architecture/fast-refresh-boundary",
+            "/fast-refresh-boundary",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "http://localhost:3001/zone/baseline/architecture/fast-refresh-boundary",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "cc3c56c094f70e06a111dcc46c33c8618d06eff72cc7c13ad93faa8f5b8399f9",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "http://localhost:3001/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "11c75225743be85d67fa30dfeaa088f4d1224815a25769ee5d0dda89499c17ae",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/dynamic-segments/single-param/items/[id]",
+            "/single-param/items/[id]",
+            "/items/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "http://localhost:3001/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "4184e9692ff5c8601bc586fdfe36abebd74972b11e4c2343bc62a8d8c5ab5214",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/file-conventions/dynamic-segments/single-param/items/[id]",
+            "/dynamic-segments/single-param/items/[id]",
+            "/single-param/items/[id]",
+            "/items/[id]",
+            "/[id]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "http://localhost:3001/zone/baseline/file-conventions/dynamic-segments/single-param/items/1",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "0d6ebe6ed63393fa86bffeeae89d13add8d9918bb6a88123c78d12d0de814eb0",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "http://localhost:3001/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "af3941b7ff31a0ccf9c0326b6c4c0111c6b0c956f100ec0def2a9b05a3b9a513",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "http://localhost:3001/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "9ca4802fe6209bc574b32a83316537c6b040bf325b075d536410df8add254f5d",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "segment",
+        "url": "http://localhost:3001/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "1854140f18bfef701296bd8f226a04847066d9774fdbc20fe50c5e22c2bc23b9",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "rsc",
+        "url": "http://localhost:3001/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "3c50b2d068e80b270b67a1efbecb13c65580ebdfaceb9023244f77084f672bab",
+        "trees": {
+          "pages": [
+            "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "/file-conventions/layout/dynamic-category-layout/[category]",
+            "/layout/dynamic-category-layout/[category]",
+            "/dynamic-category-layout/[category]",
+            "/[category]",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "baseline-direct",
+        "mode": "html",
+        "url": "http://localhost:3001/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "cc0754ec12005280b231f7abba77d986a17522471ace52d56e9f19b3cce06cc1",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/cache/revalidating/time-based-isr?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "0db2327e156c8933e25201478cbb4205ded8e66a3bf115f952ce75f2948c73f2",
+        "trees": {
+          "pages": [
+            "/zone/cache/revalidating/time-based-isr",
+            "/cache/revalidating/time-based-isr",
+            "/revalidating/time-based-isr",
+            "/time-based-isr",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/cache/revalidating/time-based-isr?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "e0faf75533d25e17cdd930f9b6953be40ac8f85fb8d42df12e6050d18f7c3523",
+        "trees": {
+          "pages": [
+            "/zone/cache/revalidating/time-based-isr",
+            "/cache/revalidating/time-based-isr",
+            "/revalidating/time-based-isr",
+            "/time-based-isr",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "html",
+        "url": "http://localhost:3198/zone/cache/revalidating/time-based-isr",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "678542bd1789634f78d1b05dcb84ccf804afcb9b87fda0c3b5c69bd00a222747",
+        "trees": null,
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "segment",
+        "url": "http://localhost:3198/zone/cache/guides/isr-cache-components/cache-life-hours?_rsc=YCuvbfS_CHCPmpKA",
+        "requestHeaders": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "cffc1b33dd3ffe740c1e4fe3f348c280bfd035dd22781116839fedc279769a90",
+        "trees": {
+          "pages": [
+            "/zone/cache/guides/isr-cache-components/cache-life-hours",
+            "/cache/guides/isr-cache-components/cache-life-hours",
+            "/guides/isr-cache-components/cache-life-hours",
+            "/isr-cache-components/cache-life-hours",
+            "/cache-life-hours",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "rsc",
+        "url": "http://localhost:3198/zone/cache/guides/isr-cache-components/cache-life-hours?_rsc=",
+        "requestHeaders": {
+          "rsc": "1"
+        },
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/x-component"
+        },
+        "bodySha256": "a6c1efc32c321cf89c819f9bd1e2b957ec6582e1dfe9ab0078375c19c937936a",
+        "trees": {
+          "pages": [
+            "/zone/cache/guides/isr-cache-components/cache-life-hours",
+            "/cache/guides/isr-cache-components/cache-life-hours",
+            "/guides/isr-cache-components/cache-life-hours",
+            "/isr-cache-components/cache-life-hours",
+            "/cache-life-hours",
+            "/"
+          ],
+          "invalidParams": []
+        },
+        "errors": []
+      },
+      {
+        "target": "shell-cache",
+        "mode": "html",
+        "url": "http://localhost:3198/zone/cache/guides/isr-cache-components/cache-life-hours",
+        "requestHeaders": {},
+        "passed": true,
+        "status": 200,
+        "responseHeaders": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "bodySha256": "31aa287eb159842e96d0a595b2b2c18f250af8fcb28efa10f7743e1cf8fb4eba",
+        "trees": null,
+        "errors": []
+      }
+    ]
+  },
+  "browserLocal": {
+    "initial": {
+      "iframePath": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+      "rows": [
+        "목록 표시 후 prefetch 요청 확인관측: 세 카드는 prefetch 기본값 / true / false 링크입니다. 뷰포트에 들어온 링크의 prefetch 요청은 production에서만 발생합니다.",
+        "관측 로그의 prefetch 요청 수",
+        "<Link href=… prefetch>",
+        "<Link href=… prefetch={false}>",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 85ms / body 85ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 90ms / body 90ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 52ms / body 52ms · 200",
+        "navigation",
+        "_rsc=true · next-router-prefetch=없음 · 헤더 51ms / body 1549ms · 200",
+        "[검증] 링크 prefetch 네트워크 요청 검증",
+        "뷰포트에 들어온 기본/prefetch 링크는 목적지 prefetch 요청(Next-Router-Prefetch 또는 segment prefetch 헤더)을 보낸다.",
+        "prefetch={false} 링크의 목적지는 prefetch 요청이 없다.",
+        "✅ 상품 1 (prefetch 기본값): prefetch 요청 있음 (기대: 있음)",
+        "✅ 상품 2 (prefetch ={true}): prefetch 요청 있음 (기대: 있음)",
+        "✅ 상품 3 (prefetch ={false}): prefetch 요청 없음 (기대: 없음)",
+        "클릭 이동 RSC 요청 1건 (prefetch 캐시 적중 시 0건일 수 있음)",
+        "[개념 정리] Link prefetch와 정적 셸 · 동적 데이터 경계",
+        "├─ page.tsx                     ← 목록: 실제 <Link> 3개 (prefetch 기본 / true / false)",
+        "   ├─ loading.tsx               ← prefetch(auto)가 닿는 loading 경계",
+        "Partial Prefetching(partialPrefetching: true, export const prefetch = 'partial')은 cacheComponents가 켜져 있을 때만 동작합니다. 이 zone(demo-baseline)은 cacheComponents를 쓰지 않으므로 App Shell prefetch 자체는 시연하지 못하고, 같은 구조(정적 셸 + Suspense 뒤 동적 데이터)에서 <Link>의 기본 prefetch 동작과 클릭 뒤 스트리밍을 실측합니다.",
+        "<Link>의 prefetch(viewport 진입·hover)는 production에서만 동작합니다. next dev의 0건은 오류가 아니라 정상입니다. 요청 헤더 Next-Router-Prefetch와 _rsc 쿼리는 DevTools Network 탭에서도 확인할 수 있습니다.",
+        "prefetch(true): 동적 라우트도 전체를 미리 가져옵니다.",
+        "prefetch={false}: viewport 진입과 hover 모두 prefetch하지 않습니다."
+      ],
+      "has404": false
+    },
+    "hovered": true,
+    "clicked": true,
+    "afterClick": {
+      "iframePath": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+      "rows": [
+        "목록 표시 후 prefetch 요청 확인관측: 세 카드는 prefetch 기본값 / true / false 링크입니다. 뷰포트에 들어온 링크의 prefetch 요청은 production에서만 발생합니다.",
+        "관측 로그의 prefetch 요청 수",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 85ms / body 85ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 90ms / body 90ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 52ms / body 52ms · 200",
+        "navigation",
+        "_rsc=true · next-router-prefetch=없음 · 헤더 51ms / body 1549ms · 200",
+        "navigation",
+        "_rsc=true · next-router-prefetch=없음 · 헤더 41ms / body 1542ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 12ms / body 12ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 8ms / body 9ms · 200",
+        "[검증] 링크 prefetch 네트워크 요청 검증",
+        "뷰포트에 들어온 기본/prefetch 링크는 목적지 prefetch 요청(Next-Router-Prefetch 또는 segment prefetch 헤더)을 보낸다.",
+        "prefetch={false} 링크의 목적지는 prefetch 요청이 없다.",
+        "✅ 상품 1 (prefetch 기본값): prefetch 요청 있음 (기대: 있음)",
+        "✅ 상품 2 (prefetch ={true}): prefetch 요청 있음 (기대: 있음)",
+        "✅ 상품 3 (prefetch ={false}): prefetch 요청 없음 (기대: 없음)",
+        "클릭 이동 RSC 요청 2건 (prefetch 캐시 적중 시 0건일 수 있음)",
+        "[개념 정리] Link prefetch와 정적 셸 · 동적 데이터 경계",
+        "├─ page.tsx                     ← 목록: 실제 <Link> 3개 (prefetch 기본 / true / false)",
+        "   ├─ loading.tsx               ← prefetch(auto)가 닿는 loading 경계",
+        "Partial Prefetching(partialPrefetching: true, export const prefetch = 'partial')은 cacheComponents가 켜져 있을 때만 동작합니다. 이 zone(demo-baseline)은 cacheComponents를 쓰지 않으므로 App Shell prefetch 자체는 시연하지 못하고, 같은 구조(정적 셸 + Suspense 뒤 동적 데이터)에서 <Link>의 기본 prefetch 동작과 클릭 뒤 스트리밍을 실측합니다.",
+        "<Link>의 prefetch(viewport 진입·hover)는 production에서만 동작합니다. next dev의 0건은 오류가 아니라 정상입니다. 요청 헤더 Next-Router-Prefetch와 _rsc 쿼리는 DevTools Network 탭에서도 확인할 수 있습니다.",
+        "prefetch(true): 동적 라우트도 전체를 미리 가져옵니다.",
+        "prefetch={false}: viewport 진입과 hover 모두 prefetch하지 않습니다."
+      ],
+      "has404": false
+    },
+    "returned": true,
+    "afterReturn": {
+      "iframePath": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+      "rows": [
+        "목록 표시 후 prefetch 요청 확인관측: 세 카드는 prefetch 기본값 / true / false 링크입니다. 뷰포트에 들어온 링크의 prefetch 요청은 production에서만 발생합니다.",
+        "관측 로그의 prefetch 요청 수",
+        "<Link href=… prefetch>",
+        "<Link href=… prefetch={false}>",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 85ms / body 85ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 90ms / body 90ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 52ms / body 52ms · 200",
+        "navigation",
+        "_rsc=true · next-router-prefetch=없음 · 헤더 51ms / body 1549ms · 200",
+        "navigation",
+        "_rsc=true · next-router-prefetch=없음 · 헤더 41ms / body 1542ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 12ms / body 12ms · 200",
+        "prefetch",
+        "_rsc=true · next-router-prefetch=1 · 헤더 8ms / body 9ms · 200",
+        "[검증] 링크 prefetch 네트워크 요청 검증",
+        "뷰포트에 들어온 기본/prefetch 링크는 목적지 prefetch 요청(Next-Router-Prefetch 또는 segment prefetch 헤더)을 보낸다.",
+        "prefetch={false} 링크의 목적지는 prefetch 요청이 없다.",
+        "✅ 상품 1 (prefetch 기본값): prefetch 요청 있음 (기대: 있음)",
+        "✅ 상품 2 (prefetch ={true}): prefetch 요청 있음 (기대: 있음)",
+        "✅ 상품 3 (prefetch ={false}): prefetch 요청 없음 (기대: 없음)",
+        "클릭 이동 RSC 요청 2건 (prefetch 캐시 적중 시 0건일 수 있음)",
+        "[개념 정리] Link prefetch와 정적 셸 · 동적 데이터 경계",
+        "├─ page.tsx                     ← 목록: 실제 <Link> 3개 (prefetch 기본 / true / false)",
+        "   ├─ loading.tsx               ← prefetch(auto)가 닿는 loading 경계",
+        "Partial Prefetching(partialPrefetching: true, export const prefetch = 'partial')은 cacheComponents가 켜져 있을 때만 동작합니다. 이 zone(demo-baseline)은 cacheComponents를 쓰지 않으므로 App Shell prefetch 자체는 시연하지 못하고, 같은 구조(정적 셸 + Suspense 뒤 동적 데이터)에서 <Link>의 기본 prefetch 동작과 클릭 뒤 스트리밍을 실측합니다.",
+        "<Link>의 prefetch(viewport 진입·hover)는 production에서만 동작합니다. next dev의 0건은 오류가 아니라 정상입니다. 요청 헤더 Next-Router-Prefetch와 _rsc 쿼리는 DevTools Network 탭에서도 확인할 수 있습니다.",
+        "prefetch(true): 동적 라우트도 전체를 미리 가져옵니다.",
+        "prefetch={false}: viewport 진입과 hover 모두 prefetch하지 않습니다."
+      ],
+      "has404": false
+    },
+    "requests": [
+      {
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+        "type": "Fetch",
+        "headers": {
+          "rsc": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-router-prefetch": "1",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "status": 200,
+        "mimeType": "text/x-component"
+      },
+      {
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+        "type": "Fetch",
+        "headers": {
+          "rsc": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-router-prefetch": "1",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "status": 200,
+        "mimeType": "text/x-component"
+      },
+      {
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=2A1drlgGN4F9wonE",
+        "type": "Fetch",
+        "headers": {
+          "rsc": "1",
+          "next-router-prefetch": "1",
+          "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22zone%22%2C%7B%22children%22%3A%5B%22baseline%22%2C%7B%22children%22%3A%5B%22guides%22%2C%7B%22children%22%3A%5B%22adopting-partial-prefetching%22%2C%7B%22children%22%3A%5B%22hover-shell%22%2C%7B%22children%22%3A%5B%22products%22%2C%7B%22children%22%3A%5B%5B%22id%22%2C%221%22%2C%22d%22%2Cnull%5D%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%2C4096%5D%7D%2Cnull%2Cnull%2C4100%5D%7D%2Cnull%2C%22refetch%22%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4120%5D",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "status": 200,
+        "mimeType": "text/x-component"
+      },
+      {
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=6H_x-vLc0hAnpStW",
+        "type": "Fetch",
+        "headers": {
+          "rsc": "1",
+          "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22zone%22%2C%7B%22children%22%3A%5B%22baseline%22%2C%7B%22children%22%3A%5B%22guides%22%2C%7B%22children%22%3A%5B%22adopting-partial-prefetching%22%2C%7B%22children%22%3A%5B%22hover-shell%22%2C%7B%22children%22%3A%5B%22products%22%2C%7B%22children%22%3A%5B%5B%22id%22%2C%222%22%2C%22d%22%2Cnull%5D%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%2C4096%5D%7D%2Cnull%2Cnull%2C4100%5D%7D%2Cnull%2C%22refetch%22%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4120%5D",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "status": 200,
+        "mimeType": "text/x-component"
+      },
+      {
+        "url": "http://localhost:3198/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=vV8ITC1_1pyCxHpu",
+        "type": "Fetch",
+        "headers": {
+          "rsc": "1",
+          "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22zone%22%2C%7B%22children%22%3A%5B%22baseline%22%2C%7B%22children%22%3A%5B%22guides%22%2C%7B%22children%22%3A%5B%22adopting-partial-prefetching%22%2C%7B%22children%22%3A%5B%22hover-shell%22%2C%7B%22children%22%3A%5B%22products%22%2C%7B%22children%22%3A%5B%5B%22id%22%2C%221%22%2C%22d%22%2Cnull%5D%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2C%22refetch%22%2C4096%5D%7D%2Cnull%2Cnull%2C4100%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4120%5D",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "status": 200,
+        "mimeType": "text/x-component"
+      }
+    ],
+    "resourceFailures": [],
+    "errors": [],
+    "failures": [
+      {
+        "url": "http://localhost:3198/demo/guides/cdn-caching?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/ci-build-caching?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/forms?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/server-actions?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/redirecting?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/draft-mode?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/prefetching?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/optimizing-prefetching?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/instant-navigation?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/lazy-loading?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/preserving-ui-state?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/preventing-flash-before-hydration?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/getting-started/metadata-and-og-images?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/getting-started/route-handlers?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/getting-started/proxy?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/getting-started/deploying?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/getting-started/upgrading?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/rendering-philosophy?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/server-and-client-boundary?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/how-revalidation-works?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/caching-without-cache-components?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/incremental-static-regeneration?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/streaming?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/incremental-static-regeneration-cache-components?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/migrating-to-cache-components?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:3198/demo/guides/adopting-partial-prefetching?_rsc=ULSKfQVtcHVCtJoO",
+        "error": "net::ERR_ABORTED"
+      }
+    ]
+  },
+  "proxyBrowser": {
+    "checks": [
+      {
+        "path": "/zone/baseline/functions/headers/user-agent-device?device=mobile",
+        "finalPath": "/zone/baseline/functions/headers/user-agent-device?device=mobile",
+        "markers": [
+          {
+            "marker": "iPhone",
+            "found": true
+          },
+          {
+            "marker": "모바일 뷰",
+            "found": true
+          }
+        ]
+      },
+      {
+        "path": "/zone/baseline/functions/headers/user-agent-device?device=desktop",
+        "finalPath": "/zone/baseline/functions/headers/user-agent-device?device=desktop",
+        "markers": [
+          {
+            "marker": "Windows NT 10.0",
+            "found": true
+          },
+          {
+            "marker": "데스크톱 뷰",
+            "found": true
+          }
+        ]
+      },
+      {
+        "path": "/zone/baseline/functions/next-response/rewrite-virtual?scenario=rewrite",
+        "finalPath": "/zone/baseline/functions/next-response/rewrite-virtual?scenario=rewrite",
+        "markers": [
+          {
+            "marker": "rewrite",
+            "found": true
+          },
+          {
+            "marker": "scenario=rewrite",
+            "found": true
+          }
+        ]
+      }
+    ],
+    "resourceFailures": [],
+    "errors": [],
+    "failures": []
+  },
+  "proxyHttp": [
+    {
+      "path": "/guides/authentication/middleware-guard?probe=admin",
+      "withDemoCookie": false,
+      "status": 307,
+      "expectedStatus": 307,
+      "headers": {
+        "location": "/zone/baseline/guides/authentication/middleware-guard?probed=admin&guardResult=redirected"
+      },
+      "passed": true
+    },
+    {
+      "path": "/guides/authentication/middleware-guard?probe=admin",
+      "withDemoCookie": true,
+      "status": 200,
+      "expectedStatus": 200,
+      "headers": {
+        "x-middleware-guard-decision": "allowed"
+      },
+      "passed": true
+    },
+    {
+      "path": "/functions/next-response/rewrite-virtual?scenario=redirect",
+      "withDemoCookie": false,
+      "status": 307,
+      "expectedStatus": 307,
+      "headers": {
+        "location": "/zone/baseline/functions/next-response/rewrite-virtual/target-event?via=redirect"
+      },
+      "passed": true
+    },
+    {
+      "path": "/proxy/rewrite-and-headers?variant=variant_b&country=US",
+      "withDemoCookie": false,
+      "status": 200,
+      "expectedStatus": 200,
+      "headers": {
+        "x-ab-variant": "variant_b",
+        "x-forwarded-country": "US",
+        "x-proxy-gateway": "Active"
+      },
+      "passed": true
+    }
+  ],
+  "shellAndAssets": [
+    {
+      "path": "/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "passed": true
+    },
+    {
+      "path": "/demo/guides/adopting-partial-prefetching",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "passed": true
+    },
+    {
+      "path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "passed": true
+    },
+    {
+      "path": "/demo-static/baseline/_next/static/chunks/1d8pgirhq9p2u.css",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "passed": true
+    },
+    {
+      "path": "/demo-static/baseline/_next/static/chunks/0yrbphev8ocyv.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "passed": true
+    },
+    {
+      "path": "/zone/cache/revalidating/time-based-isr",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "passed": true
+    },
+    {
+      "path": "/demo-static/cache/_next/static/chunks/1ygr-5k_zars8.css",
+      "status": 200,
+      "contentType": "text/css; charset=UTF-8",
+      "passed": true
+    },
+    {
+      "path": "/demo-static/cache/_next/static/chunks/1qra59zp_myy5.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=UTF-8",
+      "passed": true
+    }
+  ],
+  "rewritesManifest": {
+    "beforeFiles": [
+      {
+        "source": "/zone/baseline/:path*",
+        "destination": "http://localhost:3001/zone/baseline/:path*",
+        "regex": "^/zone/baseline(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+      },
+      {
+        "source": "/zone/cache/:path*",
+        "destination": "http://localhost:3002/zone/cache/:path*",
+        "regex": "^/zone/cache(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+      }
+    ],
+    "afterFiles": [
+      {
+        "source": "/demo-static/baseline/:path*",
+        "destination": "http://localhost:3001/demo-static/baseline/:path*",
+        "regex": "^/demo-static/baseline(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+      },
+      {
+        "source": "/demo-static/cache/:path*",
+        "destination": "http://localhost:3002/demo-static/cache/:path*",
+        "regex": "^/demo-static/cache(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+      }
+    ],
+    "fallback": []
+  },
+  "checks": {
+    "shellTypecheck": "passed",
+    "shellTurbopackBuild": "passed",
+    "initialBuildFailure": "worktree 밖 공유 node_modules 링크로 next/package.json 해석 실패. 링크 제거 및 frozen-lockfile 오프라인 독립 설치 후 통과.",
+    "fullTestSuite": "not run: 승인된 plan의 실제 HTTP·브라우저·타입·빌드 검증 범위",
+    "preview": "not deployed",
+    "production": "not deployed"
+  },
+  "codeReview": {
+    "status": "complete",
+    "verdict": "Ready to merge",
+    "scope": {
+      "base": "8166967a2cbf17f787e864fcd302d0afdb19026c",
+      "branch": "devPark/fix-baseline-segment-prefetch-404",
+      "head_sha": "8166967a2cbf17f787e864fcd302d0afdb19026c",
+      "pr_url": null,
+      "files_changed": 2,
+      "files": [
+        "nextjs-app/apps/shell/next.config.ts",
+        "nextjs-app/apps/shell/scripts/check-zone-prefetch.mjs"
+      ]
+    },
+    "intent": "Vercel에서 셸 afterFiles rewrite가 segment 전송 URL을 변환한 뒤 zone에서 다시 변환되는 문제를 zone beforeFiles로 방지한다. 자산 afterFiles와 환경별 목적지는 보존한다. 실제 HTTP/RSC/HTML 응답을 검사하는 재사용 checker로 수정 전 실패 및 수정 후 결과를 비교한다.",
+    "intent_confidence": "explicit",
+    "reviewers": [
+      "correctness",
+      "project-standards",
+      "testing",
+      "api-contract",
+      "adversarial"
+    ],
+    "findings": [],
+    "actionable_findings": [],
+    "triage_groups": [],
+    "pre_existing_findings": [],
+    "requirements_completeness": {
+      "plan_source": "explicit",
+      "plan_path": "/Users/devpark/.codex/worktrees/fix-baseline-segment-prefetch-404/nextjs-ko-study-lab/intent/fix-baseline-segment-prefetch-404/plan.md",
+      "requirements": [
+        {
+          "id": "U1",
+          "status": "met",
+          "requirement": "U1: mandatory shell and baseline HTTP origins, exact captured segment headers/_rsc hash, status/type/matched-path/RSC-tree checks, failures exit nonzero, TLS/auth hygiene, at most250lines",
+          "evidence": "신규 checker 전체 193줄을 검토했다. 필수 origin, 실제 segment 헤더와 _rsc 계산, 상태/응답 종류/대상/RSC 트리 확인, 오류 종료와 TLS 검증이 구현되어 있다."
+        },
+        {
+          "id": "U2",
+          "status": "met",
+          "requirement": "U2: zone beforeFiles assets afterFiles fallback empty preserve environment destinations and Related Projects; actual local verification is parent owned",
+          "evidence": "zone은 beforeFiles, 자산은 afterFiles, fallback은 빈 배열이다. 환경별 목적지와 Related Projects 조회 로직은 보존된다."
+        }
+      ],
+      "implementation_units": [
+        {
+          "id": "U1",
+          "status": "met",
+          "unit": "U1 actual request regression checker"
+        },
+        {
+          "id": "U2",
+          "status": "met",
+          "unit": "U2 zone rewrite order local implementation"
+        }
+      ],
+      "unrequested_behavior_rules": [],
+      "intentional_deferrals": [
+        {
+          "id": "U3",
+          "status": "not addressed",
+          "reason": "별도 배포 허가 이후 수행하는 단계로, 이번 승인된 로컬 U1/U2 코드 리뷰 범위에서 의도적으로 제외했다. 코드 결함이나 누락된 구현으로 분류하지 않는다."
+        }
+      ]
+    },
+    "learnings": [],
+    "agent_native_gaps": [],
+    "deployment_notes": [],
+    "residual_risks": [],
+    "testing_gaps": [],
+    "coverage": {
+      "depth": "full",
+      "mode": "agent report-only",
+      "notes": [
+        "승인된 U1/U2의 두 코드 파일만 검토했다. 신규 미추적 checker 전체 193줄을 포함했으며 병행 운영/검증 문서와 생성 manifest 변경은 제외했다.",
+        "공개 라우팅 경계와 실패를 놓칠 수 있는 실제 HTTP 검증 도구를 full depth로 검토했다. helper의 tracked diff 집계는 exec_nontest_lines=11, changed_lines=14, size_band=small이며 신규 checker 전체는 별도로 포함했다.",
+        "전용 CODING_STANDARDS.md가 없어 네 계층 AGENTS.md를 project-standards 기준으로 사용했다.",
+        "외부 provider 코드 전송이 명시적으로 금지되어 cross-model pass를 생략하고 로컬 네이티브 adversarial lens를 수행했다.",
+        "다섯 로컬 reviewer의 findings, residual_risks, testing_gaps는 모두 비어 있다.",
+        "validator는 primary=0, selected=0인 empty-batch로 실행하지 않았다. cross-model corroboration에 따른 shortcut은 사용하지 않았다.",
+        "빌드/HTTP/브라우저 실행은 메인 담당이다. 전달된 저장 증거는 로컬 HTTP 46건 실패 0건, 수정 전 공개 baseline 직접 요청 20건 통과, 공개 셸 segment 요청 9건 실패다.",
+        "수정 후 배포 환경의 통과 증거는 없다. Ready to merge는 검토한 로컬 코드의 준비 상태만 뜻하며 공개 서비스 404 해결 증거, 배포 완료 또는 커밋/push/배포/merge 허가를 뜻하지 않는다.",
+        "U3 배포 미실행은 별도 승인 조건에 따른 의도한 범위 제한이다. 프로젝트 파일, Git, 실행 중 서비스와 외부 provider를 변경하지 않았다."
+      ],
+      "reviewer_reasons": {
+        "correctness": "logic and RSC tree parsing",
+        "project-standards": "applicable instruction criteria",
+        "testing": "new actual HTTP verification harness",
+        "api-contract": "zone public route dispatch order",
+        "adversarial": "silent-pass checker fidelity"
+      },
+      "suppressed_by_confidence": {},
+      "mode_aware_demotions": 0,
+      "first_evidence_backfilled": 0,
+      "quote_gate_demotions": 0,
+      "malformed_findings": 0,
+      "malformed_returns": 0,
+      "settled_decision_suppressed": 0,
+      "failed_reviewers": [],
+      "timed_out_reviewers": [],
+      "peer_outcome": "in-process-fallback",
+      "validator": {
+        "outcome": "empty-batch",
+        "reason": "검증 대상으로 선정된 findings가 없어 validator launch를 생략했다.",
+        "selected": 0,
+        "confirmed": 0,
+        "rejected": 0,
+        "unresolved": 0,
+        "malformed": 0,
+        "failed": 0,
+        "shortcut_skipped": 0,
+        "protected_subject_reclassifications": 0
+      },
+      "compound_packs": {
+        "roots": [],
+        "warnings": [],
+        "errors": []
+      },
+      "not_assessed": [
+        "배포 후 공개 서비스 동작",
+        "별도 learnings/agent-native/deployment specialist 검토"
+      ]
+    },
+    "verdict_reason": "승인된 로컬 U1/U2 코드에서 실행 결과에 영향을 주는 결함을 발견하지 않았다. 배포 후 공개 서비스 해결 여부는 별도 허가와 검증이 필요하다.",
+    "artifact_path": "/tmp/compound-engineering-501/ce-code-review/20261001-134815-8c654eb0",
+    "run_id": "20261001-134815-8c654eb0"
+  }
+}

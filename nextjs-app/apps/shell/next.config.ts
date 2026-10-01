@@ -25,16 +25,19 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../../'),
   transpilePackages: ['@study/ui', '@study/docs-render', '@study/demos', '@study/docs'],
   async rewrites() {
-    return [
-      ...Object.entries(zones).map(([slug, url]) => ({
+    return {
+      // Vercel이 segment prefetch 경로를 변환하기 전에 소유 zone으로 전달한다.
+      // afterFiles에서는 셸과 zone이 같은 전송 접미사를 두 번 붙일 수 있다.
+      beforeFiles: Object.entries(zones).map(([slug, url]) => ({
         source: `/zone/${slug}/:path*`,
         destination: `${url}/zone/${slug}/:path*`,
       })),
-      ...Object.entries(zones).map(([slug, url]) => ({
+      afterFiles: Object.entries(zones).map(([slug, url]) => ({
         source: `/demo-static/${slug}/:path*`,
         destination: `${url}/demo-static/${slug}/:path*`,
       })),
-    ]
+      fallback: [],
+    }
   },
 }
 

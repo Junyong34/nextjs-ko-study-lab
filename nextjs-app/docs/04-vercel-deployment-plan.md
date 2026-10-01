@@ -1,6 +1,6 @@
 # 04. Vercel 배포 계획
 
-현재 배포 구성과 운영 절차, 과거 검증 기록, 남은 확인 사항을 구분한다. 2026-09-05 코드·설정과 공식 자료를 대조했다. Vercel 대시보드의 현재 값이나 운영 사이트를 이번에 재검증하지는 않았다.
+현재 배포 구성과 운영 절차, 과거 검증 기록, 남은 확인 사항을 구분한다. 2026-09-05 배포 구성을 코드·공식 자료와 대조했다. 2026-10-01 셸의 zone rewrite 순서를 수정하고 로컬 production 요청을 검증했다. 이 수정의 Preview·Production 배포 효과와 Vercel 대시보드 현재 설정은 아직 확인하지 않았다.
 
 ## 1. 배포 구성 원칙
 
@@ -52,6 +52,22 @@ Vercel은 프로젝트 ID로 연결한 앱 간 Preview·Production 배포 URL �
 
 이 저장소에서는 Preview의 양방향 연결을 아직 검증하지 않았다. Production URL을 Preview에 그대로 복사해 PR 변경이 연결됐다고 판단하지 않는다. 셸 rewrite 목적지와 두 zone의 허용 origin이 해당 Preview 조합에 맞는지 함께 확인해야 한다.
 
+## 3-3. Zone rewrite 순서와 segment prefetch
+
+셸의 `/zone/baseline/:path*`·`/zone/cache/:path*` 외부 rewrite는 `beforeFiles`에 둔다. `/demo-static/*` 자산 rewrite는 `afterFiles`에 유지한다. 목적지는 기존 환경변수·Related Projects 조회 결과를 사용한다.
+
+Vercel은 `rsc: 1`, `next-router-prefetch: 1`, `next-router-segment-prefetch` 헤더를 전송 경로로 변환한다. zone 전달이 `afterFiles`에 있으면 변환된 경로와 헤더를 다음 앱에 전달해 접미사가 중복될 수 있다. 셸에서 변환하기 전에 소유 zone으로 전달하도록 순서를 정한다.
+
+검증은 HTTP 200만으로 판정하지 않는다. `text/x-component`, `x-matched-path`와 RSC 트리가 요청한 라우트와 일치해야 한다. 전송 접미사를 다른 동적 라우트가 params로 받아 200을 반환한 사례도 있다.
+
+저장소 루트에서 다음 실제 요청 검사를 실행할 수 있다. Node.js와 시스템 `curl`을 사용하며 인증서 검증을 유지한다. `--shell-origin`과 `--baseline-origin`에는 경로 없는 접근 가능한 origin을 넣는다. 인증 리다이렉트나 네트워크 오류는 통과로 처리하지 않는다.
+
+```bash
+node nextjs-app/apps/shell/scripts/check-zone-prefetch.mjs --shell-origin <셸-origin> --baseline-origin <baseline-직접-origin>
+```
+
+실습의 실제 Chrome 요청은 헤더와 `_rsc` 값을 함께 캡처해 비교한다. 로컬 production은 수정 전에도 200이었으므로 로컬 통과를 배포 해결로 해석하지 않는다. 2026-10-01 [조사·검증 기록](../../intent/fix-baseline-segment-prefetch-404/verification.md)에 수정 전 공개 배포와 수정 후 로컬 결과를 구분했다. Preview 포함 배포는 별도 허가가 필요하다.
+
 ## 4. 브랜치별 자동 배포 제어
 
 세 앱의 `vercel.json`은 다음 규칙을 가진다.
@@ -83,7 +99,7 @@ Vercel은 프로젝트 ID로 연결한 앱 간 Preview·Production 배포 URL �
 1. 프로젝트명·ID·Root Directory와 환경별 변수를 대조한다.
 2. zone 두 앱과 셸을 배포하고 빌드 로그·배포 URL·커밋을 기록한다.
 3. 문서 본문과 `/docs-assets/*` 이미지, 셸의 `/zone/*` 및 `/demo-static/*` 요청을 확인한다.
-4. 각 zone을 직접 요청한 결과와 셸 프록시 결과를 비교한다. 셸의 HTML 응답만으로 iframe 성공을 판정하지 않는다.
+4. 각 zone을 직접 요청한 결과와 셸 프록시 결과를 비교한다. 일반 RSC와 segment prefetch도 비교하고 상태·Content-Type·대상 라우트 트리를 확인한다. 셸의 HTML 응답만으로 iframe 성공을 판정하지 않는다.
 5. 실제 학습자 도메인에서 Server Action 요청과 응답을 확인한다.
 6. Production과 Preview를 각각 기록한다. SEO 확인은 [07](./07-seo-plan.md)을 따른다.
 

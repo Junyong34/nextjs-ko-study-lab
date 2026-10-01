@@ -1,0 +1,430 @@
+{
+  "checkedOn": "2026-10-01",
+  "timezone": "Asia/Seoul",
+  "checkout": "8166967",
+  "browser": {
+    "requests": [
+      {
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+        "headers": {
+          "rsc": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-router-prefetch": "1",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "type": "Fetch",
+        "status": 404,
+        "mimeType": "text/html",
+        "responseHeaders": {
+          "x-vercel-cache": "HIT",
+          "x-matched-path": "/404",
+          "content-type": "text/html; charset=utf-8"
+        }
+      },
+      {
+        "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+        "headers": {
+          "rsc": "1",
+          "next-router-segment-prefetch": "/_tree",
+          "next-router-prefetch": "1",
+          "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+        },
+        "type": "Fetch",
+        "status": 404,
+        "mimeType": "text/html",
+        "responseHeaders": {
+          "x-vercel-cache": "HIT",
+          "x-matched-path": "/404",
+          "content-type": "text/html; charset=utf-8"
+        }
+      }
+    ],
+    "runtimeExceptions": []
+  },
+  "exactRequestReplay": [
+    {
+      "host": "https://www.learn-nextjs-lab.space",
+      "path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-segment-prefetch": "/_tree",
+        "next-router-prefetch": "1",
+        "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+      },
+      "exitCode": 0,
+      "responseHeaders": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT"
+      },
+      "status": 404,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    },
+    {
+      "host": "https://demo-baseline.vercel.app",
+      "path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-segment-prefetch": "/_tree",
+        "next-router-prefetch": "1",
+        "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+      },
+      "exitCode": 0,
+      "responseHeaders": {
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "content-type": "text/x-component",
+        "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+        "x-vercel-cache": "MISS"
+      },
+      "status": 200,
+      "bodySha256": "4533a94b3634dc0d324e12ef439d9116aff897df959a0534319f5edf80bc85db"
+    },
+    {
+      "host": "http://localhost:3001",
+      "path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-segment-prefetch": "/_tree",
+        "next-router-prefetch": "1",
+        "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+      },
+      "exitCode": 0,
+      "responseHeaders": {
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "content-type": "text/x-component"
+      },
+      "status": 200,
+      "bodySha256": "0b2d10396a8bc026a1b5e12e555e68c5de117571def46bf19104f0e8ae5616fb"
+    },
+    {
+      "host": "http://localhost:3198",
+      "path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-segment-prefetch": "/_tree",
+        "next-router-prefetch": "1",
+        "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+      },
+      "exitCode": 0,
+      "responseHeaders": {
+        "cache-control": "private, no-cache, no-store, max-age=0, must-revalidate",
+        "content-type": "text/x-component"
+      },
+      "status": 200,
+      "bodySha256": "0b2d10396a8bc026a1b5e12e555e68c5de117571def46bf19104f0e8ae5616fb"
+    }
+  ],
+  "transportPathComparison": [
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+      "mode": "explicit",
+      "requestHeaders": {},
+      "status": 200,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+      "headers": {
+        "age": "54",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/x-component",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+        "x-nextjs-postponed": "2",
+        "x-nextjs-prerender": "1",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1:icn1:icn1::hvsbp-1790828076527-0c409d6c19c4"
+      },
+      "bytes": 672,
+      "bodySha256": "e82b45add2a1cca67145756a626d409946ac2ae529fbdaaddf59029ed88ee11b"
+    },
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc?_rsc=_i_aeImnuN6u1u1r",
+      "mode": "segment",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-prefetch": "1",
+        "next-router-segment-prefetch": "/_tree"
+      },
+      "status": 404,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc?_rsc=_i_aeImnuN6u1u1r",
+      "headers": {
+        "age": "2705",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1:icn1:icn1::nx7sw-1790828076526-3539f6935190"
+      },
+      "bytes": 13222,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    },
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc?_rsc=",
+      "mode": "rsc",
+      "requestHeaders": {
+        "rsc": "1"
+      },
+      "status": 200,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc?_rsc=",
+      "headers": {
+        "age": "54",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/x-component",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+        "x-nextjs-postponed": "2",
+        "x-nextjs-prerender": "1",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1:icn1:icn1::6xgjn-1790828076526-67fcd769023a"
+      },
+      "bytes": 672,
+      "bodySha256": "e82b45add2a1cca67145756a626d409946ac2ae529fbdaaddf59029ed88ee11b"
+    },
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc",
+      "mode": "explicit",
+      "requestHeaders": {},
+      "status": 404,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc",
+      "headers": {
+        "age": "2705",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1:icn1:icn1::5hgbs-1790828076528-d61411b7cdbd"
+      },
+      "bytes": 13222,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    },
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc?_rsc=_i_aeImnuN6u1u1r",
+      "mode": "segment",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-prefetch": "1",
+        "next-router-segment-prefetch": "/_tree"
+      },
+      "status": 404,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc?_rsc=_i_aeImnuN6u1u1r",
+      "headers": {
+        "age": "2705",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1:icn1:icn1::b9m68-1790828076529-57bc6fb39a1f"
+      },
+      "bytes": 13222,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    },
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc?_rsc=",
+      "mode": "rsc",
+      "requestHeaders": {
+        "rsc": "1"
+      },
+      "status": 404,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc?_rsc=",
+      "headers": {
+        "age": "2705",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1:icn1:icn1::tqfns-1790828076526-7bf12d035dee"
+      },
+      "bytes": 13222,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    },
+    {
+      "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+      "mode": "explicit",
+      "requestHeaders": {},
+      "status": 200,
+      "finalUrl": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+      "headers": {
+        "age": "54",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/x-component",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+        "x-nextjs-postponed": "2",
+        "x-nextjs-prerender": "1",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1::4dvl2-1790828076669-46f5f01639fd"
+      },
+      "bytes": 672,
+      "bodySha256": "e82b45add2a1cca67145756a626d409946ac2ae529fbdaaddf59029ed88ee11b"
+    },
+    {
+      "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc?_rsc=_i_aeImnuN6u1u1r",
+      "mode": "segment",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-prefetch": "1",
+        "next-router-segment-prefetch": "/_tree"
+      },
+      "status": 404,
+      "finalUrl": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc?_rsc=_i_aeImnuN6u1u1r",
+      "headers": {
+        "age": "2705",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1::975n2-1790828076687-005b2c802493"
+      },
+      "bytes": 13222,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    },
+    {
+      "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc?_rsc=",
+      "mode": "rsc",
+      "requestHeaders": {
+        "rsc": "1"
+      },
+      "status": 200,
+      "finalUrl": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc?_rsc=",
+      "headers": {
+        "age": "54",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/x-component",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+        "x-nextjs-postponed": "2",
+        "x-nextjs-prerender": "1",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1::67hqt-1790828076700-94ea0774bef1"
+      },
+      "bytes": 672,
+      "bodySha256": "e82b45add2a1cca67145756a626d409946ac2ae529fbdaaddf59029ed88ee11b"
+    },
+    {
+      "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc",
+      "mode": "explicit",
+      "requestHeaders": {},
+      "status": 404,
+      "finalUrl": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc",
+      "headers": {
+        "age": "2705",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1::qqclb-1790828076703-1e8a1e554348"
+      },
+      "bytes": 13222,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    },
+    {
+      "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc?_rsc=_i_aeImnuN6u1u1r",
+      "mode": "segment",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-prefetch": "1",
+        "next-router-segment-prefetch": "/_tree"
+      },
+      "status": 404,
+      "finalUrl": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc?_rsc=_i_aeImnuN6u1u1r",
+      "headers": {
+        "age": "2705",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1::6d9fz-1790828076716-98cba2a6774a"
+      },
+      "bytes": 13222,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    },
+    {
+      "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc?_rsc=",
+      "mode": "rsc",
+      "requestHeaders": {
+        "rsc": "1"
+      },
+      "status": 404,
+      "finalUrl": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc.segments/_tree.segment.rsc?_rsc=",
+      "headers": {
+        "age": "2705",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1::jhrw6-1790828076740-533fbc50424a"
+      },
+      "bytes": 13222,
+      "bodySha256": "4e3d0ce68418ca19a06f9beff1c0781add7c8d0352b98109fb34b932f23bd21d"
+    }
+  ],
+  "cacheZoneCurrentComparison": [
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr",
+      "mode": "html",
+      "requestHeaders": {},
+      "status": 200,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr",
+      "headers": {
+        "age": "0",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/zone/cache/revalidating/time-based-isr",
+        "x-nextjs-prerender": "1",
+        "x-vercel-cache": "PRERENDER",
+        "x-vercel-id": "icn1:icn1:icn1::7trqm-1790828155551-582e8af84065"
+      },
+      "bytes": 27330,
+      "bodySha256": "288fb757008daba822140a2a777c5ecda3b2410f077c3e51dd8d9e2de24c32d4"
+    },
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr?_rsc=",
+      "mode": "rsc",
+      "requestHeaders": {
+        "rsc": "1"
+      },
+      "status": 200,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr?_rsc=",
+      "headers": {
+        "age": "1338",
+        "cache-control": "private, no-store, no-cache, max-age=0, must-revalidate",
+        "content-type": "text/x-component",
+        "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+        "x-matched-path": "/zone/cache/revalidating/time-based-isr.rsc",
+        "x-nextjs-prerender": "1",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1:icn1:icn1::8wfm8-1790828155546-e3417c3f0810"
+      },
+      "bytes": 9171,
+      "bodySha256": "a99d45d797f32fa3a6eab2b207cabddfefbc166c5f8d2e7a2ab8ac0d1b7a53bc"
+    },
+    {
+      "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr?_rsc=_i_aeImnuN6u1u1r",
+      "mode": "segment",
+      "requestHeaders": {
+        "rsc": "1",
+        "next-router-prefetch": "1",
+        "next-router-segment-prefetch": "/_tree"
+      },
+      "status": 404,
+      "finalUrl": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr?_rsc=_i_aeImnuN6u1u1r",
+      "headers": {
+        "age": "131",
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "text/html; charset=utf-8",
+        "x-matched-path": "/404",
+        "x-vercel-cache": "HIT",
+        "x-vercel-id": "icn1:icn1:icn1::8jm4v-1790828155545-e6164c69971b"
+      },
+      "bytes": 11791,
+      "bodySha256": "292b1874a20a37e5f923c15552759f2da06ed49c38af38b992fe049bf846e805"
+    }
+  ],
+  "shoesShellResponseTree": "0:{\"f\":[[[\"\",{\"children\":[\"zone\",{\"children\":[\"baseline\",{\"children\":[\"file-conventions\",{\"children\":[\"layout\",{\"children\":[\"dynamic-category-layout\",{\"children\":[[\"category\",\"%5Bcategory%5D.segments\",\"d\",[\"components\"]],{\"children\":[[\"item\",\"_tree.segment\",\"d\",[]],{\"children\":[\"__PAGE__\",{},\"$undefined\",\"$undefined\",4096]},\"$undefined\",\"$undefined\",4096]},\"$undefined\",\"$undefined\",4096]},\"$undefined\",\"$undefined\",4096]},\"$undefined\",\"$undefined\",4096]},\"$undefined\",\"$undefined\",4096]},\"$undefined\",\"$undefined\",4096]},\"$undefined\",\"$undefined\",4096]},\"$undefined\",\"$undefined\",4112],null,[null,null],true]],\"q\":\"\",\"i\":false,\"S\":false,\"h\":null,\"r\":\"$undefined\",\"b\":\"z8ZhGQ1U_-GJ4i6swC6CU\"}\n",
+  "adapterSourceCommit": "a69c714628bf9c95c804c3c3f03793f6bc3f254d",
+  "limitations": [
+    "Vercel 내부 rewrite trace와 배포 어댑터 버전은 직접 확인하지 않았다.",
+    "수정 후보는 적용하지 않았고 배포 후 효과는 미검증이다.",
+    "고정 배포 URL은 인증 리다이렉트로 직접 비교하지 못해 사용자 제공 Production 별칭을 사용했다."
+  ]
+}
