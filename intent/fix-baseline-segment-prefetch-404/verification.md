@@ -1,10 +1,10 @@
 # baseline segment prefetch 로컬 구현·검증
 
 검증일: 2026-10-01 (한국 시간)  
-상태: 로컬 구현·검증 완료, Preview·Production 수정 효과 미검증  
+상태: 로컬 및 Production 구현·검증 완료. Preview 별도 배포는 미실행.
 브랜치: `devPark/fix-baseline-segment-prefetch-404`  
 기준 커밋: `8166967a2cbf17f787e864fcd302d0afdb19026c`  
-승인: 현재 대화의 “승인”(통합 intent), “구현 검증”(plan의 로컬 구현·검증), “메인에 머지해줘”(이 변경의 커밋 및 로컬 main 반영). push·배포 허가는 포함하지 않는다.
+승인: 현재 대화의 “승인”(통합 intent), “구현 검증”(plan의 로컬 구현·검증), “메인에 머지해줘”(이 변경의 커밋 및 로컬 main 반영). 이후 “메인에서 진행”으로 원격 main push와 Production 검증을 승인했다.
 
 ## 변경 내용
 
@@ -57,17 +57,26 @@ node nextjs-app/apps/shell/scripts/check-zone-prefetch.mjs --shell-origin http:/
 
 `ce-code-review`의 correctness·project-standards·testing·api-contract·adversarial 다섯 네이티브 검토가 완료됐으며 지적 사항은 없다. 검토 범위는 셸 설정과 신규 HTTP 검사 스크립트다. 운영 문서와 실행 증거 파일은 코드 검토 범위에서 제외했다. 검토 receipt는 `verification-evidence.json`의 `codeReview`에 보존했다. 이 결과는 배포·머지 허가나 공개 서비스 해결을 의미하지 않는다.
 
-## 미검증 및 남은 단계
+## Production 배포 후 검증
 
-로컬 production은 수정 전에도 200이었다. 따라서 위 결과는 변경 후 로컬 회귀가 없고 요청·트리 검증이 동작한다는 증거이며, Vercel 배포에서 중복 변환이 사라졌다는 증거는 아니다.
+2026-10-01 원격 main이 여전히 `52fbb5e`여서 수정이 없는 상태를 확인했다. 사용자 “메인에서 진행” 지시 후 `8166967`과 `5ca82f1`을 push했다. 실제 배포한 구현 커밋은 `5ca82f1e69c465f05e6539078b48e3d51620d076`이다.
 
-- Preview 배포 및 그 배포의 같은 헤더 요청·실습 화면·Related Projects 연결 검증.
-- 별도 Production 반영 허가 후 공개 도메인의 같은 검증.
-- 실제 배포 어댑터 버전과 내부 rewrite trace의 직접 확인.
-- 사용자가 로컬 main 반영을 승인했다. 실제 커밋과 main 반영 결과는 Git 기록으로 확인하며, 원격 push와 배포는 별도 허가 후 진행한다.
+| 프로젝트 | 성공 시각 (KST) | 배포 기록 |
+|---|---|---|
+| cache | 2026-10-01 14:49:53 | [GitHub 기록](https://api.github.com/repos/Junyong34/nextjs-ko-study-lab/deployments/6777199280/statuses) |
+| baseline | 2026-10-01 14:52:01 | [GitHub 기록](https://api.github.com/repos/Junyong34/nextjs-ko-study-lab/deployments/6777226891/statuses) |
+| shell | 2026-10-01 14:54:14 | [GitHub 기록](https://api.github.com/repos/Junyong34/nextjs-ko-study-lab/deployments/6777257817/statuses) |
 
-이 단계가 끝나기 전에는 기능 해결이나 intent/plan의 `done`을 선언하지 않는다. 현재 문서 상태는 `approved`로 유지한다.
+공개 도메인과 baseline 직접 도메인을 대상으로 같은 HTTP 검사 46개를 실행해 모두 통과했다. 실제 Chrome의 상품 1·2 `/_tree` 요청도 200과 `text/x-component`였고, 실습 관측 로그에 404가 없었다. 트레일 백팩 hover, 클릭 상세 이동, 목록 복귀도 확인했다. HTTP 4xx/5xx·console/runtime 오류는 없었다.
+
+기존 셸·실제 CSS/JS 자산·Proxy 가드·헤더·redirect HTTP 12개와 Proxy 화면 3개를 검증했다. 전부 기존 기대값을 충족했다. 보조 자산 검사의 첫 실행은 Brotli 압축 파일을 UTF-8로 읽으려다 검사 도구에서 실패했다. 자산을 바이너리로 읽도록 고친 후 통과했으며 앱 변경은 없었다.
+
+증거는 `verification-evidence.json`의 `productionAfter`에 보존했다. 화면도 함께 남겼다.
+
+![Production 실습 화면과 200 관측 로그](./production-browser.webp)
+
+실제 Production에서 목표 완료 기준을 충족했다. 사용자 지시에 따라 PR 없이 main에 직접 반영했으며, 원격 main에서 구현 커밋과 세 프로젝트의 배포 성공을 확인했다. 별도 Preview 검증과 정확한 배포 어댑터 버전·내부 rewrite trace 확인은 이번 Production 해결의 통과 주장에 포함하지 않는다.
 
 ## 임시물 정리
 
-검증에 생성한 3001·3002·3198 서버를 종료했고 포트에 listener가 없음을 확인했다. Chrome 임시 프로필·CDP 스크립트·요청 응답 파일·새 격리 셸 `.next`를 삭제했다. main의 기존 `.next` 빌드와 구현 파일·검증 기록이 있는 관리 worktree는 보존했다. 사용자가 지정한 `.next-probe-prefetch`, `/tmp/zone.log`, `/tmp/shell.log`와 `/tmp/cdp-*`도 남아 있지 않다.
+검증에 생성한 3001·3002·3198 서버를 종료했고 포트에 listener가 없음을 확인했다. Chrome 임시 프로필·CDP 스크립트·요청 응답 파일·새 격리 셸 `.next`를 삭제했다. main의 기존 `.next` 빌드는 보존했다. 관리 worktree는 사용자 요청으로 로컬 main 반영 후 복구용 스냅샷을 남기고 삭제했다. Production 검증에서는 로컬 서버를 만들지 않았고 Chrome 프로필은 종료·정리했다. 사용자가 지정한 `.next-probe-prefetch`, `/tmp/zone.log`, `/tmp/shell.log`와 `/tmp/cdp-*`도 남아 있지 않다.

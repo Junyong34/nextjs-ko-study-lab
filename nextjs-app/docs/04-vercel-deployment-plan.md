@@ -1,6 +1,6 @@
 # 04. Vercel 배포 계획
 
-현재 배포 구성과 운영 절차, 과거 검증 기록, 남은 확인 사항을 구분한다. 2026-09-05 배포 구성을 코드·공식 자료와 대조했다. 2026-10-01 셸의 zone rewrite 순서를 수정하고 로컬 production 요청을 검증했다. 이 수정의 Preview·Production 배포 효과와 Vercel 대시보드 현재 설정은 아직 확인하지 않았다.
+현재 배포 구성과 운영 절차, 과거 검증 기록, 남은 확인 사항을 구분한다. 2026-09-05 배포 구성을 코드·공식 자료와 대조했다. 2026-10-01 셸의 zone rewrite 순서를 수정하고 로컬 production 요청을 검증했다. 같은 날 main의 5ca82f1을 Production에 배포하고 공개 요청·실습 로그를 검증했다. 별도 Preview 배포와 Vercel 대시보드 현재 설정은 확인하지 않았다.
 
 ## 1. 배포 구성 원칙
 
@@ -66,7 +66,7 @@ Vercel은 `rsc: 1`, `next-router-prefetch: 1`, `next-router-segment-prefetch` �
 node nextjs-app/apps/shell/scripts/check-zone-prefetch.mjs --shell-origin <셸-origin> --baseline-origin <baseline-직접-origin>
 ```
 
-실습의 실제 Chrome 요청은 헤더와 `_rsc` 값을 함께 캡처해 비교한다. 로컬 production은 수정 전에도 200이었으므로 로컬 통과를 배포 해결로 해석하지 않는다. 2026-10-01 [조사·검증 기록](../../intent/fix-baseline-segment-prefetch-404/verification.md)에 수정 전 공개 배포와 수정 후 로컬 결과를 구분했다. Preview 포함 배포는 별도 허가가 필요하다.
+실습의 실제 Chrome 요청은 헤더와 `_rsc` 값을 함께 캡처해 비교한다. 로컬 production은 수정 전에도 200이었으므로 로컬 통과를 배포 해결로 해석하지 않는다. 2026-10-01 main의 5ca82f1 Production에서 공개 HTTP 46개와 실제 Chrome prefetch·클릭·관측 로그, 자산·Proxy 검증을 통과했다. [조사·검증 기록](../../intent/fix-baseline-segment-prefetch-404/verification.md)에 수정 전·로컬·Production 결과를 구분했다. 새 배포는 사용자 허가 후 수행한다.
 
 ## 4. 브랜치별 자동 배포 제어
 

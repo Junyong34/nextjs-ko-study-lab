@@ -2774,8 +2774,8 @@
     "shellTurbopackBuild": "passed",
     "initialBuildFailure": "worktree 밖 공유 node_modules 링크로 next/package.json 해석 실패. 링크 제거 및 frozen-lockfile 오프라인 독립 설치 후 통과.",
     "fullTestSuite": "not run: 승인된 plan의 실제 HTTP·브라우저·타입·빌드 검증 범위",
-    "preview": "not deployed",
-    "production": "not deployed"
+    "preview": "not run: user chose direct main Production verification",
+    "production": "passed: deployed 5ca82f1, HTTP 46/46 and browser/Proxy/assets"
   },
   "codeReview": {
     "status": "complete",
@@ -2903,5 +2903,1705 @@
     "verdict_reason": "승인된 로컬 U1/U2 코드에서 실행 결과에 영향을 주는 결함을 발견하지 않았다. 배포 후 공개 서비스 해결 여부는 별도 허가와 검증이 필요하다.",
     "artifact_path": "/tmp/compound-engineering-501/ce-code-review/20261001-134815-8c654eb0",
     "run_id": "20261001-134815-8c654eb0"
+  },
+  "productionAfter": {
+    "commit": "5ca82f1e69c465f05e6539078b48e3d51620d076",
+    "authorization": "2026-10-01 현재 대화에서 사용자가 main push 및 배포 후 검증을 승인",
+    "deployments": [
+      {
+        "id": 6777257817,
+        "sha": "5ca82f1e69c465f05e6539078b48e3d51620d076",
+        "environment": "Production – nextjs-ko-study-lab-shell",
+        "statuses": [
+          {
+            "state": "success",
+            "created_at": "2026-10-01T05:54:14Z",
+            "environment_url": "https://nextjs-ko-study-lab-shell-ply116y6w-junyong34s-projects.vercel.app",
+            "target_url": "https://nextjs-ko-study-lab-shell-ply116y6w-junyong34s-projects.vercel.app"
+          }
+        ]
+      },
+      {
+        "id": 6777226891,
+        "sha": "5ca82f1e69c465f05e6539078b48e3d51620d076",
+        "environment": "Production – demo-baseline",
+        "statuses": [
+          {
+            "state": "success",
+            "created_at": "2026-10-01T05:52:01Z",
+            "environment_url": "https://demo-baseline-m6gjqe9c0-junyong34s-projects.vercel.app",
+            "target_url": "https://demo-baseline-m6gjqe9c0-junyong34s-projects.vercel.app"
+          }
+        ]
+      },
+      {
+        "id": 6777199280,
+        "sha": "5ca82f1e69c465f05e6539078b48e3d51620d076",
+        "environment": "Production – demo-cache-components",
+        "statuses": [
+          {
+            "state": "success",
+            "created_at": "2026-10-01T05:49:53Z",
+            "environment_url": "https://demo-cache-components-d2rvvqpa5-junyong34s-projects.vercel.app",
+            "target_url": "https://demo-cache-components-d2rvvqpa5-junyong34s-projects.vercel.app"
+          }
+        ]
+      }
+    ],
+    "http": {
+      "checkedAt": "2026-10-01T05:57:23.477Z",
+      "shellOrigin": "https://www.learn-nextjs-lab.space",
+      "baselineOrigin": "https://demo-baseline.vercel.app",
+      "total": 46,
+      "failed": 0,
+      "results": [
+        {
+          "target": "shell",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "81e801c12db489d1ecc354d1baedfb27d9c16a2d94d40d617af0a73b25061ab3",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell",
+              "/guides/adopting-partial-prefetching/hover-shell",
+              "/adopting-partial-prefetching/hover-shell",
+              "/hover-shell",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.rsc",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "f178a20da4039df991d17f690fa5ddda7c34e407fdb4b7d2f3d24b7c210fab09",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell",
+              "/guides/adopting-partial-prefetching/hover-shell",
+              "/adopting-partial-prefetching/hover-shell",
+              "/hover-shell",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "html",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "ab8e3efa8ddf10030ce3d1c0521ca23f4ef4335a6efed701679c2fdbaedd3ee0",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "63a14acc0b554f4f108379004c46a67440dc83741218eb906a012988f137eb74",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/hover-shell/products/[id]",
+              "/products/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "0818ce39528c1b704976b657121c334a102ae67d12c4383d6083334ce3422de3",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/hover-shell/products/[id]",
+              "/products/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "html",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "5161341446779146688a31b927acab63a926560b26fbdb8813031385bfcce9ef",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "c90b9fba7dc2f8187bdb6375c6b3af931b44e88119dfcff074baedd2c1ffcf4b",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/hover-shell/products/[id]",
+              "/products/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "8b31209093445676d1e2a86e348cb848fa120d70f1c7ce4297f30bec6dfebf96",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/hover-shell/products/[id]",
+              "/products/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "html",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "1315fb384a6192dc8be9e6955821a2c3e4f2e0ca40575527a8a6e5436aadc7fb",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/architecture/fast-refresh-boundary?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary.segments/_tree.segment.rsc",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "a1738a9ddcc67540590a5197ed0247d6c52079aa37f67a0af468446a6888c533",
+          "trees": {
+            "pages": [
+              "/zone/baseline/architecture/fast-refresh-boundary",
+              "/baseline/architecture/fast-refresh-boundary",
+              "/architecture/fast-refresh-boundary",
+              "/fast-refresh-boundary",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/architecture/fast-refresh-boundary?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary.rsc",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "10a2c4853c2e3581d8e37e986a3e077bbb03c538784755f729add29c303a79df",
+          "trees": {
+            "pages": [
+              "/zone/baseline/architecture/fast-refresh-boundary",
+              "/baseline/architecture/fast-refresh-boundary",
+              "/architecture/fast-refresh-boundary",
+              "/fast-refresh-boundary",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "html",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/architecture/fast-refresh-boundary",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "028b3385ed38b05354099382c83eeb9879acf45c5019026fd1fda2b6b1b7bfe7",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "cba374254e0005c69ec1850fe3b3dd106deee502753e9737e3a11f16e805171f",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/dynamic-segments/single-param/items/[id]",
+              "/single-param/items/[id]",
+              "/items/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "df772c66051926d8db633efe83ebf90f83792de83f044ffeb833d440405dafce",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/dynamic-segments/single-param/items/[id]",
+              "/single-param/items/[id]",
+              "/items/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "html",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/dynamic-segments/single-param/items/1",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "b7690c2ee084b1613fc194d548f189360d5ced9ecd7499aca04b3fc48b886254",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "02d6e7f94a1030029e972683539214955f27db44e07d04e6d6f74640c27dcd9f",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/file-conventions/layout/dynamic-category-layout/[category]",
+              "/layout/dynamic-category-layout/[category]",
+              "/dynamic-category-layout/[category]",
+              "/[category]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "27db87d88b52ec643d4aed813d67d9e9b817e4fdfe769ad6827c2e08ea72b621",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/file-conventions/layout/dynamic-category-layout/[category]",
+              "/layout/dynamic-category-layout/[category]",
+              "/dynamic-category-layout/[category]",
+              "/[category]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "9091712961fc54f7ba3f9b03749f349dd9c4269eef964c0e18f44d24ac1bfa51",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/file-conventions/layout/dynamic-category-layout/[category]",
+              "/layout/dynamic-category-layout/[category]",
+              "/dynamic-category-layout/[category]",
+              "/[category]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "025a4caa3c6048bcb44d78644deaf02a75198809ae16bcff973fbfdb8c27bd83",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/file-conventions/layout/dynamic-category-layout/[category]",
+              "/layout/dynamic-category-layout/[category]",
+              "/dynamic-category-layout/[category]",
+              "/[category]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell",
+          "mode": "html",
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "4dcb3303c4c2a47d533232220e97b4b82d2072cd0e68a2983eb1389afe6b0a33",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "segment",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.segments/_tree.segment.rsc",
+            "x-vercel-cache": "HIT"
+          },
+          "bodySha256": "81e801c12db489d1ecc354d1baedfb27d9c16a2d94d40d617af0a73b25061ab3",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell",
+              "/guides/adopting-partial-prefetching/hover-shell",
+              "/adopting-partial-prefetching/hover-shell",
+              "/hover-shell",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "rsc",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell.rsc",
+            "x-vercel-cache": "HIT"
+          },
+          "bodySha256": "f178a20da4039df991d17f690fa5ddda7c34e407fdb4b7d2f3d24b7c210fab09",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell",
+              "/guides/adopting-partial-prefetching/hover-shell",
+              "/adopting-partial-prefetching/hover-shell",
+              "/hover-shell",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "html",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "x-vercel-cache": "HIT"
+          },
+          "bodySha256": "ab8e3efa8ddf10030ce3d1c0521ca23f4ef4335a6efed701679c2fdbaedd3ee0",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "segment",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "63a14acc0b554f4f108379004c46a67440dc83741218eb906a012988f137eb74",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/hover-shell/products/[id]",
+              "/products/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "rsc",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "23b031841496fef300c2ebace73fd6d0d0385458375919df5d2b2b2ac47488e7",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/hover-shell/products/[id]",
+              "/products/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "html",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "cba39652dbc85cf09277496a20e1f0ce4291f6d65321c5a5c0bdf5ee4dfd1eef",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "segment",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "c90b9fba7dc2f8187bdb6375c6b3af931b44e88119dfcff074baedd2c1ffcf4b",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/hover-shell/products/[id]",
+              "/products/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "rsc",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "a22b19a690f3eaecf536f1dc1835b9cfe1b215d4b22fdd706035e9d9dbf776ba",
+          "trees": {
+            "pages": [
+              "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/adopting-partial-prefetching/hover-shell/products/[id]",
+              "/hover-shell/products/[id]",
+              "/products/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "html",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id]",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "e8565e1a882d34466f1ee24663992f3d28d05b8d5101fb64081e10612f3c80cb",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "segment",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/architecture/fast-refresh-boundary?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary.segments/_tree.segment.rsc",
+            "x-vercel-cache": "HIT"
+          },
+          "bodySha256": "a1738a9ddcc67540590a5197ed0247d6c52079aa37f67a0af468446a6888c533",
+          "trees": {
+            "pages": [
+              "/zone/baseline/architecture/fast-refresh-boundary",
+              "/baseline/architecture/fast-refresh-boundary",
+              "/architecture/fast-refresh-boundary",
+              "/fast-refresh-boundary",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "rsc",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/architecture/fast-refresh-boundary?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary.rsc",
+            "x-vercel-cache": "HIT"
+          },
+          "bodySha256": "10a2c4853c2e3581d8e37e986a3e077bbb03c538784755f729add29c303a79df",
+          "trees": {
+            "pages": [
+              "/zone/baseline/architecture/fast-refresh-boundary",
+              "/baseline/architecture/fast-refresh-boundary",
+              "/architecture/fast-refresh-boundary",
+              "/fast-refresh-boundary",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "html",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/architecture/fast-refresh-boundary",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/architecture/fast-refresh-boundary",
+            "x-vercel-cache": "HIT"
+          },
+          "bodySha256": "028b3385ed38b05354099382c83eeb9879acf45c5019026fd1fda2b6b1b7bfe7",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "segment",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "cba374254e0005c69ec1850fe3b3dd106deee502753e9737e3a11f16e805171f",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/dynamic-segments/single-param/items/[id]",
+              "/single-param/items/[id]",
+              "/items/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "rsc",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/dynamic-segments/single-param/items/1?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "6f5abac3874af360c1a5a99e75ad0662798f3d03d6e0560fc356cb74ea08d4d2",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/file-conventions/dynamic-segments/single-param/items/[id]",
+              "/dynamic-segments/single-param/items/[id]",
+              "/single-param/items/[id]",
+              "/items/[id]",
+              "/[id]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "html",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/dynamic-segments/single-param/items/1",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/file-conventions/dynamic-segments/single-param/items/[id]",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "b7690c2ee084b1613fc194d548f189360d5ced9ecd7499aca04b3fc48b886254",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "segment",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "02d6e7f94a1030029e972683539214955f27db44e07d04e6d6f74640c27dcd9f",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/file-conventions/layout/dynamic-category-layout/[category]",
+              "/layout/dynamic-category-layout/[category]",
+              "/dynamic-category-layout/[category]",
+              "/[category]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "rsc",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/shoes?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "d2381a6def7163e82f033d2da37c331598c9ad4b4152ed5cb6b2643de2b01311",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/file-conventions/layout/dynamic-category-layout/[category]",
+              "/layout/dynamic-category-layout/[category]",
+              "/dynamic-category-layout/[category]",
+              "/[category]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "segment",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "9091712961fc54f7ba3f9b03749f349dd9c4269eef964c0e18f44d24ac1bfa51",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/file-conventions/layout/dynamic-category-layout/[category]",
+              "/layout/dynamic-category-layout/[category]",
+              "/dynamic-category-layout/[category]",
+              "/[category]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "rsc",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category].rsc",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "d52715360d5e1af8e0f6c0857d0c57a98a0e699c9a1bd68b05ed1bfc54f30bc1",
+          "trees": {
+            "pages": [
+              "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+              "/file-conventions/layout/dynamic-category-layout/[category]",
+              "/layout/dynamic-category-layout/[category]",
+              "/dynamic-category-layout/[category]",
+              "/[category]",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "baseline-direct",
+          "mode": "html",
+          "url": "https://demo-baseline.vercel.app/zone/baseline/file-conventions/layout/dynamic-category-layout/electronics",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/baseline/file-conventions/layout/dynamic-category-layout/[category]",
+            "x-vercel-cache": "MISS"
+          },
+          "bodySha256": "89ac991a0665c44c22eebd98232e72339a911b1e2c9f6ab1607e1d5216f405aa",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "shell-cache",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/cache/revalidating/time-based-isr.segments/_tree.segment.rsc",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "b2c0fefe30313a32c22c52ae819c4a730b1d2c0be885e37ecdfca4109e5813c0",
+          "trees": {
+            "pages": [
+              "/zone/cache/revalidating/time-based-isr",
+              "/cache/revalidating/time-based-isr",
+              "/revalidating/time-based-isr",
+              "/time-based-isr",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell-cache",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/cache/revalidating/time-based-isr.rsc",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "482bd7b49030e81766a76567789ad55809b2885afd72438de301d07f7e4365ff",
+          "trees": {
+            "pages": [
+              "/zone/cache/revalidating/time-based-isr",
+              "/cache/revalidating/time-based-isr",
+              "/revalidating/time-based-isr",
+              "/time-based-isr",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell-cache",
+          "mode": "html",
+          "url": "https://www.learn-nextjs-lab.space/zone/cache/revalidating/time-based-isr",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/cache/revalidating/time-based-isr",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "5301f9c10f26a77bb5cdbd1f0c508b1b979550d2a7e458f10f159985b19fed9d",
+          "trees": null,
+          "errors": []
+        },
+        {
+          "target": "shell-cache",
+          "mode": "segment",
+          "url": "https://www.learn-nextjs-lab.space/zone/cache/guides/isr-cache-components/cache-life-hours?_rsc=YCuvbfS_CHCPmpKA",
+          "requestHeaders": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/cache/guides/isr-cache-components/cache-life-hours.segments/_tree.segment.rsc",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "1c0b8a7d9228262b0e74657660318dd0546674df47132ef1ade611b457635932",
+          "trees": {
+            "pages": [
+              "/zone/cache/guides/isr-cache-components/cache-life-hours",
+              "/cache/guides/isr-cache-components/cache-life-hours",
+              "/guides/isr-cache-components/cache-life-hours",
+              "/isr-cache-components/cache-life-hours",
+              "/cache-life-hours",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell-cache",
+          "mode": "rsc",
+          "url": "https://www.learn-nextjs-lab.space/zone/cache/guides/isr-cache-components/cache-life-hours?_rsc=",
+          "requestHeaders": {
+            "rsc": "1"
+          },
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/x-component",
+            "x-matched-path": "/zone/cache/guides/isr-cache-components/cache-life-hours.rsc",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "5401f6ee6ab3a404f0805e5e630ab711f3e1248d5e8ebea41907b5dddd0820ec",
+          "trees": {
+            "pages": [
+              "/zone/cache/guides/isr-cache-components/cache-life-hours",
+              "/cache/guides/isr-cache-components/cache-life-hours",
+              "/guides/isr-cache-components/cache-life-hours",
+              "/isr-cache-components/cache-life-hours",
+              "/cache-life-hours",
+              "/"
+            ],
+            "invalidParams": []
+          },
+          "errors": []
+        },
+        {
+          "target": "shell-cache",
+          "mode": "html",
+          "url": "https://www.learn-nextjs-lab.space/zone/cache/guides/isr-cache-components/cache-life-hours",
+          "requestHeaders": {},
+          "passed": true,
+          "status": 200,
+          "responseHeaders": {
+            "content-type": "text/html; charset=utf-8",
+            "x-matched-path": "/zone/cache/guides/isr-cache-components/cache-life-hours",
+            "x-vercel-cache": "PRERENDER"
+          },
+          "bodySha256": "033282f4a98303143948be265c3b16f64ffa4b56a6376f1b6bf2333ca751676f",
+          "trees": null,
+          "errors": []
+        }
+      ]
+    },
+    "browser": {
+      "checkedAt": "2026-10-01T05:57:39.432Z",
+      "initial": {
+        "iframePath": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+        "title": "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시) | Next.js 학습",
+        "links": [
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+            "text": "러닝 재킷\n89,000원\n<Link href=…>"
+          },
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+            "text": "트레일 백팩\n129,000원\n<Link href=… prefetch>"
+          },
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/3",
+            "text": "캠핑 랜턴\n45,000원\n<Link href=… prefetch={false}>"
+          }
+        ],
+        "rows": [
+          "목록 표시 후 prefetch 요청 확인관측: 세 카드는 prefetch 기본값 / true / false 링크입니다. 뷰포트에 들어온 링크의 prefetch 요청은 production에서만 발생합니다.",
+          "관측 로그의 prefetch 요청 수",
+          "<Link href=… prefetch>",
+          "<Link href=… prefetch={false}>",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 44ms / body 45ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 75ms / body 76ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 70ms / body 70ms · 200",
+          "navigation",
+          "_rsc=true · next-router-prefetch=없음 · 헤더 58ms / body 1557ms · 200",
+          "[검증] 링크 prefetch 네트워크 요청 검증",
+          "뷰포트에 들어온 기본/prefetch 링크는 목적지 prefetch 요청(Next-Router-Prefetch 또는 segment prefetch 헤더)을 보낸다.",
+          "prefetch={false} 링크의 목적지는 prefetch 요청이 없다.",
+          "✅ 상품 1 (prefetch 기본값): prefetch 요청 있음 (기대: 있음)",
+          "✅ 상품 2 (prefetch ={true}): prefetch 요청 있음 (기대: 있음)",
+          "✅ 상품 3 (prefetch ={false}): prefetch 요청 없음 (기대: 없음)",
+          "클릭 이동 RSC 요청 1건 (prefetch 캐시 적중 시 0건일 수 있음)",
+          "[개념 정리] Link prefetch와 정적 셸 · 동적 데이터 경계",
+          "├─ page.tsx                     ← 목록: 실제 <Link> 3개 (prefetch 기본 / true / false)",
+          "   ├─ loading.tsx               ← prefetch(auto)가 닿는 loading 경계",
+          "Partial Prefetching(partialPrefetching: true, export const prefetch = 'partial')은 cacheComponents가 켜져 있을 때만 동작합니다. 이 zone(demo-baseline)은 cacheComponents를 쓰지 않으므로 App Shell prefetch 자체는 시연하지 못하고, 같은 구조(정적 셸 + Suspense 뒤 동적 데이터)에서 <Link>의 기본 prefetch 동작과 클릭 뒤 스트리밍을 실측합니다.",
+          "<Link>의 prefetch(viewport 진입·hover)는 production에서만 동작합니다. next dev의 0건은 오류가 아니라 정상입니다. 요청 헤더 Next-Router-Prefetch와 _rsc 쿼리는 DevTools Network 탭에서도 확인할 수 있습니다.",
+          "prefetch(true): 동적 라우트도 전체를 미리 가져옵니다.",
+          "prefetch={false}: viewport 진입과 hover 모두 prefetch하지 않습니다."
+        ],
+        "has404": false
+      },
+      "hovered": true,
+      "afterHover": {
+        "iframePath": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+        "title": "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시) | Next.js 학습",
+        "links": [
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+            "text": "러닝 재킷\n89,000원\n<Link href=…>"
+          },
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+            "text": "트레일 백팩\n129,000원\n<Link href=… prefetch>"
+          },
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/3",
+            "text": "캠핑 랜턴\n45,000원\n<Link href=… prefetch={false}>"
+          }
+        ],
+        "rows": [
+          "목록 표시 후 prefetch 요청 확인관측: 세 카드는 prefetch 기본값 / true / false 링크입니다. 뷰포트에 들어온 링크의 prefetch 요청은 production에서만 발생합니다.",
+          "관측 로그의 prefetch 요청 수",
+          "<Link href=… prefetch>",
+          "<Link href=… prefetch={false}>",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 44ms / body 45ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 75ms / body 76ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 70ms / body 70ms · 200",
+          "navigation",
+          "_rsc=true · next-router-prefetch=없음 · 헤더 58ms / body 1557ms · 200",
+          "[검증] 링크 prefetch 네트워크 요청 검증",
+          "뷰포트에 들어온 기본/prefetch 링크는 목적지 prefetch 요청(Next-Router-Prefetch 또는 segment prefetch 헤더)을 보낸다.",
+          "prefetch={false} 링크의 목적지는 prefetch 요청이 없다.",
+          "✅ 상품 1 (prefetch 기본값): prefetch 요청 있음 (기대: 있음)",
+          "✅ 상품 2 (prefetch ={true}): prefetch 요청 있음 (기대: 있음)",
+          "✅ 상품 3 (prefetch ={false}): prefetch 요청 없음 (기대: 없음)",
+          "클릭 이동 RSC 요청 1건 (prefetch 캐시 적중 시 0건일 수 있음)",
+          "[개념 정리] Link prefetch와 정적 셸 · 동적 데이터 경계",
+          "├─ page.tsx                     ← 목록: 실제 <Link> 3개 (prefetch 기본 / true / false)",
+          "   ├─ loading.tsx               ← prefetch(auto)가 닿는 loading 경계",
+          "Partial Prefetching(partialPrefetching: true, export const prefetch = 'partial')은 cacheComponents가 켜져 있을 때만 동작합니다. 이 zone(demo-baseline)은 cacheComponents를 쓰지 않으므로 App Shell prefetch 자체는 시연하지 못하고, 같은 구조(정적 셸 + Suspense 뒤 동적 데이터)에서 <Link>의 기본 prefetch 동작과 클릭 뒤 스트리밍을 실측합니다.",
+          "<Link>의 prefetch(viewport 진입·hover)는 production에서만 동작합니다. next dev의 0건은 오류가 아니라 정상입니다. 요청 헤더 Next-Router-Prefetch와 _rsc 쿼리는 DevTools Network 탭에서도 확인할 수 있습니다.",
+          "prefetch(true): 동적 라우트도 전체를 미리 가져옵니다.",
+          "prefetch={false}: viewport 진입과 hover 모두 prefetch하지 않습니다."
+        ],
+        "has404": false
+      },
+      "clicked": true,
+      "afterClick": {
+        "iframePath": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+        "title": "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시) | Next.js 학습",
+        "links": [
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+            "text": "← 상품 목록"
+          }
+        ],
+        "rows": [
+          "목록 표시 후 prefetch 요청 확인관측: 세 카드는 prefetch 기본값 / true / false 링크입니다. 뷰포트에 들어온 링크의 prefetch 요청은 production에서만 발생합니다.",
+          "관측 로그의 prefetch 요청 수",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 44ms / body 45ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 75ms / body 76ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 70ms / body 70ms · 200",
+          "navigation",
+          "_rsc=true · next-router-prefetch=없음 · 헤더 58ms / body 1557ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 32ms / body 32ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 624ms / body 624ms · 200",
+          "[검증] 링크 prefetch 네트워크 요청 검증",
+          "뷰포트에 들어온 기본/prefetch 링크는 목적지 prefetch 요청(Next-Router-Prefetch 또는 segment prefetch 헤더)을 보낸다.",
+          "prefetch={false} 링크의 목적지는 prefetch 요청이 없다.",
+          "✅ 상품 1 (prefetch 기본값): prefetch 요청 있음 (기대: 있음)",
+          "✅ 상품 2 (prefetch ={true}): prefetch 요청 있음 (기대: 있음)",
+          "✅ 상품 3 (prefetch ={false}): prefetch 요청 없음 (기대: 없음)",
+          "클릭 이동 RSC 요청 1건 (prefetch 캐시 적중 시 0건일 수 있음)",
+          "[개념 정리] Link prefetch와 정적 셸 · 동적 데이터 경계",
+          "├─ page.tsx                     ← 목록: 실제 <Link> 3개 (prefetch 기본 / true / false)",
+          "   ├─ loading.tsx               ← prefetch(auto)가 닿는 loading 경계",
+          "Partial Prefetching(partialPrefetching: true, export const prefetch = 'partial')은 cacheComponents가 켜져 있을 때만 동작합니다. 이 zone(demo-baseline)은 cacheComponents를 쓰지 않으므로 App Shell prefetch 자체는 시연하지 못하고, 같은 구조(정적 셸 + Suspense 뒤 동적 데이터)에서 <Link>의 기본 prefetch 동작과 클릭 뒤 스트리밍을 실측합니다.",
+          "<Link>의 prefetch(viewport 진입·hover)는 production에서만 동작합니다. next dev의 0건은 오류가 아니라 정상입니다. 요청 헤더 Next-Router-Prefetch와 _rsc 쿼리는 DevTools Network 탭에서도 확인할 수 있습니다.",
+          "prefetch(true): 동적 라우트도 전체를 미리 가져옵니다.",
+          "prefetch={false}: viewport 진입과 hover 모두 prefetch하지 않습니다."
+        ],
+        "has404": false
+      },
+      "returned": true,
+      "afterReturn": {
+        "iframePath": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+        "title": "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시) | Next.js 학습",
+        "links": [
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1",
+            "text": "러닝 재킷\n89,000원\n<Link href=…>"
+          },
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2",
+            "text": "트레일 백팩\n129,000원\n<Link href=… prefetch>"
+          },
+          {
+            "href": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/3",
+            "text": "캠핑 랜턴\n45,000원\n<Link href=… prefetch={false}>"
+          }
+        ],
+        "rows": [
+          "목록 표시 후 prefetch 요청 확인관측: 세 카드는 prefetch 기본값 / true / false 링크입니다. 뷰포트에 들어온 링크의 prefetch 요청은 production에서만 발생합니다.",
+          "관측 로그의 prefetch 요청 수",
+          "<Link href=… prefetch>",
+          "<Link href=… prefetch={false}>",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 44ms / body 45ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 75ms / body 76ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 70ms / body 70ms · 200",
+          "navigation",
+          "_rsc=true · next-router-prefetch=없음 · 헤더 58ms / body 1557ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 32ms / body 32ms · 200",
+          "prefetch",
+          "_rsc=true · next-router-prefetch=1 · 헤더 624ms / body 624ms · 200",
+          "[검증] 링크 prefetch 네트워크 요청 검증",
+          "뷰포트에 들어온 기본/prefetch 링크는 목적지 prefetch 요청(Next-Router-Prefetch 또는 segment prefetch 헤더)을 보낸다.",
+          "prefetch={false} 링크의 목적지는 prefetch 요청이 없다.",
+          "✅ 상품 1 (prefetch 기본값): prefetch 요청 있음 (기대: 있음)",
+          "✅ 상품 2 (prefetch ={true}): prefetch 요청 있음 (기대: 있음)",
+          "✅ 상품 3 (prefetch ={false}): prefetch 요청 없음 (기대: 없음)",
+          "클릭 이동 RSC 요청 1건 (prefetch 캐시 적중 시 0건일 수 있음)",
+          "[개념 정리] Link prefetch와 정적 셸 · 동적 데이터 경계",
+          "├─ page.tsx                     ← 목록: 실제 <Link> 3개 (prefetch 기본 / true / false)",
+          "   ├─ loading.tsx               ← prefetch(auto)가 닿는 loading 경계",
+          "Partial Prefetching(partialPrefetching: true, export const prefetch = 'partial')은 cacheComponents가 켜져 있을 때만 동작합니다. 이 zone(demo-baseline)은 cacheComponents를 쓰지 않으므로 App Shell prefetch 자체는 시연하지 못하고, 같은 구조(정적 셸 + Suspense 뒤 동적 데이터)에서 <Link>의 기본 prefetch 동작과 클릭 뒤 스트리밍을 실측합니다.",
+          "<Link>의 prefetch(viewport 진입·hover)는 production에서만 동작합니다. next dev의 0건은 오류가 아니라 정상입니다. 요청 헤더 Next-Router-Prefetch와 _rsc 쿼리는 DevTools Network 탭에서도 확인할 수 있습니다.",
+          "prefetch(true): 동적 라우트도 전체를 미리 가져옵니다.",
+          "prefetch={false}: viewport 진입과 hover 모두 prefetch하지 않습니다."
+        ],
+        "has404": false
+      },
+      "requests": [
+        {
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=YCuvbfS_CHCPmpKA",
+          "type": "Fetch",
+          "headers": {
+            "rsc": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-router-prefetch": "1",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "status": 200,
+          "mimeType": "text/x-component",
+          "responseHeaders": {
+            "x-vercel-cache": "MISS",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "content-type": "text/x-component"
+          }
+        },
+        {
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=YCuvbfS_CHCPmpKA",
+          "type": "Fetch",
+          "headers": {
+            "rsc": "1",
+            "next-router-segment-prefetch": "/_tree",
+            "next-router-prefetch": "1",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "status": 200,
+          "mimeType": "text/x-component",
+          "responseHeaders": {
+            "x-vercel-cache": "MISS",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "content-type": "text/x-component"
+          }
+        },
+        {
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/1?_rsc=2A1drlgGN4F9wonE",
+          "type": "Fetch",
+          "headers": {
+            "rsc": "1",
+            "next-router-prefetch": "1",
+            "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22zone%22%2C%7B%22children%22%3A%5B%22baseline%22%2C%7B%22children%22%3A%5B%22guides%22%2C%7B%22children%22%3A%5B%22adopting-partial-prefetching%22%2C%7B%22children%22%3A%5B%22hover-shell%22%2C%7B%22children%22%3A%5B%22products%22%2C%7B%22children%22%3A%5B%5B%22id%22%2C%221%22%2C%22d%22%2Cnull%5D%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%2C4096%5D%7D%2Cnull%2Cnull%2C4100%5D%7D%2Cnull%2C%22refetch%22%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4120%5D",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "status": 200,
+          "mimeType": "text/x-component",
+          "responseHeaders": {
+            "x-vercel-cache": "MISS",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "content-type": "text/x-component"
+          }
+        },
+        {
+          "url": "https://www.learn-nextjs-lab.space/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/2?_rsc=6H_x-vLc0hAnpStW",
+          "type": "Fetch",
+          "headers": {
+            "rsc": "1",
+            "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22zone%22%2C%7B%22children%22%3A%5B%22baseline%22%2C%7B%22children%22%3A%5B%22guides%22%2C%7B%22children%22%3A%5B%22adopting-partial-prefetching%22%2C%7B%22children%22%3A%5B%22hover-shell%22%2C%7B%22children%22%3A%5B%22products%22%2C%7B%22children%22%3A%5B%5B%22id%22%2C%222%22%2C%22d%22%2Cnull%5D%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%2C4096%5D%7D%2Cnull%2Cnull%2C4100%5D%7D%2Cnull%2C%22refetch%22%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4104%5D%7D%2Cnull%2Cnull%2C4120%5D",
+            "next-url": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell"
+          },
+          "status": 200,
+          "mimeType": "text/x-component",
+          "responseHeaders": {
+            "x-vercel-cache": "MISS",
+            "x-matched-path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell/products/[id].rsc",
+            "content-type": "text/x-component"
+          }
+        }
+      ],
+      "resourceFailures": [],
+      "errors": [],
+      "failures": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-HQST5M8ZLK&gtm=45je69t1v9262849435za200zd9262849435xf1&_p=1790834243167&gcd=13l3l3l3l1l1&npa=0&dma=0&cid=985524501.1790834243&frm=0&ngs=1&pscdl=noapi&rcb=7&sr=800x600&uaa=arm&uab=64&uafvl=Chromium%3B154.0.8037.58%7CGoogle%2520Chrome%3B154.0.8037.58%7CNot%2520A(Brand%3B99.0.0.0&uam=&uamb=0&uap=macOS&uapv=26.3.1&uaw=0&ul=ko-kr&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121280969&sid=1790834243&sct=1&seg=0&dl=https%3A%2F%2Fwww.learn-nextjs-lab.space%2Fdemo%2Fguides%2Fadopting-partial-prefetching%3Frun%3Dguides%252Fadopting-partial-prefetching%252Fhover-shell&dt=%EB%A7%81%ED%81%AC%20%ED%98%B8%EB%B2%84%20%EC%8B%9C%20%EC%A0%95%EC%A0%81%20%EC%85%B8%20%ED%91%9C%EC%8B%9C%20(Partial%20Prefetching%20%EC%98%88%EC%8B%9C)%20%7C%20Next.js%20%ED%95%99%EC%8A%B5&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=1635",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.learn-nextjs-lab.space/demo/guides/rendering-philosophy?_rsc=ULSKfQVtcHVCtJoO",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.learn-nextjs-lab.space/demo/guides/incremental-static-regeneration-cache-components?_rsc=ULSKfQVtcHVCtJoO",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.learn-nextjs-lab.space/demo/guides/adopting-partial-prefetching?_rsc=ULSKfQVtcHVCtJoO",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-HQST5M8ZLK&gtm=45je69t1v9262849435za200zd9262849435xf1&_p=1790834243167&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&cid=985524501.1790834243&frm=0&ngs=1&pscdl=noapi&rcb=7&sr=800x600&uaa=arm&uab=64&uafvl=Chromium%3B154.0.8037.58%7CGoogle%2520Chrome%3B154.0.8037.58%7CNot%2520A(Brand%3B99.0.0.0&uam=&uamb=0&uap=macOS&uapv=26.3.1&uaw=0&ul=ko-kr&_s=2&tag_exp=115938466~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121280969&dp=%2Fdemo%2Fguides%2Fadopting-partial-prefetching&sid=1790834243&sct=1&seg=0&dl=https%3A%2F%2Fwww.learn-nextjs-lab.space%2Fdemo%2Fguides%2Fadopting-partial-prefetching%3Frun%3Dguides%252Fadopting-partial-prefetching%252Fhover-shell&dt=%EB%A7%81%ED%81%AC%20%ED%98%B8%EB%B2%84%20%EC%8B%9C%20%EC%A0%95%EC%A0%81%20%EC%85%B8%20%ED%91%9C%EC%8B%9C%20(Partial%20Prefetching%20%EC%98%88%EC%8B%9C)%20%7C%20Next.js%20%ED%95%99%EC%8A%B5&en=demo_view&_ee=1&ep.content_id=guides%2Fadopting-partial-prefetching%2Fhover-shell&ep.content_group=baseline&ep.content_type=demo&ep.ui_location=page&ep.zone=baseline&ep.demo_url=guides%2Fadopting-partial-prefetching%2Fhover-shell&ep.demo_title=%EB%A7%81%ED%81%AC%20%ED%98%B8%EB%B2%84%20%EC%8B%9C%20%EC%A0%95%EC%A0%81%20%EC%85%B8%20%ED%91%9C%EC%8B%9C%20(Partial%20Prefetching%20%EC%98%88%EC%8B%9C)&tfd=6651",
+          "error": "net::ERR_ABORTED"
+        }
+      ]
+    },
+    "regressions": [
+      {
+        "path": "/",
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "passed": true
+      },
+      {
+        "path": "/demo/guides/adopting-partial-prefetching",
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "passed": true
+      },
+      {
+        "path": "/zone/baseline/guides/adopting-partial-prefetching/hover-shell",
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "passed": true
+      },
+      {
+        "path": "/demo-static/baseline/_next/static/immutable/chunks/1cttb4q94u1ar.css",
+        "status": 200,
+        "headers": {
+          "content-encoding": "br",
+          "content-type": "text/css; charset=utf-8"
+        },
+        "bytes": 17406,
+        "passed": true
+      },
+      {
+        "path": "/demo-static/baseline/_next/static/immutable/chunks/0pwwbf1zv17vb.js",
+        "status": 200,
+        "headers": {
+          "content-encoding": "br",
+          "content-type": "application/javascript; charset=utf-8"
+        },
+        "bytes": 4523,
+        "passed": true
+      },
+      {
+        "path": "/zone/cache/revalidating/time-based-isr",
+        "status": 200,
+        "headers": {
+          "content-type": "text/html; charset=utf-8"
+        },
+        "passed": true
+      },
+      {
+        "path": "/demo-static/cache/_next/static/immutable/chunks/0hjgvthgaho58.css",
+        "status": 200,
+        "headers": {
+          "content-type": "text/css; charset=utf-8"
+        },
+        "bytes": 55047,
+        "passed": true
+      },
+      {
+        "path": "/demo-static/cache/_next/static/immutable/chunks/19dr0dvuzixj8.js",
+        "status": 200,
+        "headers": {
+          "content-type": "application/javascript; charset=utf-8"
+        },
+        "bytes": 12657,
+        "passed": true
+      },
+      {
+        "path": "/zone/baseline/guides/authentication/middleware-guard?probe=admin",
+        "withDemoCookie": false,
+        "status": 307,
+        "expectedStatus": 307,
+        "headers": {
+          "content-type": "text/plain",
+          "location": "/zone/baseline/guides/authentication/middleware-guard?probed=admin&guardResult=redirected"
+        },
+        "passed": true
+      },
+      {
+        "path": "/zone/baseline/guides/authentication/middleware-guard?probe=admin",
+        "withDemoCookie": true,
+        "status": 200,
+        "expectedStatus": 200,
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-middleware-guard-decision": "allowed"
+        },
+        "passed": true
+      },
+      {
+        "path": "/zone/baseline/functions/next-response/rewrite-virtual?scenario=redirect",
+        "withDemoCookie": false,
+        "status": 307,
+        "expectedStatus": 307,
+        "headers": {
+          "content-type": "text/plain",
+          "location": "/zone/baseline/functions/next-response/rewrite-virtual/target-event?via=redirect"
+        },
+        "passed": true
+      },
+      {
+        "path": "/zone/baseline/proxy/rewrite-and-headers?variant=variant_b&country=US",
+        "withDemoCookie": false,
+        "status": 200,
+        "expectedStatus": 200,
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "x-ab-variant": "variant_b",
+          "x-forwarded-country": "US",
+          "x-proxy-gateway": "Active"
+        },
+        "passed": true
+      }
+    ],
+    "proxyBrowser": {
+      "checks": [
+        {
+          "path": "/zone/baseline/functions/headers/user-agent-device?device=mobile",
+          "finalPath": "/zone/baseline/functions/headers/user-agent-device?device=mobile",
+          "markers": [
+            {
+              "marker": "iPhone",
+              "found": true
+            },
+            {
+              "marker": "모바일 뷰",
+              "found": true
+            }
+          ]
+        },
+        {
+          "path": "/zone/baseline/functions/headers/user-agent-device?device=desktop",
+          "finalPath": "/zone/baseline/functions/headers/user-agent-device?device=desktop",
+          "markers": [
+            {
+              "marker": "Windows NT 10.0",
+              "found": true
+            },
+            {
+              "marker": "데스크톱 뷰",
+              "found": true
+            }
+          ]
+        },
+        {
+          "path": "/zone/baseline/functions/next-response/rewrite-virtual?scenario=rewrite",
+          "finalPath": "/zone/baseline/functions/next-response/rewrite-virtual?scenario=rewrite",
+          "markers": [
+            {
+              "marker": "rewrite",
+              "found": true
+            },
+            {
+              "marker": "scenario=rewrite",
+              "found": true
+            }
+          ]
+        }
+      ],
+      "resourceFailures": [],
+      "errors": [],
+      "failures": []
+    }
   }
 }

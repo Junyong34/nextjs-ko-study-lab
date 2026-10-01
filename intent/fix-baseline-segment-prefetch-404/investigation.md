@@ -1,14 +1,14 @@
 # baseline segment prefetch 404 조사
 
 조사일: 2026-10-01 (한국 시간)  
-상태: 원인 조사 완료, plan 사용자 승인, 로컬 구현·검증 완료, 수정 후 배포 효과 미검증  
+상태: 원인 조사 및 로컬·Production 구현·검증 완료
 체크아웃: `main`, `8166967` (`git status --short`는 조사 시작 시 비어 있었음)
 
 ## 결론과 증거 수준
 
 셸의 zone 외부 rewrite가 `afterFiles`에 있어서 Vercel의 segment prefetch URL 변환을 거친 경로를 다음 zone에 전달한다. 다음 zone도 같은 prefetch 헤더를 보고 전송 접미사를 붙인다. `.segments/_tree.segment.rsc`가 중복된 경로는 정상 리소스와 일치하지 않아 HTML 404로 끝난다.
 
-실제 배포의 직접 요청·셸 경유 요청·명시적 전송 경로 비교와 Vercel 공식 어댑터의 처리 순서가 이 원인과 일치한다. 아래 중간 경로는 어댑터 소스와 응답 비교에서 도출한 값이다. Vercel 내부 rewrite trace를 열어 직접 캡처한 값은 아니다. 배포가 사용한 정확한 어댑터 버전은 아직 확인하지 않았다. 수정 후 배포 검증도 아직 하지 않았다.
+실제 배포의 직접 요청·셸 경유 요청·명시적 전송 경로 비교와 Vercel 공식 어댑터의 처리 순서가 이 원인과 일치한다. 아래 중간 경로는 어댑터 소스와 응답 비교에서 도출한 값이다. Vercel 내부 rewrite trace를 열어 직접 캡처한 값은 아니다. 배포가 사용한 정확한 어댑터 버전은 아직 확인하지 않았다. 수정 후 Production 검증은 `verification.md`에 별도로 기록했다.
 
 ## 실제 Chrome 요청 재현
 
@@ -104,11 +104,11 @@ navigation과 일반 RSC 요청에는 이 segment 변환 조건이 성립하지 
 
 ## 수정 방향과 권장 검증
 
-최소 수정 후보는 셸의 zone 외부 rewrite를 `beforeFiles`로 옮기는 것이다. 그러면 셸의 전송 경로 변환 전에 원래 경로와 헤더를 소유 zone에 전달한다. Related Projects, 환경변수 목적지, assetPrefix, baseline의 Proxy·설정 축·Link·recorder를 바꿀 이유는 현재 없다. 자산 rewrite의 배치까지 함께 바꿀지는 spec/plan에서 확정한다.
+최소 수정 후보는 셸의 zone 외부 rewrite를 `beforeFiles`로 옮기는 것이다. 그러면 셸의 전송 경로 변환 전에 원래 경로와 헤더를 소유 zone에 전달한다. Related Projects, 환경변수 목적지, assetPrefix, baseline의 Proxy·설정 축·Link·recorder는 보존했다. 승인된 plan에 따라 자산 rewrite는 afterFiles에 유지했다.
 
 기존 `packages/test-suite/src/tier1-feature-coverage/09-proxy-instrumentation.test.ts`의 9.4는 메모리 안 객체 복사만 확인한다. 실제 셸·Vercel rewrite를 호출하지 않으므로 이 문제를 잡을 수 없다.
 
-승인 후 계획에 포함할 검증:
+승인된 계획의 검증 항목:
 
 1. 셸 build manifest에서 zone rewrite가 `beforeFiles`에 등록되는지 확인한다. 타입·정적 검증은 배포 성공의 대체 증거로 쓰지 않는다.
 2. 로컬 production 직접·셸 경유 요청, navigation, `/demo-static/*` 자산을 확인한다.
@@ -116,10 +116,10 @@ navigation과 일반 RSC 요청에는 이 segment 변환 조건이 성립하지 
 4. 실제 실습 화면의 뷰포트·hover prefetch와 클릭 navigation을 기록한다. recorder에서 prefetch 404가 사라져야 한다.
 5. cache zone과 셸 라우트, Proxy 헤더·인증·rewrite 데모의 기존 동작을 비교한다.
 
-수정 후 로컬 검증은 통과했으며 배포에서의 효과는 **미검증**이다. [구현·검증 기록](./verification.md)을 참고한다. 원인 설명의 신뢰도는 **높음**이며, 어댑터 내부 trace와 실제 배포 버전 확인은 증거의 한계로 남긴다. 배포 후 위 검증이 통과하기 전에는 해결 완료로 기록하지 않는다.
+수정 후 로컬 및 실제 Production 검증을 통과했다. [구현·검증 기록](./verification.md)을 참고한다. 원인 설명의 신뢰도는 **높음**이며, 어댑터 내부 trace와 실제 배포 버전 확인은 증거의 한계로 남긴다. 배포 후 위 검증이 통과하기 전에는 해결 완료로 기록하지 않는다.
 
 ## 작업 상태와 정리
 
-사용자가 통합 intent와 plan의 로컬 구현·검증을 승인한 뒤 격리 worktree에서 셸 rewrite·HTTP 검사 스크립트를 구현했다. 로컬 검증은 통과했으며 커밋·push·배포는 하지 않았다. 수정 전 조사 결과와 증거는 그대로 보존한다.
+사용자가 통합 intent와 plan의 로컬 구현·검증을 승인한 뒤 격리 worktree에서 셸 rewrite·HTTP 검사 스크립트를 구현했다. 로컬 검증 후 사용자 지시로 main 반영·push·Production 배포 검증까지 수행했다. 수정 전 조사 결과와 증거는 그대로 보존한다.
 
 조사에 사용한 로컬 서버를 종료했고 3001·3198 포트에 listener가 없음을 확인했다. Chrome과 임시 프로필·요청 파일도 정리했다. 사용자 지정 `.next-probe-prefetch`, `/tmp/cdp-*`, `/tmp/zone.log`, `/tmp/shell.log`는 남아 있지 않다. 기존 `.next` 빌드는 이번 조사에서 만든 것이 아니므로 보존했다.

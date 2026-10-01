@@ -1,8 +1,8 @@
 Plan: baseline segment prefetch 404 수정 및 배포 검증
 Spec: ./intent.md#requirements
 Author: Codex
-Status: approved
-Approval: 2026-10-01 현재 대화에서 사용자가 “구현 검증”으로 이 plan의 로컬 구현·검증을 승인했다. PR 없음. 커밋·push·배포 허가는 포함하지 않는다.
+Status: done
+Approval: 2026-10-01 현재 대화의 “구현 검증”, “메인에 머지해줘”, “메인에서 진행”으로 로컬 구현·main 반영·push·Production 검증을 승인했다. PR 없이 main에 직접 반영했고 Production 완료 기준을 충족했다.
 
 ## Objective and authority
 
@@ -68,7 +68,7 @@ baseline/cache의 페이지, `proxy.ts`, `<Link>`, recorder, `cacheComponents`, 
 
 ## Verification
 
-타입·빌드·스크립트 명령은 저장소 루트에서 실행한다. 아래 검증은 계획이며 아직 실행하지 않았다.
+타입·빌드·스크립트 명령은 저장소 루트에서 실행한다. 아래는 검증 방법이며 실행 결과는 Verification results와 `verification.md`에 기록했다.
 
 | 검증 | 명령 또는 방법 | 통과 조건 |
 |---|---|---|
@@ -109,9 +109,9 @@ baseline/cache의 페이지, `proxy.ts`, `<Link>`, recorder, `cacheComponents`, 
 
 ## Verification results
 
-- 상태: 로컬 구현·검증 완료. Preview·Production 배포 검증 미실행.
+- 상태: 로컬 및 Production 검증 완료. Production HTTP 46/46, Chrome prefetch·hover·navigation·관측 로그 및 자산·Proxy 검증 통과. 별도 Preview는 미실행.
 - 수정 전 조사 결과: `investigation.md`, `evidence.json`. 이 결과는 수정의 통과 증거가 아니다.
 - 문서 점검: 일관성·실행 가능성·수정 범위 검토 완료. baseline 직접 origin의 필수 입력 여부를 수정 전 비교 기준과 일치시켰고 Proxy 검증 경로를 전체 경로로 명시했다. 남은 문서 검토 지적은 없으며 실제 수행 결과는 `verification.md`와 `verification-evidence.json`에 기록한다.
-- Git 반영 승인: 2026-10-01 사용자 “메인에 머지해줘” 지시로 커밋과 로컬 main 반영 승인. 남은 승인: 원격 push, Preview 배포, Production 반영.
+- Git 반영 승인: 2026-10-01 사용자 “메인에 머지해줘” 지시로 커밋과 로컬 main 반영 승인. 후속 사용자 “메인에서 진행” 지시로 원격 push·Production 반영 승인 및 수행 완료. 별도 Preview는 이번 완료 주장에 포함하지 않는다.
 
 전체 테스트 스위트나 새 baseline 빌드는 이번 단계의 필수 검증으로 늘리지 않는다. 구현 중 새 실패나 영향 범위가 발견되면 필요한 검사만 추가하고 근거를 기록한다.

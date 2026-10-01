@@ -1,7 +1,7 @@
 Intent: baseline zone의 segment prefetch 404 원인 규명과 해결
 Author: Codex (사용자 요청 초안)
-Status: approved
-Approval: 2026-10-01 현재 대화에서 사용자가 원인 설명을 확인한 뒤 “승인”으로 통합 intent의 요구사항·설계·완료 기준을 승인했다. PR 없음. 이번 승인은 plan 작성의 근거이며 구현·push·배포 승인은 아니다.
+Status: done
+Approval: 2026-10-01 현재 대화에서 통합 intent “승인”, plan “구현 검증”, “메인에 머지해줘”, “메인에서 진행”으로 로컬 구현·main 반영·push·Production 검증을 차례로 승인했다. 사용자 지시로 PR 없이 main에 직접 반영했으며 실제 완료 기준을 충족했다.
 
 ## Problem
 
@@ -34,14 +34,14 @@ Approval: 2026-10-01 현재 대화에서 사용자가 원인 설명을 확인한
 
 ## Design (spec 통합)
 
-셸의 `/zone/*` 외부 rewrite를 `beforeFiles`로 옮겨 원래 경로와 prefetch 헤더를 소유 zone에 먼저 전달한다. zone에서만 전송 경로로 변환하도록 한다. Related Projects와 환경변수 목적지를 유지한다. 자산 rewrite의 구체적인 배치와 회귀 검증 파일은 plan에서 확정한다. 로컬 구현·검증은 완료됐으며 배포 후 효과는 미검증이다.
+셸의 `/zone/*` 외부 rewrite를 `beforeFiles`로 옮겨 원래 경로와 prefetch 헤더를 소유 zone에 먼저 전달한다. zone에서만 전송 경로로 변환하도록 한다. Related Projects와 환경변수 목적지를 유지한다. 자산 rewrite의 구체적인 배치와 회귀 검증 파일은 plan에서 확정한다. 로컬과 실제 Production의 HTTP·브라우저 검증을 통과했다. 검증 기록은 `verification.md`에 남겼다.
 
 ## Acceptance criteria (spec 통합)
 
-- [ ] 실제 Chrome에서 캡처한 상품 1·2 prefetch가 배포된 셸 경유에서도 200과 `text/x-component`를 반환한다.
-- [ ] 목록 페이지·다른 정상 정적/동적 baseline 라우트에서도 segment 요청이 올바른 대상 경로·RSC 트리에 도달한다. 정상 페이지가 없는 `/zone/baseline` 자체의 404는 성공 기준에서 제외한다.
-- [ ] 실습 화면의 실제 관측 로그에서 prefetch 404가 사라지고 클릭 navigation이 정상 동작한다.
-- [ ] 셸·cache zone·자산·Proxy 데모의 기존 동작을 확인한다. 조사 시 현재 cache zone도 같은 요청에서 404였다는 결과를 회귀 기준에 반영한다.
+- [x] 실제 Chrome에서 캡처한 상품 1·2 prefetch가 배포된 셸 경유에서도 200과 `text/x-component`를 반환한다.
+- [x] 목록 페이지·다른 정상 정적/동적 baseline 라우트에서도 segment 요청이 올바른 대상 경로·RSC 트리에 도달한다. 정상 페이지가 없는 `/zone/baseline` 자체의 404는 성공 기준에서 제외한다.
+- [x] 실습 화면의 실제 관측 로그에서 prefetch 404가 사라지고 클릭 navigation이 정상 동작한다.
+- [x] 셸·cache zone·자산·Proxy 데모의 기존 동작을 확인한다. 조사 시 현재 cache zone도 같은 요청에서 404였다는 결과를 회귀 기준에 반영한다.
 - [x] 로컬 검증과 배포 검증을 구분해 기록하고 임시물을 정리한다.
 
 ## Constraints
@@ -55,6 +55,6 @@ Approval: 2026-10-01 현재 대화에서 사용자가 원인 설명을 확인한
 
 ## Open questions
 
-- 실제 Vercel 배포의 어댑터 버전·라우팅 산출물은 인증된 계정에서 확인하지 못했다. 현재 직접 Production 별칭은 정상이며 Proxy 제거 배포 실험의 필요성은 낮다.
+- 실제 Vercel 배포의 어댑터 버전·내부 라우팅 산출물은 직접 확인하지 않았다. 공개 Production 요청의 개선은 검증했으며 이 별도 확인은 해결의 완료 조건에 포함하지 않는다.
 - 이전 cache zone 200 관찰과 현재 404의 차이가 어느 배포·헤더 차이에서 생겼는지는 미확정이다.
-- 수정 확인용 Preview 배포의 프로젝트 조합·허가·되돌리기는 plan에서 별도로 합의한다.
+- 사용자 지시로 main의 Production에서 직접 검증했다. 별도 Preview 조합 검증은 이번 완료 주장에 포함하지 않는다.
