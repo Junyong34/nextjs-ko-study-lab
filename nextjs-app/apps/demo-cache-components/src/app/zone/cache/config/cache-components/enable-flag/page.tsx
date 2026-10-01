@@ -4,43 +4,50 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('cache', 'config/cache-components/enable-flag')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ConfigCacheComponentsDemo } from './components/ConfigCacheComponentsDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { EnableFlagWorkbench } from './components/EnableFlagWorkbench'
+import { EnableFlagDeepDive } from './components/EnableFlagDeepDive'
+
+/**
+ * Next가 next.config의 cacheComponents 값을 서버 번들에 주입한 내부 상수 (관찰용, 공개 API 아님).
+ * 클라이언트 번들 값은 EnableFlagWorkbench에서 따로 읽어 둘을 비교한다.
+ */
+const serverFlag: unknown = process.env.__NEXT_CACHE_COMPONENTS
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
-            <DemoGuideCard
+      <DemoGuideCard
         title="cacheComponents: true Next.js 16 플래그 활성화"
-        concept="next.config.ts에서 experimental.cacheComponents: true를 활성화하여 컴포넌트 단위의 'use cache' 지시어 선언과 정밀 캐싱 기능을 켭니다."
+        concept="next.config.ts 최상위의 cacheComponents: true는 'use cache' 지시어를 쓸 수 있게 하고, Partial Prerendering(정적 셸 + 스트리밍)을 기본 동작으로 만들며, 내비게이션 시 이전 라우트를 React <Activity>로 숨겨 state를 보존합니다. 이 zone은 플래그가 항상 켜져 있으므로 그 결과를 실제 응답과 DOM으로 측정합니다."
         steps={[
           {
             step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-            description: "'use cache' 컴포넌트 캐싱이 적용된 상품을 선택합니다.",
-            actionBadge: "상품 선택",
+            title: '[probe 측정]을 2회 누르기',
+            description:
+              "probe 라우트의 HTML을 직접 읽어, 정적 마크업·'use cache' 결과·Suspense fallback이 먼저 오고 connection() 뒤 데이터가 나중에 스트리밍되는지, 'use cache' ID가 재사용되는지 기록합니다.",
+            actionBadge: '응답 스트림 측정',
           },
           {
             step: 2,
-            title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "cacheComponents 활성화 플래그 기반의 캐시 컴포넌트 렌더링을 실행합니다.",
-            actionBadge: "컴포넌트 렌더",
+            title: '[blocking 측정] 누르기',
+            description:
+              '같은 데이터를 Suspense 없이 읽는 라우트입니다. 플래그가 켜진 상태에서는 instant = false로 셸을 포기해야만 허용되고, 데이터가 끝날 때까지 헤더가 오지 않습니다.',
+            actionBadge: '대조 측정',
           },
           {
             step: 3,
-            title: "컴포넌트 레벨 캐시 적재 및 도메인 로그 관찰",
-            description: "'use cache' 지시어가 선언된 하위 컴포넌트가 개별 캐시 엔트리로 독립 적재되는지 확인합니다.",
-            actionBadge: "로그 검증",
-            observe: "cacheComponents 플래그 활성화로 컴포넌트 레벨 use cache 기능이 정상 동작함",
-            observeAt: "verification",
+            title: '메모 입력 → [다른 라우트로 이동] → [실습 화면으로 돌아가기]',
+            description:
+              'away 페이지가 문서에 남은 이전 라우트 DOM을 조사하고, 돌아온 뒤 입력값과 인스턴스 ID가 그대로인지 확인합니다.',
+            actionBadge: 'Activity 관측',
+            observe: '검증 결과 5개 항목이 모두 [일치]로 바뀐다',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"cacheComponents: true Next.js 16 플래그 활성화 실습"}>
-        <ConfigCacheComponentsDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <EnableFlagWorkbench serverFlag={serverFlag} />
+      <EnableFlagDeepDive />
     </DemoContainer>
   )
 }

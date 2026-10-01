@@ -4,8 +4,9 @@ import { demoConfig as redirectsCondition } from './redirects-condition'
 import { demoConfig as rewritesQuery } from './rewrites-query'
 import { demoConfig as headersSecurity } from './headers-security'
 import { demoConfig as envBuildTime } from './env-build-time'
+import { demoConfig as rewritesCrossZone } from './rewrites-cross-zone'
 
-const parts: DemoConfigPart[] = [redirectsRegex, redirectsCondition, rewritesQuery, headersSecurity, envBuildTime]
+const parts: DemoConfigPart[] = [redirectsRegex, redirectsCondition, rewritesQuery, headersSecurity, envBuildTime, rewritesCrossZone]
 
 export const demoRedirects = parts.flatMap((p) => p.redirects ?? [])
 export const demoRewrites = parts.flatMap((p) => p.rewrites ?? [])

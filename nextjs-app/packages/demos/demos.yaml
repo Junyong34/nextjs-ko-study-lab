@@ -609,13 +609,13 @@
   title: "셸에서 존으로의 rewrites 라우팅 (Multi-zones)"
   doc: 2-guides/multi-zones.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/instrumentation/server-register-hook
   title: "서버 부팅 register() 실행 훅"
   doc: 2-guides/instrumentation.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/opentelemetry/trace-span
   title: "Trace ID 발급 및 Server Component Span"
@@ -1299,7 +1299,7 @@
   title: "rewrites() Zone 간 라우팅 및 외부 API 프록시"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/rewrites/query-param-rewrite
   title: "rewrites() 쿼리 파라미터 매핑 라우팅"
@@ -1365,13 +1365,13 @@
   title: "cacheComponents: true Next.js 16 플래그 활성화"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/cacheComponents.md
   zone: cache
-  status: stub
+  status: done
 
 - url: config/cache-life/custom-presets
-  title: "experimental.cacheLife 커스텀 수명 프리셋 전역 정의"
+  title: "cacheLife 커스텀 수명 프리셋 전역 정의"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/cacheLife.md
   zone: cache
-  status: stub
+  status: done
 
 - url: config/cache-handlers/redis-kv
   title: "experimental.cacheHandlers 분산 Redis 캐시 핸들러 연동"
