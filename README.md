@@ -8,8 +8,8 @@
 
 <p align="center">
   <strong>"읽고, 눌러보고, 확인한다"</strong><br />
-  Next.js App Router 공식 문서를 한국어로 체계화하고,<br />
-  등록된 실습 예제를 단계적으로 공개하는 온라인 학습 플랫폼
+  Next.js App Router 공식 문서의 한글 번역과<br />
+  실습 예제, 애니메이션 시각화로 배우는 학습 사이트
 </p>
 
 <p align="center">
@@ -19,15 +19,13 @@
   <a href="https://www.learn-nextjs-lab.space/visualize"><strong>시각화 갤러리</strong></a>
 </p>
 
-공식 문서는 잘 정리되어 있지만, 영어로 읽다 보면 한 번 훑고 넘어가기 쉽고, 읽은 내용이 브라우저에서 실제로 어떻게 동작하는지 확인하려면 따로 프로젝트를 만들어야 합니다. 이 두 과정을 한 곳에서 해결할 수 있도록 만들었습니다. 문서를 읽고, 문제를 풀고, 바로 옆의 예제에서 실제 동작까지 눈으로 확인하는 순서로 학습할 수 있습니다.
-
 ## 사이트에 있는 것
 
-### 1. 공식 문서 한글 번역 (284편)
+### 1. 공식 문서 한글 번역
 
 [nextjs.org/docs/app](https://nextjs.org/docs/app)의 App Router 문서를 Next.js **16.3.2** 기준으로 번역했습니다. 시작하기, 가이드, API 레퍼런스, 용어집, 아키텍처 다섯 카테고리로 나뉘며 원문 순서를 그대로 따릅니다.
 
-단순히 옮기기만 한 것이 아니라 학습하기 좋은 형태로 다듬었습니다. 문서 앞에는 이 글에서 무엇을 배우는지 정리한 **학습 목표**를, 뒤에는 **챕터 요약**을 붙였습니다. 코드 블록은 Shiki로 하이라이팅했고, 오른쪽에는 페이지 목차를 두었습니다.
+문서 앞의 **학습 목표**와 뒤의 **챕터 요약**으로 배울 내용과 핵심을 확인할 수 있습니다. 코드 블록에는 Shiki 하이라이팅을 적용했고, 오른쪽 목차로 원하는 내용을 찾아볼 수 있습니다.
 
 | 카테고리 | 내용 | 바로가기 |
 | :--- | :--- | :--- |
@@ -37,27 +35,48 @@
 | 용어집 | RSC, PPR, Hydration, Cache Tags 같은 용어 48개 | [열기](https://www.learn-nextjs-lab.space/glossary) |
 | 아키텍처 | Turbopack, SWC, Fast Refresh, 브라우저 지원 | [열기](https://www.learn-nextjs-lab.space/architecture) |
 
-### 2. 문서마다 딸린 연습 문제
+각 문서 끝에는 단일 선택·복수 선택 **연습 문제**가 있습니다. 문서에서 배운 내용으로 문제를 푼 뒤 접힌 정답과 해설을 펼쳐 확인할 수 있습니다. 일부 문서에는 **학습 확인** 체크리스트도 제공합니다.
 
-문서를 읽기만 하면 이해했다고 착각하기 쉽습니다. 그래서 각 문서 끝에 그 내용만으로 풀 수 있는 **연습 문제**를 넣었습니다. 단일 선택과 복수 선택 문제가 섞여 있고, 정답과 해설은 접어 두었으니 먼저 풀어 본 뒤 펼쳐서 확인하면 됩니다. 문서에 따라서는 스스로 점검할 수 있는 **학습 확인** 체크리스트도 있습니다.
+### 2. 직접 실행하고 코드를 확인하는 실습 데모
 
-### 3. 화면만 흉내 내지 않는 실습 데모
+챕터별 실습 예제를 직접 클릭하며 문서에서 배운 기능의 동작을 확인할 수 있습니다. 예제의 [소스 코드](./nextjs-app/)도 오픈소스로 제공하므로 실행 결과와 구현을 함께 살펴볼 수 있습니다.
 
-문서에서 설명하는 동작을 실제 Next.js 앱으로 그대로 구현해 두었습니다. 겉모습만 비슷하게 만든 화면이 아니라 진짜 `layout.tsx`·`template.tsx`, 라우트 그룹, `<Link>` 이동, Server Action 호출로 동작하기 때문에 브라우저 개발자 도구를 열어 보면 문서에서 설명한 것과 같은 RSC 페이로드나 요청을 그대로 확인할 수 있습니다. `use cache`처럼 Next.js 16에서 새로 도입된 캐싱 기능도 직접 눌러 보며 익힐 수 있습니다.
+`layout.tsx`·`template.tsx`, 라우트 그룹, `<Link>`, Server Action, `use cache` 등을 실제 Next.js 앱으로 구현했습니다. 브라우저 개발자 도구에서는 RSC 페이로드와 요청도 확인할 수 있습니다.
+
+제목, URL, 관련 문서명으로 검색하거나 카테고리로 필터링해 원하는 예제를 찾을 수 있습니다.
 
 다만 등록된 예제 전부가 공개되어 있지는 않습니다. 아직 준비 중인 예제는 목록에 상태로 표시되며, 정확한 공개 현황과 기준은 [운영 가이드](./nextjs-app/docs/09-demo-status-and-stepwise-release-guide.md)에서 확인할 수 있습니다.
 
-### 4. 데모 검색과 필터링 (`/demo`)
+### 3. 애니메이션 시각화
 
-등록된 예제를 한곳에서 살펴볼 수 있는 색인 페이지입니다. 제목, URL, 관련 문서명으로 검색하거나 카테고리로 필터링해서 원하는 예제를 찾을 수 있습니다.
+Streaming SSR, Selective Hydration, ISR, Cache Components의 동작 흐름을 캔버스 애니메이션으로 살펴볼 수 있습니다.
 
-### 5. 학습 진도 기록
+### 4. 학습 기록
 
-로그인 없이도 브라우저의 로컬 저장소에 읽은 문서와 완료한 예제가 기록됩니다. 같은 브라우저로 다시 들어오면 직접 표시해 둔 완료 기록을 이어서 확인할 수 있습니다.
+**학습 기록** 버튼을 눌러 공부한 문서와 예제를 완료로 체크할 수 있습니다. 기록은 로그인 없이 브라우저의 로컬 저장소에 보관되며, 같은 브라우저로 다시 방문하면 완료한 항목을 확인하며 학습을 이어갈 수 있습니다.
 
-### 6. 인터랙티브 아키텍처 시각화 (`/visualize`)
+## 실습 예제 구성
 
-Streaming SSR, Selective Hydration, ISR, Cache Components 같은 Next.js·React의 핵심 런타임 동작을 글로 설명하는 대신 캔버스 애니메이션으로 직접 살펴볼 수 있는 갤러리입니다.
+pnpm workspace로 문서, 사이트, 실습 앱을 한 저장소에서 관리합니다. 일반 예제와 Cache Components 예제가 각각의 설정으로 실행되도록 문서 사이트와 두 실습 앱을 분리했습니다.
+
+```text
+nextjs-docs/                     # 한글 학습 문서
+nextjs-app/
+├── apps/
+│   ├── shell/                   # 문서 사이트와 예제 뷰어
+│   ├── demo-baseline/           # 라우팅, 폼, Server Action 등 일반 예제
+│   └── demo-cache-components/   # Cache Components를 사용하는 예제
+└── packages/
+    ├── demos/                  # 예제 등록 정보와 관련 문서 연결
+    ├── demo-kit/               # 실습 앱의 공통 가이드와 검증 UI
+    └── ...
+```
+
+일반 예제는 `demo-baseline`, `cacheComponents: true` 설정이 필요한 캐싱 예제는 `demo-cache-components`에서 실행합니다. 각 예제는 해당 앱의 `src/app/zone/baseline/` 또는 `src/app/zone/cache/` 아래에 주제별 App Router 경로로 구성되어 있습니다.
+
+예를 들어 Server Action 기본 예제는 [server-actions/basic](./nextjs-app/apps/demo-baseline/src/app/zone/baseline/server-actions/basic/), `use cache` 기본 예제는 [caching/basic](./nextjs-app/apps/demo-cache-components/src/app/zone/cache/caching/basic/)에서 확인할 수 있습니다. `page.tsx`를 시작으로 필요한 컴포넌트와 서버 로직을 함께 살펴볼 수 있습니다.
+
+[demos.yaml](./nextjs-app/packages/demos/demos.yaml)에서 예제의 URL, 관련 문서, 실행 앱과 공개 상태를 관리합니다. 사이트의 예제 뷰어는 실습 앱을 iframe으로 보여주며, 요청은 문서 사이트를 거쳐 실습 앱으로 연결됩니다. 자세한 구조는 [아키텍처 문서](./nextjs-app/ARCHITECTURE.md)를 참고해 주세요.
 
 ## 기타
 
