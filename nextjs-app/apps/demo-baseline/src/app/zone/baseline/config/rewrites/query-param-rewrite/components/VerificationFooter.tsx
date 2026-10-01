@@ -1,106 +1,47 @@
 'use client'
 import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import { judge } from '../lib/judge'
+import { scenarioById } from '../expectations'
+import type { Measurement } from '../types'
+import { RewriteDeepDive } from './RewriteDeepDive'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+const EXPECTED = (
+  <ul className="list-disc space-y-1 pl-4">
+    <li>규칙이 적용되는 요청은 응답 상태 200이고 3xx가 아니다(opaqueredirect 없음). 응답 URL은 요청 URL과 같다.</li>
+    <li>렌더된 목적지는 요청 경로와 다르다: /old?id=N → products/[id], /legacy/shoes/N → lookup.</li>
+    <li>목적지 searchParams에 source=rewrite가 있다. 직접 접근한 /products/N에는 없다.</li>
+    <li>has(query)가 맞지 않는 요청(/old?id=abc, /old)과 page가 없는 경로는 규칙이 적용되지 않아 404다.</li>
+  </ul>
+)
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+export function VerificationFooter({ latest }: { latest: Measurement | undefined }) {
+  let isMatched: boolean | undefined
+  let actual: React.ReactNode = '• 대기 중: 값을 정하고 예측한 뒤 [요청 보내기] 버튼으로 요청을 실행하세요.'
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• rewrites() 쿼리 파라미터 매핑 라우팅의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  if (latest) {
+    const checks = judge(latest)
+    isMatched = checks.every((c) => c.ok)
+    actual = (
+      <ul className="space-y-1">
+        <li>요청: {scenarioById(latest.scenario).label} — {latest.requestedPath}</li>
+        {checks.map((c) => (
+          <li key={c.label}>{c.ok ? '✅' : '❌'} {c.label}: {c.detail}</li>
+        ))}
+      </ul>
+    )
+  }
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="rewrites() 쿼리 파라미터 매핑 라우팅 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="rewrites() 쿼리 파라미터 매핑 검증 결과"
+        expected={EXPECTED}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="가장 최근 요청의 실측값(응답 상태·응답 URL·목적지가 받은 params/searchParams)만으로 판정합니다. 예측을 골랐다면 예측이 틀릴 때도 불일치로 표시됩니다."
       />
-            <DemoDeepDiveCard title="next.config.ts rewrites() 쿼리 파라미터 변환 및 Vanity URL 라우팅">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>rewrites()</code> 설정을 통해 복잡한 내부 쿼리 스트링 경로(예: <code>/catalog?category=fashion&sort=popular</code>)를 직관적인 단축 가상 URL(예: <code>/fashion-popular</code>)로 투명하게 매핑하는 설정 스펙입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 사용자가 간결한 브랜드 기획전 URL(<code>/brand/:slug</code>)로 접속하면, <code>rewrites()</code> 룰이 내부 목적지(<code>/shop/brand-detail?brandSlug=:slug</code>)로 파라미터를 캡처 및 주입하여 서버 컴포넌트가 정상적으로 데이터를 조회하도록 전달합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>마케팅 친화적 Vanity URL 제공</strong>: 인쇄물, SNS 광고, 배너에 노출하기 적합한 짧고 기억하기 쉬운 URL을 제공합니다.</li>
-              <li><strong>검색엔진 최적화(SEO) 친화적 경로 구성</strong>: 복잡한 쿼리 스트링 대신 의미 있는 키워드가 포함된 정적 슬러그 구조를 완성합니다.</li>
-              <li><strong>내부 아키텍처 은닉</strong>: 백엔드 데이터베이스 구조나 내부 라우팅 파라미터를 외부에 노출하지 않고 캡슐화합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>시즌 마케팅 캠페인 단축 프로모션 URL (<code>/blackfriday</code> -{'>'} <code>/events?type=bf2026</code>)</li>
-              <li>인플루언서 제휴 마케팅 링크 (<code>/partner/:name</code> -{'>'} <code>/shop?ref=:name</code>)</li>
-              <li>카테고리별 인기 랭킹 단축 URL (<code>/best/:category</code> -{'>'} <code>/ranking?cat=:category</code>)</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>쿼리 우선순위 및 충돌</strong>: 요청에 이미 존재하는 쿼리 파라미터와 리라이트에서 주입하는 쿼리의 키가 중복될 경우의 덮어쓰기 우선순위를 명확히 설계해야 합니다.</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+      <RewriteDeepDive />
     </div>
   )
 }

@@ -1,106 +1,59 @@
 'use client'
 import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import type { MeasureResult } from '../types'
+import { EXPECTED_HEADERS, isInScope, judge } from '../lib/scope'
+import { HeadersDeepDive } from './HeadersDeepDive'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+const EXPECTED = (
+  <ul className="list-disc space-y-1 pl-4">
+    <li>범위 안 경로(데모 페이지·probe)의 응답에는 headers()에 선언한 {EXPECTED_HEADERS.length}개 헤더가 선언한 값 그대로 붙는다.</li>
+    <li>범위 밖 경로(다른 데모)의 응답에는 같은 값이 붙지 않는다 — source를 좁혔기 때문이다.</li>
+    <li>어느 경로에도 X-Frame-Options가 없다 — 셸이 이 페이지를 iframe으로 임베딩하므로 넣지 않았다.</li>
+    <li>대상(범위 안)과 대조(범위 밖)를 하나씩 골라야 판정한다. Strict-Transport-Security는 HTTP localhost에서 브라우저가 무시하지만 응답 헤더로는 보인다.</li>
+  </ul>
+)
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const mark = (ok: boolean) => (ok ? '일치' : '불일치')
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter({ result }: { result: MeasureResult | null }) {
+  let isMatched: boolean | undefined
+  let actual: React.ReactNode = '• 대기 중: 대상·대조 경로를 고르고 [응답 헤더 측정]을 실행하세요.'
 
-  const defaultExpected = "• headers() 전역 보안 응답 헤더 일괄 주입 (CSP, HSTS)의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  if (result && !result.ok) {
+    isMatched = false
+    actual = `• 측정 실패: ${result.error}`
+  } else if (result?.ok) {
+    const { target, control } = result
+    const verdicts = judge(target, control)
+    const contrast = isInScope(target.path) && !isInScope(control.path)
+    const noXfo = target.headers['x-frame-options'] === null && control.headers['x-frame-options'] === null
+    const allOk = verdicts.every((v) => v.targetOk && v.controlOk) && noXfo && target.status === 200
+    isMatched = contrast ? allOk : undefined
+    actual = (
+      <ul className="space-y-1">
+        {!contrast && <li>대상은 범위 안, 대조는 범위 밖 경로로 골라야 판정합니다. (아래 결과는 참고용)</li>}
+        <li>대상 HTTP {target.status} / 대조 HTTP {control.status}</li>
+        {verdicts.map((v) => (
+          <li key={v.key}>
+            {v.key}: 대상 {mark(v.targetOk)}({v.targetValue ?? '없음'}) · 대조 {mark(v.controlOk)}({v.controlValue ?? '없음'})
+          </li>
+        ))}
+        <li>X-Frame-Options 미사용: {mark(noXfo)}</li>
+      </ul>
+    )
+  }
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="headers() 전역 보안 응답 헤더 일괄 주입 (CSP, HSTS) 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="보안 응답 헤더 주입 범위 검증 결과"
+        expected={EXPECTED}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="서버가 실제로 받은 응답 헤더만으로 판정합니다. 설정(next.config)만 바꾸고 dev 서버를 재시작하지 않으면 실제 응답이 달라 불일치가 표시됩니다."
       />
-            <DemoDeepDiveCard title="next.config.ts headers() 전역 보안 헤더 주입 (CSP, HSTS, X-Frame-Options)">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>next.config.ts</code>의 <code>async headers()</code> 설정은 모든 페이지와 API 라우트의 HTTP 응답에 Content-Security-Policy(CSP), Strict-Transport-Security(HSTS), X-Content-Type-Options, X-Frame-Options 등 엔터프라이즈 보안 헤더를 선언적으로 일괄 주입하는 표준 빌드 설정입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 <code>source: '/:path*'</code> 패턴에 대해 클릭재킹 방어(<code>X-Frame-Options: DENY</code>), MIME 스니핑 방어(<code>X-Content-Type-Options: nosniff</code>), XSS 공격 방어 CSP 헤더를 정의하여 모든 HTTP 응답 헤더에 자동 적용되는 결과를 검증합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>웹 취약점 원천 방어</strong>: XSS, 클릭재킹, MIME 스니핑, 프로토콜 다운그레이드 공격을 브라우저 보안 정책 수준에서 원천 차단합니다.</li>
-              <li><strong>ISMS/금융 보안 컴플라이언스 충족</strong>: 결제 및 전자상거래 서비스가 요구하는 엄격한 보안 감사 기준을 손쉽게 달성합니다.</li>
-              <li><strong>선언적 일괄 관리</strong>: 개별 라우트마다 헤더 코드를 작성할 필요 없이 단일 설정 파일에서 전체 서비스의 보안 정책을 중앙 집중 제어합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>전자상거래 결제 및 회원 정보 페이지의 클릭재킹 및 스크립트 인젝션 방어</li>
-              <li>금융/핀테크 서비스의 HTTPS 강제화(HSTS) 및 강력한 CSP 정책 적용</li>
-              <li>B2B SaaS 관리자 콘솔의 iframe 삽입 제한 및 외부 리소스 화이트리스트 관리</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>엄격한 CSP 설정 시 서드파티 스크립트 차단 주의</strong>: Google Analytics, 카카오 SDK 등 외부 스크립트 도메인을 CSP의 <code>script-src</code> 화이트리스트에 누락하면 스크립트 실행이 차단될 수 있으므로 정밀한 도메인 정의가 필요합니다.</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+      <HeadersDeepDive />
     </div>
   )
 }

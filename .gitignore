@@ -20,6 +20,7 @@ node_modules/
 
 # Next.js
 .next/
+.next-*/
 out/
 .vercel/
 next-env.d.ts

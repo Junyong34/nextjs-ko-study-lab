@@ -1287,13 +1287,13 @@
   title: "redirects() 정규식 패턴 및 와일드카드 리다이렉트"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/redirects.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/redirects/header-query-condition
   title: "redirects() 요청 헤더 및 쿼리 기반 조건부 리다이렉트"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/redirects.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/rewrites/cross-zone-proxy
   title: "rewrites() Zone 간 라우팅 및 외부 API 프록시"
@@ -1305,13 +1305,13 @@
   title: "rewrites() 쿼리 파라미터 매핑 라우팅"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/rewrites.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/headers/global-security-headers
   title: "headers() 전역 보안 응답 헤더 일괄 주입 (CSP, HSTS)"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/headers.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/trailing-slash/url-normalization
   title: "trailingSlash: true URL 끝 슬래시 정규화"
@@ -1347,7 +1347,7 @@
   title: "env 필드를 통한 빌드 타임 환경변수 주입"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/env.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/cross-origin/anonymous-mode
   title: "crossOrigin: 'anonymous' 서드파티 스크립트 속성"
