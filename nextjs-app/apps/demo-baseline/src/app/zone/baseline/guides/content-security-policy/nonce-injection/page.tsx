@@ -1,45 +1,53 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { CspScripts } from './components/CspScripts'
+import { CspLab } from './components/CspLab'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/content-security-policy/nonce-injection')
 
-import React from 'react'
-import { headers } from 'next/headers'
-import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
-import { NonceInjectionSection } from './components/NonceInjectionSection'
-
 export default async function DemoPage() {
-  const nonce = (await headers()).get('x-nonce')
+  // headers()는 요청 시점 API라 이 페이지를 동적 렌더링으로 만든다. nonce가 요청마다 달라야 하기 때문이다.
+  const h = await headers()
+  const nonce = h.get('x-nonce')
+  const requestCsp = h.get('content-security-policy')
 
   return (
     <DemoContainer className="space-y-6">
+      {/* 위반 이벤트 수집기가 DOM에서 가장 먼저 실행되도록 맨 위에 둔다 */}
+      <CspScripts nonce={nonce} />
       <DemoGuideCard
-        title={"CSP 헤더 및 암호학적 Nonce 주입을 통한 XSS 방어"}
-        concept={"proxy.ts가 매 요청마다 nonce 값을 생성해 CSP 응답 헤더와 <script nonce=\"...\"> 속성에 주입합니다. Next.js 프레임워크 스크립트에도 이 nonce를 적용할 수 있으며, nonce가 없는 인라인 스크립트는 브라우저가 CSP에 따라 실행하지 않습니다."}
+        title="Proxy nonce 기반 CSP 헤더 주입"
+        concept="proxy.ts가 요청마다 새 nonce를 만들어 CSP 응답 헤더와 x-nonce 요청 헤더에 담습니다. 서버 컴포넌트가 headers()로 nonce를 읽어 스크립트에 붙이면 브라우저는 nonce가 일치하는 스크립트만 실행하고, 나머지는 차단하며 securitypolicyviolation 이벤트를 남깁니다."
         steps={[
           {
             step: 1,
-            title: "발급된 nonce 값 확인",
-            description: "proxy.ts가 이번 요청에 대해 발급한 nonce 값을 실습 패널에서 확인합니다.",
-            actionBadge: "nonce 확인",
+            title: '이 페이지가 받은 nonce와 스크립트 실행 결과 확인',
+            description: '서버가 발급한 nonce, nonce가 있는 스크립트와 없는 스크립트의 실행 여부, 파싱 중 발생한 위반 이벤트가 표시됩니다.',
+            actionBadge: '초기 관찰',
+            observe: 'nonce 스크립트는 true, nonce 없는 스크립트는 false',
+            observeAt: 'playground',
           },
           {
             step: 2,
-            title: "nonce 일치 스크립트 실행 여부 관찰",
-            description: "nonce 속성이 붙은 인라인 스크립트가 실제로 실행되어 true로 표시되는지 확인합니다.",
-            actionBadge: "실행 확인",
+            title: '[새 요청으로 nonce 확인]을 2회 이상 클릭',
+            description: '같은 URL을 다시 요청해 응답 헤더의 nonce와 HTML의 nonce 속성을 같은 응답에서 비교하고, 요청마다 값이 바뀌는지 봅니다.',
+            actionBadge: 'nonce 대조',
+            observe: '요청1 → 요청2 nonce가 서로 다름',
+            observeAt: 'network',
           },
           {
             step: 3,
-            title: "nonce 없는 스크립트 차단 여부 관찰",
-            description: "nonce 속성이 없는 동일한 형태의 인라인 스크립트가 CSP에 의해 차단되어 false로 남는지 확인합니다.",
-            actionBadge: "차단 확인",
-            observe: "CSP가 nonce 유무에 따라 스크립트 실행을 실제로 허용/차단하는 것을 검증 패널에서 관찰",
-            observeAt: "verification",
+            title: '[XSS 주입 시도] 클릭 후 [페이지 새로고침]',
+            description: 'nonce 없는 onerror 핸들러를 DOM에 넣으면 브라우저가 막습니다. 새로고침하면 이 페이지의 nonce도 달라집니다.',
+            actionBadge: '차단·갱신 확인',
+            observe: '모든 항목 [O] → 검증 완료',
+            observeAt: 'verification',
           },
         ]}
       />
-      <NonceInjectionSection nonce={nonce} />
+      <CspLab nonce={nonce} requestCsp={requestCsp} />
     </DemoContainer>
   )
 }

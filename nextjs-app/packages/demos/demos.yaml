@@ -261,7 +261,7 @@
   title: "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시)"
   doc: 2-guides/adopting-partial-prefetching.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/auth-cache-components/static-layout-session-context
   title: "정적 상품 레이아웃과 UserContext 기반 세션 스트리밍"
@@ -459,13 +459,13 @@
   title: "View Transitions 이미지 확대 애니메이션"
   doc: 2-guides/view-transitions.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/css-in-js/style-registry
   title: "Style Registry를 통한 CSS-in-JS SSR 스타일 주입"
   doc: 2-guides/css-in-js.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/sass/promotions-theme
   title: "Sass 변수/mixin 활용 프로모션 스타일링"
@@ -501,7 +501,7 @@
   title: "Proxy Nonce 기반 CSP 헤더 주입"
   doc: 2-guides/content-security-policy.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/environment-variables/public-vs-server
   title: "NEXT_PUBLIC_ vs 서버 환경변수 노출 범위"
@@ -537,7 +537,7 @@
   title: "외부 PG사 결제 SDK onLoad 이벤트 핸들링"
   doc: 2-guides/scripts.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/mdx/product-tech-doc
   title: "상품 기술 문서 MDX 렌더링"
@@ -579,7 +579,7 @@
   title: "홈 화면 추가 PWA 프롬프트 및 manifest"
   doc: 2-guides/progressive-web-apps.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/i18n/subpath-routing
   title: "/[lang]/products 다국어 서브패스 라우팅"
@@ -597,13 +597,13 @@
   title: "서브도메인 기반 테넌트 분기 및 브랜드 테마"
   doc: 2-guides/multi-tenant.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/multi-tenant/isolated-branding
   title: "테넌트별 로고/컬러 동적 주입"
   doc: 2-guides/multi-tenant.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/multi-zones/cross-zone-routing
   title: "셸에서 존으로의 rewrites 라우팅 (Multi-zones)"
@@ -633,7 +633,7 @@
   title: "정적 HTML 카탈로그 사전 생성"
   doc: 2-guides/static-exports.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/public-pages/terms-ssg
   title: "이용약관 정적 SSG 페이지 생성 및 캐시"
@@ -651,7 +651,7 @@
   title: "상품 홍보 영상 지연 로딩 및 자동 재생"
   doc: 2-guides/videos.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: file-conventions/layout/state-preservation
   title: "클라이언트 상태 보존 중첩 레이아웃"

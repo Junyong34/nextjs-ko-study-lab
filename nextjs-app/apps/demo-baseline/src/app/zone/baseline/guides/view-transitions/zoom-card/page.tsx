@@ -1,48 +1,19 @@
-'use client'
-import React, { useState } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ViewTransitionsDemo } from './components/ViewTransitionsDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import Link from 'next/link'
+import { BASE, PHOTOS } from './data'
+import { PhotoArt } from './components/PhotoArt'
 
-export default function DemoPage() {
-  const [supported, setSupported] = useState<boolean | null>(null)
-
+// 목록 라우트: 썸네일을 클릭하면 상세 라우트로 이동하며 같은 name의 요소가 확대 morph된다.
+export default function PhotoListPage() {
   return (
-    <DemoContainer className="space-y-6">
-      <DemoGuideCard
-        title={"View Transitions API를 통한 카드 확대 모핑 애니메이션"}
-        concept={"document.startViewTransition() API를 활용하여 썸네일 그리드 뷰에서 상세 확대 뷰로 전환할 때 브라우저 네이티브 하드웨어 가속 모핑 애니메이션을 부드럽게 구현합니다."}
-        steps={[
-          {
-            step: 1,
-            title: "썸네일 그리드 뷰 초기 상태 확인",
-            description: "전환 전 카드 썸네일 레이아웃과 View Transition 지원 상태를 확인합니다.",
-            actionBadge: "썸네일 확인",
-          },
-          {
-            step: 2,
-            title: "[전환 애니메이션 실행] 버튼 클릭",
-            description: "View Transition을 트리거하여 썸네일 카드를 상세 확대 뷰로 전환합니다.",
-            actionBadge: "트랜지션 실행",
-          },
-          {
-            step: 3,
-            title: "확대 상세 뷰 모핑 애니메이션 및 부드러운 전환 관찰",
-            description: "DOM 구조 변경 시 브라우저가 이전/이후 스냅샷을 교차 페이드 및 크기 모핑하는 과정을 검증합니다.",
-            actionBadge: "모핑 검증",
-            observe: "전환 애니메이션 실행 클릭 시 썸네일에서 확대 상세 뷰로의 부드러운 View Transition 모핑 관찰",
-            observeAt: "playground",
-          },
-        ]}
-      />
-      <DemoPlaygroundCard title={"View Transitions 이미지 확대 애니메이션 실습"}>
-        <ViewTransitionsDemo onResult={setSupported} />
-      </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={supported !== null ? supported : undefined}
-        actual={supported !== null ? `- document.startViewTransition 지원 여부: ${supported}` : undefined}
-        expected="브라우저가 View Transitions API를 지원하면 document.startViewTransition()으로 실제 네이티브 전환 애니메이션이 실행되어야 한다."
-      />
-    </DemoContainer>
+    <ul className="grid gap-3 sm:grid-cols-3">
+      {PHOTOS.map((photo) => (
+        <li key={photo.id}>
+          <Link href={`${BASE}/${photo.id}`} transitionTypes={['zoom-in']} className="block space-y-1.5 text-xs">
+            <PhotoArt photo={photo} className="h-24 rounded-md" />
+            <span className="block font-bold text-zinc-900 dark:text-zinc-100">{photo.title}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   )
 }

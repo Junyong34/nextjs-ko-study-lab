@@ -1,45 +1,38 @@
-'use client'
-import React, { useState } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { StyleRegistry } from './components/StyleRegistry'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { StyleRegistryDemo } from './components/StyleRegistryDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
-  const [style, setStyle] = useState<{ backgroundColor: string; color: string } | null>(null)
-
   return (
-    <StyleRegistry>
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"CSS-in-JS 스타일 레지스트리 및 SSR 스타일 사전 주입"}
-        concept={"useServerInsertedHTML 훅을 사용하는 Style Registry를 구축하여 styled-components 또는 Emotion이 생성한 CSS 규칙을 첫 SSR HTML <head>에 사전 주입하여 스타일 깨짐을 방지합니다."}
+        title="Style Registry를 통한 CSS-in-JS SSR 스타일 주입"
+        concept="런타임 CSS-in-JS는 렌더 중에 규칙을 만든다. registry가 그 규칙을 수집해 useServerInsertedHTML로 첫 HTML의 <head>에 flush하고, 클라이언트는 같은 registry로 SSR 규칙을 재사용하며 새 규칙만 추가한다. registry가 없으면 규칙이 하이드레이션 뒤에야 도착해 FOUC가 생긴다."
         steps={[
           {
-                    "step": 1,
-                    "title": "SSR HTML <head>에 주입된 <style> 태그 확인 및 클라이언트 하이드레이션 스타일 일치 여부 점검",
-                    "description": "useServerInsertedHTML을 통해 첫 번째 청크와 함께 전달된 CSS 규칙을 점검합니다. 클라이언트 마운트 후에도 동일한 스타일 클래스가 유지되는지 확인합니다.",
-                    "actionBadge": "주입 스타일 확인"
+            step: 1,
+            title: '[두 라우트 원본 HTML 실측] 클릭',
+            description: '서버가 registry 있음/없음 두 라우트를 직접 요청해 하이드레이션 이전의 원본 HTML을 분석합니다.',
+            actionBadge: '서버 실측',
+            observe: 'registry 있음은 head에 <style data-registry="ssr">이 있고 FOUC 없음, 없음은 style 0개에 FOUC 발생',
+            observeAt: 'playground',
           },
           {
-                    "step": 2,
-                    "title": "클래스 네임 충돌 없는 CSS-in-JS 사전 렌더링 관찰",
-                    "description": "브라우저에서 렌더링 시작 전 이미 스타일이 적용되어 깜빡임 없이 완성된 디자인을 검증합니다.",
-                    "actionBadge": "스타일 검증",
-                    "observe": "useServerInsertedHTML로 주입된 style data-styled 태그 및 서버-클라이언트 스타일 일치 관찰",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: '[하이드레이션 후 DOM 실측] 클릭',
+            description: '이 화면의 SSR 규칙을 클라이언트 registry가 재사용했는지(adopted), 계산된 배경색이 규칙대로인지 읽습니다.',
+            actionBadge: 'DOM 실측',
+          },
+          {
+            step: 3,
+            title: '[클라이언트 규칙 추가] 후 다시 실측',
+            description: '런타임에 새 규칙이 생기면 data-registry="client" style만 추가되고 SSR 규칙은 중복되지 않는지 봅니다.',
+            actionBadge: '동적 규칙',
+            observe: '두 실측이 모두 끝나면 검증 패널이 검증 완료로 바뀜',
+            observeAt: 'verification',
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"Style Registry를 통한 CSS-in-JS SSR 스타일 주입 실습"}>
-        <StyleRegistryDemo onCheck={(backgroundColor, color) => setStyle({ backgroundColor, color })} />
-      </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={style ? style.backgroundColor === 'rgb(0, 0, 0)' && style.color === 'rgb(255, 255, 255)' : undefined}
-        actual={style ? `- getComputedStyle().backgroundColor: ${style.backgroundColor}\n- getComputedStyle().color: ${style.color}` : undefined}
-        expected="useServerInsertedHTML로 주입된 CSS가 실제로 적용되어 배경색은 검정(rgb(0, 0, 0)), 글자색은 흰색(rgb(255, 255, 255))이어야 한다."
-      />
+      <StyleRegistryDemo />
     </DemoContainer>
-    </StyleRegistry>
   )
 }

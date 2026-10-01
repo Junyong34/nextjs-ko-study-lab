@@ -1,46 +1,49 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { HostPanel } from './components/HostPanel'
+import { SubdomainLab } from './components/SubdomainLab'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/multi-tenant/subdomain-tenant')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { MultiTenantDemo } from './components/MultiTenantDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+export default async function DemoPage() {
+  // headers() 는 요청 시점 API다. 이 페이지가 받은 Host 를 그대로 보여 주기 위해 읽는다.
+  const h = await headers()
 
-export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"서브도메인 기반 멀티 테넌트(Multi-tenant) 라우트 리라이트"}
-        concept={"Next.js 미들웨어에서 URL 호스트(brand-a.shop.com)를 파싱하여 0ms로 내부 경로(/_tenants/brand-a/...)로 rewrites() 처리함으로써 단일 코드베이스로 100개 이상의 독립 테넌트 몰을 서빙합니다."}
+        title="Host 헤더의 첫 라벨로 테넌트 판별"
+        concept="서브도메인 멀티 테넌시는 요청의 Host 헤더에서 첫 라벨(acme.example.com 의 acme)을 테넌트로 해석합니다. 브라우저는 Host 를 바꿀 수 없으므로, 서버가 같은 앱의 Route Handler 를 원하는 Host 로 직접 호출해 판별 로직을 실측합니다."
         steps={[
           {
             step: 1,
-            title: "[테넌트 A (블루 테마)] 서브도메인 초기 상태 확인",
-            description: "brand-a 테넌트로 라우팅된 파란색 테마와 브랜드 구성을 확인합니다.",
-            actionBadge: "테넌트 A 점검",
+            title: '이 페이지가 받은 Host 확인',
+            description: '노란 상자에 이 페이지 요청의 Host 와 첫 라벨 해석이 표시됩니다. 셸을 거치면 서브도메인이 아닌 셸 호스트가 보입니다.',
+            actionBadge: '한계 확인',
+            observe: 'Host 가 셸/zone 호스트이고 테넌트는 없음',
+            observeAt: 'playground',
           },
           {
             step: 2,
-            title: "[테넌트 B (퍼플 테마)] 버튼 클릭",
-            description: "호스트 헤더를 brand-b로 시뮬레이션하여 내부 테넌트 리라이트를 트리거합니다.",
-            actionBadge: "테넌트 전환",
+            title: '[전체 실행] 클릭',
+            description: 'Server Action 이 acme·globex·미등록·루트 도메인을 Host 로 지정해 Route Handler 를 실제로 호출하고, fetch 로 Host 를 지정하는 경우와 x-forwarded-host 를 쓰는 경우도 비교합니다.',
+            actionBadge: '서버 측 실측',
+            observe: '시나리오별 서버가 받은 Host 와 판별된 테넌트',
+            observeAt: 'network',
           },
           {
             step: 3,
-            title: "테넌트별 독립 브랜드명 및 전용 레이아웃 분기 관찰",
-            description: "URL 변경 없이 서버 리라이트를 통해 완전히 분리된 테넌트 화면이 서빙되는지 검증합니다.",
-            actionBadge: "멀티 테넌트 검증",
-            observe: "서브도메인 테넌트 전환(brand-a ↔ brand-b)에 따른 전용 테마 및 브랜드 UI 분기 관찰",
-            observeAt: "playground",
+            title: '검증 패널 확인',
+            description: '모든 시나리오가 [O] 이면 검증 완료입니다. fetch 의 Host 가 무시되는 것도 정상 기대값으로 판정합니다.',
+            actionBadge: '결과 확인',
+            observe: '모든 항목 [O] → 검증 완료',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"서브도메인 기반 테넌트 분기 및 브랜드 테마 실습"}>
-        <MultiTenantDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <SubdomainLab hostPanel={<HostPanel host={h.get('host')} forwardedHost={h.get('x-forwarded-host')} />} />
     </DemoContainer>
   )
 }

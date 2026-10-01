@@ -1,49 +1,38 @@
-'use client'
-import React, { useState } from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
 import { PgSdkOnloadDemo } from './components/PgSdkOnloadDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
-  const [ready, setReady] = useState(false)
-  const [orderId, setOrderId] = useState<string | null>(null)
-
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"next/script onLoad 콜백을 통한 외부 결제 SDK 안전 초기화"}
-        concept={"<Script src=\"...\" onLoad={...}> 콜백을 등록하여 외부 결제 라이브러리(PG SDK)의 다운로드 및 초기화가 완료된 시점에만 결제 버튼을 활성화(disabled 해제)하여 런타임 undefined 오류를 100% 방지합니다."}
+        title="next/script strategy와 onLoad로 외부 결제 SDK 안전하게 초기화"
+        concept="외부 SDK는 네트워크가 끝나기 전까지 window 전역 객체가 없다. next/script의 strategy는 언제 요청하는지를, onLoad/onReady/onError는 언제 쓸 수 있는지를 알려 준다. SDK에 의존하는 코드와 결제 버튼은 onLoad 이후에만 켜야 한다."
         steps={[
           {
             step: 1,
-            title: "결제 SDK 상태([확인] PG사 결제 모듈 준비 완료 (onLoad)) 점검",
-            description: "Script 컴포넌트의 onLoad 이벤트가 정상 트리거되어 SDK 인스턴스가 준비되었는지 확인합니다.",
-            actionBadge: "SDK 상태 확인",
+            title: '페이지 로드 직후 [strategy별 요청 시각] 표 확인',
+            description: '같은 페이지에서 afterInteractive와 lazyOnload 스크립트가 실제로 언제 요청·실행됐는지 Resource Timing으로 읽습니다.',
+            actionBadge: 'strategy 실측',
+            observe: 'lazyOnload 요청 시작이 window load 시작보다 뒤',
+            observeAt: 'playground',
           },
           {
             step: 2,
-            title: "[안전 결제창 열기] 버튼 클릭",
-            description: "초기화가 보장된 전역 PG 객체 함수를 안전하게 호출하여 결제 다이얼로그를 실행합니다.",
-            actionBadge: "결제 모듈 호출",
+            title: '[parallel] → [chained] 시도 실행',
+            description: 'SDK(1200ms 지연)와 의존 플러그인을 동시에 마운트하면 순서가 뒤집히고, SDK onLoad 뒤에 마운트하면 성공하는지 비교합니다.',
+            actionBadge: '순서 보장',
           },
           {
             step: 3,
-            title: "결제 모듈 안전 호출 및 런타임 에러 방지 관찰",
-            description: "SDK 미로드 상태에서의 클릭으로 인한 undefined 참조 에러가 원천 차단되었음을 검증합니다.",
-            actionBadge: "안전성 검증",
-            observe: "onLoad 콜백 완료 후 활성화된 [안전 결제창 열기] 버튼 및 PG 결제 모듈 정상 호출 관찰",
-            observeAt: "playground",
+            title: '로딩 중 [가드 없이 결제 요청] 클릭, 이어서 [error] 시도',
+            description: 'SDK 준비 전 호출이 TypeError로 실패하는 것과 HTTP 500에서 onError만 호출되는 것을 확인합니다.',
+            actionBadge: '호출 방지',
+            observe: '필수 실측(parallel·chained)이 끝나면 검증 패널이 검증 완료로 바뀜',
+            observeAt: 'verification',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"외부 PG사 결제 SDK onLoad 이벤트 핸들링 실습"}>
-        <PgSdkOnloadDemo onReady={() => setReady(true)} onOpen={setOrderId} />
-      </DemoPlaygroundCard>
-      <VerificationFooter
-        isMatched={orderId ? true : undefined}
-        actual={orderId ? `- SDK ready: ${ready}\n- window.__pgSdk.open() 반환 orderId: ${orderId}` : ready ? `- SDK ready: true (아직 결제창 미실행)` : undefined}
-        expected="next/script의 onLoad 콜백이 실제로 실행된 뒤에만 버튼이 활성화되고, 클릭 시 실제 SDK 함수가 호출되어 값을 반환해야 한다."
-      />
+      <PgSdkOnloadDemo />
     </DemoContainer>
   )
 }

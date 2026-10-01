@@ -1,104 +1,54 @@
 'use client'
+
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+const EXPECTED = [
+  '• lazyOnload 스크립트는 window load 이벤트 이후에 요청되고, afterInteractive가 먼저 실행된다.',
+  '• parallel: 지연이 없는 플러그인이 1200ms 지연된 SDK보다 먼저 실행되어 PgSdk를 찾지 못한다 (next/script는 같은 strategy끼리 실행 순서를 보장하지 않는다).',
+  '• chained: 플러그인을 SDK onLoad 이후에 마운트하면 PgSdk가 있고 위젯 등록에 성공한다. onReady는 onLoad 다음에 1회 호출된다.',
+  '• error: HTTP 500이면 onError만 호출되고 window.PgSdk는 끝내 정의되지 않는다. onLoad 이전의 결제 호출은 TypeError, 이후는 성공한다.',
+].join('\n')
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• 외부 PG사 결제 SDK onLoad 이벤트 핸들링의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
+export function VerificationFooter({ matched, actual }: { matched: boolean | undefined; actual: string[] }) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="외부 PG사 결제 SDK onLoad 이벤트 핸들링 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        title="PG SDK 로드 순서와 콜백 시점 검증"
+        expected={EXPECTED}
+        // 문자열끼리는 ExpectedActualPanel이 자동 비교(→ 불일치)하므로 ReactNode로 넘긴다
+        actual={<span>{actual.length > 0 ? actual.join('\n') : '• 상호작용 대기 중 (페이지 로드 측정이 끝나면 parallel과 chained 시도를 실행해 보세요.)'}</span>}
+        isMatched={matched}
+        description="strategy 타이밍과 parallel·chained 시도를 모두 실측해야 검증 완료가 됩니다. error 시도와 결제 호출은 실행한 경우에만 판정에 포함됩니다."
       />
-      <DemoDeepDiveCard title="외부 PG사 결제 SDK onLoad 이벤트 핸들링">
+      <DemoDeepDiveCard title="next/script strategy와 onLoad · onReady · onError">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>next/script</code> 컴포넌트는 <code>strategy="lazyOnload"</code> 또는 <code>"afterInteractive"</code>와 함께 <code>onLoad</code> 및 <code>onReady</code> 라이프사이클 콜백을 제공하여, 외부 결제창(PG) SDK나 카카오맵 등의 대용량 JS가 브라우저에 완전히 로드된 시점에 안전하게 초기화 객체를 바인딩하는 표준 API입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 포트원/토스페이먼츠 결제 SDK 스크립트 로드 시 <code>onLoad={'{'}() ={'>'} setSdkReady(true){'}'}</code> 콜백을 감지하여 [결제창 호출] 버튼을 활성화하고, SDK 미로드 상태에서의 <code>window.IMP is undefined</code> 크래시를 원천 차단합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>결제 스크립트 미로드 크래시 원천 방지</strong>: 글로벌 객체(<code>window.TossPayments</code>)가 준비되기 전에 결제 함수를 호출하여 발생하는 런타임 TypeError를 100% 방지합니다.</li>
-              <li><strong>초기 페이지 로딩 성능(LCP) 보호</strong>: 무거운 결제 모듈을 페이지 렌더링 완료 후 지연 로드(lazyOnload)하여 초기 쇼핑몰 화면 렌더링 속도를 저하시키지 않습니다.</li>
-              <li><strong>선언적 스크립트 중복 방지</strong>: 동일한 SDK 스크립트가 여러 번 마운트되더라도 Next.js가 중복 다운로드를 자동으로 방지합니다.</li>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">1. strategy별 실행 시점</h5>
+            <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+              <li><code>beforeInteractive</code>: 서버 HTML에 주입되고 Next.js 코드보다 먼저 받는다. 루트 레이아웃(<code>app/layout.tsx</code>)에서만 쓸 수 있고 <code>onLoad</code>·<code>onError</code>는 지원하지 않는다.</li>
+              <li><code>afterInteractive</code>(기본값): 하이드레이션 일부가 끝난 뒤 클라이언트에서 주입한다. 결제 SDK처럼 빨리 필요한 스크립트에 쓴다.</li>
+              <li><code>lazyOnload</code>: window load 이후 브라우저 유휴 시간에 주입한다. 위 표의 요청 시작 시각이 load 이벤트보다 뒤인 이유다.</li>
             </ul>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>KG이니시스, 토스페이먼츠, 포트원(아임포트) 주문 결제창 SDK 연동</li>
-              <li>카카오페이 / 네이버페이 간편결제 팝업 SDK 초기화</li>
-              <li>매장 위치 안내를 위한 네이버 지도 / 카카오맵 JavaScript API 로딩</li>
-            </ul>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">2. 콜백 시점과 실행 순서</h5>
+            <p>
+              <code>onLoad</code>는 스크립트가 처음 로드·실행된 직후 1회, <code>onReady</code>는 그 직후와 컴포넌트가 다시 마운트될 때마다,
+              <code>onError</code>는 로드 실패 때만 호출된다. 동적으로 주입된 스크립트는 <code>async</code>처럼 도착하는 대로 실행되므로, 두 스크립트를
+              같은 렌더에 두면 의존 관계가 있어도 순서가 보장되지 않는다. SDK에 의존하는 스크립트는 SDK의 <code>onLoad</code> 안에서 상태를 바꿔 뒤에 마운트한다.
+            </p>
+            <pre className="mt-1.5 overflow-x-auto rounded bg-zinc-950 p-2.5 font-mono text-[10px] leading-relaxed text-zinc-300">{`const [ready, setReady] = useState(false)
+<Script src="/pg/sdk.js" onLoad={() => setReady(true)} />
+{ready && <Script src="/pg/card-widget.js" />}   // window.PgSdk가 있을 때만 실행
+<button disabled={!ready}>결제하기</button>`}</pre>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>onReady vs onLoad 선택 기준</strong>: <code>onLoad</code>는 최초 1회 스크립트 다운로드 시에만 실행되므로, 라우트 이동 후 컴포넌트가 재마운트될 때마다 재초기화가 필요한 경우에는 <code>onReady</code> 콜백을 사용해야 합니다.</li>
-              <li><strong>TypeScript 전역 window 타입 확장</strong>: <code>window.TossPayments</code> 같은 외부 글로벌 객체를 참조할 때는 <code>window.d.ts</code>에 인터페이스를 정의해야 컴파일러 에러를 방지할 수 있습니다.</li>
-            </ul>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. components/script/pg-sdk-onload 데모와의 차이</h5>
+            <p>
+              그 데모는 콜백이 호출되는 횟수와 재마운트 동작(<code>onReady</code> 반복)을 다룬다. 이 데모는 strategy별 요청 시각, 의존 스크립트의
+              실행 순서 역전, SDK 준비 전 호출 방지를 실측한다.
+            </p>
           </div>
         </div>
       </DemoDeepDiveCard>

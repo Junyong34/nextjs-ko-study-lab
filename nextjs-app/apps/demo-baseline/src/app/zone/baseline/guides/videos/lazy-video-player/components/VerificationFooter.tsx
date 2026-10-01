@@ -1,103 +1,56 @@
 'use client'
+
 import React from 'react'
 import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+const EXPECTED = [
+  '• 진입 전: <video>에 src가 없고 preload="none"이며, 브라우저·서버 어디에도 영상 요청이 0건이다.',
+  '• 진입 후(박스를 스크롤해 영상이 25% 이상 보인 뒤): 요청이 발생하고 Range 요청은 206으로 응답되며, readyState ≥ 2이고 muted 상태로 자동 재생된다(paused=false).',
+  '• 비교군(즉시 로드)은 스크롤 없이도 요청이 발생한다 (실행한 경우에만 판정).',
+].join('\n')
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• 상품 홍보 영상 지연 로딩 및 자동 재생의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
+export function VerificationFooter({ matched, actual }: { matched: boolean | undefined; actual: string[] }) {
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="상품 홍보 영상 지연 로딩 및 자동 재생 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        title="영상 지연 로딩과 자동 재생 검증"
+        expected={EXPECTED}
+        // 문자열끼리는 ExpectedActualPanel이 자동 비교(→ 불일치)하므로 ReactNode로 넘긴다
+        actual={<span>{actual.length > 0 ? actual.join('\n') : '• 상호작용 대기 중 (스크롤 전에 먼저 [현재 요청 수·재생 상태 측정]을 누르세요.)'}</span>}
+        isMatched={matched}
+        description="스크롤 전·후 두 번의 측정이 모두 있어야 검증 완료가 됩니다. 값은 video 요소 속성, Resource Timing, 서버 Route Handler 기록에서 읽습니다."
       />
-      <DemoDeepDiveCard title="상품 홍보 영상 지연 로딩 및 자동 재생">
+      <DemoDeepDiveCard title="video 지연 로딩: src·preload 부여 시점과 muted autoplay">
         <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>비디오 지연 로딩 아키텍처는 Intersection Observer 및 <code>next/dynamic</code>을 활용하여, 비디오 요소가 사용자의 뷰포트에 도달하기 전까지 미디어 버퍼 다운로드를 차단(<code>preload="none"</code>)함으로써 초기 페이지 대역폭과 LCP 성능을 보호하는 미디어 최적화 스펙입니다.</p>
-          </div>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">1. 핵심 메커니즘</h5>
+            <p>
+              <code>&lt;video preload="none"&gt;</code>에 <code>src</code>를 주지 않으면 브라우저는 영상 자원을 요청하지 않는다. IntersectionObserver가 뷰포트
+              진입을 알려 주면 그때 <code>src</code>와 <code>preload="auto"</code>를 부여하고, <code>muted</code> 상태로 <code>play()</code>를 호출한다.
+              브라우저 autoplay 정책은 muted 영상의 자동 재생을 허용하므로 <code>muted</code>가 빠지면 재생이 거부될 수 있다.
+            </p>
+            <pre className="mt-1.5 overflow-x-auto rounded bg-zinc-950 p-2.5 font-mono text-[10px] leading-relaxed text-zinc-300">{`const observer = new IntersectionObserver(([entry]) => {
+  if (entry.isIntersecting) setEntered(true)       // 한 번만 진입을 감지
+}, { threshold: 0.25 })
 
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 스크롤 전에는 가벼운 포스터 이미지만 표시하다가, 비디오 위젯이 화면에 진입하는 순간 <code>muted</code> 및 <code>autoPlay</code> 속성과 함께 비디오 스트림을 로드하여 재생을 시작하는 과정을 실증합니다.</p>
+<video src={entered ? url : undefined}
+       preload={entered ? 'auto' : 'none'}
+       muted loop playsInline />                    // 진입 후 video.play()`}</pre>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>초기 데이터 트래픽 90% 절감</strong>: 수십 MB 용량의 비디오 파일이 페이지 첫 로딩 시 자동 다운로드되어 발생하는 불필요한 CDN 대역폭 비용을 절감합니다.</li>
-              <li><strong>Core Web Vitals(LCP/FID) 방어</strong>: 무거운 미디어 로딩으로 인한 브라우저 네트워크 병목을 해소하여 메인 상품 텍스트와 이미지가 최고 속도로 렌더링됩니다.</li>
-              <li><strong>모바일 배터리 및 메모리 절약</strong>: 보이지 않는 비디오의 디코딩 연산을 방지하여 모바일 사용자의 배터리 소모를 억제합니다.</li>
-            </ul>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">2. 영상 자산과 Range 요청</h5>
+            <p>
+              <code>public/</code> 대신 Route Handler(<code>video/route.ts</code>)가 base64 상수를 디코딩해 mp4 바이너리로 응답한다. 이 파일은 moov 박스가 뒤쪽에 있어
+              브라우저가 <code>Range</code> 헤더로 필요한 구간만 요청하고, 서버는 <code>206 Partial Content</code>와 <code>Content-Range</code>로 답한다.
+              실서비스에서는 Vercel Blob 같은 스토리지가 이 역할을 맡는다.
+            </p>
           </div>
-
           <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>패션 브랜드 룩북 및 모델 착용 런웨이 영상 지연 재생</li>
-              <li>가전/IT 기기 인터랙티브 기능 시연 백그라운드 루프 비디오</li>
-              <li>사용자 후기 숏폼 비디오 무한 스크롤 피드</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>모바일 자동재생 정책(Muted 필수)</strong>: 모바일 브라우저는 사용자의 명시적 조작 없이 소리가 있는 영상의 자동 재생을 차단하므로 반드시 <code>muted playsInline autoPlay</code> 속성을 함께 선언해야 합니다.</li>
-              <li><strong>포스터 이미지 크기 최적화</strong>: 지연 로딩 중 노출되는 <code>poster</code> 이미지는 <code>next/image</code>로 사전 최적화된 WebP/AVIF 규격을 사용하여 CLS를 방지해야 합니다.</li>
+            <h5 className="mb-1 font-bold text-zinc-900 dark:text-zinc-100">3. 주의사항</h5>
+            <ul className="list-inside list-disc space-y-1 pl-1 text-zinc-600 dark:text-zinc-400">
+              <li>서버 렌더 HTML에 영상 URL이 들어 있으면 지연 로딩이 무의미하다. 이 데모는 run id를 마운트 후에 만들어 초기 HTML에 URL을 싣지 않는다.</li>
+              <li>CLS를 막으려면 영상 영역의 크기(<code>aspect-video</code> 등)를 미리 확보한다.</li>
+              <li>외부 플랫폼 영상은 <code>&lt;iframe loading="lazy"&gt;</code>와 Suspense 스트리밍 패턴이 대안이다.</li>
             </ul>
           </div>
         </div>

@@ -305,7 +305,7 @@
     "title": "링크 호버 시 정적 셸 표시 (Partial Prefetching 예시)",
     "doc": "2-guides/adopting-partial-prefetching.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/auth-cache-components/static-layout-session-context",
@@ -536,14 +536,14 @@
     "title": "View Transitions 이미지 확대 애니메이션",
     "doc": "2-guides/view-transitions.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/css-in-js/style-registry",
     "title": "Style Registry를 통한 CSS-in-JS SSR 스타일 주입",
     "doc": "2-guides/css-in-js.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/sass/promotions-theme",
@@ -585,7 +585,7 @@
     "title": "Proxy Nonce 기반 CSP 헤더 주입",
     "doc": "2-guides/content-security-policy.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/environment-variables/public-vs-server",
@@ -627,7 +627,7 @@
     "title": "외부 PG사 결제 SDK onLoad 이벤트 핸들링",
     "doc": "2-guides/scripts.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/mdx/product-tech-doc",
@@ -676,7 +676,7 @@
     "title": "홈 화면 추가 PWA 프롬프트 및 manifest",
     "doc": "2-guides/progressive-web-apps.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/i18n/subpath-routing",
@@ -697,14 +697,14 @@
     "title": "서브도메인 기반 테넌트 분기 및 브랜드 테마",
     "doc": "2-guides/multi-tenant.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/multi-tenant/isolated-branding",
     "title": "테넌트별 로고/컬러 동적 주입",
     "doc": "2-guides/multi-tenant.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/multi-zones/cross-zone-routing",
@@ -739,7 +739,7 @@
     "title": "정적 HTML 카탈로그 사전 생성",
     "doc": "2-guides/static-exports.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/public-pages/terms-ssg",
@@ -760,7 +760,7 @@
     "title": "상품 홍보 영상 지연 로딩 및 자동 재생",
     "doc": "2-guides/videos.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/layout/state-preservation",

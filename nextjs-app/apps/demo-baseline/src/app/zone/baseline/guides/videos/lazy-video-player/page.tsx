@@ -1,46 +1,42 @@
 import type { Metadata } from 'next'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { LazyVideoDemo } from './components/LazyVideoDemo'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/videos/lazy-video-player')
-
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { LazyVideoDemo } from './components/LazyVideoDemo'
-import { VerificationFooter } from './components/VerificationFooter'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"Intersection Observer 기반 뷰포트 감지 비디오 지연 재생"}
-        concept={"HTML5 <video> 요소에 Intersection Observer를 적용하여 사용자가 스크롤하여 화면에 비디오가 진입했을 때만 4K 동영상 스트림을 다운로드하고 자동 재생하여 모바일 데이터를 보호합니다."}
+        title="IntersectionObserver로 상품 홍보 영상 지연 로딩 및 자동 재생"
+        concept="영상은 용량이 커서 화면 밖에서 미리 받으면 데이터를 낭비한다. src 없이 preload='none'으로 두었다가 IntersectionObserver가 뷰포트 진입을 알려 줄 때 src를 부여하고, muted 상태로 자동 재생한다."
         steps={[
           {
             step: 1,
-            title: "뷰포트 진입 전 대기 상태(대역폭 보존 중) 확인",
-            description: "비디오가 뷰포트에 들어오기 전까지 네트워크 스트리밍이 차단된 상태를 확인합니다.",
-            actionBadge: "대기 상태 점검",
+            title: '스크롤 전에 [현재 요청 수·재생 상태 측정] 클릭',
+            description: '아직 화면에 들어오지 않은 영상이 요청을 보내지 않았는지 브라우저와 서버 양쪽에서 확인합니다.',
+            actionBadge: '진입 전 측정',
+            observe: '요청 0건, src 없음, readyState 0',
+            observeAt: 'verification',
           },
           {
             step: 2,
-            title: "[자동재생 시뮬레이션] 버튼 클릭으로 뷰포트 교차 트리거",
-            description: "비디오 플레이어가 화면 중심에 위치한 상황을 시뮬레이션하여 재생 상태로 전환합니다.",
-            actionBadge: "재생 시뮬레이션",
+            title: '스크롤 박스를 아래로 내려 영상을 보이게 한다',
+            description: '영상이 25% 이상 보이면 src가 부여되고 Range 요청이 나간 뒤 muted로 자동 재생됩니다. 진입 이벤트 시각이 박스 아래에 표시됩니다.',
+            actionBadge: '뷰포트 진입',
+            observe: 'loadstart → loadedmetadata → loadeddata → playing 순서와 경과 시간',
+            observeAt: 'playground',
           },
           {
             step: 3,
-            title: "▶ 4K 고화질 홍보 영상 스트리밍 활성화 및 [일시정지] 관찰",
-            description: "뷰포트 진입 시점에 동영상 청크 다운로드가 시작되고 일시정지 토글이 동작하는지 검증합니다.",
-            actionBadge: "스트리밍 검증",
-            observe: "자동재생 시뮬레이션 클릭 시 스트리밍 활성화(isPlaying: true) 및 일시정지 토글 동작 관찰",
-            observeAt: "playground",
+            title: '다시 [현재 요청 수·재생 상태 측정] 클릭, 필요하면 [즉시 로드 영상 마운트]로 비교',
+            description: '진입 후 요청 수·206 응답·readyState·paused를 읽습니다. 즉시 로드 영상은 스크롤 없이 요청이 발생하는 것을 보여 줍니다.',
+            actionBadge: '진입 후 측정',
           },
         ]}
       />
-      <DemoPlaygroundCard title={"상품 홍보 영상 지연 로딩 및 자동 재생 실습"}>
-        <LazyVideoDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <LazyVideoDemo />
     </DemoContainer>
   )
 }
