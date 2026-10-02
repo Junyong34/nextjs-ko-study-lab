@@ -1,101 +1,67 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
+import { DemoPlaygroundCard, ExpectedActualPanel } from '@study/demo-kit'
+import { useHeaderProbe } from '../hooks/useHeaderProbe'
+import { useQuiz } from '../hooks/useQuiz'
+import { judgeTarget, overallMatched } from '../lib/judge'
+import { TARGETS } from '../types'
+import { content } from '../content'
+import { HeaderProbeConsole } from './HeaderProbeConsole'
+import { ExplainSection } from './ExplainSection'
+import { ConceptQuiz, QuizResult } from './ConceptQuiz'
 
-export function ConfigExpireTimeDemo() {
-  const [selectedProduct, setSelectedProduct] = useState('PROD-001')
-  const [orderQuantity, setOrderQuantity] = useState(1)
-  const [actionLog, setActionLog] = useState<string[]>([
-    '쇼핑몰 세션 초기화: 장바구니 활성화됨 (KRW)'
-  ])
-
-  const addLog = (msg: string) => {
-    setActionLog(prev => [
-      `[${new Date().toLocaleTimeString()}] ${msg}`,
-      ...prev.slice(0, 4)
-    ])
-  }
+export function ConfigExpireTimeDemo({ nodeEnv }: { nodeEnv: string }) {
+  const probe = useHeaderProbe()
+  const quiz = useQuiz()
+  const measured = Object.keys(probe.readings).length > 0
+  const results = TARGETS.map((target) => ({ target, ...judgeTarget(target, probe.readings[target.key], nodeEnv) }))
+  const matched = measured ? overallMatched(results.map((r) => r.verdict)) : undefined
 
   return (
-    <div className="space-y-4 rounded-lg border border-zinc-200 bg-white p-5 text-sm dark:border-zinc-800 dark:bg-zinc-950">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3 dark:border-zinc-800">
-        <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">expireTime 메모리 ISR 캐시 보존 기간 튜닝 실습 콘솔</h4>
-          <p className="text-xs text-zinc-500">이커머스 비즈니스 규칙과 Next.js 런타임 상호작용을 제어합니다.</p>
+    <>
+      <DemoPlaygroundCard title="expireTime 기본값 실측과 설정 예제" className="min-w-0">
+        <div className="min-w-0 space-y-5 text-sm leading-relaxed">
+          <HeaderProbeConsole probe={probe} nodeEnv={nodeEnv} />
+          <ExplainSection />
+          <ConceptQuiz quiz={quiz} />
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-001')
-              addLog('상품 선택: 프리미엄 러닝화 (KRW 129,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-001' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            러닝화 (#001)
-          </button>
-          <button
-            onClick={() => {
-              setSelectedProduct('PROD-002')
-              addLog('상품 선택: 방수 윈드브레이커 (KRW 189,000)')
-            }}
-            className={`rounded px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-              selectedProduct === 'PROD-002' ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
-            }`}
-          >
-            윈드브레이커 (#002)
-          </button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/50 space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">주문 옵션 및 수량</span>
-            <span className="rounded bg-zinc-200 px-2 py-0.5 text-[10px] font-mono dark:bg-zinc-800">{selectedProduct}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                if (orderQuantity > 1) {
-                  setOrderQuantity(q => q - 1)
-                  addLog(`수량 감소: ${orderQuantity - 1}개`)
-                }
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              -
-            </button>
-            <span className="w-10 text-center font-bold font-mono">{orderQuantity}</span>
-            <button
-              onClick={() => {
-                setOrderQuantity(q => q + 1)
-                addLog(`수량 증가: ${orderQuantity + 1}개`)
-              }}
-              className="h-7 w-7 rounded bg-zinc-200 font-bold dark:bg-zinc-700 cursor-pointer"
-            >
-              +
-            </button>
-            <button
-              onClick={() => addLog(`Next.js API 트리거: ${selectedProduct} x ${orderQuantity}건 동기화 성공`)}
-              className="ml-auto rounded bg-zinc-900 px-3 py-1 text-xs font-bold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 cursor-pointer"
-            >
-              동작 실행
-            </button>
-          </div>
-        </div>
-
-        <div className="rounded border border-zinc-200 bg-zinc-950 p-3.5 font-mono text-xs text-zinc-300 dark:border-zinc-800 space-y-1">
-          <div className="font-bold text-zinc-400 border-b border-zinc-800 pb-1">실시간 도메인 로그:</div>
-          <div className="space-y-1 pt-1 text-[11px]">
-            {actionLog.map((log, i) => (
-              <div key={i} className={i === 0 ? 'text-emerald-400 font-bold' : 'text-zinc-500'}>
-                {log}
+      </DemoPlaygroundCard>
+      <div aria-live="polite" className="space-y-4">
+        <ExpectedActualPanel
+          title="기본 expireTime이 반영된 Cache-Control"
+          className="min-w-0 break-words"
+          expected={
+            nodeEnv === 'production' ? (
+              <span>default 프로필은 s-maxage=900, stale-while-revalidate=31535100, hours 프로필은 s-maxage=3600, stale-while-revalidate=82800, 동적 경로는 s-maxage 없음</span>
+            ) : (
+              <span>NODE_ENV={nodeEnv}: next dev는 Cache-Control: no-cache, must-revalidate를 보내므로 expireTime을 판정할 수 없습니다.</span>
+            )
+          }
+          actual={
+            measured ? (
+              <div className="space-y-1">
+                {results.map(({ target, verdict, reason }) => (
+                  <p key={target.key} className="break-all">
+                    {target.key}: {probe.readings[target.key]?.cacheControl ?? '(없음)'} — {verdict === 'match' ? '일치' : verdict === 'mismatch' ? '불일치' : '판정 불가'}. {reason}
+                  </p>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            ) : (
+              <span>[헤더 측정]을 누르면 세 대상 라우트의 실제 응답 헤더가 표시됩니다.</span>
+            )
+          }
+          isMatched={matched}
+          description="브라우저가 받은 실제 응답 헤더만으로 판정합니다. dev 서버나 CDN을 거친 응답은 판정 불가로 표시합니다."
+        />
+        <ExpectedActualPanel
+          title="선택한 답안의 개념 확인"
+          className="min-w-0 break-words"
+          expected={<span>{content.questions.length}문항 모두 공식 문서의 동작과 맞는 답을 선택합니다.</span>}
+          actual={<QuizResult quiz={quiz} />}
+          isMatched={quiz.submitted ? quiz.correctCount === content.questions.length : undefined}
+          description="사용자가 선택한 답안을 판정합니다. expireTime을 바꾼 결과는 별도 앱의 확인 절차로 확인하세요."
+        />
       </div>
-    </div>
+    </>
   )
 }

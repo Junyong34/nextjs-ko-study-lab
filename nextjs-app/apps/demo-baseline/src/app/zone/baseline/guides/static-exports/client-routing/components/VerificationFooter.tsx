@@ -1,105 +1,56 @@
 'use client'
+
 import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { DemoDeepDiveCard, ExpectedActualPanel } from '@study/demo-kit'
+import { overall } from '../lib/judge'
+import { content } from '../content'
+import type { Check } from '../types'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+const BADGE = { wait: '대기', pass: '일치', fail: '불일치' } as const
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const TREE = `client-routing/layout.tsx   ← 탐색 중 유지 (요청 기록·장바구니 상태)
+├─ page.tsx                  /            → 목록
+└─ products/[id]/page.tsx    /products/:id
+     generateStaticParams → running-shoes, windbreaker
+     dynamicParams = false → 그 밖의 id는 404
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+<Link> 클릭
+  서버 모드(이 앱): GET /…/products/running-shoes?_rsc=…  (rsc: 1) → text/x-component
+  export 빌드    : GET /…/products/running-shoes.txt          → text/plain`
 
-  const defaultExpected = "• output: 'export' 빌드 산출물 및 클라이언트 라우팅의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
+export function VerificationFooter({ checks }: { checks: Check[] }) {
   return (
     <div className="space-y-4">
-      <ExpectedActualPanel
-        title="output: 'export' 빌드 산출물 및 클라이언트 라우팅 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
-      />
-      <DemoDeepDiveCard title="output: 'export' 빌드 산출물 및 클라이언트 라우팅">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>Next.js의 정적 내보내기(<code>output: 'export'</code>)는 Node.js 서버 런타임 없이 전체 애플리케이션을 순수 정적 파일(HTML/CSS/JS)로 컴파일하여 Nginx, AWS S3, Cloudflare Pages에 배포하고, 브라우저에서 <code>next/navigation</code> 기반의 클라이언트 SPA 라우팅을 수행하는 빌드 스펙입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 정적으로 빌드된 카탈로그 페이지들 간을 이동할 때, 서버 재요청 없이 브라우저 메모리 내 클라이언트 라우터가 즉각 세그먼트를 교체하고 히스토리 상태를 동기화하는 과정을 검증합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>서버 유지비 0원 및 무한 확장성</strong>: Node.js 백엔드 서버 인스턴스가 필요 없어 서버 다운 위험이 없고 저비용 정적 스토리지/CDN만으로 글로벌 서빙이 가능합니다.</li>
-              <li><strong>최고 수준의 보안 격리</strong>: 서버사이드 코드가 실행되지 않으므로 서버 침투나 RCE(원격 코드 실행) 공격 경로가 원천 차단됩니다.</li>
-              <li><strong>앱 패키징 용이성</strong>: Capacitor나 Electron과 결합하여 단일 정적 산출물로 iOS/Android 네이티브 앱 및 데스크톱 앱을 손쉽게 빌드할 수 있습니다.</li>
+      <div aria-live="polite">
+        <ExpectedActualPanel
+          title="클라이언트 라우팅 실측 검증"
+          description="패치한 window.fetch가 기록한 라우터 요청, Performance API, 상세 경로의 문서 응답 상태로만 판정합니다. export 빌드의 .txt 요청은 이 앱에서 실측하지 않으므로 판정에 들어가지 않습니다."
+          expected={<ul className="list-disc space-y-1 pl-4">{checks.map((c) => <li key={c.id}>{c.label}: {c.expected}</li>)}</ul>}
+          actual={
+            <ul className="list-disc space-y-1 break-all pl-4">
+              {checks.map((c) => (
+                <li key={c.id}><strong>[{BADGE[c.state]}]</strong> {c.label}: {c.actual}</li>
+              ))}
             </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>AWS S3 + Cloudfront 기반의 저비용 대규모 상품 카탈로그 웹사이트</li>
-              <li>Capacitor/Cordova를 활용한 하이브리드 모바일 쇼핑 앱</li>
-              <li>사내 폐쇄망 오프라인 환경에 설치되는 정적 가이드 매뉴얼 웹</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>서버 전용 기능 사용 불가 제약</strong>: <code>output: 'export'</code> 모드에서는 Server Actions, Route Handler의 동적 POST 요청, <code>cookies()</code>/<code>headers()</code> API, 미들웨어(Middleware) 기능을 사용할 수 없습니다.</li>
-              <li><strong>이미지 최적화 unoptimized 설정 필요</strong>: 빌드 타임 이미지 최적화 서버가 없으므로 <code>images: {'{'} unoptimized: true {'}'}</code> 설정이나 외부 이미지 CDN(Cloudinary/Imgix)을 연동해야 합니다.</li>
-            </ul>
-          </div>
+          }
+          isMatched={overall(checks)}
+        />
+      </div>
+      <DemoDeepDiveCard title="정적 export와 클라이언트 탐색" className="min-w-0 break-words">
+        <pre className="max-w-full overflow-x-auto rounded bg-zinc-100 p-3 font-mono text-[11px] leading-relaxed dark:bg-zinc-900">{TREE}</pre>
+        {content.concepts.map((concept) => (
+          <section key={concept.title} className="space-y-1.5">
+            <h3 className="font-semibold">{concept.title}</h3>
+            <p className="leading-relaxed">{concept.body}</p>
+          </section>
+        ))}
+        <p className="text-zinc-500">Next.js 16.3.2 기준. export 빌드 경로 규칙은 next/dist/client/components/router-reducer/fetch-server-response.js에서 확인했습니다.</p>
+        <div className="flex flex-wrap gap-x-4 gap-y-2">
+          {content.references.map((reference) => (
+            <a key={reference.url} href={reference.url} target="_blank" rel="noreferrer" className="underline underline-offset-4">
+              {reference.label}
+            </a>
+          ))}
         </div>
       </DemoDeepDiveCard>
     </div>

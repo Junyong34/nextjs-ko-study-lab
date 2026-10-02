@@ -1,106 +1,54 @@
-'use client'
 import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { DemoDeepDiveCard } from '@study/demo-kit'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+const CONCEPTS = [
+  {
+    title: '설정이 바꾸는 범위와 컴포넌트 prop',
+    body: "next.config의 crossOrigin은 Next가 HTML에 넣는 태그에 crossorigin 속성을 붙이는 전역 설정입니다. 16.3.2 소스(dist/server/app-render)에서는 부트스트랩 <script>와 preinit 스크립트, CSS <link>, 폰트 preload에 이 값이 전달됩니다. 반면 위 실습의 <Script crossOrigin>은 그 컴포넌트 하나에만 속성을 붙입니다. 실습은 '속성의 의미'를 보여 줄 뿐, 설정을 켠 결과를 대신하지 않습니다.",
+  },
+  {
+    title: '설정 없이도 crossorigin=""가 보이는 태그',
+    body: "client 컴포넌트 청크의 <script async>는 React Flight가 preinit으로 넣습니다. 값은 client reference manifest의 moduleLoading.crossOrigin에서 오고, React는 'use-credentials'가 아닌 문자열을 모두 \"\"(anonymous)로 바꿉니다. 이 dev 빌드의 매니페스트 값은 \"none\"이라 설정 없이도 crossorigin=\"\"가 붙습니다. 같은 출처 요청이라 로드에는 영향이 없지만, assetPrefix로 다른 출처를 쓰면 이 청크도 CORS 헤더가 필요합니다. 설정을 켰을 때 이 값이 바뀌는지는 이 앱에서 확인하지 않았습니다.",
+  },
+  {
+    title: '세 단계로 갈리는 브라우저 처리',
+    body: '속성 없음 → no-cors 요청: 실행은 되지만 오류는 "Script error."로 가려짐. 속성 있음 + 서버 허용 없음 → CORS 검사 실패로 실행 전 차단(onError). 속성 있음 + Access-Control-Allow-Origin 허용 → 실행되고 오류 메시지·파일 경로가 그대로 보임. 서버가 받은 Sec-Fetch-Mode(no-cors / cors)와 Origin 헤더가 이 차이를 요청 쪽에서 보여 줍니다.',
+  },
+  {
+    title: 'anonymous와 use-credentials',
+    body: "anonymous는 쿠키 같은 자격 증명 없이 요청하므로 Access-Control-Allow-Origin: *로 충분합니다. use-credentials는 자격 증명을 포함하므로 *가 통하지 않고, 서버가 요청 Origin을 그대로 적고 Access-Control-Allow-Credentials: true를 함께 보내야 합니다.",
+  },
+  {
+    title: '문서 설명과 소스의 차이(확인 필요)',
+    body: '공식 문서는 이 옵션이 next/script가 만드는 <script>에 속성을 붙인다고 설명합니다. 그런데 16.3.2의 App Router용 next/script(dist/client/script.js)는 컴포넌트의 crossOrigin prop만 읽습니다. next/client 코드에서 설정값(process.env.__NEXT_CROSS_ORIGIN)을 읽는 곳은 Pages Router의 route-loader뿐입니다. 이 앱에서는 설정을 켜지 않았으므로 실제 동작은 별도 앱에서 확인해야 합니다.',
+  },
+]
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
-
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
-
-  const defaultExpected = "• crossOrigin: 'anonymous' 서드파티 스크립트 속성의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
-
+export function VerificationFooter() {
   return (
-    <div className="space-y-4">
-      <ExpectedActualPanel
-        title="crossOrigin: 'anonymous' 서드파티 스크립트 속성 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
-        isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
-      />
-            <DemoDeepDiveCard title="next.config.ts crossOrigin anonymous 모드 & CORS 에러 스택 추적">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p><code>crossOrigin: 'anonymous' | 'use-credentials'</code> (<code>next.config.ts</code>) 설정은 Next.js가 HTML 문서에 주입하는 모든 <code>{'<'}script{'>'}</code> 및 <code>{'<'}link{'>'}</code> 정적 에셋 태그에 <code>crossorigin</code> 속성을 부여하여, CDN 등 별도 도메인에서 에셋을 로드할 때 상세한 자바스크립트 에러 스택 트레이스를 모니터링 APM(Sentry 등)에 전달할 수 있도록 지원하는 설정입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 <code>crossOrigin: 'anonymous'</code> 설정이 적용되어, CDN 도메인에서 로드된 JS 청크에서 런타임 예외가 발생했을 때 단순 <code>Script error.</code>로 뭉개지지 않고 정확한 파일명, 라인 번호, 에러 스택이 Sentry에 수집되는 환경을 구성합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>실제 에러 스택 트레이스 복원</strong>: 브라우저의 동일 출처 보안 제약으로 인한 <code>Script error.</code> 마스킹 현상을 해결하여 디버깅 생산성을 높입니다.</li>
-              <li><strong>CDN 에셋 로딩 완벽 호환</strong>: 별도 에셋 CDN 도메인을 사용할 때 필수적인 브라우저 자원 공유 규격을 준수합니다.</li>
-              <li><strong>Sentry/Datadog 연동성 향상</strong>: 프로덕션 환경의 클라이언트 에러를 소스맵과 완벽히 매핑하여 추적합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>정적 에셋을 별도 CDN 도메인(<code>cdn.shop.com</code>)에 배포하여 운영하는 서비스</li>
-              <li>Sentry, Datadog 등 APM 도구를 활용한 프론트엔드 실시간 에러 관제</li>
-              <li>서드파티 스크립트와의 안전한 리소스 공유 환경 구축</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>CDN 서버 Access-Control-Allow-Origin 필수</strong>: <code>crossOrigin</code> 속성을 추가한 경우 CDN 오리진 서버에서 <code>Access-Control-Allow-Origin: *</code> 헤더를 반환하지 않으면 브라우저가 스크립트 실행 자체를 차단하므로 CDN 헤더 설정을 반드시 병행해야 합니다.</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
-    </div>
+    <DemoDeepDiveCard title="crossOrigin 개념 정리" className="min-w-0 break-words">
+      {CONCEPTS.map((concept) => (
+        <section key={concept.title} className="space-y-1.5">
+          <h3 className="font-semibold">{concept.title}</h3>
+          <p className="leading-relaxed">{concept.body}</p>
+        </section>
+      ))}
+      <pre className="max-w-full overflow-x-auto rounded bg-zinc-950 p-3 text-[11px] leading-relaxed text-zinc-100">
+        <code>{`이 페이지 (예: http://localhost:3001)
+ └─ <Script src="http://127.0.0.1:3001/…/probe?cors=…" crossOrigin=…>
+      └─ probe/route.ts  ── 응답 헤더: ACAO 없음 | * | Origin+Credentials
+           └─ 브라우저 CORS 검사 → onLoad | onError
+                └─ 실행 시 throw → window error: "Script error." | 상세 메시지`}</code>
+      </pre>
+      <p className="text-zinc-500">Next.js 16.3.2 기준. 실측(1·2단계)과 설정 예제·개념 확인(3·4단계)을 구분해서 읽어 보세요.</p>
+      <div className="flex flex-wrap gap-x-4 gap-y-2">
+        <a href="https://nextjs.org/docs/app/api-reference/config/next-config-js/crossOrigin" target="_blank" rel="noreferrer" className="underline underline-offset-4">
+          crossOrigin 공식 문서
+        </a>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin" target="_blank" rel="noreferrer" className="underline underline-offset-4">
+          MDN crossorigin 속성
+        </a>
+      </div>
+    </DemoDeepDiveCard>
   )
 }

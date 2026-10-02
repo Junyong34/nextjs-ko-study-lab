@@ -627,7 +627,7 @@
   title: "output: 'export' 빌드 산출물 및 클라이언트 라우팅"
   doc: 2-guides/static-exports.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: guides/static-exports/ssg-catalog
   title: "정적 HTML 카탈로그 사전 생성"
@@ -1317,31 +1317,31 @@
   title: "trailingSlash: true URL 끝 슬래시 정규화"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/trailingSlash.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/images/remote-patterns-security
   title: "images.remotePatterns 외부 이미지 도메인 허용 및 보안"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/images.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/images/formats-avif-webp
   title: "images.formats: ['image/avif', 'image/webp'] 차세대 포맷"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/images.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/logging/fetches-full-url
   title: "logging.fetches.fullUrl: true 서버 fetch 콘솔 상세 로깅"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/logging.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/dev-indicators/render-badge
   title: "devIndicators 렌더링 상태 개발 뱃지 제어"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/devIndicators.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/env/build-time-injection
   title: "env 필드를 통한 빌드 타임 환경변수 주입"
@@ -1353,7 +1353,7 @@
   title: "crossOrigin: 'anonymous' 서드파티 스크립트 속성"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/crossOrigin.md
   zone: baseline
-  status: stub
+  status: done
 
 - url: config/powered-by-header/hide-x-powered
   title: "poweredByHeader: false 서버 정보 은닉 보안"
@@ -1377,19 +1377,19 @@
   title: "experimental.cacheHandlers 분산 Redis 캐시 핸들러 연동"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md
   zone: cache
-  status: stub
+  status: done
 
 - url: config/expire-time/memory-isr-tuning
   title: "expireTime 메모리 ISR 캐시 보존 기간 튜닝"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/expireTime.md
   zone: cache
-  status: stub
+  status: done
 
 - url: config/stale-times/router-cache-tuning
   title: "experimental.staleTimes 클라이언트 라우터 캐시 시간 제어"
   doc: 3-api-reference/3.5-config/3.5.1-next-config-js/staleTimes.md
   zone: cache
-  status: stub
+  status: done
 
 - url: config/output/standalone-container
   title: "output: 'standalone'의 서버 패키징과 정적 파일"

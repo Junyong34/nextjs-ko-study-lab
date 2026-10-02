@@ -1,45 +1,33 @@
+import React from 'react'
 import type { Metadata } from 'next'
+import { getImageProps } from 'next/image'
 import { getDemoMetadata } from '@study/demos'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { PRODUCT_SRC } from './lib/constants'
+import { ConfigGuide } from './components/ConfigGuide'
+import { FormatsLab } from './components/FormatsLab'
+import { VerificationFooter } from './components/VerificationFooter'
 
 export const metadata: Metadata = getDemoMetadata('baseline', 'config/images/formats-avif-webp')
 
-import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ConfigImagesFormatsDemo } from './components/ConfigImagesFormatsDemo'
-import { VerificationFooter } from './components/VerificationFooter'
-
 export default function DemoPage() {
+  // 현재 next.config의 images 설정으로 getImageProps()가 실제로 계산한 <img> 속성
+  const { props } = getImageProps({ src: PRODUCT_SRC, alt: '', width: 320, height: 40 })
+  const computed = { src: props.src, srcSet: props.srcSet ?? null }
+
   return (
-    <DemoContainer className="space-y-6">
-            <DemoGuideCard
+    <DemoContainer className="min-w-0 space-y-4 [&_fieldset]:min-w-0 [&_legend]:max-w-full [&_legend]:break-words">
+      <DemoGuideCard
         title="images.formats: ['image/avif', 'image/webp'] 차세대 포맷"
-        concept="next.config.ts images.formats에 ['image/avif', 'image/webp']를 지정하여 브라우저 지원 여부에 따라 용량을 최대 50% 절감하는 차세대 이미지로 자동 변환 서빙합니다."
+        concept="formats는 이미지 최적화 API(/_next/image)가 만들 수 있는 출력 포맷 목록이고, 실제 포맷은 요청마다 브라우저의 Accept로 정해집니다. 이 zone은 optimizer가 꺼져 있어, 브라우저가 보내는 Accept와 꺼진 상태의 응답을 재고 변환 결과는 예제와 협상 계산으로 익힙니다."
+        className="min-w-0 break-words"
         steps={[
-          {
-            step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 선택",
-            description: "차세대 이미지 포맷 변환 대상 상품을 선택합니다.",
-            actionBadge: "상품 선택",
-          },
-          {
-            step: 2,
-            title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "AVIF 및 WebP 자동 변환 파이프라인을 트리거합니다.",
-            actionBadge: "포맷 변환",
-          },
-          {
-            step: 3,
-            title: "AVIF/WebP 압축률 및 이미지 용량 절감 관찰",
-            description: "동일 해상도 대비 용량이 대폭 절감된 차세대 이미지 변환 결과가 실시간 로그에 반영되는지 확인합니다.",
-            actionBadge: "로그 검증",
-            observe: "images.formats 설정에 따라 원본 이미지가 AVIF/WebP 고효율 포맷으로 자동 변환됨",
-            observeAt: "verification",
-          },
+          { step: 1, title: '[브라우저·서버 측정] 누르기', description: '<img>와 fetch()의 Accept, AVIF·WebP 디코드 결과, 같은 Accept로 요청한 /_next/image 응답을 한 번에 잽니다.', observe: 'Accept의 포맷 목록과 실제 디코드 결과의 일치, /_next/image 404', observeAt: 'verification' },
+          { step: 2, title: '계산된 응답 포맷과 설정 예제 비교', description: '측정한 Accept로 formats 설정 세 가지의 결과를 계산합니다. 배열 순서를 바꾼 두 설정의 결과를 비교하세요.', observe: '기본값은 WebP. AVIF·WebP를 같은 q로 보내는 브라우저라면 AVIF를 넣었을 때 배열 순서와 관계없이 AVIF', observeAt: 'playground' },
+          { step: 3, title: '[개념 확인]에서 응답 포맷을 고르고 [답안 확인]', description: 'Accept의 q값과 formats 조합별로 결과를 고릅니다. [답안 초기화]로 다시 풉니다.', observe: '정답 수와 문항별 계산 결과', observeAt: 'playground' },
         ]}
       />
-      <DemoPlaygroundCard title={"images.formats: ['image/avif', 'image/webp'] 차세대 포맷 실습"}>
-        <ConfigImagesFormatsDemo />
-      </DemoPlaygroundCard>
+      <FormatsLab computed={computed} guide={<ConfigGuide />} />
       <VerificationFooter />
     </DemoContainer>
   )
