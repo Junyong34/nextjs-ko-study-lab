@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next'
 import { withRelatedProject } from '@vercel/related-projects'
+import createMDX from '@next/mdx'
 import {
   REACT_COMPILER_SETTINGS,
   USE_TURBOPACK_RUST_REACT_COMPILER,
@@ -13,6 +14,8 @@ const publicOrigin = withRelatedProject({
 })
 
 const nextConfig: NextConfig = {
+  // guides/mdx·mdx-components 데모용. md/mdx 파일도 페이지·모듈로 취급한다(src 안에 해당 확장자 파일이 생기는 곳은 그 데모들뿐).
+  pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
   // 워커별 독립 dev 서버용(.next 락 충돌 방지). 지정하지 않으면 기본 .next.
   distDir: process.env.NEXT_DIST_DIR || '.next',
   assetPrefix: '/demo-static/baseline',
@@ -38,4 +41,7 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+// Turbopack에서는 remark/rehype 플러그인을 문자열 이름으로만 지정할 수 있다.
+const withMDX = createMDX({})
+
+export default withMDX(nextConfig)

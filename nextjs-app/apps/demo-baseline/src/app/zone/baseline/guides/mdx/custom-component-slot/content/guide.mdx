@@ -1,0 +1,22 @@
+import { AddToCartButton } from '../components/AddToCartButton'
+
+export const product = {
+  sku: 'WB-002',
+  name: '윈드브레이커',
+  price: 89000,
+  stock: 3,
+}
+
+## {product.name} 구매 안내
+
+가격은 {product.price.toLocaleString('ko-KR')}원입니다. 이 숫자는 MDX 안의 JS 표현식이 렌더 시점에 계산한 값입니다.
+
+<Callout tone="stock">재고 {product.stock}개 · 장바구니에는 최대 {product.stock}개까지 담을 수 있습니다.</Callout>
+
+<AddToCartButton sku={product.sku} name={product.name} price={product.price} maxQty={product.stock} />
+
+## 렌더 위치 기록
+
+- 이 MDX 본문이 실행된 곳: <span data-probe="mdx-env">{typeof window === 'undefined' ? 'server' : 'browser'}</span>
+- 페이지가 쿠키에서 읽어 props로 넘긴 장바구니 수량: <span data-probe="cart-count">{props.cartCount}</span>개
+- 문서 식별 문구: MDXSLOT-PROSE-7F3A

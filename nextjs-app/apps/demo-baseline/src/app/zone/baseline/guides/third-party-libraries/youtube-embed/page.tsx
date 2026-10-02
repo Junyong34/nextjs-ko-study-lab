@@ -4,37 +4,43 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/third-party-libraries/youtube-embed')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ThirdPartyYoutubeDemo } from './components/ThirdPartyYoutubeDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { YoutubeLab } from './components/YoutubeLab'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"@next/third-parties YouTube 라이트 임베드(0 KB 초기 다운로드)"}
-        concept={"<YouTubeEmbed videoid=\"...\" />를 활용하여 무거운 iframe 대신 포스터 이미지를 먼저 노출(0 KB 초기 JS)하고, 사용자가 재생 버튼을 누를 때만 YouTube 플레이어를 로드합니다."}
+        title="@next/third-parties YouTubeEmbed가 클릭 전까지 플레이어를 늦추는지 실측"
+        concept="<YouTubeEmbed />는 lite-youtube-embed로 썸네일과 재생 버튼(facade)만 먼저 그리고, 클릭한 순간에 YouTube iframe을 붙입니다. 일반 iframe은 재생하지 않아도 배치 즉시 플레이어를 불러옵니다."
         steps={[
           {
-                    "step": 1,
-                    "title": "YouTube 라이트 플레이어 썸네일 포스터 확인 및 재생 버튼 클릭으로 비디오 로드 트리거",
-                    "description": "무거운 500 KB+ iframe 대신 20 KB 가벼운 이미지 포스터가 렌더링된 상태를 확인합니다. 클릭 시점에 실제 YouTube iframe 청크를 온디맨드로 주입합니다.",
-                    "actionBadge": "포스터 점검"
+            step: 1,
+            title: "[라이트 임베드 배치] 클릭",
+            description: "<YouTubeEmbed videoid=\"ogfYd705cRs\" />를 렌더합니다. lite-yt-embed.js가 유휴 시점에 로드되어 썸네일과 재생 버튼이 나타납니다.",
+            actionBadge: "facade 확인",
+            observe: "iframe 0개, 플레이어 요청 0건이고 외부 요청은 cdn.jsdelivr.net·i.ytimg.com뿐입니다.",
+            observeAt: "playground",
           },
           {
-                    "step": 2,
-                    "title": "온디맨드 iframe 주입 및 0 KB 초기 JS 절감 관찰",
-                    "description": "초기 페이지 로딩 속도(LCP) 저하 없이 필요 시점에만 동영상이 스트리밍되는지 검증합니다.",
-                    "actionBadge": "임베드 검증",
-                    "observe": "YouTube 라이트 플레이어의 0 KB 초기 번들 유지 및 사용자 클릭 시점 온디맨드 iframe 마운트 관찰",
-                    "observeAt": "playground"
-          }
-]}
+            step: 2,
+            title: "썸네일(재생 버튼) 클릭",
+            description: "클릭 순간의 iframe 수와 요청 수를 고정한 뒤, lite-youtube가 youtube-nocookie.com iframe을 붙입니다.",
+            actionBadge: "iframe 생성",
+            observe: "클릭 후 iframe 1개와 youtube-nocookie.com 요청이 생기고 검증 패널이 검증 완료로 바뀝니다. Network 탭에서 플레이어 JS가 이때부터 내려오는 것도 볼 수 있습니다.",
+            observeAt: "verification",
+          },
+          {
+            step: 3,
+            title: "[일반 iframe 배치]로 대조군 비교",
+            description: "같은 영상을 일반 <iframe>으로 넣어 클릭 없이도 플레이어 문서를 요청하는지 봅니다. [둘 다 제거]로 처음 상태로 돌아갑니다.",
+            actionBadge: "대조군",
+            observe: "배치 즉시 iframe 1개와 www.youtube.com/embed 요청이 관측됩니다. 외부 접속이 막힌 환경이면 단계 1이 판정 불가로 표시됩니다.",
+            observeAt: "playground",
+          },
+        ]}
       />
-      <DemoPlaygroundCard title={"@next/third-parties YouTube 최적화 임베드 실습"}>
-        <ThirdPartyYoutubeDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <YoutubeLab />
     </DemoContainer>
   )
 }

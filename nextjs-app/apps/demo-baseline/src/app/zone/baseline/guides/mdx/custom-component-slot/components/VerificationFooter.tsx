@@ -1,107 +1,53 @@
 'use client'
 import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import type { SlotMeasurement } from '../types'
+import { EXPECTED_CALLOUT, EXPECTED_H2 } from '../expectations'
+import { SlotDeepDive } from './SlotDeepDive'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
-}
+const EXPECTED = (
+  <ul className="list-disc space-y-1 pl-4">
+    <li>MDX 본문의 {'{typeof window}'} 표현식은 서버에서 실행되어 &quot;server&quot;로 남고, 그 안의 버튼은 하이드레이션된다.</li>
+    <li>버튼으로 담은 수량(api/cart)과 MDX가 props.cartCount로 다시 렌더한 수량이 같다 (1개 이상).</li>
+    <li>h2 {EXPECTED_H2}개는 모두 지역 매핑으로 렌더되고 전역 class는 붙지 않는다. 지역에 없는 p에는 전역 class가 붙고, Callout {EXPECTED_CALLOUT}개가 주입된다.</li>
+    <li>버튼 문자열은 JS 파일에 있고, MDX 문서 문구는 어떤 JS 파일에도 없다.</li>
+  </ul>
+)
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const mark = (ok: boolean) => (ok ? '✅' : '❌')
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+export function VerificationFooter({ m }: { m: SlotMeasurement | null }) {
+  let isMatched: boolean | undefined
+  let actual: React.ReactNode = '• 대기 중: 문서 안 버튼으로 장바구니에 담은 뒤 [경계 측정]을 누르세요.'
 
-  const defaultExpected = "• MDX 내 인터랙티브 장바구니 버튼 합성의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
-
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  if (m && m.serverCartCount === 0) {
+    actual = `• 대기 중: 장바구니가 비어 있습니다(api/cart 0개). 버튼으로 담은 뒤 다시 측정하세요. (측정 ${m.measuredAt})`
+  } else if (m) {
+    const serverOk = m.mdxEnv === 'server' && m.buttonHydrated
+    const propsOk = m.domCartCount === m.serverCartCount
+    const mappingOk = m.h2Total === EXPECTED_H2 && m.h2Local === EXPECTED_H2 && m.h2Global === 0 && m.pGlobal > 0 && m.calloutCount === EXPECTED_CALLOUT
+    const bundleOk = m.scriptsScanned > 0 && m.buttonMarkerHits > 0 && m.proseMarkerHits === 0
+    isMatched = serverOk && propsOk && mappingOk && bundleOk
+    actual = (
+      <ul className="space-y-1">
+        <li>{mark(serverOk)} MDX 실행 위치 {m.mdxEnv ?? '(없음)'} · 버튼 하이드레이션 {m.buttonHydrated ? '완료' : '안 됨'}</li>
+        <li>{mark(propsOk)} api/cart {m.serverCartCount}개 / MDX 렌더 {m.domCartCount ?? '-'}개{propsOk ? '' : ' (refresh 전이면 다시 측정)'}</li>
+        <li>{mark(mappingOk)} h2 {m.h2Total}개(지역 {m.h2Local}, 전역 {m.h2Global}) · 전역 p {m.pGlobal}개 · Callout {m.calloutCount}개</li>
+        <li>{mark(bundleOk)} JS {m.scriptsScanned}개 중 버튼 문자열 {m.buttonMarkerHits}개, 문서 문구 {m.proseMarkerHits}개</li>
+      </ul>
+    )
+  }
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="MDX 내 인터랙티브 장바구니 버튼 합성 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title="서버 MDX · 클라이언트 버튼 경계 검증"
+        expected={EXPECTED}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="DOM, api/cart 응답, 이 페이지가 받은 JS 파일 내용으로만 판정합니다."
       />
-      <DemoDeepDiveCard title="MDX 내 인터랙티브 장바구니 버튼 합성">
-        <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-            <p>MDX 커스텀 컴포넌트 슬롯팅(<code>@next/mdx</code> / <code>useMDXComponents</code>)은 정적 마크다운 문서 내부에 인터랙티브한 React 클라이언트 컴포넌트(장바구니 담기, 실시간 재고 계산기, 인터랙티브 퀴즈)를 슬롯 형태로 자연스럽게 삽입 및 합성하는 콘텐츠 아키텍처 스펙입니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-            <p>본 데모에서는 마크다운으로 작성된 제품 소개 가이드 본문 사이에 <code>{'<'}AddToCartWidget productId="PROD-001" /{'>'}</code> 클라이언트 컴포넌트를 합성하여, 문서를 읽던 고객이 페이지 이동 없이 즉시 수량을 선택하고 장바구니에 담는 인터랙션을 수행합니다.</p>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>콘텐츠와 인터랙션의 완벽한 융합</strong>: 정적인 텍스트 문서 중간에 결제 버튼, 실시간 차트, 코드 실행기 등 동적 UI 위젯을 손쉽게 배치할 수 있습니다.</li>
-              <li><strong>마케터와 개발자의 협업 효율 극대화</strong>: 콘텐츠 작성자는 간단한 마크다운 및 커스텀 JSX 태그만 작성하고, 개발자는 컴포넌트 로직에만 집중할 수 있습니다.</li>
-              <li><strong>서버 컴포넌트 기반 MDX 파싱</strong>: MDX 번들을 서버에서 파싱하여 초기 번들 크기를 경량화하고 빠른 초기 렌더링 속도를 보장합니다.</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li>신상품 런칭 스토리/블로그 포스트 내 원클릭 바로구매 위젯 삽입</li>
-              <li>개발자 API 가이드 문서 내 실시간 API 요청 테스트 위젯</li>
-              <li>가전/IT 기기 사용 매뉴얼 내 인터랙티브 고장 진단 진단기 위젯</li>
-            </ul>
-          </div>
-
-          <div>
-            <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-            <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-              <li><strong>클라이언트 컴포넌트 임포트 분리</strong>: MDX 파일 자체는 서버에서 렌더링되므로 인터랙티브 상태(<code>useState</code>)가 필요한 위젯 컴포넌트는 반드시 상단에 <code>'use client'</code>를 명시하여 분리 임포트해야 합니다.</li>
-              <li><strong>useMDXComponents 전역 정의</strong>: 프로젝트 루트의 <code>mdx-components.tsx</code> 파일에 커스텀 컴포넌트 매핑을 정확히 정의해야 누락 없이 렌더링됩니다.</li>
-            </ul>
-          </div>
-        </div>
-      </DemoDeepDiveCard>
+      <SlotDeepDive />
     </div>
   )
 }

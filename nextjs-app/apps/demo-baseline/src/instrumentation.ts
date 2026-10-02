@@ -17,6 +17,17 @@ declare global {
 }
 
 export async function register() {
+  // guides/opentelemetry/trace-span 데모용 tracer 등록. 구현은 lib/otel-setup.ts가 소유한다.
+  // nodejs 런타임에서만 실행하고, 실패해도 서버 부팅과 다른 데모는 영향받지 않게 한다.
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    try {
+      const { setupOtel } = await import('./lib/otel-setup')
+      setupOtel()
+    } catch (error) {
+      console.error('[Instrumentation:otel] 설정 실패(무시하고 계속)', error)
+    }
+  }
+
   // Next.js 서버 부트스트랩 시 1회 실행되는 인스트루멘테이션 라이프사이클 훅
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     console.info('[Instrumentation] Next.js 16 App Router Node.js 런타임 부팅 완료 (텔레메트리 활성화)')

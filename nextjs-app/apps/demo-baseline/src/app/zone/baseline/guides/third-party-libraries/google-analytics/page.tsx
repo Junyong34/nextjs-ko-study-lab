@@ -4,43 +4,43 @@ import { getDemoMetadata } from '@study/demos'
 export const metadata: Metadata = getDemoMetadata('baseline', 'guides/third-party-libraries/google-analytics')
 
 import React from 'react'
-import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
-import { ThirdPartyGaDemo } from './components/ThirdPartyGaDemo'
-import { VerificationFooter } from './components/VerificationFooter'
+import { DemoContainer, DemoGuideCard } from '@study/demo-kit'
+import { GaLab } from './components/GaLab'
 
 export default function DemoPage() {
   return (
     <DemoContainer className="space-y-6">
       <DemoGuideCard
-        title={"@next/third-parties Google Analytics(GA4) 최적화 통합"}
-        concept={"@next/third-parties/google의 <GoogleAnalytics gaId=\"G-...\" /> 컴포넌트를 사용하여 web worker 또는 afterInteractive 방식으로 GA4 스크립트를 로드하고 페이지뷰를 0ms 지연 없이 추적합니다."}
+        title="@next/third-parties GoogleAnalytics가 만드는 스크립트와 sendGAEvent의 dataLayer push 실측"
+        concept="<GoogleAnalytics gaId />는 하이드레이션 뒤(afterInteractive) gtag.js를 붙이고 dataLayer·gtag를 초기화합니다. sendGAEvent는 그 dataLayer에 push만 하므로, 외부 스크립트가 실패해도 push 자체는 확인할 수 있습니다."
         steps={[
           {
             step: 1,
-            title: "[러닝화 (#001)] 또는 [윈드브레이커 (#002)] 상품 선택",
-            description: "GA4 전자상거래 이벤트가 바인딩된 상품을 선택합니다.",
-            actionBadge: "상품 선택",
+            title: "[장바구니 담기: sendGAEvent(…) (렌더 전 호출)] 먼저 클릭",
+            description: "GoogleAnalytics가 아직 렌더되지 않은 상태에서 호출합니다. 진입 시 GA 호스트 요청이 0건인 것도 함께 확인합니다.",
+            actionBadge: "실패 사례",
+            observe: "dataLayer가 없고 push 0건, 검증 패널은 불일치, 콘솔에 'GA has not been initialized' 경고가 남습니다.",
+            observeAt: "verification",
           },
           {
             step: 2,
-            title: "[+] 수량 조절 후 [동작 실행] 클릭",
-            description: "장바구니 담기 액션을 실행하여 gtag send_event 이벤트를 트리거합니다.",
-            actionBadge: "이벤트 트리거",
+            title: '[<GoogleAnalytics gaId="G-DEMO000000" /> 렌더] 클릭',
+            description: "데모용 측정 ID로 컴포넌트를 렌더합니다. 이때부터 googletagmanager.com 요청이 나갑니다(collect 전송은 opt-out으로 차단).",
+            actionBadge: "렌더",
+            observe: "_next-ga-init·_next-ga 스크립트 태그, data-nscript=afterInteractive, typeof window.gtag가 function, dataLayer 명령 [js, config]가 표시됩니다. Network 탭에서 gtag/js 요청도 볼 수 있습니다.",
+            observeAt: "playground",
           },
           {
             step: 3,
-            title: "GA4 측정 ID(G-XXXXXXXX) 및 이벤트 페이로드 전송 관찰",
-            description: "메인 스레드 차단 없이 백그라운드에서 구글 애널리틱스로 이벤트가 전송되는지 검증합니다.",
-            actionBadge: "추적 검증",
-            observe: "GoogleAnalytics 컴포넌트를 통한 GA4 스크립트 비차단 로딩 및 상품 이벤트 트리거 관찰",
-            observeAt: "playground",
+            title: "[장바구니 담기: sendGAEvent(…)] 다시 클릭",
+            description: "렌더 후 같은 함수를 호출해 dataLayer 길이 증가분과 push된 항목을 확인합니다. 처음부터 다시 하려면 [새로고침으로 초기화]를 누릅니다.",
+            actionBadge: "push 검증",
+            observe: "dataLayer 길이 +1, ['event', 'demo_add_to_cart', {…}] 항목, collect 요청 0건으로 검증 패널이 검증 완료로 바뀝니다.",
+            observeAt: "verification",
           },
         ]}
       />
-      <DemoPlaygroundCard title={"@next/third-parties Google Analytics 최적화 실습"}>
-        <ThirdPartyGaDemo />
-      </DemoPlaygroundCard>
-      <VerificationFooter />
+      <GaLab />
     </DemoContainer>
   )
 }

@@ -1,107 +1,74 @@
 'use client'
 import React from 'react'
-import { ExpectedActualPanel, DemoDeepDiveCard } from '@study/demo-kit'
+import { ExpectedActualPanel } from '@study/demo-kit'
+import type { useHydrationProbe } from '../hooks/useHydrationProbe'
+import type { useStaleProbes } from '../hooks/useStaleProbes'
+import { judgeHtml, judgeHydration, judgeStaleProbe, type Check } from '../lib/judge'
+import type { ServerRenderInfo } from '../types'
+import { HydrationDeepDive } from './HydrationDeepDive'
 
-export interface VerificationFooterProps {
-  isMatched?: boolean
-  expected?: React.ReactNode
-  actual?: React.ReactNode
-  status?: string | number | null
-  description?: string
-  isLoaded?: boolean
-  logs?: string[]
-  count?: number
-  [key: string]: any
+interface Props {
+  info: ServerRenderInfo
+  probe: ReturnType<typeof useHydrationProbe>
+  stale: ReturnType<typeof useStaleProbes>
 }
 
-export function VerificationFooter(props: VerificationFooterProps = {}) {
-  const {
-    isMatched: propIsMatched,
-    expected: propExpected,
-    actual: propActual,
-    status,
-    description: propDescription,
-    isLoaded,
-    logs,
-    count,
-    ...rest
-  } = props
+const EXPECTED_PREFETCHED = (
+  <ul className="list-disc space-y-1 pl-4">
+    <li>하이드레이션 직후 DOM에 상품 행 4개가 이미 있다(하드 로드면 서버 HTML이 그린 것).</li>
+    <li>queryClient의 쿼리는 status=success, data.source=server-prefetch이고 dataUpdatedAt은 서버가 읽은 과거 시각이다.</li>
+    <li>마운트 후 브라우저의 api/deals 요청은 0건, 서버 읽기는 prefetch 1회뿐이다.</li>
+    <li>서버 컴포넌트의 new QueryClient()는 매 요청 빈 캐시(쿼리 0개)로 시작한다.</li>
+    <li>같은 키를 staleTime 0으로 추가 구독하면 1건 재요청, 60초면(데이터가 60초 미만이면) 0건이다.</li>
+  </ul>
+)
 
-  const isMatched =
-    propIsMatched !== undefined
-      ? propIsMatched
-      : status !== undefined && status !== null
-      ? typeof status === 'number'
-        ? status >= 200 && status < 400
-        : status === 'success' || status === 'valid' || status === 'completed' || status === 'ok'
-      : isLoaded !== undefined
-      ? Boolean(isLoaded)
-      : logs && Array.isArray(logs) && logs.length > 0
-      ? true
-      : count !== undefined && count > 0
-      ? true
-      : undefined
+const EXPECTED_CLIENT = (
+  <ul className="list-disc space-y-1 pl-4">
+    <li>하이드레이션 직후에는 상품 행이 0개이고 status=pending(로딩 표시)이다.</li>
+    <li>그 뒤 브라우저가 api/deals를 1번 요청하고, 서버는 Route Handler로만 1회 읽는다.</li>
+    <li>응답 HTML에는 상품 행도 queryKey도 없다.</li>
+  </ul>
+)
 
-  const defaultExpected = "• TanStack Query prefetchQuery와 서버 Hydration의 동작과 기대 결과를 확인합니다."
-  const defaultActual = "• 사용자 조작 후 실제 결과를 표시합니다."
+export function VerificationFooter({ info, probe, stale }: Props) {
+  const firstProbeAt = stale.runs[0]?.startT ?? Number.POSITIVE_INFINITY
+  const requestsAfterMount = probe.resourceStarts.filter((t) => t >= probe.mountedAt && t < firstProbeAt).length
+  const ready = probe.measure && probe.isHardLoad !== null && probe.reads
+  const checks: Check[] = ready
+    ? judgeHydration({ info, measure: probe.measure!, isHardLoad: probe.isHardLoad!, requestsAfterMount, reads: probe.reads! })
+    : []
+  if (probe.htmlCheck) checks.push(judgeHtml(info.variant, probe.htmlCheck))
+  if (stale.latest && stale.latestSettled) checks.push(judgeStaleProbe(stale.latest, probe.requestsSince(stale.latest.startT)))
+  const waiting = !ready || (stale.latest !== null && !stale.latestSettled)
+  const isMatched = waiting ? undefined : checks.every((c) => c.ok)
 
-  const actualContent =
-    propActual !== undefined
-      ? propActual
-      : isMatched === true
-      ? defaultActual
-      : isMatched === false
-      ? '• 상호작용 실패 또는 불일치가 확인되었습니다. 동작을 다시 확인해 주세요.'
-      : '• 상호작용 대기 중 (상단 예제의 조작 요소를 실행해 결과를 확인해 주세요.)'
+  const actual: React.ReactNode = ready ? (
+    <ul className="space-y-1">
+      <li>
+        {probe.isHardLoad ? '하드 로드(서버 HTML)' : '클라이언트 이동(RSC Payload)'} · 서버 렌더 id {info.renderId.slice(0, 8)}
+        {waiting ? ' — 측정 중' : ''}
+      </li>
+      {checks.map((c) => (
+        <li key={c.label}>
+          {c.ok ? '✅' : '❌'} {c.label}: {c.detail}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    '• 측정 중: 하이드레이션 직후 상태와 잠시 동안의 요청을 모으고 있습니다.'
+  )
 
   return (
     <div className="space-y-4">
       <ExpectedActualPanel
-        title="TanStack Query prefetchQuery와 서버 Hydration 검증 결과"
-        expected={propExpected || defaultExpected}
-        actual={actualContent}
+        title={info.variant === 'prefetched' ? 'prefetch + HydrationBoundary 검증 결과' : '대조군(클라이언트 전용) 검증 결과'}
+        expected={info.variant === 'prefetched' ? EXPECTED_PREFETCHED : EXPECTED_CLIENT}
+        actual={actual}
         isMatched={isMatched}
-        description={propDescription || "이 예제의 동작과 검증 결과를 표시합니다."}
+        description="하이드레이션 직후 DOM과 queryClient 상태, PerformanceObserver로 받은 실제 api/deals 요청, 서버가 남긴 읽기 기록(api/reads), 서버 컴포넌트가 넘긴 QueryClient 생성 정보만으로 판정합니다."
       />
-                        <DemoDeepDiveCard title="TanStack Query SSR HydrationBoundary 사전 패칭">
-              <div className="space-y-3.5 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">1. 핵심 스펙 및 개념 요약</h5>
-                  <p>TanStack Query의 SSR Hydration 패턴은 서버 컴포넌트에서 <code>QueryClient</code> 인스턴스를 생성하여 <code>prefetchQuery()</code>로 데이터를 미리 조회한 뒤, <code>dehydrate(queryClient)</code>로 직렬화하여 <code>{'<'}HydrationBoundary state={'{'}...{'}'}{'>'}</code>로 클라이언트에 전달함으로써 하이드레이션 즉시 캐시된 데이터를 동기 렌더링하는 표준 통합 스펙입니다.</p>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">2. 데모 예제 기반 동작 원리</h5>
-                  <p>본 데모에서는 서버에서 인기 상품 Top 10 목록을 사전 패칭하여 초기 HTML에 포함시켜 렌더링하고, 클라이언트 컴포넌트의 <code>useQuery</code>가 마운트될 때 추가 네트워크 요청 없이 0ms로 서버 캐시 데이터를 즉각 소비하는 파이프라인을 검증합니다.</p>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">3. 실무적 장점 (Why Use This)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>완벽한 검색엔진 최적화(SEO)</strong>: 클라이언트 전용 데이터 패칭 라이브러리를 사용하면서도 초기 HTML에 모든 데이터가 포함되어 크롤러가 완벽히 색인합니다.</li>
-                    <li><strong>초기 화면 로딩 깜빡임 제거</strong>: 클라이언트 렌더링 시점에 스피너나 스켈레톤이 노출되지 않고 완성된 UI가 즉시 나타납니다.</li>
-                    <li><strong>서버-클라이언트 캐시 동기화</strong>: 서버에서 가져온 데이터가 클라이언트 TanStack Query 캐시의 초기 상태로 자연스럽게 주입되어 이후 클라이언트 캐싱 이점을 모두 누립니다.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">4. 주요 활용 상황 (When to Use)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li>쇼핑몰 메인 베스트셀러 랭킹 및 실시간 인기 상품 추천</li>
-                    <li>검색엔진 노출이 필수적인 기술 블로그 및 뉴스 기사 본문</li>
-                    <li>초기 로딩 속도와 클라이언트 인터랙션이 모두 중요한 대시보드</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h5 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">5. 실무 주의사항 및 핵심 팁 (Caution & Tips)</h5>
-                  <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
-                    <li><strong>요청별 독립 QueryClient 생성</strong>: 서버 컴포넌트에서 <code>QueryClient</code>를 싱글톤 전역 변수로 선언하면 서로 다른 사용자 간에 데이터가 오염될 수 있으므로 반드시 요청마다 새 인스턴스를 생성해야 합니다.</li>
-                    <li><strong>staleTime 설정 주의</strong>: 기본 <code>staleTime</code>이 0이면 클라이언트 마운트 즉시 백그라운드 리패칭이 발생하므로, 불필요한 중복 요청을 줄이려면 적절한 <code>staleTime: 60 * 1000</code>을 지정해야 합니다.</li>
-                  </ul>
-                </div>
-              </div>
-            </DemoDeepDiveCard>
+      <HydrationDeepDive />
     </div>
   )
 }

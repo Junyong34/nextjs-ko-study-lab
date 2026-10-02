@@ -1,0 +1,47 @@
+export const specMeta = {
+  sku: 'RUN-001',
+  name: '에어로 러닝화',
+  revision: 'r3',
+  updatedAt: '2026-09-28',
+}
+
+# {specMeta.name} 기술 사양서
+
+이 문서는 `content/spec.mdx` 파일입니다. 상품 정보는 frontmatter 대신 `export const specMeta`로 내보내고, 본문에서는 {specMeta.sku}처럼 JS 표현식으로 꺼내 씁니다.
+
+## 소재와 구성
+
+- 갑피: 엔지니어드 메시
+- 중창: 질소 주입 폼
+- 밑창: 카본 러버
+
+## 관리 방법
+
+1. 깔창을 분리한다
+2. 미온수로 손세탁한다
+3. 그늘에서 말린다
+
+> 세탁기를 쓰면 중창 접착이 약해질 수 있습니다.
+
+## 사이즈 정보
+
+아래 세 줄은 GFM 표 문법입니다. 이 프로젝트는 `remark-gfm`을 쓰지 않습니다.
+
+| 사이즈 | 발길이(mm) |
+| --- | --- |
+| 260 | 255~260 |
+
+같은 내용을 JSX로 쓰면 MDX가 그대로 `<table>` 요소를 만듭니다.
+
+<table data-source="jsx">
+<thead><tr><th>사이즈</th><th>발길이(mm)</th></tr></thead>
+<tbody><tr><td>260</td><td>255~260</td></tr><tr><td>270</td><td>265~270</td></tr></tbody>
+</table>
+
+## 재고 조회 코드
+
+```ts
+const res = await fetch('/api/stock?sku=RUN-001')
+```
+
+자세한 문법은 [Next.js MDX 가이드](https://nextjs.org/docs/app/guides/mdx)를 참고하세요.

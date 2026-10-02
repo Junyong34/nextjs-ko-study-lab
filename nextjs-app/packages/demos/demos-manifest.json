@@ -340,14 +340,14 @@
     "title": "SWR mutate()를 활용한 낙관적 장바구니 갱신",
     "doc": "2-guides/2.15-client-side-data-fetching/swr.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/tanstack-query/infinite-scroll",
     "title": "TanStack Query useInfiniteQuery 상품 목록 무한 스크롤",
     "doc": "2-guides/2.15-client-side-data-fetching/tanstack-query.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/redirecting/order-complete",
@@ -459,7 +459,7 @@
     "title": "TanStack Query prefetchQuery와 서버 Hydration",
     "doc": "2-guides/2.15-client-side-data-fetching/tanstack-query.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/redirecting/session-expired",
@@ -546,13 +546,6 @@
     "status": "done"
   },
   {
-    "url": "guides/sass/promotions-theme",
-    "title": "Sass 변수/mixin 활용 프로모션 스타일링",
-    "doc": "2-guides/sass.md",
-    "zone": "baseline",
-    "status": "stub"
-  },
-  {
     "url": "guides/authentication/middleware-guard",
     "title": "Proxy 기반 라우트 보호 가드",
     "doc": "2-guides/authentication.md",
@@ -634,28 +627,28 @@
     "title": "상품 기술 문서 MDX 렌더링",
     "doc": "2-guides/mdx.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/mdx/custom-component-slot",
     "title": "MDX 내 인터랙티브 장바구니 버튼 합성",
     "doc": "2-guides/mdx.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/third-party-libraries/google-analytics",
     "title": "@next/third-parties Google Analytics 최적화",
     "doc": "2-guides/third-party-libraries.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/third-party-libraries/youtube-embed",
     "title": "@next/third-parties YouTube 최적화 임베드",
     "doc": "2-guides/third-party-libraries.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/bff/order-aggregation",
@@ -725,7 +718,7 @@
     "title": "Trace ID 발급 및 Server Component Span",
     "doc": "2-guides/open-telemetry.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "guides/static-exports/client-routing",
@@ -928,7 +921,7 @@
     "title": "글로벌 MDX 스타일 매핑 (mdx-components.tsx)",
     "doc": "3-api-reference/3.1-file-conventions/mdx-components.md",
     "zone": "baseline",
-    "status": "stub"
+    "status": "done"
   },
   {
     "url": "file-conventions/instrumentation/server-boot-log",
