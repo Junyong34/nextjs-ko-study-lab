@@ -44,7 +44,7 @@ export const content = {
   ],
   concepts: [
     {
-      title: '제목의 "렌더링 상태 뱃지"는 15.0의 표현입니다',
+      title: '"렌더링 상태 뱃지"는 15.0 시절의 표현입니다',
       body: '15.0의 appIsrStatus는 정적 라우트에 별도 뱃지를 띄웠습니다. 15.2부터는 Next.js 로고 버튼 하나로 합쳐졌고, 정적/동적 여부는 버튼을 눌러 여는 Dev Tools 메뉴의 Route 항목에 나옵니다. 16.0에서 appIsrStatus·buildActivity·buildActivityPosition이 제거되어 지금 조절할 수 있는 것은 position과 false뿐입니다.',
     },
     {

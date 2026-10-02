@@ -1555,7 +1555,7 @@
   },
   {
     "url": "config/dev-indicators/render-badge",
-    "title": "devIndicators 렌더링 상태 개발 뱃지 제어",
+    "title": "devIndicators로 개발 표시기 위치·숨김 제어",
     "doc": "3-api-reference/3.5-config/3.5.1-next-config-js/devIndicators.md",
     "zone": "baseline",
     "status": "done"
@@ -1597,14 +1597,14 @@
   },
   {
     "url": "config/cache-handlers/redis-kv",
-    "title": "experimental.cacheHandlers 분산 Redis 캐시 핸들러 연동",
+    "title": "cacheHandlers로 'use cache' 저장소 교체(기본 메모리 핸들러 실측 + Redis 연동 설명)",
     "doc": "3-api-reference/3.5-config/3.5.1-next-config-js/cacheHandlers.md",
     "zone": "cache",
     "status": "done"
   },
   {
     "url": "config/expire-time/memory-isr-tuning",
-    "title": "expireTime 메모리 ISR 캐시 보존 기간 튜닝",
+    "title": "expireTime으로 ISR stale-while-revalidate 상한 조정",
     "doc": "3-api-reference/3.5-config/3.5.1-next-config-js/expireTime.md",
     "zone": "cache",
     "status": "done"

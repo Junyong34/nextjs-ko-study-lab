@@ -83,8 +83,8 @@ curl -sI http://localhost:3100/products | grep -i cache-control`,
       body: "'use cache'와 cacheLife를 쓰는 이 zone에서도 같은 규칙이 적용됩니다. cacheLife('default')는 expire가 무한대라 expireTime이 채우고, 'hours'처럼 expire가 있는 프로필은 그대로 씁니다. connection() 같은 요청 시점 렌더링은 ISR 캐시 수명이 없어 대상이 아닙니다. 캐시 수명이 없는 완전 정적 페이지(이 데모 페이지 자체)는 revalidate가 false라 s-maxage=31536000만 붙고 stale-while-revalidate가 없습니다. 이 31536000은 expireTime이 아니라 고정된 1년 값입니다.",
     },
     {
-      title: '이름 정정: 메모리 ISR 보존 기간이 아니다',
-      body: '데모 제목의 "메모리 ISR 캐시 보존 기간"은 정확하지 않습니다. expireTime은 메모리 크기를 제한하지 않고, ISR 응답을 오래된 상태로 내보낼 수 있는 상한(CDN의 stale-while-revalidate와 서버 ISR 캐시의 expire)을 정합니다. 옛 이름은 experimental.swrDelta입니다.',
+      title: 'expireTime은 메모리 보존 기간이나 메모리 한도가 아니다',
+      body: '"메모리 ISR 캐시 보존 기간"으로 이해하기 쉽지만 정확하지 않습니다. expireTime은 메모리 크기를 제한하지 않고, ISR 응답을 오래된 상태로 내보낼 수 있는 상한(CDN의 stale-while-revalidate와 서버 ISR 캐시의 expire)을 정합니다. 옛 이름은 experimental.swrDelta입니다.',
     },
   ],
   references: [
