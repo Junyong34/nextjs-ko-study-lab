@@ -1,6 +1,6 @@
 # 개발·운영 문서 색인
 
-2026-09-05 기준으로 현재 구현 설명, 운영 절차, 과거 결정, 백로그를 구분한다. 문서의 확인일은 코드·기록 대조일이며 별도 표시가 없으면 새 브라우저·배포 검증일이 아니다.
+현재 구현 설명, 운영 절차, 과거 결정, 백로그를 구분한다. 기준일은 2026-09-05이고, 2026-10-02에 공개 상태(09)와 데모 앱 설정 구조(02·03·04·05)를 갱신했다. 문서의 확인일은 코드·기록 대조일이며 별도 표시가 없으면 새 브라우저·배포 검증일이 아니다.
 
 ## 문서별 역할
 
@@ -10,7 +10,7 @@
 | [ARCHITECTURE](../ARCHITECTURE.md) | 시스템·패키지 경계와 요청 흐름 | 앱 설정과 패키지 의존 관계 |
 | [01. 화면 구성](./01-ui-and-screen-design.md) | 현재 UI와 미구현 설계 구분 | 홈·AppFrame·헤더·문서·데모 코드 |
 | [02. 코드 탐색](./02-codebase-deep-dive-guide.md) | 코드 위치·데이터 흐름·명령 안내 | 원본·생성 스크립트·package.json |
-| [03. 데모 제작 표준](./03-demo-standard-and-layout-pattern.md) | 제작 기준과 공통 컴포넌트 예시 | demo-kit API. 전수 통과 보고서가 아님 |
+| [03. 데모 제작 표준](./03-demo-standard-and-layout-pattern.md) | 제작 기준, 공통 컴포넌트 예시, 실측형·설명형 구분 | demo-kit API와 데모 커밋. 전수 통과 보고서가 아님 |
 | [04. 배포 계획](./04-vercel-deployment-plan.md) | Production 절차·과거 기록·Preview 과제 | next.config/vercel.json, 공식 자료, 기존 배포 기록 |
 | [05. Zone·데모 추가](./05-zone-onboarding-checklist.md) | 일상적인 등록·검증·공개 절차 | 생성기·린터·앱 설정과 09번 |
 | [06. 학습 기록](./06-learning-progress-design.md) | 저장 계약·화면별 집계 차이 | inventory·storage·provider·홈 위젯 |
@@ -26,7 +26,7 @@
 - 설정·UI·저장 계약을 바꾸면 담당 문서를 함께 갱신한다. 번호·파일 경로를 유지하고 제목 변경 시 링크·앵커를 확인한다.
 - ADR은 당시 이유와 대안을 보존한다. 구현 차이는 날짜가 있는 후속 메모로 남기며, proposed를 임의로 accepted로 바꾸지 않는다.
 - 배포 기록은 대상 커밋·환경·관찰 결과와 함께 남긴다. 코드 존재나 정적 검사 성공을 실제 배포 성공으로 옮겨 적지 않는다.
-- [이번 최신화 근거와 후속 항목](./maintenance/2026-09-05-documentation-refresh.md)을 참조한다.
+- 최신화 근거와 후속 항목: [2026-10-02](./maintenance/2026-10-02-documentation-refresh.md)(최신), [2026-09-05](./maintenance/2026-09-05-documentation-refresh.md).
 
 ## 📜 아키텍처 의사결정 기록 (ADR)
 

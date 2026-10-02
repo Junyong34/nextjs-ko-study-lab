@@ -1,6 +1,6 @@
 # 03. 데모 표준 구조 및 4단 레이아웃 패턴
 
-Next.js 학습 데모의 제작 표준이다. 2026-09-05 공통 컴포넌트 API를 대조했다. 이 문서는 제작 기준이며 모든 데모가 기준을 통과했다는 검증 보고서가 아니다. 공개 절차와 증거 기록은 [09](./09-demo-status-and-stepwise-release-guide.md)를 따른다.
+Next.js 학습 데모의 제작 표준이다. 2026-09-05 공통 컴포넌트 API를 대조했고, 2026-10-02에 실측형·설명형 구분(4절)을 추가했다. 이 문서는 제작 기준이며 모든 데모가 기준을 통과했다는 검증 보고서가 아니다. 공개 절차와 증거 기록은 [09](./09-demo-status-and-stepwise-release-guide.md)를 따른다.
 
 ---
 
@@ -140,3 +140,40 @@ export function StandardDemoLayout({ expectedValue, observedValue }: {
   )
 }
 ```
+
+---
+
+## 4. 실측형과 설명형 데모
+
+데모는 두 종류다. 어느 쪽이든 1절의 No-Simulation 원칙을 지킨다. 차이는 검증 패널의 "실제" 값을 무엇으로 채우는가에 있다.
+
+| 종류 | 대상 | 검증 패널의 "실제" 값 |
+|---|---|---|
+| 실측형 | 이 앱에서 켜도 다른 데모에 영향이 없는 기능 | 응답 헤더·상태 코드·DOM·`performance`·Route Handler 응답 같은 실제 관찰값 |
+| 설명형 | 앱 전체에 영향을 주는 설정이라 이 앱에서 켤 수 없는 기능 | 현재(적용하지 않은) 설정에서 실제로 측정되는 값만. 켜야만 보이는 동작은 측정하지 않는다 |
+
+### 설명형을 쓰는 경우
+
+`next.config`의 전역 옵션은 한 zone의 모든 데모에 적용된다. 예를 들어 이 앱은 `images.unoptimized: true`이므로 `/_next/image`가 404이고, 이를 끄면 모든 `<Image>`와 셸의 rewrites에 영향이 간다. `trailingSlash`, `output: 'export'`, `crossOrigin`, `expireTime`, `staleTimes`, `cacheHandlers` 등도 같은 이유로 켜지 않는다. 이런 설정을 켜서 다른 데모를 바꾸는 것보다, 켜지 않은 상태를 정직하게 보여 주는 쪽을 택한다.
+
+반대로 설정 대상을 데모 경로나 이름 접두사로 한정할 수 있으면 실측형으로 만든다. `redirects`·`rewrites`·`headers`의 `source`를 데모 경로로 좁히거나, `cacheLife` 프로파일과 `env` 키에 데모 접두사를 붙이는 식이다. 한정 방식과 설정 조각의 위치는 [05](./05-zone-onboarding-checklist.md)에 있다.
+
+### 설명형의 구성
+
+선례는 `config/base-path/subpath-routing`, `config/asset-prefix/cdn-distribution`, `config/output/*`다. 다음을 갖춘다.
+
+1. 화면에 "이 앱에서는 적용하지 않았다"와 그 이유를 명시한다.
+2. 적용할 때의 `next.config.ts` 예제를 코드 블록으로 둔다.
+3. 로컬에서 직접 확인하는 절차를 둔다. 별도 앱이나 브랜치에서 무엇을 어떻게 하는지 적는다.
+4. 현재 설정에서 실측되는 값을 확인하고 기대와 대조한다. 예: `/catalog/`가 308로 슬래시 없는 주소로 이동하는 응답, `/_next/image`의 404.
+5. 정답·오답 판정과 초기화가 있는 개념 확인을 둔다. 문서 규칙으로 계산한 값은 "계산"이라고 표시하고 실제 Next.js 응답처럼 보이게 하지 않는다.
+
+`useState`로 설정 효과를 흉내 내는 것은 설명형에서도 금지다.
+
+### 근거와 한계
+
+이 구분은 [ADR 0009](./adr/0009-classify-demo-verification-by-evidence.md)의 방향(확보할 수 없는 증거를 성공으로 대체하지 않는다)을 따르지만, 그 ADR은 아직 proposed이며 최종 유형은 확정되지 않았다. 이 절은 확정된 분류 체계가 아니라 현재 데모들이 따른 기준의 기록이다. 설명형으로 공개한 14개의 목록은 [09의 7절](./09-demo-status-and-stepwise-release-guide.md#7-2026-10-공개-완료-기록)에 있다.
+
+### 새 의존성을 쓰는 데모
+
+데모가 새 패키지를 필요로 하면 해당 앱의 `package.json`에 추가한다. 정확 고정은 [ADR 0002](./adr/0002-pnpm-turborepo-catalog-pinning.md)에 따라 `next`·`react`·`react-dom` 세 개에만 적용하며, 나머지는 캐럿 범위다. 2026-10-02에 추가한 `@next/mdx`와 `@next/third-parties`는 `next`와 같은 16.3.2로 고정했다. 학습 기준 버전과 문서 근거를 맞추려는 선택이며 ADR의 요구는 아니다. 라이브러리의 Provider는 zone 루트 `layout.tsx`가 아니라 해당 데모의 `layout.tsx`나 컴포넌트 안에 둔다. 다른 데모의 렌더링에 영향을 주지 않기 위해서다.

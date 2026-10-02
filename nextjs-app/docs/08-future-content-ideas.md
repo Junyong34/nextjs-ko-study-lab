@@ -22,6 +22,7 @@
 zustand, TanStack Query(react-query), Prisma, next-auth 등 자주 함께 쓰는 라이브러리와의 연동 방법·주의점·꿀팁 페이지.
 - **가치**: "App Router 자체"를 넘어 실제 프로젝트 구성에 필요한 정보를 제공해 실전 전환율을 높임.
 - **선행 작업**: 다룰 라이브러리 우선순위 선정(사용 빈도 기준), 기존 데모 존 구조(`apps/AGENTS.md`)와의 통합 방식 검토 — 새 zone이 필요한지, 기존 zone에 데모만 추가할지.
+- **진행 상황 (2026-10-02)**: SWR, TanStack Query, `@next/third-parties`, `@next/mdx`, `@vercel/otel`을 쓰는 데모 9개를 기존 baseline zone에 추가했다. 새 zone은 만들지 않았다. zustand, Prisma, next-auth는 다루지 않았다. 이 항목은 일부만 착수된 상태이며 가이드 페이지(챕터 형태의 연동 설명)는 만들지 않았다.
 
 ### 4. 버전별 변경사항 트래커 (Migration/Changelog 매핑)
 Next.js 마이너 버전 업데이트마다 App Router 관련 변경사항(캐싱 정책, `use cache`, PPR 등)을 챕터별로 매핑해 "이 버전에서 뭐가 바뀌었는지" 추적.

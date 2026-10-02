@@ -32,9 +32,14 @@ zone 추가는 드물고, **데모 추가가 일상 작업**입니다. 훨씬 �
   - 캐시 태그·`cacheLife` 프로파일 이름에 **데모 접두사**를 붙입니다 — 같은 zone 안 데모끼리 캐시를 서로 지우지 않도록 하기 위해서입니다
   - 스토리지 키·쿠키에 `demo_{슬러그}_*` 접두사를 붙입니다 — 모든 zone이 동일 오리진이라 접두사가 없으면 다른 zone(셸 포함)의 상태를 덮어씁니다
   - 화면 하단에 **기대 / 실제**(Expected/Actual) 패널을 둡니다 ([03. 4단 표준 레이아웃](./03-demo-standard-and-layout-pattern.md))
+  - **앱 전체에 영향을 주는 `next.config` 옵션**(`trailingSlash`, `images`, `crossOrigin`, `output`, `expireTime`, `staleTimes`, `cacheHandlers` 등)은 켜지 않고 설명형으로 만듭니다 ([03의 4절](./03-demo-standard-and-layout-pattern.md#4-실측형과-설명형-데모))
+  - 설정을 데모 경로나 이름 접두사로 한정할 수 있으면 켭니다. baseline의 `redirects`·`rewrites`·`headers`·`env`는 `src/config/demo-next-config/<데모>.ts`에 `demoConfig`로 쓰고 같은 디렉토리 `index.ts`의 `parts`에 등록합니다. `source`는 반드시 데모 경로 하위로 좁힙니다. cache zone의 `cacheLife` 프로파일은 `next.config.ts`에 데모 접두사를 붙인 키로 **추가만** 하고 기존 키는 바꾸지 않습니다. 설정 변경은 dev 서버를 다시 시작해야 반영됩니다
+  - 데모가 새 패키지를 필요로 하면 해당 앱의 `package.json`에만 추가하고 Provider는 데모 안에 둡니다 ([03의 4절](./03-demo-standard-and-layout-pattern.md#새-의존성을-쓰는-데모))
 - [ ] 본문에서 가리킬 데모라면 md에 `demo` 코드펜스 삽입 (`path`, 필요하면 `caption`)
 - [ ] `pnpm --filter @study/demos lint` 통과
 - [ ] 대상 기능의 로컬·필요한 배포 환경 검증 결과 기록. **연결 학습 문서의 md 상태도 완료여야 합니다**
+  - 공유 설정(`next.config.ts`, `proxy.ts`, `instrumentation.ts`)이나 의존성을 바꿨다면 **다른 데모에 영향이 없는지** 확인합니다. 두 zone을 production(`next build` 후 `next start`)으로 띄워 기존 done 라우트의 상태 코드와 응답 헤더를 변경 전후로 대조하는 방법을 썼습니다 ([09의 7절](./09-demo-status-and-stepwise-release-guide.md#7-2026-10-공개-완료-기록)). 이 대조는 HTML 본문과 브라우저 동작을 비교하지 않습니다
+  - 여러 작업이 동시에 dev 서버를 쓰면 `.next` 락이 충돌합니다. `NEXT_DIST_DIR=.next-<포트> pnpm exec next dev --port <포트>`로 별도 서버를 띄웁니다. 두 데모 앱의 `next.config.ts`가 이 값을 `distDir`로 읽고, `.gitignore`가 `.next-*/`를 제외합니다. dev 서버는 `tsconfig.json`에 `.next-<포트>/types` 경로를 자동으로 추가하므로 커밋 전에 되돌립니다
 - [ ] 검증 후 `status: done`으로 전환하고 lint 재확인
 - [ ] `pnpm --filter @study/demos build`로 매니페스트 재생성 후 `pnpm test:manifest` 확인
 - [ ] 앱 빌드·배포 후 화면별 공개 상태 확인. 변경 파일만 명시해 스테이징

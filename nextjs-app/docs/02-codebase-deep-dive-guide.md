@@ -1,6 +1,6 @@
 # 02. 코드베이스 심층 분석 및 데이터 흐름 가이드
 
-2026-09-05 소스 기준의 코드 탐색 지도다. 시스템 경계와 요청 다이어그램은 [ARCHITECTURE](../ARCHITECTURE.md), 실행·공개 절차는 [05](./05-zone-onboarding-checklist.md)와 [09](./09-demo-status-and-stepwise-release-guide.md)를 따른다.
+2026-09-05 소스 기준의 코드 탐색 지도다. 2026-10-02에는 데모 앱의 설정·계측 구조(1절 표 끝 3행과 5.4절)만 추가했고 나머지는 다시 대조하지 않았다. 시스템 경계와 요청 다이어그램은 [ARCHITECTURE](../ARCHITECTURE.md), 실행·공개 절차는 [05](./05-zone-onboarding-checklist.md)와 [09](./09-demo-status-and-stepwise-release-guide.md)를 따른다.
 
 ## 1. 코드 탐색 지도
 
@@ -21,6 +21,9 @@
 | 공유 도메인·zone 메타데이터 | `packages/demos/src/metadata.ts` |
 | 셸 SEO | `apps/shell/src/lib/seo/`, `src/app/robots.ts`, `src/app/sitemap.ts` |
 | 피드백·공유·GitHub 안내 | `packages/ui/src/feedback/`, `src/share/`, `apps/shell/src/components/github-star/` |
+| baseline 데모별 `next.config` 조각 | `apps/demo-baseline/src/config/demo-next-config/` (`index.ts`가 조각을 합쳐 `next.config.ts`에 전달) |
+| baseline 계측(OpenTelemetry) | `apps/demo-baseline/src/instrumentation.ts`, `src/lib/otel-setup.ts` |
+| baseline MDX 전역 매핑 | `apps/demo-baseline/src/mdx-components.tsx` (`next.config.ts`의 `withMDX`·`pageExtensions`와 함께 읽는다) |
 
 ## 2. 원본과 생성물
 
@@ -80,6 +83,12 @@
 ### 5.3 Server Actions
 
 두 zone은 `withRelatedProject({ projectName: 'study-shell', defaultHost: ... })`로 얻은 host를 `experimental.serverActions.allowedOrigins`에 넣는다. 실제 학습자 host와 일치하는지는 배포 환경에서 확인한다.
+
+### 5.4 데모 앱의 설정과 계측
+
+baseline `next.config.ts`는 세 가지를 합친다. 데모별 `redirects`·`rewrites`·`headers`·`env` 조각(`src/config/demo-next-config/`), MDX 지원(`@next/mdx`의 `withMDX`와 `pageExtensions`에 `md`·`mdx` 추가), 별도 `distDir`(`NEXT_DIST_DIR` 환경변수, 기본 `.next`)다. 조각 규칙은 [05](./05-zone-onboarding-checklist.md)에 있다. cache zone `next.config.ts`는 `distDir`와 데모 접두사가 붙은 `cacheLife` 프로파일을 가진다.
+
+`src/instrumentation.ts`의 `register()`는 nodejs 런타임에서만 `lib/otel-setup.ts`의 `setupOtel()`을 호출한다. 호출은 `try/catch`로 감싸 계측 실패가 서버 부팅이나 다른 데모에 영향을 주지 않게 했다. `setupOtel()`은 span을 최대 200개의 메모리 링버퍼에만 모으고 fetch 계측을 데모 경로 URL로 한정한다. 이 파일들은 여러 데모가 공유하므로 수정하면 다른 데모의 응답이 바뀌는지 확인한다.
 
 ## 6. 변경 시 함께 볼 문서
 

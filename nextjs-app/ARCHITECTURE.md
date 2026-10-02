@@ -1,6 +1,6 @@
 # Next.js 학습 랩 아키텍처
 
-2026-09-05 소스 기준의 시스템 경계와 요청 흐름이다. 코드 탐색은 [02](./docs/02-codebase-deep-dive-guide.md), 운영 절차는 [04](./docs/04-vercel-deployment-plan.md), 문서별 역할은 [문서 색인](./docs/README.md)을 따른다.
+2026-09-05 소스 기준의 시스템 경계와 요청 흐름이다. 5절의 baseline 설정 구조는 2026-10-02에 추가했다. 코드 탐색은 [02](./docs/02-codebase-deep-dive-guide.md), 운영 절차는 [04](./docs/04-vercel-deployment-plan.md), 문서별 역할은 [문서 색인](./docs/README.md)을 따른다.
 
 ## 문서 범위와 Bounded Context
 
@@ -85,6 +85,8 @@ sequenceDiagram
 ## 5. zone 설정과 배포 경계
 
 baseline은 `assetPrefix: '/demo-static/baseline'`, cache는 `assetPrefix: '/demo-static/cache'`와 `cacheComponents: true`를 사용한다. 두 앱 모두 `images.unoptimized`를 사용하고 `allowedOrigins`를 Related Projects 또는 `PUBLIC_ORIGIN`으로 구성한다.
+
+baseline은 이에 더해 데모별 `next.config` 조각을 합쳐 쓰고, `@next/mdx`로 `md`·`mdx` 파일을 페이지로 다루며, `instrumentation.ts`에서 OpenTelemetry tracer를 등록한다. 각 조각과 훅은 해당 데모의 경로나 URL로 영향을 한정한다. 구조는 [02의 5.4](./docs/02-codebase-deep-dive-guide.md#54-데모-앱의-설정과-계측)에 있다. baseline의 `cross-zone-proxy` 데모는 cache zone host도 조회하므로 zone 사이 의존이 셸→zone 한 방향만은 아니다.
 
 셸은 `ZONE_*_URL`을 폴백으로 zone host를 구하고 두 종류의 경로를 rewrite한다. 문서 파일 추적용 `outputFileTracingRoot`도 셸 설정에 있다. 설정값·환경별 운영 절차는 중복하지 않고 [04](./docs/04-vercel-deployment-plan.md)를 따른다.
 

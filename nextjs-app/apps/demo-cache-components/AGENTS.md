@@ -9,6 +9,10 @@ Next.js 16의 `cacheComponents: true` 옵션 및 `use cache`, `cacheTag`, `cache
 
 zone 공통 규칙 및 데모 작성 표준은 [`../AGENTS.md`](../AGENTS.md)를 따른다.
 
+## 이 zone의 공유 구성 (2026-10-02)
+
+`next.config.ts`의 `cacheLife`는 모든 데모가 공유한다. 새 프로파일은 데모 접두사를 붙여 **추가만** 하고 기존 키는 바꾸지 않는다. `distDir`는 `NEXT_DIST_DIR`로 바꿀 수 있다(기본 `.next`). 자세한 절차는 [05](../../docs/05-zone-onboarding-checklist.md)에 있다.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know

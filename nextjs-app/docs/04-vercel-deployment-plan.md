@@ -1,6 +1,6 @@
 # 04. Vercel 배포 계획
 
-현재 배포 구성과 운영 절차, 과거 검증 기록, 남은 확인 사항을 구분한다. 2026-09-05 배포 구성을 코드·공식 자료와 대조했다. 2026-10-01 셸의 zone rewrite 순서를 수정하고 로컬 production 요청을 검증했다. 같은 날 main의 5ca82f1을 Production에 배포하고 공개 요청·실습 로그를 검증했다. 별도 Preview 배포와 Vercel 대시보드 현재 설정은 확인하지 않았다.
+현재 배포 구성과 운영 절차, 과거 검증 기록, 남은 확인 사항을 구분한다. 2026-09-05 배포 구성을 코드·공식 자료와 대조했다. 2026-10-01 셸의 zone rewrite 순서를 수정하고 로컬 production 요청을 검증했다. 같은 날 main의 5ca82f1을 Production에 배포하고 공개 요청·실습 로그를 검증했다. 별도 Preview 배포와 Vercel 대시보드 현재 설정은 확인하지 않았다. 2026-10-02에는 baseline이 cache zone 주소를 조회하는 코드가 추가됐으며, 이 부분은 배포 환경에서 확인하지 않았다(3-1, 3-2, 8절).
 
 ## 1. 배포 구성 원칙
 
@@ -39,14 +39,15 @@
 |---|---|---|
 | shell | `ZONE_BASELINE_URL` | baseline 배포 URL. 예: `https://<baseline-host>` |
 | shell | `ZONE_CACHE_URL` | cache 배포 URL. 예: `https://<cache-host>` |
+| baseline | `ZONE_CACHE_URL` | cache 배포 URL. `config/rewrites/cross-zone-proxy` 데모의 rewrite 목적지에만 쓰인다. 미지정이면 `localhost:3002`로 폴백한다. 형식은 셸과 같다 |
 | 두 데모 앱 | `PUBLIC_ORIGIN` | 학습자가 접속하는 셸 host. **스킴·경로 없이** 지정. 커스텀 도메인 사용 시 그 host와 대조 |
 | 세 앱 | `NEXT_PUBLIC_SITE_URL` | canonical·OG 등에 쓸 공개 사이트 URL. 미지정 시 공유 메타데이터 모듈의 기본값 사용 |
 
-셸은 `ZONE_*_URL`의 스킴을 제거한 뒤 Vercel에서는 `https`, 로컬에서는 `http`를 붙인다. 데모 앱은 `PUBLIC_ORIGIN`을 스킴 제거 없이 `allowedOrigins`에 전달하므로 URL 전체를 넣지 않는다. 환경변수를 수정하면 영향을 받는 앱을 재빌드·재배포한다.
+셸은 `ZONE_*_URL`의 스킴을 제거한 뒤 Vercel에서는 `https`, 로컬에서는 `http`를 붙인다. baseline의 `ZONE_CACHE_URL`도 `src/config/demo-next-config/rewrites-cross-zone.ts`에서 같은 방식으로 처리한다. 값이 없으면 Vercel에서 목적지가 `https://localhost:3002`가 되어 그 데모의 프록시 요청만 실패한다. 다른 데모의 라우팅에는 영향이 없다. 데모 앱은 `PUBLIC_ORIGIN`을 스킴 제거 없이 `allowedOrigins`에 전달하므로 URL 전체를 넣지 않는다. 환경변수를 수정하면 영향을 받는 앱을 재빌드·재배포한다.
 
 ### 3-2. Related Projects와 Preview
 
-코드는 Related Projects의 host 조회를 유지한다. 셸은 두 zone을, 각 zone은 셸을 조회한다. 수동 환경변수는 조회 결과를 강제로 덮어쓰는 값이 아니라 폴백이다.
+코드는 Related Projects의 host 조회를 유지한다. 셸은 두 zone을, 각 zone은 셸을 조회한다. 2026-10-02부터 baseline은 위 데모 때문에 `study-cache`도 조회한다. 그런데 baseline의 `vercel.json` `relatedProjects`에는 셸 프로젝트만 있어, 현재 설정만으로는 Vercel이 cache host를 주입하지 못한다. 해결 방법은 baseline `vercel.json`에 cache 프로젝트 ID를 추가하거나 baseline 프로젝트에 `ZONE_CACHE_URL`을 수동 등록하는 것이다. 어느 쪽도 하지 않았고 효과를 확인하지 않았다. 수동 환경변수는 조회 결과를 강제로 덮어쓰는 값이 아니라 폴백이다.
 
 Vercel은 프로젝트 ID로 연결한 앱 간 Preview·Production 배포 URL 자동 연결을 안내한다. 이 기능 자체가 Production에서 지원되지 않는다는 뜻은 아니다. [공식 발표](https://vercel.com/changelog/sync-projects-with-vercel-related-projects) (확인: 2026-09-05)
 
@@ -112,6 +113,7 @@ node nextjs-app/apps/shell/scripts/check-zone-prefetch.mjs --shell-origin <셸-o
 ## 8. 남은 리스크 / 다음 확인 사항
 
 - Preview 프로젝트 간 URL 연결과 Server Action origin 정합성
+- baseline의 `ZONE_CACHE_URL`·Related Projects 연결. 해결 전에는 `config/rewrites/cross-zone-proxy` 데모가 배포 환경에서 실패할 수 있다
 - `main`, `preview/*`, 작업 브랜치의 실제 배포·스킵 결과
 - 현재 대시보드 빌드 명령·Ignored Build Step·원격 캐시 설정
 - 도메인 변경 시 세 앱의 메타데이터·캐시 반영
