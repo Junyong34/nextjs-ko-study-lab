@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react'
 import type { Metadata } from 'next'
-import { nextjsVisualizeDemos } from '@/components/visualize/data'
 import { buildPageMetadata } from '@/lib/seo/metadata'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { buildLearningResourceJsonLd } from '@/lib/seo/json-ld'
@@ -35,9 +34,9 @@ export default function VisualizeHubPage() {
   })
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <JsonLd data={jsonLd} />
-      <VisualizeHeader totalCount={nextjsVisualizeDemos.length} />
+      <VisualizeHeader />
 
       <Suspense
         fallback={

@@ -18,7 +18,7 @@ export const VISUALIZE_GROUPS: NextjsDemoGroup[] = [
 ]
 
 /**
- * Next.js 학습에 직결되는 15개 시각화 데모 컬렉션
+ * Next.js 학습에 직결되는 시각화 데모 컬렉션
  */
 export const nextjsVisualizeDemos: DemoMeta[] = showcaseDemos.filter(
   (demo) => demo.group !== 'generic'

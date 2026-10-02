@@ -1,0 +1,10 @@
+/* Feedback is limited to pointer presses; keyboard navigation stays still. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .visualize-press:active:not(:focus-visible) {
+    transform: scale(0.97);
+  }
+}
+
+.visualize-search::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
