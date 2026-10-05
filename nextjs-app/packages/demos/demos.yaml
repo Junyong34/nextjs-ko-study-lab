@@ -767,6 +767,12 @@
   zone: baseline
   status: done
 
+- url: file-conventions/dynamic-segments/static-or-dynamic
+  title: "[slug] 세그먼트의 정적·동적 렌더링 판정 (generateStaticParams 유무)"
+  doc: 3-api-reference/3.1-file-conventions/dynamic-routes.md
+  zone: baseline
+  status: done
+
 - url: file-conventions/parallel-routes/conditional-slot
   title: "권한별 조건부 슬롯 분기 (Parallel Routes)"
   doc: 3-api-reference/3.1-file-conventions/parallel-routes.md
@@ -1444,3 +1450,15 @@
   doc: 2-guides/interactive-apps.md
   zone: baseline
   status: done
+
+- url: functions/cookies/suspense-boundary
+  title: "cookies()를 Suspense 안팎에서 읽을 때 정적 셸 도착 순서"
+  doc: 3-api-reference/3.3-functions/cookies.md
+  zone: cache
+  status: done
+
+- url: guides/adopting-partial-prefetching/app-shell
+  title: "prefetch = 'partial' 세그먼트의 App Shell 공유 prefetch"
+  doc: 2-guides/adopting-partial-prefetching.md
+  zone: cache
+  status: stub
