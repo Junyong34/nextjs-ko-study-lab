@@ -791,6 +791,12 @@
   zone: baseline
   status: done
 
+- url: file-conventions/intercepting-routes/product-detail
+  title: "상품 상세 가로채기 (목록 요약 즉시 표시 vs 정식 페이지 스트리밍)"
+  doc: 3-api-reference/3.1-file-conventions/intercepting-routes.md
+  zone: baseline
+  status: done
+
 - url: file-conventions/mdx-components/global-mdx-theme
   title: "글로벌 MDX 스타일 매핑 (mdx-components.tsx)"
   doc: 3-api-reference/3.1-file-conventions/mdx-components.md
