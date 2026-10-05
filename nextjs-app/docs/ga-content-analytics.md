@@ -1,6 +1,6 @@
 # GA4 콘텐츠 분석 운영 가이드
 
-Search Console은 이미 연결되어 있으며 이번 변경 대상에서 제외한다. 이 문서는 이벤트 계약과 운영자가 만들 보고서의 설정 절차다. **GA 계정의 맞춤 정의·탐색 보고서 적용 및 DebugView 수신 확인은 아직 수행하지 않았다.** 코드·브라우저 검증 결과는 [작업 계획](../../intent/ga-content-insights/plan.md)의 Verification results에 별도로 기록한다.
+Search Console은 이미 연결되어 있으며 이번 변경 대상에서 제외한다. 이 문서는 이벤트 계약과 운영자가 만들 보고서의 설정 절차다. **GA 계정의 맞춤 정의·탐색 보고서 적용 및 DebugView 수신 확인은 아직 수행하지 않았다.** 코드·브라우저 검증 결과는 작업 계획(`intent/ga-content-insights/plan.md`, 삭제됨 — git 히스토리에서 확인)의 Verification results에 별도로 기록한다.
 
 ## 수집 구조와 공통 문맥
 

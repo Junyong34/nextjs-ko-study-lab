@@ -67,7 +67,7 @@ Vercel은 `rsc: 1`, `next-router-prefetch: 1`, `next-router-segment-prefetch` �
 node nextjs-app/apps/shell/scripts/check-zone-prefetch.mjs --shell-origin <셸-origin> --baseline-origin <baseline-직접-origin>
 ```
 
-실습의 실제 Chrome 요청은 헤더와 `_rsc` 값을 함께 캡처해 비교한다. 로컬 production은 수정 전에도 200이었으므로 로컬 통과를 배포 해결로 해석하지 않는다. 2026-10-01 main의 5ca82f1 Production에서 공개 HTTP 46개와 실제 Chrome prefetch·클릭·관측 로그, 자산·Proxy 검증을 통과했다. [조사·검증 기록](../../intent/fix-baseline-segment-prefetch-404/verification.md)에 수정 전·로컬·Production 결과를 구분했다. 새 배포는 사용자 허가 후 수행한다.
+실습의 실제 Chrome 요청은 헤더와 `_rsc` 값을 함께 캡처해 비교한다. 로컬 production은 수정 전에도 200이었으므로 로컬 통과를 배포 해결로 해석하지 않는다. 2026-10-01 main의 5ca82f1 Production에서 공개 HTTP 46개와 실제 Chrome prefetch·클릭·관측 로그, 자산·Proxy 검증을 통과했다. 조사·검증 기록(`intent/fix-baseline-segment-prefetch-404/verification.md`, 삭제됨 — git 히스토리에서 확인)에 수정 전·로컬·Production 결과를 구분했다. 새 배포는 사용자 허가 후 수행한다.
 
 ## 4. 브랜치별 자동 배포 제어
 
