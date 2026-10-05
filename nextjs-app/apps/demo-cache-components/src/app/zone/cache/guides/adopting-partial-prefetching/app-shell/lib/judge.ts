@@ -1,5 +1,5 @@
 import { DISABLED_ID, FULL_ID, SHARED_IDS } from './constants'
-import type { RscRequest } from '../types'
+import type { Check, RscRequest } from '../types'
 
 /** next/dist/client/components/segment-cache/cache.js 가 보내는 Next-Router-Prefetch 값 (16.3.2에서 확인) */
 const HEADER_KIND: Record<string, string> = { '1': 'loading 경계', '2': 'PPR 런타임', '3': '런타임 셸(App Shell)' }
@@ -8,13 +8,6 @@ export const kindOf = (r: RscRequest) =>
 
 const idOf = (r: RscRequest) => r.path.split('/').pop() ?? ''
 const inRoute = (r: RscRequest, route: 'partial' | 'legacy') => r.path.includes(`/app-shell/${route}/`)
-
-export interface Check {
-  label: string
-  expected: string
-  actual: string
-  ok: boolean
-}
 
 export const IS_PROD = process.env.NODE_ENV === 'production'
 
