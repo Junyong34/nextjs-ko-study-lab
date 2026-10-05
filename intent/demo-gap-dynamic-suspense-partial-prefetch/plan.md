@@ -66,8 +66,16 @@ Approval: 2026-10-05 대화 승인(PR 없음, 커밋 보류). 사용자가 "2번
 - **#3 실측(2026-10-05, cache zone production, 포트 3912, 청크 단위 스트림 읽기)**: 빌드 표 `inside ◐`, `outside ƒ`. inside는 정적/fallback 약 15~86ms, 쿠키 영역 약 1.2~1.3초(스트리밍 세그먼트 `S:` 있음). outside는 정적·쿠키 영역이 약 1.23초에 함께 도착, fallback 없음. 쿠키 없음/있음 모두 서버가 읽은 값(none/kim-shopping)이 보낸 쿠키와 일치.
 - **#2 화면 확인**: baseline 재빌드(`●` with-gsp/alpha·beta, `ƒ` no-gsp·with-headers) 뒤 4개 라우트 SSR 200, 렌더 ID 3/1/1/3개, 화면 문구 포함.
 - **정적 검사**: `pnpm check-types`(baseline·cache) 통과, `pnpm --filter @study/demos lint` exit 0, `build`로 매니페스트 재생성, `pnpm test:manifest` exit 0(등록 244, done 243, stub 1).
+- **배포 환경 브라우저 확인(2026-10-05, https://www.learn-nextjs-lab.space, `agent-browser`, zone 경로 직접 열기)**:
+  - #2: [3번씩 실제 요청] 후 4개 라우트 모두 `일치`, 검증 패널 `검증 완료`. 단 Vercel에서는 `x-nextjs-cache`가 없고 `cache-control`이 `public, max-age=0, must-revalidate`(정적)로 나와, 검증 패널 기대 문구의 "x-nextjs-cache HIT"와 개념 정리의 MISS/HIT 서술이 배포 환경과 맞지 않는다. 판정은 렌더 ID로만 하므로 통과했으나 **문구 수정 필요**.
+  - #3: 쿠키 없음/있음 × inside/outside 4조합 모두 `일치`(inside 간격 1251·1293ms, fallback 먼저 도착 / outside 간격 0ms, fallback 없음), 검증 패널 `검증 완료`.
+  - #7 관찰(2회 새로고침, 같은 패턴): 라우트 트리 요청(`/_tree`)은 partial 3·legacy 3건. `Next-Router-Prefetch` 값은 소스(`segment-cache/cache.js`)상 `1`=loading 경계, `2`=PPR 런타임, `3`=런타임 셸, 없음=전체. partial 라우트는 **런타임 셸(3) 1건**(링크 3개 공유)이 나가고, 이어 **PPR 런타임(2)이 partial/1·2·3·4 각 1건**(기본 링크 3개 + `prefetch` 링크 1개) 나갔다. legacy는 URL별 세그먼트(`__PAGE__`) 요청이 관찰 시점에 1~3건으로 매번 달라 건수 판정에는 부적합. `prefetch={false}` 링크(partial/5)는 요청 0건. 기본 링크 1·2·3에도 PPR 런타임 요청이 나간 이유는 확인하지 못했다(`params`를 Suspense 안에서 읽는 구조의 영향일 수 있음, 미검증).
+- **#7 완료(2026-10-05, 로컬 production 빌드 + 접두사 제거 프록시, `agent-browser`)**: `lib/judge.ts`·`Verification.tsx`·`ConceptCard.tsx`·가이드 2단계를 추가하고 `demos.yaml`을 `done`으로 전환. 판정은 반복 관찰에서 안정적이던 3항목(partial 기본 링크 3개의 런타임 셸 요청 1건, `<Link prefetch>` 요청 1건 이상, `prefetch={false}` 0건)만 사용하고, legacy URL별 요청 건수는 판정에서 제외. 로컬에서 세 항목 모두 `일치`, 패널 `검증 완료`. 기본 링크에 PPR 런타임 요청이 추가로 나가는 원인은 확인하지 못했고 개념 정리에 "확인하지 못한 것"으로 적었다. `hover-shell` DeepDive에 새 데모 안내 1문장 추가.
+- **#2 문구 정정**: 검증 패널·개념 정리의 `x-nextjs-cache` 서술을 next start 기준으로 한정하고 Vercel 배포에서는 헤더가 없을 수 있음을 명시.
+- **모바일 폭(375px)**: 세 데모 모두 문서 폭 687~700px로 넘쳤다(기존 `static-and-dynamic`도 469px로 넘침). 원인은 `fieldset`이 자식 표·코드 블록의 최소 폭만큼 늘어나는 것. 공용 `demo-kit`은 건드리지 않고 각 데모의 `overflow-x-auto` 컨테이너에 `w-0 min-w-full`을 적용해 360px로 해소(기존 `caching/basic`과 동일). 공용 `DemoPlaygroundCard`/`ExpectedActualPanel`의 같은 문제는 기존 데모에 남아 있어 이번 범위에서 제외.
+- **등록·검증**: `@study/demos` lint exit 0, 매니페스트 재생성, `pnpm test:manifest` exit 0(등록 245, 전부 done), 두 앱 타입 검사 통과.
 - **미검증·미완료**:
-  - Chrome 확장 미연결로 **브라우저 조작(버튼 클릭 → 대기/성공/실패 전환, 모바일 폭)을 두 데모 모두 확인하지 못했다**. `done`은 사용자 지시와 HTTP 수준 실측에 근거하며 브라우저 확인이 남아 있다.
-  - **#7 `app-shell`은 미완료(`stub`)**: 도착지 라우트·링크·RSC 요청 로그까지만 구현. 3단 검증 패널과 4단 개념 정리가 없고(lint 경고 2건), curl로는 라우터 prefetch(`_rsc` 해시 리다이렉트)를 재현하지 못해 prefetch 건수 차이를 아직 관측하지 못했다. 브라우저에서 production 뷰포트 prefetch를 관측해야 판정을 설계할 수 있다. `hover-shell` DeepDive 안내 추가도 #7을 공개할 때 함께 한다.
+  - #2·#3 버튼 조작은 위 배포 환경 확인으로 검증했다.
+  - (해결됨 — 위 #7 완료 참고) **#7 `app-shell` 미완료(`stub`)였던 항목**: 도착지 라우트·링크·RSC 요청 로그까지만 구현. 3단 검증 패널과 4단 개념 정리가 없고(lint 경고 2건), curl로는 라우터 prefetch(`_rsc` 해시 리다이렉트)를 재현하지 못해 prefetch 건수 차이를 아직 관측하지 못했다. 브라우저에서 production 뷰포트 prefetch를 관측해야 판정을 설계할 수 있다. `hover-shell` DeepDive 안내 추가도 #7을 공개할 때 함께 한다.
   - 회귀 대조(기존 done 라우트 헤더 전후 비교), dev 모드 확인, 질문 3의 `instant = false` 외 대안 검토는 하지 않았다.
 - 실행 환경: `NEXT_DIST_DIR=.next-3911/.next-3912`(gitignore 대상). 빌드가 수정한 두 앱의 `tsconfig.json`은 되돌렸다.

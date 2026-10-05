@@ -19,6 +19,7 @@ export function DeepDive() {
           <p>
             Partial Prefetching(<code>partialPrefetching: true</code>, <code>export const prefetch = &apos;partial&apos;</code>)은 <code>cacheComponents</code>가 켜져 있을 때만 동작합니다.
             이 zone(<code>demo-baseline</code>)은 <code>cacheComponents</code>를 쓰지 않으므로 App Shell prefetch 자체는 시연하지 못하고, 같은 구조(정적 셸 + Suspense 뒤 동적 데이터)에서 <code>&lt;Link&gt;</code>의 기본 prefetch 동작과 클릭 뒤 스트리밍을 실측합니다.
+            App Shell 공유 prefetch(<code>prefetch = &apos;partial&apos;</code>)는 cache zone의 <code>guides/adopting-partial-prefetching/app-shell</code> 실습에서 확인할 수 있습니다.
           </p>
         </div>
         <div>

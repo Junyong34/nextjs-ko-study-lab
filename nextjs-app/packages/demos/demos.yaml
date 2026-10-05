@@ -1467,4 +1467,4 @@
   title: "prefetch = 'partial' 세그먼트의 App Shell 공유 prefetch"
   doc: 2-guides/adopting-partial-prefetching.md
   zone: cache
-  status: stub
+  status: done

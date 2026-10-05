@@ -21,7 +21,7 @@ export function ConceptCard() {
             </li>
             <li>
               <strong>목록 밖의 값은 첫 요청에 렌더되고 이후 재사용</strong>: <code>dynamicParams</code>의 기본값(true) 때문입니다.
-              첫 요청은 <code>x-nextjs-cache: MISS</code>, 그 뒤는 HIT이고 렌더 ID는 같습니다. 즉 &quot;목록에 없는 값 = 매번 동적&quot;이
+              <code>next start</code>에서는 첫 요청이 <code>x-nextjs-cache: MISS</code>, 그 뒤는 HIT이고, 어느 환경이든 렌더 ID는 같습니다. Vercel 배포에서는 CDN이 헤더를 바꿔 <code>x-nextjs-cache</code>가 보이지 않지만 렌더 ID는 똑같이 고정됩니다. 즉 &quot;목록에 없는 값 = 매번 동적&quot;이
               아닙니다.
             </li>
             <li>
@@ -32,7 +32,7 @@ export function ConceptCard() {
         </div>
         <div>
           <h5 className={h5}>2. 이 데모의 대조 구조</h5>
-          <pre className="overflow-x-auto rounded bg-zinc-950 p-3 font-mono text-[11px] text-zinc-300">
+          <pre className="w-0 min-w-full overflow-x-auto rounded bg-zinc-950 p-3 font-mono text-[11px] text-zinc-300">
 {`static-or-dynamic/
 ├─ no-gsp/[slug]/page.tsx       # generateStaticParams 없음        → ƒ
 ├─ with-gsp/[slug]/page.tsx     # generateStaticParams(alpha,beta) → ● (zeta는 첫 요청 뒤 재사용)

@@ -18,7 +18,7 @@ export function RequestLog() {
         </p>
         <DemoResetButton label="로그 초기화" onReset={reset} />
       </div>
-      <div className="overflow-x-auto">
+      <div className="w-0 min-w-full overflow-x-auto">
         <table className="w-full min-w-[620px] border-collapse font-mono text-[10px] text-zinc-700 dark:text-zinc-300">
           <thead>
             <tr className="text-left text-zinc-500">

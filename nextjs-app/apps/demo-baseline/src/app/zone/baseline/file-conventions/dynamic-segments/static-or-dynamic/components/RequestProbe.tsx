@@ -61,7 +61,7 @@ export function RequestProbe() {
       </div>
       {error && <p className="text-xs text-rose-600">요청 실패: {error}</p>}
       {results.length > 0 && (
-        <div className="overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
+        <div className="w-0 min-w-full overflow-x-auto rounded border border-zinc-200 dark:border-zinc-800">
           <table className="w-full min-w-[700px] font-mono text-[10px] text-zinc-700 dark:text-zinc-300">
             <thead className="bg-zinc-50 text-left text-zinc-500 dark:bg-zinc-900">
               <tr>

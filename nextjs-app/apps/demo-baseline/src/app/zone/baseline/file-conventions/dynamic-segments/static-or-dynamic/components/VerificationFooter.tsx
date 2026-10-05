@@ -11,8 +11,8 @@ const EXPECTED_BY_MODE = {
   production:
     '• next build 라우트 표: no-gsp/[slug] ƒ, with-gsp/[slug] ● (alpha·beta만 나열), with-headers/[slug] ƒ\n' +
     `• no-gsp/alpha: ${SAMPLES_PER_ROUTE}번 요청 → 렌더 ID ${SAMPLES_PER_ROUTE}개 (런타임 API가 없어도 요청마다 렌더)\n` +
-    '• with-gsp/alpha(목록 안): 렌더 ID 1개, x-nextjs-cache HIT\n' +
-    '• with-gsp/zeta(목록 밖): 첫 요청에 렌더되고 이후 재사용 → 렌더 ID 1개 (첫 요청만 MISS일 수 있음)\n' +
+    '• with-gsp/alpha(목록 안): 렌더 ID 1개 (next start에서는 x-nextjs-cache HIT, Vercel 배포에서는 이 헤더가 없을 수 있음)\n' +
+    '• with-gsp/zeta(목록 밖): 첫 요청에 렌더되고 이후 재사용 → 렌더 ID 1개 (next start에서는 첫 요청만 MISS)\n' +
     `• with-headers/alpha: 목록이 있어도 headers()가 있으면 렌더 ID ${SAMPLES_PER_ROUTE}개`,
   development:
     '• next dev는 정적/동적 구분 없이 모든 라우트를 요청마다 렌더링\n' +
@@ -47,7 +47,7 @@ export function VerificationFooter() {
         expected={<>{EXPECTED_BY_MODE[RUN_MODE]}</>}
         actual={<>{actual}</>}
         isMatched={isMatched}
-        description="기대값은 실행 모드에 따라 달라집니다. 판정은 실제로 받은 HTML 안의 렌더 ID가 몇 종류인지로만 하고, 헤더는 근거로 함께 표시합니다."
+        description="기대값은 실행 모드에 따라 달라집니다. 판정은 실제로 받은 HTML 안의 렌더 ID가 몇 종류인지로만 하고, 헤더는 근거로 함께 표시합니다. Vercel 배포에서는 CDN이 헤더를 바꿔 x-nextjs-cache가 없고 cache-control이 public으로 보입니다."
       />
       <ConceptCard />
     </div>

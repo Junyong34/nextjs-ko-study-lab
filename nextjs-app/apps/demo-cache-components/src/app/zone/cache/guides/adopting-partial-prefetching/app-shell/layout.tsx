@@ -1,6 +1,8 @@
 import { DemoContainer, DemoGuideCard, DemoPlaygroundCard } from '@study/demo-kit'
 import { ProbeProvider } from './components/ProbeContext'
 import { RequestLog } from './components/RequestLog'
+import { Verification } from './components/Verification'
+import { ConceptCard } from './components/ConceptCard'
 
 /**
  * 가이드·실습·로그를 layout에 두어 목록과 상세 사이를 이동해도 요청 로그가 유지되게 한다.
@@ -21,6 +23,14 @@ export default function AppShellLayout({ children }: { children: React.ReactNode
             observe: '요청 로그의 prefetch 건수와 path',
             observeAt: 'playground',
           },
+          {
+            step: 2,
+            title: '[C·D] 링크 두 개의 요청과 검증 패널 확인',
+            description: '<Link prefetch>는 요청이 나가고 prefetch={false}는 나가지 않는지, 기본 링크 3개가 런타임 셸을 공유하는지 대조합니다.',
+            actionBadge: '검증',
+            observe: 'partial 런타임 셸 1건, prefetch 링크 1건 이상, prefetch={false} 0건이면 검증 완료',
+            observeAt: 'verification',
+          },
         ]}
       />
       <ProbeProvider>
@@ -30,6 +40,8 @@ export default function AppShellLayout({ children }: { children: React.ReactNode
             <RequestLog />
           </div>
         </DemoPlaygroundCard>
+        <Verification />
+        <ConceptCard />
       </ProbeProvider>
     </DemoContainer>
   )

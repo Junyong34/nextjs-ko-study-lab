@@ -26,7 +26,7 @@ export function ConceptCard() {
         </div>
         <div>
           <h5 className={h5}>2. 대조 구조</h5>
-          <pre className="overflow-x-auto rounded bg-zinc-950 p-3 font-mono text-[11px] text-zinc-300">
+          <pre className="w-0 min-w-full overflow-x-auto rounded bg-zinc-950 p-3 font-mono text-[11px] text-zinc-300">
 {`suspense-boundary/
 ├─ inside/page.tsx    # <p 정적/> + <Suspense><cookies() 읽기/></Suspense>
 └─ outside/page.tsx   # instant = false, Suspense 없이 cookies() 읽기`}

@@ -49,7 +49,7 @@ export function ProbePanel({ runs, running, cookieSent, error, onProbe, onIssue,
         </button>
       </div>
       {error && <p className="text-[11px] text-rose-600 dark:text-rose-400">측정 실패: {error}</p>}
-      <div className="overflow-x-auto">
+      <div className="w-0 min-w-full overflow-x-auto">
         <table className="w-full min-w-[620px] border-collapse font-mono text-[11px]">
           <thead>
             <tr className="text-left text-zinc-500 dark:text-zinc-400">
